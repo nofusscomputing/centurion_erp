@@ -80,6 +80,7 @@ CACHES = {
 #
 
 ALLOWED_HOSTS = [ '*' ]          # Site host to serve
+API_TEST = False                   # API Version 2. currently testing
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
 SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
 SECRET_KEY = None                # You need to generate this
@@ -99,15 +100,18 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 # SESSION_COOKIE_SECURE = True
 # USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'corsheaders',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_json_api',
+    'django_filters',
     'social_django',
     'django_celery_results',
     'core.apps.CoreConfig',
@@ -123,10 +127,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -258,12 +263,13 @@ if API_ENABLED:
         # ),
         'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
         'DEFAULT_FILTER_BACKENDS': (
-            'rest_framework_json_api.filters.QueryParameterValidationFilter',
-            'rest_framework_json_api.filters.OrderingFilter',
-            'rest_framework_json_api.django_filters.DjangoFilterBackend',
+            # 'django_filters.rest_framework.DjangoFilterBackend',
             'rest_framework.filters.SearchFilter',
+            'rest_framework_json_api.django_filters.DjangoFilterBackend',
+            # 'rest_framework_json_api.filters.QueryParameterValidationFilter',
+            'rest_framework_json_api.filters.OrderingFilter',
         ),
-        'SEARCH_PARAM': 'filter[search]',
+        # 'SEARCH_PARAM': 'filter[search]',
         # 'TEST_REQUEST_RENDERER_CLASSES': (
         #     'rest_framework_json_api.renderers.JSONRenderer',
         # ),

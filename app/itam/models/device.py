@@ -160,6 +160,92 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         verbose_name = 'Is Virtual',
     )
 
+    table_fields: list = [
+        "nbsp",
+        "name",
+        "device_model",
+        "device_type",
+        "organization",
+        "created",
+        "modified",
+        "model",
+        "nbsp"
+    ]
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'device_type',
+                        'device_model',
+                        'name',
+                        'serial_number',
+                        'uuid',
+                        'inventorydate',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_virtual',
+                        'is_global',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Dependent Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    # "name": "Device Config",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    # "name": "Device Config",
+                    "field": "software",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": []
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+        {
+            "name": "Config Management",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    # "name": "Rendered Config",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        }
+    ]
+
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -242,10 +328,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
             return 'UNK'
 
+    @property
+    def get_configuration(self):
 
-    def get_configuration(self, id):
-
-        softwares = DeviceSoftware.objects.filter(device=id)
+        softwares = DeviceSoftware.objects.filter(device=self.id)
 
         config = {
             "software": []
@@ -343,49 +429,99 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
     device = models.ForeignKey(
         Device,
+        blank= False,
         on_delete=models.CASCADE,
         null = False,
-        blank= False
     )
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.CASCADE,
+        blank= False,
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
     )
 
     action = models.CharField(
-        max_length=1,
+        blank = True,
         choices=Actions,
         default=None,
+        help_text = 'Action to perform',
+        max_length=1,
         null=True,
-        blank = True,
+        verbose_name = 'Action',
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Version to install',
+        on_delete=models.CASCADE,
         null = True,
-        blank= True
+        verbose_name = 'Desired Version'
     )
 
 
     installedversion = models.ForeignKey(
         SoftwareVersion,
-        related_name = 'installedversion',
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        related_name = 'installedversion',
+        verbose_name = 'Installed Version'
     )
 
     installed = models.DateTimeField(
-        verbose_name = 'Install Date',
+        blank = True,
+        help_text = 'Date detected as installed',
         null = True,
-        blank = True
+        verbose_name = 'Date Installed'
     )
+
+
+    table_fields: list = [
+        "nbsp",
+        "software",
+        "category",
+        "action_badge",
+        "version",
+        "installedversion",
+        "installed",
+        "nbsp"
+    ]
+
+
+    @property
+    def action_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.action:
+
+            text = self.get_action_display()
+
+        return Badge(
+            icon= f'action_{text.lower()}',
+            icon_style = f'badge-icon-action-{text.lower()}',
+            text = text,
+            text_style = f'badge-text-action-{text.lower()}',
+            url = '_self',
+        )
+
+
+    @property
+    def category(self):
+
+        category = None
+
+        if self.software:
+
+            category = self.software.category.id
+
+        return category
 
 
     @property
