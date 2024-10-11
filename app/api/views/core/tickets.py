@@ -33,6 +33,8 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_dynamic_permissions(self):
 
+        action_keyword = 'view'
+
         if self.action == 'create':
 
             action_keyword = 'add'
@@ -61,9 +63,9 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
             action_keyword = 'view'
 
-        else:
+        # else:
 
-            raise ValueError('unable to determin the action_keyword')
+        #     raise ValueError('unable to determin the action_keyword')
 
         self.permission_required = [
             'core.' + action_keyword + '_ticket_' + self._ticket_type,

@@ -11,6 +11,7 @@ from access.models import TenancyObject
 
 from app.helpers.merge_software import merge_software
 
+from core.classes.icon import Icon
 from core.mixin.history_save import SaveHistory
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
@@ -160,6 +161,98 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         verbose_name = 'Is Virtual',
     )
 
+    table_fields: list = [
+        # "nbsp",
+        'status_icon',
+        "name",
+        "device_model",
+        "device_type",
+        "organization",
+        "created",
+        "modified",
+        "model",
+        "nbsp"
+    ]
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'device_type',
+                        'device_model',
+                        'name',
+                        'serial_number',
+                        'uuid',
+                        'inventorydate',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_virtual',
+                        'is_global',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Dependent Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    # "name": "Device Config",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    # "name": "Device Config",
+                    "field": "software",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ],
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+        {
+            "name": "Config Management",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    # "name": "Rendered Config",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        }
+    ]
+
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -208,6 +301,32 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         return self.name
 
+
+
+    @property
+    def status_icon(self) -> list([Icon]):
+
+        
+
+        icons: list(Icon) = []
+
+        icons += [
+            Icon(
+                name = f'device_status_{self.status.lower()}',
+                style = f'icon-device-status-{self.status.lower()}'
+            )
+        ]
+        # return Badge(
+        #     icon= f'action_{text.lower()}',
+        #     icon_style = f'badge-icon-action-{text.lower()}',
+        #     text = text,
+        #     text_style = f'badge-text-action-{text.lower()}',
+        #     url = '_self',
+        # )
+
+        return icons
+
+
     @property
     def status(self) -> str:
         """ Fetch Device status
@@ -226,26 +345,27 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         one = (now() - check_date).days
 
+        status: str = 'UNK'
+
         if (now() - check_date).days >= 0 and (now() - check_date).days <= 1:
 
-            return 'OK'
+            status = 'OK'
 
         elif (now() - check_date).days >= 2 and (now() - check_date).days < 3:
 
-            return 'WARN'
+            status = 'WARN'
 
         elif (now() - check_date).days >= 3:
 
-            return 'BAD'
+            status = 'BAD'
 
-        else:
-
-            return 'UNK'
+        return status
 
 
-    def get_configuration(self, id):
+    @property
+    def get_configuration(self):
 
-        softwares = DeviceSoftware.objects.filter(device=id)
+        softwares = DeviceSoftware.objects.filter(device=self.id)
 
         config = {
             "software": []
@@ -343,49 +463,99 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
     device = models.ForeignKey(
         Device,
+        blank= False,
         on_delete=models.CASCADE,
         null = False,
-        blank= False
     )
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.CASCADE,
+        blank= False,
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
     )
 
     action = models.CharField(
-        max_length=1,
+        blank = True,
         choices=Actions,
         default=None,
+        help_text = 'Action to perform',
+        max_length=1,
         null=True,
-        blank = True,
+        verbose_name = 'Action',
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Version to install',
+        on_delete=models.CASCADE,
         null = True,
-        blank= True
+        verbose_name = 'Desired Version'
     )
 
 
     installedversion = models.ForeignKey(
         SoftwareVersion,
-        related_name = 'installedversion',
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        related_name = 'installedversion',
+        verbose_name = 'Installed Version'
     )
 
     installed = models.DateTimeField(
-        verbose_name = 'Install Date',
+        blank = True,
+        help_text = 'Date detected as installed',
         null = True,
-        blank = True
+        verbose_name = 'Date Installed'
     )
+
+
+    table_fields: list = [
+        "nbsp",
+        "software",
+        "category",
+        "action_badge",
+        "version",
+        "installedversion",
+        "installed",
+        "nbsp"
+    ]
+
+
+    @property
+    def action_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.action:
+
+            text = self.get_action_display()
+
+        return Badge(
+            icon_name = f'action_{text.lower()}',
+            icon_style = f'badge-icon-action-{text.lower()}',
+            text = text,
+            text_style = f'badge-text-action-{text.lower()}',
+            url = '_self',
+        )
+
+
+    @property
+    def category(self):
+
+        category = None
+
+        if self.software:
+
+            category = self.software.category.id
+
+        return category
 
 
     @property

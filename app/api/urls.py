@@ -1,4 +1,6 @@
-from django.urls import path
+from django.conf import settings as django_settings
+
+from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -27,6 +29,42 @@ from api.views.project_management import (
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
+
+
+from api.v2.views import index as v2
+
+from api.v2.views.assistance import (
+    index as assistance_index_v2,
+    request as request_ticket_v2,
+    request_comments as request_comments_v2,
+    ticket_linked_item as ticket_linked_item_v2,
+    related_ticket as related_ticket_v2
+)
+
+
+from api.v2.views.itam import (
+    index as itam_index_v2,
+    device as device_v2,
+    device_software as device_software_v2
+)
+from api.v2.views.settings import (
+    index as settings_index_v2,
+    device_model as device_model_v2,
+    external_link as external_link_v2
+)
+
+from api.v2.views.itim import (
+    service_device as service_device_v2
+)
+
+from api.v2.views.access import (
+    organization as organization_v2
+)
+
+from core.viewsets import (
+    notes as notes_v2,
+    history as history_v2
+)
 
 
 app_name = "API"
@@ -64,6 +102,36 @@ router.register('settings/ticket_comment_categories', ticket_comment_categories.
 router.register('software', software.SoftwareViewSet, basename='software')
 
 
+# API V2
+if django_settings.API_TEST:
+
+    router.register('v2', v2.Index, basename='_api_v2_home')
+
+    router.register('v2/access', itam_index_v2.Index, basename='_api_v2_access_home')
+    router.register('v2/access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
+
+    router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
+    router.register('v2/assistance/ticket/request', request_ticket_v2.ViewSet, basename='_api_v2_ticket_request')
+    router.register('v2/assistance/ticket/request/(?P<ticket_id>[0-9]+)/comments', request_comments_v2.ViewSet, basename='_api_v2_assistance_request_ticket_comments')
+    router.register('v2/assistance/ticket/request/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', request_comments_v2.ViewSet, basename='_api_v2_assistance_request_ticket_comment_threads')
+    router.register('v2/assistance/ticket/request/(?P<ticket_id>[0-9]+)/linked_items', ticket_linked_item_v2.ViewSet, basename='_api_v2_ticket_linked_item')
+    router.register('v2/assistance/ticket/request/(?P<ticket_id>[0-9]+)/related_tickets', related_ticket_v2.ViewSet, basename='_api_v2_related_ticket')
+
+
+    router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
+    router.register('v2/itam/device', device_v2.ViewSet, basename='_api_v2_device')
+    router.register('v2/itam/device/(?P<device_id>[0-9]+)/device_software', device_software_v2.ViewSet, basename='_api_v2_device_software')
+    router.register('v2/itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
+    router.register('v2/itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
+    router.register('v2/itam/(?P<item_class>[a-z]+)/(?P<item_id>[0-9]+)/tickets', ticket_linked_item_v2.ViewSet, basename='_api_v2_device_tickets')
+    # router.register('v2/itam/device/(?P<item_id>[0-9]+)/tickets', ticket_linked_item_v2.ViewSet, basename='_api_v2_device_tickets')
+
+    # router.register('v2/itam/(?P<model_class>)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
+    router.register('v2/core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
+
+    router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+    router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
+    router.register('v2/settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
 
 urlpatterns = [
 
@@ -99,3 +167,4 @@ urlpatterns = [
 urlpatterns = format_suffix_patterns(urlpatterns)
 
 urlpatterns += router.urls
+
