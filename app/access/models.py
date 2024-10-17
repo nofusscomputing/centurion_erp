@@ -12,6 +12,7 @@ from core.mixin.history_save import SaveHistory
 class Organization(SaveHistory):
 
     class Meta:
+        verbose_name = "Organization"
         verbose_name_plural = "Organizations"
         ordering = ['name']
 
@@ -23,28 +24,34 @@ class Organization(SaveHistory):
         super().save(*args, **kwargs)
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this item',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this Organization',
         max_length = 50,
         unique = True,
+        verbose_name = 'Name'
     )
 
     manager = models.ForeignKey(
         User,
-        on_delete=models.SET_NULL,
         blank = False,
+        help_text = 'Manager for this organization',
         null = True,
-        help_text = 'Organization Manager'
+        on_delete=models.SET_NULL,
+        verbose_name = 'Manager'
     )
 
     model_notes = models.TextField(
         blank = True,
         default = None,
+        help_text = 'Tid bits of information',
         null= True,
         verbose_name = 'Notes',
     )
@@ -62,6 +69,49 @@ class Organization(SaveHistory):
     def __str__(self):
         return self.name
 
+    table_fields: list = [
+        'nbsp',
+        'name',
+        'created',
+        'modified',
+        'nbsp'
+    ]
+
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'name',
+                        'manager',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Teams",
+            "slug": "teams",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "teams"
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        }
+    ]
 
 
 class TenancyManager(models.Manager):
@@ -106,7 +156,9 @@ class TenancyManager(models.Manager):
 
         if request:
 
-            user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
+            # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
+
+            user = request.user
 
 
             if user.is_authenticated:
@@ -173,23 +225,36 @@ class TenancyObject(SaveHistory):
             raise ValidationError('You must provide an organization')
 
 
+    id = models.AutoField(
+        blank=False,
+        help_text = 'ID of the item',
+        primary_key=True,
+        unique=True,
+        verbose_name = 'ID'
+    )
+
     organization = models.ForeignKey(
         Organization,
-        on_delete=models.CASCADE,
         blank = False,
+        help_text = 'Organization this belongs to',
         null = True,
+        on_delete = models.CASCADE,
         validators = [validatate_organization_exists],
+        verbose_name = 'Organization'
     )
 
     is_global = models.BooleanField(
+        blank = False,
         default = False,
-        blank = False
+        help_text = 'Is this a global object?',
+        verbose_name = 'Global Object'
     )
 
     model_notes = models.TextField(
         blank = True,
         default = None,
-        null= True,
+        help_text = 'Tid bits of information',
+        null = True,
         verbose_name = 'Notes',
     )
 
@@ -208,10 +273,14 @@ class TenancyObject(SaveHistory):
 
 
 class Team(Group, TenancyObject):
+
     class Meta:
-        # proxy = True
+
+        ordering = [ 'team_name' ]
+
+        verbose_name = 'Team'
+
         verbose_name_plural = "Teams"
-        ordering = ['team_name']
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -222,17 +291,54 @@ class Team(Group, TenancyObject):
 
 
     team_name = models.CharField(
-        verbose_name = 'Name',
         blank = False,
+        default = '',
+        help_text = 'Name to give this team',
         max_length = 50,
         unique = False,
-        default = ''
+        verbose_name = 'Name',
     )
 
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'team_name',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Users",
+                    "field": "user",
+                },
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+    table_fields: list = [
+        'team_name',
+        'modified',
+        'created',
+    ]
 
     @property
     def parent_object(self):
@@ -263,35 +369,51 @@ class Team(Group, TenancyObject):
 class TeamUsers(SaveHistory):
 
     class Meta:
-        # proxy = True
-        verbose_name_plural = "Team Users"
+
         ordering = ['user']
 
+        verbose_name = "Team User"
+
+        verbose_name_plural = "Team Users"
+
+
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this Team User',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     team = models.ForeignKey(
         Team,
+        help_text = 'Team user belongs to',
+        on_delete=models.CASCADE,
         related_name="team",
-        on_delete=models.CASCADE)
+        verbose_name = 'Team'
+    )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        help_text = 'User who will be added to the team',
+        on_delete=models.CASCADE,
+        verbose_name = 'User'
     )
 
     manager = models.BooleanField(
-        verbose_name='manager',
+        blank=True,
         default=False,
-        blank=True
+        help_text = 'Is this user to be a manager of this team',
+        verbose_name='manager',
     )
 
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+    page_layout: list = []
+
+    table_fields: list = []
 
 
     def delete(self, using=None, keep_parents=False):

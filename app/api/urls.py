@@ -29,6 +29,53 @@ from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
 
 
+from api.viewsets import (
+    index as v2
+)
+
+from app.viewsets.base import (
+    index as base_index_v2,
+    content_type as content_type_v2,
+    permisson as permission_v2,
+    user as user_v2
+)
+
+from access.viewsets import (
+    index as access_v2,
+    organization as organization_v2,
+    team as team_v2,
+    team_user as team_user_v2
+)
+
+from assistance.viewsets import (
+    index as assistance_index_v2,
+    knowledge_base as knowledge_base_v2,
+    knowledge_base_category as knowledge_base_category_v2
+)
+
+from config_management.viewsets import (
+    index as config_management_v2,
+    config_group as config_group_v2,
+    config_group_software as config_group_software_v2
+)
+
+from itam.viewsets import (
+    index as itam_index_v2,
+)
+
+from itim.viewsets import (
+    index as itim_v2
+)
+
+from project_management.viewsets import (
+    index as project_management_v2
+)
+
+from settings.viewsets import (
+    index as settings_index_v2,
+)
+
+
 app_name = "API"
 
 
@@ -64,6 +111,35 @@ router.register('settings/ticket_comment_categories', ticket_comment_categories.
 router.register('software', software.SoftwareViewSet, basename='software')
 
 
+# API V2
+router.register('v2', v2.Index, basename='_api_v2_home')
+
+router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
+router.register('v2/access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
+router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team', team_v2.ViewSet, basename='_api_v2_organization_team')
+router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
+
+router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
+router.register('v2/assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
+
+router.register('v2/base', base_index_v2.Index, basename='_api_v2_base_home')
+router.register('v2/base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
+router.register('v2/base/permission', permission_v2.ViewSet, basename='_api_v2_permission')
+router.register('v2/base/user', user_v2.ViewSet, basename='_api_v2_user')
+
+router.register('v2/config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
+router.register('v2/config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
+router.register('v2/config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
+router.register('v2/config_management/group/(?P<group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
+
+router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
+
+router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
+
+router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
+
+router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 
 urlpatterns = [
 
