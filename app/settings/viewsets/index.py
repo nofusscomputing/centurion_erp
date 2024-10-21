@@ -60,6 +60,19 @@ class Index(CommonViewSet):
                     "model": "software_category"
                 }
             ]
+        },
+        {
+            "name": "ITIM",
+            "links": [
+                {
+                    "name": "Cluster Type",
+                    "model": "cluster_type"
+                },
+                {
+                    "name": "Service Port",
+                    "model": "port"
+                },
+            ]
         }
     ]
 
@@ -72,11 +85,13 @@ class Index(CommonViewSet):
 
         return Response(
             {
+                "cluster_type": reverse('API:_api_v2_cluster_type-list', request=request),
                 "device_model": reverse('API:_api_v2_device_model-list', request=request),
                 "device_type": reverse('API:_api_v2_device_type-list', request=request),
                 "external_link": reverse('API:_api_v2_external_link-list', request=request),
                 "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
                 "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
+                "port": reverse('API:_api_v2_port-list', request=request),
                 "software_category": reverse('API:_api_v2_software_category-list', request=request),
             }
         )

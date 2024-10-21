@@ -65,7 +65,7 @@ class ClusterType(TenancyObject):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'name'
+                        'name',
                         'is_global',
                     ],
                     "right": [
@@ -78,18 +78,6 @@ class ClusterType(TenancyObject):
                     "layout": "single",
                     "fields": [
                         'config',
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Rendered Config",
-            "slug": "config_management",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        "rendered_config",
                     ]
                 }
             ]
@@ -220,11 +208,12 @@ class Cluster(TenancyObject):
                         'organization',
                         'parent_cluster',
                         'cluster_type',
-                        'name'
+                        'name',
                         'is_global',
                     ],
                     "right": [
                         'model_notes',
+                        'resources',
                         'created',
                         'modified',
                     ]

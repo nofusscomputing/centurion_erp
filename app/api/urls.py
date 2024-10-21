@@ -79,7 +79,12 @@ from itam.viewsets import (
 )
 
 from itim.viewsets import (
-    index as itim_v2
+    index as itim_v2,
+    cluster as cluster_v2,
+    cluster_type as cluster_type_v2,
+    port as port_v2,
+    service as service_v2,
+    service_device as service_device_v2
 )
 
 from project_management.viewsets import (
@@ -154,6 +159,7 @@ router.register('v2/core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', hist
 router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 router.register('v2/itam/device', device_v2.ViewSet, basename='_api_v2_device')
 router.register('v2/itam/device/(?P<device_id>[0-9]+)/software', device_software_v2.ViewSet, basename='_api_v2_device_software')
+router.register('v2/itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
 router.register('v2/itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
 router.register('v2/itam/operating_system', operating_system_v2.ViewSet, basename='_api_v2_operating_system')
 router.register('v2/itam/operating_system/(?P<operating_system_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_operating_system_notes')
@@ -163,17 +169,24 @@ router.register('v2/itam/software/(?P<software_id>[0-9]+)/notes', notes_v2.ViewS
 router.register('v2/itam/software/(?P<software_id>[0-9]+)/version', software_version_v2.ViewSet, basename='_api_v2_software_version')
 
 router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
+router.register('v2/itim/cluster', cluster_v2.ViewSet, basename='_api_v2_cluster')
+router.register('v2/itim/cluster/(?P<cluster_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_notes')
+router.register('v2/itim/service', service_v2.ViewSet, basename='_api_v2_service')
 router.register('v2/itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
 
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+router.register('v2/settings/cluster_type', cluster_type_v2.ViewSet, basename='_api_v2_cluster_type')
+router.register('v2/settings/cluster_type/(?P<cluster_type_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_type_notes')
 router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
 router.register('v2/settings/device_type', device_type_v2.ViewSet, basename='_api_v2_device_type')
 router.register('v2/settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
 router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('v2/settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('v2/settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
+router.register('v2/settings/port', port_v2.ViewSet, basename='_api_v2_port')
+router.register('v2/settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_port_notes')
 router.register('v2/settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 
 urlpatterns = [

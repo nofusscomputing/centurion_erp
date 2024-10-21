@@ -23,9 +23,9 @@ class Port(TenancyObject):
             'protocol',
         ]
 
-        verbose_name = "Protocol"
+        verbose_name = "Port"
 
-        verbose_name_plural = "Protocols"
+        verbose_name_plural = "Ports"
 
 
     class Protocol(models.TextChoices):
@@ -67,7 +67,6 @@ class Port(TenancyObject):
     protocol = models.CharField(
         blank = False,
         choices=Protocol.choices,
-        default = Protocol.TCP,
         help_text = 'Layer 4 Network Protocol',
         max_length = 3,
         verbose_name = 'Protocol',
@@ -334,23 +333,22 @@ class Service(TenancyObject):
     @property
     def config_variables(self):
 
-        if self.is_template:
+        config: dict = {}
 
-            return self.config
 
         if self.template:
 
-            template_config: dict = Service.objects.get(id=self.template.id).config
+            if self.template.config:
 
-            template_config.update(self.config)
+                config.update(self.template.config)
 
-            return template_config
 
-        else:
+        if self.config:
 
-            return self.config
+            config.update(self.config)
 
-        return None
+        return config
+
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
