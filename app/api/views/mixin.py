@@ -27,126 +27,144 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             return False
 
-        self.request = request
+        try:
 
-        method = self.request._request.method.lower()
+            self.request = request
 
-        if method.upper() not in view.allowed_methods:
+            method = self.request._request.method.lower()
 
-            view.http_method_not_allowed(request._request)
+            if method.upper() not in view.allowed_methods:
 
-        if hasattr(view, 'queryset'):
-            if view.queryset.model._meta:
-                self.obj = view.queryset.model
+                view.http_method_not_allowed(request._request)
 
-        object_organization = None
+            if request.user.is_authenticated and method == 'options':
 
-        if method == 'get':
+                return True
 
-            action = 'view'
-        
-        elif method == 'post':
+            if hasattr(view, 'get_queryset'):
 
-            action = 'add'
+                queryset  = view.get_queryset()
 
-            if 'organization' in request.data:
+                self.obj = queryset.model
 
-                if not request.data['organization']:
-                    raise ValidationError('you must provide an organization')
+            elif hasattr(view, 'queryset'):
 
-                object_organization = int(request.data['organization'])
-        elif method == 'patch':
+                if view.queryset.model._meta:
 
-            action = 'change'
+                    self.obj = view.queryset.model
 
-        elif method == 'put':
+            object_organization = None
 
-            action = 'change'
+            if method == 'get':
 
-        elif method == 'delete':
+                action = 'view'
+            
+            elif method == 'post':
 
-            action = 'delete'
+                action = 'add'
 
-        else:
+                if 'organization' in request.data:
 
-            action = 'view'
+                    if not request.data['organization']:
+                        raise ValidationError('you must provide an organization')
 
-        permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
+                    object_organization = int(request.data['organization'])
+            elif method == 'patch':
 
-        self.permission_required = [ permission ]
+                action = 'change'
 
-        if hasattr(view, 'get_dynamic_permissions'):
+            elif method == 'put':
 
-            self.permission_required = view.get_dynamic_permissions()
+                action = 'change'
 
+            elif method == 'delete':
 
+                action = 'delete'
 
+            else:
 
-        if view:
-            if 'organization_id' in view.kwargs:
+                action = 'view'
 
-                if view.kwargs['organization_id']:
+            if hasattr(self, 'obj'):
 
-                    object_organization = view.kwargs['organization_id']
+                permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
 
-            if object_organization is None and 'pk' in view.kwargs:
+                self.permission_required = [ permission ]
 
-                self.obj = view.queryset.get(pk=view.kwargs['pk'])
+            if hasattr(view, 'get_dynamic_permissions'):
 
-
-        if obj:
-
-            if obj.get_organization():
-
-                object_organization = obj.get_organization().id
-
-                if hasattr(self.obj, 'is_global'):
-                    
-                    if obj.is_global:
-
-                        object_organization = 0
+                self.permission_required = view.get_dynamic_permissions()
 
 
-            if 'pk' in view.kwargs:
+            if view:
+                if 'organization_id' in view.kwargs:
 
-                if object_organization is None and view.queryset.model._meta.model_name == 'organization' and view.kwargs['pk']:
+                    if view.kwargs['organization_id']:
 
-                    object_organization = view.kwargs['pk']
+                        object_organization = view.kwargs['organization_id']
 
-                if object_organization is None:
+                if object_organization is None and 'pk' in view.kwargs:
 
-                    self.obj = view.queryset.get()
-
-
-        if hasattr(self, 'obj') and object_organization is None and 'pk' in view.kwargs:
-
-            if self.obj.get_organization():
-
-                object_organization = self.obj.get_organization().id
-
-                if hasattr(self.obj, 'is_global'):
-
-                    if self.obj.is_global:
-
-                        object_organization = 0
+                    self.obj = view.queryset.get(pk=view.kwargs['pk'])
 
 
-        # ToDo: implement proper checking of listview as this if allows ALL.
-        if 'pk' not in view.kwargs and method == 'get' and object_organization is None:
+            if obj:
 
-            return True
+                if obj.get_organization():
 
-        if hasattr(self, 'default_organization'):
-            object_organization = self.default_organization
+                    object_organization = obj.get_organization().id
 
-        if method == 'post' and hasattr(self, 'default_organization'):
+                    if hasattr(self.obj, 'is_global'):
+                        
+                        if obj.is_global:
 
-            if self.default_organization:
+                            object_organization = 0
 
-                object_organization = self.default_organization.id
 
-        if not self.has_organization_permission(object_organization) and not request.user.is_superuser:
+                if 'pk' in view.kwargs:
 
-            raise PermissionDenied('You are not part of this organization')
+                    if object_organization is None and view.queryset.model._meta.model_name == 'organization' and view.kwargs['pk']:
+
+                        object_organization = view.kwargs['pk']
+
+                    if object_organization is None:
+
+                        self.obj = view.queryset.get()
+
+
+            if hasattr(self, 'obj') and object_organization is None and 'pk' in view.kwargs:
+
+                if self.obj.get_organization():
+
+                    object_organization = self.obj.get_organization().id
+
+                    if hasattr(self.obj, 'is_global'):
+
+                        if self.obj.is_global:
+
+                            object_organization = 0
+
+
+            # ToDo: implement proper checking of listview as this if allows ALL.
+            if 'pk' not in view.kwargs and method == 'get' and object_organization is None:
+
+                return True
+
+            if hasattr(self, 'default_organization'):
+                object_organization = self.default_organization
+
+            if method == 'post' and hasattr(self, 'default_organization'):
+
+                if self.default_organization:
+
+                    object_organization = self.default_organization.id
+
+            if not self.has_organization_permission(object_organization) and not request.user.is_superuser:
+
+                raise PermissionDenied('You are not part of this organization')
+
+        except Exception as e:
+
+            return False
 
         return True
