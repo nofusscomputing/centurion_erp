@@ -83,9 +83,9 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         elif view.suffix == 'List':
 
-            if hasattr(view, 'model'):
+            if hasattr(view, 'table_fields'):
 
-                metadata['table_fields'] = view.model.table_fields
+                metadata['table_fields'] = view.get_table_fields()
 
             if view.documentation:
 
@@ -197,6 +197,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "system",
                         "icon": "settings",
                         "link": "/settings"
+                    },
+                    {
+                        "display_name": "Task Log",
+                        "name": "celery_task_log",
+                        # "icon": "settings",
+                        "link": "/settings/celery_log"
                     }
                 ]
             }

@@ -40,6 +40,17 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         ValidationError: When software set as global and no organization has been specified 
     """
 
+    class Meta:
+
+        ordering = [
+            'owner_organization'
+        ]
+
+        verbose_name = 'App Settings'
+
+        verbose_name_plural = 'App Settings'
+
+
     owner_organization = models.ForeignKey(
         Organization,
         blank= True,
@@ -95,6 +106,16 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         related_name = 'global_organization',
         verbose_name = 'Global Organization'
     )
+
+    table_fields: list = []
+
+    page_layout: list = []
+
+
+    def get_organization(self):
+
+        return self.global_organization
+
 
     def clean(self):
         from django.core.exceptions import ValidationError

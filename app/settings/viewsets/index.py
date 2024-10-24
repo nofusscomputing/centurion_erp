@@ -18,6 +18,15 @@ class Index(CommonViewSet):
 
     page_layout: list = [
         {
+            "name": "Application",
+            "links": [
+                {
+                    "name": "Settings",
+                    "model": "app_settings"
+                }
+            ]
+        },
+        {
             "name": "Assistanace",
             "links": [
                 {
@@ -98,6 +107,8 @@ class Index(CommonViewSet):
 
         return Response(
             {
+                "app_settings": reverse('API:_api_v2_app_settings-detail', request=request, kwargs={'pk': 1}),
+                "celery_log": reverse('API:_api_v2_celery_log-list', request=request),
                 "cluster_type": reverse('API:_api_v2_cluster_type-list', request=request),
                 "device_model": reverse('API:_api_v2_device_model-list', request=request),
                 "device_type": reverse('API:_api_v2_device_type-list', request=request),
@@ -108,5 +119,12 @@ class Index(CommonViewSet):
                 "project_state": reverse('API:_api_v2_project_state-list', request=request),
                 "project_type": reverse('API:_api_v2_project_type-list', request=request),
                 "software_category": reverse('API:_api_v2_software_category-list', request=request),
+                "user_settings": reverse(
+                    'API:_api_v2_user_settings-detail',
+                    request=request,
+                    kwargs={
+                        'pk': request.user.id 
+                    }
+                ),
             }
         )

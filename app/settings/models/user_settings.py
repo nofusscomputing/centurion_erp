@@ -30,6 +30,17 @@ class UserSettingsCommonFields(models.Model):
 
 class UserSettings(UserSettingsCommonFields):
 
+    class Meta:
+
+        ordering = [
+            'user'
+        ]
+
+        verbose_name = 'User Settings'
+
+        verbose_name_plural = 'User Settings'
+
+
     user = models.ForeignKey(
         User,
         blank= False,
@@ -48,6 +59,11 @@ class UserSettings(UserSettingsCommonFields):
         on_delete=models.SET_DEFAULT,
         verbose_name = 'Default Organization'
     )
+
+
+    def get_organization(self):
+
+        return self.default_organization
 
 
     @receiver(post_save, sender=User)
