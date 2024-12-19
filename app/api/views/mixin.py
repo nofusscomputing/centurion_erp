@@ -15,12 +15,34 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
     def has_permission(self, request, view):
 
-        return self.permission_check(request, view)
+        permission_check = self.permission_check(request, view)
+
+        if view.kwargs.get('pk', None):
+
+            if(
+                str(type(view.get_object()).__name__).lower() == 'organization'
+                and view.get_object().manager == request.user
+            ):
+
+                return True
+
+        return permission_check
 
 
     def has_object_permission(self, request, view, obj):
 
-        return self.permission_check(request, view, obj)
+        is_organization_manager: bool = False
+
+        if view.kwargs.get('pk', None):
+
+            if(
+                str(type(obj).__name__).lower() == 'organization'
+                and obj.manager == request.user
+            ):
+
+                return True
+
+        return self.permission_check(request, view)
 
 
     def permission_check(self, request, view, obj=None) -> bool:
