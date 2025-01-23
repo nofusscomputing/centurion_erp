@@ -1,8 +1,8 @@
 
-Django==5.1.4
+Django==5.1.5
 django-cors-headers==4.4.0
 
-django-debug-toolbar==4.3.0
+django-debug-toolbar==5.0.1
 social-auth-app-django==5.4.1
 
 djangorestframework==3.15.2
@@ -30,3 +30,7 @@ Pygments==2.18.0
 celery==5.4.0
 django-celery-results==2.5.1
 sqlalchemy==2.0.31
+
+# metrics
+prometheus-client==0.21.1
+django-prometheus==2.3.1
