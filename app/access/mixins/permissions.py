@@ -115,6 +115,13 @@ class OrganizationPermissionMixin(
 
         try:
 
+            if (
+                view.model.__name__ == 'UserSettings'
+                and request._user.id == int(view.kwargs.get('pk', 0))
+            ):
+
+                return True
+
 
             has_permission_required: bool = False
 
