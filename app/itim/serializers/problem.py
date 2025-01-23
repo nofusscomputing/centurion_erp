@@ -218,10 +218,6 @@ class ProblemTriageTicketModelSerializer(
             'ticket_type',
             'is_deleted',
             'date_closed',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
             'opened_by',
             '_urls',
         ]
