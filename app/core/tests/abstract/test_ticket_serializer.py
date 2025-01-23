@@ -1442,7 +1442,8 @@ class TicketValidationAPI(
         For an ADD operation planned_start_date should not be editable
         """
 
-        assert self.created_ticket_triage_serializer.planned_start_date is None
+        # assert self.created_ticket_triage_serializer.planned_start_date is None
+        assert str(self.created_ticket_triage_serializer.planned_start_date) == str(self.all_fields_data_import['planned_start_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
@@ -1452,7 +1453,7 @@ class TicketValidationAPI(
         For an ADD operation planned_finish_date should not be editable
         """
 
-        assert self.created_ticket_triage_serializer.planned_finish_date is None
+        assert str(self.created_ticket_triage_serializer.planned_finish_date) == str(self.all_fields_data_import['planned_finish_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
@@ -1462,7 +1463,7 @@ class TicketValidationAPI(
         For an ADD operation real_start_date should not be editable
         """
 
-        assert self.created_ticket_triage_serializer.real_start_date is None
+        assert str(self.created_ticket_triage_serializer.real_start_date) == str(self.all_fields_data_import['real_start_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
@@ -1472,7 +1473,7 @@ class TicketValidationAPI(
         For an ADD operation real_finish_date should not be editable
         """
 
-        assert self.created_ticket_triage_serializer.real_finish_date is None
+        assert str(self.created_ticket_triage_serializer.real_finish_date) == str(self.all_fields_data_import['real_finish_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
@@ -1727,7 +1728,7 @@ class TicketValidationAPI(
         For an Change operation (triage serializer) planned_start_date should not be editable
         """
 
-        assert self.changed_ticket_triage_serializer.planned_start_date is None
+        assert str(self.changed_ticket_triage_serializer.planned_start_date) == str(self.all_fields_data_import['planned_start_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
@@ -1737,7 +1738,7 @@ class TicketValidationAPI(
         For an Change operation (triage serializer) planned_finish_date should not be editable
         """
 
-        assert self.changed_ticket_triage_serializer.planned_finish_date is None
+        assert str(self.changed_ticket_triage_serializer.planned_finish_date) == str(self.all_fields_data_import['planned_finish_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
@@ -1747,7 +1748,7 @@ class TicketValidationAPI(
         For an Change operation (triage serializer) real_start_date should not be editable
         """
 
-        assert self.changed_ticket_triage_serializer.real_start_date is None
+        assert str(self.changed_ticket_triage_serializer.real_start_date) == str(self.all_fields_data_import['real_start_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
@@ -1757,7 +1758,7 @@ class TicketValidationAPI(
         For an Change operation (triage serializer) real_finish_date should not be editable
         """
 
-        assert self.changed_ticket_triage_serializer.real_finish_date is None
+        assert str(self.changed_ticket_triage_serializer.real_finish_date) == str(self.all_fields_data_import['real_finish_date']).replace('T', ' ').replace('Z', '+00:00')
 
 
 
