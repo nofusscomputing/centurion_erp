@@ -1,3 +1,67 @@
+## 1.8.0 (2025-01-23)
+
+### feat
+
+- **python**: update django 5.1.4 -> 5.1.5
+- **access**: TenancyManager object to cache the users team lokkup
+- **access**: if organization object casted to int, return organization.id
+- **base**: Dont enable metrics by default
+- **base**: Add exporter to celery
+- **base**: Add exporter to gunicorn
+- **base**: Add django-prometheus for metrics export
+- **api**: fetch doc path for view metadata
+- **settings**: Add new field button text
+- **itim**: Ability to add external link to a service
+- **access**: Add organization to team display_name
+- **assistance**: add category and org to model articles tab
+- **api**: Enable fetching related ticket metadata for the other side of the related ticket
+- **core**: Add ticket comment field metadata to api meta
+- **core**: Add ticket linked item field metadata to api meta
+- **core**: Add related ticket field metadata to api meta
+- **api**: Add option to viewset to render field markdown metadata
+- **api**: Add item metadata to markdown field for renderable items
+- **api**: Add item metadata to markdown field for renderable items
+
+### Fixes
+
+- **core**: triage user requires access to date fields for change, incident, problem and project task tickets
+- **core**: triage user requires access to date fields for tickets
+- **core**: User must be a required field for ticket comment
+- **access**: use request object passed to has_object_permission
+- **core**: ensure when updating, reques.tenancy object perm checking is used
+- **project**: when creating a project, fetch the organization object
+- **api**: Only attempt to access a app_settings object for org field if request object exists
+- **core**: When adding a ticket, query for org
+- **access**: use the request user teams within Manager
+- **access**: cached orgs is an int list
+- **base**: metrics dir env var PROMETHEUS_MULTIPROC_DIR must ALWAYS exist
+- **base**: Dynammic settings determined by if metrics are enabled
+- **access**: Return API exception, not django
+- **api**: correctly return API exceptions for user to rectify
+- **core**: Set user whom added comment as comment user
+- **core**: display_name is not a mandatory field for related ticket
+- **core**: display_name is not a mandatory field for ticket linked item
+- **api**: Ensure ALL required classes for viewset are inherited
+
+### Refactoring
+
+- **access**: Dont override django middleware, create own for access tenancy
+- **access**: Move user perm logic to request.tenancy object
+- Move app_settings object to request object
+- **access**: cache app settings during perm check
+- **access**: prefetch team related fields
+
+### Tests
+
+- **core**: Correct ticket tests as triage user is supposed to  have access to ticket date fields
+- update to cater for tenancy object in request
+- Initial k6s individual page speed test cases
+- **app**: metrics_enabled setings checks
+- **app**: refactor. order tests alphanumerical
+- **api**: ensure documentation key and data is added to API metadata
+- **settings**: check to ensure API fields returned are present and correct type for external_links model
+- **assistance**: Ensure category fields are present for model articles
+
 ## 1.7.0 (2025-01-04)
 
 ### feat
