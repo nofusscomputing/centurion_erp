@@ -105,7 +105,13 @@ class TicketModelSerializer(
 
     duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 
+    impact_badge = BadgeField(label='Impact')
+
+    priority_badge = BadgeField(label='Priority')
+
     status_badge = BadgeField(label='Status')
+
+    urgency_badge = BadgeField(label='Urgency')
 
     organization = OrganizationField( required = True, write_only = True )
 
@@ -142,8 +148,11 @@ class TicketModelSerializer(
             'estimate',
             'duration',
             'urgency',
+            'urgency_badge',
             'impact',
+            'impact_badge',
             'priority',
+            'priority_badge',
             'external_ref',
             'external_system',
             'ticket_type',
