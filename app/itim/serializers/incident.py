@@ -61,6 +61,7 @@ class IncidentTicketModelSerializer(
             'impact',
             'impact_badge',
             'priority',
+            'priority_badge',
             'external_ref',
             'external_system',
             'ticket_type',
