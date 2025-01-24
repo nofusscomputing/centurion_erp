@@ -568,6 +568,7 @@ class Ticket(
         'id',
         'title',
         'status_badge',
+        'impact_badge',
         'urgency_badge',
         'opened_by',
         'organization',
@@ -908,6 +909,43 @@ class Ticket(
         signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.subscribed_teams.through)
 
 
+
+    @property
+    def impact_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = '-'
+
+        if self.impact:
+
+            if self.impact == self.TicketImpact.VERY_LOW:
+
+                text = 'Very Low'
+
+            elif self.impact == self.TicketImpact.LOW:
+
+                text = 'Low'
+
+            elif self.impact == self.TicketImpact.MEDIUM:
+
+                text = 'Medium'
+
+            elif self.impact == self.TicketImpact.HIGH:
+
+                text = 'High'
+
+            elif self.impact == self.TicketImpact.VERY_HIGH:
+
+                text = 'Very High'
+
+
+        return Badge(
+            icon_name = 'circle',
+            icon_style = f"status {text.lower().replace(' ', '-')}",
+            text = text,
+            text_style = '',
+        )
 
     @property
     def status_badge(self):

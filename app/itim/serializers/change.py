@@ -61,6 +61,7 @@ class ChangeTicketModelSerializer(
             'urgency',
             'urgency_badge',
             'impact',
+            'impact_badge',
             'priority',
             'external_ref',
             'external_system',
