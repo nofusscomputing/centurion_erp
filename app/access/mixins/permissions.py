@@ -272,9 +272,18 @@ class OrganizationPermissionMixin(
 
         try:
 
+
             if request.user.is_anonymous:
 
                 return False
+
+
+            if (
+                view.model.__name__ == 'UserSettings'
+                and request._user.id == int(view.kwargs.get('pk', 0))
+            ):
+
+                return True
 
 
             object_organization: int = getattr(view.get_obj_organization( obj = obj ), 'id', None)
