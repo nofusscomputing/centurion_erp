@@ -353,6 +353,117 @@ class TicketAPI(
 
 
 
+    def test_api_field_exists_priority_badge(self):
+        """ Test for existance of API Field
+
+        priority_badge field must exist
+        """
+
+        assert 'priority_badge' in self.api_data
+
+
+    def test_api_field_type_priority_badge(self):
+        """ Test for type for API Field
+
+        priority_badge field must be int
+        """
+
+        assert type(self.api_data['priority_badge']) is dict
+
+
+    def test_api_field_exists_priority_badge_icon(self):
+        """ Test for existance of API Field
+
+        priority_badge.icon field must exist
+        """
+
+        assert 'icon' in self.api_data['priority_badge']
+
+
+    def test_api_field_type_priority_badge_icon(self):
+        """ Test for type for API Field
+
+        priority_badge.icon field must be dict
+        """
+
+        assert type(self.api_data['priority_badge']['icon']) is dict
+
+
+    def test_api_field_exists_priority_badge_icon_name(self):
+        """ Test for existance of API Field
+
+        priority_badge.icon.name field must exist
+        """
+
+        assert 'name' in self.api_data['priority_badge']['icon']
+
+
+    def test_api_field_type_priority_badge_icon_name(self):
+        """ Test for type for API Field
+
+        priority_badge.icon.name field must be str
+        """
+
+        assert type(self.api_data['priority_badge']['icon']['name']) is str
+
+
+    def test_api_field_exists_priority_badge_icon_style(self):
+        """ Test for existance of API Field
+
+        priority_badge.icon.style field must exist
+        """
+
+        assert 'style' in self.api_data['priority_badge']['icon']
+
+
+    def test_api_field_type_priority_badge_icon_style(self):
+        """ Test for type for API Field
+
+        priority_badge.icon.style field must be str
+        """
+
+        assert type(self.api_data['priority_badge']['icon']['style']) is str
+
+
+
+    def test_api_field_exists_priority_badge_text(self):
+        """ Test for existance of API Field
+
+        priority_badge.text field must exist
+        """
+
+        assert 'text' in self.api_data['priority_badge']
+
+
+    def test_api_field_type_priority_badge_text(self):
+        """ Test for type for API Field
+
+        priority_badge.text field must be str
+        """
+
+        assert type(self.api_data['priority_badge']['text']) is str
+
+
+
+    def test_api_field_exists_priority_badge_text_style(self):
+        """ Test for existance of API Field
+
+        priority_badge.text_style field must exist
+        """
+
+        assert 'text_style' in self.api_data['priority_badge']
+
+
+    def test_api_field_type_priority_badge_text_style(self):
+        """ Test for type for API Field
+
+        priority_badge.text_style field must be str
+        """
+
+        assert type(self.api_data['priority_badge']['text_style']) is str
+
+
+
     def test_api_field_exists_title(self):
         """ Test for existance of API Field
 
