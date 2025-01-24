@@ -275,6 +275,34 @@ class UserSettingsPermissionsAPI(
         pass
 
 
+    def test_change_no_permission_denied(self):
+        """ Ensure permission view cant make change
+
+        This test case is a duplicate of a test case with the same name.
+        This test is not required for this model as there are no permissions
+        assosiated with accessing this model.
+
+        Attempt to make change as user without permissions
+        """
+
+        pass
+
+
+    def test_view_no_permission_denied(self):
+        """ Check correct permission for view
+
+        This test case is a duplicate of a test case with the same name.
+        This test is not required for this model as there are no permissions
+        assosiated with accessing this model.
+
+        Attempt to view with user missing permission
+        """
+
+        pass
+
+
+
+
 
 class UserSettingsViewSet(
     ViewSetBase,
