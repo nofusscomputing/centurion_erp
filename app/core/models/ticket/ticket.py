@@ -568,6 +568,7 @@ class Ticket(
         'id',
         'title',
         'status_badge',
+        'urgency_badge',
         'opened_by',
         'organization',
         'created'
@@ -927,6 +928,44 @@ class Ticket(
             icon_style = f'ticket-status-icon ticket-status-icon-{style.lower()}',
             text = text,
             text_style = f'ticket-status-text badge-text-ticket_status-{style.lower()}',
+        )
+
+
+    @property
+    def urgency_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = '-'
+
+        if self.urgency:
+
+            if self.urgency == self.TicketUrgency.VERY_LOW:
+
+                text = 'Very Low'
+
+            elif self.urgency == self.TicketUrgency.LOW:
+
+                text = 'Low'
+
+            elif self.urgency == self.TicketUrgency.MEDIUM:
+
+                text = 'Medium'
+
+            elif self.urgency == self.TicketUrgency.HIGH:
+
+                text = 'High'
+
+            elif self.urgency == self.TicketUrgency.VERY_HIGH:
+
+                text = 'Very High'
+
+
+        return Badge(
+            icon_name = 'circle',
+            icon_style = f"status {text.lower().replace(' ', '-')}",
+            text = text,
+            text_style = '',
         )
 
 

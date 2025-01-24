@@ -107,6 +107,8 @@ class TicketModelSerializer(
 
     status_badge = BadgeField(label='Status')
 
+    urgency_badge = BadgeField(label='Urgency')
+
     organization = OrganizationField( required = True, write_only = True )
 
 
@@ -142,6 +144,7 @@ class TicketModelSerializer(
             'estimate',
             'duration',
             'urgency',
+            'urgency_badge',
             'impact',
             'priority',
             'external_ref',
