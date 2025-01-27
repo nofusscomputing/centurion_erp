@@ -908,19 +908,49 @@ class Ticket(
 
             if field == 'planned_start_date':
 
-                comment_field_value = f"changed Planned Start Date from _{before[field]}_ to **{str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'}**"
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Planned Start Date from _{before[field]}_ to **{to_value}**"
 
             if field == 'planned_finish_date':
 
-                comment_field_value = f"changed Planned Finish Date from _{before[field]}_ to **{str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'}**"
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Planned Finish Date from _{before[field]}_ to **{to_value}**"
 
             if field == 'real_start_date':
 
-                comment_field_value = f"changed Real Start Date from _{before[field]}_ to **{str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'}**"
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Real Start Date from _{before[field]}_ to **{to_value}**"
+
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
 
             if field == 'real_finish_date':
 
-                comment_field_value = f"changed Real Finish Date from _{before[field]}_ to **{str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'}**"
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Real Finish Date from _{before[field]}_ to **{to_value}**"
 
 
             if comment_field_value:
