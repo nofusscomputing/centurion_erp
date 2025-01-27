@@ -891,18 +891,20 @@ class Ticket(
 
             if field == 'milestone_id':
 
-                value = 'nothing'
+                value = 'None'
 
-                try:
+                if before[field]:
 
-                    get_milestone = ProjectMilestone.objects.get( pk = before[field])
+                    value = f"$milestone-{before[field]}"
 
-                    value = get_milestone.name
+                to_value = getattr(self.milestone, 'id', 'None')
 
-                except:
-                    pass
+                if to_value != 'None':
 
-                comment_field_value = f"changed milestone from _{value}_ to **{self.milestone}**"
+                    to_value = f"$milestone-{getattr(self.milestone, 'id', 'None')}"
+
+
+                comment_field_value = f"changed milestone from {value} to {to_value}"
 
             if field == 'planned_start_date':
 
