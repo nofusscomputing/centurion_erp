@@ -15,6 +15,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 from app.tests.abstract.model_permissions import ModelPermissions
 
 from project_management.models.projects import Project
+from project_management.models.project_milestone import ProjectMilestone
 
 from core.models.ticket.ticket import Ticket, RelatedTickets
 from core.models.ticket.ticket_comment import TicketComment
@@ -962,6 +963,158 @@ class ActionComments(SetUp):
 
         assert action_comment
 
+
+
+    def test_ticket_action_comment_milestone_added(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_milestone_add'
+        )
+
+        milestone = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_add',
+            project = project
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.save()
+
+        # add milestone
+        self.item.milestone = milestone
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed milestone from None to $milestone-{milestone.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_milestone_removed(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_milestone_remove'
+        )
+
+        milestone = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_remove',
+            project = project
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.milestone = milestone
+        self.item.save()
+
+        # remove milestone
+        self.item.milestone = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed milestone from $milestone-{milestone.id} to None'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_milestone_changed(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_milestone_change'
+        )
+
+        
+        milestone = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_change',
+            project = project
+        )
+
+
+        milestone_two = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_change_two',
+            project = project
+        )
+
+
+        # prepare
+        self.item.project = project
+        self.item.milestone = milestone
+        self.item.save()
+
+        # change milestone
+        self.item.milestone = milestone_two
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed milestone from $milestone-{milestone.id} to $milestone-{milestone_two.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
 
 
 
