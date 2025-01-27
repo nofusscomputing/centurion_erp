@@ -826,22 +826,143 @@ class ActionComments(SetUp):
 
 
     @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_project_added(self):
-        """Action Comment test
-        Confirm a 'project added' action comment is created for the ticket
-        when a project is added
-        """
-
-        pass
-
-
-    @pytest.mark.skip(reason='to be written')
     def test_ticket_action_comment_related_ticket_removed(self):
         """Action Comment test
         Confirm an action comment is created when a related ticket is removed
         """
 
         pass
+
+
+
+    def test_ticket_action_comment_project_added(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # prepare
+        self.item.project = None
+        self.item.save()
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_add'
+        )
+
+        # add project
+        self.item.project = project
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed project from None to $project-{project.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_project_removed(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_remove'
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.save()
+
+        # remove project
+        self.item.project = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed project from $project-{project.id} to None'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_project_changed(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_change'
+        )
+
+        project_two = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_change_two'
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.save()
+
+        # remove project
+        self.item.project = project_two
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed project from $project-{project.id} to $project-{project_two.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
 
 
 
