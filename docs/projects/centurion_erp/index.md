@@ -137,7 +137,7 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
             - Software _[see #3](https://github.com/nofusscomputing/centurion_erp/issues/3)_
 
-    - IT Operations
+    - IT Operations _[see #493](https://github.com/nofusscomputing/centurion_erp/issues/493)_
 
         - Release and Deployment Management _[see #462](https://github.com/nofusscomputing/centurion_erp/issues/462)_
 

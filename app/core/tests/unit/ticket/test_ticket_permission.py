@@ -1,5 +1,7 @@
 import re
 
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
@@ -15,6 +17,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 from app.tests.abstract.model_permissions import ModelPermissions
 
 from project_management.models.projects import Project
+from project_management.models.project_milestone import ProjectMilestone
 
 from core.models.ticket.ticket import Ticket, RelatedTickets
 from core.models.ticket.ticket_comment import TicketComment
@@ -24,9 +27,8 @@ from core.tests.unit.ticket.ticket_permission.field_based_permissions import ITS
 from settings.models.user_settings import UserSettings
 
 
-class TicketPermissions(
-    ModelPermissions,
-):
+
+class SetUp:
 
     ticket_type:str = None
 
@@ -280,11 +282,9 @@ class TicketPermissions(
         )
 
 
-    @pytest.mark.skip(reason="To be written")
-    def test_permission_purge(self):
 
-        pass
 
+class ActionComments(SetUp):
 
     def test_ticket_action_comment_assign_user_added_status_change(self):
         """Action Comment test
@@ -829,20 +829,741 @@ class TicketPermissions(
 
 
     @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_related_ticket_removed(self):
+        """Action Comment test
+        Confirm an action comment is created when a related ticket is removed
+        """
+
+        pass
+
+
+
     def test_ticket_action_comment_project_added(self):
         """Action Comment test
         Confirm a 'project added' action comment is created for the ticket
         when a project is added
         """
 
-        pass
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # prepare
+        self.item.project = None
+        self.item.save()
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_add'
+        )
+
+        # add project
+        self.item.project = project
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed project from None to $project-{project.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
 
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_related_ticket_removed(self):
+    def test_ticket_action_comment_project_removed(self):
         """Action Comment test
-        Confirm an action comment is created when a related ticket is removed
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
         """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_remove'
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.save()
+
+        # remove project
+        self.item.project = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed project from $project-{project.id} to None'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_project_changed(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_change'
+        )
+
+        project_two = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_change_two'
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.save()
+
+        # remove project
+        self.item.project = project_two
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed project from $project-{project.id} to $project-{project_two.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+
+    def test_ticket_action_comment_milestone_added(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_milestone_add'
+        )
+
+        milestone = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_add',
+            project = project
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.save()
+
+        # add milestone
+        self.item.milestone = milestone
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed milestone from None to $milestone-{milestone.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_milestone_removed(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_milestone_remove'
+        )
+
+        milestone = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_remove',
+            project = project
+        )
+
+        # prepare
+        self.item.project = project
+        self.item.milestone = milestone
+        self.item.save()
+
+        # remove milestone
+        self.item.milestone = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed milestone from $milestone-{milestone.id} to None'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_milestone_changed(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        # create fresh project as id will be unique for test 
+        project = Project.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_project_milestone_change'
+        )
+
+        
+        milestone = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_change',
+            project = project
+        )
+
+
+        milestone_two = ProjectMilestone.objects.create(
+            organization = self.item.organization,
+            name = 'ticket_milestone_change_two',
+            project = project
+        )
+
+
+        # prepare
+        self.item.project = project
+        self.item.milestone = milestone
+        self.item.save()
+
+        # change milestone
+        self.item.milestone = milestone_two
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed milestone from $milestone-{milestone.id} to $milestone-{milestone_two.id}'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+
+    def test_ticket_action_comment_planned_start_date_added(self):
+        """Action Comment test
+        
+        When the field `planned_start_date` has a value added it must create
+        an action comment
+        """
+
+        from_value = None
+        to_value = '2025-01-27 00:01:00+00:00'
+
+        # prepare
+        self.item.planned_start_date = from_value
+        self.item.save()
+
+        # add desired value
+        self.item.planned_start_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Planned Start Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_planned_start_date_change(self):
+        """Action Comment test
+        
+        When the field `planned_start_date` has a value change it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 00:02:00+00:00'
+        to_value = '2025-01-27 00:03:00+00:00'
+
+        # prepare
+        self.item.planned_start_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.planned_start_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Planned Start Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_planned_start_date_remove(self):
+        """Action Comment test
+        
+        When the field `planned_start_date` has a value removed it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 00:02:00+00:00'
+        to_value = None
+
+        # prepare
+        self.item.planned_start_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.planned_start_date = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Planned Start Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+
+    def test_ticket_action_comment_planned_finish_date_added(self):
+        """Action Comment test
+        
+        When the field `planned_finish_date` has a value added it must create
+        an action comment
+        """
+
+        from_value = None
+        to_value = '2025-01-27 01:01:00+00:00'
+
+        # prepare
+        self.item.planned_finish_date = from_value
+        self.item.save()
+
+        # add desired value
+        self.item.planned_finish_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Planned Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_planned_finish_date_change(self):
+        """Action Comment test
+        
+        When the field `planned_finish_date` has a value change it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 01:02:00+00:00'
+        to_value = '2025-01-27 01:03:00+00:00'
+
+        # prepare
+        self.item.planned_finish_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.planned_finish_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Planned Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_planned_finish_date_remove(self):
+        """Action Comment test
+        
+        When the field `planned_finish_date` has a value removed it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 01:04:00+00:00'
+        to_value = None
+
+        # prepare
+        self.item.planned_finish_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.planned_finish_date = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Planned Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+
+    def test_ticket_action_comment_real_start_date_added(self):
+        """Action Comment test
+        
+        When the field `real_start_date` has a value added it must create
+        an action comment
+        """
+
+        from_value = None
+        to_value = '2025-01-27 00:01:00+00:00'
+
+        # prepare
+        self.item.real_start_date = from_value
+        self.item.save()
+
+        # add desired value
+        self.item.real_start_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Start Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_real_start_date_change(self):
+        """Action Comment test
+        
+        When the field `real_start_date` has a value change it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 00:02:00+00:00'
+        to_value = '2025-01-27 00:03:00+00:00'
+
+        # prepare
+        self.item.real_start_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.real_start_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Start Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_real_start_date_remove(self):
+        """Action Comment test
+        
+        When the field `real_start_date` has a value removed it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 00:02:00+00:00'
+        to_value = None
+
+        # prepare
+        self.item.real_start_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.real_start_date = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Start Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+
+    def test_ticket_action_comment_real_finish_date_added(self):
+        """Action Comment test
+        
+        When the field `real_finish_date` has a value added it must create
+        an action comment
+        """
+
+        from_value = None
+        to_value = '2025-01-27 01:01:00+00:00'
+
+        # prepare
+        self.item.real_finish_date = from_value
+        self.item.save()
+
+        # add desired value
+        self.item.real_finish_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_real_finish_date_change(self):
+        """Action Comment test
+        
+        When the field `real_finish_date` has a value change it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 01:02:00+00:00'
+        to_value = '2025-01-27 01:03:00+00:00'
+
+        # prepare
+        self.item.real_finish_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.real_finish_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_real_finish_date_remove(self):
+        """Action Comment test
+        
+        When the field `real_finish_date` has a value removed it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 01:04:00+00:00'
+        to_value = None
+
+        # prepare
+        self.item.real_finish_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.real_finish_date = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+
+class TicketPermissions(
+    SetUp,
+    ModelPermissions,
+):
+
+
+    @pytest.mark.skip(reason="To be written")
+    def test_permission_purge(self):
 
         pass
 
@@ -999,3 +1720,144 @@ class RequestTicketPermissions(ITSMTicketPermissions, TestCase):
     url_name_delete = '_ticket_request_delete'
 
     url_delete_response = reverse('Assistance:Requests')
+
+
+
+
+
+class ChangeTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'change'
+
+    ticket_type_enum: int = int(Ticket.TicketType.CHANGE.value)
+
+    app_namespace = 'ITIM'
+
+    url_name_view = '_ticket_change_view'
+
+    url_name_add = '_ticket_change_add'
+
+    url_name_change = '_ticket_change_change'
+
+    url_name_delete = '_ticket_change_delete'
+
+    url_delete_response = reverse('ITIM:Changes')
+
+
+
+class IncidentTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'incident'
+
+    ticket_type_enum: int = int(Ticket.TicketType.INCIDENT.value)
+
+    app_namespace = 'ITIM'
+
+    url_name_view = '_ticket_incident_view'
+
+    url_name_add = '_ticket_incident_add'
+
+    url_name_change = '_ticket_incident_change'
+
+    url_name_delete = '_ticket_incident_delete'
+
+    url_delete_response = reverse('ITIM:Incidents')
+
+
+
+class ProblemTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'problem'
+
+    ticket_type_enum: int = int(Ticket.TicketType.PROBLEM.value)
+
+    app_namespace = 'ITIM'
+
+    url_name_view = '_ticket_problem_view'
+
+    url_name_add = '_ticket_problem_add'
+
+    url_name_change = '_ticket_problem_change'
+
+    url_name_delete = '_ticket_problem_delete'
+
+    url_delete_response = reverse('ITIM:Problems')
+
+
+
+class ProjectTaskActionComments(ActionComments, TestCase):
+
+    ticket_type = 'project_task'
+
+    ticket_type_enum: int = int(Ticket.TicketType.PROJECT_TASK.value)
+
+    app_namespace = 'Project Management'
+
+    url_name_view = '_project_task_view'
+
+    url_name_add = '_project_task_add'
+
+    url_name_change = '_project_task_change'
+
+    url_name_delete = '_project_task_delete'
+
+
+
+
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
+
+        1. Create an organization for user and item
+        . create an organization that is different to item
+        2. Create a manufacturer
+        3. create teams with each permission: view, add, change, delete
+        4. create a user per team
+        """
+
+        super().setUpTestData()
+
+        self.item = self.model.objects.create(
+            organization = self.organization,
+            title = 'Amended ' + self.ticket_type + ' ticket',
+            description = 'the ticket body',
+            ticket_type = int(Ticket.TicketType.REQUEST.value),
+            opened_by = self.add_user,
+            status = int(Ticket.TicketStatus.All.NEW.value),
+            project = self.project
+        )
+
+        self.url_add_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type}
+
+        self.url_change_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.item.id}
+
+        self.url_delete_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.project.id}
+
+        # self.url_delete_kwargs = {'pk': self.project.id}
+
+        self.url_view_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.item.id}
+
+        self.url_delete_response = reverse('Project Management:_project_view', kwargs={'pk': self.project.id})
+
+
+
+class RequestTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'request'
+
+    ticket_type_enum: int = int(Ticket.TicketType.REQUEST.value)
+
+    app_namespace = 'Assistance'
+
+    url_name_view = '_ticket_request_view'
+
+    url_name_add = '_ticket_request_add'
+
+    url_name_change = '_ticket_request_change'
+
+    url_name_delete = '_ticket_request_delete'
+
+    url_delete_response = reverse('Assistance:Requests')
+
+
+
