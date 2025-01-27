@@ -1445,6 +1445,117 @@ class ActionComments(SetUp):
 
         assert action_comment
 
+
+
+    def test_ticket_action_comment_real_finish_date_added(self):
+        """Action Comment test
+        
+        When the field `real_finish_date` has a value added it must create
+        an action comment
+        """
+
+        from_value = None
+        to_value = '2025-01-27 01:01:00+00:00'
+
+        # prepare
+        self.item.real_finish_date = from_value
+        self.item.save()
+
+        # add desired value
+        self.item.real_finish_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_real_finish_date_change(self):
+        """Action Comment test
+        
+        When the field `real_finish_date` has a value change it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 01:02:00+00:00'
+        to_value = '2025-01-27 01:03:00+00:00'
+
+        # prepare
+        self.item.real_finish_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.real_finish_date = datetime.strptime(to_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_real_finish_date_remove(self):
+        """Action Comment test
+        
+        When the field `real_finish_date` has a value removed it must create
+        an action comment
+        """
+
+        from_value = '2025-01-27 01:04:00+00:00'
+        to_value = None
+
+        # prepare
+        self.item.real_finish_date = datetime.strptime(from_value, '%Y-%m-%d %H:%M:%S%z')
+        self.item.save()
+
+        # add desired value
+        self.item.real_finish_date = None
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'changed Real Finish Date from _{from_value}_ to **{to_value}**'
+
+        for comment in comments:
+
+            if str(comment_body).lower() == str(comment.body).lower():
+
+                action_comment = True
+
+        assert action_comment
+
+
+
 class TicketPermissions(
     SetUp,
     ModelPermissions,
