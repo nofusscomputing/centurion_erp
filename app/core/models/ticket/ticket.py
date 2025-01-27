@@ -891,6 +891,9 @@ class Ticket(
 
                 comment_field_value = f"changed milestone from _{value}_ to **{self.milestone}**"
 
+            if field == 'planned_start_date':
+
+                comment_field_value = f"changed Planned Start Date from _{before[field]}_ to **{str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'}**"
 
             if comment_field_value:
 
