@@ -24,9 +24,8 @@ from core.tests.unit.ticket.ticket_permission.field_based_permissions import ITS
 from settings.models.user_settings import UserSettings
 
 
-class TicketPermissions(
-    ModelPermissions,
-):
+
+class SetUp:
 
     ticket_type:str = None
 
@@ -280,11 +279,9 @@ class TicketPermissions(
         )
 
 
-    @pytest.mark.skip(reason="To be written")
-    def test_permission_purge(self):
 
-        pass
 
+class ActionComments(SetUp):
 
     def test_ticket_action_comment_assign_user_added_status_change(self):
         """Action Comment test
@@ -848,6 +845,19 @@ class TicketPermissions(
 
 
 
+class TicketPermissions(
+    SetUp,
+    ModelPermissions,
+):
+
+
+    @pytest.mark.skip(reason="To be written")
+    def test_permission_purge(self):
+
+        pass
+
+
+
 class ITSMTicketPermissions(
     TicketPermissions,
     ITSMTicketFieldBasedPermissions,
@@ -999,3 +1009,144 @@ class RequestTicketPermissions(ITSMTicketPermissions, TestCase):
     url_name_delete = '_ticket_request_delete'
 
     url_delete_response = reverse('Assistance:Requests')
+
+
+
+
+
+class ChangeTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'change'
+
+    ticket_type_enum: int = int(Ticket.TicketType.CHANGE.value)
+
+    app_namespace = 'ITIM'
+
+    url_name_view = '_ticket_change_view'
+
+    url_name_add = '_ticket_change_add'
+
+    url_name_change = '_ticket_change_change'
+
+    url_name_delete = '_ticket_change_delete'
+
+    url_delete_response = reverse('ITIM:Changes')
+
+
+
+class IncidentTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'incident'
+
+    ticket_type_enum: int = int(Ticket.TicketType.INCIDENT.value)
+
+    app_namespace = 'ITIM'
+
+    url_name_view = '_ticket_incident_view'
+
+    url_name_add = '_ticket_incident_add'
+
+    url_name_change = '_ticket_incident_change'
+
+    url_name_delete = '_ticket_incident_delete'
+
+    url_delete_response = reverse('ITIM:Incidents')
+
+
+
+class ProblemTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'problem'
+
+    ticket_type_enum: int = int(Ticket.TicketType.PROBLEM.value)
+
+    app_namespace = 'ITIM'
+
+    url_name_view = '_ticket_problem_view'
+
+    url_name_add = '_ticket_problem_add'
+
+    url_name_change = '_ticket_problem_change'
+
+    url_name_delete = '_ticket_problem_delete'
+
+    url_delete_response = reverse('ITIM:Problems')
+
+
+
+class ProjectTaskActionComments(ActionComments, TestCase):
+
+    ticket_type = 'project_task'
+
+    ticket_type_enum: int = int(Ticket.TicketType.PROJECT_TASK.value)
+
+    app_namespace = 'Project Management'
+
+    url_name_view = '_project_task_view'
+
+    url_name_add = '_project_task_add'
+
+    url_name_change = '_project_task_change'
+
+    url_name_delete = '_project_task_delete'
+
+
+
+
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
+
+        1. Create an organization for user and item
+        . create an organization that is different to item
+        2. Create a manufacturer
+        3. create teams with each permission: view, add, change, delete
+        4. create a user per team
+        """
+
+        super().setUpTestData()
+
+        self.item = self.model.objects.create(
+            organization = self.organization,
+            title = 'Amended ' + self.ticket_type + ' ticket',
+            description = 'the ticket body',
+            ticket_type = int(Ticket.TicketType.REQUEST.value),
+            opened_by = self.add_user,
+            status = int(Ticket.TicketStatus.All.NEW.value),
+            project = self.project
+        )
+
+        self.url_add_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type}
+
+        self.url_change_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.item.id}
+
+        self.url_delete_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.project.id}
+
+        # self.url_delete_kwargs = {'pk': self.project.id}
+
+        self.url_view_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.item.id}
+
+        self.url_delete_response = reverse('Project Management:_project_view', kwargs={'pk': self.project.id})
+
+
+
+class RequestTicketActionComments(ActionComments, TestCase):
+
+    ticket_type = 'request'
+
+    ticket_type_enum: int = int(Ticket.TicketType.REQUEST.value)
+
+    app_namespace = 'Assistance'
+
+    url_name_view = '_ticket_request_view'
+
+    url_name_add = '_ticket_request_add'
+
+    url_name_change = '_ticket_request_change'
+
+    url_name_delete = '_ticket_request_delete'
+
+    url_delete_response = reverse('Assistance:Requests')
+
+
+
