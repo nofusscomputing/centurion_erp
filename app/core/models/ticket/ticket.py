@@ -876,6 +876,21 @@ class Ticket(
 
                 comment_field_value = f"changed {field.replace('_id','')} to {self.project}"
 
+            if field == 'milestone_id':
+
+                value = 'nothing'
+
+                try:
+
+                    get_milestone = ProjectMilestone.objects.get( pk = before[field])
+
+                    value = get_milestone.name
+
+                except:
+                    pass
+
+                comment_field_value = f"changed milestone from _{value}_ to **{self.milestone}**"
+
 
             if comment_field_value:
 
