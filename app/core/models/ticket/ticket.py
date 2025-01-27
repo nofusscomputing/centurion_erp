@@ -874,7 +874,20 @@ class Ticket(
 
             if field == 'project_id':
 
-                comment_field_value = f"changed {field.replace('_id','')} to {self.project}"
+                value = 'None'
+
+                if before[field]:
+
+                    value = f"$project-{before[field]}"
+
+                to_value = getattr(self.project, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$project-{getattr(self.project, 'id', 'None')}"
+
+
+                comment_field_value = f"changed project from {value} to {to_value}"
 
             if field == 'milestone_id':
 
