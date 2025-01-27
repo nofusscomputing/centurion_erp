@@ -899,6 +899,10 @@ class Ticket(
 
                 comment_field_value = f"changed Planned Finish Date from _{before[field]}_ to **{str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'}**"
 
+            if field == 'real_start_date':
+
+                comment_field_value = f"changed Real Start Date from _{before[field]}_ to **{str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'}**"
+
             if comment_field_value:
 
                 if request:
