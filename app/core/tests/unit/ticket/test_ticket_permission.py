@@ -1556,6 +1556,42 @@ class ActionComments(SetUp):
 
 
 
+    def test_ticket_action_comment_description_change(self):
+        """Action Comment test
+        
+        When the field `real_finish_date` has a value removed it must create
+        an action comment
+        """
+
+        from_value = 'description text'
+        to_value = 'description text\n\nadditional text'
+
+        # prepare
+        self.item.description = from_value
+        self.item.save()
+
+        # add desired value
+        self.item.description = to_value
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+
+        for comment in comments:
+
+            if '+additional text' in str(comment.body):
+
+                action_comment = True
+
+        assert action_comment
+
+
+
 class TicketPermissions(
     SetUp,
     ModelPermissions,
