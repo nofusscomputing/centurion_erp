@@ -245,6 +245,10 @@ class TicketViewSet(ModelViewSet):
 
         serializer_prefix = str(self._ticket_type).replace(' ', '')
 
+        if self.serializer_class:
+
+            return self.serializer_class
+
 
         if (
             self.action == 'create'
@@ -253,34 +257,7 @@ class TicketViewSet(ModelViewSet):
             or self.action == 'update'
         ):
 
-            organization = None
-
-
-            if (
-                self.action == 'create'
-            ):
-
-                if self.request.data is not None:
-
-                    if 'organization' in self.request.data:
-
-                        organization = int(self.request.data['organization'])
-
-                        organization = Organization.objects.get(
-                            pk = organization
-                        )
-
-            elif (
-                (
-                    self.action == 'partial_update'
-                    or self.action == 'partial_update'
-                ) 
-                and self.kwargs.get('pk', None)
-            ):
-
-                organization = self.model.objects.get(
-                    pk = int(self.kwargs['pk'])
-                ).organization
+            organization = self._obj_organization
 
 
             if organization:
@@ -333,7 +310,10 @@ class TicketViewSet(ModelViewSet):
             or self.action == 'retrieve'
         ):
 
-            return globals()[serializer_prefix + 'TicketViewSerializer']
+            self.serializer_class = globals()[serializer_prefix + 'TicketViewSerializer']
 
+        else:
 
-        return globals()[serializer_prefix + 'TicketModelSerializer']
+            self.serializer_class = globals()[serializer_prefix + 'TicketModelSerializer']
+
+        return self.serializer_class

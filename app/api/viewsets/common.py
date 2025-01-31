@@ -561,6 +561,12 @@ class ModelViewSetBase(
     _Optional_, Used by API text search as the fields to search.
     """
 
+    serializer_class = None
+    """Serializer class to use,
+    
+    If not used, use get_serializer_class function and cache the class here.
+    """
+
 
     def get_queryset(self):
 
@@ -582,15 +588,24 @@ class ModelViewSetBase(
 
     def get_serializer_class(self):
 
+        if self.serializer_class:
+
+            return self.serializer_class
+
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return globals()[str( self.model._meta.verbose_name) + 'ViewSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ViewSerializer']
+
+        else:
+
+            self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ModelSerializer']
 
 
-        return globals()[str( self.model._meta.verbose_name) + 'ModelSerializer']
+        return self.serializer_class
 
 
 

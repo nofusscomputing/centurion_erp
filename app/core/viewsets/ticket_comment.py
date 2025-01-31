@@ -212,6 +212,10 @@ class ViewSet(ModelViewSet):
 
     def get_serializer_class(self):
 
+        if self.serializer_class:
+
+            return self.serializer_class
+
         organization:int = None
 
         serializer_prefix:str = 'TicketComment'
@@ -335,10 +339,14 @@ class ViewSet(ModelViewSet):
             or self.action == 'retrieve'
         ):
 
-            return globals()['TicketCommentViewSerializer']
+            self.serializer_class = globals()['TicketCommentViewSerializer']
 
 
-        return globals()[str(serializer_prefix).replace(' ', '') + 'ModelSerializer']
+        else:
+            
+            self.serializer_class = globals()[str(serializer_prefix).replace(' ', '') + 'ModelSerializer']
+
+        return self.serializer_class
 
 
 
