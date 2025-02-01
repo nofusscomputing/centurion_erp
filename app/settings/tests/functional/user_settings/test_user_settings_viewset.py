@@ -236,7 +236,7 @@ class UserSettingsPermissionsAPI(
         url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
 
 
-        client.force_login(self.delete_user)
+        client.force_login(self.view_user)
         response = client.delete(url, data=self.delete_data)
 
         assert response.status_code == 405
