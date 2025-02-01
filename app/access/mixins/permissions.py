@@ -122,6 +122,14 @@ class OrganizationPermissionMixin(
 
                 return True
 
+            elif (
+                view.model.__name__ == 'UserSettings'
+                and request._user.id != int(view.kwargs.get('pk', 0))
+            ):
+
+
+                return False
+
 
             has_permission_required: bool = False
 
@@ -166,10 +174,6 @@ class OrganizationPermissionMixin(
 
                 view_action = 'delete'
 
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif (
                 view.action == 'list'
             ):
@@ -183,10 +187,6 @@ class OrganizationPermissionMixin(
 
                 view_action = 'change'
 
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif (
                 view.action == 'update'
                 and request.method == 'PUT'
@@ -194,20 +194,12 @@ class OrganizationPermissionMixin(
 
                 view_action = 'change'
 
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif(
                 view.action == 'retrieve'
                 and request.method == 'GET' 
             ):
 
                 view_action = 'view'
-
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
 
             elif(
                 view.action == 'metadata'
@@ -286,12 +278,12 @@ class OrganizationPermissionMixin(
                 return True
 
 
-            object_organization: int = getattr(view.get_obj_organization( obj = obj ), 'id', None)
+            object_organization = view._obj_organization
 
             if object_organization:
 
                 if(
-                    object_organization
+                    int(object_organization)
                     in view.get_permission_organizations( view.get_permission_required() )
                     or request.user.is_superuser
                     or getattr(request.app_settings.global_organization, 'id', 0) == int(object_organization)

@@ -129,6 +129,8 @@ class ViewSet(ModelViewSet):
 
     model = TicketLinkedItem
 
+    item_type = None
+
 
     def get_parent_model(self):
 
@@ -200,19 +202,37 @@ class ViewSet(ModelViewSet):
 
     def get_serializer_class(self):
 
+        if self.serializer_class:
+
+            return self.serializer_class
+
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
+
+        else:
+
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
 
 
-        return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
+        return self.serializer_class
 
 
 
     def get_queryset(self):
+
+        if self.queryset:
+
+            return self.queryset
+
+
+        if not getattr(self, 'item_type', None):
+
+            self.get_parent_model()
 
         if 'ticket_id' in self.kwargs:
 
