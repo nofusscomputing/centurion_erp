@@ -129,6 +129,8 @@ class ViewSet(ModelViewSet):
 
     model = TicketLinkedItem
 
+    item_type = None
+
 
     def get_parent_model(self):
 
@@ -222,6 +224,10 @@ class ViewSet(ModelViewSet):
 
 
     def get_queryset(self):
+
+        if not getattr(self, 'item_type', None):
+
+            self.get_parent_model()
 
         if 'ticket_id' in self.kwargs:
 
