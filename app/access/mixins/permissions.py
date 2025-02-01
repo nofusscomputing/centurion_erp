@@ -166,10 +166,6 @@ class OrganizationPermissionMixin(
 
                 view_action = 'delete'
 
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif (
                 view.action == 'list'
             ):
@@ -183,10 +179,6 @@ class OrganizationPermissionMixin(
 
                 view_action = 'change'
 
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif (
                 view.action == 'update'
                 and request.method == 'PUT'
@@ -194,20 +186,12 @@ class OrganizationPermissionMixin(
 
                 view_action = 'change'
 
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif(
                 view.action == 'retrieve'
                 and request.method == 'GET' 
             ):
 
                 view_action = 'view'
-
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
 
             elif(
                 view.action == 'metadata'
