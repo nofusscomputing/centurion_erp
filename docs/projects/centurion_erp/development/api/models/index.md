@@ -21,6 +21,6 @@ Models within Centurion ERP:
 
 - [History Save](./core_history_save.md)
 
-- [Organization Permission Checking](./access_organization_permission_checking.md)
+- Organization Permission Checking
 
 - [Tenancy Object](./tenancy_object.md)

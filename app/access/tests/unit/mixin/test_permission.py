@@ -429,7 +429,7 @@ class HasPermission(
 
 
     @patch.object(GenericAPIView, 'get_object')
-    def test_action_has_permission_function_get_object_called_once(self, get_object):
+    def test_action_has_permission_function_get_object_called_none(self, get_object):
 
         get_object.return_value = self.obj
 
@@ -464,7 +464,7 @@ class HasPermission(
 
         OrganizationPermissionMixin().has_permission(request = view.request, view = view)
 
-        assert get_object.call_count == 1
+        assert get_object.call_count == 0
 
 
 
@@ -1331,7 +1331,7 @@ class HasPermissionDifferentOrganization(
 ):
 
     @patch.object(GenericAPIView, 'get_object')
-    def test_action_has_permission_different_org_get_object_called_once(self, get_object):
+    def test_action_has_permission_different_org_get_object_called_none(self, get_object):
 
         get_object.return_value = self.obj
 
@@ -1365,7 +1365,7 @@ class HasPermissionDifferentOrganization(
 
         OrganizationPermissionMixin().has_permission(request = view.request, view = view)
 
-        assert get_object.call_count == 1
+        assert get_object.call_count == 0
 
 
 

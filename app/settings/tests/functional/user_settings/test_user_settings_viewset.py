@@ -134,7 +134,7 @@ class ViewSetBase:
             user = self.view_user
         )
 
-        self.item = self.model.objects.get( id = 1 )
+        self.item = self.model.objects.get( id = self.view_user.id )
 
         self.item.default_organization = self.organization
 
@@ -236,7 +236,7 @@ class UserSettingsPermissionsAPI(
         url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
 
 
-        client.force_login(self.delete_user)
+        client.force_login(self.view_user)
         response = client.delete(url, data=self.delete_data)
 
         assert response.status_code == 405
@@ -266,6 +266,19 @@ class UserSettingsPermissionsAPI(
         assert response.status_code == 200
 
 
+    def test_change_permission_view_denied(self):
+        """ Ensure permission view cant make change
+
+        This test case is a duplicate of a test case with the same name.
+        As this is the users own settings, any permission a user has will grant
+        them access as user settings do not use permissions
+
+        Attempt to make change as user with view permission
+        """
+
+        pass
+
+
     def test_returned_results_only_user_orgs(self):
         """Test not required
 
@@ -273,6 +286,34 @@ class UserSettingsPermissionsAPI(
         """
 
         pass
+
+
+    def test_change_no_permission_denied(self):
+        """ Ensure permission view cant make change
+
+        This test case is a duplicate of a test case with the same name.
+        This test is not required for this model as there are no permissions
+        assosiated with accessing this model.
+
+        Attempt to make change as user without permissions
+        """
+
+        pass
+
+
+    def test_view_no_permission_denied(self):
+        """ Check correct permission for view
+
+        This test case is a duplicate of a test case with the same name.
+        This test is not required for this model as there are no permissions
+        assosiated with accessing this model.
+
+        Attempt to view with user missing permission
+        """
+
+        pass
+
+
 
 
 
