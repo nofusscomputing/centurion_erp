@@ -38,19 +38,19 @@ class OrganizationMixin:
             return self._obj_organization
 
 
-        _obj_organization: Organization = None
-
-
         if obj:
 
-            _obj_organization = getattr(obj, 'organization', None)
+            self._obj_organization = getattr(obj, 'organization', None)
 
 
-            if not _obj_organization:
+            if not self._obj_organization:
 
-                _obj_organization = getattr(obj, 'get_organization', lambda: None)()
+                self._obj_organization = getattr(obj, 'get_organization', lambda: None)()
 
-        elif request:
+        elif (
+            request
+            and not self.kwargs.get('pk', None)
+        ):
 
             if getattr(request.stream, 'method', '') != 'DELETE':
 
@@ -72,22 +72,21 @@ class OrganizationMixin:
 
                     if data_organization:
 
-                        _obj_organization = Organization.objects.get(
+                        self._obj_organization = Organization.objects.get(
                             pk = int( data_organization )
                         )
+
+        elif self.kwargs.get('pk', None):
+
+            self._obj_organization = self.get_object().organization
 
 
         if self.get_parent_model():    # if defined is to overwrite object organization
 
             parent_obj = self.get_parent_obj()
 
-            _obj_organization = parent_obj.get_organization()
+            self._obj_organization = parent_obj.get_organization()
 
-
-
-        if _obj_organization:
-
-            self._obj_organization = _obj_organization
 
         return self._obj_organization
 
