@@ -270,12 +270,12 @@ class OrganizationPermissionMixin(
                 return True
 
 
-            object_organization = int(view._obj_organization)
+            object_organization = view._obj_organization
 
             if object_organization:
 
                 if(
-                    object_organization
+                    int(object_organization)
                     in view.get_permission_organizations( view.get_permission_required() )
                     or request.user.is_superuser
                     or getattr(request.app_settings.global_organization, 'id', 0) == int(object_organization)
