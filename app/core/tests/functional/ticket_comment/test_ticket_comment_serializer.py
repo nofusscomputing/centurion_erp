@@ -143,6 +143,37 @@ class TicketCommentValidationAPI:
         assert serializer.is_valid(raise_exception = True)
 
 
+    def test_serializer_validation_add_valid_item_user_added_as_commenter(self):
+        """Serializer Validation Check
+
+        Ensure that a valid item it does not raise a validation error
+        """
+
+        mock_view = MockView( user = self.user )
+        mock_view.action = 'create'
+
+        # mock_request = MockRequest()
+        # mock_request._user = self.user
+
+
+        mock_view.kwargs: dict = {
+            'ticket_id': int(self.ticket.id)
+        }
+
+        serializer = self.serializer(
+            context = {
+                'view': mock_view,
+                'request': mock_view.request
+            },
+            data = self.serializer_data
+        )
+
+        serializer.is_valid(raise_exception = True)
+
+
+        assert serializer._validated_data['user'].id == self.user.id
+
+
     def test_serializer_validation_no_ticket(self):
         """Serializer Validation Check
 
