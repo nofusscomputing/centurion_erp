@@ -270,7 +270,7 @@ class OrganizationPermissionMixin(
                 return True
 
 
-            object_organization: int = getattr(view.get_obj_organization( obj = obj ), 'id', None)
+            object_organization = int(view._obj_organization)
 
             if object_organization:
 
