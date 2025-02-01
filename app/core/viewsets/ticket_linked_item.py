@@ -225,6 +225,11 @@ class ViewSet(ModelViewSet):
 
     def get_queryset(self):
 
+        if self.queryset:
+
+            return self.queryset
+
+
         if not getattr(self, 'item_type', None):
 
             self.get_parent_model()
