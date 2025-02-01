@@ -238,11 +238,11 @@ class TicketCommentModelSerializer(
         is_valid = super().is_valid(raise_exception=raise_exception)
 
 
+        self.validated_data['user'] = self.request.user
+
         if 'view' in self._context:
 
             if self._context['view'].action == 'create':
-
-                self.validated_data['user'] = self.request.user
 
                 if 'ticket_id' in self._kwargs['context']['view'].kwargs:
 
@@ -276,7 +276,12 @@ class TicketCommentModelSerializer(
                         code = 'required'
                     )
 
-                
+        if str(self._validated_data['user']._meta.verbose_name).lower() != 'user':
+
+            raise centurion_exceptions.ValidationError(
+                detail = "Couldn't determine user",
+                code = 'user_required'
+            )
 
         return is_valid
 
