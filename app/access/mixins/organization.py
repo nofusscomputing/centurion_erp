@@ -78,7 +78,16 @@ class OrganizationMixin:
 
         elif self.kwargs.get('pk', None):
 
-            self._obj_organization = self.get_object().organization
+
+            obj = self.model.objects.get( pk = self.kwargs.get('pk', None) )
+
+            if getattr(obj, 'organization', None):
+
+                self._obj_organization = obj.organization
+
+            elif str(self.model._meta.verbose_name).lower() == 'organization':
+
+                self._obj_organization = obj
 
 
         if self.get_parent_model():    # if defined is to overwrite object organization
