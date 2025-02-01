@@ -193,17 +193,52 @@ class TicketViewSet(ModelViewSet):
 
     def get_queryset(self):
 
+        if self.queryset:
+
+            return self.queryset
+
         self.get_ticket_type()
+
+
+        if self.kwargs.get('pk', None):
+
+            queryset = self.model.objects.select_related(
+                'organization',
+                'category',
+                'project',
+                'milestone',
+                'opened_by',
+            ).prefetch_related(
+                'assigned_teams',
+                'assigned_users',
+                'subscribed_teams',
+                'subscribed_users',
+            ).filter( pk = int( self.kwargs['pk'] ) )
+
+        else:
+
+            queryset = self.model.objects.select_related(
+                'organization',
+                'category',
+                'project',
+                'milestone',
+                'opened_by',
+            ).prefetch_related(
+                'assigned_teams',
+                'assigned_users',
+                'subscribed_teams',
+                'subscribed_users',
+            )
 
         if str(self._ticket_type).lower().replace(' ', '_') == 'project_task':
 
-            queryset = super().get_queryset().filter(
+            queryset = queryset.filter(
                 project_id = int(self.kwargs['project_id'])
             )
 
         else:
 
-            queryset = super().get_queryset().filter(
+            queryset = queryset.filter(
                 ticket_type = self._ticket_type_id
             )
 
