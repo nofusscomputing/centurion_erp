@@ -572,15 +572,14 @@ class ModelViewSetBase(
 
         if not self.queryset:
 
-            queryset = self.model.objects.all()
+            self.queryset = self.model.objects.all()
 
-            if 'pk' in self.kwargs:
+        if 'pk' in self.kwargs:
 
-                if self.kwargs['pk']:
+            if self.kwargs['pk']:
 
-                    queryset = queryset.filter( pk = int( self.kwargs['pk'] ) )
+                self.queryset = queryset.filter( pk = int( self.kwargs['pk'] ) )
 
-            self.queryset = queryset
 
         return self.queryset
 
