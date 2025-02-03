@@ -144,6 +144,10 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
+        if self.queryset:
+
+            return self.queryset
+
         queryset = super().get_queryset()
 
         queryset = queryset.filter(organization_id=self.kwargs['organization_id'])
