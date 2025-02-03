@@ -73,6 +73,10 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
+        if self.queryset:
+
+            return self.queryset
+
         if 'config_group_id' in self.kwargs:
 
             self.queryset = super().get_queryset().filter(config_group = self.kwargs['config_group_id'])
