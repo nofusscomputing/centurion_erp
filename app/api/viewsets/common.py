@@ -576,9 +576,11 @@ class ModelViewSetBase(
 
     def get_queryset(self):
 
-        if not self.queryset:
+        if self.queryset is not None:
 
-            self.queryset = self.model.objects.all()
+            return self.queryset
+
+        self.queryset = self.model.objects.all()
 
         if 'pk' in self.kwargs:
 
