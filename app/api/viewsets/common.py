@@ -338,6 +338,12 @@ class CommonViewSet(
         return super().allowed_methods
 
 
+    back_url: str = None
+    """Back URL
+    _Optional_, if specified will be added to view metadata for use for ui.
+    """
+
+
     documentation: str = None
     """ Viewset Documentation URL
 

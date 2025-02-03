@@ -78,7 +78,7 @@ class ViewSet( ModelViewSet ):
     def get_back_url(self) -> str:
 
         if(
-            getattr(self, '_back_url', None) is None
+            getattr(self, 'back_url', None) is None
         ):
 
             model_value: str = ''
@@ -108,12 +108,12 @@ class ViewSet( ModelViewSet ):
 
                     if item:
 
-                        self._back_url = str(
+                        self.back_url = str(
                             item.get_url( self.request )
                         )
 
 
-        return self._back_url
+        return self.back_url
 
 
     def get_queryset(self):
