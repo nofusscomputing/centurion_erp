@@ -627,11 +627,6 @@ class ViewSetModel(
         mock_return = view_set.get_queryset()    # Real item to be used as mock return Some 
                                                  # functions use `Queryset` for additional filtering
 
-        def bool_rtn(self):
-            return True
-
-        mock_return.__class__.__bool__ = bool_rtn    # Required for truthy if statments to work. i.e. `if self.queryset`
-
         setter_not_called = True
 
 
@@ -701,11 +696,6 @@ class ViewSetModel(
 
         mock_return = view_set.get_serializer_class()    # Real item to be used as mock return Some 
                                                          # functions use `Queryset` for additional filtering
-
-        def bool_rtn(self):
-            return True
-
-        mock_return.__class__.__bool__ = bool_rtn    # Required for truthy if statments to work. i.e. `if self.queryset`
 
         setter_not_called = True
 
