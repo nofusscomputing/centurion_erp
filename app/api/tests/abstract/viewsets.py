@@ -1,3 +1,5 @@
+from unittest.mock import patch, PropertyMock
+
 from access.mixins.permissions import OrganizationPermissionMixin
 
 from api.react_ui_metadata import ReactUIMetadata
@@ -367,7 +369,7 @@ class ModelViewSet(AllViewSet):
 
         assert (
             type(view_set.documentation) is str
-            or type(view_set.documentation) is None
+            or view_set.documentation is None
         )
 
 
@@ -584,4 +586,141 @@ class ViewSetModel(
         APIRenderModelViewSet (class): Tests to check API rendering to ensure data is present, includes `APIRenderViewSet` tests.
     """
 
-    pass
+
+    def test_view_func_get_queryset_cache_result(self):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>.queryset`
+        """
+
+        view_set = self.viewset()
+
+        view_set.kwargs = self.kwargs
+
+        view_set.action = 'list'
+
+        view_set.detail = False
+
+        assert view_set.queryset is None    # Must be empty before init
+
+        q = view_set.get_queryset()
+
+        assert view_set.queryset is not None    # Must not be empty after init
+
+        assert q == view_set.queryset
+
+
+    def test_view_func_get_queryset_cache_result_used(self):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>.queryset`
+        """
+
+        view_set = self.viewset()
+
+        view_set.kwargs = self.kwargs
+        view_set.action = 'list'
+        view_set.detail = False
+
+        mock_return = view_set.get_queryset()    # Real item to be used as mock return Some 
+                                                 # functions use `Queryset` for additional filtering
+
+        setter_not_called = True
+
+
+        with patch.object(self.viewset, 'queryset', new_callable=PropertyMock) as qs:
+
+            qs.return_value = mock_return
+
+            mocked_view_set = self.viewset()
+
+            mocked_view_set.kwargs = self.kwargs
+            mocked_view_set.action = 'list'
+            mocked_view_set.detail = False
+
+            qs.reset_mock()    # Just in case
+
+            mocked_setup = mocked_view_set.get_queryset()    # should only add two calls, if exists and the return
+
+
+            for mock_call in list(qs.mock_calls):    # mock_calls with args means setter was called
+
+                if len(mock_call.args) > 0:
+
+                    setter_not_called = False
+
+
+        assert setter_not_called
+        assert qs.call_count == 2
+
+
+
+    def test_view_func_get_serializer_class_cache_result(self):
+        """Viewset Test
+
+        Ensure that the `get_serializer_class` function caches the result under
+        attribute `<viewset>.serializer_class`
+        """
+
+        view_set = self.viewset()
+
+        view_set.kwargs = self.kwargs
+
+        view_set.action = 'list'
+
+        view_set.detail = False
+
+        assert view_set.serializer_class is None    # Must be empty before init
+
+        q = view_set.get_serializer_class()
+
+        assert view_set.serializer_class is not None    # Must not be empty after init
+
+        assert q == view_set.serializer_class
+
+
+    def test_view_func_get_serializer_class_cache_result_used(self):
+        """Viewset Test
+
+        Ensure that the `get_serializer_class` function caches the result under
+        attribute `<viewset>.serializer_class`
+        """
+
+        view_set = self.viewset()
+
+        view_set.kwargs = self.kwargs
+        view_set.action = 'list'
+        view_set.detail = False
+
+        mock_return = view_set.get_serializer_class()    # Real item to be used as mock return Some 
+                                                         # functions use `Queryset` for additional filtering
+
+        setter_not_called = True
+
+
+        with patch.object(self.viewset, 'serializer_class', new_callable=PropertyMock) as qs:
+
+            qs.return_value = mock_return
+
+            mocked_view_set = self.viewset()
+
+            mocked_view_set.kwargs = self.kwargs
+            mocked_view_set.action = 'list'
+            mocked_view_set.detail = False
+
+            qs.reset_mock()    # Just in case
+
+            mocked_setup = mocked_view_set.get_serializer_class()    # should only add two calls, if exists and the return
+
+
+            for mock_call in list(qs.mock_calls):    # mock_calls with args means setter was called
+
+                if len(mock_call.args) > 0:
+
+                    setter_not_called = False
+
+
+        assert setter_not_called
+        assert qs.call_count == 2

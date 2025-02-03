@@ -338,6 +338,12 @@ class CommonViewSet(
         return super().allowed_methods
 
 
+    back_url: str = None
+    """Back URL
+    _Optional_, if specified will be added to view metadata for use for ui.
+    """
+
+
     documentation: str = None
     """ Viewset Documentation URL
 
@@ -570,17 +576,18 @@ class ModelViewSetBase(
 
     def get_queryset(self):
 
-        if not self.queryset:
+        if self.queryset is not None:
 
-            queryset = self.model.objects.all()
+            return self.queryset
 
-            if 'pk' in self.kwargs:
+        self.queryset = self.model.objects.all()
 
-                if self.kwargs['pk']:
+        if 'pk' in self.kwargs:
 
-                    queryset = queryset.filter( pk = int( self.kwargs['pk'] ) )
+            if self.kwargs['pk']:
 
-            self.queryset = queryset
+                self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
+
 
         return self.queryset
 
@@ -588,7 +595,7 @@ class ModelViewSetBase(
 
     def get_serializer_class(self):
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 
