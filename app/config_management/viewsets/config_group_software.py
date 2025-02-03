@@ -73,7 +73,7 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        if self.queryset:
+        if self.queryset is not None:
 
             return self.queryset
 
