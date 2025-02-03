@@ -140,7 +140,7 @@ class ViewSet( ModelViewSet ):
 
         # all_models = apps.get_models()
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 
