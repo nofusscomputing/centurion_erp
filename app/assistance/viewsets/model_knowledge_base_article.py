@@ -118,6 +118,10 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
+        if self.queryset is not None:
+
+            return self.queryset
+
         queryset = super().get_queryset()
 
         for value, display_name in all_models():
