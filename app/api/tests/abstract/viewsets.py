@@ -24,6 +24,8 @@ class MockRequest:
 
     data = {}
 
+    kwargs = {}
+
     tenancy: Tenancy = None
 
     user: User = None
@@ -95,6 +97,8 @@ class AllViewSet:
 
         view_set = self.viewset()
 
+        view_set.kwargs = self.kwargs
+
         assert view_set.allowed_methods is not None
 
 
@@ -105,6 +109,8 @@ class AllViewSet:
         """
 
         view_set = self.viewset()
+
+        view_set.kwargs = self.kwargs
 
         assert type(view_set.allowed_methods) is list
 
@@ -485,6 +491,8 @@ class ModelViewSet(AllViewSet):
         all_valid: bool = True
 
         view_set = self.viewset()
+
+        view_set.kwargs = self.kwargs
 
         for method in list(view_set.allowed_methods):
 
