@@ -70,6 +70,8 @@ class ViewSet(ModelViewSet):
 
     model = TicketCategory
 
+    view_description: str = 'Categories available for tickets'
+
 
     def get_serializer_class(self):
 
