@@ -34,11 +34,13 @@ class ViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
 
-        queryset = queryset.filter(device_id=self.kwargs['device_id'])
+            return self.queryset
 
-        self.queryset =  queryset
+        self.queryset = super().get_queryset()
+
+        self.queryset = self.queryset.filter(device_id=self.kwargs['device_id'])
 
         return self.queryset
 
