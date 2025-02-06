@@ -1,8 +1,67 @@
+from django.contrib.auth.models import ContentType, User
+
 from unittest.mock import patch, PropertyMock
 
 from access.mixins.permissions import OrganizationPermissionMixin
 
 from api.react_ui_metadata import ReactUIMetadata
+
+from access.middleware.request import Tenancy
+from access.models import Organization, Team, TeamUsers, Permission
+
+from settings.models.app_settings import AppSettings
+
+
+
+class MockRequest:
+    """Fake Request
+
+    contains the user and tenancy object for permission checks
+
+    Some ViewSets rely upon the request object for obtaining the user and
+    fetching the tenacy object for permission checking.
+    """
+
+    data = {}
+
+    tenancy: Tenancy = None
+
+    user: User = None
+
+    def __init__(self, user: User, organization: Organization, viewset):
+
+        self.user = user
+
+        view_permission = Permission.objects.get(
+            codename = 'view_' + viewset.model._meta.model_name,
+            content_type = ContentType.objects.get(
+                app_label = viewset.model._meta.app_label,
+                model = viewset.model._meta.model_name,
+            )
+        )
+
+        view_team = Team.objects.create(
+            team_name = 'view_team',
+            organization = organization,
+        )
+
+        view_team.permissions.set([view_permission])
+
+
+        teamuser = TeamUsers.objects.create(
+            team = view_team,
+            user = user
+        )
+
+
+        self.app_settings = AppSettings.objects.select_related('global_organization').get(
+            owner_organization = None
+        )
+
+        self.tenancy = Tenancy(
+            user = user,
+            app_settings = self.app_settings
+        )
 
 
 
@@ -596,6 +655,12 @@ class ViewSetModel(
 
         view_set = self.viewset()
 
+        view_set.request = MockRequest(
+            user = self.view_user,
+            organization = self.organization,
+            viewset = self.viewset
+        )
+
         view_set.kwargs = self.kwargs
 
         view_set.action = 'list'
@@ -619,6 +684,12 @@ class ViewSetModel(
         """
 
         view_set = self.viewset()
+
+        view_set.request = MockRequest(
+            user = self.view_user,
+            organization = self.organization,
+            viewset = self.viewset
+        )
 
         view_set.kwargs = self.kwargs
         view_set.action = 'list'
@@ -666,6 +737,12 @@ class ViewSetModel(
 
         view_set = self.viewset()
 
+        view_set.request = MockRequest(
+            user = self.view_user,
+            organization = self.organization,
+            viewset = self.viewset
+        )
+
         view_set.kwargs = self.kwargs
 
         view_set.action = 'list'
@@ -689,6 +766,12 @@ class ViewSetModel(
         """
 
         view_set = self.viewset()
+
+        view_set.request = MockRequest(
+            user = self.view_user,
+            organization = self.organization,
+            viewset = self.viewset
+        )
 
         view_set.kwargs = self.kwargs
         view_set.action = 'list'
