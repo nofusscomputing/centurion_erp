@@ -359,7 +359,17 @@ class Ticket(
         help_text = 'Status of ticket',
         # null=True,
         verbose_name = 'Status',
-    ) 
+    )
+
+    parent_ticket = models.ForeignKey(
+        'self',
+        blank = True,
+        default = None,
+        help_text = 'Parent of this ticket',
+        null = True,
+        on_delete = models.SET_NULL,
+        verbose_name = 'Parent Ticket'
+    )
 
     category = models.ForeignKey(
         TicketCategory,
