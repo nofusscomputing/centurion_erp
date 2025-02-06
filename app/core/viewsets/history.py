@@ -42,6 +42,8 @@ class ViewSet(ReadOnlyModelViewSet):
 
     model = History
 
+    view_description: str = 'Model Change History'
+
 
     def get_queryset(self):
 
