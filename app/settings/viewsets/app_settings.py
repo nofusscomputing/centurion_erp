@@ -67,6 +67,8 @@ class ViewSet(ModelRetrieveUpdateViewSet):
     #     'software',
     # ]
 
+    view_description = 'Centurion Settings'
+
 
     def get_serializer_class(self):
 
