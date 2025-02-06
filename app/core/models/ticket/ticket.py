@@ -12,8 +12,8 @@ from .ticket_enum_values import TicketValues
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
+from core import exceptions as centurion_exceptions
 from core.lib.slash_commands import SlashCommands
-
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket_category import TicketCategory, KnowledgeBase
 
@@ -359,7 +359,17 @@ class Ticket(
         help_text = 'Status of ticket',
         # null=True,
         verbose_name = 'Status',
-    ) 
+    )
+
+    parent_ticket = models.ForeignKey(
+        'self',
+        blank = True,
+        default = None,
+        help_text = 'Parent of this ticket',
+        null = True,
+        on_delete = models.SET_NULL,
+        verbose_name = 'Parent Ticket'
+    )
 
     category = models.ForeignKey(
         TicketCategory,
@@ -973,7 +983,14 @@ class Ticket(
                 comment_field_value = '<details><summary>Changed the Description</summary>\n\n``` diff \n\n' + comment_field_value + '\n\n```\n\n</details>'
 
 
-            if comment_field_value:
+            if comment_field_value is None:
+
+                raise centurion_exceptions.MissingAttribute(
+                    detail = f'Action comment for field {field} will not be created. please report this as a bug.',
+                    code = 'no_action_comment'
+                )
+
+            elif comment_field_value:
 
                 if request:
 
