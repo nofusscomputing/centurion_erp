@@ -86,6 +86,8 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
 
     parent_model_pk_kwarg = 'ticket_id'
 
+    view_description: str = 'Related Tickets'
+
 
     def get_serializer_class(self):
 
