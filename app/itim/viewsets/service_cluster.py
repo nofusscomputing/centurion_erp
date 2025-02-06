@@ -45,7 +45,7 @@ class ViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
 
-        if self.serializer_class:
+        if self.serializer_classis is not None:
 
             return self.serializer_class
 
