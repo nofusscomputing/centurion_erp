@@ -183,6 +183,8 @@ class ViewSet(ModelViewSet):
 
     parent_model_pk_kwarg = 'ticket_id'
 
+    view_description = 'Comments made on Ticket'
+
 
     def get_queryset(self):
 
