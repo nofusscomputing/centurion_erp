@@ -75,7 +75,11 @@ class ViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
+
+            return self.queryset
+
+        self.queryset = super().get_queryset()
 
         if 'device_id' in self.kwargs:
 
