@@ -193,7 +193,7 @@ class TicketViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        if self.queryset:
+        if self.queryset is not None:
 
             return self.queryset
 
@@ -280,7 +280,7 @@ class TicketViewSet(ModelViewSet):
 
         serializer_prefix = str(self._ticket_type).replace(' ', '')
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 

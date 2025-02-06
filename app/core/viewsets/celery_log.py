@@ -88,15 +88,26 @@ class ViewSet(AuthUserReadOnlyModelViewSet):
         'date_created',
     ]
 
+    view_description = 'Task Logs'
+
+    view_name = 'Celery Task Results'
+
 
     def get_serializer_class(self):
+
+        if self.serializer_class is not None:
+
+            return  self.serializer_class
 
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return globals()['TaskResultViewSerializer']
+            self.serializer_class = globals()['TaskResultViewSerializer']
 
+        else:
 
-        return globals()['TaskResultModelSerializer']
+            self.serializer_class = globals()['TaskResultModelSerializer']
+
+        return self.serializer_class

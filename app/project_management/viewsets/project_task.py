@@ -132,3 +132,5 @@ class ViewSet(TicketViewSet):
     """
 
     _ticket_type: str = 'Project Task'
+
+    view_description = 'Tasks Assigned to Project'

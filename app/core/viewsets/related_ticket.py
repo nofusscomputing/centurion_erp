@@ -86,10 +86,12 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
 
     parent_model_pk_kwarg = 'ticket_id'
 
+    view_description: str = 'Related Tickets'
+
 
     def get_serializer_class(self):
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 
@@ -111,10 +113,16 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
 
     def get_queryset(self):
 
+        if self.queryset is not None:
+
+            return self.queryset
+
         self.queryset = RelatedTickets.objects.filter(
             Q(from_ticket_id_id=self.kwargs['ticket_id'])
                 |
             Q(to_ticket_id_id=self.kwargs['ticket_id'])
         )
 
-        return self.queryset.filter().order_by('id')
+        self.queryset = self.queryset.filter().order_by('id')
+
+        return self.queryset

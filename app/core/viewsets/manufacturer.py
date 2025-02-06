@@ -70,10 +70,12 @@ class ViewSet(ModelViewSet):
 
     model = Manufacturer
 
+    view_description: str = 'Manufacturer(s) / Publishers'
+
 
     def get_serializer_class(self):
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 

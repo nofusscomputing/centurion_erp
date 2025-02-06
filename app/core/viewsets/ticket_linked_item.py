@@ -131,6 +131,8 @@ class ViewSet(ModelViewSet):
 
     item_type = None
 
+    view_description = 'Models linked to a ticket'
+
 
     def get_parent_model(self):
 
@@ -202,7 +204,7 @@ class ViewSet(ModelViewSet):
 
     def get_serializer_class(self):
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 
@@ -225,7 +227,7 @@ class ViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        if self.queryset:
+        if self.queryset is not None:
 
             return self.queryset
 

@@ -183,36 +183,41 @@ class ViewSet(ModelViewSet):
 
     parent_model_pk_kwarg = 'ticket_id'
 
+    view_description = 'Comments made on Ticket'
+
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
+
+            return self.queryset
+
+        self.queryset = super().get_queryset()
 
         if 'parent_id' in self.kwargs:
 
-            queryset = queryset.filter(parent=self.kwargs['parent_id'])
+            self.queryset = self.queryset.filter(parent=self.kwargs['parent_id'])
 
         else:
 
-            queryset = queryset.filter(parent=None)
+            self.queryset = self.queryset.filter(parent=None)
 
 
         if 'ticket_id' in self.kwargs:
 
-            queryset = queryset.filter(ticket=self.kwargs['ticket_id'])
+            self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id'])
 
         if 'pk' in self.kwargs:
 
-            queryset = queryset.filter(pk = self.kwargs['pk'])
+            self.queryset = self.queryset.filter(pk = self.kwargs['pk'])
 
-        self.queryset = queryset
 
         return self.queryset
 
 
     def get_serializer_class(self):
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 

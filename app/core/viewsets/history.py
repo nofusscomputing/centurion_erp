@@ -42,12 +42,18 @@ class ViewSet(ReadOnlyModelViewSet):
 
     model = History
 
+    view_description: str = 'Model Change History'
+
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
 
-        self.queryset = queryset.filter(
+            return self.queryset
+
+        self.queryset = super().get_queryset()
+
+        self.queryset = self.queryset.filter(
             Q(item_pk = self.kwargs['model_id'], item_class = self.kwargs['model_class'])
             |
             Q(item_parent_pk = self.kwargs['model_id'], item_parent_class = self.kwargs['model_class'])
@@ -58,7 +64,13 @@ class ViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
 
-        return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+        if self.serializer_class is not None:
+
+            return self.serializer_class
+
+        self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+
+        return self.serializer_class
 
 
     def get_view_name(self):

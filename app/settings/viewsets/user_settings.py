@@ -67,10 +67,12 @@ class ViewSet(ModelRetrieveUpdateViewSet):
     #     'software',
     # ]
 
+    view_description = 'Your Settings'
+
 
     def get_serializer_class(self):
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 
