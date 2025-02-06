@@ -126,7 +126,7 @@ class ViewSet( ModelViewSet ):
 
         self.queryset = super().get_queryset()
 
-        self.queryset = queryset.filter( project_id = self.kwargs['project_id'])
+        self.queryset = self.queryset.filter( project_id = self.kwargs['project_id'])
 
         return self.queryset
 
