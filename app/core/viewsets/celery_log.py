@@ -88,6 +88,8 @@ class ViewSet(AuthUserReadOnlyModelViewSet):
         'date_created',
     ]
 
+    view_description = 'Task Logs'
+
 
     def get_serializer_class(self):
 
