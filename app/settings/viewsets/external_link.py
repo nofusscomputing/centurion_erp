@@ -64,6 +64,8 @@ class ViewSet(ModelViewSet):
         'software',
     ]
 
+    view_description: str = 'External Link tags'
+
 
     def get_serializer_class(self):
 
