@@ -62,15 +62,24 @@ class ViewSet(ModelViewSet):
 
     def get_serializer_class(self):
 
+        if self.serializer_class is not None:
+
+            return self.serializer_class
+
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return ViewSerializer
+            self.serializer_class = ViewSerializer
 
 
-        return ModelSerializer
+        else:
+            
+            self.serializer_class = ModelSerializer
+
+        return self.serializer_class
 
 
     def get_queryset(self):
@@ -120,10 +129,6 @@ class ViewSet(ModelViewSet):
             self.parent_model = Software
 
             self.parent_model_pk_kwarg = 'software_id'
-
-        else:
-
-            self.queryset = queryset
 
 
         return self.queryset
