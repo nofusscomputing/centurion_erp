@@ -43,6 +43,8 @@ class AccessViewset(
         client.force_login(self.view_user)
         self.http_options_response_list = client.options(url)
 
+        self.kwargs = {}
+
 
 
     def test_view_attr_permission_classes_value(self):

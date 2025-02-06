@@ -78,7 +78,7 @@ class ViewSet( ModelViewSet ):
     def get_back_url(self) -> str:
 
         if(
-            getattr(self, '_back_url', None) is None
+            getattr(self, 'back_url', None) is None
         ):
 
             model_value: str = ''
@@ -108,15 +108,19 @@ class ViewSet( ModelViewSet ):
 
                     if item:
 
-                        self._back_url = str(
+                        self.back_url = str(
                             item.get_url( self.request )
                         )
 
 
-        return self._back_url
+        return self.back_url
 
 
     def get_queryset(self):
+
+        if self.queryset is not None:
+
+            return self.queryset
 
         queryset = super().get_queryset()
 
@@ -138,15 +142,23 @@ class ViewSet( ModelViewSet ):
 
     def get_serializer_class(self):
 
-        all_models = apps.get_models()
-        
+        # all_models = apps.get_models()
+
+        if self.serializer_class is not None:
+
+            return self.serializer_class
+
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
+
+        else:
+
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
 
 
-        return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
-
+        return self.serializer_class

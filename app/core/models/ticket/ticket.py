@@ -1,3 +1,5 @@
+import difflib
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q, signals, Sum
@@ -568,6 +570,9 @@ class Ticket(
         'id',
         'title',
         'status_badge',
+        'priority_badge',
+        'impact_badge',
+        'urgency_badge',
         'opened_by',
         'organization',
         'created'
@@ -871,7 +876,101 @@ class Ticket(
 
             if field == 'project_id':
 
-                comment_field_value = f"changed {field.replace('_id','')} to {self.project}"
+                value = 'None'
+
+                if before[field]:
+
+                    value = f"$project-{before[field]}"
+
+                to_value = getattr(self.project, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$project-{getattr(self.project, 'id', 'None')}"
+
+
+                comment_field_value = f"changed project from {value} to {to_value}"
+
+            if field == 'milestone_id':
+
+                value = 'None'
+
+                if before[field]:
+
+                    value = f"$milestone-{before[field]}"
+
+                to_value = getattr(self.milestone, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$milestone-{getattr(self.milestone, 'id', 'None')}"
+
+
+                comment_field_value = f"changed milestone from {value} to {to_value}"
+
+            if field == 'planned_start_date':
+
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Planned Start Date from _{before[field]}_ to **{to_value}**"
+
+            if field == 'planned_finish_date':
+
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Planned Finish Date from _{before[field]}_ to **{to_value}**"
+
+            if field == 'real_start_date':
+
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Real Start Date from _{before[field]}_ to **{to_value}**"
+
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+            if field == 'real_finish_date':
+
+                to_value = after[field]
+
+                if to_value:
+
+                    to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
+
+                comment_field_value = f"changed Real Finish Date from _{before[field]}_ to **{to_value}**"
+
+
+            if field == 'description':
+
+                comment_field_value = ''.join(
+                    str(x) for x in list(
+                        difflib.unified_diff(
+                            str(before[field] + '\n').splitlines(keepends=True),
+                            str(after[field] + '\n').splitlines(keepends=True),
+                            fromfile = 'before',
+                            tofile = 'after',
+                            n = 10000,
+                            lineterm = '\n'
+                        )
+                    )
+                ) + ''
+
+                comment_field_value = '<details><summary>Changed the Description</summary>\n\n``` diff \n\n' + comment_field_value + '\n\n```\n\n</details>'
 
 
             if comment_field_value:
@@ -909,6 +1008,82 @@ class Ticket(
 
 
     @property
+    def impact_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = '-'
+
+        if self.impact:
+
+            if self.impact == self.TicketImpact.VERY_LOW:
+
+                text = 'Very Low'
+
+            elif self.impact == self.TicketImpact.LOW:
+
+                text = 'Low'
+
+            elif self.impact == self.TicketImpact.MEDIUM:
+
+                text = 'Medium'
+
+            elif self.impact == self.TicketImpact.HIGH:
+
+                text = 'High'
+
+            elif self.impact == self.TicketImpact.VERY_HIGH:
+
+                text = 'Very High'
+
+
+        return Badge(
+            icon_name = 'circle',
+            icon_style = f"status {text.lower().replace(' ', '-')}",
+            text = text,
+            text_style = '',
+        )
+
+
+    @property
+    def priority_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = '-'
+
+        if self.priority:
+
+            if self.priority == self.TicketPriority.VERY_LOW:
+
+                text = 'Very Low'
+
+            elif self.priority == self.TicketPriority.LOW:
+
+                text = 'Low'
+
+            elif self.priority == self.TicketPriority.MEDIUM:
+
+                text = 'Medium'
+
+            elif self.priority == self.TicketPriority.HIGH:
+
+                text = 'High'
+
+            elif self.priority == self.TicketPriority.VERY_HIGH:
+
+                text = 'Very High'
+
+
+        return Badge(
+            icon_name = 'circle',
+            icon_style = f"status {text.lower().replace(' ', '-')}",
+            text = text,
+            text_style = '',
+        )
+
+
+    @property
     def status_badge(self):
 
         from core.classes.badge import Badge
@@ -927,6 +1102,44 @@ class Ticket(
             icon_style = f'ticket-status-icon ticket-status-icon-{style.lower()}',
             text = text,
             text_style = f'ticket-status-text badge-text-ticket_status-{style.lower()}',
+        )
+
+
+    @property
+    def urgency_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = '-'
+
+        if self.urgency:
+
+            if self.urgency == self.TicketUrgency.VERY_LOW:
+
+                text = 'Very Low'
+
+            elif self.urgency == self.TicketUrgency.LOW:
+
+                text = 'Low'
+
+            elif self.urgency == self.TicketUrgency.MEDIUM:
+
+                text = 'Medium'
+
+            elif self.urgency == self.TicketUrgency.HIGH:
+
+                text = 'High'
+
+            elif self.urgency == self.TicketUrgency.VERY_HIGH:
+
+                text = 'Very High'
+
+
+        return Badge(
+            icon_name = 'circle',
+            icon_style = f"status {text.lower().replace(' ', '-')}",
+            text = text,
+            text_style = '',
         )
 
 
