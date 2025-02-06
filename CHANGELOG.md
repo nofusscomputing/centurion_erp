@@ -1,3 +1,201 @@
+## 1.9.0 (2025-02-06)
+
+### feat
+
+- **core**: Validate user field to ensure ticket comments always have user who added comment
+- **core**: Cache ticket linked item queryset
+- Views to cache discovered serializer
+- **core**: When changing ticket description create an action comment with the details
+- **core**: When changing a ticket real finish date create an action comment with the details
+- **core**: When changing a ticket real start date create an action comment with the details
+- **core**: When changing a ticket planned finish date create an action comment with the details
+- **core**: When changing a ticket planned start date create an action comment with the details
+- **core**: When changing a ticket milestone create an action comment with the changed details
+- **core**: Add Priority badge field to ALL ticket types
+- **core**: Add Impact badge field to ALL ticket types
+- **core**: Add urgency badge field to ALL ticket types
+
+### Fixes
+
+- **project_management**: Add missing attribute `view_description` to project tasks viewset
+- **settings**: Add missing attribute `view_description` to user settings viewset
+- **settings**: Add missing attribute `view_description` to app settings viewset
+- **itim**: Add missing attribuite to problem ticket viewset
+- **itim**: Add missing attribuite to incident ticket viewset
+- **itim**: Add missing attribuite to change ticket viewset
+- **itimm**: correct truthy check for service device ViewSet property when evaluating queryset
+- **itam**: correct truthy check for service cluster ViewSet property when evaluating queryset
+- **itam**: correct truthy check for service cluster ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for service device ViewSet property when evaluating serializer_class
+- **itam**: add missing attribute view_name to celery log viewset
+- **api**: correct get_view_name to prioritize view_name over model.verbose_name
+- **itam**: correct truthy check for software version ViewSet property when evaluating queryset
+- **itam**: correct truthy check for os version ViewSet property when evaluating queryset
+- **itam**: correct truthy check for device software ViewSet property when evaluating queryset
+- **itam**: correct truthy check for device os ViewSet property when evaluating queryset
+- **itam**: correct truthy check for software version ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for software category ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for os version ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for device software ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for device os ViewSet property when evaluating serializer_class
+- **core**: correct varname for queryset within notes queryset
+- **core**: add missing attribute view_description to ticket linked item viewset
+- **core**: add missing attribute view_description to ticket comment viewset
+- **core**: add missing attribute view_description to note viewset
+- **core**: add missing attribute view_description to related ticket log viewset
+- **core**: add missing attribute view_description to celery log viewset
+- **core**: add missing attribute view_description to history viewset
+- **core**: correct truthy check for notes ViewSet property when evaluating serializer_class
+- **core**: correct truthy check for history ViewSet property when evaluating queryset
+- **core**: correct truthy check for notes ViewSet property when evaluating queryset
+- **core**: correct truthy check for related ticket ViewSet property when evaluating queryset
+- **core**: correct truthy check for ticket comment ViewSet property when evaluating queryset
+- **core**: correct truthy check for ticket linked items ViewSet property when evaluating queryset
+- **core**: correct truthy check for ticket linked items ViewSet property when evaluating queryset
+- **core**: correct truthy check for ticket comment ViewSet property when evaluating queryset
+- **core**: correct truthy check for related ticket ViewSet property when evaluating queryset
+- **core**: correct truthy check for history ViewSet property when evaluating queryset
+- **core**: correct truthy check for celery log ViewSet property when evaluating queryset
+- **core**: correct truthy check for Ticket Base ViewSet property when evaluating queryset
+- **core**: correct truthy check for ticket base ViewSet property when evaluating serializer_class
+- **assistance**: Add missing attribute `view_description` to request ticket ViewSet
+- **settinggs**: Add missing attribute `view_description` to external links ViewSet
+- **core**: Add missing attribute `view_description` to ticket comment category ViewSet
+- **core**: Add missing attribute `view_description` to ticekt category ViewSet
+- **core**: Add missing attribute `view_description` to Manufacturer ViewSet
+- **project_management**: correct truthy check for project milestone ViewSet property when evaluating queryset
+- **settings**: correct truthy check for user settings ViewSet property when evaluating serializer_class
+- **settings**: correct truthy check for external links ViewSet property when evaluating serializer_class
+- **settings**: correct truthy check for app settings ViewSet property when evaluating serializer_class
+- **project_management**: correct truthy check for project milestone ViewSet property when evaluating queryset
+- **project_management**: correct truthy check for project ViewSet property when evaluating serializer_class
+- **project_management**: correct truthy check for project type ViewSet property when evaluating serializer_class
+- **project_management**: correct truthy check for project state ViewSet property when evaluating serializer_class
+- **project_management**: correct truthy check for project milestone ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for service ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for port ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for cluster ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for cluster type ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for software ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for os ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for device ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for device type ViewSet property when evaluating serializer_class
+- **itam**: correct truthy check for device model ViewSet property when evaluating serializer_class
+- **core**: correct truthy check for ticket comment category ViewSet property when evaluating serializer_class
+- **core**: correct truthy check for ticket category ViewSet property when evaluating serializer_class
+- **core**: correct truthy check for manufacturer ViewSet property when evaluating serializer_class
+- **config_management**: correct truthy check for config group ViewSet property when evaluating queryset
+- **config_management**: correct truthy check for config group ViewSet property when evaluating serializer_class
+- **config_management**: correct truthy check for config group software ViewSet property when evaluating serializer_class
+- **config_management**: correct truthy check for config group software ViewSet property when evaluating queryset
+- **assistance**: correct truthy check for model kb article ViewSet property when evaluating queryset
+- **assistance**: correct truthy check for model kb article ViewSet property when evaluating serializer_class
+- **assistance**: correct truthy check for kb ViewSet property when evaluating serializer_class
+- **assistance**: correct truthy check for kb ViewSet property when evaluating serializer_class
+- **access**: correct truthy check for team ViewSet property when evaluating serializer_class
+- **access**: correct truthy check for team ViewSet property when evaluating queryset
+- **access**: correct truthy check for team user ViewSet property when evaluating queryset
+- **access**: correct truthy check for team user ViewSet property when evaluating serializer_class
+- **access**: correct truthy check for organization ViewSet property when evaluating serializer_class
+- **api**: correct truthy check for set property when evaluating serializer_class
+- **api**: correct truthy check for set property when evaluating queryset
+- **api**: correct variable name in common viewset for queryset
+- **config_management**: config group software viewset must cache queryset
+- **config_management**: config group viewset must cache queryset
+- **assistance**: Knowledge base category viewset must cache serializer_class
+- **access**: Team viewset must cache serializer_class
+- **access**: Team viewset must cach queryset
+- **access**: Team User viewset must cach queryset
+- **api**: Add missing property `bacjk_url` to Common viewset
+- **api**: Common viewset to cache and use queryset Object
+- **access**: When conduting permission check for user settings, if user not owner of settings, deny access
+- **access**: when checking object permissions, dont cast obj to int untill checking it exists
+- **access**: org mixin get_obj_org not to call get_object
+- **core**: ensure item_type exists before trying to get queryset
+- **core**: Ticket Action comment date fields must be checked if empty before use
+- **settings**: grant the user access to their own settings object
+- **settings**: grant the user access to their own settings
+
+### Refactoring
+
+- **access**: when checking obj permission use view cached obj organization
+- **access**: When fetching obj org, if pk exist attempt to fetch object
+- **core**: When fetching a ticket, fetch related fields
+- **core**: Ticket action comment for changing milestone to use item tasg
+- **core**: Ticket action comment for changing project to use item tasg
+
+### Tests
+
+- **core**: Add missing unit tests for notes ticket viewset
+- **settings**: Add missing unit tests for user settings ticket viewset
+- **settings**: Add missing unit tests for app settings ticket viewset
+- **project_management**: Add missing unit tests for project task ticket viewset
+- **api**: Add kwargs as arg to test cases
+- **itim**: Add missing unit tests for problem ticket viewset
+- **itim**: Add missing unit tests for incident ticket viewset
+- **itim**: Add missing unit tests for change ticket viewset
+- **core**: add permisssion class override test case for celery results
+- Add empty kwargs to ViewSet index page test cases
+- **itam**: Add missing unit tests for software version viewset
+- **itam**: Add missing unit tests for software categories viewset
+- **itam**: Add missing unit tests for os versions viewset
+- **itam**: Add missing unit tests for software installs viewset
+- **itam**: Add missing unit tests for os installs viewset
+- **itam**: Add missing unit tests for device software viewset
+- **itam**: Add missing unit tests for device operating system viewset
+- **api**: Add kwargs as arg to test cases
+- **core**: Add missing unit tests for ticket linked items viewset
+- **core**: Add missing unit tests for ticket comment viewset
+- **core**: Add missing unit tests for celery log viewset
+- **core**: Add missing unit tests for history viewset
+- **core**: Add missing unit tests for related tickets viewset
+- **assistance**: Add missing unit tests for request ticket viewset
+- **api**: queryset and serializer_class test cases updated to use Fake request object
+- **settings**: Add missing unit tests for external links viewset
+- **project_management**: Add missing unit tests for project type viewset
+- **project_management**: Add missing unit tests for project state viewset
+- **project_management**: Add missing unit tests for project milestone viewset
+- **project_management**: Add missing unit tests for project viewset
+- **itim**: Add missing unit tests for service viewset
+- **itim**: Add missing unit tests for ports viewset
+- **itim**: Add missing unit tests for cluster types viewset
+- **itim**: Add missing unit tests for cluster viewset
+- **itam**: Add missing unit tests for Software viewset
+- **itam**: Add missing unit tests for Operating System viewset
+- **itam**: Add missing unit tests for Device Type viewset
+- **itam**: Add missing unit tests for Device Model viewset
+- **itam**: Add missing unit tests for Device viewset
+- **api**: dont mock the qs bool
+- **core**: Add missing unit tests for Ticket Comment Category viewset
+- **core**: Add missing unit tests for Ticket Category viewset
+- **core**: Add missing unit tests for manufacturer viewset
+- **config_management**: Add missing unit tests for config groups software viewset
+- **config_management**: Add missing unit tests for config groups viewset
+- **assistance**: Add missing unit tests for Model Knowledge Base Article viewset
+- **assistance**: Add missing unit tests for Knowledge Base Category viewset
+- **assistance**: Add missing unit tests for Knowledge Base viewset
+- **access**: Add missing unit tests for team user viewset
+- **access**: Add missing unit tests for team viewset
+- **access**: Add missing unit tests for organization viewset
+- **base**: Ensure viewsets are caching and using the serializer_class object
+- **base**: Ensure viewsets are caching and using the queryset object
+- **core**: Test case to ensure ticket comment always has user added
+- **settings**: when checking if user can delete own settings, user must be owner of settings
+- **settings**: regardless of permissions a user can change their own settings
+- **access**: during permission check function has_permission ensure `get_object` not called
+- **core**: Ensure that an action comment is created when ticket description is edited
+- **core**: Ticket Action comment test cases for real_finish_date actions
+- **core**: Ticket Action comment test cases for real_start_date actions
+- **core**: Ticket Action comment test cases for planned_finish_date actions
+- **core**: Ticket Action comment test cases for planned_start_date actions
+- **core**: Ticket Action comment test cases for milestone actions
+- **core**: Ticket Action comment test cases for project actions
+- **core**: Ticket Action comment tests moved to their own suite
+- **core**: Unit test cases for ticket urgency_badge field checks
+- **core**: Unit test cases for ticket priority_badge field checks
+- **core**: Unit test cases for ticket impact_badge field checks
+- **settings**: Remove no-permission failure test as user settings require no permissions
+
 ## 1.8.0 (2025-01-23)
 
 ### feat
