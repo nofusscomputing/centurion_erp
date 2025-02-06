@@ -58,7 +58,13 @@ class ViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
 
-        return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+        if self.serializer_class is not None:
+
+            return self.serializer_class
+
+        self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+
+        return self.serializer_class
 
 
     def get_view_name(self):
