@@ -90,6 +90,8 @@ class ViewSet(AuthUserReadOnlyModelViewSet):
 
     view_description = 'Task Logs'
 
+    view_name = 'Celery Task Results'
+
 
     def get_serializer_class(self):
 
