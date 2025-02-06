@@ -128,11 +128,13 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
 
-        queryset = queryset.filter(software_id=self.kwargs['software_id'])
+            return self.queryset
 
-        self.queryset = queryset
+        self.queryset = super().get_queryset()
+
+        self.queryset = self.queryset.filter(software_id=self.kwargs['software_id'])
 
         return self.queryset
 
