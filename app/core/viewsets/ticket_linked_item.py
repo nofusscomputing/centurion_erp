@@ -131,6 +131,8 @@ class ViewSet(ModelViewSet):
 
     item_type = None
 
+    view_description = 'Models linked to a ticket'
+
 
     def get_parent_model(self):
 
