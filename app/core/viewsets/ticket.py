@@ -280,7 +280,7 @@ class TicketViewSet(ModelViewSet):
 
         serializer_prefix = str(self._ticket_type).replace(' ', '')
 
-        if self.serializer_class:
+        if self.serializer_class is not None:
 
             return self.serializer_class
 
