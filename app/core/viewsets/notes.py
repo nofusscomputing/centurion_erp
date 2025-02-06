@@ -94,7 +94,7 @@ class ViewSet(ModelViewSet):
 
         if 'device_id' in self.kwargs:
 
-            self.queryset = queryset.filter(device_id=self.kwargs['device_id']).order_by('-created')
+            self.queryset = self.queryset.filter(device_id=self.kwargs['device_id']).order_by('-created')
 
             self.parent_model = Device
 
@@ -102,7 +102,7 @@ class ViewSet(ModelViewSet):
 
         elif 'config_group_id' in self.kwargs:
 
-            self.queryset = queryset.filter(config_group_id=self.kwargs['config_group_id']).order_by('-created')
+            self.queryset = self.queryset.filter(config_group_id=self.kwargs['config_group_id']).order_by('-created')
 
             self.parent_model = ConfigGroups
 
@@ -110,7 +110,7 @@ class ViewSet(ModelViewSet):
 
         elif 'operating_system_id' in self.kwargs:
 
-            self.queryset = queryset.filter(operatingsystem_id=self.kwargs['operating_system_id']).order_by('-created')
+            self.queryset = self.queryset.filter(operatingsystem_id=self.kwargs['operating_system_id']).order_by('-created')
 
             self.parent_model = OperatingSystem
 
@@ -118,7 +118,7 @@ class ViewSet(ModelViewSet):
 
         elif 'service_id' in self.kwargs:
 
-            self.queryset = queryset.filter(service_id=self.kwargs['service_id']).order_by('-created')
+            self.queryset = self.queryset.filter(service_id=self.kwargs['service_id']).order_by('-created')
 
             self.parent_model = Service
 
@@ -126,7 +126,7 @@ class ViewSet(ModelViewSet):
 
         elif 'software_id' in self.kwargs:
 
-            self.queryset = queryset.filter(software_id=self.kwargs['software_id']).order_by('-created')
+            self.queryset = self.queryset.filter(software_id=self.kwargs['software_id']).order_by('-created')
 
             self.parent_model = Software
 
