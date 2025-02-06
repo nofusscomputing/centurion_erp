@@ -45,9 +45,13 @@ class ViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
 
-        self.queryset = queryset.filter(
+            return self.queryset
+
+        self.queryset = super().get_queryset()
+
+        self.queryset = self.queryset.filter(
             Q(item_pk = self.kwargs['model_id'], item_class = self.kwargs['model_class'])
             |
             Q(item_parent_pk = self.kwargs['model_id'], item_parent_class = self.kwargs['model_class'])
