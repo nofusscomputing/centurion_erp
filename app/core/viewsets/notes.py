@@ -59,6 +59,8 @@ class ViewSet(ModelViewSet):
 
     model = Notes
 
+    view_description = 'Model notes'
+
 
     def get_serializer_class(self):
 
