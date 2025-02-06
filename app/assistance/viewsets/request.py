@@ -93,3 +93,5 @@ class ViewSet(TicketViewSet):
     """
 
     _ticket_type: str = 'Request'
+
+    view_description: str = 'Service Request Tickets'

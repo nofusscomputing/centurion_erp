@@ -171,28 +171,39 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
 
-        queryset = queryset.filter(
+            return self.queryset
+
+        self.queryset = super().get_queryset()
+
+        self.queryset = self.queryset.filter(
             team_id = self.kwargs['team_id']
         )
-
-        self.queryset = queryset
 
         return self.queryset
 
 
     def get_serializer_class(self):
 
+        if self.serializer_class is not None:
+
+            return self.serializer_class
+
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
+
+        else:
+
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
 
 
-        return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
+        return self.serializer_class
 
 
     def get_return_url(self):

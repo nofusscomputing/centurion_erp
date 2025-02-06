@@ -73,6 +73,10 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
+        if self.queryset is not None:
+
+            return self.queryset
+
         if 'config_group_id' in self.kwargs:
 
             self.queryset = super().get_queryset().filter(config_group = self.kwargs['config_group_id'])
@@ -86,13 +90,22 @@ class ViewSet( ModelViewSet ):
 
     def get_serializer_class(self):
 
+        if self.serializer_class is not None:
+
+            return self.serializer_class
+
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
+
+        else:
+
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
 
 
-        return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
+        return self.serializer_class
 

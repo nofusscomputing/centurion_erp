@@ -80,6 +80,10 @@ class ViewSet( ModelViewSet ):
 
     def get_serializer_class(self):
 
+        if self.serializer_class is not None:
+
+            return self.serializer_class
+
         organization = None
 
         if 'organization' in self.request.data:
@@ -104,7 +108,9 @@ class ViewSet( ModelViewSet ):
                 permissions_required = 'project_management.import_project'
             ) or self.request.user.is_superuser:
 
-                return globals()[str( self.model._meta.verbose_name) + 'ImportSerializer']
+                self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ImportSerializer']
+
+                return self.serializer_class
 
 
         if (
@@ -112,7 +118,11 @@ class ViewSet( ModelViewSet ):
             or self.action == 'retrieve'
         ):
 
-            return globals()[str( self.model._meta.verbose_name) + 'ViewSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ViewSerializer']
 
 
-        return globals()[str( self.model._meta.verbose_name) + 'ModelSerializer']
+        else:
+            
+            self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ModelSerializer']
+
+        return self.serializer_class

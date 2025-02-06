@@ -49,7 +49,7 @@ Centurion ERP contains the following modules:
 
     - [Markdown](./user/core/markdown.md)
 
-    - [Multi-Tenant](./development/api/models/access_organization_permission_checking.md#permission-checking)
+    - [Multi-Tenant](./user/access/organization.md)
 
     - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)
 
@@ -137,7 +137,7 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
             - Software _[see #3](https://github.com/nofusscomputing/centurion_erp/issues/3)_
 
-    - IT Operations
+    - IT Operations _[see #493](https://github.com/nofusscomputing/centurion_erp/issues/493)_
 
         - Release and Deployment Management _[see #462](https://github.com/nofusscomputing/centurion_erp/issues/462)_
 
