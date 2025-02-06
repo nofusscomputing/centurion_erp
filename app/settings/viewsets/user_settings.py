@@ -67,6 +67,8 @@ class ViewSet(ModelRetrieveUpdateViewSet):
     #     'software',
     # ]
 
+    view_description = 'Your Settings'
+
 
     def get_serializer_class(self):
 
