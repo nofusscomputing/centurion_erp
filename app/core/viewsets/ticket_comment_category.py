@@ -66,6 +66,8 @@ class ViewSet(ModelViewSet):
 
     model = TicketCommentCategory
 
+    view_description: str = 'Categories available for Ticket Comments'
+
 
     def get_serializer_class(self):
 
