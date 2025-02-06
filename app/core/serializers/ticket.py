@@ -143,6 +143,7 @@ class TicketModelSerializer(
             'modified',
             'status',
             'status_badge',
+            'parent_ticket',
             'title',
             'description',
             'estimate',
@@ -323,6 +324,8 @@ class TicketViewSerializer(TicketModelSerializer):
     assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
 
     category = TicketCategoryBaseSerializer()
+
+    parent_ticket = TicketBaseSerializer()
 
     opened_by = UserBaseSerializer()
 
