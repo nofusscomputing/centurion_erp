@@ -70,6 +70,8 @@ class ViewSet(ModelViewSet):
 
     model = Manufacturer
 
+    view_description: str = 'Manufacturer(s) / Publishers'
+
 
     def get_serializer_class(self):
 
