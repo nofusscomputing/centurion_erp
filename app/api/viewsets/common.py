@@ -522,17 +522,19 @@ class CommonViewSet(
 
     def get_view_name(self):
 
+        if self.view_name is not None:
+
+            return self.view_name
+
         if getattr(self, 'model', None):
 
             if self.detail:
 
-                return self.model._meta.verbose_name
+                self.view_name = str(self.model._meta.verbose_name)
             
-            return self.model._meta.verbose_name_plural
-
-        if not self.view_name:
-
-            return 'Error'
+            else:
+                
+                self.view_name = str(self.model._meta.verbose_name_plural)
 
         return self.view_name
 
