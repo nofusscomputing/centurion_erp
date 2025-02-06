@@ -154,11 +154,15 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        if self.queryset is not None:
+
+            return self.queryset
+
+        self.queryset = super().get_queryset()
 
         if self.kwargs.get('device_id', None):
 
-            queryset = queryset.filter(device_id=self.kwargs['device_id'])
+            self.queryset = self.queryset.filter(device_id=self.kwargs['device_id'])
 
             self.parent_model = Device
 
@@ -167,14 +171,12 @@ class ViewSet( ModelViewSet ):
 
         elif self.kwargs.get('operating_system_id', None):
 
-            queryset = queryset.filter(operating_system_version__operating_system_id=self.kwargs['operating_system_id'])
+            self.queryset = self.queryset.filter(operating_system_version__operating_system_id=self.kwargs['operating_system_id'])
 
             self.parent_model = OperatingSystem
 
             self.parent_model_pk_kwarg = 'operating_system_id'
 
-
-        self.queryset = queryset
 
         return self.queryset
 
