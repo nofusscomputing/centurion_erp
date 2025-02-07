@@ -80,6 +80,7 @@ from itim.viewsets import (
     cluster_type_notes,
     incident,
     port as port_v2,
+    port_notes,
     problem,
     service as service_v2,
     service_cluster,
@@ -195,7 +196,7 @@ router.register('settings/knowledge_base_category', knowledge_base_category_v2.V
 router.register('settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('settings/manufacturer/(?P<model_id>[0-9]+)/notes', manufacturer_notes.ViewSet, basename='_api_v2_manufacturer_note')
 router.register('settings/port', port_v2.ViewSet, basename='_api_v2_port')
-# router.register('settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_port_notes')
+router.register('settings/port/(?P<model_id>[0-9]+)/notes', port_notes.ViewSet, basename='_api_v2_port_note')
 router.register('settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
 router.register('settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
