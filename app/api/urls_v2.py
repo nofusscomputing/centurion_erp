@@ -59,6 +59,7 @@ from itam.viewsets import (
     device_model as device_model_v2,
     device_notes,
     device_type as device_type_v2,
+    device_type_notes,
     device_software as device_software_v2,
     device_operating_system,
     inventory,
@@ -191,6 +192,7 @@ router.register('settings/cluster_type', cluster_type_v2.ViewSet, basename='_api
 router.register('settings/cluster_type/(?P<model_id>[0-9]+)/notes', cluster_type_notes.ViewSet, basename='_api_v2_cluster_type_note')
 router.register('settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
 router.register('settings/device_type', device_type_v2.ViewSet, basename='_api_v2_device_type')
+router.register('settings/device_type/(?P<model_id>[0-9]+)/notes', device_type_notes.ViewSet, basename='_api_v2_device_type_note')
 router.register('settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
 router.register('settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
