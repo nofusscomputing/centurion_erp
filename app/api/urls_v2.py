@@ -97,6 +97,7 @@ from project_management.viewsets import (
     index as project_management_v2,
     project as project_v2,
     project_milestone as project_milestone_v2,
+    project_milestone_notes,
     project_notes,
     project_state as project_state_v2,
     project_task,
@@ -188,6 +189,7 @@ router.register('itim/service/(?P<model_id>[0-9]+)/notes', service_notes.ViewSet
 router.register('project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 router.register('project_management/project', project_v2.ViewSet, basename='_api_v2_project')
 router.register('project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
+router.register('project_management/project/(?P<project_id>[0-9]+)/milestone/(?P<model_id>[0-9]+)/notes', project_milestone_notes.ViewSet, basename='_api_v2_project_milestone_note')
 router.register('project_management/project/(?P<model_id>[0-9]+)/notes', project_notes.ViewSet, basename='_api_v2_project_note')
 router.register('project_management/project/(?P<project_id>[0-9]+)/project_task', project_task.ViewSet, basename='_api_v2_ticket_project_task')
 
