@@ -67,6 +67,7 @@ from itam.viewsets import (
     operating_system as operating_system_v2,
     operating_system_notes,
     operating_system_version as operating_system_version_v2,
+    operating_system_version_notes,
     software as software_v2,
     software_category as software_category_v2,
     software_notes,
@@ -163,6 +164,7 @@ router.register('itam/operating_system', operating_system_v2.ViewSet, basename='
 router.register('itam/operating_system/(?P<operating_system_id>[0-9]+)/installs', device_operating_system.ViewSet, basename='_api_v2_operating_system_installs')
 router.register('itam/operating_system/(?P<model_id>[0-9]+)/notes', operating_system_notes.ViewSet, basename='_api_v2_operating_system_note')
 router.register('itam/operating_system/(?P<operating_system_id>[0-9]+)/version', operating_system_version_v2.ViewSet, basename='_api_v2_operating_system_version')
+router.register('itam/operating_system/(?P<operating_system_id>[0-9]+)/version/(?P<model_id>[0-9]+)/notes', operating_system_version_notes.ViewSet, basename='_api_v2_operating_system_version_note')
 router.register('itam/software', software_v2.ViewSet, basename='_api_v2_software')
 router.register('itam/software/(?P<software_id>[0-9]+)/installs', device_software_v2.ViewSet, basename='_api_v2_software_installs')
 router.register('itam/software/(?P<model_id>[0-9]+)/notes', software_notes.ViewSet, basename='_api_v2_software_note')
