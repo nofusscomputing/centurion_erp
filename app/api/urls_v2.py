@@ -40,7 +40,6 @@ from core.viewsets import (
     celery_log as celery_log_v2,
     history as history_v2,
     manufacturer as manufacturer_v2,
-    model_notes as notes_v2,
     ticket_category,
     ticket_comment,
     ticket_comment_category,
@@ -122,7 +121,7 @@ router.register('base/user', user_v2.ViewSet, basename='_api_v2_user')
 router.register('config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
 router.register('config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
 router.register('config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
-router.register('config_management/group/(?P<config_group_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_config_group_notes')
+# router.register('config_management/group/(?P<config_group_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_config_group_notes')
 router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
 
 
@@ -139,15 +138,15 @@ router.register('itam/device', device_v2.ViewSet, basename='_api_v2_device')
 router.register('itam/device/(?P<device_id>[0-9]+)/operating_system', device_operating_system.ViewSet, basename='_api_v2_device_operating_system')
 router.register('itam/device/(?P<device_id>[0-9]+)/software', device_software_v2.ViewSet, basename='_api_v2_device_software')
 router.register('itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
-router.register('itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
+# router.register('itam/device/(?P<model_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_note')
 router.register('itam/inventory', inventory.ViewSet, basename='_api_v2_inventory')
 router.register('itam/operating_system', operating_system_v2.ViewSet, basename='_api_v2_operating_system')
 router.register('itam/operating_system/(?P<operating_system_id>[0-9]+)/installs', device_operating_system.ViewSet, basename='_api_v2_operating_system_installs')
-router.register('itam/operating_system/(?P<operating_system_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_operating_system_notes')
+# router.register('itam/operating_system/(?P<operating_system_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_operating_system_notes')
 router.register('itam/operating_system/(?P<operating_system_id>[0-9]+)/version', operating_system_version_v2.ViewSet, basename='_api_v2_operating_system_version')
 router.register('itam/software', software_v2.ViewSet, basename='_api_v2_software')
 router.register('itam/software/(?P<software_id>[0-9]+)/installs', device_software_v2.ViewSet, basename='_api_v2_software_installs')
-router.register('itam/software/(?P<software_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_software_notes')
+# router.register('itam/software/(?P<software_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_software_notes')
 router.register('itam/software/(?P<software_id>[0-9]+)/version', software_version_v2.ViewSet, basename='_api_v2_software_version')
 
 
@@ -155,17 +154,17 @@ router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
 router.register('itim/ticket/change', change.ViewSet, basename='_api_v2_ticket_change')
 router.register('itim/cluster', cluster_v2.ViewSet, basename='_api_v2_cluster')
 router.register('itim/cluster/(?P<cluster_id>[0-9]+)/service', service_cluster.ViewSet, basename='_api_v2_service_cluster')
-router.register('itim/cluster/(?P<cluster_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_notes')
+# router.register('itim/cluster/(?P<cluster_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_notes')
 router.register('itim/ticket/incident', incident.ViewSet, basename='_api_v2_ticket_incident')
 router.register('itim/ticket/problem', problem.ViewSet, basename='_api_v2_ticket_problem')
 router.register('itim/service', service_v2.ViewSet, basename='_api_v2_service')
-router.register('itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
+# router.register('itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
 
 
 router.register('project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 router.register('project_management/project', project_v2.ViewSet, basename='_api_v2_project')
 router.register('project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
-router.register('project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
+# router.register('project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
 router.register('project_management/project/(?P<project_id>[0-9]+)/project_task', project_task.ViewSet, basename='_api_v2_ticket_project_task')
 
 
@@ -173,15 +172,15 @@ router.register('settings', settings_index_v2.Index, basename='_api_v2_settings_
 router.register('settings/app_settings', app_settings_v2.ViewSet, basename='_api_v2_app_settings')
 router.register('settings/celery_log', celery_log_v2.ViewSet, basename='_api_v2_celery_log')
 router.register('settings/cluster_type', cluster_type_v2.ViewSet, basename='_api_v2_cluster_type')
-router.register('settings/cluster_type/(?P<cluster_type_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_type_notes')
+# router.register('settings/cluster_type/(?P<cluster_type_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_type_notes')
 router.register('settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
 router.register('settings/device_type', device_type_v2.ViewSet, basename='_api_v2_device_type')
 router.register('settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
 router.register('settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
-router.register('settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
+# router.register('settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
 router.register('settings/port', port_v2.ViewSet, basename='_api_v2_port')
-router.register('settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_port_notes')
+# router.register('settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_port_notes')
 router.register('settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
 router.register('settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
