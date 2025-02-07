@@ -103,6 +103,7 @@ class Notes(NotesCommonFields):
         help_text = 'Device this note belongs to',
         null = True,
         on_delete=models.CASCADE,
+        related_name = '+',
         verbose_name = 'Device'
     )
 
@@ -113,6 +114,7 @@ class Notes(NotesCommonFields):
         help_text = 'Service this note belongs to',
         null = True,
         on_delete=models.CASCADE,
+        related_name = '+',
         verbose_name = 'Service'
     )
 
@@ -123,6 +125,7 @@ class Notes(NotesCommonFields):
         help_text = 'Software this note belongs to',
         null = True,
         on_delete=models.CASCADE,
+        related_name = '+',
         verbose_name = 'Software'
     )
 
@@ -133,6 +136,7 @@ class Notes(NotesCommonFields):
         help_text = 'Operating system this note belongs to',
         null = True,
         on_delete=models.CASCADE,
+        related_name = '+',
         verbose_name = 'Operating System'
     )
 

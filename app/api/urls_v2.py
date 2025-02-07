@@ -40,7 +40,7 @@ from core.viewsets import (
     celery_log as celery_log_v2,
     history as history_v2,
     manufacturer as manufacturer_v2,
-    notes as notes_v2,
+    model_notes as notes_v2,
     ticket_category,
     ticket_comment,
     ticket_comment_category,
