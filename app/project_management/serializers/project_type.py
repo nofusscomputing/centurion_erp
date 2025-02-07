@@ -63,6 +63,13 @@ class ProjectTypeModelSerializer(
                     'model_pk': item.pk
                 }
             ),
+            'notes': reverse(
+                "v2:_api_v2_project_type_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_id': item.pk
+                }
+            ),
         }
 
 

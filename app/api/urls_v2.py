@@ -103,6 +103,7 @@ from project_management.viewsets import (
     project_state_notes,
     project_task,
     project_type as project_type_v2,
+    project_type_notes,
 )
 
 from settings.viewsets import (
@@ -214,6 +215,7 @@ router.register('settings/port/(?P<model_id>[0-9]+)/notes', port_notes.ViewSet, 
 router.register('settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
 router.register('settings/project_state/(?P<model_id>[0-9]+)/notes', project_state_notes.ViewSet, basename='_api_v2_project_state_note')
 router.register('settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
+router.register('settings/project_type/(?P<model_id>[0-9]+)/notes', project_type_notes.ViewSet, basename='_api_v2_project_type_note')
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 router.register('settings/software_category/(?P<model_id>[0-9]+)/notes', software_category_notes.ViewSet, basename='_api_v2_software_category_note')
 router.register('settings/ticket_category', ticket_category.ViewSet, basename='_api_v2_ticket_category')
