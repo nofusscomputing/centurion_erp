@@ -75,6 +75,7 @@ from itim.viewsets import (
     index as itim_v2,
     change,
     cluster as cluster_v2,
+    cluster_notes,
     cluster_type as cluster_type_v2,
     incident,
     port as port_v2,
@@ -165,7 +166,7 @@ router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
 router.register('itim/ticket/change', change.ViewSet, basename='_api_v2_ticket_change')
 router.register('itim/cluster', cluster_v2.ViewSet, basename='_api_v2_cluster')
 router.register('itim/cluster/(?P<cluster_id>[0-9]+)/service', service_cluster.ViewSet, basename='_api_v2_service_cluster')
-# router.register('itim/cluster/(?P<cluster_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_notes')
+router.register('itim/cluster/(?P<model_id>[0-9]+)/notes', cluster_notes.ViewSet, basename='_api_v2_cluster_note')
 router.register('itim/ticket/incident', incident.ViewSet, basename='_api_v2_ticket_incident')
 router.register('itim/ticket/problem', problem.ViewSet, basename='_api_v2_ticket_problem')
 router.register('itim/service', service_v2.ViewSet, basename='_api_v2_service')
