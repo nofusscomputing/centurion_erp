@@ -362,12 +362,34 @@ class Team(Group, TenancyObject):
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
+    def validatate_organization_exists(self):
+        """Ensure that the user did provide an organization
+
+        Raises:
+            ValidationError: User failed to supply organization.
+        """
+
+        if not self:
+            raise ValidationError('You must provide an organization')
+
+
+
     team_name = models.CharField(
         blank = False,
         help_text = 'Name to give this team',
         max_length = 50,
         unique = False,
         verbose_name = 'Name',
+    )
+
+    organization = models.ForeignKey(
+        Organization,
+        blank = False,
+        help_text = 'Organization this belongs to',
+        null = False,
+        on_delete = models.CASCADE,
+        validators = [validatate_organization_exists],
+        verbose_name = 'Organization'
     )
 
     created = AutoCreatedField()
