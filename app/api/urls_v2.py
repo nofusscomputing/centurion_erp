@@ -44,6 +44,7 @@ from core.viewsets import (
     celery_log as celery_log_v2,
     history as history_v2,
     manufacturer as manufacturer_v2,
+    manufacturer_notes,
     ticket_category,
     ticket_comment,
     ticket_comment_category,
@@ -186,7 +187,7 @@ router.register('settings/device_type', device_type_v2.ViewSet, basename='_api_v
 router.register('settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
 router.register('settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
-# router.register('settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
+router.register('settings/manufacturer/(?P<model_id>[0-9]+)/notes', manufacturer_notes.ViewSet, basename='_api_v2_manufacturer_note')
 router.register('settings/port', port_v2.ViewSet, basename='_api_v2_port')
 # router.register('settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_port_notes')
 router.register('settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
