@@ -17,7 +17,7 @@ class OperatingSystemNotePermissionsAPI(
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_operating_system_notes'
+    url_name = '_api_v2_operating_system_note'
 
 
     @classmethod

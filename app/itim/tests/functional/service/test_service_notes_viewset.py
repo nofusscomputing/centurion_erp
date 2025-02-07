@@ -17,7 +17,7 @@ class ServiceNotePermissionsAPI(
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_service_notes'
+    url_name = '_api_v2_service_note'
 
 
     @classmethod

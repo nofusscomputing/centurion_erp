@@ -17,7 +17,7 @@ class DeviceNotePermissionsAPI(
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_device_notes'
+    url_name = '_api_v2_device_note'
 
 
     @classmethod
