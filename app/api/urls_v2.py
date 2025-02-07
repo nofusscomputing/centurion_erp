@@ -70,6 +70,7 @@ from itam.viewsets import (
     operating_system_version_notes,
     software as software_v2,
     software_category as software_category_v2,
+    software_category_notes,
     software_notes,
     software_version as software_version_v2,
 )
@@ -208,6 +209,7 @@ router.register('settings/port/(?P<model_id>[0-9]+)/notes', port_notes.ViewSet, 
 router.register('settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
 router.register('settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
+router.register('settings/software_category/(?P<model_id>[0-9]+)/notes', software_category_notes.ViewSet, basename='_api_v2_software_category_note')
 router.register('settings/ticket_category', ticket_category.ViewSet, basename='_api_v2_ticket_category')
 router.register('settings/ticket_comment_category', ticket_comment_category.ViewSet, basename='_api_v2_ticket_comment_category')
 router.register('settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
