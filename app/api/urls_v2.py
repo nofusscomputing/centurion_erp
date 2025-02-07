@@ -103,6 +103,7 @@ from project_management.viewsets import (
 from settings.viewsets import (
     app_settings as app_settings_v2,
     external_link as external_link_v2,
+    external_link_notes,
     index as settings_index_v2,
     user_settings as user_settings_v2
 )
@@ -196,6 +197,7 @@ router.register('settings/device_model/(?P<model_id>[0-9]+)/notes', device_model
 router.register('settings/device_type', device_type_v2.ViewSet, basename='_api_v2_device_type')
 router.register('settings/device_type/(?P<model_id>[0-9]+)/notes', device_type_notes.ViewSet, basename='_api_v2_device_type_note')
 router.register('settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
+router.register('settings/external_link/(?P<model_id>[0-9]+)/notes', external_link_notes.ViewSet, basename='_api_v2_external_link_note')
 router.register('settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('settings/manufacturer/(?P<model_id>[0-9]+)/notes', manufacturer_notes.ViewSet, basename='_api_v2_manufacturer_note')
