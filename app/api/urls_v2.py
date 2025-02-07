@@ -73,6 +73,7 @@ from itam.viewsets import (
     software_category_notes,
     software_notes,
     software_version as software_version_v2,
+    software_version_notes,
 )
 
 from itim.viewsets import (
@@ -170,6 +171,7 @@ router.register('itam/software', software_v2.ViewSet, basename='_api_v2_software
 router.register('itam/software/(?P<software_id>[0-9]+)/installs', device_software_v2.ViewSet, basename='_api_v2_software_installs')
 router.register('itam/software/(?P<model_id>[0-9]+)/notes', software_notes.ViewSet, basename='_api_v2_software_note')
 router.register('itam/software/(?P<software_id>[0-9]+)/version', software_version_v2.ViewSet, basename='_api_v2_software_version')
+router.register('itam/software/(?P<software_id>[0-9]+)/version/(?P<model_id>[0-9]+)/notes', software_version_notes.ViewSet, basename='_api_v2_software_version_note')
 
 
 router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
