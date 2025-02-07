@@ -100,6 +100,7 @@ from project_management.viewsets import (
     project_milestone_notes,
     project_notes,
     project_state as project_state_v2,
+    project_state_notes,
     project_task,
     project_type as project_type_v2,
 )
@@ -211,6 +212,7 @@ router.register('settings/manufacturer/(?P<model_id>[0-9]+)/notes', manufacturer
 router.register('settings/port', port_v2.ViewSet, basename='_api_v2_port')
 router.register('settings/port/(?P<model_id>[0-9]+)/notes', port_notes.ViewSet, basename='_api_v2_port_note')
 router.register('settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
+router.register('settings/project_state/(?P<model_id>[0-9]+)/notes', project_state_notes.ViewSet, basename='_api_v2_project_state_note')
 router.register('settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 router.register('settings/software_category/(?P<model_id>[0-9]+)/notes', software_category_notes.ViewSet, basename='_api_v2_software_category_note')
