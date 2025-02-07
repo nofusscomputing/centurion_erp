@@ -17,7 +17,7 @@ class NotePermissionsAPI(
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_config_group_notes'
+    url_name = '_api_v2_config_group_note'
 
 
     @classmethod
