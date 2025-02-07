@@ -985,7 +985,7 @@ class Ticket(
 
             if comment_field_value is None:
 
-                raise centurion_exceptions.MissingAttribute(
+                raise centurion_exceptions.APIError(
                     detail = f'Action comment for field {field} will not be created. please report this as a bug.',
                     code = 'no_action_comment'
                 )
