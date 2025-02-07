@@ -83,6 +83,7 @@ from itim.viewsets import (
     service as service_v2,
     service_cluster,
     service_device as service_device_v2,
+    service_notes,
 )
 
 from project_management.viewsets import (
@@ -170,7 +171,7 @@ router.register('itim/cluster/(?P<model_id>[0-9]+)/notes', cluster_notes.ViewSet
 router.register('itim/ticket/incident', incident.ViewSet, basename='_api_v2_ticket_incident')
 router.register('itim/ticket/problem', problem.ViewSet, basename='_api_v2_ticket_problem')
 router.register('itim/service', service_v2.ViewSet, basename='_api_v2_service')
-# router.register('itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
+router.register('itim/service/(?P<model_id>[0-9]+)/notes', service_notes.ViewSet, basename='_api_v2_service_note')
 
 
 router.register('project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
