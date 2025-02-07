@@ -93,6 +93,7 @@ class Notes(NotesCommonFields):
         help_text = 'Config group this note belongs to',
         null = True,
         on_delete=models.CASCADE,
+        related_name = '+',
         verbose_name = 'Config Group'
     )
 
