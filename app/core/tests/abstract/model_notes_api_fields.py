@@ -37,7 +37,7 @@ class ModelNotesNotesAPIFields(
 
         self.organization = Organization.objects.create(name='test_org')
 
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
+        self.view_user = User.objects.create_user(username="test_user_view", password="password", is_superuser = True)
 
 
         view_permissions = Permission.objects.get(
