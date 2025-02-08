@@ -17,9 +17,9 @@ class KnowledgeBaseNotes(
 
         ordering = ModelNotes._meta.ordering
 
-        verbose_name = 'Knowledge Base Article Note'
+        verbose_name = 'Knowledge Base Note'
 
-        verbose_name_plural = 'Knowledge Base Article Notes'
+        verbose_name_plural = 'Knowledge Base Notes'
 
 
     model = models.ForeignKey(
