@@ -35,6 +35,8 @@ class ModelNoteViewSet(ModelViewSet):
 
     filterset_fields = []
 
+    parent_model_pk_kwarg = 'model_id'
+
     search_fields = [
         'content',
     ]
@@ -58,3 +60,12 @@ class ModelNoteViewSet(ModelViewSet):
         )
 
         return self.queryset
+
+
+    def get_parent_model(self):
+
+        if self.parent_model is None:
+
+            self.parent_model = self.model.model.field.related_model
+
+        return self.parent_model

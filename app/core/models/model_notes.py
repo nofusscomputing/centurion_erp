@@ -107,3 +107,10 @@ class ModelNotes(TenancyObject):
     def __str__(self):
 
         return 'Note ' + str(self.id)
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.model
