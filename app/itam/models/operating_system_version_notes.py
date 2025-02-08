@@ -40,6 +40,7 @@ class OperatingSystemVersionNotes(
     def get_url_kwargs(self) -> dict:
 
         return {
+            'operating_system_id': self.model.operating_system.pk,
             'model_id': self.model.pk,
             'pk': self.pk
         }
