@@ -27,8 +27,9 @@ from access.viewsets import (
 from assistance.viewsets import (
     index as assistance_index_v2,
     knowledge_base as knowledge_base_v2,
-    knowledge_base_category as knowledge_base_category_v2,
     knowledge_base_notes,
+    knowledge_base_category as knowledge_base_category_v2,
+    knowledge_base_category_notes,
     model_knowledge_base_article,
     request as request_ticket_v2,
 )
@@ -208,6 +209,7 @@ router.register('settings/device_type/(?P<model_id>[0-9]+)/notes', device_type_n
 router.register('settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
 router.register('settings/external_link/(?P<model_id>[0-9]+)/notes', external_link_notes.ViewSet, basename='_api_v2_external_link_note')
 router.register('settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
+router.register('settings/knowledge_base_category/(?P<model_id>[0-9]+)/notes', knowledge_base_category_notes.ViewSet, basename='_api_v2_knowledge_base_category_note')
 router.register('settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('settings/manufacturer/(?P<model_id>[0-9]+)/notes', manufacturer_notes.ViewSet, basename='_api_v2_manufacturer_note')
 router.register('settings/port', port_v2.ViewSet, basename='_api_v2_port')
