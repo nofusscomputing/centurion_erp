@@ -607,11 +607,11 @@ class ModelViewSetBase(
             or self.action == 'retrieve'
         ):
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ViewSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ', '_') + 'ViewSerializer']
 
         else:
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ModelSerializer']
+            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ', '_') + 'ModelSerializer']
 
 
         return self.serializer_class

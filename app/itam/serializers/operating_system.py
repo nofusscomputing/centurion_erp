@@ -74,7 +74,14 @@ class OperatingSystemModelSerializer(
                     'model_pk': item.pk
                 }
             ),
-            'notes': reverse("v2:_api_v2_operating_system_notes-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
+            
+            'notes': reverse(
+                "v2:_api_v2_operating_system_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_id': item.pk
+                }
+            ),
             'tickets': reverse(
                 "v2:_api_v2_item_tickets-list",
                 request=self._context['view'].request,

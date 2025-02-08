@@ -93,9 +93,11 @@ class ConfigGroupModelSerializer(
                 }
             ),
             'notes': reverse(
-                "v2:_api_v2_config_group_notes-list",
+                "v2:_api_v2_config_group_note-list",
                 request=self._context['view'].request,
-                kwargs={'config_group_id': item.pk}
+                kwargs={
+                    'model_id': item.pk
+                }
             ),
             'knowledge_base': reverse(
                 "v2:_api_v2_model_kb-list",

@@ -66,6 +66,14 @@ class ProjectMilestoneModelSerializer(
                     'model_pk': item.pk
                 }
             ),
+            'notes': reverse(
+                "v2:_api_v2_project_milestone_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'project_id': item.project.pk,
+                    'model_id': item.pk
+                }
+            ),
         }
 
 

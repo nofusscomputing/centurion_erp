@@ -87,7 +87,13 @@ class DeviceModelSerializer(
                     'model_pk': item.pk
                 }
             ),
-            'notes': reverse("v2:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'notes': reverse(
+                "v2:_api_v2_device_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_id': item.pk
+                }
+            ),
             'operating_system': reverse("v2:_api_v2_device_operating_system-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'service': reverse("v2:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'software': reverse("v2:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),

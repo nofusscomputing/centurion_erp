@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User, Group
+from django.db import models
+
 from access.models import Organization, Team
 
 
@@ -253,7 +255,7 @@ class OrganizationMixin:
 
 
 
-    parent_model: str = None
+    parent_model: models.Model = None
     """ Parent Model
 
     This attribute defines the parent model for the model in question. The parent model when defined

@@ -63,6 +63,13 @@ class KnowledgeBaseCategoryModelSerializer(
 
         return {
             '_self': item.get_url( request = self._context['view'].request ),
+            'notes': reverse(
+                "v2:_api_v2_knowledge_base_category_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_id': item.pk
+                }
+            ),
             'organization': reverse(
                 'v2:_api_v2_organization-list',
                 request=self.context['view'].request,
