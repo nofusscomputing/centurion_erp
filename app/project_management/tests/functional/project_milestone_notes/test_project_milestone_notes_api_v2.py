@@ -52,6 +52,7 @@ class ProjectMilestoneNotesAPI(
 
 
         self.url_view_kwargs = {
+            'project_id': self.item.model.project.pk,
             'model_id': self.item.model.pk,
             'pk': self.item.pk
         }
