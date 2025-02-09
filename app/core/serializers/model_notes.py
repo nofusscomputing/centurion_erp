@@ -93,32 +93,41 @@ class ModelNoteModelSerializer(
 
         is_valid = False
 
+        if (
+            self._context['view'].action == 'partial_update'
+            or self._context['view'].action == 'update'
+        ):
+
+            attrs['modified_by'] = self._context['request'].user
+
+        else:
+
+            related_model = self.fields.fields['model'].context['view'].model.model.field.related_model
+
+            attrs['model_id'] = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
+
+            if str(related_model._meta.model_name).lower() == 'organization':
+
+                attrs['organization'] = related_model.objects.get(
+                    pk = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
+                )
+            elif self.fields.fields.get('organization', None):
+
+                attrs['organization'] = related_model.objects.get(
+                    pk = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
+                ).organization
+
+            
+
+            attrs['content_type'] = ContentType.objects.filter(
+                app_label = related_model._meta.app_label,
+                model = related_model._meta.model_name
+            )[0]
+
+            attrs['created_by'] = self._context['request'].user
+
+
         is_valid = super().validate(attrs)
-
-        related_model = self.fields.fields['model'].context['view'].model.model.field.related_model
-
-        attrs['model_id'] = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
-
-        if str(related_model._meta.model_name).lower() == 'organization':
-
-            attrs['organization'] = related_model.objects.get(
-                pk = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
-            )
-        elif self.fields.fields.get('organization', None):
-
-            attrs['organization'] = related_model.objects.get(
-                pk = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
-            ).organization
-
-        
-
-        attrs['content_type'] = ContentType.objects.filter(
-            app_label = related_model._meta.app_label,
-            model = related_model._meta.model_name
-        )[0]
-
-        attrs['created_by'] = self._context['request'].user
-
 
         return is_valid
 
