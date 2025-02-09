@@ -30,6 +30,7 @@ class TeamNotesModel(
                 model = str(self.model.model.field.related_model.__name__).replace(' ', '').lower(),
             ),
             model = self.model.model.field.related_model.objects.create(
+                organization = self.organization,
                 name = 'note model existing item',
             ),
             created_by = self.user,
