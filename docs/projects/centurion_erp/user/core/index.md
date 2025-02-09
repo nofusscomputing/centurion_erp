@@ -13,10 +13,17 @@ The core module contains items that are relevant across multiple modules.
 
 - Manufacturers
 
+- Model Notes
+
 
 ## Manufacturers
 
 A manufacturer is an entity that creates an item. Within the IT world a manufacturer can also be known as a publisher, this is in the case of software. To add a new manufacturer navigate to `settings -> Common -> Manufacturers / Publishers`
+
+
+## Model Notes
+
+ALL objects can have notes added to them. The notes can be any arbitrary information. To add a not to an item, navigate to it's detail page and click on the `Notes` tab. [Markdown](./markdown.md) is also supported for notes.
 
 
 ## Background worker

@@ -63,7 +63,13 @@ class SoftwareCategoryModelSerializer(
                     'model_pk': item.pk
                 }
             ),
-            'notes': 'ToDo',
+            'notes': reverse(
+                "v2:_api_v2_software_category_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_id': item.pk
+                }
+            ),
         }
 
 

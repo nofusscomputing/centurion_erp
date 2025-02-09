@@ -79,10 +79,11 @@ class OperatingSystemVersionModelSerializer(
                 }
             ),
             'notes': reverse(
-                "v2:_api_v2_operating_system_notes-list",
+                "v2:_api_v2_operating_system_version_note-list",
                 request=self._context['view'].request,
                 kwargs={
-                    'operating_system_id': item.pk
+                    'operating_system_id': item.operating_system.id,
+                    'model_id': item.pk
                 }
             ),
             'tickets': 'ToDo'

@@ -863,6 +863,23 @@ class Ticket(
 
             comment_field_value: str = None
 
+            if field == 'category_id':
+
+                value = 'None'
+
+                if before[field]:
+
+                    value = f"$category-{before[field]}"
+
+                to_value = getattr(self.milestone, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$category-{getattr(self.milestone, 'id', 'None')}"
+
+
+                comment_field_value = f"changed category from {value} to {to_value}"
+
             if field == 'impact':
 
                 comment_field_value = f"changed {field} to {self.get_impact_display()}"
@@ -983,9 +1000,13 @@ class Ticket(
                 comment_field_value = '<details><summary>Changed the Description</summary>\n\n``` diff \n\n' + comment_field_value + '\n\n```\n\n</details>'
 
 
-            if comment_field_value is None:
+            if (
+                comment_field_value is None
+                and field != 'created'
+                and field != 'modified'
+            ):
 
-                raise centurion_exceptions.MissingAttribute(
+                raise centurion_exceptions.APIError(
                     detail = f'Action comment for field {field} will not be created. please report this as a bug.',
                     code = 'no_action_comment'
                 )
