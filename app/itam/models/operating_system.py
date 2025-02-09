@@ -244,6 +244,11 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
                 # }
             ],
         },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
 
 
     ]
