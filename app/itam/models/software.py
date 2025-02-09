@@ -353,6 +353,11 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
                 # }
             ],
         },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
 
     ]
 
