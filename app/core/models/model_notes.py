@@ -90,7 +90,9 @@ class ModelNotes(TenancyObject):
         verbose_name = 'Content Model'
     )
 
-    created = AutoCreatedField()
+    created = AutoCreatedField(
+        editable = True,
+    )
 
     modified = AutoLastModifiedField()
 
