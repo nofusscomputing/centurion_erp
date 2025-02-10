@@ -64,6 +64,7 @@ class TicketViewSet(ModelViewSet):
         'impact',
         'milestone',
         'organization',
+        'parent_ticket',
         'priority',
         'project',
         'status',

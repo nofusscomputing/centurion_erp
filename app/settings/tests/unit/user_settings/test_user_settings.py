@@ -154,3 +154,9 @@ class UserSettings(TestCase):
     def test_user_settings_on_delete_organization_user_settings_not_deleted(self):
         """ On Delete of an organization, users settings are not deleted """
         pass
+
+
+    def test_user_settings_browser_mode(self):
+        """User Settings value 'browser_mode' exists"""
+
+        assert self.item.browser_mode
