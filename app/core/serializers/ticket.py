@@ -311,7 +311,7 @@ class TicketModelSerializer(
 
 
         if(
-            data['parent_ticket']
+            data.get('parent_ticket', None)
             and (
                 self._context['view'].action == 'partial_update'
                 or self._context['view'].action == 'update'
