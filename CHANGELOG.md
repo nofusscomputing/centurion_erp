@@ -1,3 +1,242 @@
+## 1.10.0 (2025-02-10)
+
+### feat
+
+- **settings**: Provide user with the ability to set browser mode
+- **core**: Parent Ticket validation added to ticket serializer
+- **core**: Add to ticket endpoint the ability to filter using `parent_ticket`
+- **core**: Add to ticket model  a function for circular dependecy check of parent ticket
+- **core**: Migrate Notes data to new table
+- **project_management**: Add notes tab to Project Milestone details page
+- **itam**: Add notes tab to Software Version details page
+- **itam**: Add notes tab to Operating System details page
+- **core**: Ensure when editing a model note, the modified user is updated.
+- **assistance**: Knowledge Base Category Notes viewset
+- **assistance**: Knowledge Base Category Notes Serializer
+- **assistance**: Knowledge Base Category Notes Model
+- **project_management**: Project Type Notes ViewSet
+- **project_management**: Project Type Notes Serializer
+- **project_management**: Project Type Notes Model
+- **project_management**: Project State Notes ViewSet
+- **project_management**: Project State Notes Serializer
+- **project_management**: Project State Notes Model
+- **project_management**: Project Milestone Notes ViewSet
+- **project_management**: Project Milestone Notes Serializer
+- **project_management**: Project Milestone Notes Model
+- **itam**: Software Version Notes ViewSet
+- **itam**: Software Version Notes Serializer
+- **itam**: Software Version Notes Model
+- **itam**: Software Category Notes ViewSet
+- **itam**: Software Category Notes Serializer
+- **itam**: Software Category Notes Model
+- **itam**: Operating System Version Notes ViewSet
+- **itam**: Operating System Version Notes Serializer
+- **itam**: Operating System Version Notes Model
+- **settings**: External Link Notes ViewSet
+- **settings**: External Link Notes Serializer
+- **settings**: External Link Notes Model
+- **itam**: Device Model Notes ViewSet
+- **itam**: Device Model Notes Serializer
+- **itam**: Device Model Notes Model
+- **itam**: Device Type Notes ViewSet
+- **itam**: Device Type Notes Serializer
+- **itam**: Device Type Notes Model
+- **core**: Create an action comment on a ticket when the category changes
+- **itim**: Porte Notes ViewSet
+- **itim**: Porte Notes Serializer
+- **itim**: Porte Notes Model
+- **itim**: Cluster Type Notes ViewSet
+- **itim**: Cluster Type Notes Serializer
+- **itim**: Cluster Type Notes Model
+- **project_management**: Project Notes ViewSet
+- **project_management**: Project Notes Serializer
+- **project_management**: Project Notes Model
+- **itim**: Service Notes ViewSet
+- **itim**: Service Notes Serializer
+- **itim**: Service Notes Model
+- **itim**: Cluster Notes ViewSet
+- **itim**: Cluster Notes Serializer
+- **itim**: Cluster Notes Model
+- **itam**: Software Notes ViewSet
+- **itam**: Software Notes Serilaizer
+- **itam**: Software Notes Model
+- **itam**: Operating System Notes ViewSet
+- **itam**: Operating System Notes Serializer
+- **itam**: Operating System Notes Model
+- **core**: Manufacturer Notes viewset
+- **core**: Manufacturer Notes serializer
+- **core**: Manufacturer Notes Model
+- **config_management**: Config Group Notes ViewSet
+- **config_management**: Config Group Notes Serializer
+- **config_management**: Config Group Notes Model
+- **assistance**: Knowledge Base Notes ViewSet
+- **assistance**: Knowledge Base Notes Serializer
+- **assistance**: Knowledge Base Notes Model
+- **access**: Team Notes ViewSet
+- **access**: Team Notes Serializer
+- **access**: Team Notes Model
+- **access**: Organization Notes ViewSet
+- **access**: Organization Notes Serializer
+- **access**: Organization Notes Model
+- **itam**: Device Notes ViewSet
+- **itam**: Device Notes Serializer
+- **itam**: Device Notes Model
+- **core**: Base viewset for model notes
+- **core**: Base serializer for model notes
+- **core**: Base model for model notes
+- **core**: Add failsafe to throw an exception if no action comment will be created
+- **core**: Add field parent_ticket to base ticket view serializer
+- **project_management**: Add field parent_ticket to project task ticket view serializer
+- **itim**: Add field parent_ticket to problem ticket view serializer
+- **itim**: Add field parent_ticket to incident ticket view serializer
+- **itim**: Add field parent_ticket to change ticket view serializer
+- **assistance**: Add field parent_ticket to request ticket view serializer
+- **core**: Add field parent to ticket model
+
+### Fixes
+
+- **core**: Dont attempt to access parent_ticket field during ticket validation if it does not exist
+- **core**: Permissions require the parent model for model notes
+- **access**: field organization requires team related_model for org
+- **core**: Use generic APIError for ticket save when no action comment will be created
+
+### Refactoring
+
+- Squash migrations so there is less of them for model notes
+- **access**: Dont add releationship from tenancyObject.organization to organization model
+
+### Tests
+
+- **settings**: Test User Settings API render to ensure browser_model exists and is the correct type
+- **settings**: Test User Settings model to ensure `browser_mode` field exists
+- **access**: Team Note Model Check object requires org
+- **settings**: External Links Note Model Checks
+- **project_management**: Project Type Note Model Checks
+- **project_management**: Project State Note Model Checks
+- **project_management**: Project Note Model Checks
+- **project_management**: Project Milestone Note Model Checks
+- **itim**: Service Note Model Checks
+- **itim**: Port Note Model Checks
+- **itim**: Cluster Type Note Model Checks
+- **itim**: Cluster Note Model Checks
+- **itam**: Software Version Note Model Checks
+- **itam**: Software Note Model Checks
+- **itam**: Software Category Note Model Checks
+- **itam**: Operating System Version Note Model Checks
+- **itam**: Operating System Note Model Checks
+- **itam**: Device Type Note Model Checks
+- **itam**: Device Note Model Checks
+- **itam**: Device Model Note Model Checks
+- **core**: Manufacturer Note Model Checks
+- **config_management**: Config Group Note Model Checks
+- **assistance**: KB Note Model Checks
+- **assistance**: KB Category Note Model Checks
+- **access**: Team Note Model Checks
+- **access**: Organization Note Model Checks
+- **core**: Model Notes Test Suite
+- **settings**: Serializer Checks for External Links Notes
+- **Project_management**: Serializer Checks for Project Type Notes
+- **Project_management**: Serializer Checks for Project State Notes
+- **Project_management**: Serializer Checks for Project Notes
+- **Project_management**: Serializer Checks for Project Milestone Notes
+- **itim**: Serializer Checks for Service Notes
+- **itim**: Serializer Checks for Port Notes
+- **itim**: Serializer Checks for Cluster Type Notes
+- **itim**: Serializer Checks for Cluster Notes
+- **itam**: Serializer Checks for Software Version Notes
+- **itam**: Serializer Checks for Software Notes
+- **itam**: Serializer Checks for Software Category Notes
+- **itam**: Serializer Checks for Operating System Version Notes
+- **itam**: Serializer Checks for Operating System Notes
+- **itam**: Serializer Checks for Device Type Notes
+- **itam**: Serializer Checks for Device Notes
+- **itam**: Serializer Checks for Device Model Notes
+- **core**: Serializer Checks for Manufacturer Notes
+- **config_management**: Serializer Checks for Config Groups Notes
+- **assistance**: Serializer Checks for KB Notes
+- **assistance**: Serializer Checks for KB Category Notes
+- **access**: Serializer Checks for Team Notes
+- **access**: Serializer Checks for Organization Notes
+- **core**: Test Suite for Model Notes checks
+- **api**: API Fileds user to be super user for tests to run
+- **settings**: External Links Notes Function Viewset Tests
+- **project_management**: Project Type Notes Function Viewset Tests
+- **project_management**: Project State Notes Function Viewset Tests
+- **project_management**: Project Notes Function Viewset Tests
+- **project_management**: Project Milestone Notes Function Viewset Tests
+- **itim**: Service Notes Function Viewset Tests
+- **itim**: Port Notes Function Viewset Tests
+- **itim**: Cluster Types Notes Function Viewset Tests
+- **itim**: Cluster Notes Function Viewset Tests
+- **itam**: Software Version Notes Function Viewset Tests
+- **itam**: Software Notes Function Viewset Tests
+- **itam**: Software Category Notes Function Viewset Tests
+- **itam**: Operating System Version Notes Function Viewset Tests
+- **itam**: Operating System Notes Function Viewset Tests
+- **itam**: Device Type Notes Function Viewset Tests
+- **itam**: Device Notes Function Viewset Tests
+- **itam**: Device Model Notes Function Viewset Tests
+- **core**: Manufacturer Notes Function Viewset Tests
+- **config_management**: Config Groups Notes Function Viewset Tests
+- **assistance**: Knowledge Base Notes Function Viewset Tests
+- **assistance**: Knowledge Base Category Notes Function Viewset Tests
+- **access**: Team Notes Function Viewset Tests
+- **access**: Organization Notes Function Viewset Tests
+- **core**: Model Notes Test Cases
+- Remove old notes model tests
+- **settings**: External Notes Test Cases for ViewSet
+- **project_management**: Project Type Notes Test Cases for ViewSet
+- **project_management**: Project State Notes Test Cases for ViewSet
+- **project_management**: Project Notes Test Cases for ViewSet
+- **project_management**: Project Milestone Notes Test Cases for ViewSet
+- **itim**: Service Notes Test Cases for ViewSet
+- **itim**: Port Notes Test Cases for ViewSet
+- **itim**: Cluster Type Notes Test Cases for ViewSet
+- **itim**: Cluster Notes Test Cases for ViewSet
+- **itam**: Software Version Notes Test Cases for ViewSet
+- **itam**: Software Notes Test Cases for ViewSet
+- **itam**: Software Category Notes Test Cases for ViewSet
+- **itam**: Operating System Version Notes Test Cases for ViewSet
+- **itam**: Operating_system Notes Test Cases for ViewSet
+- **itam**: Device Type Notes Test Cases for ViewSet
+- **itam**: Device Notes Test Cases for ViewSet
+- **itam**: Device Model Notes Test Cases for ViewSet
+- **core**: Manufacturer Notes Test Cases for ViewSet
+- **config_management**: Config Groups Notes Test Cases for ViewSet
+- **assistance**: Knowledge Base Notes Test Cases for ViewSet
+- **assistance**: Knowledge Base Category Notes Test Cases for ViewSet
+- **access**: Team Notes Test Cases for ViewSet
+- **access**: Organization Notes Test Cases for ViewSet
+- **project_management**: Correct kwargs for Project Milestone Notes Test Cases for API Field Checks
+- **assistance**: Knowledge Base Category Notes Test Cases for API Field Checks
+- **Settings**: External Link Notes Test Cases for API Field Checks
+- **project_management**: Project Type Notes Test Cases for API Field Checks
+- **project_management**: Project State Notes Test Cases for API Field Checks
+- **project_management**: Project Notes Test Cases for API Field Checks
+- **project_management**: Project Milestone Notes Test Cases for API Field Checks
+- **itim**: Service Notes Test Cases for API Field Checks
+- **itim**: Port Notes Test Cases for API Field Checks
+- **itim**: Cluster Types Notes Test Cases for API Field Checks
+- **itim**: Cluster Notes Test Cases for API Field Checks
+- **itam**: Software Version Notes Test Cases for API Field Checks
+- **itam**: Software Notes Test Cases for API Field Checks
+- **itam**: Software Category Notes Test Cases for API Field Checks
+- **itam**: Device Type Notes Test Cases for API Field Checks
+- **itam**: Device Notes Test Cases for API Field Checks
+- **itam**: Device Model Notes Test Cases for API Field Checks
+- **itam**: Operating System Test Cases for API Field Checks
+- **itam**: Operating System Version Test Cases for API Field Checks
+- **core**: Manufacturer Test Cases for API Field Checks
+- **config_management**: Config Group Test Cases for API Field Checks
+- **assistance**: KB Test Cases for API Field Checks
+- **access**: Team Test Cases for API Field Checks
+- **access**: Organization Test Cases for API Field Checks
+- **core**: Model Notes Base Test Cases for API Field Checks
+- remove old notes model tests
+- Update url_name to match new notes endpoint
+- **config_Management**: Update url_name to match new notes endpoint
+- **core**: Remove notes test cases for previous notes model
+
 ## 1.9.0 (2025-02-06)
 
 ### feat
