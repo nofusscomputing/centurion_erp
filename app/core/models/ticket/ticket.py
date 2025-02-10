@@ -754,6 +754,45 @@ class Ticket(
         return linked_items
 
 
+    def circular_dependency_check(self, ticket, parent, depth: int = 0) -> bool:
+        """Confirm the parent ticket does not create circular dependencies
+
+        A recursive check from `ticket` to `depth`. If a dependency is found.
+        `False` will be returned
+
+        Args:
+            ticket (Ticket): The initial ticket to check against
+            parent (Ticket): The parent ticket to check, 
+            depth (int, optional): How deep the recursive check should go. Defaults to 0.
+
+        Returns:
+            True (bool): No circular dependency found
+            False (bool): Circular dependency was found
+        """
+
+        depth = depth + 1
+        depth_limit = 10
+
+        results: bool = True
+
+        if ticket == parent:
+
+            results = False
+
+        elif(
+            self.parent_ticket
+            and depth <= depth_limit
+        ):
+
+            results = self.circular_dependency_check(
+                ticket = ticket,
+                parent = self.parent_ticket,
+                depth = depth
+            )
+
+        return results
+
+
     @property
     def related_tickets(self) -> list(dict()):
 
