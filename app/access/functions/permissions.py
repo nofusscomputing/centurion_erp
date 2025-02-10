@@ -24,6 +24,7 @@ def permission_queryset():
         'chordcounter',
         'comment',
         'groupresult',
+        'modelnotes',
         'usersettings',
     ]
 

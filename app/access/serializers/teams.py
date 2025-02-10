@@ -71,6 +71,14 @@ class TeamModelSerializer(
                     'model_pk': item.pk
                 }
             ),
+            'notes': reverse(
+                "v2:_api_v2_organization_team_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'organization_id': item.organization.pk,
+                    'model_id': item.pk
+                }
+            ),
             'users': reverse(
                 'v2:_api_v2_organization_team_user-list',
                 request=self.context['view'].request,

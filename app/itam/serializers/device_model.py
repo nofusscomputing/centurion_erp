@@ -64,6 +64,13 @@ class DeviceModelModelSerializer(
                     'model_pk': obj.pk
                 }
             ),
+            'notes': reverse(
+                "v2:_api_v2_device_model_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_id': obj.pk
+                }
+            ),
         }
 
     class Meta:

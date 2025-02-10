@@ -21,11 +21,15 @@ class MockView:
     request = None
 
 
-    def __init__(self, user: User):
+    def __init__(self, user: User, model = None):
 
         app_settings = AppSettings.objects.select_related('global_organization').get(
             owner_organization = None
         )
+
+        if model is not None:
+
+            self.model = model
 
         self.request = MockRequest( user = user, app_settings = app_settings)
 

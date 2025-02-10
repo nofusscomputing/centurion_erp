@@ -158,3 +158,21 @@ class UserSettingsAPI(
         """
 
         assert type(self.api_data['default_organization']['url']) is Hyperlink
+
+
+    def test_api_field_exists_browser_mode(self):
+        """ Test for existance of API Field
+
+        browser_mode field must exist
+        """
+
+        assert 'browser_mode' in self.api_data
+
+
+    def test_api_field_type_browser_mode(self):
+        """ Test for type for API Field
+
+        browser_mode field must be int
+        """
+
+        assert type(self.api_data['browser_mode']) is int

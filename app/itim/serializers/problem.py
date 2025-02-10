@@ -49,6 +49,7 @@ class ProblemTicketModelSerializer(
             'assigned_teams',
             'assigned_users',
             'category',
+            'parent_ticket',
             'created',
             'modified',
             'status',
@@ -84,6 +85,7 @@ class ProblemTicketModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
+            'parent_ticket',
             'external_ref',
             'external_system',
             'status_badge',

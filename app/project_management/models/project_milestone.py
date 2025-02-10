@@ -104,6 +104,11 @@ class ProjectMilestone(ProjectCommonFieldsName):
                 # }
             ],
         },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
     ]
 
 

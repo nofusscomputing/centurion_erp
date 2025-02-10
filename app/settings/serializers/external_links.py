@@ -69,7 +69,13 @@ class ExternalLinkModelSerializer(
                     'model_pk': item.pk
                 }
             ),
-            'notes': reverse("v2:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'notes': reverse(
+                "v2:_api_v2_external_link_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_id': item.pk
+                }
+            ),
         }
 
 
