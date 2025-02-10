@@ -72,6 +72,14 @@ class SoftwareVersionModelSerializer(
                     'model_pk': item.pk
                 }
             ),
+            'notes': reverse(
+                "v2:_api_v2_software_version_note-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'software_id': item.software.pk,
+                    'model_id': item.pk
+                }
+            ),
             'tickets': 'ToDo'
         }
 

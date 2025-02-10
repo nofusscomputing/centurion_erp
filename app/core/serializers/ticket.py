@@ -143,6 +143,7 @@ class TicketModelSerializer(
             'modified',
             'status',
             'status_badge',
+            'parent_ticket',
             'title',
             'description',
             'estimate',
@@ -309,6 +310,28 @@ class TicketModelSerializer(
                 data['status'] = int(Ticket.TicketStatus.All.NEW)
 
 
+        if(
+            data.get('parent_ticket', None)
+            and (
+                self._context['view'].action == 'partial_update'
+                or self._context['view'].action == 'update'
+            )
+        ):
+
+            if not data['parent_ticket'].circular_dependency_check(
+                ticket = self.instance,
+                parent = data['parent_ticket']
+            ):
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'parent_ticket': 'Adding this ticket will create a circular dependency'
+                    },
+                    code = 'no_parent_circular_dependency',
+                )
+
+
+
         self.validate_field_organization()
 
         self.validate_field_milestone()
@@ -323,6 +346,8 @@ class TicketViewSerializer(TicketModelSerializer):
     assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
 
     category = TicketCategoryBaseSerializer()
+
+    parent_ticket = TicketBaseSerializer()
 
     opened_by = UserBaseSerializer()
 

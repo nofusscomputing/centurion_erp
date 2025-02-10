@@ -48,6 +48,11 @@
                 <span>{{ settings.timezone }}</span>
             </div>
 
+            <div class="detail-view-field">
+                <label>{{ form.browser_mode.label }}</label>
+                <span>{{ settings.get_browser_mode_display }}</span>
+            </div>
+
         </div>
         <div>
             <input type="button" value="Edit"

@@ -19,6 +19,7 @@ class UserSettingsForm(CommonModelForm):
         fields = [
             'default_organization',
             'timezone',
+            'browser_mode',
         ]
 
         model = UserSettings

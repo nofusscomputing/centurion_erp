@@ -54,6 +54,13 @@ class UserSettings(UserSettingsCommonFields):
         verbose_name_plural = 'User Settings'
 
 
+    class BrowserMode(models.IntegerChoices):
+
+        AUTO  = 1, 'Auto'
+        DARK  = 2, 'Dark'
+        LIGHT = 3, 'Light'
+
+
     user = models.ForeignKey(
         User,
         blank= False,
@@ -63,6 +70,13 @@ class UserSettings(UserSettingsCommonFields):
         verbose_name = 'User'
     )
 
+    browser_mode = models.IntegerField(
+        blank = False,
+        choices = BrowserMode,
+        default = BrowserMode.AUTO,
+        help_text = "Set your web browser's mode",
+        verbose_name = 'Browser Mode',
+    ) 
 
     default_organization = models.ForeignKey(
         Organization,

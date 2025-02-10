@@ -269,6 +269,7 @@ class TenancyObject(SaveHistory):
         help_text = 'Organization this belongs to',
         null = False,
         on_delete = models.CASCADE,
+        related_name = '+',
         validators = [validatate_organization_exists],
         verbose_name = 'Organization'
     )
@@ -361,12 +362,34 @@ class Team(Group, TenancyObject):
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
+    def validatate_organization_exists(self):
+        """Ensure that the user did provide an organization
+
+        Raises:
+            ValidationError: User failed to supply organization.
+        """
+
+        if not self:
+            raise ValidationError('You must provide an organization')
+
+
+
     team_name = models.CharField(
         blank = False,
         help_text = 'Name to give this team',
         max_length = 50,
         unique = False,
         verbose_name = 'Name',
+    )
+
+    organization = models.ForeignKey(
+        Organization,
+        blank = False,
+        help_text = 'Organization this belongs to',
+        null = False,
+        on_delete = models.CASCADE,
+        validators = [validatate_organization_exists],
+        verbose_name = 'Organization'
     )
 
     created = AutoCreatedField()
@@ -592,3 +615,92 @@ class TeamUsers(SaveHistory):
     def __str__(self):
         return self.user.username
 
+
+
+from core.models.model_notes import ModelNotes
+
+
+class OrganizationNotes(
+    ModelNotes
+):
+
+
+    class Meta:
+
+        db_table = 'access_organization_notes'
+
+        ordering = ModelNotes._meta.ordering
+
+        verbose_name = 'Organization Note'
+
+        verbose_name_plural = 'Organization Notes'
+
+
+    model = models.ForeignKey(
+        Organization,
+        blank = False,
+        help_text = 'Model this note belongs to',
+        null = False,
+        on_delete = models.CASCADE,
+        related_name = 'notes',
+        verbose_name = 'Model',
+    )
+
+    table_fields: list = []
+
+    page_layout: dict = []
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'model_id': self.model.pk,
+            'pk': self.pk
+        }
+
+
+
+class TeamNotes(
+    ModelNotes
+):
+
+
+    class Meta:
+
+        db_table = 'access_team_notes'
+
+        ordering = ModelNotes._meta.ordering
+
+        verbose_name = 'Team Note'
+
+        verbose_name_plural = 'Team Notes'
+
+
+    model = models.ForeignKey(
+        Team,
+        blank = False,
+        help_text = 'Model this note belongs to',
+        null = False,
+        on_delete = models.CASCADE,
+        related_name = 'notes',
+        verbose_name = 'Model',
+    )
+
+    table_fields: list = []
+
+    page_layout: dict = []
+
+
+    def get_url( self, request = None ) -> str:
+
+        kwargs = {
+            'organization_id': self.organization.pk,
+            'model_id': self.model.pk,
+            'pk': self.pk
+        }
+
+        if request:
+
+            return reverse("v2:_api_v2_organization_team_note-detail", request=request, kwargs = kwargs )
+
+        return reverse("v2:_api_v2_organization_team_note-detail", kwargs = kwargs )

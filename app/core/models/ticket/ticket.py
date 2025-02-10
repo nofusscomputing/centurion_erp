@@ -12,8 +12,8 @@ from .ticket_enum_values import TicketValues
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
+from core import exceptions as centurion_exceptions
 from core.lib.slash_commands import SlashCommands
-
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket_category import TicketCategory, KnowledgeBase
 
@@ -359,7 +359,17 @@ class Ticket(
         help_text = 'Status of ticket',
         # null=True,
         verbose_name = 'Status',
-    ) 
+    )
+
+    parent_ticket = models.ForeignKey(
+        'self',
+        blank = True,
+        default = None,
+        help_text = 'Parent of this ticket',
+        null = True,
+        on_delete = models.SET_NULL,
+        verbose_name = 'Parent Ticket'
+    )
 
     category = models.ForeignKey(
         TicketCategory,
@@ -744,6 +754,45 @@ class Ticket(
         return linked_items
 
 
+    def circular_dependency_check(self, ticket, parent, depth: int = 0) -> bool:
+        """Confirm the parent ticket does not create circular dependencies
+
+        A recursive check from `ticket` to `depth`. If a dependency is found.
+        `False` will be returned
+
+        Args:
+            ticket (Ticket): The initial ticket to check against
+            parent (Ticket): The parent ticket to check, 
+            depth (int, optional): How deep the recursive check should go. Defaults to 0.
+
+        Returns:
+            True (bool): No circular dependency found
+            False (bool): Circular dependency was found
+        """
+
+        depth = depth + 1
+        depth_limit = 10
+
+        results: bool = True
+
+        if ticket == parent:
+
+            results = False
+
+        elif(
+            self.parent_ticket
+            and depth <= depth_limit
+        ):
+
+            results = self.circular_dependency_check(
+                ticket = ticket,
+                parent = self.parent_ticket,
+                depth = depth
+            )
+
+        return results
+
+
     @property
     def related_tickets(self) -> list(dict()):
 
@@ -852,6 +901,23 @@ class Ticket(
         for field in changed_fields:
 
             comment_field_value: str = None
+
+            if field == 'category_id':
+
+                value = 'None'
+
+                if before[field]:
+
+                    value = f"$category-{before[field]}"
+
+                to_value = getattr(self.milestone, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$category-{getattr(self.milestone, 'id', 'None')}"
+
+
+                comment_field_value = f"changed category from {value} to {to_value}"
 
             if field == 'impact':
 
@@ -973,7 +1039,18 @@ class Ticket(
                 comment_field_value = '<details><summary>Changed the Description</summary>\n\n``` diff \n\n' + comment_field_value + '\n\n```\n\n</details>'
 
 
-            if comment_field_value:
+            if (
+                comment_field_value is None
+                and field != 'created'
+                and field != 'modified'
+            ):
+
+                raise centurion_exceptions.APIError(
+                    detail = f'Action comment for field {field} will not be created. please report this as a bug.',
+                    code = 'no_action_comment'
+                )
+
+            elif comment_field_value:
 
                 if request:
 
