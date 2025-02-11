@@ -936,9 +936,21 @@ class Ticket(
 
                 comment_field_value = f"Ticket moved from $organization-{before[field]} to $organization-{after[field]}"
 
-            elif field == 'parent_ticket':
+            elif field == 'parent_ticket_id':
 
-                comment_field_value = f"changed parent ticket from #{before[field]} to #{after[field]}"
+                value = 'None'
+
+                if before[field]:
+
+                    value = f"#{before[field]}"
+
+                to_value = getattr(self.parent_ticket, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"#{getattr(self.parent_ticket, 'id', 'None')}"
+
+                comment_field_value = f"Parent ticket changed from {value} to {to_value}"
 
             elif field == 'status':
 
