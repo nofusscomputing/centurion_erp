@@ -919,28 +919,28 @@ class Ticket(
 
                 comment_field_value = f"changed category from {value} to {to_value}"
 
-            if field == 'impact':
+            elif field == 'impact':
 
                 comment_field_value = f"changed {field} to {self.get_impact_display()}"
 
-            if field == 'urgency':
+            elif field == 'urgency':
 
                 comment_field_value = f"changed {field} to {self.get_urgency_display()}"
 
-            if field == 'priority':
+            elif field == 'priority':
 
                 comment_field_value = f"changed {field} to {self.get_priority_display()}"
 
 
-            if field == 'status':
+            elif field == 'status':
 
                 comment_field_value = f"changed {field} to {self.get_status_display()}"
 
-            if field == 'title':
+            elif field == 'title':
 
                 comment_field_value = f"Title changed ~~{before[field]}~~ to **{after[field]}**"
 
-            if field == 'project_id':
+            elif field == 'project_id':
 
                 value = 'None'
 
@@ -957,7 +957,7 @@ class Ticket(
 
                 comment_field_value = f"changed project from {value} to {to_value}"
 
-            if field == 'milestone_id':
+            elif field == 'milestone_id':
 
                 value = 'None'
 
@@ -974,7 +974,7 @@ class Ticket(
 
                 comment_field_value = f"changed milestone from {value} to {to_value}"
 
-            if field == 'planned_start_date':
+            elif field == 'planned_start_date':
 
                 to_value = after[field]
 
@@ -984,7 +984,7 @@ class Ticket(
 
                 comment_field_value = f"changed Planned Start Date from _{before[field]}_ to **{to_value}**"
 
-            if field == 'planned_finish_date':
+            elif field == 'planned_finish_date':
 
                 to_value = after[field]
 
@@ -994,7 +994,7 @@ class Ticket(
 
                 comment_field_value = f"changed Planned Finish Date from _{before[field]}_ to **{to_value}**"
 
-            if field == 'real_start_date':
+            elif field == 'real_start_date':
 
                 to_value = after[field]
 
@@ -1010,7 +1010,7 @@ class Ticket(
 
                     to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
 
-            if field == 'real_finish_date':
+            elif field == 'real_finish_date':
 
                 to_value = after[field]
 
@@ -1021,7 +1021,7 @@ class Ticket(
                 comment_field_value = f"changed Real Finish Date from _{before[field]}_ to **{to_value}**"
 
 
-            if field == 'description':
+            elif field == 'description':
 
                 comment_field_value = ''.join(
                     str(x) for x in list(
