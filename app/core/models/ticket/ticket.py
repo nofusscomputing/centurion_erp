@@ -908,13 +908,13 @@ class Ticket(
 
                 if before[field]:
 
-                    value = f"$category-{before[field]}"
+                    value = f"$ticket_category-{before[field]}"
 
-                to_value = getattr(self.milestone, 'id', 'None')
+                to_value = getattr(self.category, 'id', 'None')
 
                 if to_value != 'None':
 
-                    to_value = f"$category-{getattr(self.milestone, 'id', 'None')}"
+                    to_value = f"$ticket_category-{getattr(self.category, 'id', 'None')}"
 
 
                 comment_field_value = f"changed category from {value} to {to_value}"
