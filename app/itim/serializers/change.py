@@ -30,6 +30,7 @@ class ChangeTicketModelSerializer(
 
 
     category = serializers.PrimaryKeyRelatedField(
+        allow_null = True,
         queryset = TicketCategory.objects.filter(
             change = True
         ),
