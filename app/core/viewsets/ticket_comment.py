@@ -370,3 +370,25 @@ class ViewSet(ModelViewSet):
             return "Ticket Comment"
         
         return 'Ticket Comments'
+
+
+
+    def get_view_serializer_name(self) -> str:
+        """Get the Models `View` Serializer name.
+
+        Override this function if required and/or the serializer names deviate from default.
+
+        Returns:
+            str: Models View Serializer Class name
+        """
+
+        if self.view_serializer_name is None:
+
+            self.view_serializer_name = super().get_view_serializer_name()
+
+            for remove_str in [ 'Add', 'Change', 'Import', 'Triage', 'ITIL', 'FollowUp', 'Solution', 'Task' ]:
+
+                self.view_serializer_name = self.view_serializer_name.replace(remove_str, '')
+
+
+        return self.view_serializer_name
