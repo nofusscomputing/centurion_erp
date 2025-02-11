@@ -66,26 +66,19 @@ Available admonition types are:
 Declare a ticket reference in format `#<ticket number>`, and it will be rendered as a link to the ticket. i.e. `#2`
 
 
-## Model Reference
+## Model Reference / Model Tag
 
 A Model link is a reference to an item within the database. Supported model link items are:
 
-- cluster
-
-- config_group
-
-- device
-
-- kb
-
-- operating_system
-
-- organization
-
-- service
-
-- software
-
-- team
+| Model | Tag |
+|:---|:---:|
+| cluster| `$cluster-<id>` |
+| configgroups| `$config_group-<id>` |
+| device| `$device-<id>` |
+| operatingsystem| `$operating_system-<id>` |
+| organization| `$organization-<id>` |
+| service| `$service-<id>` |
+| software| `$software-<id>` |
+| team| `$team-<id>` |
 
 To declare a model link use syntax `$<type>-<model id>`. i.e. for device 1, it would be `$device-1`
