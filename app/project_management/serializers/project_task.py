@@ -28,6 +28,7 @@ class ProjectTaskTicketModelSerializer(
 
 
     category = serializers.PrimaryKeyRelatedField(
+        allow_null = True,
         queryset = TicketCategory.objects.filter(
             project_task = True
         ),
