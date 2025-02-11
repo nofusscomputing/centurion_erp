@@ -1,3 +1,4 @@
+import importlib
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets
@@ -40,6 +41,29 @@ class Create(
         try:
 
             response = super().create(request = request, *args, **kwargs)
+
+            # Always return using the ViewSerializer
+            serializer_module = importlib.import_module(self.serializer_class.__module__)
+
+            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+
+            serializer = view_serializer(
+                self.get_queryset().get( pk = int(response.data['id']) ),
+                context = {
+                    'request': request,
+                    'view': self,
+                },
+            )
+
+            # Mimic ALL details from DRF response except serializer
+            response = Response(
+                data = serializer.data,
+                status = response.status_code,
+                template_name = response.template_name,
+                headers = response.headers,
+                exception = response.exception,
+                content_type = response.content_type,
+            )
 
         except Exception as e:
 
@@ -246,6 +270,29 @@ class Update(
 
             response = super().partial_update(request = request, *args, **kwargs)
 
+            # Always return using the ViewSerializer
+            serializer_module = importlib.import_module(self.serializer_class.__module__)
+
+            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+
+            serializer = view_serializer(
+                self.queryset.get( pk = int(self.kwargs['pk']) ),
+                context = {
+                    'request': request,
+                    'view': self,
+                },
+            )
+
+            # Mimic ALL details from DRF response except serializer
+            response = Response(
+                data = serializer.data,
+                status = response.status_code,
+                template_name = response.template_name,
+                headers = response.headers,
+                exception = response.exception,
+                content_type = response.content_type,
+            )
+
         except Exception as e:
 
             if not isinstance(e, APIException):
@@ -289,6 +336,29 @@ class Update(
         try:
 
             response = super().update(request = request, *args, **kwargs)
+
+            # Always return using the ViewSerializer
+            serializer_module = importlib.import_module(self.serializer_class.__module__)
+
+            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+
+            serializer = view_serializer(
+                self.queryset.get( pk = int(self.kwargs['pk']) ),
+                context = {
+                    'request': request,
+                    'view': self,
+                },
+            )
+
+            # Mimic ALL details from DRF response except serializer
+            response = Response(
+                data = serializer.data,
+                status = response.status_code,
+                template_name = response.template_name,
+                headers = response.headers,
+                exception = response.exception,
+                content_type = response.content_type,
+            )
 
         except Exception as e:
 
@@ -575,6 +645,9 @@ class ModelViewSetBase(
     If not used, use get_serializer_class function and cache the class here.
     """
 
+    view_serializer_name: str = None
+    """Cached model view Serializer name"""
+
 
     def get_queryset(self):
 
@@ -615,6 +688,23 @@ class ModelViewSetBase(
 
 
         return self.serializer_class
+
+
+
+    def get_view_serializer_name(self) -> str:
+        """Get the Models `View` Serializer name.
+
+        Override this function if required and/or the serializer names deviate from default.
+
+        Returns:
+            str: Models View Serializer Class name
+        """
+
+        if self.view_serializer_name is None:
+
+            self.view_serializer_name = self.serializer_class.__name__.replace('ModelSerializer', 'ViewSerializer')
+
+        return self.view_serializer_name
 
 
 
