@@ -527,6 +527,94 @@ class ActionComments(SetUp):
         assert self.item.status == Ticket.TicketStatus.All.NEW
 
 
+
+    def test_ticket_action_comment_category_added(self):
+        """Action Comment test
+        Confirm an' action comment is created when a `category` is added
+        """
+
+        self.item.category = self.category
+
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed category from none to \$ticket_category-" + str(self.category.id) , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_category_remove(self):
+        """Action Comment test
+        Confirm an action comment is created when the `category` is removed
+        """
+
+        self.item.category = self.category
+
+        self.item.save()
+
+        self.item.category = None
+
+        self.item.save()
+
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed category from \$ticket_category-" + str(self.category.id) + " to none", str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_category_change(self):
+        """Action Comment test
+        Confirm an action comment is created when a `category` is changed
+        """
+
+        self.item.category = self.category
+
+        self.item.save()
+
+
+        self.item.category = self.category_two
+
+        self.item.save()
+
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed category from \$ticket_category-" + str(self.category.id) + r" to \$ticket_category-" + str(self.category_two.id) , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+
     def test_ticket_action_comment_subscribed_users_added_user_subscribed(self):
         """Action Comment test
         Confirm a 'user subscribed' action comment is created when a user is added as subscribed
