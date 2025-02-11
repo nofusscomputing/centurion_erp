@@ -28,6 +28,7 @@ class IncidentTicketModelSerializer(
 ):
 
     category = serializers.PrimaryKeyRelatedField(
+        allow_null = True,
         queryset = TicketCategory.objects.filter(
             incident = True
         ),
