@@ -932,6 +932,10 @@ class Ticket(
                 comment_field_value = f"changed {field} to {self.get_priority_display()}"
 
 
+            elif field == 'parent_ticket':
+
+                comment_field_value = f"changed parent ticket from #{before[field]} to #{after[field]}"
+
             elif field == 'status':
 
                 comment_field_value = f"changed {field} to {self.get_status_display()}"
