@@ -251,7 +251,7 @@ class ViewSet(ModelViewSet):
             if self.request.tenancy.has_organization_permission(
                 organization = organization,
                 permissions_required = 'core.import_ticketcomment'
-            ):
+            ) and not self.request.user.is_superuser:
 
                 if (
                     self.action == 'create'

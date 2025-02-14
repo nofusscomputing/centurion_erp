@@ -308,14 +308,14 @@ class TicketViewSet(ModelViewSet):
                     if self.request.tenancy.has_organization_permission(
                         organization = organization,
                         permissions_required = 'core.import_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ):
+                    ) and not self.request.user.is_superuser:
 
                         serializer_prefix = serializer_prefix + 'Import'
 
                     elif self.request.tenancy.has_organization_permission(
                         organization = organization,
                         permissions_required = 'core.triage_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ):
+                    ) or self.request.user.is_superuser:
 
                         serializer_prefix = serializer_prefix + 'Triage'
 
