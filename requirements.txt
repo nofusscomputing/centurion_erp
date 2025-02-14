@@ -34,3 +34,8 @@ sqlalchemy==2.0.31
 # metrics
 prometheus-client==0.21.1
 django-prometheus==2.3.1
+
+# Version must be specified. see https://github.com/nofusscomputing/centurion_erp/issues/603
+# must also have export PYTHONTZPATH=""
+pytz==2025.1
+tzdata==2025.1
