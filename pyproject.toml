@@ -1,0 +1,4 @@
+[tool.pylint.main]
+disable = [ 
+    "all" 
+]
