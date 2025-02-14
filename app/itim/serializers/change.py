@@ -92,6 +92,7 @@ class ChangeTicketModelSerializer(
             'external_system',
             'status_badge',
             'ticket_type',
+            'opened_by',
             '_urls',
         ]
 
