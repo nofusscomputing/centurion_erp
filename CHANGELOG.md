@@ -1,3 +1,9 @@
+## 1.10.1 (2025-02-14)
+
+### Fixes
+
+- **python**: Dont use system TimeZone data, use python zoneinfo module zone data
+
 ## 1.10.0 (2025-02-10)
 
 ### feat
