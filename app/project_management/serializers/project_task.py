@@ -88,6 +88,7 @@ class ProjectTaskTicketModelSerializer(
             'parent_ticket',
             'external_ref',
             'external_system',
+            'opened_by',
             'status_badge',
             'ticket_type',
             '_urls',
