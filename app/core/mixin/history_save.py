@@ -32,7 +32,7 @@ class SaveHistory(models.Model):
         Args:
             before (dict): Model data before the change
             after (dict): Model data after the change
-            history_model(models.Model) History model class
+            history_model (models.Model): History model class
 
         Returns:
             False (bool): Failed to save history
