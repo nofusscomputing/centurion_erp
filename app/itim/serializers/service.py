@@ -54,32 +54,10 @@ class ServiceModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        return {
-            '_self': item.get_url( request = self._context['view'].request ),
+        get_url = super().get_url( item = item )
+
+        get_url.update({
             'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?service=true',
-            'history': reverse(
-                "v2:_api_v2_model_history-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_class': self.Meta.model._meta.model_name,
-                    'model_id': item.pk
-                }
-            ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
-            'notes': reverse(
-                "v2:_api_v2_service_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': item.pk
-                }
-            ),
             'tickets': reverse(
                 "v2:_api_v2_item_tickets-list",
                 request=self._context['view'].request,
@@ -88,7 +66,10 @@ class ServiceModelSerializer(
                     'item_id': item.pk
                     }
             )
-        }
+        })
+
+        return get_url
+
 
 
     rendered_config = serializers.JSONField( source='config_variables', read_only = True )

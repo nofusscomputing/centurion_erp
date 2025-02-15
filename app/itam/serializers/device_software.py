@@ -60,22 +60,32 @@ class DeviceSoftwareModelSerializer(
 
     def get_url(self, obj) -> dict:
 
-         if 'view' in self._context:
+        get_url = super().get_url( item = item )
+
+        del get_url['history']
+
+        del get_url['knowledge_base']
+
+        del get_url['notes']
+
+        if 'view' in self._context:
 
             if 'software_id' in self._context['view'].kwargs:
 
-                return {
+                get_url.update({
                     '_self': reverse("v2:_api_v2_software_installs-detail", request = self._context['view'].request, kwargs = {
                         'software_id': obj.software.pk,
                         'pk': obj.pk
                     } )
-                }
+                })
 
             elif 'device_id' in self._context['view'].kwargs:
 
-                return {
+                get_url.update({
                     '_self': obj.get_url( request = self._context['view'].request )
-                }
+                })
+
+        return get_url
 
 
 

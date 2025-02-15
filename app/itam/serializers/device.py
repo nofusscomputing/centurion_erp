@@ -51,7 +51,7 @@ class DeviceBaseSerializer(serializers.ModelSerializer):
 
 class DeviceModelSerializer(
     common.CommonModelSerializer,
-    DeviceBaseSerializer
+    DeviceBaseSerializer,
 ):
 
     _urls = serializers.SerializerMethodField('get_url')
@@ -60,40 +60,13 @@ class DeviceModelSerializer(
 
         request = None
 
-        if 'view' in self._context:
+        get_url = super().get_url( item = item )
 
-            if hasattr(self._context['view'], 'request'):
+        get_url.update({
 
-                request = self._context['view'].request
-
-        return {
-            '_self': item.get_url( request = request ),
             'device_model': reverse("v2:_api_v2_device_model-list", request=self._context['view'].request),
             'device_type': reverse("v2:_api_v2_device_type-list", request=self._context['view'].request),
             'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
-            'history': reverse(
-                "v2:_api_v2_model_history-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_class': self.Meta.model._meta.model_name,
-                    'model_id': item.pk
-                }
-            ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
-            'notes': reverse(
-                "v2:_api_v2_device_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': item.pk
-                }
-            ),
             'operating_system': reverse("v2:_api_v2_device_operating_system-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'service': reverse("v2:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'software': reverse("v2:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
@@ -105,7 +78,9 @@ class DeviceModelSerializer(
                     'item_id': item.pk
                     }
             )
-        }
+        })
+
+        return get_url
 
 
     context = serializers.SerializerMethodField('get_cont')

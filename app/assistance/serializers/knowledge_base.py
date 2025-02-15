@@ -63,18 +63,14 @@ class KnowledgeBaseModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        return {
-            '_self': item.get_url( request = self._context['view'].request ),
+        get_url = super().get_url( item = item )
+
+        del get_url['knowledge_base']
+
+        get_url.update({
             'category': reverse(
                 'v2:_api_v2_knowledge_base_category-list',
                 request=self.context['view'].request,
-            ),
-            'notes': reverse(
-                "v2:_api_v2_knowledge_base_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': item.pk
-                }
             ),
             'organization': reverse(
                 'v2:_api_v2_organization-list',
@@ -91,7 +87,10 @@ class KnowledgeBaseModelSerializer(
                 'v2:_api_v2_user-list',
                 request=self.context['view'].request,
             )
-        }
+        })
+
+        return get_url
+
 
 
     content = centurion_field.MarkdownField( required = False, style_class = 'large' )
