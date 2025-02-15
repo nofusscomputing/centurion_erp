@@ -1,12 +1,11 @@
-from django.db.models import Q
+from django.contrib.auth.models import ContentType
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from api.viewsets.common import ReadOnlyModelViewSet
 
 from core.serializers.history import (
-    History,
-    HistoryModelSerializer,
+    ModelHistory,
     HistoryViewSerializer
 )
 
@@ -34,13 +33,13 @@ class ViewSet(ReadOnlyModelViewSet):
         'OPTIONS'
     ]
 
+
     filterset_fields = [
-        'item_parent_pk',
-        'item_parent_class'
+        'content_type',
+        'user',
     ]
 
-
-    model = History
+    model = ModelHistory
 
     view_description: str = 'Model Change History'
 
@@ -51,12 +50,22 @@ class ViewSet(ReadOnlyModelViewSet):
 
             return self.queryset
 
-        self.queryset = super().get_queryset()
+        history_models = ContentType.objects.filter(
+            model__contains = 'history'
+        ).exclude(
+            app_label = 'core',
+            model = 'modelhistory'
+        ).exclude(
+            app_label = 'core',
+            model = 'history'
+        ).exclude(
+            model__in = self.model.child_history_models
+        )
 
-        self.queryset = self.queryset.filter(
-            Q(item_pk = self.kwargs['model_id'], item_class = self.kwargs['model_class'])
-            |
-            Q(item_parent_pk = self.kwargs['model_id'], item_parent_class = self.kwargs['model_class'])
+        history_models: list =  list([ f.model for f in history_models ])
+
+        self.queryset = self.model.objects.select_related(
+           *history_models
         )
 
         return self.queryset

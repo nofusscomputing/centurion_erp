@@ -1,15 +1,19 @@
 from django.contrib.auth.models import ContentType, User
 from django.db import models
 
-from access.fields import *
+from access.fields import AutoCreatedField
+from access.models import TenancyObject
+
 
 
 class ModelHistory(
-    models.Model
+    TenancyObject
 ):
 
 
     class Meta:
+
+        db_table = 'core_model_history'
 
         ordering = [
             '-created'
@@ -26,13 +30,7 @@ class ModelHistory(
         DELETE = 3, 'Delete'
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID for this history entry',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
+    model_notes = None    # model notes not required for this model
 
     before = models.JSONField(
         blank = True,
@@ -83,6 +81,18 @@ class ModelHistory(
     created = AutoCreatedField()
 
 
+
+    child_history_models = []
+    """Child History Models
+
+    This list is currently used for excluding child models from the the history
+    select_related query.
+
+    Returns:
+        list: Child history models.
+    """
+
+
     table_fields: list  = [
         'created',
         'action',
@@ -94,3 +104,29 @@ class ModelHistory(
             'after'
         ]
     ]
+
+
+    def get_serialized_model_field(self, context):
+
+        model = None
+
+        model = getattr(self, self._meta.related_objects[0].name).model
+
+        model = model.get_serialized_model(context).data
+
+        return model
+
+
+    def get_serialized_child_model_field(self, context):
+
+        model = {}
+
+        parent_model = getattr(self, self._meta.related_objects[0].name)
+
+        child_model = getattr(parent_model, parent_model._meta.related_objects[0].name, None)
+
+        if child_model is not None:
+
+            model = child_model.get_serialized_child_model(context).data
+
+        return model
