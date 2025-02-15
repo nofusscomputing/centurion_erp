@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import Organization, OrganizationBaseSerializer
 
 from api.serializers import common
 from app.serializers.user import UserBaseSerializer
