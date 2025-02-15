@@ -86,7 +86,7 @@ class SaveHistory(models.Model):
             if entry not in remove_keys:
                 clean[entry] = value
 
-        before_json = json.dumps(clean)
+        before_json = clean
 
         clean = {}
         for entry in after:
@@ -126,7 +126,7 @@ class SaveHistory(models.Model):
                 clean[entry] = value
 
 
-        after_json = json.dumps(clean)
+        after_json = clean
 
         audit_model = self
         parent_model = None
