@@ -1,6 +1,8 @@
 from django.contrib.auth.models import ContentType, User
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from access.fields import AutoCreatedField
 from access.models import TenancyObject
 
@@ -130,3 +132,23 @@ class ModelHistory(
             model = child_model.get_serialized_child_model(context).data
 
         return model
+
+
+    def get_url_kwargs(self) -> dict:
+
+        parent_model = getattr(self, self._meta.related_objects[0].name)
+
+        return {
+            'model_class': parent_model.model._meta.model_name,
+            'model_id': parent_model.model.pk,
+            'pk': parent_model.pk
+        }
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse(f"v2:_api_v2_model_history-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_model_history-detail", kwargs = self.get_url_kwargs() )
