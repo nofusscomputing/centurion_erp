@@ -58,7 +58,7 @@ class DeviceOperatingSystemModelSerializer(
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, obj) -> dict:
+    def get_url(self, item) -> dict:
 
         get_url = super().get_url( item = item )
 
@@ -73,15 +73,15 @@ class DeviceOperatingSystemModelSerializer(
             if self.context['view'].kwargs.get('device_id'):
 
                 get_url.update({
-                    '_self': obj.get_url( request = self._context['view'].request )
+                    '_self': item.get_url( request = self._context['view'].request )
                 })
 
             elif self.context['view'].kwargs.get('operating_system_id'):
 
                 get_url.update({
                     '_self': reverse("v2:_api_v2_operating_system_installs-detail", request = self._context['view'].request, kwargs = {
-                        'operating_system_id': obj.operating_system_version.operating_system.pk,
-                        'pk': obj.pk
+                        'operating_system_id': item.operating_system_version.operating_system.pk,
+                        'pk': item.pk
                     } )
                 })
 

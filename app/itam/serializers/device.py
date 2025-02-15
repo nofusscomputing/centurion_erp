@@ -58,8 +58,6 @@ class DeviceModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        request = None
-
         get_url = super().get_url( item = item )
 
         get_url.update({
