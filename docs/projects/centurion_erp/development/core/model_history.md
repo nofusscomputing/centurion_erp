@@ -15,7 +15,14 @@ Most of the work has already been done, all that is required to add history to a
 
 - Model
 
-- Function `` added to audit model
+- Function `get_serialized_model` added to audit model _(parent model only)_
+
+- Function `get_serialized_child_model` added to audit model _(child model only)_
+
+- _(child model only)_ model name added to list attribute in `core.models.model_history.ModelHistory.child_history_models`
+
+    !!! tip
+        To obtain the model name you can use the api at endpoint `api/v2/base/content_type` and then filtering by app_name and model. The value in the model field is what's required.
 
 
 ### Model
