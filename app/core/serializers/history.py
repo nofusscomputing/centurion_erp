@@ -61,7 +61,8 @@ class HistoryModelSerializer(HistoryBaseSerializer):
             '_self': reverse("v2:_api_v2_model_history-detail", 
                 request=self._context['view'].request,
                 kwargs={
-                    'model_class': self._kwargs['context']['view'].kwargs['model_class'],
+                    'app_label': self._kwargs['context']['view'].kwargs['app_label'],
+                    'model_name': self._kwargs['context']['view'].kwargs['model_name'],
                     'model_id': self._kwargs['context']['view'].kwargs['model_id'],
                     'pk': item.pk
                 }

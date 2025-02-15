@@ -139,7 +139,8 @@ class ModelHistory(
         parent_model = getattr(self, self._meta.related_objects[0].name)
 
         return {
-            'model_class': parent_model.model._meta.model_name,
+            'app_label': parent_model.model._meta.app_name,
+            'model_name': parent_model.model._meta.model_name,
             'model_id': parent_model.model.pk,
             'pk': parent_model.pk
         }
