@@ -340,6 +340,19 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     ]
 
 
+
+    def get_serialized_model(self, serializer_context):
+
+        model = None
+
+        from itam.serializers.device import DeviceBaseSerializer
+
+        model = DeviceBaseSerializer(self, context = serializer_context)
+
+        return model
+
+
+
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
         ):
@@ -381,6 +394,22 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         ConfigGroupHosts.objects.filter(
             host = self.id,
         ).delete()
+
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_history import DeviceHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceHistory
+        )
+
+
+        return history
+
 
 
     def __str__(self):

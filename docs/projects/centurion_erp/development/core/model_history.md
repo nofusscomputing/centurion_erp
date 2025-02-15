@@ -6,7 +6,7 @@ template: project.html
 about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-Model History is a core feature that is intended to be used to keep an audit history of **ALL** changes to a model.
+Model History is a core feature that is intended to be used to keep an audit history of **ALL** changes to a model. All Tenancy Models are to have a history model created for it.
 
 
 ## Adding History to a Model
