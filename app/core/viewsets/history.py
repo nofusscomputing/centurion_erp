@@ -43,6 +43,70 @@ class ViewSet(ReadOnlyModelViewSet):
 
     view_description: str = 'Model Change History'
 
+    _content_type: ContentType = None
+
+
+    def get_content_type(self) -> ContentType:
+
+        if self._content_type is None:
+
+            self._content_type = ContentType.objects.prefetch_related(
+                'permission_set'
+            ).get(
+                    app_label = self.kwargs['app_label'],
+                    model = self.kwargs['model_name'],
+            )
+
+        return self._content_type
+
+
+    def get_dynamic_permissions(self):
+
+
+        view_action: str = None
+
+        if(
+            self.action == 'create'
+            or getattr(self.request._stream, 'method', '') == 'POST'
+        ):
+
+            view_action = 'add'
+
+        elif (
+            self.action == 'partial_update'
+            or self.action == 'update'
+            or getattr(self.request._stream, 'method', '') == 'PATCH'
+            or getattr(self.request._stream, 'method', '') == 'PUT'
+        ):
+
+            view_action = 'change'
+
+        elif(
+            self.action == 'destroy'
+            or getattr(self.request._stream, 'method', '') == 'DELETE'
+        ):
+
+            view_action = 'delete'
+
+        elif (
+            self.action == 'list'
+        ):
+
+            view_action = 'view'
+
+        elif self.action == 'retrieve':
+
+            view_action = 'view'
+
+        elif self.action == 'metadata':
+
+            view_action = 'view'
+
+        self._permission_required = self.kwargs['app_label'] + '.' + view_action + '_' + self.kwargs['model_name']
+
+        return self._permission_required
+
+
 
     def get_queryset(self):
 
@@ -55,7 +119,7 @@ class ViewSet(ReadOnlyModelViewSet):
         ).exclude(
             app_label = 'core',
             model = 'modelhistory'
-        ).exclude(
+        ).exclude(    # Old history model. This exclude block can be removed when the model is removed.
             app_label = 'core',
             model = 'history'
         ).exclude(
@@ -66,6 +130,14 @@ class ViewSet(ReadOnlyModelViewSet):
 
         self.queryset = self.model.objects.select_related(
            *history_models
+        ).filter(
+            content_type_id = self.get_content_type().id
+        )
+
+        self.queryset = self.queryset.filter(
+            **{
+                str(self.queryset[0]._meta.related_objects[0].name + '__model_id'): int(self.kwargs['model_id']),
+            }
         )
 
         return self.queryset
