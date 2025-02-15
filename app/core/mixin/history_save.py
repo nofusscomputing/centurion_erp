@@ -168,8 +168,8 @@ class SaveHistory(models.Model):
                     action = action,
                     user = current_user,
                     content_type = ContentType.objects.get(
-                        app_label= self._meta.app_label,
-                        model = self._meta.model_name
+                        app_label= parent_model._meta.app_label,
+                        model = parent_model._meta.model_name
                     ),
                     model = parent_model,
                     child_model = audit_model,
@@ -184,8 +184,8 @@ class SaveHistory(models.Model):
                     action = action,
                     user = current_user,
                     content_type = ContentType.objects.get(
-                        app_label= self._meta.app_label,
-                        model = self._meta.model_name
+                        app_label= audit_model._meta.app_label,
+                        model = audit_model._meta.model_name
                     ),
                     model = audit_model,
                 )
