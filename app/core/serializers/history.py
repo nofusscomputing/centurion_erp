@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from app.serializers.user import UserBaseSerializer
 
-from core.models.history import History
+from core.models.model_history import ModelHistory
 
 
 
@@ -31,7 +31,7 @@ class HistoryBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = History
+        model = ModelHistory
 
         fields = [
             'id',
@@ -69,9 +69,31 @@ class HistoryModelSerializer(HistoryBaseSerializer):
         }
 
 
+    model = serializers.SerializerMethodField('get_model', label = 'device')
+
+    def get_model(self, item):
+
+        model = {}
+
+        model = item.get_serialized_model_field( self.context )
+
+        return model
+
+
+    child_model = serializers.SerializerMethodField('get_child_model')
+
+    def get_child_model(self, item):
+
+        model = {}
+
+        model = item.get_serialized_child_model_field( self.context )
+
+        return model
+
+
     class Meta:
 
-        model = History
+        model = ModelHistory
 
         fields =  [
              'id',
@@ -80,10 +102,8 @@ class HistoryModelSerializer(HistoryBaseSerializer):
             'after',
             'action',
             'user',
-            'item_pk',
-            'item_class',
-            'item_parent_pk',
-            'item_parent_class',
+            'model',
+            'child_model',
             'created',
             '_urls',
         ]
@@ -100,5 +120,3 @@ class HistoryModelSerializer(HistoryBaseSerializer):
 class HistoryViewSerializer(HistoryModelSerializer):
 
     user = UserBaseSerializer( read_only = True )
-
-    pass
