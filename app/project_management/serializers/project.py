@@ -1,11 +1,9 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import Organization, OrganizationBaseSerializer
+from access.serializers.organization import OrganizationBaseSerializer
 
-from itam.serializers.device import DeviceBaseSerializer
-
+from api.serializers import common
 from app.serializers.user import UserBaseSerializer
 
 from access.serializers.teams import TeamBaseSerializer
@@ -50,7 +48,10 @@ class ProjectBaseSerializer(serializers.ModelSerializer):
 
 
 
-class ProjectModelSerializer(ProjectBaseSerializer):
+class ProjectModelSerializer(
+    common.CommonModelSerializer,
+    ProjectBaseSerializer,
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 
