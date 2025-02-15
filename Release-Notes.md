@@ -1,3 +1,20 @@
+
+## Version 1.11.0
+
+- History views removed from original Centurion interface.
+- History views removed from API v1.
+
+
+## Version 1.10.0
+
+- Nothing significant to report
+
+
+## Version 1.9.0
+
+- Nothing significant to report
+
+
 ## Version 1.8.0
 
 - Prometheus exporter added. To enable metrics for the database you will have to update the database backend. see the [docs](https://nofusscomputing.com/projects/centurion_erp/administration/monitoring/#django-exporter-setup) for further information.
