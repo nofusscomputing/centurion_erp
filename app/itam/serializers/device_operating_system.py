@@ -26,9 +26,9 @@ class DeviceOperatingSystemBaseSerializer(serializers.ModelSerializer):
 
     url = serializers.SerializerMethodField('my_url')
 
-    def my_url(self, obj) -> str:
+    def my_url(self, item) -> str:
 
-        return obj.get_url( request = self._context['request'] )
+        return item.get_url( request = self._context['request'] )
 
 
     class Meta:
