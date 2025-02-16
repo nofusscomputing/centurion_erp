@@ -108,6 +108,20 @@ class KnowledgeBaseCategory(TenancyObject):
         return self.name
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from assistance.models.knowledge_base_category_history import KnowledgeBaseCategoryHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = KnowledgeBaseCategoryHistory,
+        )
+
+
+        return history
+
+
 
 class KnowledgeBase(TenancyObject):
 
