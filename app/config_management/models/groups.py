@@ -358,6 +358,20 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return self.name
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from config_management.models.config_groups_history import ConfigGroupsHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ConfigGroupsHistory,
+        )
+
+
+        return history
+
+
 
 @receiver(post_delete, sender=ConfigGroups, dispatch_uid='config_group_delete_signal')
 def signal_deleted_model(sender, instance, using, **kwargs):
