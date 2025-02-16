@@ -810,3 +810,16 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         super().save(
             force_insert=False, force_update=False, using=None, update_fields=None
         )
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_operating_system_history import DeviceOperatingSystemHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceOperatingSystemHistory,
+        )
+
+
+        return history
