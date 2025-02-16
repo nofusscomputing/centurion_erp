@@ -346,3 +346,15 @@ class Project(ProjectCommonFieldsName):
 
         return str(calculation) + '%'
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from project_management.models.project_history import ProjectHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ProjectHistory,
+        )
+
+
+        return history
