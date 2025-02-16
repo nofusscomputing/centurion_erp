@@ -1,6 +1,8 @@
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
+from access.serializers.organization import OrganizationBaseSerializer
+
 from app.serializers.user import UserBaseSerializer
 
 from core.models.model_history import ModelHistory
@@ -120,6 +122,7 @@ class HistoryModelSerializer(HistoryBaseSerializer):
             'user',
             'model',
             'child_model',
+            'organization',
             'created',
             '_urls',
         ]
@@ -134,5 +137,7 @@ class HistoryModelSerializer(HistoryBaseSerializer):
 
 
 class HistoryViewSerializer(HistoryModelSerializer):
+
+    organization = OrganizationBaseSerializer( read_only = True )
 
     user = UserBaseSerializer( read_only = True )
