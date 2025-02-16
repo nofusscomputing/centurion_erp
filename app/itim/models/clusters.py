@@ -128,6 +128,19 @@ class ClusterType(TenancyObject):
 
         return self.name
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.cluster_type_history import ClusterTypeHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ClusterTypeHistory,
+        )
+
+
+        return history
+
 
 
 class Cluster(TenancyObject):
