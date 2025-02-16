@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+# THis import only exists so that the migrations can be created
+from itam.models.software_category_history import SoftwareCategoryHistory    # pylint: disable=W0611:unused-import
 from itam.serializers.software_category import (
     SoftwareCategory,
     SoftwareCategoryModelSerializer,
