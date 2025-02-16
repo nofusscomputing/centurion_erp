@@ -421,7 +421,18 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
         
         return self.group
 
+    def save_history(self, before: dict, after: dict) -> bool:
 
+        from config_management.models.config_groups_hosts_history import ConfigGroupHostsHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ConfigGroupHostsHistory,
+        )
+
+
+        return history
 
 
 
