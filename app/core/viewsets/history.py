@@ -67,7 +67,7 @@ class ViewSet(ReadOnlyModelViewSet):
 
         if(
             self.action == 'create'
-            or getattr(self.request._stream, 'method', '') == 'POST'
+            or getattr(self.request, 'method', '') == 'POST'
         ):
 
             view_action = 'add'
@@ -75,15 +75,15 @@ class ViewSet(ReadOnlyModelViewSet):
         elif (
             self.action == 'partial_update'
             or self.action == 'update'
-            or getattr(self.request._stream, 'method', '') == 'PATCH'
-            or getattr(self.request._stream, 'method', '') == 'PUT'
+            or getattr(self.request, 'method', '') == 'PATCH'
+            or getattr(self.request, 'method', '') == 'PUT'
         ):
 
             view_action = 'change'
 
         elif(
             self.action == 'destroy'
-            or getattr(self.request._stream, 'method', '') == 'DELETE'
+            or getattr(self.request, 'method', '') == 'DELETE'
         ):
 
             view_action = 'delete'
@@ -102,7 +102,7 @@ class ViewSet(ReadOnlyModelViewSet):
 
             view_action = 'view'
 
-        self._permission_required = self.kwargs['app_label'] + '.' + view_action + '_' + self.kwargs['model_name']
+        self._permission_required = self.kwargs['app_label'] + '.' + view_action + '_' + self.kwargs['model_name'] + 'history'
 
         return self._permission_required
 
