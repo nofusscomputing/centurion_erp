@@ -270,6 +270,20 @@ class Software(SoftwareCommonFields, SaveHistory):
         return self.name
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.software_history import SoftwareHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = SoftwareHistory,
+        )
+
+
+        return history
+
+
 
 @receiver(post_delete, sender=Software, dispatch_uid='software_delete_signal')
 def signal_deleted_model(sender, instance, using, **kwargs):
