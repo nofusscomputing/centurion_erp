@@ -91,6 +91,20 @@ class HistoryModelSerializer(HistoryBaseSerializer):
 
         return model
 
+    content = serializers.SerializerMethodField('get_content')
+
+    def get_content(self, item):
+
+        model = getattr(item, item.get_related_field_name( item ))
+
+        content = model.model._meta.model_name
+
+        if self.get_child_model(item):
+
+            return getattr(model, item.get_related_field_name( model )).child_model._meta.model_name
+
+        return content
+
 
     class Meta:
 
@@ -99,6 +113,7 @@ class HistoryModelSerializer(HistoryBaseSerializer):
         fields =  [
              'id',
             'display_name',
+            'content',
             'before',
             'after',
             'action',

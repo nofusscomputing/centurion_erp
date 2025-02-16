@@ -104,7 +104,7 @@ class ModelHistory(
     table_fields: list  = [
         'created',
         'action',
-        'content_type',
+        'content',
         'user',
         'nbsp',
         [
