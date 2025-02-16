@@ -262,11 +262,11 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return reverse("v2:_api_v2_config_group-detail", kwargs={'pk': self.id})
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.parent
+    #     return self.parent
 
 
     def render_config(self):
