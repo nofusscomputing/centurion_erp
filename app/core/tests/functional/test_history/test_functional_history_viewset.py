@@ -16,6 +16,8 @@ from core.models.model_history import ModelHistory
 from itam.models.device import Device
 from itam.models.device_history import DeviceHistory
 
+from settings.models.app_settings import AppSettings
+
 
 
 class ViewSetBase:
@@ -48,7 +50,29 @@ class ViewSetBase:
 
         self.organization = organization
 
-        different_organization = Organization.objects.create(name='test_different_organization')
+        self.different_organization = Organization.objects.create(name='test_different_organization')
+
+        self.global_organization = Organization.objects.create(
+            name = 'test_global_organization'
+        )
+
+        self.other_org_item = Device.objects.create(
+            organization = self.different_organization,
+            name = 'two'
+        )
+
+        self.global_org_item = Device.objects.create(
+            organization = self.global_organization,
+            name = 'global_item'
+        )
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
+        app_settings.global_organization = self.global_organization
+
+        app_settings.save()
 
 
         self.device = Device.objects.create(
@@ -177,7 +201,7 @@ class ViewSetBase:
 
         different_organization_team = Team.objects.create(
             team_name = 'different_organization_team',
-            organization = different_organization,
+            organization = self.different_organization,
         )
 
         different_organization_team.permissions.set([
@@ -205,12 +229,34 @@ class HistoryPermissionsAPI(
         """Check items returned
 
         This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
+        Although this model is a tenancy model, the viewset filters by object
+        ID, so will only return the one item.
 
         Items returned from the query Must be from the users organization and
         global ONLY!
         """
-        pass
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs=self.url_kwargs)
+
+
+        only_from_user_org: bool = True
+
+        viewable_organizations = [
+            self.organization.id,
+            self.global_organization.id
+        ]
+
+
+        assert getattr(self.global_organization, 'id', False)    # fail if no global org set
+        assert getattr(self.global_org_item, 'id', False)    # fail if no global item set
+
+
+        client.force_login(self.view_user)
+        response = client.get(url)
+
+        assert len(response.data['results']) == 1    # fail if only one item extist.
+
 
 
     def test_view_list_has_permission(self):
@@ -311,32 +357,6 @@ class HistoryPermissionsAPI(
 
         assert response.status_code == 405
 
-
-    def test_returned_results_only_user_orgs(self):
-        """Test not required
-
-        this test is not required as a history item obtains it's
-        organization from the object changed.
-        """
-
-        pass
-
-
-    # item is not tenancy object
-    def test_view_different_organizaiton_denied(self):
-        """ Check correct permission for view
-
-        This test case is a duplicate of a test case with the same name. This
-        test is not required as currently the history model is not a tenancy
-        model.
-        
-        see https://github.com/nofusscomputing/centurion_erp/issues/455 for
-        more details.
-
-        Attempt to view with user from different organization
-        """
-
-        pass
 
 
 class HistoryMetadata(
