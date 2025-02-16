@@ -1,10 +1,10 @@
 import pytest
 
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import AnonymousUser, Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models import Organization, Team, TeamUsers
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases

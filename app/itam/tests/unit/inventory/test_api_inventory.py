@@ -3,7 +3,7 @@ import json
 import pytest
 import unittest
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -11,7 +11,7 @@ from django.test.utils import override_settings
 
 from unittest.mock import patch
 
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models import Organization, Team, TeamUsers
 
 from api.views.mixin import OrganizationPermissionAPI
 from api.serializers.inventory import Inventory

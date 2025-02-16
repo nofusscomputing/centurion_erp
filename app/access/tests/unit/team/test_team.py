@@ -1,9 +1,10 @@
 import pytest
 import unittest
 
+from django.contrib.auth.models import Permission
 from django.test import TestCase, Client
 
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models import Organization, Team, TeamUsers
 
 from app.tests.abstract.models import TenancyModel
 
