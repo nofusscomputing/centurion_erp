@@ -355,6 +355,20 @@ class Cluster(TenancyObject):
         return self.name
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.cluster_history import ClusterHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ClusterHistory,
+        )
+
+
+        return history
+
+
 
 @receiver(post_delete, sender=Cluster, dispatch_uid='cluster_delete_signal')
 def signal_deleted_model(sender, instance, using, **kwargs):
