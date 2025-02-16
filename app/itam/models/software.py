@@ -117,6 +117,19 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
         return self.name
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.software_category_history import SoftwareCategoryHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = SoftwareCategoryHistory,
+        )
+
+
+        return history
+
 
 
 class Software(SoftwareCommonFields, SaveHistory):
