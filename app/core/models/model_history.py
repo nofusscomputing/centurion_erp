@@ -89,7 +89,7 @@ class ModelHistory(
         'configgroupsoftwarehistory',
         'deviceoperatingsystemhistory',
         'devicesoftwarehistory',
-        'projectmilestone',
+        'projectmilestonehistory',
     ]
     """Child History Models
 
@@ -114,11 +114,25 @@ class ModelHistory(
     ]
 
 
+    def get_related_field_name(self, model) -> str:
+
+        meta = getattr(model, '_meta')
+
+        for related_object in getattr(meta, 'related_objects', []):
+
+            if getattr(model, related_object.name, None):
+
+                return related_object.name
+
+        # return related_field_name
+        return ''
+
+
     def get_serialized_model_field(self, context):
 
         model = None
 
-        model = getattr(self, self._meta.related_objects[0].name).model
+        model = getattr(self, self.get_related_field_name( self )).model
 
         model = model.get_serialized_model(context).data
 
@@ -129,9 +143,9 @@ class ModelHistory(
 
         model = {}
 
-        parent_model = getattr(self, self._meta.related_objects[0].name)
+        parent_model = getattr(self, self.get_related_field_name( self ))
 
-        child_model = getattr(parent_model, parent_model._meta.related_objects[0].name, None)
+        child_model = getattr(parent_model, self.get_related_field_name( parent_model ), None)
 
         if child_model is not None:
 
