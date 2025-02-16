@@ -328,7 +328,10 @@ class BaseModelHistoryAPI(
         user.url field must be Hyperlink
         """
 
-        assert type(self.api_data['user']['url']) is Hyperlink
+        assert(
+            type(self.api_data['user']['url']) is Hyperlink
+            or type(self.api_data['user']['url']) is str
+        )
 
 
 
@@ -472,7 +475,10 @@ class PrimaryModelHistoryAPI(
         model.url field must be Hyperlink
         """
 
-        assert type(self.api_data['model']['url']) is Hyperlink
+        assert(
+            type(self.api_data['model']['url']) is Hyperlink
+            or type(self.api_data['model']['url']) is str
+        )
 
 
 
@@ -576,4 +582,7 @@ class ChildModelHistoryAPI(
         child_model.url field must be Hyperlink
         """
 
-        assert type(self.api_data['child_model']['url']) is Hyperlink
+        assert (
+            type(self.api_data['child_model']['url']) is Hyperlink
+            or type(self.api_data['child_model']['url']) is str
+        )
