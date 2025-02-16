@@ -8,6 +8,8 @@ from core.mixin.history_save import SaveHistory
 
 from settings.models.app_settings import AppSettings
 
+
+
 class ManufacturerCommonFields(models.Model):
 
     class Meta:
@@ -111,3 +113,17 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
     def __str__(self):
 
         return self.name
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from core.models.manufacturer_history import ManufacturerHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ManufacturerHistory
+        )
+
+
+        return history
