@@ -169,3 +169,17 @@ class TicketCategory(TicketCategoryCommonFields):
     def __str__(self):
 
         return self.recusive_name
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from core.models.ticket.ticket_category_history import TicketCategoryHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = TicketCategoryHistory
+        )
+
+
+        return history
