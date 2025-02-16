@@ -175,6 +175,19 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
 
         return self.name
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.operating_system_history import OperatingSystemHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = OperatingSystemHistory,
+        )
+
+
+        return history
+
 
 
 @receiver(post_delete, sender=OperatingSystem, dispatch_uid='operating_system_delete_signal')
