@@ -696,6 +696,21 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         )
 
 
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_software_history import DeviceSoftwareHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceSoftwareHistory,
+        )
+
+
+        return history
+
+
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
 
