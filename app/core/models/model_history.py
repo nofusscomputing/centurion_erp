@@ -87,6 +87,7 @@ class ModelHistory(
     child_history_models = [
         'configgrouphostshistory',
         'configgroupsoftwarehistory',
+        'devicesoftwarehistory'
     ]
     """Child History Models
 
