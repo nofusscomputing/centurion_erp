@@ -88,7 +88,8 @@ class ModelHistory(
         'configgrouphostshistory',
         'configgroupsoftwarehistory',
         'deviceoperatingsystemhistory',
-        'devicesoftwarehistory'
+        'devicesoftwarehistory',
+        'projectmilestone',
     ]
     """Child History Models
 
