@@ -137,3 +137,16 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
     def __str__(self):
 
         return self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from core.models.ticket.ticket_comment_category_history import TicketCommentCategoryHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = TicketCommentCategoryHistory
+        )
+
+
+        return history
