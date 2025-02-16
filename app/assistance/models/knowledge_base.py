@@ -327,3 +327,17 @@ class KnowledgeBase(TenancyObject):
     def __str__(self):
 
         return self.title
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from assistance.models.knowledge_base_history import KnowledgeBaseHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = KnowledgeBaseHistory,
+        )
+
+
+        return history
