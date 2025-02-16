@@ -353,19 +353,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     ]
 
 
-
-    def get_serialized_model(self, serializer_context):
-
-        model = None
-
-        from itam.serializers.device import DeviceBaseSerializer
-
-        model = DeviceBaseSerializer(self, context = serializer_context)
-
-        return model
-
-
-
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
         ):

@@ -132,7 +132,7 @@ class ModelHistory(
 
         model = None
 
-        model = getattr(self, self.get_related_field_name( self )).model
+        model = getattr(self, self.get_related_field_name( self ))
 
         model = model.get_serialized_model(context).data
 
