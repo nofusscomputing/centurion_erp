@@ -520,3 +520,15 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
         return self.config_group
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from config_management.models.config_groups_software_history import ConfigGroupSoftwareHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ConfigGroupSoftwareHistory,
+        )
+
+
+        return history
