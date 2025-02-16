@@ -103,6 +103,19 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
         return self.name
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_type_history import DeviceTypeHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceTypeHistory,
+        )
+
+
+        return history
+
 
 
 class Device(DeviceCommonFieldsName, SaveHistory):
