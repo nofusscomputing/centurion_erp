@@ -156,10 +156,10 @@ class ModelHistory(
 
     def get_url_kwargs(self) -> dict:
 
-        parent_model = getattr(self, self._meta.related_objects[0].name)
+        parent_model = getattr(self, self.get_related_field_name( self ))
 
         return {
-            'app_label': parent_model.model._meta.app_name,
+            'app_label': parent_model.model._meta.app_label,
             'model_name': parent_model.model._meta.model_name,
             'model_id': parent_model.model.pk,
             'pk': parent_model.pk
