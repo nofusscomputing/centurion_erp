@@ -84,7 +84,10 @@ class ModelHistory(
 
 
 
-    child_history_models = []
+    child_history_models = [
+        'configgrouphostshistory',
+        'configgroupsoftwarehistory',
+    ]
     """Child History Models
 
     This list is currently used for excluding child models from the the history
