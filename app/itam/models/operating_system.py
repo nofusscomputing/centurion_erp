@@ -282,14 +282,27 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         }
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.operating_system
+    #     return self.operating_system
 
 
     def __str__(self):
 
         return self.operating_system.name + ' ' + self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.operating_system_version_history import OperatingSystemVersionHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = OperatingSystemVersionHistory,
+        )
+
+
+        return history
 
