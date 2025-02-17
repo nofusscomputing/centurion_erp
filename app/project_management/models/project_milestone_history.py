@@ -1,14 +1,13 @@
 from django.db import models
 
+from core.models.model_history import ModelHistory
+
 from project_management.models.project_milestone import ProjectMilestone
-from project_management.models.project_history import (
-    ProjectHistory
-)
 
 
 
 class ProjectMilestoneHistory(
-    ProjectHistory
+    ModelHistory
 ):
 
 
@@ -16,14 +15,14 @@ class ProjectMilestoneHistory(
 
         db_table = 'project_management_projectmilestone_history'
 
-        ordering = ProjectHistory._meta.ordering
+        ordering = ModelHistory._meta.ordering
 
         verbose_name = 'Project Milestone History'
 
         verbose_name_plural = 'Project Milestone History'
 
 
-    child_model = models.ForeignKey(
+    model = models.ForeignKey(
         ProjectMilestone,
         blank = False,
         help_text = 'Model this note belongs to',
@@ -38,12 +37,17 @@ class ProjectMilestoneHistory(
     page_layout: dict = []
 
 
-    def get_serialized_child_model(self, serializer_context):
+    def get_object(self):
+
+        return self
+
+
+    def get_serialized_model(self, serializer_context):
 
         model = None
 
         from project_management.serializers.project_milestone import ProjectMilestoneBaseSerializer
 
-        model = ProjectMilestoneBaseSerializer(self.child_model, context = serializer_context)
+        model = ProjectMilestoneBaseSerializer(self.model, context = serializer_context)
 
         return model
