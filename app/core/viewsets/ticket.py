@@ -308,14 +308,14 @@ class TicketViewSet(ModelViewSet):
                     if self.request.tenancy.has_organization_permission(
                         organization = organization,
                         permissions_required = 'core.import_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ):
+                    ) and not self.request.user.is_superuser:
 
                         serializer_prefix = serializer_prefix + 'Import'
 
                     elif self.request.tenancy.has_organization_permission(
                         organization = organization,
                         permissions_required = 'core.triage_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ):
+                    ) or self.request.user.is_superuser:
 
                         serializer_prefix = serializer_prefix + 'Triage'
 
@@ -353,3 +353,24 @@ class TicketViewSet(ModelViewSet):
             self.serializer_class = globals()[serializer_prefix + 'TicketModelSerializer']
 
         return self.serializer_class
+
+
+    def get_view_serializer_name(self) -> str:
+        """Get the Models `View` Serializer name.
+
+        Override this function if required and/or the serializer names deviate from default.
+
+        Returns:
+            str: Models View Serializer Class name
+        """
+
+        if self.view_serializer_name is None:
+
+            self.view_serializer_name = super().get_view_serializer_name()
+
+            for remove_str in [ 'ChangeTicketView', 'AddTicketView', 'ImportTicketView', 'TriageTicketView' ]:
+
+                self.view_serializer_name = self.view_serializer_name.replace(remove_str, 'TicketView')
+
+
+        return self.view_serializer_name
