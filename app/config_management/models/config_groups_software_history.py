@@ -43,12 +43,12 @@ class ConfigGroupSoftwareHistory(
         return self
 
 
-    def get_serialized_model(self, serializer_context):
+    def get_serialized_child_model(self, serializer_context):
 
         model = None
 
-        from config_management.serializers.config_group_software import ConfigGroupSoftwareBaseSerializer
+        from itam.serializers.software import SoftwareBaseSerializer
 
-        model = ConfigGroupSoftwareBaseSerializer(self.child_model, context = serializer_context)
+        model = SoftwareBaseSerializer(self.child_model.software, context = serializer_context)
 
         return model
