@@ -27,8 +27,8 @@ class ConfigGroupHostsHistory(
         ConfigGroupHosts,
         blank = False,
         help_text = 'Model this note belongs to',
-        null = False,
-        on_delete = models.CASCADE,
+        null = True,
+        on_delete = models.SET_NULL,
         related_name = 'history',
         verbose_name = 'Model',
     )
