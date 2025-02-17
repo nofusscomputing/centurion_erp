@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from core.tests.abstract.test_unit_model_history_api_v2 import ChildModelHistoryAPI
+from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
 from project_management.models.projects import Project
 from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneHistory
@@ -9,13 +9,13 @@ from project_management.models.project_milestone_history import ProjectMilestone
 
 
 class ModelHistoryAPI(
-    ChildModelHistoryAPI,
+    PrimaryModelHistoryAPI,
     TestCase,
 ):
 
-    audit_model = Project
+    audit_model = ProjectMilestone
 
-    audit_model_child = ProjectMilestone
+    # audit_model_child = 
 
     model = ProjectMilestoneHistory
 
@@ -27,13 +27,10 @@ class ModelHistoryAPI(
 
         self.audit_object = self.audit_model.objects.create(
             organization = self.organization,
-            name = 'one',
-        )
-
-
-        self.audit_object_child = self.audit_model_child.objects.create(
-            organization = self.organization,
-            project = self.audit_object,
+            project = Project.objects.create(
+                organization = self.organization,
+                name = 'one',
+            ),
             name = 'proj',
         )
 
@@ -49,7 +46,6 @@ class ModelHistoryAPI(
                 model = self.audit_object._meta.model_name,
             ),
             model = self.audit_object,
-            child_model = self.audit_object_child
         )
 
 
