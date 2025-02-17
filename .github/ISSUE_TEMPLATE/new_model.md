@@ -29,9 +29,11 @@ Describe in detail the following:
 
 <!-- Don't remove tasks strike them out. use `~~` before and after the item. i.e. `- ~~[ ] Model Created~~` note: don't include the list dash-->
 
-- [ ] Model Created
+- [ ] 🆕 Model Created
 
-- [ ] Model tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()` function
+- [ ] 🛠️ Migrations added
+
+- [ ] 🏷️ Model tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()` function
 
     - [ ] Tag updated in the [docs](https://nofusscomputing.com/projects/centurion_erp/user/core/markdown/#model-reference)
 
@@ -40,9 +42,10 @@ Describe in detail the following:
 > - Two words are not to contain a space char, `\s`. It is to be replaced with an underscore `_`
 > - As much as practical, keep the tag as close to the model name as possible
 
-- [ ] New [History model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_history/) created 
+- [ ] 📝 New [History model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_history/) created 
 
-- [ ] New [Notes model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/) created 
+- [ ] 📓 New [Notes model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/) created 
+
 
 - [ ] Admin Documentation added/updated _if applicable_
 - [ ] Developer Documentation added/updated _if applicable_
@@ -64,6 +67,7 @@ Describe in detail the following:
 - [ ] Function Test API Metadata
 - [ ] Function Test API Permissions
 - [ ] Function Test API Render (fields)
+- [ ] Function Test History Entries
 
 
 ### ✅ Requirements
