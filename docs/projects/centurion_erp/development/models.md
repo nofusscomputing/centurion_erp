@@ -56,6 +56,8 @@ All models must meet the following requirements:
 
 - Tenancy models must have the ability to have a [knowledge base article](#knowledge-base-article-linking) linked to it.
 
+- Models must save audit history
+
 
 ## Checklist
 
@@ -135,7 +137,7 @@ The `table_fields` attribute within a model is what the UI List View or section 
 
 ## History
 
-Currently the adding of history to a model is a manual process. edit the file located at `core.views.history` and within `View.get_object` add the model to the `switch` statement.
+Adding History to a model is a simple process. Please see the [Model History](./core/model_history.md) docs.
 
 
 ## Tests

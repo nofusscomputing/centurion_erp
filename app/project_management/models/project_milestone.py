@@ -133,11 +133,11 @@ class ProjectMilestone(ProjectCommonFieldsName):
         }
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.project
+    #     return self.project
 
 
     @property
