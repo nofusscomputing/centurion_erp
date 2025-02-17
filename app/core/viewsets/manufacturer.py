@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+# THis import only exists so that the migrations can be created
+from core.models.manufacturer_history import ManufacturerHistory    # pylint: disable=W0611:unused-import
 from core.serializers.manufacturer import (
     Manufacturer,
     ManufacturerModelSerializer,

@@ -16,6 +16,8 @@ from api.views.mixin import OrganizationPermissionAPI
 
 from api.viewsets.common import ModelViewSet
 
+# THis import only exists so that the migrations can be created
+from itam.models.device_operating_system_history import DeviceOperatingSystemHistory    # pylint: disable=W0611:unused-import
 from itam.serializers.device_operating_system import (
     Device,
     DeviceOperatingSystem,

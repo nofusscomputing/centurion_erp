@@ -1,12 +1,11 @@
-from django.db.models import Q
+from django.contrib.auth.models import ContentType
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from api.viewsets.common import ReadOnlyModelViewSet
 
 from core.serializers.history import (
-    History,
-    HistoryModelSerializer,
+    ModelHistory,
     HistoryViewSerializer
 )
 
@@ -34,15 +33,79 @@ class ViewSet(ReadOnlyModelViewSet):
         'OPTIONS'
     ]
 
+
     filterset_fields = [
-        'item_parent_pk',
-        'item_parent_class'
+        'content_type',
+        'user',
     ]
 
-
-    model = History
+    model = ModelHistory
 
     view_description: str = 'Model Change History'
+
+    _content_type: ContentType = None
+
+
+    def get_content_type(self) -> ContentType:
+
+        if self._content_type is None:
+
+            self._content_type = ContentType.objects.prefetch_related(
+                'permission_set'
+            ).get(
+                    app_label = self.kwargs['app_label'],
+                    model = self.kwargs['model_name'],
+            )
+
+        return self._content_type
+
+
+    def get_dynamic_permissions(self):
+
+
+        view_action: str = None
+
+        if(
+            self.action == 'create'
+            or getattr(self.request, 'method', '') == 'POST'
+        ):
+
+            view_action = 'add'
+
+        elif (
+            self.action == 'partial_update'
+            or self.action == 'update'
+            or getattr(self.request, 'method', '') == 'PATCH'
+            or getattr(self.request, 'method', '') == 'PUT'
+        ):
+
+            view_action = 'change'
+
+        elif(
+            self.action == 'destroy'
+            or getattr(self.request, 'method', '') == 'DELETE'
+        ):
+
+            view_action = 'delete'
+
+        elif (
+            self.action == 'list'
+        ):
+
+            view_action = 'view'
+
+        elif self.action == 'retrieve':
+
+            view_action = 'view'
+
+        elif self.action == 'metadata':
+
+            view_action = 'view'
+
+        self._permission_required = self.kwargs['app_label'] + '.' + view_action + '_' + self.kwargs['model_name'] + 'history'
+
+        return self._permission_required
+
 
 
     def get_queryset(self):
@@ -51,12 +114,34 @@ class ViewSet(ReadOnlyModelViewSet):
 
             return self.queryset
 
-        self.queryset = super().get_queryset()
+        history_models = ContentType.objects.filter(
+            model__contains = 'history'
+        ).exclude(
+            app_label = 'core',
+            model = 'modelhistory'
+        ).exclude(    # Old history model. This exclude block can be removed when the model is removed.
+            app_label = 'core',
+            model = 'history'
+        ).exclude(
+            model__in = self.model.child_history_models
+        )
+
+        history_models: list =  list([ f.model for f in history_models ])
+
+        self.queryset = self.model.objects.select_related(
+           *history_models
+        ).filter(
+            content_type_id = self.get_content_type().id
+        )
+
+
+        related_object_name = self.queryset[0].get_related_field_name( self.queryset[0] )
+
 
         self.queryset = self.queryset.filter(
-            Q(item_pk = self.kwargs['model_id'], item_class = self.kwargs['model_class'])
-            |
-            Q(item_parent_pk = self.kwargs['model_id'], item_parent_class = self.kwargs['model_class'])
+            **{
+                str(related_object_name + '__model_id'): int(self.kwargs['model_id']),
+            }
         )
 
         return self.queryset

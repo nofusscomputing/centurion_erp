@@ -1,11 +1,9 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
 from access.serializers.organization import Organization, OrganizationBaseSerializer
 
-from itam.serializers.device import DeviceBaseSerializer
-
+from api.serializers import common
 from app.serializers.user import UserBaseSerializer
 
 from access.serializers.teams import TeamBaseSerializer
@@ -50,38 +48,19 @@ class ProjectBaseSerializer(serializers.ModelSerializer):
 
 
 
-class ProjectModelSerializer(ProjectBaseSerializer):
+class ProjectModelSerializer(
+    common.CommonModelSerializer,
+    ProjectBaseSerializer,
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item) -> dict:
 
-        return {
-            '_self': item.get_url( request = self._context['view'].request ),
-            'history': reverse(
-                "v2:_api_v2_model_history-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_class': self.Meta.model._meta.model_name,
-                    'model_id': item.pk
-                }
-            ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
+        get_url = super().get_url( item = item )
+
+        get_url.update({
             'milestone': reverse("v2:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
-            'notes': reverse(
-                "v2:_api_v2_project_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': item.pk
-                }
-            ),
             'tickets': reverse(
                 "v2:_api_v2_ticket_project_task-list",
                 request=self._context['view'].request,
@@ -89,7 +68,10 @@ class ProjectModelSerializer(ProjectBaseSerializer):
                     'project_id': item.pk
                 }
             ),
-        }
+        })
+
+        return get_url
+
 
     description = centurion_field.MarkdownField( required = False, style_class = 'large' )
     completed = serializers.CharField( source = 'percent_completed', read_only = True )

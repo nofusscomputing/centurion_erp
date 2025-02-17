@@ -64,16 +64,9 @@ class ConfigGroupModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        request = None
+        get_url = super().get_url( item = item )
 
-        if 'view' in self._context:
-
-            if hasattr(self._context['view'], 'request'):
-
-                request = self._context['view'].request
-
-        return {
-            '_self': item.get_url( request = request ),
+        get_url.update({
             'child_groups': reverse(
                 'v2:_api_v2_config_group_child-list',
                 request = self.context['view'].request,
@@ -92,21 +85,6 @@ class ConfigGroupModelSerializer(
                     'config_group_id': item.pk
                 }
             ),
-            'notes': reverse(
-                "v2:_api_v2_config_group_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': item.pk
-                }
-            ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
             'organization': reverse(
                 'v2:_api_v2_organization-list',
                 request=self.context['view'].request,
@@ -123,7 +101,10 @@ class ConfigGroupModelSerializer(
                     'item_id': item.pk
                     }
             ),
-        }
+        })
+
+        return get_url
+
 
     rendered_config = serializers.JSONField( source = 'render_config', read_only=True )
 

@@ -145,6 +145,20 @@ class Port(TenancyObject):
         return str(self.protocol) + '/' + str(self.number)
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.port_history import PortHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = PortHistory,
+        )
+
+
+        return history
+
+
 
 class Service(TenancyObject):
 
@@ -404,6 +418,19 @@ class Service(TenancyObject):
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.service_history import ServiceHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ServiceHistory,
+        )
+
+
+        return history
 
     def __str__(self):
 

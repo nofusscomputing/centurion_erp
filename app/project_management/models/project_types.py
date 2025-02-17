@@ -108,3 +108,16 @@ class ProjectType(ProjectTypeCommonFields):
     def __str__(self):
 
         return self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from project_management.models.project_type_history import ProjectTypeHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ProjectTypeHistory,
+        )
+
+
+        return history

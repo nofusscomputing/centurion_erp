@@ -52,26 +52,6 @@ class DeviceModelModelSerializer(
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, obj) -> dict:
-
-        return {
-            '_self': obj.get_url( request = self._context['view'].request ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': obj.pk
-                }
-            ),
-            'notes': reverse(
-                "v2:_api_v2_device_model_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': obj.pk
-                }
-            ),
-        }
 
     class Meta:
 

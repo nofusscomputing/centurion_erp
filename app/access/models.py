@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import User, Group
 
 from rest_framework.reverse import reverse
 

@@ -95,6 +95,34 @@ clear; \
 ```
 
 
+
+
+
+## Tips / Handy info
+
+- To obtain a list of models _(in in the same order as the file system)_ using the db shell `python3 manage.py dbshell` run the following sql command:
+
+    ``` sql
+
+    SELECT model FROM django_content_type ORDER BY app_label ASC, model ASC;
+
+    ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Old working docs
 
 

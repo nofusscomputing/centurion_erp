@@ -163,3 +163,16 @@ class ExternalLink(TenancyObject):
         """ Return the Template to render """
 
         return str(self.template)
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from settings.models.external_link_history import ExternalLinkHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ExternalLinkHistory,
+        )
+
+
+        return history

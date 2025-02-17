@@ -1,13 +1,13 @@
 import pytest
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
 from access.middleware.request import Tenancy
-from access.models import Organization, Permission
+from access.models import Organization
 
 from access.serializers.teams import (
     Team,

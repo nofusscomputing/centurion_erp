@@ -103,6 +103,19 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
         return self.name
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_type_history import DeviceTypeHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceTypeHistory,
+        )
+
+
+        return history
+
 
 
 class Device(DeviceCommonFieldsName, SaveHistory):
@@ -381,6 +394,22 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         ConfigGroupHosts.objects.filter(
             host = self.id,
         ).delete()
+
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_history import DeviceHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceHistory
+        )
+
+
+        return history
+
 
 
     def __str__(self):
@@ -667,6 +696,21 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         )
 
 
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_software_history import DeviceSoftwareHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceSoftwareHistory,
+        )
+
+
+        return history
+
+
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
 
@@ -766,3 +810,16 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         super().save(
             force_insert=False, force_update=False, using=None, update_fields=None
         )
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.device_operating_system_history import DeviceOperatingSystemHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = DeviceOperatingSystemHistory,
+        )
+
+
+        return history
