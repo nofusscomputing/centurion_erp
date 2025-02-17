@@ -92,3 +92,9 @@ As with any other object within Centurion, the addition of a feature requires it
     - `core.tests.abstract.test_unit_model_history_api_v2.PrimaryModelHistoryAPI` for parent / Primary history model
 
     - `core.tests.abstract.test_unit_model_history_api_v2.ChildModelHistoryAPI` for child history model
+
+- `Functional` - History entry checks
+
+    - `core.tests.abstract.test_functional_history.HistoryEntriesCommon` for parent / Primary history model
+
+    - `core.tests.abstract.test_functional_history.HistoryEntriesChildModel` for child history model
