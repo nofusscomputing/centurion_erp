@@ -43,12 +43,11 @@ class ConfigGroupHostsHistory(
         return self
 
 
-    def get_serialized_model(self, serializer_context):
+    def get_serialized_child_model(self, serializer_context):
 
         model = None
 
         from itam.serializers.device import DeviceBaseSerializer
 
         model = DeviceBaseSerializer(self.child_model.host, context = serializer_context)
-
         return model
