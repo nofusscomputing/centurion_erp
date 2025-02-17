@@ -42,7 +42,7 @@ class SaveHistory(models.Model):
 
         if history_model is None:
 
-            return None
+            return False
 
 
         remove_keys = [
@@ -67,16 +67,16 @@ class SaveHistory(models.Model):
                 value = bool(before[entry])
 
             elif (
-                    "{" in str(after[entry]) 
+                    "{" in str(after.get(entry, '')) 
                         and
-                    "}" in str(after[entry])
+                    "}" in str(after.get(entry, ''))
                 ) or (
-                    "[" in str(after[entry])
+                    "[" in str(after.get(entry, ''))
                         and
-                    "]" in str(after[entry])
+                    "]" in str(after.get(entry, ''))
                 ):
 
-                value = str(after[entry]).replace("'", '\"')
+                value = str(after.get(entry, '')).replace("'", '\"')
 
             else:
 
@@ -91,34 +91,34 @@ class SaveHistory(models.Model):
         clean = {}
         for entry in after:
 
-            if type(after[entry]) == type(int()):
+            if type(after.get(entry, '')) == type(int()):
 
-                value = int(after[entry])
+                value = int(after.get(entry, ''))
 
-            elif type(after[entry]) == type(bool()):
+            elif type(after.get(entry, '')) == type(bool()):
 
-                value = bool(after[entry])
+                value = bool(after.get(entry, ''))
 
             elif (
-                    "{" in str(after[entry]) 
+                    "{" in str(after.get(entry, '')) 
                         and
-                    "}" in str(after[entry])
+                    "}" in str(after.get(entry, ''))
                 ) or (
-                    "[" in str(after[entry])
+                    "[" in str(after.get(entry, ''))
                         and
-                    "]" in str(after[entry])
+                    "]" in str(after.get(entry, ''))
                 ):
 
-                value = str(after[entry]).replace("'", '\"')
+                value = str(after.get(entry, '')).replace("'", '\"')
 
             else:
 
-                value = str(after[entry])
+                value = str(after.get(entry, ''))
 
 
             if entry not in remove_keys and str(before) != '{}':
 
-                if after[entry] != before[entry]:
+                if after.get(entry, '') != before[entry]:
                     clean[entry] = value
 
             elif entry not in remove_keys:
@@ -142,7 +142,7 @@ class SaveHistory(models.Model):
 
             action = ModelHistory.Actions.ADD
 
-        elif self.pk is None:
+        elif not after_json:
 
             action = ModelHistory.Actions.DELETE
             after_json = None
@@ -175,6 +175,8 @@ class SaveHistory(models.Model):
                     child_model = audit_model,
                 )
 
+                return True
+
             else:
 
                 entry = history_model.objects.create(
@@ -190,7 +192,7 @@ class SaveHistory(models.Model):
                     model = audit_model,
                 )
 
-            entry.save()
+                return True
 
 
 
@@ -218,3 +220,23 @@ class SaveHistory(models.Model):
             after = self.__dict__.copy()
 
             self.save_history(before, after)
+
+
+    def delete(self, using=None, keep_parents=False):
+
+        before = {}
+
+        try:
+            before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+        except Exception:
+            pass
+
+
+        if self.save_model_history:
+
+            after = {}
+
+            self.save_history(before, after)
+
+        # Process the delete
+        super().delete(using=using, keep_parents=keep_parents)
