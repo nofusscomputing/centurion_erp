@@ -100,6 +100,7 @@ class ModelHistory(
         list: Child history models.
     """
 
+    page_layout: list = []
 
     table_fields: list  = [
         'created',
