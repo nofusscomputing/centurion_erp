@@ -23,6 +23,8 @@ class History(
 
         self.field_value_original = 22
 
+        self.field_value_changed = 21
+
         self.field_value_delete = 33
 
         self.field_name = 'number'

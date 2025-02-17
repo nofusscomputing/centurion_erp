@@ -21,15 +21,19 @@ class History(
 
         super().setUpTestData()
 
+        self.field_name = 'title'
+
 
         self.obj = self.model.objects.create(
             organization = self.organization,
-            name = self.field_value_original
+            title = self.field_value_original,
+            body = 'sadsadsa',
         )
 
         self.obj_delete = self.model.objects.create(
             organization = self.organization,
-            name = self.field_value_delete
+            title = self.field_value_delete,
+            body = 'sadsadsa',
         )
 
         self.call_the_banners()
