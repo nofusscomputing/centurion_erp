@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                 ('modified', access.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False)),
                 ('name', models.CharField(max_length=50, unique=True)),
                 ('slug', access.fields.AutoSlugField()),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
             ],
             options={
                 'ordering': ['name'],

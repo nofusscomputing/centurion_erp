@@ -1,7 +1,8 @@
 from django.db import models
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models import TenancyObject, Team
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from assistance.models.knowledge_base import KnowledgeBase
 
@@ -118,3 +119,16 @@ class ProjectState(ProjectStateCommonFields):
     def __str__(self):
 
         return self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from project_management.models.project_state_history import ProjectStateHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ProjectStateHistory,
+        )
+
+
+        return history

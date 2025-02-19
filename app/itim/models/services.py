@@ -9,7 +9,8 @@ from django.forms import ValidationError
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import Team, TenancyObject
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
@@ -143,6 +144,20 @@ class Port(TenancyObject):
     def __str__(self):
 
         return str(self.protocol) + '/' + str(self.number)
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.port_history import PortHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = PortHistory,
+        )
+
+
+        return history
 
 
 
@@ -404,6 +419,19 @@ class Service(TenancyObject):
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.service_history import ServiceHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ServiceHistory,
+        )
+
+
+        return history
 
     def __str__(self):
 

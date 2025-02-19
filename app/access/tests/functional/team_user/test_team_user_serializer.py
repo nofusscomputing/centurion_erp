@@ -1,12 +1,13 @@
 import pytest
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models import Organization, Permission, Team
+from access.models.organization import Organization
+from access.models.team import Team
 
 from access.serializers.team_user import (
     TeamUsers,

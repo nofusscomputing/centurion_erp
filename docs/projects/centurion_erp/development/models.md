@@ -15,10 +15,10 @@ All models within Centurion ERP are what we call a "Tenancy Object." A tenancy o
 
 All models must meet the following requirements:
 
-- inherits from [`app.access.models.TenancyObject`](./api/models/tenancy_object.md)
+- inherits from `app.access.models.TenancyObject`
 
     !!! tip
-        There is no requirement to include class [`app.core.mixin.history_save.SaveHistory`](./api/models/core_history_save.md) for inheritence as this class is already included within class [`app.access.models.TenancyObject`](./api/models/tenancy_object.md).
+        There is no requirement to include class [`app.core.mixin.history_save.SaveHistory`](./api/models/core_history_save.md) for inheritence as this class is already included within class `app.access.models.TenancyObject`.
 
     !!! note
         If there is a specific use case for the object not to be a tenancy object, this will need to be discussed with a maintainer.
@@ -31,7 +31,7 @@ All models must meet the following requirements:
 
     - `help_text`
 
-- No `queryset` is to return data that the user has not got access to. _see [queryset()](./api/models/tenancy_object.md#tenancy-object-manager)_
+- No `queryset` is to return data that the user has not got access to.
 
 - Single Field validation is conducted if required.
 
@@ -55,6 +55,8 @@ All models must meet the following requirements:
 - `clean()` method within a model is **only** used to ensure that the data entered into the DB is valid and/or to ensure application wide changes/validation is conducted prior to saving model.
 
 - Tenancy models must have the ability to have a [knowledge base article](#knowledge-base-article-linking) linked to it.
+
+- Models must save audit history
 
 
 ## Checklist
@@ -135,7 +137,7 @@ The `table_fields` attribute within a model is what the UI List View or section 
 
 ## History
 
-Currently the adding of history to a model is a manual process. edit the file located at `core.views.history` and within `View.get_object` add the model to the `switch` statement.
+Adding History to a model is a simple process. Please see the [Model History](./core/model_history.md) docs.
 
 
 ## Tests

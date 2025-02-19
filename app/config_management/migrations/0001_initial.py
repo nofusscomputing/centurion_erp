@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False)),
                 ('name', models.CharField(max_length=50)),
                 ('config', models.JSONField(blank=True, default=None, null=True, validators=[config_management.models.groups.ConfigGroups.validate_config_keys_not_reserved])),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
                 ('parent', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='config_management.configgroups')),
             ],
             options={

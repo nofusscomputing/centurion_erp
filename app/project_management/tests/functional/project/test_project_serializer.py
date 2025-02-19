@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from project_management.serializers.project import (
     Project,

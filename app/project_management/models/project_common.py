@@ -1,7 +1,7 @@
 from django.db import models
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 
 class ProjectCommonFields(TenancyObject):

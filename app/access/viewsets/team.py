@@ -1,7 +1,8 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from access.models import Organization
-
+from access.models.organization import Organization
+# THis import only exists so that the migrations can be created
+from access.models.team_history import TeamHistory    # pylint: disable=W0611:unused-import
 from access.serializers.teams import (
     Team,
     TeamModelSerializer,

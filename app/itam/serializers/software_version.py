@@ -52,37 +52,6 @@ class SoftwareVersionModelSerializer(
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item) -> dict:
-
-        return {
-            '_self': item.get_url( request = self._context['view'].request ),
-            'history': reverse(
-                "v2:_api_v2_model_history-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_class': self.Meta.model._meta.model_name,
-                    'model_id': item.pk
-                }
-            ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
-            'notes': reverse(
-                "v2:_api_v2_software_version_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'software_id': item.software.pk,
-                    'model_id': item.pk
-                }
-            ),
-            'tickets': 'ToDo'
-        }
-
 
     class Meta:
 

@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import *
-from access.models import *
+from access.models.organization import Organization
 
 from access.forms.organization import OrganizationForm
 

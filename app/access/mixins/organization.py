@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User, Group
 from django.db import models
 
-from access.models import Organization, Team
+from access.models.organization import Organization
+from access.models.team import Team
+
 
 
 class OrganizationMixin:

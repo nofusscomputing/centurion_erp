@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('content_type', models.ForeignKey(blank=True, help_text='Model this note is for', on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype', verbose_name='Content Model')),
                 ('created_by', models.ForeignKey(blank=True, help_text='User whom added the Note', on_delete=django.db.models.deletion.DO_NOTHING, related_name='created_notes', to=settings.AUTH_USER_MODEL, verbose_name='Created By')),
                 ('modified_by', models.ForeignKey(blank=True, default=None, help_text='User whom modified the note', null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='modified_notes', to=settings.AUTH_USER_MODEL, verbose_name='Edited By')),
-                ('organization', models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization')),
+                ('organization', models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization')),
             ],
             options={
                 'verbose_name': 'Model Note',

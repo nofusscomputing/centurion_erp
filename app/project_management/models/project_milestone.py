@@ -133,11 +133,11 @@ class ProjectMilestone(ProjectCommonFieldsName):
         }
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.project
+    #     return self.project
 
 
     @property
@@ -149,3 +149,17 @@ class ProjectMilestone(ProjectCommonFieldsName):
         """
 
         return 'xx %'
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from project_management.models.project_milestone_history import ProjectMilestoneHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ProjectMilestoneHistory,
+        )
+
+
+        return history
+

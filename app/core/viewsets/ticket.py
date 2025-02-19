@@ -1,7 +1,7 @@
 from api.exceptions import UnknownTicketType
 from api.viewsets.common import ModelViewSet
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from assistance.serializers.request import (
     RequestAddTicketModelSerializer,

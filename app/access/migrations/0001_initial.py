@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 ('team_name', models.CharField(default='', max_length=50, verbose_name='Name')),
                 ('created', access.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False)),
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False)),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
             ],
             options={
                 'verbose_name_plural': 'Teams',

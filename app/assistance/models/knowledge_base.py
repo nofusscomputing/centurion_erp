@@ -3,8 +3,8 @@ from django.db import models
 from django.forms import ValidationError
 
 from access.fields import *
-from access.models import Team, TenancyObject
-
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 
 class KnowledgeBaseCategory(TenancyObject):
@@ -106,6 +106,20 @@ class KnowledgeBaseCategory(TenancyObject):
     def __str__(self):
 
         return self.name
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from assistance.models.knowledge_base_category_history import KnowledgeBaseCategoryHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = KnowledgeBaseCategoryHistory,
+        )
+
+
+        return history
 
 
 
@@ -313,3 +327,17 @@ class KnowledgeBase(TenancyObject):
     def __str__(self):
 
         return self.title
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from assistance.models.knowledge_base_history import KnowledgeBaseHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = KnowledgeBaseHistory,
+        )
+
+
+        return history

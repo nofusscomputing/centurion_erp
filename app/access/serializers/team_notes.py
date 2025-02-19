@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from access.models import TeamNotes
+from access.models.team_notes import TeamNotes
 
 from api.serializers import common
 

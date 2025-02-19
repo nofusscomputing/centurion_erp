@@ -4,7 +4,7 @@ from django.forms import inlineformset_factory
 
 from .team_users import TeamUsersForm, TeamUsers
 
-from access.models import Team
+from access.models.team import Team
 from access.functions import permissions
 
 from app import settings

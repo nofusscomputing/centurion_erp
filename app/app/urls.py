@@ -24,7 +24,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from .views import home
 
-from core.views import history, related_ticket, ticket_linked_item
+from core.views import related_ticket, ticket_linked_item
 
 from settings.views import user_settings
 
@@ -47,7 +47,6 @@ urlpatterns = [
     path("itim/", include("itim.urls")),
     path("config_management/", include("config_management.urls")),
 
-    path("history/<str:model_name>/<int:model_pk>", history.View.as_view(), name='_history'),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 
 

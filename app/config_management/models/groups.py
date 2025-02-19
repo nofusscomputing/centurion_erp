@@ -8,7 +8,7 @@ from django.forms import ValidationError
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from app.helpers.merge_software import merge_software
 
@@ -262,11 +262,11 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return reverse("v2:_api_v2_config_group-detail", kwargs={'pk': self.id})
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.parent
+    #     return self.parent
 
 
     def render_config(self):
@@ -358,6 +358,20 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return self.name
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from config_management.models.config_groups_history import ConfigGroupsHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ConfigGroupsHistory,
+        )
+
+
+        return history
+
+
 
 @receiver(post_delete, sender=ConfigGroups, dispatch_uid='config_group_delete_signal')
 def signal_deleted_model(sender, instance, using, **kwargs):
@@ -407,7 +421,18 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
         
         return self.group
 
+    def save_history(self, before: dict, after: dict) -> bool:
 
+        from config_management.models.config_groups_hosts_history import ConfigGroupHostsHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ConfigGroupHostsHistory,
+        )
+
+
+        return history
 
 
 
@@ -495,3 +520,15 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
         return self.config_group
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from config_management.models.config_groups_software_history import ConfigGroupSoftwareHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ConfigGroupSoftwareHistory,
+        )
+
+
+        return history
