@@ -3,7 +3,7 @@ from django.db import models
 
 from itam.models.device_common import DeviceCommonFieldsName
 
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer

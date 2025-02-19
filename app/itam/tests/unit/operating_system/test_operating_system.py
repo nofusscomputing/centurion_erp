@@ -6,7 +6,7 @@ import pytest
 import unittest
 import requests
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from app.tests.abstract.models import TenancyModel
 
