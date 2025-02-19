@@ -1,4 +1,4 @@
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import ContentType, Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -160,7 +160,12 @@ class ViewSetBase:
             user = self.view_user
         )
 
-        self.item = self.model.objects.all()[0]
+        self.item = self.model.objects.filter(
+            content_type = ContentType.objects.get(
+                app_label = self.device._meta.app_label,
+                model = self.device._meta.model_name
+            )
+        )[0]
 
 
         self.url_kwargs = {
