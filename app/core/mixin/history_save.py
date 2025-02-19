@@ -157,12 +157,19 @@ class SaveHistory(models.Model):
                 current_user = None
 
 
+        organization = getattr(self, 'organization', None)
+
+        if self._meta.model_name == 'organization':
+
+            organization = self
+
+
         if before_json != after_json:
 
             if parent_model is not None:
 
                 entry = history_model.objects.create(
-                    organization = self.organization,
+                    organization = organization,
                     before = before_json,
                     after = after_json,
                     action = action,
@@ -180,7 +187,7 @@ class SaveHistory(models.Model):
             else:
 
                 entry = history_model.objects.create(
-                    organization = self.organization,
+                    organization = organization,
                     before = before_json,
                     after = after_json,
                     action = action,

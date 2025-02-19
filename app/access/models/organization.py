@@ -67,12 +67,6 @@ class Organization(SaveHistory):
     modified = AutoLastModifiedField()
 
 
-    @property
-    def organization(self):
-
-        return self
-
-
     def get_organization(self):
         return self
 
