@@ -12,6 +12,8 @@ class ModelHistory(
     TenancyObject
 ):
 
+    save_model_history: bool = False
+
 
     class Meta:
 
@@ -80,7 +82,9 @@ class ModelHistory(
         verbose_name = 'Content Model'
     )
 
-    created = AutoCreatedField()
+    created = AutoCreatedField(
+        editable = True
+    )
 
 
 

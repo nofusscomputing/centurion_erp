@@ -1,8 +1,59 @@
 
 ## Version 1.11.0
 
+**Note:** Migrations should be performed offline. **Failing to perform** an online migration, the option provided below will not be available if the migration crashes. Running the below commands to reset the database for the migrations to re-run will cause data loss if users are making changes to Centurion.
+
 - History views removed from original Centurion interface.
+
 - History views removed from API v1.
+
+- A migration exists that will move the history from the old tables to the new ones.
+
+    if for some reason the migration crashes enter the following commands in the dbshell `python manage.py dbshell` and restart the migrations
+
+    ``` sql
+
+    delete from access_organization_history;
+    delete from access_team_history;
+
+    delete from assistance_knowledge_base_history;
+    delete from assistance_knowledge_base_category_history;
+
+    delete from config_management_configgroups_history;
+    delete from config_management_configgroupsoftware_history;
+    delete from config_management_configgrouphosts_history;
+
+    delete from core_manufacturer_history;
+    delete from core_ticketcategory_history;
+    delete from core_ticketcommentcategory_history;
+    
+    delete from itam_device_history;
+    delete from itam_devicemodel_history;
+    delete from itam_devicetype_history;
+    delete from itam_deviceoperatingsystem_history;
+    delete from itam_devicesoftware_history;
+    delete from itam_operatingsystem_history;
+    delete from itam_operatingsystemversion_history;
+    delete from itam_software_history;
+    delete from itam_softwareversion_history;
+    delete from itam_softwarecategory_history;
+
+    delete from itim_cluster_history;
+    delete from itim_clustertype_history;
+    delete from itim_port_history;
+    delete from itim_service_history;
+
+    delete from project_management_project_history;
+    delete from project_management_projectmilestone_history;
+    delete from project_management_projectstate_history;
+    delete from project_management_projecttype_history;
+    delete from settings_externallink_history;
+
+    delete from core_model_history;
+
+    ```
+
+    The above commands truncate the data from the new history tables so the migration can run again.
 
 
 ## Version 1.10.0
