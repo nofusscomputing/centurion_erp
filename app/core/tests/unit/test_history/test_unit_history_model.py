@@ -16,6 +16,8 @@ class ManufacturerModel(
 
     model = ModelHistory
 
+    should_model_history_be_saved = False
+
 
     @classmethod
     def setUpTestData(self):
