@@ -9,7 +9,7 @@ from django.db.models import Field
 from django.forms import ValidationError
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 
 

@@ -2,7 +2,9 @@ from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.test import Client, TestCase
 
-from access.models import Organization, Team, TeamUsers
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from api.react_ui_metadata import ReactUIMetadata
 
