@@ -136,11 +136,11 @@ class Team(Group, TenancyObject):
         }
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.organization
+    #     return self.organization
 
 
     def permission_list(self) -> list:
@@ -159,3 +159,17 @@ class Team(Group, TenancyObject):
 
     def __str__(self):
         return self.organization.name + ', ' + self.team_name
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from access.models.team_history import TeamHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = TeamHistory
+        )
+
+
+        return history
