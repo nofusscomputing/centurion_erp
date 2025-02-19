@@ -67,6 +67,12 @@ class Organization(SaveHistory):
     modified = AutoLastModifiedField()
 
 
+    @property
+    def organization(self):
+
+        return self
+
+
     def get_organization(self):
         return self
 
@@ -139,3 +145,17 @@ class Organization(SaveHistory):
             return reverse("v2:_api_v2_organization-detail", request=request, kwargs={'pk': self.id})
 
         return reverse("v2:_api_v2_organization-detail", kwargs={'pk': self.id})
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from access.models.organization_history import OrganizationHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = OrganizationHistory
+        )
+
+
+        return history
