@@ -8,7 +8,7 @@ from django.test import Client, TestCase
 
 from rest_framework.relations import Hyperlink
 
-from access.models import Organization, Team, TeamUsers
+from access.models.organization import Organization
 
 from api.tests.abstract.api_fields import APITenancyObject
 
