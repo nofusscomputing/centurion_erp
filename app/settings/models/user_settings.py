@@ -9,7 +9,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from access.fields import *
-from access.models import Organization
+from access.models.organization import Organization
 
 sorted_timezones = sorted(zoneinfo.available_timezones())
 

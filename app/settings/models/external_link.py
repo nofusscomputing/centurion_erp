@@ -1,7 +1,7 @@
 from django.template import Template
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 
 

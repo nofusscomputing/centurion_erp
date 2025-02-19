@@ -9,7 +9,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-from access.models import Organization, Team, TeamUsers
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from settings.models.user_settings import UserSettings
 
