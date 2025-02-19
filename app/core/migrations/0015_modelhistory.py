@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('action', models.IntegerField(choices=[(1, 'Create'), (2, 'Update'), (3, 'Delete')], default=None, help_text='History action performed', null=True, verbose_name='Action')),
                 ('created', access.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, help_text='Date and time of creation', verbose_name='Created')),
                 ('content_type', models.ForeignKey(blank=True, help_text='Model this note is for', on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype', verbose_name='Content Model')),
-                ('organization', models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization')),
+                ('organization', models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization')),
                 ('user', models.ForeignKey(help_text='User whom performed the action this history relates to', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to=settings.AUTH_USER_MODEL, verbose_name='User')),
             ],
             options={

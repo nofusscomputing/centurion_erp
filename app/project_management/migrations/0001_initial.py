@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('is_deleted', models.BooleanField(default=False, help_text='Is this project considered deleted', verbose_name='Deleted')),
                 ('manager_team', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='access.team')),
                 ('manager_user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='manager_user', to=settings.AUTH_USER_MODEL)),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
                 ('team_members', models.ManyToManyField(blank=True, to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 ('start_date', models.DateTimeField(blank=True, help_text='When work commenced on the project.', null=True, verbose_name='Real Start Date')),
                 ('finish_date', models.DateTimeField(blank=True, help_text='When work was completed for the project', null=True, verbose_name='Real Finish Date')),
                 ('created', access.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False)),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
                 ('project', models.ForeignKey(help_text='Project this milestone belongs.', on_delete=django.db.models.deletion.CASCADE, to='project_management.project')),
             ],
             options={
@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False)),
                 ('name', models.CharField(help_text='Name of thee project state.', max_length=50, unique=True, verbose_name='Name')),
                 ('is_completed', models.BooleanField(default=False, help_text='Is this state considered complete', verbose_name='State Completed')),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
                 ('runbook', models.ForeignKey(blank=True, help_text='The runbook for this project state', null=True, on_delete=django.db.models.deletion.SET_NULL, to='assistance.knowledgebase', verbose_name='Runbook')),
             ],
             options={
@@ -104,7 +104,7 @@ class Migration(migrations.Migration):
                 ('created', access.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False)),
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False)),
                 ('name', models.CharField(help_text='Name of thee project type.', max_length=50, unique=True, verbose_name='Name')),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
                 ('runbook', models.ForeignKey(blank=True, help_text='The runbook for this project type', null=True, on_delete=django.db.models.deletion.SET_NULL, to='assistance.knowledgebase', verbose_name='Runbook')),
             ],
             options={

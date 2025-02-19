@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('created', access.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, help_text='Date and time of creation', verbose_name='Created')),
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, help_text='Date and time of last modification', verbose_name='Modified')),
                 ('article', models.ForeignKey(help_text='Article to be linked to model', on_delete=django.db.models.deletion.CASCADE, to='assistance.knowledgebase', verbose_name='Article')),
-                ('organization', models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization')),
+                ('organization', models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization')),
             ],
             options={
                 'verbose_name': 'Model Knowledge Base Article',
