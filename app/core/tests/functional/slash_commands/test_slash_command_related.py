@@ -4,7 +4,7 @@ import unittest
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from core.models.ticket.ticket import Ticket
 from core.models.ticket.ticket_comment import TicketComment

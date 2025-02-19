@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, ContentType
 from django.test import TestCase
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from app.tests.abstract.models import TenancyModel
 

@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from unittest.mock import patch
 
-from access.models import TenancyManager
+from access.models.tenancy import TenancyManager
 
 
 class Models:

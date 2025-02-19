@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 

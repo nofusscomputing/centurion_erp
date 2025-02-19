@@ -9,7 +9,9 @@ from django.test import TestCase
 
 from celery import states
 
-from access.models import Organization, Team, TeamUsers
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from app.tests.abstract.model_permissions import ModelPermissionsView
 
