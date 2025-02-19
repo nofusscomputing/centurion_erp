@@ -7,7 +7,8 @@ from django.forms import ValidationError
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import Team, TenancyObject
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 

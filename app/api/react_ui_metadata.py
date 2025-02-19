@@ -13,7 +13,7 @@ from rest_framework.utils.field_mapping import ClassLookupDict
 
 from rest_framework_json_api.utils import get_related_resource_type
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from app.serializers.user import User, UserBaseSerializer
 

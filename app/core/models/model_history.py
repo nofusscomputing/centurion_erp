@@ -4,7 +4,7 @@ from django.db import models
 from rest_framework.reverse import reverse
 
 from access.fields import AutoCreatedField
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 
 

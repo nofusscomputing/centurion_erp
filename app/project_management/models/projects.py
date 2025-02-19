@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from access.models import Team
+from access.models.team import Team
 
 from core.mixin.history_save import SaveHistory
 from core.models.ticket.ticket_enum_values import TicketValues

@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from access.models import TeamUsers
+from access.models.team_user import TeamUsers
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes

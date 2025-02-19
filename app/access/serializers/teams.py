@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
-from access.models import Team
+from access.models.team import Team
 
 from api.serializers import common
 

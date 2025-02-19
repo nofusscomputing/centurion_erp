@@ -6,7 +6,8 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models import Organization, Team
+from access.models.organization import Organization
+from access.models.team import Team
 
 from assistance.models.model_knowledge_base_article import KnowledgeBase, ModelKnowledgeBaseArticle
 from assistance.serializers.model_knowledge_base_article import ModelKnowledgeBaseArticleModelSerializer

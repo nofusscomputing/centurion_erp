@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer

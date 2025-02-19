@@ -1,6 +1,6 @@
 from django.contrib.auth.models import ContentType
 
-from access.models import Organization
+from access.models.organization import Organization
 
 
 

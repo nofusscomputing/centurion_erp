@@ -12,7 +12,9 @@ from django.test.utils import override_settings
 
 from unittest.mock import patch
 
-from access.models import Organization, Team, TeamUsers
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from itam.models.device import Device
 

@@ -5,7 +5,8 @@ from django.forms import ValidationError
 from rest_framework.reverse import reverse
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models import TenancyObject, Team
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from core.lib.slash_commands import SlashCommands
 

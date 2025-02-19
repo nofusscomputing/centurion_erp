@@ -7,7 +7,8 @@ from rest_framework.permissions import DjangoObjectPermissions
 from rest_framework.response import Response
 
 from access.mixin import OrganizationMixin
-from access.models import Organization, Team
+from access.models.organization import Organization
+from access.models.team import Team
 
 from api.serializers.access import OrganizationSerializer, OrganizationListSerializer, TeamSerializer, TeamPermissionSerializer
 from api.views.mixin import OrganizationPermissionAPI

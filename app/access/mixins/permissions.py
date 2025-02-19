@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions
 from rest_framework.permissions import DjangoObjectPermissions
 
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
 

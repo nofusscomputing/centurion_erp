@@ -10,7 +10,8 @@ from rest_framework.reverse import reverse
 from .ticket_enum_values import TicketValues
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models import TenancyObject, Team
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
 from core.lib.slash_commands import SlashCommands

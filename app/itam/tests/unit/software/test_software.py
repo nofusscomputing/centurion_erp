@@ -4,7 +4,9 @@ import requests
 
 from django.test import TestCase, Client
 
-from access.models import Organization
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from app.tests.abstract.models import TenancyModel
 

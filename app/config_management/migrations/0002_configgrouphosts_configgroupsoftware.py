@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False)),
                 ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='config_management.configgroups')),
                 ('host', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='itam.device', validators=[config_management.models.groups.ConfigGroupHosts.validate_host_no_parent_group])),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
             ],
             options={
                 'abstract': False,
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False)),
                 ('action', models.CharField(blank=True, choices=[('1', 'Install'), ('0', 'Remove')], default=None, max_length=1, null=True)),
                 ('config_group', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='config_management.configgroups')),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
                 ('software', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='itam.software')),
                 ('version', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='itam.softwareversion')),
             ],

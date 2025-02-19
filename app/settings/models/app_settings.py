@@ -3,7 +3,7 @@ from django.db import models
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import Organization
+from access.models.organization import Organization
 
 from core.mixin.history_save import SaveHistory
 

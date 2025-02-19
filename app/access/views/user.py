@@ -2,9 +2,11 @@ from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 
 from access.forms.team_users import TeamUsersForm
-from access.models import Team, TeamUsers
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from core.views.common import AddView, DeleteView
+
 
 
 class Add(AddView):
