@@ -9,7 +9,10 @@ import pytest
 import unittest
 import requests
 
-from access.models import Organization, Team, TeamUsers
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
+
 from access.tests.abstract.model_permissions_organization_manager import OrganizationManagerModelPermissionAdd, OrganizationManagerModelPermissionDelete
 
 from app.tests.abstract.model_permissions import ModelPermissionsAdd, ModelPermissionsChange, ModelPermissionsDelete

@@ -7,7 +7,8 @@ from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 
 from access.middleware.request import Tenancy
-from access.models import Organization
+
+from access.models.organization import Organization
 
 from access.serializers.teams import (
     Team,

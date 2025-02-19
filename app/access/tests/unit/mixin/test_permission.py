@@ -13,7 +13,10 @@ from api.viewsets.common import ModelViewSet
 
 from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import OrganizationPermissionMixin
-from access.models import Organization, Team, TeamUsers
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
+
 
 from core import exceptions as centurion_exceptions
 from core.models.manufacturer import Manufacturer

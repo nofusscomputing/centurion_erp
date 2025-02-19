@@ -4,7 +4,9 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
 
-from .models import Organization, Team
+from access.models.organization import Organization
+from access.models.team import Team
+
 
 
 class OrganizationMixin():

@@ -1,7 +1,7 @@
 import pytest
 import unittest
 
-from access.models import TenancyManager
+from access.models.tenancy import TenancyManager
 
 
 

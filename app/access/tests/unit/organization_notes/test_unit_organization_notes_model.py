@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_unit_model_notes_model import ModelNotesModel
 
-from access.models import OrganizationNotes
+from access.models.organization_notes import OrganizationNotes
 
 
 
