@@ -169,3 +169,17 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         'software_categories_is_global',
         'global_organization',
     ]
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from settings.models.app_settings_history import AppSettingsHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = AppSettingsHistory,
+        )
+
+
+        return history
