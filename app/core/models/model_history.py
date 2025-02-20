@@ -4,6 +4,7 @@ from django.db import models
 from rest_framework.reverse import reverse
 
 from access.fields import AutoCreatedField
+from access.models.organization import Organization
 from access.models.tenancy import TenancyObject
 
 
@@ -63,6 +64,15 @@ class ModelHistory(
         verbose_name = 'Action'
     )
 
+    organization = models.ForeignKey(
+        Organization,
+        blank = False,
+        help_text = 'Organization this belongs to',
+        null = True,
+        on_delete = models.CASCADE,
+        related_name = '+',
+        verbose_name = 'Organization'
+    )
 
     user = models.ForeignKey(
         User,

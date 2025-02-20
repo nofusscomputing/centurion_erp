@@ -47,6 +47,8 @@ class HistoryEntriesCommon:
 
         self.organization = Organization.objects.create(name='test_org')
 
+        self.extra_organization = Organization.objects.create(name='test_org_extra')
+
 
     @classmethod
     def call_the_banners(self):

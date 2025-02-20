@@ -204,7 +204,10 @@ class TenancyObject(SaveHistory):
 
         self.clean()
 
-        if not getattr(self, 'organization', None):
+        if(
+            not getattr(self, 'organization', None)
+            and self._meta.model_name !='appsettingshistory'    # App Settings for
+        ):
 
             raise centurion_exceptions.ValidationError(
                 detail = {
