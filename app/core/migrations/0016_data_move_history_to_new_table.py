@@ -204,7 +204,14 @@ def move_history(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0018_ticketcommentcategoryhistory'),
+        ('access', '0004_organizationhistory_teamhistory'),
+        ('assistance', '0005_knowledgebasecategoryhistory_knowledgebasehistory'),
+        ('config_management', '0007_configgroupshistory_configgrouphostshistory_and_more'),
+        ('core', '0015_modelhistory_manufacturerhistory_and_more'),
+        ('itam', '0009_devicehistory_devicemodelhistory_devicetypehistory_and_more'),
+        ('itim', '0008_clusterhistory_clustertypehistory_porthistory_and_more'),
+        ('project_management', '0005_projecthistory_projectmilestonehistory_and_more'),
+        ('settings', '0011_appsettingshistory_externallinkhistory')
     ]
 
     operations = [
