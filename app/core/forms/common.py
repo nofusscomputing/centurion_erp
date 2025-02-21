@@ -1,7 +1,8 @@
 from django import forms
 from django.db.models import Q
 
-from access.models import Organization, TeamUsers
+from access.models.organization import Organization
+from access.models.team_user import TeamUsers
 
 
 

@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
+# THis import only exists so that the migrations can be created
+from itam.models.software_version_history import SoftwareVersionHistory    # pylint: disable=W0611:unused-import
 from itam.serializers.software_version import (
     Software,
     SoftwareVersion,

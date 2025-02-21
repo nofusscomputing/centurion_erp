@@ -1,9 +1,11 @@
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
+from access.serializers.organization import OrganizationBaseSerializer
+
 from app.serializers.user import UserBaseSerializer
 
-from core.models.history import History
+from core.models.model_history import ModelHistory
 
 
 
@@ -31,7 +33,7 @@ class HistoryBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = History
+        model = ModelHistory
 
         fields = [
             'id',
@@ -61,7 +63,8 @@ class HistoryModelSerializer(HistoryBaseSerializer):
             '_self': reverse("v2:_api_v2_model_history-detail", 
                 request=self._context['view'].request,
                 kwargs={
-                    'model_class': self._kwargs['context']['view'].kwargs['model_class'],
+                    'app_label': self._kwargs['context']['view'].kwargs['app_label'],
+                    'model_name': self._kwargs['context']['view'].kwargs['model_name'],
                     'model_id': self._kwargs['context']['view'].kwargs['model_id'],
                     'pk': item.pk
                 }
@@ -69,21 +72,57 @@ class HistoryModelSerializer(HistoryBaseSerializer):
         }
 
 
+    model = serializers.SerializerMethodField('get_model', label = 'device')
+
+    def get_model(self, item):
+
+        model = {}
+
+        model = item.get_serialized_model_field( self.context )
+
+        return model
+
+
+    child_model = serializers.SerializerMethodField('get_child_model')
+
+    def get_child_model(self, item):
+
+        model = {}
+
+        model = item.get_serialized_child_model_field( self.context )
+
+        return model
+
+    content = serializers.SerializerMethodField('get_content')
+
+    def get_content(self, item):
+
+        model = getattr(item, item.get_related_field_name( item ))
+
+        content = model.model._meta.model_name
+
+        if self.get_child_model(item):
+
+            return getattr(model, item.get_related_field_name( model )).child_model._meta.model_name
+
+        return content
+
+
     class Meta:
 
-        model = History
+        model = ModelHistory
 
         fields =  [
              'id',
             'display_name',
+            'content',
             'before',
             'after',
             'action',
             'user',
-            'item_pk',
-            'item_class',
-            'item_parent_pk',
-            'item_parent_class',
+            'model',
+            'child_model',
+            'organization',
             'created',
             '_urls',
         ]
@@ -99,6 +138,6 @@ class HistoryModelSerializer(HistoryBaseSerializer):
 
 class HistoryViewSerializer(HistoryModelSerializer):
 
-    user = UserBaseSerializer( read_only = True )
+    organization = OrganizationBaseSerializer( read_only = True )
 
-    pass
+    user = UserBaseSerializer( read_only = True )

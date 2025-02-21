@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.exceptions import ValidationError
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from core.serializers.ticket_linked_item import Ticket, TicketLinkedItem, TicketLinkedItemModelSerializer
 

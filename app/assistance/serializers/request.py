@@ -28,6 +28,7 @@ class RequestTicketModelSerializer(
 
 
     category = serializers.PrimaryKeyRelatedField(
+        allow_null = True,
         queryset = TicketCategory.objects.filter(
             request = True
         ),
@@ -86,6 +87,7 @@ class RequestTicketModelSerializer(
             'parent_ticket',
             'external_ref',
             'external_system',
+            'opened_by',
             'status_badge',
             'ticket_type',
             '_urls',

@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
-from access.models import TeamUsers
+from access.models.team_user import TeamUsers
 
 from api.serializers import common
 
@@ -53,9 +53,15 @@ class TeamUserModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        return {
-            '_self': item.get_url( request = self._context['view'].request )
-        }
+        get_url = super().get_url( item = item )
+
+        del get_url['history']
+
+        del get_url['knowledge_base']
+
+        del get_url['notes']
+
+        return get_url
 
 
     class Meta:

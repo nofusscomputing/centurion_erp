@@ -6,7 +6,9 @@ import unittest
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from access.models import Organization, Team
+
+from access.models.organization import Organization
+from access.models.team import Team
 
 
 # @pytest.fixture

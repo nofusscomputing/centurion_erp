@@ -95,8 +95,6 @@ nav:
 
           - projects/centurion_erp/development/api/models/ticket.md
 
-          - projects/centurion_erp/development/api/models/tenancy_object.md
-
         - projects/centurion_erp/development/api/common_views.md
 
         - Serializers:
@@ -143,13 +141,13 @@ nav:
 
           - projects/centurion_erp/development/api/tests/model_views.md
 
-          - projects/centurion_erp/development/api/tests/notes_permissions.md
-
       - projects/centurion_erp/development/fields.md
 
       - projects/centurion_erp/development/forms.md
 
       - projects/centurion_erp/development/models.md
+
+      - projects/centurion_erp/development/core/model_history.md
 
       - projects/centurion_erp/development/core/model_notes.md
 

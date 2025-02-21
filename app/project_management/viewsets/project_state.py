@@ -2,6 +2,8 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
+# This import only exists so that the migrations can be created
+from project_management.models.project_state_history import ProjectStateHistory    # pylint: disable=W0611:unused-import
 from project_management.serializers.project_states import (
     ProjectState,
     ProjectStateModelSerializer,

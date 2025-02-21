@@ -5,7 +5,7 @@ from app.urls import urlpatterns
 from django.conf import settings
 from django.urls import URLPattern, URLResolver
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from settings.models.user_settings import UserSettings
 

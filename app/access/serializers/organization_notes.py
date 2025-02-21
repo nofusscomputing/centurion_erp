@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from access.models import OrganizationNotes
+from access.models.organization_notes import OrganizationNotes
 
 from api.serializers import common
 

@@ -30,6 +30,7 @@ class ChangeTicketModelSerializer(
 
 
     category = serializers.PrimaryKeyRelatedField(
+        allow_null = True,
         queryset = TicketCategory.objects.filter(
             change = True
         ),
@@ -91,6 +92,7 @@ class ChangeTicketModelSerializer(
             'external_system',
             'status_badge',
             'ticket_type',
+            'opened_by',
             '_urls',
         ]
 

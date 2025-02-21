@@ -19,4 +19,6 @@
     ],
     "cSpell.language": "en-AU",
     "jest.enable": false,
+    "pylint.enabled": true,
+    "pylint.importStrategy": "fromEnvironment",
 }

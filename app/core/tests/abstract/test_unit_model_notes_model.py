@@ -2,8 +2,7 @@ from django.contrib.auth.models import  User
 
 from app.tests.abstract.models import TenancyModel
 
-from access.models import Organization
-
+from access.models.organization import Organization
 
 
 class ModelNotesModel(

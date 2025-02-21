@@ -151,7 +151,8 @@ router.register('config_management/group/(?P<model_id>[0-9]+)/notes', config_gro
 router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
 
 
-router.register('core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
+router.register('(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
+
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments', ticket_comment.ViewSet, basename='_api_v2_ticket_comment')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, basename='_api_v2_ticket_comment_threads')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/linked_item', ticket_linked_item.ViewSet, basename='_api_v2_ticket_linked_item')

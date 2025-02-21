@@ -1,11 +1,9 @@
-import pytest
-
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from api.tests.abstract.viewsets import ViewSetModel
 
@@ -44,7 +42,8 @@ class ViewsetCommon(
         )
 
         self.kwargs = {
-            'model_class': 'device',
+            'app_label': device._meta.app_label,
+            'model_name': device._meta.model_name,
             'model_id': device.id
         }
 

@@ -10,7 +10,8 @@ from rest_framework.reverse import reverse
 from .ticket_enum_values import TicketValues
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models import TenancyObject, Team
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
 from core.lib.slash_commands import SlashCommands
@@ -908,39 +909,59 @@ class Ticket(
 
                 if before[field]:
 
-                    value = f"$category-{before[field]}"
+                    value = f"$ticket_category-{before[field]}"
 
-                to_value = getattr(self.milestone, 'id', 'None')
+                to_value = getattr(self.category, 'id', 'None')
 
                 if to_value != 'None':
 
-                    to_value = f"$category-{getattr(self.milestone, 'id', 'None')}"
+                    to_value = f"$ticket_category-{getattr(self.category, 'id', 'None')}"
 
 
                 comment_field_value = f"changed category from {value} to {to_value}"
 
-            if field == 'impact':
+            elif field == 'impact':
 
                 comment_field_value = f"changed {field} to {self.get_impact_display()}"
 
-            if field == 'urgency':
+            elif field == 'urgency':
 
                 comment_field_value = f"changed {field} to {self.get_urgency_display()}"
 
-            if field == 'priority':
+            elif field == 'priority':
 
                 comment_field_value = f"changed {field} to {self.get_priority_display()}"
 
 
-            if field == 'status':
+            elif field == 'organization':
+
+                comment_field_value = f"Ticket moved from $organization-{before[field]} to $organization-{after[field]}"
+
+            elif field == 'parent_ticket_id':
+
+                value = 'None'
+
+                if before[field]:
+
+                    value = f"#{before[field]}"
+
+                to_value = getattr(self.parent_ticket, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"#{getattr(self.parent_ticket, 'id', 'None')}"
+
+                comment_field_value = f"Parent ticket changed from {value} to {to_value}"
+
+            elif field == 'status':
 
                 comment_field_value = f"changed {field} to {self.get_status_display()}"
 
-            if field == 'title':
+            elif field == 'title':
 
                 comment_field_value = f"Title changed ~~{before[field]}~~ to **{after[field]}**"
 
-            if field == 'project_id':
+            elif field == 'project_id':
 
                 value = 'None'
 
@@ -957,7 +978,7 @@ class Ticket(
 
                 comment_field_value = f"changed project from {value} to {to_value}"
 
-            if field == 'milestone_id':
+            elif field == 'milestone_id':
 
                 value = 'None'
 
@@ -974,7 +995,7 @@ class Ticket(
 
                 comment_field_value = f"changed milestone from {value} to {to_value}"
 
-            if field == 'planned_start_date':
+            elif field == 'planned_start_date':
 
                 to_value = after[field]
 
@@ -984,7 +1005,7 @@ class Ticket(
 
                 comment_field_value = f"changed Planned Start Date from _{before[field]}_ to **{to_value}**"
 
-            if field == 'planned_finish_date':
+            elif field == 'planned_finish_date':
 
                 to_value = after[field]
 
@@ -994,7 +1015,7 @@ class Ticket(
 
                 comment_field_value = f"changed Planned Finish Date from _{before[field]}_ to **{to_value}**"
 
-            if field == 'real_start_date':
+            elif field == 'real_start_date':
 
                 to_value = after[field]
 
@@ -1010,7 +1031,7 @@ class Ticket(
 
                     to_value = str(after[field].utcfromtimestamp(after[field].timestamp()))+ '+00:00'
 
-            if field == 'real_finish_date':
+            elif field == 'real_finish_date':
 
                 to_value = after[field]
 
@@ -1021,7 +1042,7 @@ class Ticket(
                 comment_field_value = f"changed Real Finish Date from _{before[field]}_ to **{to_value}**"
 
 
-            if field == 'description':
+            elif field == 'description':
 
                 comment_field_value = ''.join(
                     str(x) for x in list(

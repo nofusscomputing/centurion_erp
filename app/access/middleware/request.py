@@ -6,7 +6,10 @@ from django.contrib.auth.middleware import (
 from django.contrib.auth.models import User, Group
 from django.utils.deprecation import MiddlewareMixin
 
-from access.models import Organization, Team
+
+from access.models.organization import Organization
+from access.models.team import Team
+
 
 from settings.models.app_settings import AppSettings
 

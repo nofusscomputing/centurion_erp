@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from assistance.models.knowledge_base import KnowledgeBase
 

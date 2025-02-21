@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
@@ -175,6 +175,19 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
 
         return self.name
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.operating_system_history import OperatingSystemHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = OperatingSystemHistory,
+        )
+
+
+        return history
+
 
 
 @receiver(post_delete, sender=OperatingSystem, dispatch_uid='operating_system_delete_signal')
@@ -269,14 +282,27 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         }
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.operating_system
+    #     return self.operating_system
 
 
     def __str__(self):
 
         return self.operating_system.name + ' ' + self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.operating_system_version_history import OperatingSystemVersionHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = OperatingSystemVersionHistory,
+        )
+
+
+        return history
 

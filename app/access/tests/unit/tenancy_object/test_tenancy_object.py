@@ -3,7 +3,8 @@ import unittest
 
 from django.test import TestCase
 
-from access.models import TenancyObject, TenancyManager
+from access.models.tenancy import TenancyManager
+from access.models.tenancy import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 

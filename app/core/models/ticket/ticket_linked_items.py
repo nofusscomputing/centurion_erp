@@ -7,7 +7,7 @@ from rest_framework.reverse import reverse
 
 from .ticket_enum_values import TicketValues
 
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket import Ticket, KnowledgeBase
