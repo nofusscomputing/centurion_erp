@@ -1,3 +1,246 @@
+## 1.11.0 (2025-02-21)
+
+### feat
+
+- **core**: Enable App settings History to save without specifying an organization
+- **settings**: save_history method added to App Settings
+- **settings**: History Model for App Settings Version added
+- **core**: Migration for history data to new history tables
+- **access**: save_history method added to Team
+- **access**: History Model for Team added
+- **access**: save_history method added to Organization
+- **access**: History Model for Organization added
+- **core**: add org field History Model api rendering
+- **core**: Show the model name within history
+- **project_management**: Project Milestone added to modelhistory.child_history_models
+- **settings**: History Model migrations for External Link
+- **settings**: save_history method added to External Link
+- **settings**: History Model for External Link added
+- **project_management**: History Model migrations for Project Type
+- **project_management**: save_history method added to Project Type
+- **project_management**: History Model for Project TYpe added
+- **project_management**: History Model migrations for Project State
+- **project_management**: save_history method added to Project State
+- **project_management**: History Model for Project State added
+- **project_management**: History Model migrations for Project Milestone
+- **project_management**: save_history method added to Project Milestonr
+- **project_management**: History Model for Project Milestone added
+- **project_management**: History Model migrations for Project
+- **project_management**: save_history method added to Project
+- **project_management**: History Model for Project added
+- **itim**: History Model migrations for Service
+- **itim**: save_history method added to Service
+- **itim**: History Model for Service added
+- **itim**: History Model migrations for Port
+- **itim**: save_history method added to Port
+- **itim**: History Model for Port added
+- **itim**: History Model migrations for Cluster Type
+- **itim**: save_history method added to Cluster TYpe
+- **itim**: History Model for Cluster Type added
+- **itim**: History Model migrations for Cluster
+- **itim**: save_history method added to Cluster
+- **itim**: History Model for Cluster added
+- **itam**: History Model migrations for Software Version
+- **itam**: save_history method added to Software Version
+- **itam**: History Model for Software Version added
+- **itam**: History Model migrations for Software Category
+- **itam**: save_history method added to Software Category
+- **itam**: History Model for Software Category added
+- **itam**: History Model migrations for Software
+- **itam**: save_history method added to Software
+- **itam**: History Model for Software added
+- **itam**: History Model migrations for Operating System Version
+- **itam**: save_history method added to Operating System Version
+- **itam**: History Model for Operating System Version added
+- **itam**: History Model migrations for Device Type
+- **itam**: save_history method added to Device Type
+- **itam**: History Model for Device Type added
+- **itam**: History Model migrations for Device Operating System
+- **itam**: save_history method added to Device Operating System
+- **itam**: History Model for Device Operating System added
+- **itam**: History Model migrations for Operating System
+- **itam**: save_history method added to Operating System
+- **itam**: History Model migrations for Operating System
+- **itam**: History Model migrations for Device Software
+- **itam**: History Model for Device Software added
+- **itam**: save_history method added to Device
+- **itam**: History Model migrations for Device Model
+- **itam**: save_history method added to Device Model
+- **itam**: History Model for Device Model added
+- **core**: History Model migrations for Ticket Comment Category
+- **core**: save_history method added to Ticket Comment Category
+- **core**: History Model for Ticket Comment Category added
+- **config_management**: Child History Models added to child model lists for config group hosts and software
+- **core**: History Model migrations for Ticket Category
+- **core**: save_history method added to Ticket Category
+- **core**: History Model for Ticket Category added
+- **core**: History Model migrations for Manufacturer
+- **core**: save_history method added to Manufacturer
+- **core**: History Model for Manufacturer added
+- **config_management**: save_history method added to Config Group Software
+- **config_management**: save_history method added to Config Group Hosts
+- **config_management**: save_history method added to Config Groups
+- **assistance**: save_history method added to Knowledge base
+- **assistance**: save_history method added to Knowledge base category
+- **config_management**: History Model migrations for Config Groupse + children
+- **config_management**: History Model for Config Group Software added
+- **config_management**: History Model for Config Group Hosts added
+- **config_management**: History Model for Config Groups added
+- **assistance**: History Model migrations for Knowledge base + children
+- **assistance**: History Model for Knowledge base category added
+- **assistance**: History Model for Knowledge base added
+- **itam**: Add device history model
+- **core**: History view to only display objects from the model being requested
+- **core**: Add new history model to History Serializer
+- **core**: Add new history model
+- **development**: lint for un-used imports
+- **development**: add pylit settings
+- **core**: added new history model
+- **api**: Device Software Viewset requires its own function to obtain the model view serializer
+- **api**: Ticket Comment Viewset requires its own function to obtain the model view serializer
+- **api**: Ticket Viewset requires its own function to obtain the model view serializer
+- **api**: Always use a models `View` serializer for the response
+- **core**: Add logic to ensure when organization changes, an action comment is created
+- **core**: Add logic to ensure when parnet ticket changes, an action comment is created
+
+### Fixes
+
+- **settings**: App settings serializer fielad name does not exist
+- **access**: dont use organization property within organization model
+- **project_management**: Project milestone is not a child model
+- **core**: Child models on delete must make model field null
+- **project_management**: Project Milestone History is a primaryu model
+- **core**: When a child model is deleted ensure entry is still created on parent model history
+- **core**: when fetching url_kwargs for model history, make it dynamic for related field name
+- **core**: Xorrect logic for determining view_action
+- **core**: dynamically search for history object name
+- **config_management**: Remove parent property from config groups
+- **tests**: Correct Permission Import due to removing from access.models
+- **project_management**: project Model serializer must inherit common serializer
+- **core**: History audit objects must be a valid dict
+- **api**: history app names can contain an underscore
+- **core**: when saving history, use audit_model for content type
+- **core**: add missing functions for fetching item url
+- **project_management**: Opened by field set to read only for project task ticket
+- **itim**: Opened by field set to read only for problem ticket
+- **itim**: Opened by field set to read only for incident ticket
+- **itim**: Opened by field set to read only for change ticket
+- **assistance**: Opened by field set to read only for request ticket
+- **core**: Ensure that if the parent ticket changes, that the logic caters for none
+- **assistance**: Category can be empty for Project Task Ticket
+- **assistance**: Category can be empty for Problem Ticket
+- **assistance**: Category can be empty for Incident Ticket
+- **assistance**: Category can be empty for Change Ticket
+- **assistance**: Category can be empty for Request Ticket
+- **core**: Ticket Action comment for category change must use category field
+
+### Refactoring
+
+- **core**: Update access imports to new path
+- **core**: Update access imports to new path
+- Update migrations imports to new path
+- **config_management**: Update access imports to new path
+- **api**: Update access imports to neew path
+- **settings**: Update access imports to new path
+- **project_management**: Update access imports to new path
+- **itim**: Update access imports to new path
+- **itam**: Update access imports to new path
+- **core**: Update access imports to new path
+- **config_management**: Update access imports to new path
+- **assistance**: Update access imports to new path
+- **base**: Update access imports to new path
+- **api**: Update access imports to neew path
+- **access**: Update access imports to neew path
+- **access**: Move models to their own file
+- **core**: move get_url to common serializer
+- **api**: Update history url kwargs to use vals from model._meta
+- **core**: superuser changed from import to triage access
+- **core**: Ticket action comment logic only requires a single check
+
+### Tests
+
+- **settings**: History Entry checks for App Settings History
+- **settings**: API Field Checks for App Settings History
+- Model History not to save history on self
+- **core**: Correct lookup for model history test setup
+- **access**: remove test cases for Team prarent_object
+- **access**: History Entry checks for Team model
+- **access**: API Field Checks for Team History
+- **access**: History Entry checks for Organization model
+- **access**: API Field Checks for Organization History
+- Fix History API checks for kb
+- Fix History API checks for project milestone
+- Fix History Entry checks for models
+- **config_management**: History Entry checks for Config_group_hosts model
+- **settings**: History Entry checks for External Link model
+- **project_management**: History Entry checks for Project Type model
+- **project_management**: History Entry checks for Project State model
+- **project_management**: History Entry checks for Project Milestone model
+- **project_management**: History Entry checks for Project model
+- **itim**: History Entry checks for Service model
+- **itim**: History Entry checks for Cluster Type model
+- **itim**: History Entry checks for Port model
+- **itim**: History Entry checks for Cluster model
+- **itam**: History Entry checks for Software Version model
+- **itam**: History Entry checks for Software Category model
+- **itam**: History Entry checks for Software model
+- **itam**: History Entry checks for Operating System Version model
+- **itam**: History Entry checks for Operating System model
+- **itam**: History Entry checks for Device Type model
+- **itam**: History Entry checks for Device OS model
+- **itam**: History Entry checks for Device Model model
+- **itam**: History Entry checks for Device model
+- **core**: History Entry checks for Ticket Comment Category model
+- **core**: History Entry checks forTicket Category model
+- **config_management**: History Entry checks for Config Groups Software model
+- **config_management**: History Entry checks for Config Groups model
+- **assistance**: History Entry checks for Knowledge base category model
+- **assistance**: History Entry checks for Knowledge base model
+- **itam**: Device Software History Entry checks
+- **core**: Manufacturer History Entry checks
+- **core**: Model History Entries Test Suite
+- **core**: History Model Unit test cases for model and tenancy checks
+- **settings**: API Field Checks for External Links History
+- **project_management**: API Field Checks for Project Type History
+- **project_management**: API Field Checks for Project State History
+- **project_management**: API Field Checks for Project Milestone History
+- **project_management**: API Field Checks for Project History
+- **itim**: API Field Checks for Service History
+- **itim**: API Field Checks for Port History
+- **itim**: API Field Checks for Cluster Type History
+- **itim**: API Field Checks for Cluster History
+- **core**: API Field Checks for Ticket Comment Category History
+- **core**: API Field Checks for Ticket Category History
+- **config_management**: API Field Checks for Config Group Software History
+- **config_management**: API Field Checks for Config Group Hosts History
+- **config_management**: API Field Checks for Config Group History
+- **assistance**: API Field Checks for Knowledge base category History
+- **assistance**: API Field Checks for Knowledge base History
+- **itam**: API Field Checks for Software Version History
+- **itam**: API Field Checks for Software Category History
+- **itam**: API Field Checks for Software History
+- **itam**: API Field Checks for Operating System Version History
+- **itam**: API Field Checks for Operating System History
+- **itam**: API Field Checks for Device Type History
+- **itam**: API Field Checks for Device OS History
+- **itam**: API Field Checks for Device Model History
+- **itam**: API Field Checks for Device History
+- **core**: Unit Test Suite for History Model API field checks urls can either be str or hyperlink
+- **itam**: API Field Checks for Device Software History
+- **core**: API Field Checks for Manufacturer History
+- **core**: API Field Checks for Model History
+- **core**: Unit Test Suite for History Model API field checks
+- **core**: Functional Test for History Model APIPermission updated to cater for tenancy obj
+- **core**: Functional Test for History Model API Permissions and Metadata
+- **core**: Unit Test for History Model Viewset
+- **itam**: remove test cases for os version model.parent_object as it's not required
+- **core**: disable hisotry viewset function test
+- **core**: correct kwargs for history tests
+- **core**: Remove old history model viewset tests
+- Disable Old History Model test suites
+- **core**: Ensure that when parent_ticket changes on a ticket an action comment is created
+- **core**: Confirm on category change to ticket that an action comment is created
+
 ## 1.10.1 (2025-02-14)
 
 ### Fixes
