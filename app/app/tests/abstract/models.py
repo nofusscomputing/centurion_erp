@@ -4,7 +4,7 @@ import unittest
 
 from django.db.models import fields
 
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 from access.tests.abstract.tenancy_object import TenancyObject as TenancyObjectTestCases
 
 from app.tests.abstract.views import AddView, ChangeView, DeleteView, DisplayView, IndexView

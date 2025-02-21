@@ -66,26 +66,40 @@ Available admonition types are:
 Declare a ticket reference in format `#<ticket number>`, and it will be rendered as a link to the ticket. i.e. `#2`
 
 
-## Model Reference
+## Model Reference / Model Tag
 
 A Model link is a reference to an item within the database. Supported model link items are:
 
-- cluster
-
-- config_group
-
-- device
-
-- kb
-
-- operating_system
-
-- organization
-
-- service
-
-- software
-
-- team
+| Model | Tag |
+|:---|:---:|
+| cluster| `$cluster-<id>` |
+| clustertype| `$-<id>` |
+| config groups| `$config_group-<id>` |
+| device| `$device-<id>` |
+| devicemodel| `$-<id>` |
+| devicetype| `$-<id>` |
+| externallink| `$-<id>` |
+| group| `$-<id>` |
+| knowledgebase| `$kb-<id>` |
+| knowledgebasecategory| `$-<id>` |
+| manufacturer| `$-<id>` |
+| modelnotes| `$-<id>` |
+| operatingsystem| `$operating_system-<id>` |
+| operatingsystemversion| `$-<id>` |
+| organization| `$organization-<id>` |
+| port| `$-<id>` |
+| project| `$-<id>` |
+| projectmilestone| `$-<id>` |
+| projectstate| `$-<id>` |
+| projecttask| `$-<id>` |
+| projecttype| `$-<id>` |
+| service| `$service-<id>` |
+| software| `$software-<id>` |
+| softwarecategory| `$-<id>` |
+| softwareversion| `$-<id>` |
+| team| `$team-<id>` |
+| ticketcategory| `$-<id>` |
+| ticketcomment| `$-<id>` |
+| ticketcommentcategory| `$-<id>` |
 
 To declare a model link use syntax `$<type>-<model id>`. i.e. for device 1, it would be `$device-1`

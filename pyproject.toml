@@ -1,0 +1,16 @@
+[tool.pylint.main]
+disable = [ 
+    "all" 
+]
+enable = [
+    "variables"
+]
+
+source-roots = [ 
+    "app/"
+]
+
+
+[tool.pylint.variables]
+allow-global-unused-variables = true
+init-import = true

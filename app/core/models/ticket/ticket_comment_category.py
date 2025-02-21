@@ -1,7 +1,8 @@
 from django.db import models
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models import TenancyObject, Team
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from assistance.models.knowledge_base import KnowledgeBase
 
@@ -137,3 +138,16 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
     def __str__(self):
 
         return self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from core.models.ticket.ticket_comment_category_history import TicketCommentCategoryHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = TicketCommentCategoryHistory
+        )
+
+
+        return history

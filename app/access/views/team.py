@@ -4,8 +4,10 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 
 from access.forms.team import TeamForm, TeamFormAdd
-from access.models import Team, TeamUsers, Organization
 from access.mixin import *
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from core.views.common import AddView, ChangeView, DeleteView
 

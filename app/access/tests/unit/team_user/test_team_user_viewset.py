@@ -5,7 +5,8 @@ from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from access.models import Organization, Team
+from access.models.organization import Organization
+from access.models.team import Team
 from access.viewsets.team_user import ViewSet
 
 from api.tests.abstract.viewsets import ViewSetModel

@@ -7,7 +7,8 @@ from django.forms import ValidationError
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import Team, TenancyObject
+from access.models.team import Team
+from access.models.tenancy import TenancyObject
 
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
@@ -127,6 +128,19 @@ class ClusterType(TenancyObject):
     def __str__(self):
 
         return self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.cluster_type_history import ClusterTypeHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ClusterTypeHistory,
+        )
+
+
+        return history
 
 
 
@@ -353,6 +367,20 @@ class Cluster(TenancyObject):
     def __str__(self):
 
         return self.name
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itim.models.cluster_history import ClusterHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = ClusterHistory,
+        )
+
+
+        return history
 
 
 

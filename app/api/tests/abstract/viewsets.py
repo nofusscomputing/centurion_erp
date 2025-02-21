@@ -1,4 +1,4 @@
-from django.contrib.auth.models import ContentType, User
+from django.contrib.auth.models import ContentType, Permission, User
 
 from unittest.mock import patch, PropertyMock
 
@@ -7,7 +7,9 @@ from access.mixins.permissions import OrganizationPermissionMixin
 from api.react_ui_metadata import ReactUIMetadata
 
 from access.middleware.request import Tenancy
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from settings.models.app_settings import AppSettings
 

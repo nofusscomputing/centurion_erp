@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='manufacturer',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.AlterField(
             model_name='notes',
@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='notes',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.AlterField(
             model_name='notes',
@@ -54,32 +54,32 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='relatedtickets',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.AlterField(
             model_name='ticket',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.AlterField(
             model_name='ticketcategory',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.AlterField(
             model_name='ticketcomment',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.AlterField(
             model_name='ticketcommentcategory',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.AlterField(
             model_name='ticketlinkeditem',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Organization'),
         ),
         migrations.CreateModel(
             name='ManufacturerNotes',

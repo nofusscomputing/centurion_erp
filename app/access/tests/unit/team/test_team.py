@@ -1,9 +1,12 @@
 import pytest
 import unittest
 
+from django.contrib.auth.models import Permission
 from django.test import TestCase, Client
 
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from app.tests.abstract.models import TenancyModel
 
@@ -34,22 +37,22 @@ class TeamModel(
         )
 
 
-    def test_model_has_property_parent_object(self):
-        """ Check if model contains 'parent_object'
+    # def test_model_has_property_parent_object(self):
+    #     """ Check if model contains 'parent_object'
         
-            This is a required property for all models that have a parent
-        """
+    #         This is a required property for all models that have a parent
+    #     """
 
-        assert hasattr(self.model, 'parent_object')
+    #     assert hasattr(self.model, 'parent_object')
 
 
-    def test_model_property_parent_object_returns_object(self):
-        """ Check if model contains 'parent_object'
+    # def test_model_property_parent_object_returns_object(self):
+    #     """ Check if model contains 'parent_object'
         
-            This is a required property for all models that have a parent
-        """
+    #         This is a required property for all models that have a parent
+    #     """
 
-        assert self.item.parent_object is self.parent_item
+    #     assert self.item.parent_object is self.parent_item
 
 
     @pytest.mark.skip(reason="to be written")

@@ -1,7 +1,9 @@
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import AnonymousUser, Permission, User
 from django.contrib.contenttypes.models import ContentType
 
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 # Test Cases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional

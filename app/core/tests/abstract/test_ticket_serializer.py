@@ -1,15 +1,15 @@
 import pytest
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from access.middleware.request import Tenancy
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from rest_framework.exceptions import ValidationError
-
-from access.models import Organization
 
 from core.models.ticket.ticket import Ticket
 from core.models.ticket.ticket_category import TicketCategory

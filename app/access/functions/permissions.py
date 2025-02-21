@@ -24,17 +24,22 @@ def permission_queryset():
         'chordcounter',
         'comment',
         'groupresult',
+        'history',
         'modelnotes',
         'usersettings',
     ]
 
     exclude_permissions = [
+        'add_history',
         'add_organization',
         'add_taskresult',
+        'change_history',
         'change_organization',
         'change_taskresult',
+        'delete_history',
         'delete_organization',
         'delete_taskresult',
+        'view_history',
     ]
 
     return Permission.objects.filter(

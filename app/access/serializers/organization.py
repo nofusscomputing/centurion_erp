@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from app.serializers.user import UserBaseSerializer
 

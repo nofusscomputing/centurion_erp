@@ -4,12 +4,14 @@ import unittest
 import requests
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import AnonymousUser, Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from app.tests.abstract.model_permissions import ModelPermissionsView
 

@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
@@ -116,6 +116,19 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
     def __str__(self):
 
         return self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.software_category_history import SoftwareCategoryHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = SoftwareCategoryHistory,
+        )
+
+
+        return history
 
 
 
@@ -270,6 +283,20 @@ class Software(SoftwareCommonFields, SaveHistory):
         return self.name
 
 
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.software_history import SoftwareHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = SoftwareHistory,
+        )
+
+
+        return history
+
+
 
 @receiver(post_delete, sender=Software, dispatch_uid='software_delete_signal')
 def signal_deleted_model(sender, instance, using, **kwargs):
@@ -377,16 +404,29 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         }
 
 
-    @property
-    def parent_object(self):
-        """ Fetch the parent object """
+    # @property
+    # def parent_object(self):
+    #     """ Fetch the parent object """
         
-        return self.software
+    #     return self.software
 
 
     def __str__(self):
 
         return self.name
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from itam.models.software_version_history import SoftwareVersionHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = SoftwareVersionHistory,
+        )
+
+
+        return history
 
 
 

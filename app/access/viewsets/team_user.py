@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from access.models import Team
+from access.models.team import Team
 
 from access.serializers.team_user import (
     TeamUsers,

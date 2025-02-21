@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import AnonymousUser, Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -12,14 +12,16 @@ import pytest
 import unittest
 import requests
 
-from access.models import Organization, Team, TeamUsers, Permission
+from access.models.organization import Organization
+from access.models.team import Team
+from access.models.team_user import TeamUsers
 
 from app.tests.abstract.model_permissions import ModelPermissions
 
 from project_management.models.projects import Project
 from project_management.models.project_milestone import ProjectMilestone
 
-from core.models.ticket.ticket import Ticket, RelatedTickets
+from core.models.ticket.ticket import Ticket, RelatedTickets, TicketCategory
 from core.models.ticket.ticket_comment import TicketComment
 
 from core.tests.unit.ticket.ticket_permission.field_based_permissions import ITSMTicketFieldBasedPermissions, ProjectTicketFieldBasedPermissions
@@ -92,6 +94,16 @@ class SetUp:
         user_settings.default_organization = self.organization
         user_settings.save()
 
+        self.category = TicketCategory.objects.create(
+            organization = organization,
+            name = 'a category'
+        )
+
+        self.category_two = TicketCategory.objects.create(
+            organization = organization,
+            name = 'a category_two'
+        )
+
 
         self.item = self.model.objects.create(
             organization=organization,
@@ -105,6 +117,15 @@ class SetUp:
         self.second_item = self.model.objects.create(
             organization=organization,
             title = 'A second ' + self.ticket_type + ' ticket',
+            description = 'the ticket body of item two',
+            ticket_type = self.ticket_type_enum,
+            opened_by = self.add_user,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+        self.third_item = self.model.objects.create(
+            organization=organization,
+            title = 'A third ' + self.ticket_type + ' ticket',
             description = 'the ticket body of item two',
             ticket_type = self.ticket_type_enum,
             opened_by = self.add_user,
@@ -525,6 +546,181 @@ class ActionComments(SetUp):
         self.item.assigned_teams.remove(self.change_team.id)
 
         assert self.item.status == Ticket.TicketStatus.All.NEW
+
+
+
+    def test_ticket_action_comment_category_added(self):
+        """Action Comment test
+        Confirm an' action comment is created when a `category` is added
+        """
+
+        self.item.category = self.category
+
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed category from none to \$ticket_category-" + str(self.category.id) , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_category_remove(self):
+        """Action Comment test
+        Confirm an action comment is created when the `category` is removed
+        """
+
+        self.item.category = self.category
+
+        self.item.save()
+
+        self.item.category = None
+
+        self.item.save()
+
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed category from \$ticket_category-" + str(self.category.id) + " to none", str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_category_change(self):
+        """Action Comment test
+        Confirm an action comment is created when a `category` is changed
+        """
+
+        self.item.category = self.category
+
+        self.item.save()
+
+
+        self.item.category = self.category_two
+
+        self.item.save()
+
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed category from \$ticket_category-" + str(self.category.id) + r" to \$ticket_category-" + str(self.category_two.id) , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+
+    def test_ticket_action_comment_parent_ticket_added(self):
+        """Action Comment test
+        Confirm an' action comment is created when a `parent_ticket` is added
+        """
+
+        self.item.parent_ticket = self.second_item
+
+        self.item.save()
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"parent ticket changed from none to #" + str(self.second_item.id) , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_parent_ticket_remove(self):
+        """Action Comment test
+        Confirm an action comment is created when the `category` is removed
+        """
+
+        self.item.parent_ticket = self.second_item
+
+        self.item.save()
+
+        self.item.parent_ticket = None
+
+        self.item.save()
+
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"parent ticket changed from #" + str(self.second_item.id) + " to none", str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_parent_ticket_change(self):
+        """Action Comment test
+        Confirm an action comment is created when a `category` is changed
+        """
+
+        self.item.parent_ticket = self.second_item
+
+        self.item.save()
+
+
+        self.item.parent_ticket = self.third_item
+
+        self.item.save()
+
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"parent ticket changed from #" + str(self.second_item.id) + r" to #" + str(self.third_item.id) , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
 
 
     def test_ticket_action_comment_subscribed_users_added_user_subscribed(self):

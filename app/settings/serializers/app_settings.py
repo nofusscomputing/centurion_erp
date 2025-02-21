@@ -27,14 +27,14 @@ class AppSettingsBaseSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'display_name',
-            'name',
+            # 'name',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            'name',
+            # 'name',
             'url',
         ]
 

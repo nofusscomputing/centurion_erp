@@ -107,7 +107,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(help_text='Ticket ID Number', primary_key=True, serialize=False, unique=True, verbose_name='Number')),
                 ('how_related', models.IntegerField(choices=[(1, 'Related'), (2, 'Blocks'), (3, 'Blocked By')], help_text='How is the ticket related', verbose_name='How Related')),
-                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
+                ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists])),
             ],
             options={
                 'ordering': ['id'],

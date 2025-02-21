@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
-from access.models import Team
+from access.models.team import Team
 
 from api.serializers import common
 
@@ -61,24 +61,9 @@ class TeamModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        return {
-            '_self': item.get_url( request = self._context['view'].request ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
-            'notes': reverse(
-                "v2:_api_v2_organization_team_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'organization_id': item.organization.pk,
-                    'model_id': item.pk
-                }
-            ),
+        get_url = super().get_url( item = item )
+
+        get_url.update({
             'users': reverse(
                 'v2:_api_v2_organization_team_user-list',
                 request=self.context['view'].request,
@@ -87,7 +72,10 @@ class TeamModelSerializer(
                     'team_id': item.pk
                 }
             )
-        }
+        })
+
+        return get_url
+
 
     team_name = centurion_field.CharField( autolink = True )
 

@@ -2,7 +2,7 @@ from django.db.models import Q
 
 from app import settings
 
-from access.models import TeamUsers
+from access.models.team_user import TeamUsers
 
 from core.forms.common import CommonModelForm
 

@@ -23,4 +23,3 @@ Models within Centurion ERP:
 
 - Organization Permission Checking
 
-- [Tenancy Object](./tenancy_object.md)

@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from app.tests.abstract.mock_view import MockView
 

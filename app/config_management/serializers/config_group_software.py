@@ -60,14 +60,22 @@ class ConfigGroupSoftwareModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        return {
-            '_self': item.get_url( request = self._context['view'].request ),
+        get_url = super().get_url( item = item )
+
+        del get_url['history']
+        del get_url['knowledge_base']
+        del get_url['notes']
+
+        get_url.update({
             'organization': reverse(
                 'v2:_api_v2_organization-list',
                 request=self.context['view'].request,
             ),
             'softwareversion': 'ToDo',
-        }
+        })
+
+        return get_url
+
 
 
     class Meta:

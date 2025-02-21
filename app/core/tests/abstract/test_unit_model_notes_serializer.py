@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.exceptions import ValidationError
 
-from access.models import Organization
+from access.models.organization import Organization
 
 from app.tests.abstract.mock_view import MockView
 

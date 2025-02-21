@@ -7,7 +7,7 @@ from django.forms import ValidationError
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models import TenancyObject
+from access.models.tenancy import TenancyObject
 
 from assistance.models.knowledge_base import KnowledgeBase
 
