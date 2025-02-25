@@ -91,6 +91,16 @@ class ViewSet(
         return self.serializer_class
 
 
+    def get_back_url(self) -> str:
+
+        if self.back_url is None:
+
+            self.back_url = self.get_return_url()
+
+
+        return self.back_url
+
+
     def get_return_url(self) -> str:
 
         if getattr(self, '_get_return_url', None):
@@ -106,3 +116,4 @@ class ViewSet(
         )
 
         return self._get_return_url
+
