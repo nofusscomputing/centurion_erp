@@ -73,6 +73,7 @@ class AuthTokenModelSerializer(
 
         fields =  [
             'id',
+            'display_name',
             'note',
             'token',
             'user',
