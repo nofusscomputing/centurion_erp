@@ -3,20 +3,34 @@ import random
 import string
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Field
 from django.forms import ValidationError
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from rest_framework.reverse import reverse
+
+from access.fields import (
+    AutoCreatedField,
+    AutoLastModifiedField
+)
 
 
 
 class AuthToken(models.Model):
 
 
-    def validate_note_no_token(self, note, token):
+    class Meta:
+
+        ordering = [
+            'expires'
+        ]
+
+        verbose_name = 'Auth Token'
+
+        verbose_name_plural = 'Auth Tokens'
+
+
+
+    def validate_note_no_token(self, note, token, raise_exception = True) -> bool:
         """ Ensure plaintext token cant be saved to notes field.
 
         called from app.settings.views.user_settings.TokenAdd.form_valid()
@@ -41,9 +55,11 @@ class AuthToken(models.Model):
 
             validation = False
 
-        if not validation:
+        if not validation and raise_exception:
 
             raise ValidationError('Token can not be placed in the notes field.')
+
+        return validation
 
 
 
@@ -95,6 +111,7 @@ class AuthToken(models.Model):
     modified = AutoLastModifiedField()
 
 
+    @property
     def generate(self) -> str:
 
         return str(hashlib.sha256(str(self.randomword()).encode('utf-8')).hexdigest())
@@ -115,3 +132,32 @@ class AuthToken(models.Model):
     def __str__(self):
 
         return self.token
+
+
+    table_fields: list = [
+        'note',
+        'created',
+        'expires',
+    ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse(f"v2:_api_v2_user_settings_token-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_user_settings_token-detail", kwargs = self.get_url_kwargs() )
+
+
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'model_id': self.user.id,
+            'pk': self.id
+        }

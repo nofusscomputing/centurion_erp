@@ -109,14 +109,6 @@ nav:
 
           - projects/centurion_erp/development/api/tests/models.md
 
-          - projects/centurion_erp/development/api/tests/model_history.md
-
-          - projects/centurion_erp/development/api/tests/model_history_child_item.md
-
-          - projects/centurion_erp/development/api/tests/model_history_parent_item.md
-
-          - projects/centurion_erp/development/api/tests/model_history_permissions.md
-
           - projects/centurion_erp/development/api/tests/model_permissions.md
 
           - projects/centurion_erp/development/api/tests/model_permissions_organization_manager.md

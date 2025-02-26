@@ -55,7 +55,7 @@ class APIAuthToken(TestCase):
             expires=expires
         )
 
-        self.api_token_valid = token.generate()
+        self.api_token_valid = token.generate
         self.hashed_token = token.token_hash(self.api_token_valid)
         token.token = self.hashed_token
 
@@ -69,7 +69,7 @@ class APIAuthToken(TestCase):
         expires = expires.strftime('%Y-%m-%d %H:%M:%S%z')
 
 
-        self.api_token_expired = token.generate()
+        self.api_token_expired = token.generate
 
         self.hashed_token_expired = token.token_hash(self.api_token_expired)
 

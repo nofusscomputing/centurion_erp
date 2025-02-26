@@ -110,6 +110,7 @@ class UserSettings(UserSettingsCommonFields):
                     ],
                 },
                 {
+                    "name": "Auth Tokens",
                     "layout": "table",
                     "field": "tokens",
                 }
