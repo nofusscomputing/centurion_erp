@@ -138,6 +138,7 @@ class AuthToken(models.Model):
         'note',
         'created',
         'expires',
+        '-action_delete-',
     ]
 
 
