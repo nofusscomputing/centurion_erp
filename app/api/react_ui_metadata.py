@@ -95,11 +95,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         elif view.kwargs:
 
-            url_self = reverse('v2:' + view.basename + '-list', request = view.request, kwargs = view.kwargs )
+            url_self = reverse('v2:' + view.model().get_app_namespace() + view.basename + '-list', request = view.request, kwargs = view.kwargs )
 
         else:
 
-            url_self = reverse('v2:' + view.basename + '-list', request = view.request )
+            url_self = reverse('v2:' + view.model().get_app_namespace() + view.basename + '-list', request = view.request )
 
         if url_self:
 

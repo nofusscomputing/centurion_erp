@@ -165,6 +165,29 @@ class TenancyObject(SaveHistory):
     def get_organization(self) -> Organization:
         return self.organization
 
+    app_namespace: str = None
+    """Application namespace.
+
+    Specify the applications namespace i.e. `devops`, without including
+    the API version, i.e. `v2:devops`.
+    """
+
+    def get_app_namespace(self) -> str:
+        """Fetch the Application namespace if specified.
+
+        Returns:
+            str: Application namespace suffixed with colin `:`
+            None: No application namespace found.
+        """
+
+        app_namespace = None
+
+        if self.app_namespace:
+
+            app_namespace = self.app_namespace + ':'
+
+        return str(app_namespace)
+
 
     def get_url( self, request = None ) -> str:
         """Fetch the models URL
@@ -183,9 +206,9 @@ class TenancyObject(SaveHistory):
 
         if request:
 
-            return reverse(f"v2:_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
+            return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
 
-        return reverse(f"v2:_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
+        return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
 
 
     def get_url_kwargs(self) -> dict:
