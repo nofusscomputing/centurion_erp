@@ -30,14 +30,6 @@ Models are tested using the following test cases:
 
 - [View Permission (organization Manager)](./model_permission_view_organization_manager.md)
 
-- [History Entry](./model_history.md)
-
-- [History Entry (Child Item)](./model_history_child_item.md)
-
-- [History Entry (Parent Item)](./model_history_parent_item.md)
-
-- [History Entry Permissions](./model_history_permissions.md)
-
 - [Model Views](./model_views.md)
 
 - [Tenancy Objects](./model_tenancy_object.md)
