@@ -452,7 +452,14 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             "display_name": "DevOPs",
             "name": "devops",
             "icon": "devops",
-            "pages": {}
+            "pages": {
+                'view_featureflag': {
+                    "display_name": "Feature Flags",
+                    "name": "feature_flag",
+                    "icon": 'feature_flag',
+                    "link": "/devops/feature_flag"
+                }
+            }
         },
         'config_management': {
             "display_name": "Config Management",
