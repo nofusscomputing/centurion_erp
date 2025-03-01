@@ -180,7 +180,7 @@ class TenancyObject(SaveHistory):
             None: No application namespace found.
         """
 
-        app_namespace = None
+        app_namespace = ''
 
         if self.app_namespace:
 

@@ -83,6 +83,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         url_self = None
 
+        app_namespace = ''
+
+        if getattr(view, 'model', None):
+
+            app_namespace = view.model().get_app_namespace()
+
 
         if view.kwargs.get('pk', None) is not None:
 
@@ -95,11 +101,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         elif view.kwargs:
 
-            url_self = reverse('v2:' + view.model().get_app_namespace() + view.basename + '-list', request = view.request, kwargs = view.kwargs )
+            url_self = reverse('v2:' + app_namespace + view.basename + '-list', request = view.request, kwargs = view.kwargs )
 
         else:
 
-            url_self = reverse('v2:' + view.model().get_app_namespace() + view.basename + '-list', request = view.request )
+            url_self = reverse('v2:' + app_namespace + view.basename + '-list', request = view.request )
 
         if url_self:
 
