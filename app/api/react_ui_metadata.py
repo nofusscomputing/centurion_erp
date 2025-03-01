@@ -448,6 +448,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 },
             }
         },
+        'devops': {
+            "display_name": "DevOPs",
+            "name": "devops",
+            "icon": "devops",
+            "pages": {}
+        },
         'config_management': {
             "display_name": "Config Management",
             "name": "config_management",
