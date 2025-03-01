@@ -1,3 +1,29 @@
+## 1.12.0 (2025-03-01)
+
+### feat
+
+- **api**: Add delete column to AuthToken Table
+- **docker**: Upgrade system packages on build
+- **api**: AuthToken requires viewset get_back_url
+- **api**: Add auth token api endpoint
+- **settings**: Add section title to auth tokens
+- **settings**: Add tokens url to user settings `_urls`
+- **api**: Update Auth Token model for use with serializer
+- **api**: Add user Auth Token viewset
+- **api**: Add user Auth Token serializer
+- **settings**: Add `page_layout` attribute to User Settings
+
+### Fixes
+
+- **api**: correct usage of `AuthToken.generate` to a property
+
+### Tests
+
+- **api**: AuthToken ViewSet checks (unit)
+- **api**: AuthToken API Field checks
+- **api**: AuthToken Serializer checks
+- **api**: AuthToken ViewSet checks
+
 ## 1.11.0 (2025-02-21)
 
 ### feat
