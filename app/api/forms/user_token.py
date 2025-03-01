@@ -32,7 +32,7 @@ class AuthTokenForm(CommonModelForm):
 
         if self.prefix + '-gen_token' not in self.data:
 
-            generated_token = self.instance.generate()
+            generated_token = self.instance.generate
 
         else:
 

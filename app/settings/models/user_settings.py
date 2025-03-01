@@ -96,6 +96,28 @@ class UserSettings(UserSettingsCommonFields):
         verbose_name = 'Your Timezone',
     )
 
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        'browser_mode',
+                        'default_organization',
+                        'timezone',
+                    ],
+                },
+                {
+                    "name": "Auth Tokens",
+                    "layout": "table",
+                    "field": "tokens",
+                }
+            ]
+        },
+    ]
+
 
     def get_organization(self):
 

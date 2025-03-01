@@ -128,7 +128,7 @@ Items to test include, and are not limited to:
 
 - can access global object (still to require model CRUD permission)
 
-- history - [History Entries](./api/tests/model_history.md), [History Permissions](./api/tests/model_history_permissions.md)
+- history
 
     - saves history with parent pk and parent class
 

@@ -5,6 +5,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
 from api.viewsets import (
+    auth_token,
     index as v2
 )
 
@@ -224,6 +225,7 @@ router.register('settings/software_category/(?P<model_id>[0-9]+)/notes', softwar
 router.register('settings/ticket_category', ticket_category.ViewSet, basename='_api_v2_ticket_category')
 router.register('settings/ticket_comment_category', ticket_comment_category.ViewSet, basename='_api_v2_ticket_comment_category')
 router.register('settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
+router.register('settings/user_settings/(?P<model_id>[0-9]+)/token', auth_token.ViewSet, basename='_api_v2_user_settings_token')
 
 
 urlpatterns = [

@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions
 from rest_framework.permissions import DjangoObjectPermissions
 
-from access.models.tenancy import TenancyObject
+from access.models.tenancy import Organization, TenancyObject
 
 from core import exceptions as centurion_exceptions
 
@@ -116,15 +116,27 @@ class OrganizationPermissionMixin(
         try:
 
             if (
-                view.model.__name__ == 'UserSettings'
-                and request._user.id == int(view.kwargs.get('pk', 0))
+                (
+                    view.model.__name__ == 'UserSettings'
+                    and request._user.id == int(view.kwargs.get('pk', 0))
+                )
+                or (
+                    view.model.__name__ == 'AuthToken'
+                    and request._user.id == int(view.kwargs.get('model_id', 0))
+                )
             ):
 
                 return True
 
             elif (
-                view.model.__name__ == 'UserSettings'
-                and request._user.id != int(view.kwargs.get('pk', 0))
+                (
+                    view.model.__name__ == 'UserSettings'
+                    and request._user.id != int(view.kwargs.get('pk', 0))
+                )
+                or (
+                    view.model.__name__ == 'AuthToken'
+                    and request._user.id != int(view.kwargs.get('model_id', 0))
+                )
             ):
 
 
@@ -271,8 +283,14 @@ class OrganizationPermissionMixin(
 
 
             if (
-                view.model.__name__ == 'UserSettings'
-                and request._user.id == int(view.kwargs.get('pk', 0))
+                (
+                    view.model.__name__ == 'UserSettings'
+                    and request._user.id == int(view.kwargs.get('pk', 0))
+                )
+                or (
+                    view.model.__name__ == 'AuthToken'
+                    and request._user.id == int(view.kwargs.get('model_id', 0))
+                )
             ):
 
                 return True
