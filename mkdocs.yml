@@ -190,6 +190,9 @@ nav:
       - DevOps:
 
         - projects/centurion_erp/user/devops/index.md
+
+        - projects/centurion_erp/user/devops/feature_flagging.md
+
       - ITAM:
 
         - projects/centurion_erp/user/itam/index.md

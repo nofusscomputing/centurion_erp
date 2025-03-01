@@ -77,6 +77,8 @@ class FeatureFlag(
 
     app_namespace = 'devops'
 
+    documentation = 'devops/feature_flags'
+
     page_layout: dict = [
         {
             "name": "Details",
