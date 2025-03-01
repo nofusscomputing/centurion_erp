@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -236,3 +236,7 @@ urlpatterns = [
 ]
 
 urlpatterns += router.urls
+
+urlpatterns += [
+    path("devops/", include("devops.urls"))
+]
