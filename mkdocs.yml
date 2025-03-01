@@ -65,6 +65,8 @@ nav:
 
       - projects/centurion_erp/administration/core/ticketing.md
 
+      - projects/centurion_erp/administration/devops/feature_flags.md
+
       - projects/centurion_erp/administration/installation.md
 
       - projects/centurion_erp/administration/monitoring.md
@@ -191,7 +193,7 @@ nav:
 
         - projects/centurion_erp/user/devops/index.md
 
-        - projects/centurion_erp/user/devops/feature_flagging.md
+        - projects/centurion_erp/user/devops/feature_flags.md
 
       - ITAM:
 
