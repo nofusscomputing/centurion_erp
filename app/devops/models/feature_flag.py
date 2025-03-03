@@ -101,16 +101,16 @@ class FeatureFlag(
                 }
             ]
         },
-        # {
-        #     "name": "Knowledge Base",
-        #     "slug": "kb_articles",
-        #     "sections": [
-        #         {
-        #             "layout": "table",
-        #             "field": "knowledge_base",
-        #         }
-        #     ]
-        # },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
         {
             "name": "Notes",
             "slug": "notes",

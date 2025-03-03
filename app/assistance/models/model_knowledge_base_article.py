@@ -22,6 +22,7 @@ def all_models() -> list(tuple()):
         'assistance',
         'config_management',
         'core',
+        'devops',
         'itam',
         'itim',
         'project_management',
@@ -31,14 +32,20 @@ def all_models() -> list(tuple()):
     excluded_models: list = [
         'appsettings',
         'authtoken',
+        'configgrouphosts',
+        'configgroupsoftware',
+        'deviceoperatingsystem',
+        'devicesoftware',
         'history',
         'knowledgebase',
         'modelknowledgebasearticle',
         'notes',
         'relatedtickets',
+        'teamusers',
         'ticket',
         'ticketcomment',
         'ticketlinkeditem',
+        'token',
         'usersettings',
     ]
 
@@ -47,6 +54,7 @@ def all_models() -> list(tuple()):
         if(
             str(app_model._meta.app_label) in model_apps
             and str(app_model._meta.model_name) not in excluded_models
+            and not str(app_model._meta.model_name).lower().endswith('notes')
         ):
 
             models.append(
