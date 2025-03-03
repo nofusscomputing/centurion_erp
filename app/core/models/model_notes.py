@@ -8,6 +8,8 @@ from access.models.tenancy import TenancyObject
 
 from config_management.models.groups import ConfigGroups
 
+from core.lib.feature_not_used import FeatureNotUsed
+
 from itam.models.device import Device
 from itam.models.software import Software
 from itam.models.operating_system import OperatingSystem
@@ -109,6 +111,11 @@ class ModelNotes(TenancyObject):
     def __str__(self):
 
         return 'Note ' + str(self.id)
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     @property
