@@ -81,18 +81,18 @@ class CommonModelSerializer(CommonBaseSerializer):
         }
 
 
-        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+        obj = getattr(item, 'get_url_kwargs_notes', None)
 
         if callable(obj):
 
             obj = obj()
 
         if(
-            not str(self.model._meta.model_name).lower().endswith('notes')
+            not str(item._meta.model_name).lower().endswith('notes')
             and obj is not FeatureNotUsed
         ):
 
-            note_basename = '_api_v2_' + str(self.Meta.model._meta.verbose_name).lower().replace(' ', '_') + '_note'
+            note_basename = '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
 
             if getattr(self.Meta, 'note_basename', None):
 
