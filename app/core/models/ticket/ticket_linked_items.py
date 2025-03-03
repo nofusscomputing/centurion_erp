@@ -147,6 +147,11 @@ class TicketLinkedItem(TenancyObject):
 
             item_type = 'team'
 
+        else:
+
+            item_type = str(self.get_item_type_display()).lower().replace(' ', '_')
+
+
         if item_type:
 
             return f'${item_type}-{int(self.item)}'
