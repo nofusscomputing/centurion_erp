@@ -48,8 +48,10 @@ from core.viewsets import (
     manufacturer as manufacturer_v2,
     manufacturer_notes,
     ticket_category,
+    ticket_category_notes,
     ticket_comment,
     ticket_comment_category,
+    ticket_comment_category_notes,
     ticket_linked_item,
     related_ticket,
 
@@ -223,7 +225,9 @@ router.register('settings/project_type/(?P<model_id>[0-9]+)/notes', project_type
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 router.register('settings/software_category/(?P<model_id>[0-9]+)/notes', software_category_notes.ViewSet, basename='_api_v2_software_category_note')
 router.register('settings/ticket_category', ticket_category.ViewSet, basename='_api_v2_ticket_category')
+router.register('settings/ticket_category/(?P<model_id>[0-9]+)/notes', ticket_category_notes.ViewSet, basename='_api_v2_ticket_category_note')
 router.register('settings/ticket_comment_category', ticket_comment_category.ViewSet, basename='_api_v2_ticket_comment_category')
+router.register('settings/ticket_comment_category/(?P<model_id>[0-9]+)/notes', ticket_comment_category_notes.ViewSet, basename='_api_v2_ticket_comment_category_note')
 router.register('settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
 router.register('settings/user_settings/(?P<model_id>[0-9]+)/token', auth_token.ViewSet, basename='_api_v2_user_settings_token')
 
