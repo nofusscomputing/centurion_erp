@@ -49,6 +49,6 @@ class TeamNotes(
 
         if request:
 
-            return reverse("v2:_api_v2_organization_team_note-detail", request=request, kwargs = kwargs )
+            return reverse("v2:_api_v2_team_note-detail", request=request, kwargs = kwargs )
 
-        return reverse("v2:_api_v2_organization_team_note-detail", kwargs = kwargs )
+        return reverse("v2:_api_v2_team_note-detail", kwargs = kwargs )
