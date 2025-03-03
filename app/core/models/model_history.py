@@ -7,6 +7,8 @@ from access.fields import AutoCreatedField
 from access.models.organization import Organization
 from access.models.tenancy import TenancyObject
 
+from core.lib.feature_not_used import FeatureNotUsed
+
 
 
 class ModelHistory(
@@ -179,6 +181,11 @@ class ModelHistory(
             'model_id': parent_model.model.pk,
             'pk': parent_model.pk
         }
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     def get_url( self, request = None ) -> str:

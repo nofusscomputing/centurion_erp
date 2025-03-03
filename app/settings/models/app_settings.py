@@ -5,7 +5,9 @@ from rest_framework.reverse import reverse
 from access.fields import *
 from access.models.organization import Organization
 
+from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
+
 
 
 class AppSettingsCommonFields(models.Model):
@@ -151,6 +153,10 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
             return reverse(f"v2:_api_v2_app_settings-detail", request=request, kwargs = { 'pk': self.pk } )
 
         return reverse(f"v2:_api_v2_app_settings-detail", kwargs = { 'pk': self.pk } )
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
 

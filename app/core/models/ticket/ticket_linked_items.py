@@ -9,6 +9,7 @@ from .ticket_enum_values import TicketValues
 
 from access.models.tenancy import TenancyObject
 
+from core.lib.feature_not_used import FeatureNotUsed
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket import Ticket, KnowledgeBase
 
@@ -105,6 +106,10 @@ class TicketLinkedItem(TenancyObject):
                 'pk': self.id
             }
         )
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     def __str__(self) -> str:

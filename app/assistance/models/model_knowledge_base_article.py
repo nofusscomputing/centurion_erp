@@ -11,6 +11,9 @@ from access.models.tenancy import TenancyObject
 
 from assistance.models.knowledge_base import KnowledgeBase
 
+from core.lib.feature_not_used import FeatureNotUsed
+
+
 def all_models() -> list(tuple()):
 
     models: list(tuple()) = []
@@ -170,3 +173,7 @@ class ModelKnowledgeBaseArticle(TenancyObject):
         """ Function not required nor-used"""
 
         return None
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
