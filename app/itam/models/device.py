@@ -17,6 +17,7 @@ from access.models.tenancy import TenancyObject
 from app.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
+from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
@@ -678,6 +679,11 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         }
 
 
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
@@ -792,6 +798,11 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
             'device_id': self.device.id,
             'pk': self.pk
         }
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     @property
