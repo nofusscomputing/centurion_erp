@@ -59,8 +59,6 @@ class TeamUserModelSerializer(
 
         del get_url['knowledge_base']
 
-        del get_url['notes']
-
         return get_url
 
 

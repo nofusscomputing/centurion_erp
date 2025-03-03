@@ -403,6 +403,18 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
             'pk': self.id
         }
 
+    def get_url_kwargs_notes(self) -> dict:
+        """Fetch the URL kwargs for model notes
+
+        Returns:
+            dict: notes kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'software_id': self.software.id,
+            'model_id': self.id
+        }
+
 
     # @property
     # def parent_object(self):

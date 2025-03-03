@@ -223,6 +223,18 @@ class TenancyObject(SaveHistory):
         }
 
 
+    def get_url_kwargs_notes(self) -> dict:
+        """Fetch the URL kwargs for model notes
+
+        Returns:
+            dict: notes kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'model_id': self.id
+        }
+ 
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         self.clean()
