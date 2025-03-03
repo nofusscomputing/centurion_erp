@@ -111,11 +111,11 @@ class FeatureFlag(
         #         }
         #     ]
         # },
-        # {
-        #     "name": "Notes",
-        #     "slug": "notes",
-        #     "sections": []
-        # },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
     ]
 
 
