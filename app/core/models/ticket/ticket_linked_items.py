@@ -40,6 +40,7 @@ class TicketLinkedItem(TenancyObject):
         KB               = 7, 'Knowledge Base'
         ORGANIZATION     = 8, 'Organization'
         TEAM             = 9, 'Team'
+        FEATURE_FLAG     = 10, 'Feature Flag'
 
     is_global = None
 
