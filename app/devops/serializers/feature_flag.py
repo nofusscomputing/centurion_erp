@@ -54,6 +54,8 @@ class ModelSerializer(
 
         model = FeatureFlag
 
+        note_basename = 'devops:_api_v2_feature_flag_note'
+
         fields =  [
             'id',
             'organization',
