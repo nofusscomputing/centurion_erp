@@ -66,8 +66,6 @@ class DeviceSoftwareModelSerializer(
 
         del get_url['knowledge_base']
 
-        del get_url['notes']
-
         if 'view' in self._context:
 
             if 'software_id' in self._context['view'].kwargs:

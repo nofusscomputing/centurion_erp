@@ -4,8 +4,10 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import Organization
 
-from core import fields as centurion_field
+from assistance.models.model_knowledge_base_article import all_models
 
+from core import fields as centurion_field
+from core.lib.feature_not_used import FeatureNotUsed
 
 
 
@@ -56,7 +58,7 @@ class CommonModelSerializer(CommonBaseSerializer):
 
     def get_url(self, item) -> dict:
 
-        return {
+        get_url = {
             '_self': item.get_url( request = self._context['view'].request ),
 
             'history': reverse(
@@ -76,11 +78,30 @@ class CommonModelSerializer(CommonBaseSerializer):
                     'model_pk': item.pk
                 }
             ),
-            'notes': reverse(
-                "v2:_api_v2_operating_system_note-list",
-                request = self._context['view'].request,
-                kwargs = {
-                    'model_id': item.pk
-                }
-            ),
         }
+
+
+        obj = getattr(item, 'get_url_kwargs_notes', None)
+
+        if callable(obj):
+
+            obj = obj()
+
+        if(
+            not str(item._meta.model_name).lower().endswith('notes')
+            and obj is not FeatureNotUsed
+        ):
+
+            note_basename = '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
+
+            if getattr(self.Meta, 'note_basename', None):
+
+                note_basename = self.Meta.note_basename
+
+            get_url['notes'] = reverse(
+                "v2:" + note_basename + "-list",
+                request = self._context['view'].request,
+                kwargs = item.get_url_kwargs_notes()
+            )
+
+        return get_url

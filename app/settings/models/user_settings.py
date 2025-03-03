@@ -11,6 +11,8 @@ from django.dispatch import receiver
 from access.fields import *
 from access.models.organization import Organization
 
+from core.lib.feature_not_used import FeatureNotUsed
+
 sorted_timezones = sorted(zoneinfo.available_timezones())
 
 TIMEZONES = tuple(zip(
@@ -135,6 +137,11 @@ class UserSettings(UserSettingsCommonFields):
             return reverse(f"v2:_api_v2_user_settings-detail", request=request, kwargs = { 'pk': self.pk } )
 
         return reverse(f"v2:_api_v2_user_settings-detail", kwargs = { 'pk': self.pk } )
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
 
