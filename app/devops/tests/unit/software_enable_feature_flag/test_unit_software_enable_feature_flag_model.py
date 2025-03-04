@@ -17,6 +17,7 @@ class Model(
 
     model = SoftwareEnableFeatureFlag
 
+    should_model_history_be_saved: bool = False
 
     @classmethod
     def setUpTestData(self):

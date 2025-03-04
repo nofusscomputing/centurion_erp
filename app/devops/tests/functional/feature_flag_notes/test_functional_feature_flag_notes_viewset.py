@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
+from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from devops.viewsets.feature_flag_notes import ViewSet
 
 from core.tests.abstract.test_functional_notes_viewset import (
@@ -28,6 +29,17 @@ class ViewSetBase(
 
         super().setUpTestData()
 
+        software = Software.objects.create(
+            organization = self.organization,
+            name = 'soft',
+        )
+
+        SoftwareEnableFeatureFlag.objects.create(
+            organization = self.organization,
+            software = software,
+            enabled = True
+        )
+
         self.item = self.viewset.model.objects.create(
             organization = self.organization,
             content = 'a random comment',
@@ -38,16 +50,24 @@ class ViewSetBase(
             model = self.viewset.model.model.field.related_model.objects.create(
                 organization = self.organization,
                 name = 'one',
-                software = Software.objects.create(
-                    organization = self.organization,
-                    name = 'soft',
-                ),
+                software = software,
                 description = 'desc',
                 model_notes = 'text',
                 enabled = True
             ),
             created_by = self.view_user,
             modified_by = self.view_user,
+        )
+
+        software = Software.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+        SoftwareEnableFeatureFlag.objects.create(
+            organization = self.organization,
+            software = software,
+            enabled = True
         )
 
         self.other_org_item = self.viewset.model.objects.create(
@@ -60,10 +80,7 @@ class ViewSetBase(
             model = self.viewset.model.model.field.related_model.objects.create(
                 organization = self.organization,
                 name = 'two',
-                software = Software.objects.create(
-                    organization = self.organization,
-                    name = 'soft two',
-                ),
+                software = software,
                 description = 'desc',
                 model_notes = 'text',
                 enabled = True
@@ -72,6 +89,12 @@ class ViewSetBase(
             modified_by = self.view_user,
         )
 
+
+        SoftwareEnableFeatureFlag.objects.create(
+            organization = self.global_organization,
+            software = software,
+            enabled = True
+        )
 
         self.global_org_item = self.viewset.model.objects.create(
             organization = self.global_organization,
@@ -83,6 +106,10 @@ class ViewSetBase(
             model = self.viewset.model.model.field.related_model.objects.create(
                 organization = self.global_organization,
                 name = 'note model global_organization',
+                software = software,
+                description = 'desc',
+                model_notes = 'text',
+                enabled = True
             ),
             created_by = self.view_user,
             modified_by = self.view_user,

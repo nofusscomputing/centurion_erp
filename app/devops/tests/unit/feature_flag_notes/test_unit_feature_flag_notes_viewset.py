@@ -7,7 +7,11 @@ from access.models.organization import Organization
 
 from api.tests.abstract.viewsets import ViewSetModel
 
+from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from devops.viewsets.feature_flag_notes import ViewSet
+
+from itam.models.software import Software
+
 
 
 class ViewsetCommon(
@@ -35,7 +39,7 @@ class ViewsetCommon(
 
 
 
-class ManufacturerNotesViewsetList(
+class NotesViewsetList(
     ViewsetCommon,
     TestCase,
 ):
@@ -53,9 +57,21 @@ class ManufacturerNotesViewsetList(
 
         super().setUpTestData()
 
+        software = Software.objects.create(
+            organization = self.organization,
+            name = 'soft',
+        )
+
+        SoftwareEnableFeatureFlag.objects.create(
+            organization = self.organization,
+            software = software,
+            enabled = True
+        )
+
         self.note_model = self.viewset.model.model.field.related_model.objects.create(
             organization = self.organization,
             name = 'note model',
+            software = software,
         )
 
         self.kwargs = {
