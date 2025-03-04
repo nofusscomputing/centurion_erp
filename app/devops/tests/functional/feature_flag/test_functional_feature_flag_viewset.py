@@ -14,6 +14,7 @@ from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from devops.models.feature_flag import FeatureFlag
+from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
 from itam.models.software import Software
 
@@ -59,11 +60,6 @@ class ViewSetBase:
 
         self.global_organization = Organization.objects.create(
             name = 'test_global_organization'
-        )
-
-        self.global_org_item = self.model.objects.create(
-            organization = self.global_organization,
-            name = 'global_item'
         )
 
         app_settings = AppSettings.objects.get(
@@ -155,14 +151,27 @@ class ViewSetBase:
             user = self.view_user
         )
 
+        software = Software.objects.create(
+            organization = self.organization,
+            name = 'soft',
+        )
+
+        SoftwareEnableFeatureFlag.objects.create(
+            organization = self.organization,
+            software = software,
+            enabled = True
+        )
+
+        self.global_org_item = self.model.objects.create(
+            organization = self.global_organization,
+            name = 'global_item',
+            software = software,
+        )
 
         self.item = self.model.objects.create(
             organization = self.organization,
             name = 'one',
-            software = Software.objects.create(
-                organization = self.organization,
-                name = 'soft',
-            ),
+            software = software,
             description = 'desc',
             model_notes = 'text',
             enabled = True
@@ -170,7 +179,8 @@ class ViewSetBase:
 
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
-            name = 'two'
+            name = 'two',
+            software = software,
         )
 
 
@@ -179,6 +189,7 @@ class ViewSetBase:
         self.add_data = {
             'name': 'team_post',
             'organization': self.organization.id,
+            'software': software.id,
         }
 
 
