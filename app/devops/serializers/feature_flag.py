@@ -50,18 +50,18 @@ class ModelSerializer(
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    organization = serializers.PrimaryKeyRelatedField(
-        queryset =  Organization.objects.filter(id__in = list(Organization.objects.filter(
-                software__feature_flagging__enabled = True
-            ).distinct().values_list('software__feature_flagging__organization', flat = True)))
-    )
+    # ffs, prevents test collection
+    # organization = serializers.PrimaryKeyRelatedField(
+    #     queryset =  Organization.objects.filter(id__in = list(Organization.objects.filter(
+    #             software__feature_flagging__enabled = True
+    #         ).distinct().values_list('software__feature_flagging__organization', flat = True)))
+    # )
 
-    software = serializers.PrimaryKeyRelatedField(
-        queryset =  Software.objects.filter(id__in = list(Software.objects.filter(
-                feature_flagging__enabled = True
-            ).distinct().values_list('feature_flagging__software', flat = True)))
-
-    )
+    # software = serializers.PrimaryKeyRelatedField(
+    #     queryset =  Software.objects.filter(id__in = list(Software.objects.filter(
+    #             feature_flagging__enabled = True
+    #         ).distinct().values_list('feature_flagging__software', flat = True)))
+    # )
 
 
     class Meta:
