@@ -6,7 +6,7 @@ from api.serializers import common
 
 from devops.models.feature_flag import FeatureFlag
 
-from itam.serializers.software import SoftwareBaseSerializer
+from itam.serializers.software import Software, SoftwareBaseSerializer
 
 
 
@@ -52,6 +52,13 @@ class ModelSerializer(
         queryset =  Organization.objects.filter(id__in = list(Organization.objects.filter(
                 software__feature_flagging__enabled = True
             ).distinct().values_list('software__feature_flagging__organization', flat = True)))
+    )
+
+    software = serializers.PrimaryKeyRelatedField(
+        queryset =  Software.objects.filter(id__in = list(Software.objects.filter(
+                feature_flagging__enabled = True
+            ).distinct().values_list('feature_flagging__software', flat = True)))
+
     )
 
 
