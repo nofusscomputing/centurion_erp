@@ -57,6 +57,10 @@ from core.viewsets import (
 
 )
 
+from devops.viewsets import (
+    software_enable_feature_flag,
+)
+
 from itam.viewsets import (
     index as itam_index_v2,
     device as device_v2,
@@ -180,6 +184,7 @@ router.register('itam/software/(?P<software_id>[0-9]+)/installs', device_softwar
 router.register('itam/software/(?P<model_id>[0-9]+)/notes', software_notes.ViewSet, basename='_api_v2_software_note')
 router.register('itam/software/(?P<software_id>[0-9]+)/version', software_version_v2.ViewSet, basename='_api_v2_software_version')
 router.register('itam/software/(?P<software_id>[0-9]+)/version/(?P<model_id>[0-9]+)/notes', software_version_notes.ViewSet, basename='_api_v2_software_version_note')
+router.register('itam/software/(?P<software_id>[0-9]+)/feature_flag', software_enable_feature_flag.ViewSet, basename='_api_v2_feature_flag_software')
 
 
 router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
