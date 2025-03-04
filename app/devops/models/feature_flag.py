@@ -33,10 +33,11 @@ class FeatureFlag(
 
     software = models.ForeignKey(
         Software,
+        blank = False,
         help_text = 'Software this feature flag is for',
-        on_delete = models.SET_NULL,
         null = True,
-        verbose_name = 'Software'
+        on_delete = models.CASCADE,
+        verbose_name = 'Software',
     )
 
     name = models.CharField(
