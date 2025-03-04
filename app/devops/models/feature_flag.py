@@ -35,7 +35,6 @@ class FeatureFlag(
         Software,
         blank = False,
         help_text = 'Software this feature flag is for',
-        null = True,
         on_delete = models.CASCADE,
         related_name = 'feature_flags',
         verbose_name = 'Software',
