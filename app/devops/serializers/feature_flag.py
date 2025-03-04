@@ -4,6 +4,8 @@ from access.serializers.organization import Organization, OrganizationBaseSerial
 
 from api.serializers import common
 
+from core import exceptions as centurion_exceptions
+
 from devops.models.feature_flag import FeatureFlag
 
 from itam.serializers.software import Software, SoftwareBaseSerializer
@@ -89,6 +91,42 @@ class ModelSerializer(
             'modified',
             '_urls',
         ]
+
+
+    def is_valid(self, raise_exception = False):
+
+        is_valid = super().is_valid( raise_exception = raise_exception )
+
+
+        valid_software_orgs = Software.objects.filter(
+            feature_flagging__enabled = True,
+            feature_flagging__software = self.validated_data['software']
+        ).distinct().values_list(
+            'feature_flagging__organization',
+            flat = True
+        )
+
+
+        if len(valid_software_orgs) == 0:
+
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'software': 'Software not enabled for Feature flagging'
+                },
+                code = 'feature_flagging_disabled'
+            )
+
+        if self.validated_data['organization'].id not in valid_software_orgs:
+
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'organization': 'Feature flagging not enabled for this software within this organization'
+                },
+                code = 'feature_flagging_wrong_organizaiton'
+            )
+
+        return is_valid
+
 
 
 
