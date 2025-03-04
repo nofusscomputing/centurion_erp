@@ -1,7 +1,6 @@
-# from rest_framework.reverse import reverse
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import Organization, OrganizationBaseSerializer
 
 from api.serializers import common
 
@@ -48,6 +47,12 @@ class ModelSerializer(
 
 
     _urls = serializers.SerializerMethodField('get_url')
+
+    organization = serializers.PrimaryKeyRelatedField(
+        queryset =  Organization.objects.filter(id__in = list(Organization.objects.filter(
+                software__feature_flagging__enabled = True
+            ).distinct().values_list('software__feature_flagging__organization', flat = True)))
+    )
 
 
     class Meta:
