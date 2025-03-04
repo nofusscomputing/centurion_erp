@@ -98,9 +98,21 @@ class ModelSerializer(
         is_valid = super().is_valid( raise_exception = raise_exception )
 
 
+        valid_software_orgs = []
+
+        software = self.validated_data.get('software', None)
+
+        organization = self.validated_data.get('organization', None)
+
+        if getattr(self, 'instance', None):
+
+            software = self.instance.software
+
+            organization = self.instance.organization
+
         valid_software_orgs = Software.objects.filter(
             feature_flagging__enabled = True,
-            feature_flagging__software = self.validated_data['software']
+            feature_flagging__software = software
         ).distinct().values_list(
             'feature_flagging__organization',
             flat = True
@@ -116,7 +128,7 @@ class ModelSerializer(
                 code = 'feature_flagging_disabled'
             )
 
-        if self.validated_data['organization'].id not in valid_software_orgs:
+        if organization.id not in valid_software_orgs:
 
             raise centurion_exceptions.ValidationError(
                 detail = {
