@@ -94,7 +94,6 @@ class ModelSerializer(
 
     def is_valid(self, raise_exception = False):
 
-
         valid_software_orgs = []
 
         software = self.initial_data.get('software', None)
@@ -107,32 +106,38 @@ class ModelSerializer(
 
             organization = self.instance.organization.id
 
-        valid_software_orgs = Software.objects.filter(
-            feature_flagging__enabled = True,
-            feature_flagging__software_id = int(software)
-        ).distinct().values_list(
-            'feature_flagging__organization',
-            flat = True
-        )
 
+        if(
+            software is not None
+            and organization is not None
+        ):
 
-        if len(valid_software_orgs) == 0:
-
-            raise centurion_exceptions.ValidationError(
-                detail = {
-                    'software': 'Software not enabled for Feature flagging'
-                },
-                code = 'feature_flagging_disabled'
+            valid_software_orgs = Software.objects.filter(
+                feature_flagging__enabled = True,
+                feature_flagging__software_id = int(software)
+            ).distinct().values_list(
+                'feature_flagging__organization',
+                flat = True
             )
 
-        if int(organization) not in valid_software_orgs:
 
-            raise centurion_exceptions.ValidationError(
-                detail = {
-                    'organization': 'Feature flagging not enabled for this software within this organization'
-                },
-                code = 'feature_flagging_wrong_organizaiton'
-            )
+            if len(valid_software_orgs) == 0:
+
+                raise centurion_exceptions.ValidationError(
+                    detail = {
+                        'software': 'Software not enabled for Feature flagging'
+                    },
+                    code = 'feature_flagging_disabled'
+                )
+
+            if int(organization) not in valid_software_orgs:
+
+                raise centurion_exceptions.ValidationError(
+                    detail = {
+                        'organization': 'Feature flagging not enabled for this software within this organization'
+                    },
+                    code = 'feature_flagging_wrong_organizaiton'
+                )
 
         is_valid = super().is_valid( raise_exception = raise_exception )
 
