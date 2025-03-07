@@ -94,24 +94,22 @@ class ModelSerializer(
 
     def is_valid(self, raise_exception = False):
 
-        is_valid = super().is_valid( raise_exception = raise_exception )
-
 
         valid_software_orgs = []
 
-        software = self.validated_data.get('software', None)
+        software = self.initial_data.get('software', None)
 
-        organization = self.validated_data.get('organization', None)
+        organization = self.initial_data.get('organization', None)
 
         if getattr(self, 'instance', None):
 
-            software = self.instance.software
+            software = self.instance.software.id
 
-            organization = self.instance.organization
+            organization = self.instance.organization.id
 
         valid_software_orgs = Software.objects.filter(
             feature_flagging__enabled = True,
-            feature_flagging__software = software
+            feature_flagging__software_id = int(software)
         ).distinct().values_list(
             'feature_flagging__organization',
             flat = True
@@ -127,7 +125,7 @@ class ModelSerializer(
                 code = 'feature_flagging_disabled'
             )
 
-        if organization.id not in valid_software_orgs:
+        if int(organization) not in valid_software_orgs:
 
             raise centurion_exceptions.ValidationError(
                 detail = {
@@ -135,6 +133,8 @@ class ModelSerializer(
                 },
                 code = 'feature_flagging_wrong_organizaiton'
             )
+
+        is_valid = super().is_valid( raise_exception = raise_exception )
 
         return is_valid
 
