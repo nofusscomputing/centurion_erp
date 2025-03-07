@@ -134,6 +134,7 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'config_management.apps.ConfigManagementConfig',
     'project_management.apps.ProjectManagementConfig',
+    'devops.apps.DevOpsConfig',
 ]
 
 MIDDLEWARE = [

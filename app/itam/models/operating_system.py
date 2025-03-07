@@ -282,6 +282,19 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         }
 
 
+    def get_url_kwargs_notes(self) -> dict:
+        """Fetch the URL kwargs for model notes
+
+        Returns:
+            dict: notes kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'operating_system_id': self.operating_system.id,
+            'model_id': self.id
+        }
+
+
     # @property
     # def parent_object(self):
     #     """ Fetch the parent object """

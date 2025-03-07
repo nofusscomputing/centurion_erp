@@ -18,7 +18,7 @@ class ViewsetCommon(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_organization_team_note'
+    route_name = 'v2:_api_v2_team_note'
 
     @classmethod
     def setUpTestData(self):

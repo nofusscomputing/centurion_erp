@@ -12,6 +12,7 @@ def permission_queryset():
         'assistance',
         'config_management',
         'core',
+        'devops',
         'django_celery_results',
         'itam',
         'itim',

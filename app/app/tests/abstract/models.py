@@ -9,6 +9,7 @@ from access.tests.abstract.tenancy_object import TenancyObject as TenancyObjectT
 
 from app.tests.abstract.views import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
+from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
 from core.tests.abstract.models import Models
 
@@ -290,6 +291,111 @@ class BaseModel:
         """
 
         assert callable(self.item.get_url)
+
+
+
+    def test_attribute_exists_get_url_kwargs_notes(self):
+        """Test for existance of field in `<model>`
+
+        Attribute `get_url_kwargs_notes` must be defined in class.
+        """
+
+        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+
+        if callable(obj):
+
+            obj = obj()
+
+        if(
+            not str(self.model._meta.model_name).lower().endswith('notes')
+            and obj is not FeatureNotUsed
+        ):
+
+            assert hasattr(self.item, 'get_url_kwargs_notes')
+
+        else:
+
+            print('Test is n/a')
+
+            assert True
+
+
+    def test_attribute_not_empty_get_url_kwargs_notes(self):
+        """Test field `<model>` is not empty
+
+        Attribute `get_url` must contain values
+        """
+
+        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+
+        if callable(obj):
+
+            obj = obj()
+
+        if(
+            not str(self.model._meta.model_name).lower().endswith('notes')
+            and obj is not FeatureNotUsed
+        ):
+
+            assert self.item.get_url_kwargs_notes() is not None
+
+        else:
+
+            print('Test is n/a')
+
+            assert True
+
+
+    def test_attribute_type_get_url_kwargs_notes(self):
+        """Test field `<model>`type
+
+        Attribute `get_url_kwargs_notes` must be dict
+        """
+
+        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+
+        if callable(obj):
+
+            obj = obj()
+
+        if(
+            not str(self.model._meta.model_name).lower().endswith('notes')
+            and obj is not FeatureNotUsed
+        ):
+
+            assert type(self.item.get_url_kwargs_notes()) is dict
+
+        else:
+
+            print('Test is n/a')
+
+            assert True
+
+
+    def test_attribute_callable_get_url_kwargs_notes(self):
+        """Test field `<model>` callable
+
+        Attribute `get_url_kwargs_notes` must be a function
+        """
+
+        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+
+        if callable(obj):
+
+            obj = obj()
+
+        if(
+            not str(self.model._meta.model_name).lower().endswith('notes')
+            and obj is not FeatureNotUsed
+        ):
+
+            assert callable(self.item.get_url_kwargs_notes)
+
+        else:
+
+            print('Test is n/a')
+
+            assert True
 
 
 

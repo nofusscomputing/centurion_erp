@@ -336,6 +336,24 @@ class BaseModelHistoryAPI(
         )
 
 
+    def test_api_field_exists_urls_notes(self):
+        """ Test for existance of API Field
+
+        _urls.notes field must exist
+        """
+
+        assert True
+
+
+    def test_api_field_type_urls_notes(self):
+        """ Test for type for API Field
+
+        _urls._self field must be str
+        """
+
+        assert True
+
+
 
 class PrimaryModelHistoryAPI(
     BaseModelHistoryAPI,

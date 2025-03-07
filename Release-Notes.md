@@ -1,3 +1,9 @@
+## Version 1.13.0
+
+- DevOps Module added.
+
+- Feature Flagging Component added as par of the DevOps module.
+
 
 ## Version 1.11.0
 

@@ -12,6 +12,7 @@ from access.models.tenancy import TenancyObject
 
 from app.helpers.merge_software import merge_software
 
+from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
@@ -415,6 +416,10 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
     )
 
 
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
@@ -511,6 +516,11 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
             'config_group_id': self.config_group.id,
             'pk': self.id
         }
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     @property

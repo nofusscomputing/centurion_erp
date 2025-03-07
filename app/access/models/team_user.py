@@ -12,6 +12,7 @@ from access.fields import (
 from access.models.organization import Organization
 from access.models.team import Team
 
+from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
 
 
@@ -109,6 +110,11 @@ class TeamUsers(SaveHistory):
             return reverse(f"v2:_api_v2_organization_team_user-detail", request=request, kwargs = url_kwargs )
 
         return reverse(f"v2:_api_v2_organization_team_user-detail", kwargs = url_kwargs )
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     def save(self, *args, **kwargs):
