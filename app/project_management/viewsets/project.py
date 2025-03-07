@@ -82,10 +82,6 @@ class ViewSet( ModelViewSet ):
 
     def get_serializer_class(self):
 
-        if self.serializer_class is not None:
-
-            return self.serializer_class
-
         organization = None
 
         if 'organization' in self.request.data:

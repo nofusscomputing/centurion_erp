@@ -92,7 +92,8 @@ class SoftwareEnableFeatureFlag(
         # },
         'display_name',
         'organization',
-        'created'
+        'created',
+        '-action_delete-',
     ]
 
     def get_url_kwargs(self) -> dict:
