@@ -47,7 +47,7 @@ class SoftwareEnableFeatureFlag(
         Software,
         blank = False,
         help_text = 'Software this feature flag is for',
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         null = False,
         related_name = 'feature_flagging',
         verbose_name = 'Software'
