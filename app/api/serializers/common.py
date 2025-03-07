@@ -60,16 +60,6 @@ class CommonModelSerializer(CommonBaseSerializer):
 
         get_url = {
             '_self': item.get_url( request = self._context['view'].request ),
-
-            'history': reverse(
-                "v2:_api_v2_model_history-list",
-                request = self._context['view'].request,
-                kwargs = {
-                    'app_label': self.Meta.model._meta.app_label,
-                    'model_name': self.Meta.model._meta.model_name,
-                    'model_id': item.pk
-                }
-            ),
             'knowledge_base': reverse(
                 "v2:_api_v2_model_kb-list",
                 request=self._context['view'].request,
@@ -79,6 +69,18 @@ class CommonModelSerializer(CommonBaseSerializer):
                 }
             ),
         }
+
+        if getattr(self.Meta.model, 'save_model_history', True):
+
+            get_url['history'] = reverse(
+                "v2:_api_v2_model_history-list",
+                request = self._context['view'].request,
+                kwargs = {
+                    'app_label': self.Meta.model._meta.app_label,
+                    'model_name': self.Meta.model._meta.model_name,
+                    'model_id': item.pk
+                }
+            )
 
 
         obj = getattr(item, 'get_url_kwargs_notes', None)

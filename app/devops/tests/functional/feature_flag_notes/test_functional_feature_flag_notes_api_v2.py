@@ -4,6 +4,7 @@ from django.test import TestCase
 from core.tests.abstract.model_notes_api_fields import ModelNotesNotesAPIFields
 
 from devops.models.feature_flag_notes import FeatureFlag, FeatureFlagNotes
+from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
 from itam.models.software import Software
 
@@ -31,6 +32,17 @@ class NotesAPI(
 
         super().setUpTestData()
 
+        software = Software.objects.create(
+            organization = self.organization,
+            name = 'soft',
+        )
+
+        SoftwareEnableFeatureFlag.objects.create(
+            organization = self.organization,
+            software = software,
+            enabled = True
+        )
+
 
         self.item = self.model.objects.create(
             organization = self.organization,
@@ -42,10 +54,7 @@ class NotesAPI(
             model = FeatureFlag.objects.create(
                 organization = self.organization,
                 name = 'one',
-                software = Software.objects.create(
-                    organization = self.organization,
-                    name = 'soft',
-                ),
+                software = software,
                 description = 'desc',
                 model_notes = 'text',
                 enabled = True

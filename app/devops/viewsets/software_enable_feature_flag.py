@@ -1,21 +1,20 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-# THis import only exists so that the migrations can be created
-from devops.models.feature_flag_history import FeatureFlagHistory    # pylint: disable=W0611:unused-import
-from devops.serializers.feature_flag import (
-    FeatureFlag,
+from api.viewsets.common import ModelViewSet
+
+from devops.serializers.software_enable_feature_flag import (
+    SoftwareEnableFeatureFlag,
     ModelSerializer,
     ViewSerializer,
 )
 
-from api.viewsets.common import ModelViewSet
-
+from itam.models.software import Software
 
 
 
 @extend_schema_view(
     create=extend_schema(
-        summary = 'Create a Feature Flag',
+        summary = 'Enable Feature Flagging for Software',
         description='',
         responses = {
             201: OpenApiResponse(description='Created', response=ViewSerializer),
@@ -23,7 +22,7 @@ from api.viewsets.common import ModelViewSet
         }
     ),
     destroy = extend_schema(
-        summary = 'Delete a Feature Flag',
+        summary = 'Delete Feature Flagging for Software',
         description = '',
         responses = {
             204: OpenApiResponse(description=''),
@@ -31,7 +30,7 @@ from api.viewsets.common import ModelViewSet
         }
     ),
     list = extend_schema(
-        summary = 'Fetch all Feature Flags',
+        summary = 'Fetch all Software Feature Flags enabled',
         description='',
         responses = {
             200: OpenApiResponse(description='', response=ViewSerializer),
@@ -39,7 +38,7 @@ from api.viewsets.common import ModelViewSet
         }
     ),
     retrieve = extend_schema(
-        summary = 'Fetch a single Feature Flag',
+        summary = 'Fetch a single software Feature Flag enabled',
         description='',
         responses = {
             200: OpenApiResponse(description='', response=ViewSerializer),
@@ -48,7 +47,7 @@ from api.viewsets.common import ModelViewSet
     ),
     update = extend_schema(exclude = True),
     partial_update = extend_schema(
-        summary = 'Update a Feature Flag',
+        summary = 'Update Software Feature Flagging enabled',
         description = '',
         responses = {
             200: OpenApiResponse(description='', response=ViewSerializer),
@@ -64,14 +63,60 @@ class ViewSet(ModelViewSet):
         'software',
     ]
 
-    search_fields = [
-        'description',
-        'name',
-    ]
+    search_fields = []
 
-    model = FeatureFlag
+    model = SoftwareEnableFeatureFlag
 
-    view_description: str = 'Software Development Feature Flags'
+    parent_model = Software
+
+    parent_model_pk_kwarg = 'software_id'
+
+    view_description: str = 'Enabled Software Development Feature Flags'
+
+
+    def get_back_url(self) -> str:
+
+        if(
+            getattr(self, '_back_url', None) is None
+        ):
+
+            return_model = Software.objects.get(
+                pk = self.kwargs['software_id']
+            )
+
+            self._back_url = str(
+                return_model.get_url( self.request )
+            )
+
+        return self._back_url
+
+
+    def get_return_url(self) -> str:
+
+        if getattr(self, '_return_url', None) is None:
+
+            return_model = Software.objects.get(
+                pk = self.kwargs['software_id']
+            )
+
+            self._return_url = str(
+                return_model.get_url( self.request )
+            )
+
+        return self._return_url
+
+
+    def get_queryset(self):
+
+        if self.queryset is None:
+
+            self.queryset = super().get_queryset()
+
+            if 'software_id' in self.kwargs:
+
+                self.queryset = self.queryset.filter(software_id=self.kwargs['software_id'])
+
+        return self.queryset
 
 
     def get_serializer_class(self):

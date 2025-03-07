@@ -3,7 +3,9 @@ from django.contrib.auth.models import (
     User,
 )
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
+from django.test import Client, TestCase
+
+from django.shortcuts import reverse
 
 from access.models.organization import Organization
 from access.models.team import Team
@@ -13,7 +15,7 @@ from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from devops.models.feature_flag import FeatureFlag
+# from devops.models.feature_flag import FeatureFlag
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
 from itam.models.software import Software
@@ -25,13 +27,13 @@ from settings.models.app_settings import AppSettings
 
 class ViewSetBase:
 
-    model = FeatureFlag
+    model = SoftwareEnableFeatureFlag
 
     app_namespace = 'v2'
     
-    url_name = 'devops:_api_v2_feature_flag'
+    url_name = '_api_v2_feature_flag_software'
 
-    change_data = {'name': 'device'}
+    change_data = {'enabled': False}
 
     delete_data = {}
 
@@ -53,6 +55,8 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
+
+        self.add_organization = Organization.objects.create(name='add_organization')
 
 
 
@@ -102,7 +106,7 @@ class ViewSetBase:
 
         add_team = Team.objects.create(
             team_name = 'add_team',
-            organization = organization,
+            organization = self.add_organization,
         )
 
         add_team.permissions.set([add_permissions])
@@ -156,40 +160,59 @@ class ViewSetBase:
             name = 'soft',
         )
 
-        SoftwareEnableFeatureFlag.objects.create(
-            organization = self.organization,
-            software = software,
-            enabled = True
-        )
+        # SoftwareEnableFeatureFlag.objects.create(
+        #     organization = self.organization,
+        #     software = software,
+        #     enabled = True
+        # )
 
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
-            name = 'global_item',
             software = software,
-        )
-
-        self.item = self.model.objects.create(
-            organization = self.organization,
-            name = 'one',
-            software = software,
-            description = 'desc',
-            model_notes = 'text',
             enabled = True
         )
 
+        # software = Software.objects.create(
+        #     organization = self.organization,
+        #     name = 'soft item',
+        # )
+
+        self.item = self.model.objects.create(
+            organization = self.organization,
+            software = software,
+            enabled = True
+        )
+
+        self.url_kwargs = {
+            'software_id': software.id,
+        }
+
+        self.url_view_kwargs = {
+            'software_id': software.id,
+            'pk': self.item.id
+        }
+
+        # software = Software.objects.create(
+        #     organization = self.organization,
+        #     name = 'soft other org',
+        # )
+
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
-            name = 'two',
             software = software,
+            enabled = True
         )
 
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.software_add = Software.objects.create(
+            organization = self.add_organization,
+            name = 'soft add',
+        )
 
         self.add_data = {
-            'name': 'team_post',
-            'organization': self.organization.id,
-            'software': software.id,
+            'enabled': True,
+            'organization': self.add_organization.id,
+            'software': self.software_add,
         }
 
 
@@ -198,6 +221,10 @@ class ViewSetBase:
             team = add_team,
             user = self.add_user
         )
+        # TeamUsers.objects.create(    # Required so that user can Add (without errors with duplicate constraint)
+        #     team = view_team,
+        #     user = self.add_user
+        # )
 
         self.change_user = User.objects.create_user(username="test_user_change", password="password")
         TeamUsers.objects.create(
@@ -234,7 +261,7 @@ class ViewSetBase:
 
 
 
-class ManufacturerPermissionsAPI(
+class PermissionsAPI(
     ViewSetBase,
     APIPermissions,
     TestCase,
@@ -242,9 +269,32 @@ class ManufacturerPermissionsAPI(
 
     pass
 
+    def test_add_has_permission(self):
+        """ Check correct permission for add 
+
+        This test cases is a duplicate of a test with the same name. Required
+        as the kwargs are different from normal
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+        # if self.url_kwargs:
+
+        url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = {
+                'software_id': self.software_add.id,
+            }
+        )
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.add_data)
+
+        assert response.status_code == 201
 
 
-class ManufacturerViewSet(
+
+
+class ViewSet(
     ViewSetBase,
     SerializersTestCases,
     TestCase
@@ -254,7 +304,7 @@ class ManufacturerViewSet(
 
 
 
-class ManufacturerMetadata(
+class Metadata(
     ViewSetBase,
     MetadataAttributesFunctional,
     TestCase

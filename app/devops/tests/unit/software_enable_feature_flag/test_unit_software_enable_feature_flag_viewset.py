@@ -7,8 +7,7 @@ from access.models.organization import Organization
 
 from api.tests.abstract.viewsets import ViewSetModel
 
-from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
-from devops.viewsets.feature_flag_notes import ViewSet
+from devops.viewsets.software_enable_feature_flag import ViewSet
 
 from itam.models.software import Software
 
@@ -20,7 +19,7 @@ class ViewsetCommon(
 
     viewset = ViewSet
 
-    route_name = 'v2:devops:_api_v2_feature_flag_note'
+    route_name = 'v2:_api_v2_feature_flag_software'
 
     @classmethod
     def setUpTestData(self):
@@ -36,10 +35,16 @@ class ViewsetCommon(
 
         self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
 
+        software = Software.objects.create(
+            organization = self.organization,
+            name = 'soft',
+        )
+
+        self.kwargs = { 'software_id': software.id }
 
 
 
-class NotesViewsetList(
+class ViewsetList(
     ViewsetCommon,
     TestCase,
 ):
@@ -49,38 +54,15 @@ class NotesViewsetList(
     def setUpTestData(self):
         """Setup Test
 
-        1. Create object that is to be tested against
-        2. add kwargs
-        3. make list request
+        1. make list request
         """
 
 
         super().setUpTestData()
 
-        software = Software.objects.create(
-            organization = self.organization,
-            name = 'soft',
-        )
-
-        SoftwareEnableFeatureFlag.objects.create(
-            organization = self.organization,
-            software = software,
-            enabled = True
-        )
-
-        self.note_model = self.viewset.model.model.field.related_model.objects.create(
-            organization = self.organization,
-            name = 'note model',
-            software = software,
-        )
-
-        self.kwargs = {
-            'model_id': self.note_model.pk,
-        }
-
 
         client = Client()
-
+        
         url = reverse(
             self.route_name + '-list',
             kwargs = self.kwargs
