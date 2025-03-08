@@ -38,7 +38,7 @@ The API endpoint that is available for feature flagging returns a paginated JSON
     "results": [
 
         {
-            "2025-0001": {                               // ID of the feature (format: YYYY-<Feature ID>, using year of creation), Dictionary
+            "2025-00001": {                              // ID of the feature (format: YYYY-<Feature ID>, using year of creation), Dictionary
                 "name": "Feature name 1",                // String
                 "description": "Feature description",    // String
                 "enabled": true,                         // Boolean
@@ -47,7 +47,7 @@ The API endpoint that is available for feature flagging returns a paginated JSON
             }
         },
         {
-            "2025-0002": {
+            "2025-00002": {
                 "name": "Feature name 2",
                 "description": "Feature description",
                 "enabled": true,
@@ -60,12 +60,12 @@ The API endpoint that is available for feature flagging returns a paginated JSON
         "pagination": {
             "page": 1,
             "pages": 1,
-            "count": 1
+            "count": 2
         }
     },
     "links": {
-        "first": "https://mydomain.tld/public/flags/1234?page%5Bnumber%5D=1",
-        "last": "https://mydomain.tld/public/flags/1234?page%5Bnumber%5D=1",
+        "first": "https://mydomain.tld/api/v2/public/1/flags/1234?page%5Bnumber%5D=1",
+        "last": "https://mydomain.tld/api/v2/public/1/flags/1234?page%5Bnumber%5D=1",
         "next": null,
         "prev": null
     }
@@ -77,4 +77,4 @@ The API endpoint that is available for feature flagging returns a paginated JSON
 
 The software you are developing will need to be able to query the flags endpoint, including the ability to obtain paginated results. As JSON is returned from the endpoint there is no restriction upon what programming language you are using. The only requirement is the ability to parse JSON. Most if not all programming languages can do this.
 
-A simple query to the endpoint is all that is required. As only 10 results are returned per page, if `meta.pagination.pages > 1` subsequent requests will be required to obtain all available feature flags. Once you have the complete document, a simple `if` statement is all that is required. i.e. `if flags_json['2025-0001']['enabled']`.
+A simple query to the endpoint is all that is required. As only 10 results are returned per page, if `meta.pagination.pages > 1` subsequent requests will be required to obtain all available feature flags. Once you have the complete document, a simple `if` statement is all that is required. i.e. `if flags_json['2025-00001']['enabled']`.
