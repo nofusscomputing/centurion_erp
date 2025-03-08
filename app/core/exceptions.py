@@ -7,6 +7,7 @@ from django.http import Http404
 from rest_framework import exceptions, status
 from rest_framework.exceptions import (
     MethodNotAllowed,
+    NotFound,
     NotAuthenticated,
     ParseError,
     PermissionDenied,
