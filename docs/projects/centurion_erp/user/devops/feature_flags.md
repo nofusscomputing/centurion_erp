@@ -72,6 +72,8 @@ The API endpoint that is available for feature flagging returns a paginated JSON
 }
 ```
 
+The url for the feature flags can be found at API endpoint `api/v2/public/flags`. This view displays a dictionary of organizations by name with each organization showing the available urls by software name.
+
 
 ### Using the endpoint in your software
 

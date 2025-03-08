@@ -15,3 +15,7 @@ router = DefaultRouter(trailing_slash=False)
 router.register('', public.Index, basename='_public_api_v2')
 
 urlpatterns = router.urls
+
+urlpatterns += [
+    path('', include('devops.urls_public')),
+]
