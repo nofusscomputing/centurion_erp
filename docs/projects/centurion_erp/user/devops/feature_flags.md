@@ -80,3 +80,8 @@ The url for the feature flags can be found at API endpoint `api/v2/public/flags`
 The software you are developing will need to be able to query the flags endpoint, including the ability to obtain paginated results. As JSON is returned from the endpoint there is no restriction upon what programming language you are using. The only requirement is the ability to parse JSON. Most if not all programming languages can do this.
 
 A simple query to the endpoint is all that is required. As only 10 results are returned per page, if `meta.pagination.pages > 1` subsequent requests will be required to obtain all available feature flags. Once you have the complete document, a simple `if` statement is all that is required. i.e. `if flags_json['2025-00001']['enabled']`.
+
+The Feature Flags endpoint does support HTTP Header `If-Modified-Since`. The value of this field is passed when you make a request to the Feature Flag endpoint within header `Last-Modified`. The value of the `Last-Modified` header is derived from the most recently edited feature flag that was received from the endpoint. Simply put, if you failed to parse the `Last-Modified` header, you can iterate over the list of feature flags you received and use the most recent modified date.
+
+!!! tip
+    HTTP header Date fields must be correctly formatted. please see [RFC1910 - 5.6.7. Date/Time Formats](https://httpwg.org/specs/rfc9110.html#http.date) for more details.
