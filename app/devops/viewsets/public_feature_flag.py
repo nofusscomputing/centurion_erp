@@ -7,6 +7,8 @@ from devops.serializers.public_feature_flag import (
 
 from api.viewsets.common import PublicReadOnlyViewSet
 
+from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
+
 from core import exceptions as centurion_exceptions
 
 
@@ -53,21 +55,27 @@ class ViewSet(PublicReadOnlyViewSet):
 
         if self.queryset is None:
 
-            queryset = super().get_queryset().filter(
-                organization_id = int(self.kwargs['organization_id'])
+            enabled_qs = SoftwareEnableFeatureFlag.objects.filter(
+                enabled = True,
+                software_id = int(self.kwargs['software_id']),
+                organization_id = int(self.kwargs['organization_id']),
             )
 
-            if len(queryset) == 0:
+            if len(enabled_qs) == 0:
 
                 raise centurion_exceptions.NotFound(
                     code = 'organization_not_found'
                 )
 
-            queryset = queryset.filter(
-                software_id = int(self.kwargs['software_id'])
+            queryset = super().get_queryset().filter(
+                organization_id = int(self.kwargs['organization_id']),
+                software_id = int(self.kwargs['software_id']),
             )
 
-            if len(queryset) == 0:
+            if(
+                len(queryset) == 0
+                and len(enabled_qs) == 0
+            ):
 
                 raise centurion_exceptions.NotFound(
                     code = 'software_not_found'
