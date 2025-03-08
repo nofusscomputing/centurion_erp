@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from devops.serializers.public_feature_flag import (
@@ -81,6 +83,31 @@ class ViewSet(PublicReadOnlyViewSet):
                     code = 'software_not_found'
                 )
 
+            last_modified = None
+
+            for flag in queryset:
+
+                if last_modified is None:
+
+                    last_modified = flag.modified
+
+
+                if last_modified.timestamp() < flag.modified.timestamp():
+
+                    last_modified = flag.modified
+
+
+            if self.request.headers.get('if-modified-since', None):
+
+                check_date = datetime.strptime(self.request.headers['if-modified-since'], '%a, %d %b %Y %H:%M:%S %z')
+
+
+                if last_modified.timestamp() >= check_date.timestamp():
+
+                    raise centurion_exceptions.NotModified()
+
+
+            self.last_modified = last_modified
 
             self.queryset = queryset
 
@@ -97,3 +124,14 @@ class ViewSet(PublicReadOnlyViewSet):
     def get_serializer_class(self):
 
         return ModelSerializer
+
+
+    def list(self, request, *args, **kwargs):
+
+        response = super().list(request = request, *args, **kwargs)
+
+        if response.status_code == 200:
+
+            response.headers['Last-Modified'] = self.last_modified.strftime('%a, %d %b %Y %H:%M:%S %z')
+
+        return response
