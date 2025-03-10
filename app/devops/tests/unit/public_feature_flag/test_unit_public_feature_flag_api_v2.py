@@ -209,13 +209,13 @@ class API(
 
 
 
-    def test_api_field_exists_pagination_meta(self):
+    def test_api_field_exists_pagination_meta_count(self):
         """List view API fields exist
 
         meta key must exist
         """
 
-        assert 'meta' in self.api_data
+        assert 'count' in self.api_data
 
 
 
@@ -278,10 +278,20 @@ class API(
 
 
 
-    def test_api_field_exists_pagination_links(self):
+    def test_api_field_exists_pagination_links_next(self):
         """List view API fields exist
 
-        links key must exist
+        links.next key must exist
         """
 
-        assert 'links' in self.api_data
+        assert 'next' in self.api_data
+
+
+
+    def test_api_field_exists_pagination_links_prev(self):
+        """List view API fields exist
+
+        links.prev key must exist
+        """
+
+        assert 'previous' in self.api_data
