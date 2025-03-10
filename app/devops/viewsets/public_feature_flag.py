@@ -99,10 +99,16 @@ class ViewSet(PublicReadOnlyViewSet):
 
             if self.request.headers.get('if-modified-since', None):
 
-                check_date = datetime.strptime(self.request.headers['if-modified-since'], '%a, %d %b %Y %H:%M:%S %z')
+                if type(self.request.headers['if-modified-since']) is datetime:
+
+                    check_date = self.request.headers['if-modified-since']
+
+                else:
+                    
+                    check_date = datetime.strptime(self.request.headers['if-modified-since'], '%a, %d %b %Y %H:%M:%S %z')
 
 
-                if last_modified.timestamp() >= check_date.timestamp():
+                if last_modified.replace(microsecond=0).timestamp() <= check_date.replace(microsecond=0).timestamp():
 
                     raise centurion_exceptions.NotModified()
 

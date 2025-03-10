@@ -29,7 +29,7 @@ Feature flags are a tool that a developer can use so as to conduct progressive r
 ## API Endpoint
 
 !!! danger
-    The Feature Flag Endpoint is publicly accessible. i.e. does not require that a user log in to Centurion. This is by design. You are advised not to enter any sensitive information within the name or description fields of the feature flag.
+    The Feature Flag Endpoint (`api/v2/public/<organization_id>/flags/<software_id>`) is publicly accessible. i.e. does not require that a user log in to Centurion. This is by design. You are advised not to enter any sensitive information within the name or description fields of the feature flag.
 
 The API endpoint that is available for feature flagging returns a paginated JSON document containing ALL of the feature flags for the software in question. The format of this document is as follows.
 
