@@ -42,6 +42,6 @@ class ModelSerializer(
                 "description": instance.description,
                 "enabled": instance.enabled,
                 "created": instance.created,
-                "modeified": instance.modified
+                "modified": instance.modified
             }
         }
