@@ -1,7 +1,7 @@
 import importlib
 from django.utils.safestring import mark_safe
 
-from rest_framework import viewsets
+from rest_framework import viewsets, pagination
 from rest_framework_json_api.metadata import JSONAPIMetadata
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -802,6 +802,20 @@ class IndexViewset(
     ]
 
 
+class StaticPageNumbering(
+    pagination.PageNumberPagination
+):
+    """Enforce Page Numbering
+
+    Enfore results per page min/max to static value that cant be changed.
+    """
+
+    page_size = 20
+
+    max_page_size = 20
+
+
+
 class PublicReadOnlyViewSet(
     ReadOnlyListModelViewSet
 ):
@@ -816,6 +830,8 @@ class PublicReadOnlyViewSet(
     Args:
         ReadOnlyModelViewSet (ViewSet): Common Read-Only Viewset
     """
+
+    pagination_class = StaticPageNumbering
 
     permission_classes = [
         IsAuthenticatedOrReadOnly,

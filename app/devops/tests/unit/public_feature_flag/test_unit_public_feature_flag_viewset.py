@@ -8,7 +8,8 @@ from rest_framework.reverse import reverse
 from access.models.organization import Organization
 
 from api.tests.abstract.viewsets import ViewSetModel
-from api.viewsets.common import PublicReadOnlyViewSet
+from api.viewsets.common import PublicReadOnlyViewSet, StaticPageNumbering
+
 
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from devops.viewsets.public_feature_flag import ViewSet
@@ -115,3 +116,14 @@ class ViewsetList(
         view_set = self.viewset()
     
         assert view_set.metadata_class is JSONAPIMetadata
+
+
+    def test_view_attr_pagination_class_value(self):
+        """Attribute Test
+    
+        Attribute `pagination_class` must be metadata class `StaticPageNumbering`
+        """
+    
+        view_set = self.viewset()
+    
+        assert view_set.pagination_class is StaticPageNumbering
