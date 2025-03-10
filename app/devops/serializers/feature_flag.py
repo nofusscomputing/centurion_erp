@@ -10,6 +10,7 @@ from devops.models.feature_flag import FeatureFlag
 
 from itam.serializers.software import Software, SoftwareBaseSerializer
 
+
 class OrganizationField(common.OrganizationField):
 
     def get_queryset(self):
@@ -21,6 +22,19 @@ class OrganizationField(common.OrganizationField):
         ).distinct().values_list('software__feature_flagging__organization', flat = True)))
 
         return qs
+
+
+
+class SoftwareField(serializers.PrimaryKeyRelatedField):
+
+    def get_queryset(self):
+
+        qs = Software.objects.filter(
+            feature_flagging__enabled = True
+        ).distinct()
+
+        return qs
+
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -59,6 +73,8 @@ class ModelSerializer(
 ):
 
     organization = OrganizationField(required = True)
+
+    software = SoftwareField(required = True, write_only = True)
 
     _urls = serializers.SerializerMethodField('get_url')
 

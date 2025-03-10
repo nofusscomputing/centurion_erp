@@ -671,6 +671,8 @@ class ViewSetModel(
             viewset = self.viewset
         )
 
+        view_set.request.headers = {}
+
         view_set.kwargs = self.kwargs
 
         view_set.action = 'list'
@@ -701,6 +703,7 @@ class ViewSetModel(
             viewset = self.viewset
         )
 
+        view_set.request.headers = {}
         view_set.kwargs = self.kwargs
         view_set.action = 'list'
         view_set.detail = False
