@@ -4,7 +4,7 @@ from devops.models.feature_flag import FeatureFlag
 
 
 
-class ModelSerializer(
+class ViewSerializer(
     serializers.ModelSerializer,
 ):
 

@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from devops.serializers.public_feature_flag import (
     FeatureFlag,
-    ModelSerializer,
+    ViewSerializer,
 )
 
 from api.viewsets.common import PublicReadOnlyViewSet
@@ -22,14 +22,14 @@ from core import exceptions as centurion_exceptions
         summary = '(public) Fetch all Feature Flags',
         description='',
         responses = {
-            200: OpenApiResponse(description='', response=ModelSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
         }
     ),
     retrieve = extend_schema(
         summary = '(public) Fetch a single Feature Flag',
         description='',
         responses = {
-            200: OpenApiResponse(description='', response=ModelSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
         }
     ),
     update = extend_schema(exclude = True),
@@ -112,18 +112,18 @@ class ViewSet(PublicReadOnlyViewSet):
             self.queryset = queryset
 
 
-        if self.queryset is None:
+            if self.queryset is None:
 
-            raise centurion_exceptions.NotFound(
-                    code = 'failsafe_not_found'
-                )
+                raise centurion_exceptions.NotFound(
+                        code = 'failsafe_not_found'
+                    )
 
         return self.queryset
 
 
     def get_serializer_class(self):
 
-        return ModelSerializer
+        return ViewSerializer
 
 
     def list(self, request, *args, **kwargs):
