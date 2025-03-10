@@ -14,6 +14,7 @@ from access.models.team import Team
 from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
+from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket_category import TicketCategory, KnowledgeBase
@@ -727,6 +728,11 @@ class Ticket(
             return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", request=request, kwargs = kwargs )
 
         return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", kwargs = kwargs )
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     @property
@@ -1517,6 +1523,11 @@ class RelatedTickets(TenancyObject):
                     'pk': self.id
                 }
             )
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     def __str__(self):

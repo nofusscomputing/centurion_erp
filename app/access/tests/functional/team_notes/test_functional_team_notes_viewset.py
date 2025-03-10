@@ -18,7 +18,7 @@ class ViewSetBase(
 
     viewset = ViewSet
 
-    url_name = '_api_v2_organization_team_note'
+    url_name = '_api_v2_team_note'
 
     @classmethod
     def setUpTestData(self):

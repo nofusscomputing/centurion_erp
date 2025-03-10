@@ -1,5 +1,9 @@
 from rest_framework.relations import Hyperlink
 
+from assistance.models.model_knowledge_base_article import all_models
+
+from core.lib.feature_not_used import FeatureNotUsed
+
 
 
 class APICommonFields:
@@ -82,13 +86,66 @@ class APICommonFields:
         assert '_self' in self.api_data['_urls']
 
 
-    def test_api_field_type_urls(self):
+    def test_api_field_type_urls_self(self):
         """ Test for type for API Field
 
         _urls._self field must be str
         """
 
         assert type(self.api_data['_urls']['_self']) is str
+
+
+
+    def test_api_field_exists_urls_notes(self):
+        """ Test for existance of API Field
+
+        _urls.notes field must exist
+        """
+
+        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+
+        if callable(obj):
+
+            obj = obj()
+
+        if(
+            not str(self.model._meta.model_name).lower().endswith('notes')
+            and obj is not FeatureNotUsed
+        ):
+
+            assert 'notes' in self.api_data['_urls']
+
+        else:
+
+            print('Test is n/a')
+
+            assert True
+
+
+    def test_api_field_type_urls_notes(self):
+        """ Test for type for API Field
+
+        _urls._self field must be str
+        """
+
+        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+
+        if callable(obj):
+
+            obj = obj()
+
+        if(
+            not str(self.model._meta.model_name).lower().endswith('notes')
+            and obj is not FeatureNotUsed
+        ):
+
+            assert type(self.api_data['_urls']['notes']) is str
+
+        else:
+
+            print('Test is n/a')
+
+            assert True
 
 
 

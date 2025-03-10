@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -48,11 +48,17 @@ from core.viewsets import (
     manufacturer as manufacturer_v2,
     manufacturer_notes,
     ticket_category,
+    ticket_category_notes,
     ticket_comment,
     ticket_comment_category,
+    ticket_comment_category_notes,
     ticket_linked_item,
     related_ticket,
 
+)
+
+from devops.viewsets import (
+    software_enable_feature_flag,
 )
 
 from itam.viewsets import (
@@ -128,7 +134,7 @@ router.register('access', access_v2.Index, basename='_api_v2_access_home')
 router.register('access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
 router.register('access/organization/(?P<model_id>[0-9]+)/notes', organization_notes.ViewSet, basename='_api_v2_organization_note')
 router.register('access/organization/(?P<organization_id>[0-9]+)/team', team_v2.ViewSet, basename='_api_v2_organization_team')
-router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<model_id>[0-9]+)/notes', team_notes.ViewSet, basename='_api_v2_organization_team_note')
+router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<model_id>[0-9]+)/notes', team_notes.ViewSet, basename='_api_v2_team_note')
 router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
 
 
@@ -178,6 +184,7 @@ router.register('itam/software/(?P<software_id>[0-9]+)/installs', device_softwar
 router.register('itam/software/(?P<model_id>[0-9]+)/notes', software_notes.ViewSet, basename='_api_v2_software_note')
 router.register('itam/software/(?P<software_id>[0-9]+)/version', software_version_v2.ViewSet, basename='_api_v2_software_version')
 router.register('itam/software/(?P<software_id>[0-9]+)/version/(?P<model_id>[0-9]+)/notes', software_version_notes.ViewSet, basename='_api_v2_software_version_note')
+router.register('itam/software/(?P<software_id>[0-9]+)/feature_flag', software_enable_feature_flag.ViewSet, basename='_api_v2_feature_flag_software')
 
 
 router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
@@ -223,7 +230,9 @@ router.register('settings/project_type/(?P<model_id>[0-9]+)/notes', project_type
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 router.register('settings/software_category/(?P<model_id>[0-9]+)/notes', software_category_notes.ViewSet, basename='_api_v2_software_category_note')
 router.register('settings/ticket_category', ticket_category.ViewSet, basename='_api_v2_ticket_category')
+router.register('settings/ticket_category/(?P<model_id>[0-9]+)/notes', ticket_category_notes.ViewSet, basename='_api_v2_ticket_category_note')
 router.register('settings/ticket_comment_category', ticket_comment_category.ViewSet, basename='_api_v2_ticket_comment_category')
+router.register('settings/ticket_comment_category/(?P<model_id>[0-9]+)/notes', ticket_comment_category_notes.ViewSet, basename='_api_v2_ticket_comment_category_note')
 router.register('settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
 router.register('settings/user_settings/(?P<model_id>[0-9]+)/token', auth_token.ViewSet, basename='_api_v2_user_settings_token')
 
@@ -236,3 +245,8 @@ urlpatterns = [
 ]
 
 urlpatterns += router.urls
+
+urlpatterns += [
+    path("devops/", include("devops.urls")),
+    path('public/', include('api.urls_public')),
+]

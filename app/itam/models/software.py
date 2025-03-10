@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.models.tenancy import Organization, TenancyObject
 
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
@@ -147,6 +147,17 @@ class Software(SoftwareCommonFields, SaveHistory):
         verbose_name_plural = 'Softwares'
 
 
+    organization = models.ForeignKey(
+        Organization,
+        blank = False,
+        help_text = 'Organization this belongs to',
+        null = False,
+        on_delete = models.CASCADE,
+        related_name = 'software',
+        validators = [ TenancyObject.validatate_organization_exists ],
+        verbose_name = 'Organization',
+    )
+
     publisher = models.ForeignKey(
         Manufacturer,
         blank= True,
@@ -220,6 +231,16 @@ class Software(SoftwareCommonFields, SaveHistory):
                     "field": "installations",
                 }
             ],
+        },
+        {
+            "name": "Feature Flagging",
+            "slug": "feature_flagging",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "feature_flagging",
+                }
+            ]
         },
         {
             "name": "Knowledge Base",
@@ -401,6 +422,18 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         return {
             'software_id': self.software.id,
             'pk': self.id
+        }
+
+    def get_url_kwargs_notes(self) -> dict:
+        """Fetch the URL kwargs for model notes
+
+        Returns:
+            dict: notes kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'software_id': self.software.id,
+            'model_id': self.id
         }
 
 

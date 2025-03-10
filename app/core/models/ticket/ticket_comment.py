@@ -8,6 +8,7 @@ from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.team import Team
 from access.models.tenancy import TenancyObject
 
+from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
 
 from .ticket import Ticket
@@ -448,6 +449,10 @@ class TicketComment(
 
         return reverse(f"v2:{url_name}-detail", kwargs = kwargs )
 
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
 
 
     @property

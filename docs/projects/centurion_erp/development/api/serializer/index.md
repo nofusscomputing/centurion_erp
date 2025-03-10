@@ -31,6 +31,8 @@ This section contains the application API documentation for Serializers to assis
 
 - fields that are required to have an initial value have it specified `self.fields.fields[<field name>].initial`
 
+- Serializers that are used to expose data that is publicly available **must** have it's filename prefixed with `public_`
+
 
 ## Base Serializer
 

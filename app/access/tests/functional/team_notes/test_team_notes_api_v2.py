@@ -15,7 +15,7 @@ class TeamNotesAPI(
 
     model = TeamNotes
 
-    view_name: str = '_api_v2_organization_team_note'
+    view_name: str = '_api_v2_team_note'
 
     @classmethod
     def setUpTestData(self):

@@ -190,6 +190,14 @@ class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
 
             model = Device
 
+        elif item.item_type == TicketLinkedItem.Modules.FEATURE_FLAG:
+
+            from devops.serializers.feature_flag import FeatureFlag, BaseSerializer
+
+            base_serializer = BaseSerializer
+
+            model = FeatureFlag
+
         elif item.item_type == TicketLinkedItem.Modules.KB:
 
             from assistance.serializers.knowledge_base import KnowledgeBase, KnowledgeBaseBaseSerializer
