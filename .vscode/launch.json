@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Centurion",
             "type": "debugpy",
@@ -40,6 +41,19 @@
                 "PROMETHEUS_MULTIPROC_DIR": ""
             }
         },
+        {
+            "name": "Centurion Feature Flag (Management Command)",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "feature_flag",
+                // "0.0.0.0:8002"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/app/manage.py"
+        },
+        
         {
             "name": "Migrate",
             "type": "debugpy",
