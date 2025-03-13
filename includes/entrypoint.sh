@@ -62,8 +62,17 @@ if [ "$1" == "" ]; then
     fi;
 
 
-    echo "[Info] SupervisorD Setup successfully"
+    echo "[info] SupervisorD Setup successfully"
 
+    echo "[info] Fetching available feature flags";
+
+    export init_dir=${PWD}
+    
+    cd /app;
+    
+    python manage.py feature_flag;
+
+    echo "[info] Starting SupervisorCTL";
 
     /usr/local/bin/supervisord;
 
