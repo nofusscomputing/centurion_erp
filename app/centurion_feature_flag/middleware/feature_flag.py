@@ -17,7 +17,9 @@ class FeatureFlagMiddleware:
             self._feature_flagging = CenturionFeatureFlagging(
                 url = settings.feature_flag['url'],
                 user_agent = settings.feature_flag['user_agent'],
-                cache_dir = settings.feature_flag['cache_dir']
+                cache_dir =settings.feature_flag['cache_dir'],
+                unique_id = settings.feature_flag.get('unique_id', None),
+                version = settings.feature_flag.get('version', None),
             )
 
 
