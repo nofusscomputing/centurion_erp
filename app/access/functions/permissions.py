@@ -31,15 +31,19 @@ def permission_queryset():
     ]
 
     exclude_permissions = [
+        'add_checkin',
         'add_history',
         'add_organization',
         'add_taskresult',
+        'change_checkin',
         'change_history',
         'change_organization',
         'change_taskresult',
+        'delete_checkin',
         'delete_history',
         'delete_organization',
         'delete_taskresult',
+        'view_checkin',
         'view_history',
     ]
 
