@@ -11,6 +11,7 @@ feature_flag = {
     'url': 'https://127.0.0.1:8002/api/v2/public/1/flags/2844',    # URL to your Centurion ERP instance
     'user_agent': 'My Django Application Name',                    # The name of your Django Application
     'cache_dir': str(BASE_DIR) + '/',                              # Directory name (with trailing slash `/`) where the cached flags will be stored
+    'disable_downloading': False                                   # Prevent downloading feature flags
     'unique_id': 'unique ID for application',                      # Unique ID for this instance of your Django application
     'version': '1.0.0',                                            # The Version of Your Django Application
 }    # Note: All key values are strings

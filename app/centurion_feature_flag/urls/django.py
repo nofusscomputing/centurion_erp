@@ -21,6 +21,7 @@ if getattr(settings,'feature_flag', None):
             url = settings.feature_flag['url'],
             user_agent = settings.feature_flag['user_agent'],
             cache_dir =settings.feature_flag['cache_dir'],
+            disable_downloading = settings.feature_flag.get('disable_downloading', False),
             unique_id = settings.feature_flag.get('unique_id', None),
             version = settings.feature_flag.get('version', None),
         )

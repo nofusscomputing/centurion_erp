@@ -42,6 +42,7 @@ class CenturionFeatureFlagging:
         user_agent (str): User Agent to report to Centurion Instance this
             should be the name of your application
         cache_dir (str): Directory where the feature flag cache file is saved.
+        disable_downloading (bool): Prevent the downloaing of feature flags
         unique_id (str, optional): Unique ID of the application that is
             reporting to Centurion ERP
         version (str, optional): The version of your application
@@ -58,32 +59,42 @@ class CenturionFeatureFlagging:
     """Date the feature flag file was last saved"""
 
     _cache_dir: str = None
+    """Directory name (with trailing slash `/`) where the feature flags will be saved/cached."""
+
+    _disable_downloading: bool = False
+    """Prevent check-in and subsequent downloading from remote Centurion instance"""
 
     _feature_flags: list = None
 
     _feature_flag_filename: str = 'feature_flags.json'
+    """ File name for the cached feture flags"""
 
     _headers: dict = {
         "Accept": "application/json",
     }
 
     _last_modified: datetime = None
+    """ Last modified date/time of the feature flags"""
 
     _response: requests.Response = None
+    """Cached response from fetched feature flags"""
 
     _ssl_verify: bool = True
+    """Verify the SSL certificate of the remote Centurion ERP instance"""
 
     _url: str = None
+    """ url of the centurion ERP instance"""
 
 
 
     def __init__(
         self,
-        url,
-        user_agent,
+        url: str,
+        user_agent: str,
         cache_dir: str,
-        unique_id = None,
-        version = None,
+        disable_downloading: bool = False,
+        unique_id: str = None,
+        version: str = None,
     ):
 
         if not str(cache_dir).endswith('/'):
@@ -94,6 +105,8 @@ class CenturionFeatureFlagging:
         self._url = url
 
         self._cache_dir = cache_dir
+
+        self._disable_downloading = disable_downloading
 
 
         if version is not None:
@@ -207,7 +220,10 @@ class CenturionFeatureFlagging:
 
         if feature_flag_file.is_file():
 
-            if feature_flag_file.lstat().st_mtime > datetime.now().timestamp() - (4 * 3580):    # -20 second buffer
+            if(
+                feature_flag_file.lstat().st_mtime > datetime.now().timestamp() - (4 * 3580)    # -20 second buffer
+                or self._disable_downloading
+            ):
                 # Only open file if less than 4 hours old
 
                 with open(feature_flag_path, 'r') as saved_feature_flags:
@@ -220,6 +236,10 @@ class CenturionFeatureFlagging:
 
 
         response = None
+
+        if self._disable_downloading:    # User has disabled downloading.
+
+            url = None
 
         while(url is not None):
 
