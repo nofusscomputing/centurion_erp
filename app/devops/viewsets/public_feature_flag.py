@@ -144,12 +144,17 @@ class ViewSet(PublicReadOnlyViewSet):
 
             response.headers['Last-Modified'] = self.last_modified.strftime('%a, %d %b %Y %H:%M:%S %z')
 
+        if(
+            response.status_code == 200
+            or response.status_code == 304
+        ):    # Only save check-in if no other error occured.
 
-        CheckIn.objects.create(
-            organization_id = self.kwargs['organization_id'],
-            software_id = self.kwargs['software_id'],
-            deployment_id = request.headers.get('client-id', 'not-provided'),
-            feature = 'feature_flag',
-        )
+            CheckIn.objects.create(
+                organization_id = self.kwargs['organization_id'],
+                software_id = self.kwargs['software_id'],
+                deployment_id = request.headers.get('client-id', 'not-provided'),
+                feature = 'feature_flag',
+            )
+
 
         return response
