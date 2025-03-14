@@ -136,7 +136,10 @@ class ViewSet(PublicReadOnlyViewSet):
 
         response = super().list(request = request, *args, **kwargs)
 
-        if response.status_code == 200:
+        if(
+            response.status_code == 200
+            and self.last_modified
+        ):
 
             response.headers['Last-Modified'] = self.last_modified.strftime('%a, %d %b %Y %H:%M:%S %z')
 
