@@ -440,7 +440,13 @@ if BUILD_VERSION:
 
 else:
 
-    feature_flag_version = str(BUILD_SHA)
+    if BUILD_SHA is not None:
+
+        feature_flag_version = str(BUILD_SHA)
+
+    else:
+
+        feature_flag_version = 'development'
 
 
 """ Unique ID Rational

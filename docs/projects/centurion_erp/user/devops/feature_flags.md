@@ -6,7 +6,7 @@ template: project.html
 about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-Feature flags are a tool that a developer can use so as to conduct progressive releases. That is by hiding a feature behind a flag that is only enabled (available to end users) when it is marked as enabled.
+Feature flags are a tool that a developer can use so as to conduct progressive releases. That is by hiding a feature behind a flag that is only enabled (available to end users) when it is marked as enabled. Feature Flagging is slightly different to other models within Centurion in that you can't across organizations use it's feature. Feature Flagging is enabled on a per organization basis.
 
 
 ## Fields
@@ -24,6 +24,13 @@ Feature flags are a tool that a developer can use so as to conduct progressive r
 - **created** Date and time the feature flag was created
 
 - **modified** Date and time the feature flag was modified
+
+
+## Enabling Feature Flagging
+
+Until you enable feature flagging within the organization you intend on using it. You will not be able to add feature flagging for the software in question.
+
+To enable feature flagging navigate to the software in question `ITAM -> Software`, enter the software page and click on the `Feature Flagging` tab. Click the `Add` button, then select the organization, software and enabled. Once you save this form, youi will be able to add the feature flag.
 
 
 ## API Endpoint

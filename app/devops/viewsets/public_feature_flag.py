@@ -2,6 +2,7 @@ from datetime import datetime
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from devops.models.check_ins import CheckIn
 from devops.serializers.public_feature_flag import (
     FeatureFlag,
     ViewSerializer,
@@ -142,5 +143,27 @@ class ViewSet(PublicReadOnlyViewSet):
         ):
 
             response.headers['Last-Modified'] = self.last_modified.strftime('%a, %d %b %Y %H:%M:%S %z')
+
+        if(
+            response.status_code == 200
+            or response.status_code == 304
+        ):    # Only save check-in if no other error occured.
+
+            user_agent = request.headers.get('user-agent', None)
+
+            if user_agent is not None:
+
+                user_agent = str(user_agent).split(' ')
+                user_agent = user_agent[( len(user_agent) -1 )]
+
+
+            CheckIn.objects.create(
+                organization_id = self.kwargs['organization_id'],
+                software_id = self.kwargs['software_id'],
+                deployment_id = request.headers.get('client-id', 'not-provided'),
+                version = user_agent,
+                feature = 'feature_flag',
+            )
+
 
         return response

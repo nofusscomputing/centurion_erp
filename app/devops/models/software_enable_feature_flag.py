@@ -1,3 +1,7 @@
+import pytz
+
+from datetime import date, datetime
+
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -6,6 +10,8 @@ from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.tenancy import TenancyObject
 
 from core.lib.feature_not_used import FeatureNotUsed
+
+from devops.models.check_ins import CheckIn
 
 from itam.models.software import Software
 
@@ -92,9 +98,37 @@ class SoftwareEnableFeatureFlag(
         # },
         'display_name',
         'organization',
+        'checkins',
         'created',
         '-action_delete-',
     ]
+
+    @property
+    def get_daily_checkins(self):
+
+        checkin = CheckIn.objects.filter(
+            organization = self.organization,
+            feature = 'feature_flag',
+            software = self.software,
+            created__range = (
+                datetime.fromtimestamp(datetime.utcnow().timestamp() - 86400, pytz.timezone('utc')), 
+                datetime.fromtimestamp(datetime.utcnow().timestamp(), pytz.timezone('utc'))
+            )
+        )
+
+        unique_deployment = {}
+
+        for deployment in checkin:
+
+            if unique_deployment.get(deployment.deployment_id, None) is None:
+
+                unique_deployment.update({
+                    deployment.deployment_id: 1
+                })
+
+
+        return len(unique_deployment)
+
 
     def get_url_kwargs(self) -> dict:
 
