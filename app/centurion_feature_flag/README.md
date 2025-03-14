@@ -29,6 +29,8 @@ Within Django the following locations have the feature flagging available
 
 - Django DRF Router(s)
 
+- Django URLs
+
 - Management command to fetch feature flag file
 
 - Caching of flags
@@ -63,6 +65,44 @@ class MyView:
             # code to run if feature flag is enabled
 
 ```
+
+
+## Django URLs
+
+To enable feature flagging for urls, substitute `from django.urls import path, re_path` with `from centurion_feature_flag.urls.django import path, re_path`. Then optionally, whilst calling the `path` function include attribute `feature_flag` with a string value of the feature flag id. Once enabled if an attempt to navigate to the url is made and for a disabled feature flag, a `HTTP/404` will be returned.
+
+``` py
+
+# urls.py
+
+from django.contrib import admin
+
+from centurion_feature_flag.urls.django import (
+    include,
+    path,
+    re_path
+)
+
+from my_app.views import home
+
+urlpatterns = [
+    path('', home.HomeView.as_view(), name='home', feature_flag = '2025-00001'),
+
+    path('admin/', admin.site.urls, name='_administration'),
+
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}, feature_flag = '2025-00003'),
+
+    path("some-path/", include("my_app.urls"), feature_flag = '2025-00002'),
+
+]
+
+```
+
+!!! tip
+    module `centurion_feature_flag.urls.django` also contains function `include` from `django.urls` so there is no need to import `django.urls` for this function.
+
+!!! note
+    If you use feature flagging on the `path` function and its called with the `include` function as the view attribute, not all paths from the include function are available. As a consequence, sub-paths are unavailable. For example. The `some-path/` url can be navigated to whilst `some-path/sub-path/` can not be. This generally wont be an issue, although if you attempt to use the `reverse` function on the sub-path and the feature flag is disabled; the reverse function will raise an exception.
 
 
 ## DRF Router
