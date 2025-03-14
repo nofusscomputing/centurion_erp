@@ -17,6 +17,8 @@ This component within ITAM is intended to display information about software wit
 
 - Installations
 
+- [Feature Flagging](../devops/feature_flags.md)
+
 - [Change History](../index.md#history)
 
 
@@ -48,3 +50,11 @@ This tab displays the different software versions and how many of each version a
 ## Installations
 
 This tab displays the installations of the software on devices within your inventory regardless of version.
+
+
+## Feature Flagging
+
+!!! note
+    Usage of this feature requires that you have been granted in addition to the software permissions, the relevant `feature_flag` permissions.
+
+Within this tab, you will be able to view which organizations have had feature flagging enabled for this software. In addition the `deployments` column shows how many unique deployments have fetched feature flags since midnight.
