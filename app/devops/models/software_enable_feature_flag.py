@@ -1,4 +1,7 @@
+import pytz
+
 from datetime import date, datetime
+
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -107,7 +110,10 @@ class SoftwareEnableFeatureFlag(
             organization = self.organization,
             feature = 'feature_flag',
             software = self.software,
-            created__date = datetime.now().date()
+            created__range = (
+                datetime.fromtimestamp(datetime.utcnow().timestamp() - 86400, pytz.timezone('utc')), 
+                datetime.fromtimestamp(datetime.utcnow().timestamp(), pytz.timezone('utc'))
+            )
         )
 
         unique_deployment = {}

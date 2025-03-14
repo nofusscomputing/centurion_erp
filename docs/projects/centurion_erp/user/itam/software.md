@@ -57,4 +57,4 @@ This tab displays the installations of the software on devices within your inven
 !!! note
     Usage of this feature requires that you have been granted in addition to the software permissions, the relevant `feature_flag` permissions.
 
-Within this tab, you will be able to view which organizations have had feature flagging enabled for this software. In addition the `deployments` column shows how many unique deployments have fetched feature flags since midnight.
+Within this tab, you will be able to view which organizations have had feature flagging enabled for this software. In addition the `deployments` column shows how many unique deployments have fetched feature flags within the last 24-hours.
