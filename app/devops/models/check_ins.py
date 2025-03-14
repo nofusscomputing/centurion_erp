@@ -43,6 +43,15 @@ class CheckIn(
         verbose_name = 'Software',
     )
 
+    version = models.TextField(
+        blank = True,
+        help_text = 'Version of the deployed software',
+        max_length = 80,
+        null = True,
+        unique = False,
+        verbose_name = 'Deployed Version'
+    )
+
     deployment_id = models.CharField(
         blank = False,
         help_text = 'Unique Deployment ID',
