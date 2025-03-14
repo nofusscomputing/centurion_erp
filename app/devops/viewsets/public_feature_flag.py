@@ -149,10 +149,19 @@ class ViewSet(PublicReadOnlyViewSet):
             or response.status_code == 304
         ):    # Only save check-in if no other error occured.
 
+            user_agent = request.headers.get('user-agent', None)
+
+            if user_agent is not None:
+
+                user_agent = str(user_agent).split(' ')
+                user_agent = user_agent[( len(user_agent) -1 )]
+
+
             CheckIn.objects.create(
                 organization_id = self.kwargs['organization_id'],
                 software_id = self.kwargs['software_id'],
                 deployment_id = request.headers.get('client-id', 'not-provided'),
+                version = user_agent,
                 feature = 'feature_flag',
             )
 

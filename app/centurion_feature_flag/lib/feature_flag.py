@@ -109,7 +109,7 @@ class CenturionFeatureFlagging:
         self._disable_downloading = disable_downloading
 
 
-        if version is not None:
+        if version is None:
 
             self._headers.update({
                 'User-Agent': f'{user_agent} 0.0'
