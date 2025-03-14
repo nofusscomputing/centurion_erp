@@ -50,6 +50,14 @@ class ModelSerializer(
     _urls = serializers.SerializerMethodField('get_url')
 
 
+    checkins = serializers.IntegerField(
+        read_only = True,
+        source = 'get_daily_checkins',
+        label = 'Deployments',
+        help_text = 'Todays unique deployment count'
+    )
+
+
     class Meta:
 
         model = SoftwareEnableFeatureFlag
@@ -60,6 +68,7 @@ class ModelSerializer(
             'display_name',
             'software',
             'enabled',
+            'checkins',
             'created',
             'modified',
             '_urls',
@@ -69,6 +78,7 @@ class ModelSerializer(
             'id',
             'display_name',
             'software',
+            'checkins',
             'created',
             'modified',
             '_urls',
