@@ -148,7 +148,7 @@ class ViewSet(PublicReadOnlyViewSet):
         CheckIn.objects.create(
             organization_id = self.kwargs['organization_id'],
             software_id = self.kwargs['software_id'],
-            deployment_id = request.headers['client-id'],
+            deployment_id = request.headers.get('client-id', 'not-provided'),
             feature = 'feature_flag',
         )
 
