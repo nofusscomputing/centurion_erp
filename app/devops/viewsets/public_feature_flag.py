@@ -2,6 +2,7 @@ from datetime import datetime
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from devops.models.check_ins import CheckIn
 from devops.serializers.public_feature_flag import (
     FeatureFlag,
     ViewSerializer,
@@ -142,5 +143,13 @@ class ViewSet(PublicReadOnlyViewSet):
         ):
 
             response.headers['Last-Modified'] = self.last_modified.strftime('%a, %d %b %Y %H:%M:%S %z')
+
+
+        CheckIn.objects.create(
+            organization_id = self.kwargs['organization_id'],
+            software_id = self.kwargs['software_id'],
+            deployment_id = request.headers['client-id'],
+            feature = 'feature_flag',
+        )
 
         return response
