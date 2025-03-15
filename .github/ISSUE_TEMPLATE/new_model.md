@@ -68,8 +68,8 @@ Describe in detail the following:
 #### 🧪 Tests
 
 - [ ] Unit Test Model
+    - [ ] Unit Test Tenancy Object
 - [ ] Unit Test Serializer
-- [ ] Unit Test Tenancy Object
 - [ ] Unit Test ViewSet
 - [ ] Function Test ViewSet
 - [ ] Function Test API Metadata
