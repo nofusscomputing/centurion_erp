@@ -76,6 +76,7 @@ Describe in detail the following:
 - [ ] Function Test API Permissions
 - [ ] Function Test API Render (fields)
 - [ ] Function Test History Entries
+- [ ] Function Test History API Render (fields)
 
 
 ### ✅ Requirements
