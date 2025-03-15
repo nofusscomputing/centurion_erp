@@ -68,6 +68,7 @@ CELERY_WORKER_MAX_TASKS_PER_CHILD = 1 # worker_max_tasks_per_child
 CELERY_TASK_SEND_SENT_EVENT = True
 CELERY_WORKER_SEND_TASK_EVENTS = True # worker_send_task_events
 
+FEATURE_FLAGGING_ENABLED = True # Turn Feature Flagging on/off
 
 # PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(8010, 8010)
 # PROMETHEUS_METRICS_EXPORT_PORT = 8010
@@ -472,3 +473,20 @@ is yours. If you do change the value ensure that it's still hashed as a sha256 h
 """
 unique_id = str(f'{CELERY_BROKER_URL}{DOCS_ROOT}{SITE_URL}{SECRET_KEY}{feature_flag_version}')
 unique_id = hashlib.sha256(unique_id.encode()).hexdigest()
+
+if FEATURE_FLAGGING_ENABLED:
+
+    FEATURE_FLAGGING_URL = 'https://alfred.nofusscomputing.com/api/v2/public/4/flags/1'
+
+    if DEBUG:
+
+        FEATURE_FLAGGING_URL = 'http://127.0.0.1:8002/api/v2/public/1/flags/2844'
+
+    feature_flag = {
+        'url': str(FEATURE_FLAGGING_URL),
+        'user_agent': 'Centurion ERP',
+        'cache_dir': str(BASE_DIR) + '/',
+        'disable_downloading': False,
+        'unique_id': unique_id,
+        'version': feature_flag_version
+    }

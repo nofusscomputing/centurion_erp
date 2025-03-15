@@ -22,3 +22,12 @@ It's completely your choice how you expose this endpoint although with the cavea
 - `HTTP/200 - Success`
 
     When the client checks-in and the feature flags have been supplied. If the user does not specify request header `If-Modified-Since:`, the feature flags will always be returned.
+
+
+## Settings
+
+Within your settings file the following settings are available
+
+| Attribute | Type | Default | Description |
+|:---|:---:|:---:|:---|
+| FEATURE_FLAGGING_ENABLED | `Bolean` | `True `| Turn feature flagging on/off |
