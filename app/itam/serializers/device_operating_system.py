@@ -66,8 +66,6 @@ class DeviceOperatingSystemModelSerializer(
 
         del get_url['knowledge_base']
 
-        del get_url['notes']
-
         if self._context.get('view', None):
 
             if self.context['view'].kwargs.get('device_id'):

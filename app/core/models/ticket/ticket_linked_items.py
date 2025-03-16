@@ -9,6 +9,7 @@ from .ticket_enum_values import TicketValues
 
 from access.models.tenancy import TenancyObject
 
+from core.lib.feature_not_used import FeatureNotUsed
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket import Ticket, KnowledgeBase
 
@@ -40,6 +41,7 @@ class TicketLinkedItem(TenancyObject):
         KB               = 7, 'Knowledge Base'
         ORGANIZATION     = 8, 'Organization'
         TEAM             = 9, 'Team'
+        FEATURE_FLAG     = 10, 'Feature Flag'
 
     is_global = None
 
@@ -105,6 +107,10 @@ class TicketLinkedItem(TenancyObject):
             }
         )
 
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed
+
 
     def __str__(self) -> str:
 
@@ -145,6 +151,11 @@ class TicketLinkedItem(TenancyObject):
         elif self.item_type == TicketLinkedItem.Modules.TEAM:
 
             item_type = 'team'
+
+        else:
+
+            item_type = str(self.get_item_type_display()).lower().replace(' ', '_')
+
 
         if item_type:
 

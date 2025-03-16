@@ -197,7 +197,7 @@ class ModelKnowledgeBaseArticleAPI(
 
 
     @pytest.mark.skip( reason = 'not required for this model' )
-    def test_api_field_type_urls(self):
+    def test_api_field_type_urls_self(self):
         """ Test for type for API Field
 
         _urls._self field must be str

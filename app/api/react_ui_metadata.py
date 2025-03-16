@@ -83,6 +83,14 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         url_self = None
 
+        app_namespace = ''
+
+        if getattr(view, 'model', None):
+
+            if getattr(view.model, 'get_app_namespace', None):
+
+                app_namespace = view.model().get_app_namespace()
+
 
         if view.kwargs.get('pk', None) is not None:
 
@@ -95,11 +103,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         elif view.kwargs:
 
-            url_self = reverse('v2:' + view.basename + '-list', request = view.request, kwargs = view.kwargs )
+            url_self = reverse('v2:' + app_namespace + view.basename + '-list', request = view.request, kwargs = view.kwargs )
 
         else:
 
-            url_self = reverse('v2:' + view.basename + '-list', request = view.request )
+            url_self = reverse('v2:' + app_namespace + view.basename + '-list', request = view.request )
 
         if url_self:
 
@@ -446,6 +454,19 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     "name": "service",
                     "link": "/itim/service"
                 },
+            }
+        },
+        'devops': {
+            "display_name": "DevOPs",
+            "name": "devops",
+            "icon": "devops",
+            "pages": {
+                'view_featureflag': {
+                    "display_name": "Feature Flags",
+                    "name": "feature_flag",
+                    "icon": 'feature_flag',
+                    "link": "/devops/feature_flag"
+                }
             }
         },
         'config_management': {

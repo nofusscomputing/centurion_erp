@@ -46,6 +46,8 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
 - View Added to Navigation
 
+- ViewSets that are used to expose data that is publicly available **must** have it's filename prefixed with `public_`
+
 
 ## Permissions
 

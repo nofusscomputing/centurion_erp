@@ -64,7 +64,6 @@ class ConfigGroupSoftwareModelSerializer(
 
         del get_url['history']
         del get_url['knowledge_base']
-        del get_url['notes']
 
         get_url.update({
             'organization': reverse(

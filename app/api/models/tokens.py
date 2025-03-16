@@ -13,6 +13,8 @@ from access.fields import (
     AutoLastModifiedField
 )
 
+from core.lib.feature_not_used import FeatureNotUsed
+
 
 
 class AuthToken(models.Model):
@@ -162,3 +164,8 @@ class AuthToken(models.Model):
             'model_id': self.user.id,
             'pk': self.id
         }
+
+
+    def get_url_kwargs_notes(self):
+
+        return FeatureNotUsed

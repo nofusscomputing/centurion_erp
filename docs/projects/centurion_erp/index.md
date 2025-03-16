@@ -53,6 +53,10 @@ Centurion ERP contains the following modules:
 
     - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)
 
+- [Development Operations (DevOps)](./user/devops/index.md)
+
+    - [Feature Flags](./user/devops/feature_flags.md)
+
 - Incident Management
 
 - [IT Asset Management (ITAM)](./user/itam/index.md)
