@@ -33,6 +33,7 @@ class Index(IndexViewset):
                 "itim": reverse('v2:_api_v2_itim_home-list', request=request),
                 "config_management": reverse('v2:_api_v2_config_management_home-list', request=request),
                 "project_management": reverse('v2:_api_v2_project_management_home-list', request=request),
+                "public": reverse('v2:public:_public_api_v2-list', request=request),
                 "settings": reverse('v2:_api_v2_settings_home-list', request=request)
             }
         )

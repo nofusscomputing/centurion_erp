@@ -72,11 +72,6 @@ class ViewSet(ModelRetrieveUpdateViewSet):
 
     def get_serializer_class(self):
 
-        if self.serializer_class is not None:
-
-            return self.serializer_class
-
-
         if (
             self.action == 'list'
             or self.action == 'retrieve'

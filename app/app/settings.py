@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import hashlib
 import os
 import sys
 
@@ -67,6 +68,7 @@ CELERY_WORKER_MAX_TASKS_PER_CHILD = 1 # worker_max_tasks_per_child
 CELERY_TASK_SEND_SENT_EVENT = True
 CELERY_WORKER_SEND_TASK_EVENTS = True # worker_send_task_events
 
+FEATURE_FLAGGING_ENABLED = True # Turn Feature Flagging on/off
 
 # PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(8010, 8010)
 # PROMETHEUS_METRICS_EXPORT_PORT = 8010
@@ -134,6 +136,8 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'config_management.apps.ConfigManagementConfig',
     'project_management.apps.ProjectManagementConfig',
+    'devops.apps.DevOpsConfig',
+    'centurion_feature_flag',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +152,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.get_request.RequestMiddleware',
     'app.middleware.timezone.TimezoneMiddleware',
+    # 'centurion_feature_flag.middleware.feature_flag.FeatureFlagMiddleware',
 ]
 
 
@@ -428,3 +433,60 @@ if SSO_ENABLED:
         'social_core.pipeline.social_auth.load_extra_data',
         'social_core.pipeline.user.user_details',
     )
+
+
+if BUILD_VERSION:
+
+    feature_flag_version = str(BUILD_VERSION) + '+' + str(BUILD_SHA)[8:]
+
+else:
+
+    if BUILD_SHA is not None:
+
+        feature_flag_version = str(BUILD_SHA)
+
+    else:
+
+        feature_flag_version = 'development'
+
+
+""" Unique ID Rational
+
+Unique ID generation required to determine how many installations are deployed. Also provides the opportunity
+should it be required in the future to enable feature flags on a per `unique_id`.
+
+Objects:
+
+- CELERY_BROKER_URL
+- SITE_URL
+- SECRET_KEY
+
+Will provide enough information alone once hashed, to identify a majority of deployments as unique.
+
+Adding object `feature_flag_version`, Ensures that as each release occurs that a deployments `unique_id` will
+change, thus preventing long term monitoring of a deployments usage of Centurion.
+
+value `DOCS_ROOT` is added so there is more data to hash.
+
+You are advised not to change the `unique_id` as you may inadvertantly reduce your privacy. However the choice
+is yours. If you do change the value ensure that it's still hashed as a sha256 hash.
+"""
+unique_id = str(f'{CELERY_BROKER_URL}{DOCS_ROOT}{SITE_URL}{SECRET_KEY}{feature_flag_version}')
+unique_id = hashlib.sha256(unique_id.encode()).hexdigest()
+
+if FEATURE_FLAGGING_ENABLED:
+
+    FEATURE_FLAGGING_URL = 'https://alfred.nofusscomputing.com/api/v2/public/4/flags/1'
+
+    if DEBUG:
+
+        FEATURE_FLAGGING_URL = 'http://127.0.0.1:8002/api/v2/public/1/flags/2844'
+
+    feature_flag = {
+        'url': str(FEATURE_FLAGGING_URL),
+        'user_agent': 'Centurion ERP',
+        'cache_dir': str(BASE_DIR) + '/',
+        'disable_downloading': False,
+        'unique_id': unique_id,
+        'version': feature_flag_version
+    }

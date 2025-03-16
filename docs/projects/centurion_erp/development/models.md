@@ -132,7 +132,22 @@ page_layout: list = [
 
 ## table_fields Attributes
 
-The `table_fields` attribute within a model is what the UI List View or section table uses as the fields to add to the table. The `table_fields` attribute is a python list of strings that are the field names as are defined within the serializer.
+The `table_fields` attribute within a model is what the UI List View or section table uses as the fields to add to the table. The `table_fields` attribute is a python list of string/dictionary that are the field names as are defined within the serializer. If the field is defined as a dictionary, the field is formatted as per the definition. for example:
+
+``` py
+
+table_fields: list = [
+    'organization',
+    'name'
+    {
+        'field': 'display_name',    # String, Name of the field to use
+        'type': 'link',             # Choice, (link = anchor link) definition type
+        'key': '_self'              # String, Dictionary key to use, in case of link. in this case will expand to `_urls._self`
+    },
+    'created'
+]
+
+```
 
 
 ## History

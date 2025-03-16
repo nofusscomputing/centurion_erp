@@ -157,6 +157,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.DEVICE
 
+        elif model_type == 'feature_flag':
+
+            from devops.models.feature_flag import FeatureFlag
+
+            model = FeatureFlag
+
+            item_type = TicketLinkedItem.Modules.FEATURE_FLAG
+
         elif model_type == 'kb':
 
             from assistance.models.knowledge_base import KnowledgeBase
@@ -175,7 +183,7 @@ For this command to process the following conditions must be met:
 
         elif  model_type == 'organization':
 
-            from access.models import Organization
+            from access.models.organization import Organization
 
             model = Organization
 
@@ -199,7 +207,7 @@ For this command to process the following conditions must be met:
 
         elif model_type == 'team':
 
-            from access.models import Team
+            from access.models.team import Team
 
             model = Team
 
