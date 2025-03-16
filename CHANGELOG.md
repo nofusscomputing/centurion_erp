@@ -1,3 +1,132 @@
+## 1.13.0 (2025-03-16)
+
+### feat
+
+- **devops**: Add ability for user to turn off feature flagging check-in
+- **devops**: When displaying the feature_flag deployments, limit to last 24-hours
+- **devops**: During feature flag `Checkin` derive the version from the last field of the user-agent
+- **devops**: Add missing column to model `Checkin`
+- **devops**: Remove model `Checkin` permissions from permissions selector
+- **devops**: Display the days total unique check-ins for feature flags within software feature flagging tab
+- **devops**: Record to check-in table every time feature flags are obtained
+- **devops**: Migrations for model `CheckIns`
+- **devops**: New model `CheckIns`
+- Generate a deployment unique ID
+- **devops**: Provide user with option to disable downloading feature flags
+- **devops**: Feature Flagging url.path wrapper
+- **docker**: Configure cron to download feature flags every four hours
+- **docker**: Start and run crond within container
+- **docker**: Download feature flags on container start
+- **devops**: Feature Flagging DRF Router wrapper
+- **devops**: Feature Flagging middleware
+- **devops**: Feature Flagging management command
+- **devops**: Add Feature Flagging lib
+- **devops**: add temp application for feature flag client
+- **devops**: public feature flag endpoint pagination limited to 20 results
+- **devops**: Add support for `if-modified-since` header for Feature Flags public endpoint
+- **api**: Add public API feature flag index endpoint
+- **api**: Add public API endpoint
+- **devops**: Add feature flag public ViewSet
+- **devops**: Add feature flag public serializer
+- **api**: Add common viewset for public RO list
+- Remove serializer caching from ALL viewsets
+- **devops**: Add delete col to software enabled feature flags
+- **devops**: Prevent deletion  of software when it has feature flagging enabled and/or feature flags
+- **devops**: limit feature_flag to organizations that's had feature flags enabled
+- **devops**: limit feature_flag to software that's had feature flags enabled
+- **python**: Update Django 5.1.5 -> 5.1.7
+- **devops**: Serializer limiting of software and os disabled for time being
+- **devops**: Serializer validate software and org
+- **devops**: Serializer software filter to enabled feature_flag software
+- **devops**: Serializer org filter to enabled feature_flag organizations
+- **devops**: Add endpoint for enabling software for feature flagging
+- **devops**: Add serializer for enabling software for feature flagging
+- **devops**: Add model for enabling software for feature flagging
+- **devops**: Add model tag feature_flag to ticket linked item
+- **devops**: Add KB tab to feature flag model
+- **devops**: Add Notes to feature flag model
+- **core**: Migration for feature_flag model reference
+- **core**: url endpoints added for ticket comment category and ticket category notes
+- **itam**: disable model notes for model device os
+- **api**: disable model notes for model auth token
+- **core**: disable model notes for model teamuser
+- **core**: disable model notes for model notes
+- **core**: Migrations for adding notes to ticket category and ticket comment category
+- **core**: Add Feature Flag model reference
+- **devops**: Add devops module to installed applications
+- **devops**: Add Feature Flag viewset
+- **devops**: Add Feature Flag serializer
+- **devops**: Add devops Navigation menu
+- **devops**: Add devops module URL includes
+- **devops**: Add devops to permissions
+- **devops**: DB Migrations for Feature Flag and History model
+- **devops**: Add Feature Flag History model
+- **devops**: Add Feature Flag model
+- **access**: add support for nested application namespaces
+- **devops**: Add devops module
+
+### Fixes
+
+- **devops**: Only track checkin if no other error occured
+- **devops**: during feature flag checkin, if no `client-id` provided, use value `not-provided`
+- **devops**: When init the feature flag clients, look for all args within settings
+- **devops**: Only add `Last-Modified` header to response if exists
+- **devops**: Correct logic for data changed check for public endpoint for feature flagging
+- **devops**: feature flag public ViewSet serializer name correction and qs cache correction
+- **devops**: feature flag public endpoint field modified name typo
+- **devops**: Filter public feature flag endpoint to org and software where software is enabled
+- **devops**: Move software field filter for feature flag to the serializer
+- **devops**: Dont attempt to validate feature flag software or organization if it is absent
+- **devops**: Correct feature flagging validation for enabled software and enabled orgs
+- **devops**: dont cache serializer for featureflag
+- **devops**: Correct Feature Flag serializer validation to cater for edit
+- **devops**: Feature Flag field is mandatory
+- **api**: make history url dynamic. only display if history should save
+- **devops**: if software is deleted delete feature flags
+- **core**: disable of notes for models not requiring it
+- **api**: when generating notes url, use correct object
+- **api**: Add missing import for featurenotused
+- **core**: Add ability to add notes for ticket comment category
+- **core**: Add ability to add notes for ticket category
+- **core**: Serializer `_urls.notes` URL generation now dynamic
+- **api**: Dont attempt to access model.get_app_namespace if it doesnt exist
+
+### Tests
+
+- **devops**: Feature Flag History API render checks
+- **devops**: Feature Flag Serializer checks
+- **devops**: CheckIn Entry created of fetching feature flags
+- **devops**: CheckIn model test cases
+- **devops**: public feature flag fields corrections
+- **devops**: public feature flag functional ViewSet checks
+- **devops**: feature flag ViewSet checks
+- **api**: Update vieset test cases to cater for mockrequest to contain headers attribute
+- **devops**: feature flag public endpoint API field, header checks
+- **devops**: Ensure that only enabled org and enabled software is possible
+- **devops**: software_feature_flag_enable ViewSet checks
+- **devops**: software_feature_flag_enable Serializer checks
+- **devops**: Update feature flag test case setup to enable feature flag for testing software
+- **devops**: Update feature flag test case setup to enable feature flag for testing software
+- **api**: Remove serializer cache test cases
+- **devops**: software_feature_flag_enable api field checks
+- **devops**: software_feature_flag_enable viewset checks
+- **devops**: software_feature_flag_enable model checks
+- **devops**: software_feature_flag_enable tenancy object checks
+- **devops**: correct dir name for tests
+- **devops**: Notes feature flag model checks
+- **core**: Ticket Comment Category Notes checks
+- **core**: Ticket Category Notes checks
+- **app**: Model test cases for api field rendering `_urls.notes`
+- **app**: Model test cases for get_url_kwargs_notes function
+- **access**: Correct Team notes url route name
+- **devops**: Feature Flag viewset unit Checks
+- **devops**: Feature Flag model Checks
+- **devops**: Feature Flag api Checks
+- **devops**: Feature Flag tenancy object Checks
+- **devops**: Feature Flag viewset functional Checks
+- **devops**: Feature Flag serializer Checks
+- **devops**: Feature Flag History Checks
+
 ## 1.12.0 (2025-03-01)
 
 ### feat
