@@ -128,6 +128,23 @@ class ViewSet( ModelViewSet ):
     view_description = 'Physical Softwares'
 
 
+    def get_back_url(self) -> str:
+
+        if(
+            getattr(self, '_back_url', None) is None
+        ):
+
+            return_model = Software.objects.get(
+                pk = self.kwargs['software_id']
+            )
+
+            self._back_url = str(
+                return_model.get_url( self.request )
+            )
+
+        return self._back_url
+
+
     def get_queryset(self):
 
         if self.queryset is not None:
