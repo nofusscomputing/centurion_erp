@@ -270,6 +270,14 @@ class CenturionFeatureFlagging:
 
             except requests.exceptions.ConnectionError as err:
 
+                print(f'Error Connecting to {url}')
+
+                url = None
+
+            except requests.exceptions.ReadTimeout as err:
+
+                print(f'Connection Timed Out connecting to {url}')
+
                 url = None
 
 
