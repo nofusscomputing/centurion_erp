@@ -101,6 +101,6 @@ A Model link is a reference to an item within the database. Supported model link
 | team| `$team-<id>` |
 | ticketcategory| `$ticket_category-<id>` |
 | ticketcomment| `$-<id>` |
-| ticketcommentcategory| `$-<id>` |
+| ticketcommentcategory| `$ticket_comment_category-<id>` |
 
 To declare a model link use syntax `$<type>-<model id>`. i.e. for device 1, it would be `$device-1`

@@ -229,6 +229,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.TICKET_CATEGORY
 
+        elif model_type == 'ticket_comment_category':
+
+            from core.models.ticket.ticket_comment_category import TicketCommentCategory
+
+            model = TicketCommentCategory
+
+            item_type = TicketLinkedItem.Modules.TICKET_COMMENT_CATEGORY
+
 
         return tuple([
             model,

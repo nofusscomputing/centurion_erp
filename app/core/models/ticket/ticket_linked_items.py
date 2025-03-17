@@ -31,19 +31,20 @@ class TicketLinkedItem(TenancyObject):
 
 
     class Modules(models.IntegerChoices):
-        CLUSTER          = 1, 'Cluster'
-        CONFIG_GROUP     = 2, 'Config Group'
-        DEVICE           = 3, 'Device'
-        OPERATING_SYSTEM = 4, 'Operating System'
-        SERVICE          = 5, 'Service'
-        SOFTWARE         = 6, 'Software'
+        CLUSTER                 = 1, 'Cluster'
+        CONFIG_GROUP            = 2, 'Config Group'
+        DEVICE                  = 3, 'Device'
+        OPERATING_SYSTEM        = 4, 'Operating System'
+        SERVICE                 = 5, 'Service'
+        SOFTWARE                = 6, 'Software'
 
-        KB               = 7, 'Knowledge Base'
-        ORGANIZATION     = 8, 'Organization'
-        TEAM             = 9, 'Team'
-        FEATURE_FLAG     = 10, 'Feature Flag'
-        SOFTWARE_VERSION = 11, 'Software Version'
-        TICKET_CATEGORY  = 12, 'Ticket Category'
+        KB                      = 7, 'Knowledge Base'
+        ORGANIZATION            = 8, 'Organization'
+        TEAM                    = 9, 'Team'
+        FEATURE_FLAG            = 10, 'Feature Flag'
+        SOFTWARE_VERSION        = 11, 'Software Version'
+        TICKET_CATEGORY         = 12, 'Ticket Category'
+        TICKET_COMMENT_CATEGORY = 13, 'Ticket Comment Category'
 
 
     is_global = None
