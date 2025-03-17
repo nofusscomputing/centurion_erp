@@ -1,3 +1,17 @@
+## 1.13.1 (2025-03-17)
+
+### Fixes
+
+- **devops**: After fetching feature flags dont attempt to access results unless status=200
+- **docker**: only download feature flags when not a worker
+- **devops**: Use correct stderr function when using feature_flag management command
+- **devops**: Cater for connection timeout when fetching feature flags
+- when building feature flag version, use first 8 chars of build hash
+
+### Refactoring
+
+- **docker**: Use crontabs not cron.d
+
 ## 1.13.0 (2025-03-16)
 
 ### feat
