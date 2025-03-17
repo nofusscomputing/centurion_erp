@@ -1,5 +1,7 @@
 import re
 
+from core import exceptions as centurion_exceptions
+
 
 
 class CommandLinkedModel:
@@ -44,6 +46,8 @@ For this command to process the following conditions must be met:
 
     linked_item: str = r'\/(?P<full>(?P<command>[link]+)(?P<models>(\s\$(?P<type>[a-z_]+)-(?P<id>\d+)))+)[\s]?'
 
+    single_item: str = r'\$(?P<type>[a-z_]+)-(?P<id>\d+)'
+
 
     def command_linked_model(self, match) -> str:
         """/link processor
@@ -67,56 +71,64 @@ For this command to process the following conditions must be met:
             None: On successfully processing the command
         """
 
-        a = 'a'
+        ticket = self
 
-        command = match.group('command')
+        if str(self._meta.verbose_name).lower() == 'ticket comment':
 
-        model_type:int =  str(match.group('type'))
-        model_id:int =  int(match.group('id'))
+            ticket = self.ticket
 
+        found_items = re.findall(self.single_item, match.group('full'))
 
         try:
 
-            model, item_type = self.get_model( model_type )
+            for model_type, model_id in found_items:
 
-            if not model:
+                try:
 
-                return str(match.string[match.start():match.end()])
+                    model, item_type = self.get_model( model_type )
 
+                    if not model:
 
-            if str(self._meta.verbose_name).lower() == 'ticket':
-
-                ticket = self
-
-            elif str(self._meta.verbose_name).lower() == 'ticket comment':
-
-                ticket = self.ticket
+                        return str(match.string[match.start():match.end()])
 
 
-            if model:
+                    if model:
 
-                item = model.objects.get(
-                    pk = model_id
-                )
+                        item = model.objects.get(
+                            pk = model_id
+                        )
 
-                from core.serializers.ticket_linked_item import TicketLinkedItemModelSerializer
+                        from core.serializers.ticket_linked_item import TicketLinkedItemModelSerializer
 
-                serializer = TicketLinkedItemModelSerializer(
-                    data = {
-                        'organization': ticket.organization,
-                        'ticket': ticket.id,
-                        'item_type': item_type,
-                        'item': item.id
-                    }
-                )
+                        serializer = TicketLinkedItemModelSerializer(
+                            data = {
+                                'organization': ticket.organization,
+                                'ticket': ticket.id,
+                                'item_type': item_type,
+                                'item': item.id
+                            }
+                        )
 
-                if serializer.is_valid():
+                        if serializer.is_valid( raise_exception = True ):
 
-                    serializer.save()
+                            serializer.save()
 
-                    return None
+                except centurion_exceptions.ValidationError as err:
 
-                return str(match.string[match.start():match.end()])
+                    error = err.get_codes().get('non_field_errors', None)
+
+                    if error is not None:
+
+                        if error[0] != 'unique':
+
+                            raise centurion_exceptions.ValidationError(
+                                detail = err.detail,
+                                code = err.get_codes()
+                            )
+
+
+
+            return None
 
         except Exception as e:
 
