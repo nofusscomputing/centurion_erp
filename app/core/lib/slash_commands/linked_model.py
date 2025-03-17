@@ -205,6 +205,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.SOFTWARE
 
+        elif model_type == 'software_version':
+
+            from itam.models.software import SoftwareVersion
+
+            model = SoftwareVersion
+
+            item_type = TicketLinkedItem.Modules.SOFTWARE_VERSION
+
         elif model_type == 'team':
 
             from access.models.team import Team
