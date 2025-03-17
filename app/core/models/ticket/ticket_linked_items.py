@@ -45,6 +45,7 @@ class TicketLinkedItem(TenancyObject):
         SOFTWARE_VERSION        = 11, 'Software Version'
         TICKET_CATEGORY         = 12, 'Ticket Category'
         TICKET_COMMENT_CATEGORY = 13, 'Ticket Comment Category'
+        PROJECT_STATE           = 14, 'Project State'
 
 
     is_global = None

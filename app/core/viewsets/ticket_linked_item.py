@@ -23,6 +23,8 @@ from itam.models.software import Software, SoftwareVersion
 from itim.models.clusters import Cluster
 from itim.models.services import Service
 
+from project_management.models.project_states import ProjectState
+
 
 
 @extend_schema_view(
@@ -183,6 +185,12 @@ class ViewSet(ModelViewSet):
                         item_type = getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').value
 
                         self.parent_model = OperatingSystem
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'PROJECT_STATE').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'PROJECT_STATE').value
+
+                        self.parent_model = ProjectState
 
                     elif str(getattr(TicketLinkedItem.Modules, 'SERVICE').label).lower() == self.kwargs['item_class']:
 

@@ -221,6 +221,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.TEAM
 
+        elif model_type == 'project_state':
+
+            from project_management.models.project_states import ProjectState
+
+            model = ProjectState
+
+            item_type = TicketLinkedItem.Modules.PROJECT_STATE
+
         elif model_type == 'ticket_category':
 
             from core.models.ticket.ticket_category import TicketCategory
