@@ -25,6 +25,12 @@ class TicketLinkedItem(TenancyObject):
             'id'
         ]
 
+        unique_together = (
+            'ticket',
+            'item_type',
+            'item',
+        )
+
         verbose_name = 'Ticket Linked Item'
 
         verbose_name_plural = 'Ticket linked Items'
