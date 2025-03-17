@@ -61,6 +61,9 @@ if [ "$1" == "" ]; then
 
     fi;
 
+    chmod 744 -R /etc/crontabs;
+
+    chown 0:0 -R /etc/crontabs;
 
     echo "[info] SupervisorD Setup successfully"
 
