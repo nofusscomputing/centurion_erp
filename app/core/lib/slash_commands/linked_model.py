@@ -221,6 +221,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.TEAM
 
+        elif model_type == 'ticket_category':
+
+            from core.models.ticket.ticket_category import TicketCategory
+
+            model = TicketCategory
+
+            item_type = TicketLinkedItem.Modules.TICKET_CATEGORY
+
 
         return tuple([
             model,

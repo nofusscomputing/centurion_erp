@@ -7,6 +7,7 @@ from assistance.models.knowledge_base import KnowledgeBase
 
 from config_management.models.groups import ConfigGroups
 
+from core.models.ticket.ticket_category import TicketCategory
 from core.serializers.ticket_linked_item import (
     Ticket,
     TicketLinkedItem,
@@ -199,6 +200,12 @@ class ViewSet(ModelViewSet):
                         item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE_VERSION').value
 
                         self.parent_model = SoftwareVersion
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'TICKET_CATEGORY').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'TICKET_CATEGORY').value
+
+                        self.parent_model = TicketCategory
 
 
                 self.item_type = item_type

@@ -43,6 +43,7 @@ class TicketLinkedItem(TenancyObject):
         TEAM             = 9, 'Team'
         FEATURE_FLAG     = 10, 'Feature Flag'
         SOFTWARE_VERSION = 11, 'Software Version'
+        TICKET_CATEGORY  = 12, 'Ticket Category'
 
 
     is_global = None

@@ -99,7 +99,7 @@ A Model link is a reference to an item within the database. Supported model link
 | softwarecategory| `$-<id>` |
 | softwareversion| `$software_version-<id>` |
 | team| `$team-<id>` |
-| ticketcategory| `$-<id>` |
+| ticketcategory| `$ticket_category-<id>` |
 | ticketcomment| `$-<id>` |
 | ticketcommentcategory| `$-<id>` |
 
