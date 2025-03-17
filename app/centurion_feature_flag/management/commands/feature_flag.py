@@ -39,7 +39,7 @@ class Command(BaseCommand):
 
             else:
 
-                self.stdout.stderr('Error. Something went wrong.')
+                self.stderr.write('Error. Something went wrong.')
 
             if kwargs['reload']:
 
