@@ -16,7 +16,7 @@ from core.serializers.ticket_linked_item import (
 
 from itam.models.device import Device
 from itam.models.operating_system import OperatingSystem
-from itam.models.software import Software
+from itam.models.software import Software, SoftwareVersion
 
 from itim.models.clusters import Cluster
 from itim.models.services import Service
@@ -193,6 +193,12 @@ class ViewSet(ModelViewSet):
                         item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE').value
 
                         self.parent_model = Software
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'SOFTWARE_VERSION').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE_VERSION').value
+
+                        self.parent_model = SoftwareVersion
 
 
                 self.item_type = item_type

@@ -238,6 +238,14 @@ class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
 
             model = Software
 
+        elif item.item_type == TicketLinkedItem.Modules.SOFTWARE_VERSION:
+
+            from itam.serializers.software_version import SoftwareVersion, SoftwareVersionBaseSerializer
+
+            base_serializer = SoftwareVersionBaseSerializer
+
+            model = SoftwareVersion
+
         elif item.item_type == TicketLinkedItem.Modules.TEAM:
 
             from access.serializers.teams import Team, TeamBaseSerializer

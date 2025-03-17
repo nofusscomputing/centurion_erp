@@ -42,6 +42,8 @@ class TicketLinkedItem(TenancyObject):
         ORGANIZATION     = 8, 'Organization'
         TEAM             = 9, 'Team'
         FEATURE_FLAG     = 10, 'Feature Flag'
+        SOFTWARE_VERSION = 11, 'Software Version'
+
 
     is_global = None
 

@@ -395,10 +395,10 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
             "name": "Tickets",
             "slug": "tickets",
             "sections": [
-                # {
-                #     "layout": "table",
-                #     "field": "tickets",
-                # }
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
             ],
         },
         {
