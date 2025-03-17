@@ -19,13 +19,13 @@ Valid commands are as follows:
 
 For this command to process the following conditions must be met:
 
-- There is either a `<new line>` (`\\n`) or a `<space>` char immediatly before the slash `/`
+- There is a `<new line>` (`\\n`) char immediatly before the slash `/`
 
 - There is a `<space>` char after the command keyword, i.e. `/relate<space>#1`
 """
 
 
-    related_ticket: str = r'[\s|\n]\/(?P<command>[relate|blocks|blocked_by]+)\s\#(?P<ticket>\d+)[\s|\n]?'
+    related_ticket: str = r'\/(?P<command>[relate|blocks|blocked_by]+)\s\#(?P<ticket>\d+)[\s|\n]?'
 
 
     def command_related_ticket(self, match) -> str:

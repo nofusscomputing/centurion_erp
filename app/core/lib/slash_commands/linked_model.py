@@ -36,13 +36,13 @@ Available model types for linking are as follows:
 
 For this command to process the following conditions must be met:
 
-- There is either a `<new line>` (`\\n`) or a `<space>` char immediatly before the slash `/`
+- There is a `<new line>` (`\n`) char immediatly before the slash `/`
 
 - There is a `<space>` char after the command keyword, i.e. `/link<space>$device-101`
 """
 
 
-    linked_item: str = r'[\s|\n]\/(?P<command>[link]+)\s\$(?P<type>[a-z_]+)-(?P<id>\d+)[\s|\n]?'
+    linked_item: str = r'\/(?P<full>(?P<command>[link]+)(?P<models>(\s\$(?P<type>[a-z_]+)-(?P<id>\d+)))+)[\s]?'
 
 
     def command_linked_model(self, match) -> str:
