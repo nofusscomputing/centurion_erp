@@ -1,7 +1,0 @@
-#
-#  Centurion ERP
-#
-# Fetch the Feature flags and restart Centurion
-#
-# m h dom mon dow user  command
-* */4 * * * root cd /app && python manage.py feature_flag --reload &>/dev/null

@@ -258,17 +258,30 @@ class CenturionFeatureFlagging:
 
                     self._response = response
 
-                fetched_flags += resp.json()['results']
 
                 if resp.status_code == 304:    # Nothing has changed, exit the loop
 
                     url = None
 
-                else:    # Fetch next page of results
+                elif resp.ok:    # Fetch next page of results
+
+                    fetched_flags += resp.json()['results']
 
                     url = resp.json()['next']
 
+                else:
+
+                    url = None
+
             except requests.exceptions.ConnectionError as err:
+
+                print(f'Error Connecting to {url}')
+
+                url = None
+
+            except requests.exceptions.ReadTimeout as err:
+
+                print(f'Connection Timed Out connecting to {url}')
 
                 url = None
 
