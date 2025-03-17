@@ -437,7 +437,7 @@ if SSO_ENABLED:
 
 if BUILD_VERSION:
 
-    feature_flag_version = str(BUILD_VERSION) + '+' + str(BUILD_SHA)[8:]
+    feature_flag_version = str(BUILD_VERSION) + '+' + str(BUILD_SHA)[:8]
 
 else:
 
