@@ -14,7 +14,7 @@ Valid commands are as follows:
 
 For this command to process the following conditions must be met:
 
-- There is either a `<new line>` (`\\n`) or a `<space>` char immediatly before the slash `/`
+- There is a `<new line>` (`\\n`) char immediatly before the slash `/`
 
 - There is a `<space>` char after the command keyword, i.e. `/spend<space>1h`
 
@@ -22,7 +22,7 @@ For this command to process the following conditions must be met:
 """
 
 
-    time_spent: str = r'[\s|\r\n|\n]\/(?P<command>[spend|spent]+) (?P<time>(?P<hours>\d+h)?[ ]?(?P<minutes>[\d]{1,2}m)?[ ]?(?P<seconds>\d+s)?)[\s|\r\n|\n]?'
+    time_spent: str = r'\/(?P<command>[spend|spent]+) (?P<time>(?P<hours>\d+h)?[ ]?(?P<minutes>[\d]{1,2}m)?[ ]?(?P<seconds>\d+s)?)[\s|\r\n|\n]?'
 
 
     def command_duration(self, match) -> str:

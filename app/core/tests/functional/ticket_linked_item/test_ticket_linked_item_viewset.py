@@ -166,6 +166,15 @@ class ViewSetBase:
             status = Ticket.TicketStatus.All.NEW
         )
 
+        self.ticket_two = Ticket.objects.create(
+            organization = self.organization,
+            title = 'two',
+            description = 'some text for body',
+            opened_by = self.view_user,
+            ticket_type = self.ticket_type_enum,
+            status = Ticket.TicketStatus.All.NEW
+        )
+
         self.item = self.model.objects.create(
             organization = self.organization,
             item = self.linked_item.id,
@@ -173,14 +182,13 @@ class ViewSetBase:
             ticket = self.ticket,
         )
 
-
         # self.url_kwargs = {'ticket_id': self.ticket.id}
 
         # self.url_view_kwargs = {'ticket_id': self.ticket.id, 'pk': self.item.id}
 
         self.add_data = {
             'organization': self.organization.id,
-            'ticket': self.ticket.id,
+            'ticket': self.ticket_two.id,
             'item': self.linked_item_two.id,
             'item_type': int(TicketLinkedItem.Modules.DEVICE),
         }

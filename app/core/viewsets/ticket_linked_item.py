@@ -7,6 +7,8 @@ from assistance.models.knowledge_base import KnowledgeBase
 
 from config_management.models.groups import ConfigGroups
 
+from core.models.ticket.ticket_category import TicketCategory
+from core.models.ticket.ticket_comment_category import TicketCommentCategory
 from core.serializers.ticket_linked_item import (
     Ticket,
     TicketLinkedItem,
@@ -16,10 +18,12 @@ from core.serializers.ticket_linked_item import (
 
 from itam.models.device import Device
 from itam.models.operating_system import OperatingSystem
-from itam.models.software import Software
+from itam.models.software import Software, SoftwareVersion
 
 from itim.models.clusters import Cluster
 from itim.models.services import Service
+
+from project_management.models.project_states import ProjectState
 
 
 
@@ -182,6 +186,12 @@ class ViewSet(ModelViewSet):
 
                         self.parent_model = OperatingSystem
 
+                    elif str(getattr(TicketLinkedItem.Modules, 'PROJECT_STATE').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'PROJECT_STATE').value
+
+                        self.parent_model = ProjectState
+
                     elif str(getattr(TicketLinkedItem.Modules, 'SERVICE').label).lower() == self.kwargs['item_class']:
 
                         item_type = getattr(TicketLinkedItem.Modules, 'SERVICE').value
@@ -193,6 +203,24 @@ class ViewSet(ModelViewSet):
                         item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE').value
 
                         self.parent_model = Software
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'SOFTWARE_VERSION').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE_VERSION').value
+
+                        self.parent_model = SoftwareVersion
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'TICKET_CATEGORY').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'TICKET_CATEGORY').value
+
+                        self.parent_model = TicketCategory
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'TICKET_COMMENT_CATEGORY').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'TICKET_COMMENT_CATEGORY').value
+
+                        self.parent_model = TicketCommentCategory
 
 
                 self.item_type = item_type

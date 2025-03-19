@@ -1,5 +1,7 @@
 import re
 
+from core import exceptions as centurion_exceptions
+
 
 
 class CommandRelatedTicket:
@@ -17,15 +19,19 @@ Valid commands are as follows:
 
 - /blocked_by #1
 
+You can also stack ticket references. i.e. `/relate #1 #10 #500`
+
 For this command to process the following conditions must be met:
 
-- There is either a `<new line>` (`\\n`) or a `<space>` char immediatly before the slash `/`
+- The slash `/` is the first character on the line
 
 - There is a `<space>` char after the command keyword, i.e. `/relate<space>#1`
 """
 
 
-    related_ticket: str = r'[\s|\n]\/(?P<command>[relate|blocks|blocked_by]+)\s\#(?P<ticket>\d+)[\s|\n]?'
+    related_ticket: str = r'\/(?P<full>(?P<command>[relate|blocks|blocked_by]+)(\s\#(?P<ticket>\d+))+)\s?'
+
+    related_ticket_single_item: str = r'\#(?P<ticket>\d+)'
 
 
     def command_related_ticket(self, match) -> str:
@@ -43,62 +49,79 @@ For this command to process the following conditions must be met:
         """
 
         command = match.group('command')
-        ticket_id:int =  str(match.group('ticket'))
 
-        if ticket_id is not None:
+        found_items = re.findall(self.related_ticket_single_item, match.group('full'))
 
-            from core.serializers.ticket_related import RelatedTickets, RelatedTicketModelSerializer
+        try:
 
-            if command == 'relate':
+            for ticket_id in found_items:
 
-                how_related = RelatedTickets.Related.RELATED.value
+                try:
 
-            elif command == 'blocks':
+                    if ticket_id is not None:
 
-                how_related = RelatedTickets.Related.BLOCKS.value
+                        from core.serializers.ticket_related import RelatedTickets, RelatedTicketModelSerializer
 
-            elif command == 'blocked_by':
+                        if command == 'relate':
 
-                how_related = RelatedTickets.Related.BLOCKED_BY.value
+                            how_related = RelatedTickets.Related.RELATED.value
 
-            else:
+                        elif command == 'blocks':
 
-                #ToDo: Add logging that the slash command could not be processed.
+                            how_related = RelatedTickets.Related.BLOCKS.value
 
-                return str(match.string[match.start():match.end()])
+                        elif command == 'blocked_by':
 
+                            how_related = RelatedTickets.Related.BLOCKED_BY.value
 
-            if str(self._meta.verbose_name).lower() == 'ticket':
+                        else:
 
-                from_ticket = self
+                            #ToDo: Add logging that the slash command could not be processed.
 
-                to_ticket = self.__class__.objects.get(pk = ticket_id)
-
-            elif str(self._meta.verbose_name).lower() == 'ticket comment':
-
-                from_ticket = self.ticket
-
-                to_ticket = self.ticket.__class__.objects.get(pk = ticket_id)
+                            return str(match.string[match.start():match.end()])
 
 
-            item = RelatedTicketModelSerializer(
-                data = {
-                    'from_ticket_id': from_ticket.id,
-                    'how_related': int(how_related),
-                    'to_ticket_id': to_ticket.id,
-                    'organization': from_ticket.organization.id
-                }
-            )
+                        if str(self._meta.verbose_name).lower() == 'ticket':
 
-            if item.is_valid( raise_exception = False ):
+                            from_ticket = self
 
-                item.save()
+                            to_ticket = self.__class__.objects.get(pk = ticket_id)
 
-            else:
+                        elif str(self._meta.verbose_name).lower() == 'ticket comment':
 
-                return str(match.string[match.start():match.end()])
+                            from_ticket = self.ticket
 
-        else:
+                            to_ticket = self.ticket.__class__.objects.get(pk = ticket_id)
+
+
+                        item = RelatedTicketModelSerializer(
+                            data = {
+                                'from_ticket_id': from_ticket.id,
+                                'how_related': int(how_related),
+                                'to_ticket_id': to_ticket.id,
+                                'organization': from_ticket.organization.id
+                            }
+                        )
+
+                        if item.is_valid( raise_exception = False ):
+
+                            item.save()
+
+
+                except centurion_exceptions.ValidationError as err:
+
+                    error = err.get_codes().get('non_field_errors', None)
+
+                    if error is not None:
+
+                        if error[0] != 'unique':
+
+                            raise centurion_exceptions.ValidationError(
+                                detail = err.detail,
+                                code = err.get_codes()
+                            )
+
+        except Exception as e:
 
             #ToDo: Add logging that the slash command could not be processed.
 

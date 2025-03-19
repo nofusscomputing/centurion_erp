@@ -52,6 +52,23 @@ class SoftwareVersionModelSerializer(
 
     _urls = serializers.SerializerMethodField('get_url')
 
+    def get_url(self, item) -> dict:
+
+        get_url = super().get_url( item = item )
+
+        get_url.update({
+            'tickets': reverse(
+                "v2:_api_v2_item_tickets-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'item_class': 'software_version',
+                    'item_id': item.pk
+                    }
+            )
+        })
+
+        return get_url
+
 
     class Meta:
 

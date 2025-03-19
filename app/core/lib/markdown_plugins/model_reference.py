@@ -106,6 +106,14 @@ def plugin(
 
                 url = reverse('ITAM:_software_view', kwargs={'pk': int(id)})
 
+            elif item_type == 'software_version':
+
+                from itam.models.software import SoftwareVersion
+
+                model = SoftwareVersion
+
+                url = reverse('ITAM:_software_version_view', kwargs={'pk': int(id)})
+
 
             if url:
 

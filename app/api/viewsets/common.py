@@ -48,17 +48,27 @@ class Create(
 
             view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-            serializer = view_serializer(
-                self.get_queryset().get( pk = int(response.data['id']) ),
-                context = {
-                    'request': request,
-                    'view': self,
-                },
-            )
+            if response.data['id'] is not None:
+
+                serializer = view_serializer(
+                    self.get_queryset().get( pk = int(response.data['id']) ),
+                    context = {
+                        'request': request,
+                        'view': self,
+                    },
+                )
+
+                serializer_data = serializer.data
+
+            else:
+
+
+                serializer_data = {}
+
 
             # Mimic ALL details from DRF response except serializer
             response = Response(
-                data = serializer.data,
+                data = serializer_data,
                 status = response.status_code,
                 template_name = response.template_name,
                 headers = response.headers,
