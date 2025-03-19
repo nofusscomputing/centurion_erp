@@ -84,4 +84,4 @@ class SlashCommands(
 
                 processed_lines += line + '\n'
 
-        return processed_lines
+        return str(processed_lines).strip()
