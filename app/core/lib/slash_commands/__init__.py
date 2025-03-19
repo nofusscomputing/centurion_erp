@@ -40,13 +40,18 @@ class SlashCommands(
             str: Markdown without the slash command text.
         """
 
-        if '\n' in markdown:
+        nl = '\n'
 
-            lines = str(markdown).split('\n')
+        if '\r\n' in markdown:
+
+            nl = '\r\n'
+
+            lines = str(markdown).split(nl)
 
         else:
 
-            lines = str('\n' + markdown + '\n').split('\n')
+            lines = str(markdown).split(nl)
+
 
         processed_lines = ''
 
@@ -78,10 +83,10 @@ class SlashCommands(
 
                 if returned_line != '':
 
-                    processed_lines += line + '\n'
+                    processed_lines += line + nl
 
             else:
 
-                processed_lines += line + '\n'
+                processed_lines += line + nl
 
         return str(processed_lines).strip()
