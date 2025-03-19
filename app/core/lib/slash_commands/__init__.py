@@ -57,6 +57,8 @@ class SlashCommands(
 
         for line in lines:
 
+            line = str(line).strip()
+
             search = re.match(self.command, line)
 
             if search is not None:
