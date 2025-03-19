@@ -293,10 +293,6 @@ class Ticket(
 
         As we use a common model for **ALL** ticket types. Effort has been made to limit fields showing for a ticket type that it does not belong.
         If you find a field displayed that does not belong to a ticket, please create an [issue](https://github.com/nofusscomputing/centurion_erp).
-
-        !!! danger
-            The API does not filter ticket fields. It's important not to edit a field that does not belong to the ticket type selected,
-            as this will cause the ticket validation to fail.
         """
 
         REQUEST       = '1', 'Request'

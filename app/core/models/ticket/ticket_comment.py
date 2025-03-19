@@ -465,16 +465,32 @@ class TicketComment(
 
         self.organization = self.ticket.organization
 
+        body = self.body
+
         self.body = self.slash_command(self.body)
 
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+        if(
+           (
+                (
+                    body is not None
+                    and body != ''
+                )
+                and (
+                    self.body is not None
+                    and self.body != ''
+                )
+            )
+            or self.comment_type == self.CommentType.SOLUTION
+        ):
 
-        if self.comment_type == self.CommentType.SOLUTION:
+            super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
-            update_ticket =  self.ticket.__class__.objects.get(pk=self.ticket.id)
-            update_ticket.status = int(Ticket.TicketStatus.All.SOLVED.value)
+            if self.comment_type == self.CommentType.SOLUTION:
 
-            update_ticket.save()
+                update_ticket =  self.ticket.__class__.objects.get(pk=self.ticket.id)
+                update_ticket.status = int(Ticket.TicketStatus.All.SOLVED.value)
+
+                update_ticket.save()
 
 
     @property
