@@ -59,6 +59,8 @@ Slash commands are a quick action that is specified after a slash command. As th
 
 - Time Spent `/spend`, `/spent`
 
+When using slash commands, there is only to be one slash command per line. All slash commands support reference stacking (more than one reference) as long as they are separated by a space. i.e. `/<command> $<model>-<pk> $<model>-<pk> $<model>-<pk>`
+
 
 ### Time Spent
 
