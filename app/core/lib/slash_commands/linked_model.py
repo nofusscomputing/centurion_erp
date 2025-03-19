@@ -16,25 +16,9 @@ Valid commands are as follows:
 
 - /link $cluster-55
 
-Available model types for linking are as follows:
+You can also stack model references. i.e. `/link $device-1 $cluster-55 $software-2254`
 
-- cluster
-
-- config_group
-
-- device
-
-- kb
-
-- operating_system
-
-- organization
-
-- service
-
-- software
-
-- team
+Available model types for linking are that same as exists for model references. Please see the [markdown](./markdown.md) documentation:
 
 For this command to process the following conditions must be met:
 
