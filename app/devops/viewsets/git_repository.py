@@ -1,0 +1,250 @@
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+    OpenApiParameter,
+    OpenApiResponse,
+    PolymorphicProxySerializer,
+)
+
+# THis import only exists so that the migrations can be created
+# from devops.models.feature_flag_history import FeatureFlagHistory    # pylint: disable=W0611:unused-import
+from devops.models.git_group import GitGroup
+from devops.serializers.git_repository.base import (
+    GitRepository,
+    ModelSerializer,
+    ViewSerializer,
+)
+from devops.serializers.git_repository.github import (
+    GitHubRepository,
+    ModelSerializer as GitHubModelSerializer,
+    ViewSerializer as GitHubViewSerializer,
+)
+from devops.serializers.git_repository.gitlab import (
+    GitLabRepository,
+    ModelSerializer as GitLabModelSerializer,
+    ViewSerializer as GitLabViewSerializer,
+)
+
+from api.viewsets.common import ModelViewSet
+
+
+
+
+@extend_schema_view(
+    create=extend_schema(
+        parameters = [
+            OpenApiParameter(
+                name = 'git_provider',
+                description = 'Select the provider the repository belongs to.',
+                location = OpenApiParameter.PATH,
+                required = True,
+                allow_blank = False,
+                type = str,
+                enum = ['github', 'gitlab'],
+            ),
+        ],
+        summary = 'Create a GIT Repository',
+        description='Create',
+        request = PolymorphicProxySerializer(
+            component_name = 'Git Provider',
+            serializers=[
+                GitHubModelSerializer,
+                GitLabModelSerializer,
+            ],
+            resource_type_field_name=None,
+            many = False,
+        ),
+        responses = {
+            201: OpenApiResponse(
+                description='Created. Will be serialized with the serializer matching the provider.',
+                response=PolymorphicProxySerializer(
+                    component_name = 'Git Provider',
+                    serializers=[
+                        GitHubViewSerializer,
+                        GitLabViewSerializer,
+                    ],
+                    resource_type_field_name=None,
+                    many = False,
+                ),
+            ),
+            403: OpenApiResponse(description='User is missing add permissions'),
+        }
+    ),
+    destroy = extend_schema(
+        parameters = [
+            OpenApiParameter(
+                name = 'git_provider',
+                description = 'Select the provider the repository belongs to.',
+                location = OpenApiParameter.PATH,
+                required = True,
+                allow_blank = False,
+                type = str,
+                enum = ['github', 'gitlab'],
+            ),
+        ],
+        summary = 'Delete a GIT Repository',
+        description = 'Delete',
+        responses = {
+            204: OpenApiResponse(description=''),
+            403: OpenApiResponse(description='User is missing delete permissions'),
+        }
+    ),
+    list = extend_schema(
+        parameters = [
+            OpenApiParameter(
+                name = 'git_provider',
+                description = 'Select the provider the repository belongs to.',
+                location = OpenApiParameter.PATH,
+                required = True,
+                allow_blank = False,
+                type = str,
+                enum = ['github', 'gitlab'],
+            ),
+        ],
+        summary = 'Fetch all GIT Repository',
+        description='Fetch',
+        responses = {
+            200: OpenApiResponse(description='Will be serialized with the serializer matching the provider.',
+                response=PolymorphicProxySerializer(
+                    component_name = 'Git Provider',
+                    serializers=[
+                        GitHubViewSerializer,
+                        GitLabViewSerializer,
+                    ],
+                    resource_type_field_name=None,
+                    many = False,
+                )
+            ),
+            403: OpenApiResponse(description='User is missing view permissions'),
+        }
+    ),
+    retrieve = extend_schema(
+        parameters = [
+            OpenApiParameter(
+                name = 'git_provider',
+                description = 'Select the provider the repository belongs to.',
+                location = OpenApiParameter.PATH,
+                required = True,
+                allow_blank = False,
+                type = str,
+                enum = ['github', 'gitlab'],
+            ),
+        ],
+        summary = 'Fetch a single GIT Repository',
+        description='Fetch',
+        responses = {
+            200: OpenApiResponse(description='Will be serialized with the serializer matching the provider.',
+                response=PolymorphicProxySerializer(
+                    component_name = 'Git Provider',
+                    serializers=[
+                        GitHubViewSerializer,
+                        GitLabViewSerializer,
+                    ],
+                    resource_type_field_name=None,
+                    many = False,
+                )
+            ),
+            403: OpenApiResponse(description='User is missing view permissions'),
+        }
+    ),
+    update = extend_schema(exclude = True),
+    partial_update = extend_schema(
+        parameters = [
+            OpenApiParameter(
+                name = 'git_provider',
+                description = 'Select the provider the repository belongs to.',
+                location = OpenApiParameter.PATH,
+                required = True,
+                allow_blank = False,
+                type = str,
+                enum = ['github', 'gitlab'],
+            ),
+        ],
+        summary = 'Update a GIT Repository',
+        description = 'Update',
+        responses = {
+            200: OpenApiResponse(description='Will be serialized with the serializer matching the provider.',
+                response=PolymorphicProxySerializer(
+                    component_name = 'Git Provider',
+                    serializers=[
+                        GitHubViewSerializer,
+                        GitLabViewSerializer,
+                    ],
+                    resource_type_field_name=None,
+                    many = False,
+                )
+            ),
+            403: OpenApiResponse(description='User is missing change permissions'),
+        }
+    ),
+)
+class ViewSet(ModelViewSet):
+    """fdgdfgdf"""
+
+    filterset_fields = [
+        'organization',
+        'provider',
+    ]
+
+    search_fields = [
+        'description',
+        'name',
+        'provider_id',
+    ]
+
+    model = GitRepository
+
+    view_description: str = 'GIT Repositories'
+
+
+    def get_queryset(self):
+
+        if self.queryset is not None:
+
+            return self.queryset
+
+        self.queryset = self.model.objects.select_related(
+            'git_group',
+            'githubrepository',
+            'gitlabrepository',
+            ).all()
+
+        if self.kwargs.get('git_provider', None):
+
+            self.queryset = self.queryset.filter(
+                provider = getattr(GitGroup.GitProvider, str(self.kwargs['git_provider']).upper() )
+            )
+
+        if 'pk' in self.kwargs:
+
+            if self.kwargs['pk']:
+
+                self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
+
+
+        return self.queryset
+
+
+    def get_serializer_class(self):
+
+        prefix: str = ''
+
+        if self.kwargs.get('git_provider', '') == 'github':
+
+            prefix = 'GitHub'
+
+        elif self.kwargs.get('git_provider', '') == 'gitlab':
+
+            prefix = 'GitLab'
+
+
+        if (
+            self.action == 'list'
+            or self.action == 'retrieve'
+        ):
+
+            return globals()[prefix + 'ViewSerializer']
+
+        else:
+
+            return globals()[prefix + 'ModelSerializer']
