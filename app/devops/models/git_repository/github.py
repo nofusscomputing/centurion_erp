@@ -72,3 +72,16 @@ class GitHubRepository(
     #     'organization',
     #     'created',
     # ]
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from devops.models.git_repository.github_history import GitHubHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = GitHubHistory
+        )
+
+
+        return history
