@@ -25,7 +25,7 @@ Describe in detail the following:
 -->
 
 
-### 🚧 Tasks
+## 🚧 Tasks
 
 <!-- Don't remove tasks strike them out. use `~~` before and after the item. i.e. `- ~~[ ] Model Created~~` note: don't include the list dash-->
 
@@ -79,7 +79,7 @@ Describe in detail the following:
 - [ ] Function Test History API Render (fields)
 
 
-### ✅ Requirements
+## ✅ Requirements
 
 A Requirement is a must have. In addition will also be tested.
 
