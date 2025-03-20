@@ -4,6 +4,7 @@ from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
+from core.lib.feature_not_used import FeatureNotUsed
 
 from devops.models.git_group import GitGroup
 
@@ -127,3 +128,13 @@ class GitRepository(
         'organization',
         'created',
     ]
+
+    def get_url_kwargs_notes(self) -> dict:
+        """Fetch the URL kwargs for model notes
+
+        This feature is disabled in the base, however should be enabled in the
+        child model.
+        """
+
+        return FeatureNotUsed
+ 
