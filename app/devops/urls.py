@@ -4,7 +4,10 @@ from devops.viewsets import (
     feature_flag,
     feature_flag_notes,
     git_group,
+    git_group_notes,
     git_repository,
+    github_repository_notes,
+    gitlab_repository_notes
 )
 
 
