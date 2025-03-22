@@ -152,7 +152,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.get_request.RequestMiddleware',
     'app.middleware.timezone.TimezoneMiddleware',
-    # 'centurion_feature_flag.middleware.feature_flag.FeatureFlagMiddleware',
+    'centurion_feature_flag.middleware.feature_flag.FeatureFlagMiddleware',
 ]
 
 
