@@ -112,9 +112,9 @@ class CenturionFeatureFlagging:
 
         self._disable_downloading = disable_downloading
 
-        if over_rides:
+        _over_rides: dict = {}
 
-            _over_rides: dict = {}
+        if over_rides:
 
             for entry in over_rides:
 
@@ -124,8 +124,8 @@ class CenturionFeatureFlagging:
                     key[0]: FeatureFlag(key[0], flag[0])
                 })
 
-            self._over_rides = _over_rides
 
+        self._over_rides = _over_rides
 
 
         if version is None:
