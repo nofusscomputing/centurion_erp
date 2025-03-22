@@ -70,8 +70,9 @@ class GitRepository(
     )
 
     provider_id = models.IntegerField(
-        blank = False,
+        blank = True,
         help_text = 'Providers ID for this repository',
+        null = True,
         unique = False,
         verbose_name = 'Provider ID'
     )

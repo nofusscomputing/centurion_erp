@@ -79,6 +79,7 @@ class ModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
+            'provider_pk',
             'created',
             'modified',
             '_urls',
