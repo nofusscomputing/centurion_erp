@@ -518,6 +518,16 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             }
         }
 
+        if request.feature_flag['2025-00001']:
+
+            nav['devops']['pages'].update({
+                'view_gitrepository': {
+                    "display_name": "Git Repositories",
+                    "name": "git_repository",
+                    "icon": 'git_repository',
+                    "link": "/devops/git_repository"
+                }
+            })
 
         return nav
 

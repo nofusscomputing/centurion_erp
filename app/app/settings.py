@@ -498,3 +498,20 @@ if FEATURE_FLAGGING_ENABLED:
             'over_rides': FEATURE_FLAG_OVERRIDES
         })
 
+    if DEBUG:
+
+        debug_feature_flags = [
+            {
+                "2025-00001": {
+                    "name": "DevOps/Git Repositories",
+                    "description": "Disables Git Repositories and Git Groups. see https://github.com/nofusscomputing/centurion_erp/issues/515",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            }
+        ]
+
+        feature_flag.update({
+            'over_rides': debug_feature_flags
+        })
