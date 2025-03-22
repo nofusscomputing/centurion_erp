@@ -6,6 +6,8 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from api.serializers import common
 
+from core.fields.badge import BadgeField
+
 from devops.models.git_repository.base import GitRepository, GitGroup
 from devops.serializers.git_group import BaseSerializer as GitGroupBaseSerializer
 
@@ -48,6 +50,7 @@ class ModelSerializer(
     """Base Git Repository"""
     _urls = serializers.SerializerMethodField('get_url')
 
+    provider_badge = BadgeField(label='Provider')
 
     class Meta:
 
@@ -58,6 +61,7 @@ class ModelSerializer(
             'display_name',
             'organization',
             'provider',
+            'provider_badge',
             'provider_id',
             'git_group',
             'path',
