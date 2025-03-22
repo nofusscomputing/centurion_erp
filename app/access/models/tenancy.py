@@ -172,6 +172,13 @@ class TenancyObject(SaveHistory):
     the API version, i.e. `v2:devops`.
     """
 
+
+    def get_page_layout(self):
+        """ FEtch the page layout"""
+
+        return self.page_layout
+
+
     def get_app_namespace(self) -> str:
         """Fetch the Application namespace if specified.
 

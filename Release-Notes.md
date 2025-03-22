@@ -1,3 +1,8 @@
+## Version 1.14.0
+
+- Git Repository and Git Group Models added behind feature flag `2025-00001`. They will remain behind this feature flag until the Git features are fully developed and ready for use.
+
+
 ## Version 1.13.0
 
 - DevOps Module added.
