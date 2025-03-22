@@ -112,7 +112,46 @@ class GitGroup(
 
     documentation = ''
 
-    page_layout: dict = []
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'provider',
+                        'parent_group',
+                        'path',
+                        'name',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'description',
+                        'provider_pk',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
 
 
     table_fields: list = [
