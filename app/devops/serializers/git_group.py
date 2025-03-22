@@ -56,29 +56,29 @@ class ModelSerializer(
 
         # note_basename = 'devops:_api_v2_feature_flag_note'
 
-        fields = '__all__'
+        fields =  [
+            'id',
+            'organization',
+            'display_name',
+            'parent_group',
+            'provider',
+            'provider_pk',
+            'name',
+            'path',
+            'description',
+            'model_notes',
+            'created',
+            'modified',
+            '_urls',
+        ]
 
-        # fields =  [
-        #     'id',
-        #     'organization',
-        #     'display_name',
-
-        #     'name',
-        #     'description',
-        #     'enabled',
-        #     'model_notes',
-        #     'created',
-        #     'modified',
-        #     '_urls',
-        # ]
-
-        # read_only_fields = [
-        #     'id',
-        #     'display_name',
-        #     'created',
-        #     'modified',
-        #     '_urls',
-        # ]
+        read_only_fields = [
+            'id',
+            'display_name',
+            'created',
+            'modified',
+            '_urls',
+        ]
 
 
     def is_valid(self, raise_exceptions = False):
