@@ -81,8 +81,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'GitHubViewSerializer')
 class ViewSerializer(
+    GitViewSerializer,
     ModelSerializer,
-    GitViewSerializer
 ):
     """GitHub View Repository"""
 
