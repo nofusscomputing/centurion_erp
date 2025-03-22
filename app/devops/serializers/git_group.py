@@ -85,9 +85,9 @@ class ModelSerializer(
         ]
 
 
-    def is_valid(self, raise_exceptions = False):
+    def is_valid(self, raise_exception = False):
 
-        is_valid = super().is_valid(raise_exceptions = raise_exceptions)
+        is_valid = super().is_valid(raise_exception = raise_exception)
 
         if self.validated_data.get('parent_group', None):
 
@@ -110,3 +110,5 @@ class ModelSerializer(
 class ViewSerializer(ModelSerializer):
 
     organization = OrganizationBaseSerializer( read_only = True )
+
+    parent_group = BaseSerializer( read_only = True )
