@@ -198,6 +198,21 @@ class ViewSet(ModelViewSet):
     view_description: str = 'GIT Repositories'
 
 
+    def get_page_layout(self):
+
+        if len(self.page_layout) < 1:
+
+            if hasattr(self, 'model'):
+
+                if self.kwargs.get('pk', None):
+
+                    model = getattr(self.queryset[0], self.kwargs['git_provider'] + 'repository')
+
+                    self.page_layout = model.get_page_layout()
+
+        return self.page_layout
+
+
     def get_queryset(self):
 
         if self.queryset is not None:

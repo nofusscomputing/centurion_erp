@@ -118,7 +118,9 @@ class GitRepository(
 
     documentation = ''
 
-    page_layout: dict = []
+    def get_page_layout(self):
+
+        return self.page_layout
 
 
     table_fields: list = [
