@@ -30,6 +30,11 @@ class GitRepository(
             'path',
         ]
 
+        unique_together = [
+            'provider',
+            'provider_id',
+        ]
+
         verbose_name = 'GIT Repository'
 
         verbose_name_plural = 'GIT Repositories'
@@ -67,7 +72,7 @@ class GitRepository(
     provider_id = models.IntegerField(
         blank = False,
         help_text = 'Providers ID for this repository',
-        unique = True,
+        unique = False,
         verbose_name = 'Provider ID'
     )
 
