@@ -1,5 +1,7 @@
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.tenancy import TenancyObject
 
@@ -130,6 +132,44 @@ class GitRepository(
         'organization',
         'created',
     ]
+
+
+    def get_url(self, request):
+
+        if request:
+
+            return reverse(
+                f"v2:" + self.get_app_namespace() + f"_api_v2_git_repository-detail",
+                request=request,
+                kwargs = self.get_url_kwargs()
+            )
+
+        return reverse(
+            f"v2:" + self.get_app_namespace() + f"_api_v2_git_repository-detail",
+            kwargs = self.get_url_kwargs()
+        )
+
+
+    def get_url_kwargs(self) -> dict:
+
+        url_kwargs = super().get_url_kwargs()
+
+        provider = ''
+
+        if self.provider == GitGroup.GitProvider.GITHUB:
+
+            provider = 'github'
+
+        elif self.provider == GitGroup.GitProvider.GITLAB:
+
+            provider = 'gitlab'
+
+        url_kwargs.update({
+            'git_provider': provider
+        })
+
+        return url_kwargs
+
 
     def get_url_kwargs_notes(self) -> dict:
         """Fetch the URL kwargs for model notes
