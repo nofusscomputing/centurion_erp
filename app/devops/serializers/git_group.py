@@ -21,7 +21,7 @@ class BaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:devops:_api_v2_feature_flag-detail", format="html"
+        view_name="v2:devops:_api_v2_git_group-detail", format="html"
     )
 
 
@@ -47,7 +47,7 @@ class ModelSerializer(
     BaseSerializer
 ):
     """Base Git Repository"""
-    # _urls = serializers.SerializerMethodField('get_url')
+    _urls = serializers.SerializerMethodField('get_url')
 
 
     class Meta:
