@@ -92,7 +92,10 @@ class ModelSerializer(
 
         if self.validated_data.get('parent_group', None):
 
-            if self.validated_data['parent_group'].provider != self.validated_data['provider']:
+            if(
+                self.validated_data['parent_group'].provider != self.validated_data['provider']
+                and int(self.validated_data['provider']) != int(GitGroup.GitProvider.GITHUB)
+            ):
 
                 is_valid = False
 
@@ -102,6 +105,18 @@ class ModelSerializer(
                     },
                     code = 'parent_provider_must_match'
                 )
+
+            elif int(self.validated_data['provider']) == int(GitGroup.GitProvider.GITHUB):
+
+                is_valid = False
+
+                raise centurion_exceptions.ValidationError(
+                    detail = {
+                        'parent_group': 'Nesting of GitHub groups is not available. Please remove the parent group'
+                    },
+                    code = 'github_group_no_nesting'
+                )
+
 
         return is_valid
 
