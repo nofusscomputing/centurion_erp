@@ -227,17 +227,26 @@ class ViewSet(ModelViewSet):
 
             return self.queryset
 
-        self.queryset = self.model.objects.select_related(
-            'git_group',
-            'githubrepository',
-            'gitlabrepository',
-            ).all()
+        
+        if self.kwargs.get('git_provider', '') == 'github':
 
-        if self.kwargs.get('git_provider', None):
+            self.queryset = GitHubRepository.objects.select_related(
+                'git_group',
+                ).all()
 
-            self.queryset = self.queryset.filter(
-                provider = getattr(GitGroup.GitProvider, str(self.kwargs['git_provider']).upper() )
-            )
+        elif self.kwargs.get('git_provider', '') == 'gitlab':
+
+            self.queryset = GitLabRepository.objects.select_related(
+                'git_group',
+                ).all()
+
+        else:
+
+            self.queryset = self.model.objects.select_related(
+                'git_group',
+                'githubrepository',
+                'gitlabrepository',
+                ).all()
 
         if 'pk' in self.kwargs:
 
