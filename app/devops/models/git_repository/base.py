@@ -30,10 +30,10 @@ class GitRepository(
             'path',
         ]
 
-        unique_together = [
-            'provider',
-            'provider_id',
-        ]
+        # unique_together = [    # Cant use until import is a feature
+        #     'provider',
+        #     'provider_id',
+        # ]
 
         verbose_name = 'GIT Repository'
 

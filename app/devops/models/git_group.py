@@ -17,10 +17,10 @@ class GitGroup(
             'name',
         ]
 
-        unique_together = [
-            'provider',
-            'provider_pk'
-        ]
+        # unique_together = [    # Cant use until import is a feature
+        #     'provider',
+        #     'provider_pk'
+        # ]
 
         verbose_name = 'GIT Group'
 
