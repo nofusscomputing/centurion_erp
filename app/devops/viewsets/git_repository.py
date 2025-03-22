@@ -1,3 +1,5 @@
+from rest_framework.reverse import reverse
+
 from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
@@ -198,6 +200,12 @@ class ViewSet(ModelViewSet):
     view_description: str = 'GIT Repositories'
 
 
+    def get_back_url(self) -> str:
+
+
+        return reverse('v2:devops:_api_v2_git_repository-list', request = self.request )
+
+
     def get_page_layout(self):
 
         if len(self.page_layout) < 1:
@@ -239,6 +247,15 @@ class ViewSet(ModelViewSet):
 
 
         return self.queryset
+
+    
+    def get_return_url(self) -> str:
+
+        if 'pk' in self.kwargs:
+
+            return self.queryset[0].get_url( request = self.request )
+
+        return None
 
 
     def get_serializer_class(self):
