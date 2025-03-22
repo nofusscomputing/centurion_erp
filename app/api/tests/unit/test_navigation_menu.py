@@ -8,6 +8,13 @@ from access.models.team_user import TeamUsers
 
 from api.react_ui_metadata import ReactUIMetadata
 
+class MockRequst:
+
+    user = None
+
+    def __init__(self, user ):
+
+        self.user = user
 
 class NavigationMenu(
     TestCase
@@ -150,7 +157,7 @@ class NavigationMenu(
 
             for model_name in model_names:
 
-                setattr(self, app_label + "_" + model_name['permission_model'], User.objects.create_user(username= app_label + "_" + model_name['permission_model'], password="password"))
+                setattr(self, app_label + "_" + model_name['permission_model'], MockRequst( user = User.objects.create_user(username= app_label + "_" + model_name['permission_model'], password="password")))
 
                 team = Team.objects.create(
                     team_name = app_label + "_" + model_name['permission_model'],
@@ -169,7 +176,7 @@ class NavigationMenu(
 
                 team_user = TeamUsers.objects.create(
                     team = team,
-                    user = getattr(self, app_label + "_" + model_name['permission_model'])
+                    user = getattr(self, app_label + "_" + model_name['permission_model']).user
                 )
 
         self.metadata = ReactUIMetadata()

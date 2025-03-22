@@ -518,23 +518,25 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             }
         }
 
-        if request.feature_flag['2025-00001']:
+        if getattr(request, 'feature_flag', None):
 
-            nav['devops']['pages'].update({
-                
-                'view_gitgroup': {
-                    "display_name": "Git Group",
-                    "name": "git_group",
-                    "icon": 'git_group',
-                    "link": "/devops/git_group"
-                },
-                'view_gitrepository': {
-                    "display_name": "Git Repositories",
-                    "name": "git_repository",
-                    "icon": 'git',
-                    "link": "/devops/git_repository"
-                }
-            })
+            if request.feature_flag['2025-00001']:
+
+                nav['devops']['pages'].update({
+                    
+                    'view_gitgroup': {
+                        "display_name": "Git Group",
+                        "name": "git_group",
+                        "icon": 'git_group',
+                        "link": "/devops/git_group"
+                    },
+                    'view_gitrepository': {
+                        "display_name": "Git Repositories",
+                        "name": "git_repository",
+                        "icon": 'git',
+                        "link": "/devops/git_repository"
+                    }
+                })
 
         return nav
 
