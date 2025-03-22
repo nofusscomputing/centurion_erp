@@ -14,6 +14,7 @@ feature_flag = {
     'disable_downloading': False                                   # Prevent downloading feature flags
     'unique_id': 'unique ID for application',                      # Unique ID for this instance of your Django application
     'version': '1.0.0',                                            # The Version of Your Django Application
+    'over_rides': []                                               # list(dict). Feature Flag over rides. use same format as API endpoint.
 }    # Note: All key values are strings
 
 ```

@@ -76,6 +76,9 @@ class CenturionFeatureFlagging:
     _last_modified: datetime = None
     """ Last modified date/time of the feature flags"""
 
+    _over_rides: dict = None
+    """Feature Flag Over rides."""
+
     _response: requests.Response = None
     """Cached response from fetched feature flags"""
 
@@ -95,6 +98,7 @@ class CenturionFeatureFlagging:
         disable_downloading: bool = False,
         unique_id: str = None,
         version: str = None,
+        over_rides: dict = None,
     ):
 
         if not str(cache_dir).endswith('/'):
@@ -107,6 +111,21 @@ class CenturionFeatureFlagging:
         self._cache_dir = cache_dir
 
         self._disable_downloading = disable_downloading
+
+        if over_rides:
+
+            _over_rides: dict = {}
+
+            for entry in over_rides:
+
+                [*key], [*flag] = zip(*entry.items())
+
+                _over_rides.update({
+                    key[0]: FeatureFlag(key[0], flag[0])
+                })
+
+            self._over_rides = _over_rides
+
 
 
         if version is None:
@@ -174,6 +193,7 @@ class CenturionFeatureFlagging:
 
         if(
             self._feature_flags.get(key, None) is None
+            and self._over_rides.get(key, None) is None
             and raise_exceptions
         ):
 
@@ -182,10 +202,19 @@ class CenturionFeatureFlagging:
         elif(
             not raise_exceptions
             and self._feature_flags.get(key, None) is None
+            and self._over_rides.get(key, None) is None
         ):
 
             return False
 
+        elif(
+            not raise_exceptions
+            and self._over_rides.get(key, None) is not None
+        ):
+
+            return  self._over_rides[key]
+
+        
         return self._feature_flags[key]
 
 

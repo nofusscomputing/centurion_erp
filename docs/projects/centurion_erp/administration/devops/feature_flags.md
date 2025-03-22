@@ -30,4 +30,5 @@ Within your settings file the following settings are available
 
 | Attribute | Type | Default | Description |
 |:---|:---:|:---:|:---|
-| FEATURE_FLAGGING_ENABLED | `Bolean` | `True `| Turn feature flagging on/off |
+| FEATURE_FLAGGING_ENABLED | `Boolean` | `True `| Turn feature flagging on/off. |
+| FEATURE_FLAG_OVERRIDES | `list(dict)` | `None` | Feature Flags to override. Uses same format as the API Enbdpoint. |
