@@ -176,7 +176,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         }
 
 
-        metadata['navigation'] = self.get_navigation(request.user)
+        metadata['navigation'] = self.get_navigation(request)
 
         return metadata
 
@@ -373,154 +373,159 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         return field_info
 
 
-    _nav = {
-        'access': {
-            "display_name": "Access",
-            "name": "access",
-            "pages": {
-                'view_organization': {
-                    "display_name": "Organization",
-                    "name": "organization",
-                    "link": "/access/organization"
+    def get_nav_items(self, request) -> dict:
+        
+        nav = {
+            'access': {
+                "display_name": "Access",
+                "name": "access",
+                "pages": {
+                    'view_organization': {
+                        "display_name": "Organization",
+                        "name": "organization",
+                        "link": "/access/organization"
+                    }
                 }
-            }
-        },
-        'assistance': {
-            "display_name": "Assistance",
-            "name": "assistance",
-            "pages": {
-                'core.view_ticket_request': {
-                    "display_name": "Requests",
-                    "name": "request",
-                    "icon": "ticket_request",
-                    "link": "/assistance/ticket/request"
-                },
-                'view_knowledgebase': {
-                    "display_name": "Knowledge Base",
-                    "name": "knowledge_base",
-                    "icon": "information",
-                    "link": "/assistance/knowledge_base"
+            },
+            'assistance': {
+                "display_name": "Assistance",
+                "name": "assistance",
+                "pages": {
+                    'core.view_ticket_request': {
+                        "display_name": "Requests",
+                        "name": "request",
+                        "icon": "ticket_request",
+                        "link": "/assistance/ticket/request"
+                    },
+                    'view_knowledgebase': {
+                        "display_name": "Knowledge Base",
+                        "name": "knowledge_base",
+                        "icon": "information",
+                        "link": "/assistance/knowledge_base"
+                    }
                 }
-            }
-        },
-        'itam': {
-            "display_name": "ITAM",
-            "name": "itam",
-            "pages": {
-                'view_device': {
-                    "display_name": "Devices",
-                    "name": "device",
-                    "icon": "device",
-                    "link": "/itam/device"
-                },
-                'view_operatingsystem': {
-                    "display_name": "Operating System",
-                    "name": "operating_system",
-                    "link": "/itam/operating_system"
-                },
-                'view_software': {
-                    "display_name": "Software",
-                    "name": "software",
-                    "link": "/itam/software"
+            },
+            'itam': {
+                "display_name": "ITAM",
+                "name": "itam",
+                "pages": {
+                    'view_device': {
+                        "display_name": "Devices",
+                        "name": "device",
+                        "icon": "device",
+                        "link": "/itam/device"
+                    },
+                    'view_operatingsystem': {
+                        "display_name": "Operating System",
+                        "name": "operating_system",
+                        "link": "/itam/operating_system"
+                    },
+                    'view_software': {
+                        "display_name": "Software",
+                        "name": "software",
+                        "link": "/itam/software"
+                    }
                 }
-            }
-        },
-        'itim': {
-            "display_name": "ITIM",
-            "name": "itim",
-            "pages": {
-                'core.view_ticket_change': {
-                    "display_name": "Changes",
-                    "name": "ticket_change",
-                    "link": "/itim/ticket/change"
-                },
-                'view_cluster': {
-                    "display_name": "Clusters",
-                    "name": "cluster",
-                    "link": "/itim/cluster"
-                },
-                'core.view_ticket_incident': {
-                    "display_name": "Incidents",
-                    "name": "ticket_incident",
-                    "link": "/itim/ticket/incident"
-                },
-                'core.view_ticket_problem': {
-                    "display_name": "Problems",
-                    "name": "ticket_problem",
-                    "link": "/itim/ticket/problem"
-                },
-                'view_service': {
-                    "display_name": "Services",
-                    "name": "service",
-                    "link": "/itim/service"
-                },
-            }
-        },
-        'devops': {
-            "display_name": "DevOPs",
-            "name": "devops",
-            "icon": "devops",
-            "pages": {
-                'view_featureflag': {
-                    "display_name": "Feature Flags",
-                    "name": "feature_flag",
-                    "icon": 'feature_flag',
-                    "link": "/devops/feature_flag"
+            },
+            'itim': {
+                "display_name": "ITIM",
+                "name": "itim",
+                "pages": {
+                    'core.view_ticket_change': {
+                        "display_name": "Changes",
+                        "name": "ticket_change",
+                        "link": "/itim/ticket/change"
+                    },
+                    'view_cluster': {
+                        "display_name": "Clusters",
+                        "name": "cluster",
+                        "link": "/itim/cluster"
+                    },
+                    'core.view_ticket_incident': {
+                        "display_name": "Incidents",
+                        "name": "ticket_incident",
+                        "link": "/itim/ticket/incident"
+                    },
+                    'core.view_ticket_problem': {
+                        "display_name": "Problems",
+                        "name": "ticket_problem",
+                        "link": "/itim/ticket/problem"
+                    },
+                    'view_service': {
+                        "display_name": "Services",
+                        "name": "service",
+                        "link": "/itim/service"
+                    },
                 }
-            }
-        },
-        'config_management': {
-            "display_name": "Config Management",
-            "name": "config_management",
-            "icon": "ansible",
-            "pages": {
-                'view_configgroups': {
-                    "display_name": "Groups",
-                    "name": "group",
-                    "icon": 'config_management',
-                    "link": "/config_management/group"
+            },
+            'devops': {
+                "display_name": "DevOPs",
+                "name": "devops",
+                "icon": "devops",
+                "pages": {
+                    'view_featureflag': {
+                        "display_name": "Feature Flags",
+                        "name": "feature_flag",
+                        "icon": 'feature_flag',
+                        "link": "/devops/feature_flag"
+                    }
                 }
-            }
-        },
-        'project_management': {
-            "display_name": "Project Management",
-            "name": "project_management",
-            "icon": 'project',
-            "pages": {
-                'view_project': {
-                    "display_name": "Projects",
-                    "name": "project",
-                    "icon": 'kanban',
-                    "link": "/project_management/project"
+            },
+            'config_management': {
+                "display_name": "Config Management",
+                "name": "config_management",
+                "icon": "ansible",
+                "pages": {
+                    'view_configgroups': {
+                        "display_name": "Groups",
+                        "name": "group",
+                        "icon": 'config_management',
+                        "link": "/config_management/group"
+                    }
                 }
-            }
-        },
+            },
+            'project_management': {
+                "display_name": "Project Management",
+                "name": "project_management",
+                "icon": 'project',
+                "pages": {
+                    'view_project': {
+                        "display_name": "Projects",
+                        "name": "project",
+                        "icon": 'kanban',
+                        "link": "/project_management/project"
+                    }
+                }
+            },
 
-        'settings': {
-            "display_name": "Settings",
-            "name": "settings",
-            "pages": {
-                'all_settings': {
-                    "display_name": "System",
-                    "name": "setting",
-                    "icon": "system",
-                    "link": "/settings"
-                },
-                'django_celery_results.view_taskresult': {
-                    "display_name": "Task Log",
-                    "name": "celery_log",
-                    # "icon": "settings",
-                    "link": "/settings/celery_log"
+            'settings': {
+                "display_name": "Settings",
+                "name": "settings",
+                "pages": {
+                    'all_settings': {
+                        "display_name": "System",
+                        "name": "setting",
+                        "icon": "system",
+                        "link": "/settings"
+                    },
+                    'django_celery_results.view_taskresult': {
+                        "display_name": "Task Log",
+                        "name": "celery_log",
+                        # "icon": "settings",
+                        "link": "/settings/celery_log"
+                    }
                 }
             }
         }
-    }
 
 
-    def get_navigation(self, user) -> list(dict()):
+        return nav
+
+
+    def get_navigation(self, request) -> list(dict()):
         """Render the navigation menu
 
-        Check the users permissions agains `_nav`. if they have the permission, add the
+        Check the users permissions against `get_nav_items()`. if they have the permission, add the
         menu entry to the navigation to be rendered,
 
         **No** Menu is to be rendered that contains no menu entries.
@@ -536,7 +541,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         processed_permissions: dict = {}
 
-        for group in user.groups.all():
+        for group in request.user.groups.all():
 
             for permission in group.permissions.all():
 
@@ -569,11 +574,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         # user = view.request.user
 
         user_orgainzations = Organization.objects.filter(
-            manager = user
+            manager = request.user
         )
 
 
-        for app, entry in self._nav.items():
+        for app, entry in self.get_nav_items(request).items():
 
             new_menu_entry: dict = {}
 
