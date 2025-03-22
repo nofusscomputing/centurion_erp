@@ -161,6 +161,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.FEATURE_FLAG
 
+        elif model_type == 'git_repository':
+
+            from devops.models.git_repository.base import GitRepository
+
+            model = GitRepository
+
+            item_type = TicketLinkedItem.Modules.GIT_REPOSITORY
+
         elif model_type == 'kb':
 
             from assistance.models.knowledge_base import KnowledgeBase

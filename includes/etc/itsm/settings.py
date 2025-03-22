@@ -31,6 +31,8 @@ DATABASES = {
 
 FEATURE_FLAGGING_ENABLED = True    # Turn Feature Flagging on/off
 
+FEATURE_FLAG_OVERRIDES = []    # Feature Flag Overrides. Takes preceedence over downloaded feature flags.
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SECURE_SSL_REDIRECT = True
