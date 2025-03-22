@@ -50,6 +50,8 @@ class ModelSerializer(
     """Base Git Repository"""
     _urls = serializers.SerializerMethodField('get_url')
 
+    organization = serializers.PrimaryKeyRelatedField( read_only = True)
+
     provider_badge = BadgeField(label='Provider')
 
     class Meta:
@@ -86,7 +88,6 @@ class ModelSerializer(
             'id',
             'organization',
             'display_name',
-            'organization',
             'provider',
             'provider_id',
             'git_group',
