@@ -6,7 +6,7 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from api.serializers import common
 
-from devops.models.git_repository.base import GitRepository
+from devops.models.git_repository.base import GitRepository, GitGroup
 from devops.serializers.git_group import BaseSerializer as GitGroupBaseSerializer
 
 
@@ -53,9 +53,23 @@ class ModelSerializer(
 
         model = GitRepository
 
-        fields = '__all__'
+        fields = [
+            'id',
+            'display_name',
+            'organization',
+            'provider',
+            'provider_id',
+            'git_group',
+            'path',
+            'name',
+            'description',
+            'model_notes',
+            'created',
+            'modified',
+            '_urls',
+        ]
 
-        read_only_fields = [
+        default_read_only_fields = [
             'id',
             'display_name',
             'created',
@@ -63,6 +77,29 @@ class ModelSerializer(
             '_urls',
         ]
 
+        read_only_fields = [
+            'id',
+            'organization',
+            'display_name',
+            'organization',
+            'provider',
+            'provider_id',
+            'git_group',
+            'path',
+            'name',
+            'description',
+            'model_notes',
+            'created',
+            'modified',
+            '_urls',
+        ]
+
+
+    def is_valid(self, raise_exception = False):
+
+        is_valid = super().is_valid( raise_exception = raise_exception )
+
+        return is_valid
 
 
 
