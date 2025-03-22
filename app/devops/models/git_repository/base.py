@@ -90,7 +90,7 @@ class GitRepository(
         help_text = 'Path to this repository, not including the organization',
         max_length = 80,
         null = False,
-        unique = True,
+        unique = False,
         validators = [ validation_path ],
         verbose_name = 'path'
     )
