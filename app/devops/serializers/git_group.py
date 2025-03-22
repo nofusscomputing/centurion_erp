@@ -7,6 +7,7 @@ from access.serializers.organization import OrganizationBaseSerializer
 from api.serializers import common
 
 from core import exceptions as centurion_exceptions
+from core.fields.badge import BadgeField
 
 from devops.models.git_group import GitGroup
 
@@ -49,6 +50,8 @@ class ModelSerializer(
     """Base Git Repository"""
     _urls = serializers.SerializerMethodField('get_url')
 
+    provider_badge = BadgeField(label='Provider')
+
 
     class Meta:
 
@@ -62,6 +65,7 @@ class ModelSerializer(
             'display_name',
             'parent_group',
             'provider',
+            'provider_badge',
             'provider_pk',
             'name',
             'path',

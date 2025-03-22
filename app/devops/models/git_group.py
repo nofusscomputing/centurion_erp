@@ -108,6 +108,21 @@ class GitGroup(
 
         return self.path
 
+
+    @property
+    def provider_badge(self):
+
+        from core.classes.badge import Badge
+
+        text: str = self.get_provider_display()
+
+        return Badge(
+            icon_name = f'{text.lower()}',
+            icon_style = f'badge-icon-action-{text.lower()}',
+            text = text,
+        )
+
+
     app_namespace = 'devops'
 
     documentation = ''
@@ -155,8 +170,9 @@ class GitGroup(
 
 
     table_fields: list = [
-        'path',
         'name',
+        'provider_badge',
+        'path',
         'organization',
         'created',
     ]
