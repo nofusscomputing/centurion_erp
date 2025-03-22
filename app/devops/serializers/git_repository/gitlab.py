@@ -72,7 +72,7 @@ class ModelSerializer(
 
         self.validated_data['provider'] = getattr(
             GitGroup.GitProvider,
-            str(self.context['_view'].kwargs['git_provider']).upper()
+            str(self.context['view'].kwargs['git_provider']).upper()
         )
 
         return is_valid
@@ -81,8 +81,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'GitLabViewSerializer')
 class ViewSerializer(
+    GitViewSerializer,
     ModelSerializer,
-    GitViewSerializer
 ):
     """GitLab View Repository"""
 
