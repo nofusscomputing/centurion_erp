@@ -97,7 +97,7 @@ class GitGroup(
 
     created = AutoCreatedField()
 
-    modifoed = AutoLastModifiedField()
+    modified = AutoLastModifiedField()
 
 
     def __str__(self) -> str:
