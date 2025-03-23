@@ -458,6 +458,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     },
                 }
             },
+            'itops': {
+                "display_name": "ITOps",
+                "name": "itops",
+                "icon": "itops",
+                "pages": {}
+            },
             'devops': {
                 "display_name": "DevOPs",
                 "name": "devops",
