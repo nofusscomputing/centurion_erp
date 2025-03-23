@@ -138,7 +138,8 @@ INSTALLED_APPS = [
     'config_management.apps.ConfigManagementConfig',
     'project_management.apps.ProjectManagementConfig',
     'devops.apps.DevOpsConfig',
-    'centurion_feature_flag',
+    'centurion_feature_flag.apps.CenturionFeatureFlagConfig',
+    'itops.apps.ItOpsConfig',
 ]
 
 MIDDLEWARE = [
