@@ -1,49 +1,21 @@
-import pytest
-
-from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from access.models.organization import Organization
-
-from api.tests.abstract.viewsets import ViewSetModel
+from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 from itim.viewsets.incident import ViewSet
 
 
 
-
-class ViewsetCommon(
-    ViewSetModel,
+class IncidentTicketViewsetList(
+    ModelViewSetInheritedCases,
+    TestCase,
 ):
 
     viewset = ViewSet
 
     route_name = 'v2:_api_v2_ticket_incident'
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. Create an organization
-        3. create super user
-        """
-
-        organization = Organization.objects.create(name='test_org')
-
-        self.organization = organization
-
-        self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
-
-        self.kwargs = {}
-
-
-
-class IncidentTicketViewsetList(
-    ViewsetCommon,
-    TestCase,
-):
 
 
     @classmethod

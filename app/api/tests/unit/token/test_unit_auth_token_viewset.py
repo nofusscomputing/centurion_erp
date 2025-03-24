@@ -1,50 +1,26 @@
-import pytest
-
-from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from access.models.organization import Organization
+from api.tests.unit.test_unit_common_viewset import (
+    ModelCreateViewSetInheritedCases,
+    ModelListRetrieveDeleteViewSetInheritedCases,
+)
+from api.viewsets.auth_token import ViewSet
 
-from api.tests.abstract.viewsets import ViewSetModel
-
-from settings.viewsets.user_settings import ViewSet
+# from settings.viewsets.user_settings import ViewSet
 
 
 
-class ViewsetCommon(
-    ViewSetModel,
+class ViewsetList(
+    ModelCreateViewSetInheritedCases,
+    ModelListRetrieveDeleteViewSetInheritedCases,
+    TestCase,
 ):
 
     viewset = ViewSet
 
     route_name = 'v2:_api_v2_user_settings_token'
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. Create an organization
-        3. create super user
-        """
-
-        organization = Organization.objects.create(name='test_org')
-
-        self.organization = organization
-
-        self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
-
-        self.kwargs = {
-            'model_id': self.view_user.id
-        }
-
-
-
-class ViewsetList(
-    ViewsetCommon,
-    TestCase,
-):
 
 
     @classmethod
@@ -54,8 +30,11 @@ class ViewsetList(
         1. make list request
         """
 
-
         super().setUpTestData()
+
+        self.kwargs = {
+            'model_id': self.view_user.id
+        }
 
 
         client = Client()
