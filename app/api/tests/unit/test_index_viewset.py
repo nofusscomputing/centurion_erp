@@ -2,18 +2,16 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from rest_framework.permissions import IsAuthenticated
-
 from access.models.organization import Organization
 
-from api.tests.abstract.viewsets import ViewSetCommon
+from api.tests.unit.test_unit_common_viewset import IndexViewsetInheritedCases
 
 from api.viewsets.index import Index
 
 
 class HomeViewset(
     TestCase,
-    ViewSetCommon
+    IndexViewsetInheritedCases
 ):
 
     viewset = Index
@@ -44,18 +42,4 @@ class HomeViewset(
         self.http_options_response_list = client.options(url)
 
         self.kwargs = {}
-
-
-
-    def test_view_attr_permission_classes_value(self):
-        """Attribute Test
-
-        Attribute `permission_classes` must be metadata class `ReactUIMetadata`
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.permission_classes[0] is IsAuthenticated
-
-        assert len(view_set.permission_classes) == 1
 

@@ -94,7 +94,13 @@ class CommonModelSerializer(CommonBaseSerializer):
             and obj is not FeatureNotUsed
         ):
 
-            note_basename = '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
+            app_namespace = ''
+
+            if getattr(item, 'app_namespace', None):
+
+                app_namespace = str(item.app_namespace) + ':'
+
+            note_basename = app_namespace + '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
 
             if getattr(self.Meta, 'note_basename', None):
 

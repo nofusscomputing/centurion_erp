@@ -44,21 +44,31 @@ class Create(
             response = super().create(request = request, *args, **kwargs)
 
             # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.serializer_class.__module__)
+            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
             view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-            serializer = view_serializer(
-                self.get_queryset().get( pk = int(response.data['id']) ),
-                context = {
-                    'request': request,
-                    'view': self,
-                },
-            )
+            if response.data['id'] is not None:
+
+                serializer = view_serializer(
+                    self.get_queryset().get( pk = int(response.data['id']) ),
+                    context = {
+                        'request': request,
+                        'view': self,
+                    },
+                )
+
+                serializer_data = serializer.data
+
+            else:
+
+
+                serializer_data = {}
+
 
             # Mimic ALL details from DRF response except serializer
             response = Response(
-                data = serializer.data,
+                data = serializer_data,
                 status = response.status_code,
                 template_name = response.template_name,
                 headers = response.headers,
@@ -272,7 +282,7 @@ class Update(
             response = super().partial_update(request = request, *args, **kwargs)
 
             # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.serializer_class.__module__)
+            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
             view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
@@ -339,7 +349,7 @@ class Update(
             response = super().update(request = request, *args, **kwargs)
 
             # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.serializer_class.__module__)
+            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
             view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
@@ -698,7 +708,7 @@ class ModelViewSetBase(
 
         if self.view_serializer_name is None:
 
-            self.view_serializer_name = self.serializer_class.__name__.replace('ModelSerializer', 'ViewSerializer')
+            self.view_serializer_name = self.get_serializer_class().__name__.replace('ModelSerializer', 'ViewSerializer')
 
         return self.view_serializer_name
 

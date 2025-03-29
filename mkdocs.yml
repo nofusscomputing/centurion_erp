@@ -195,6 +195,10 @@ nav:
 
         - projects/centurion_erp/user/devops/feature_flags.md
 
+        - projects/centurion_erp/user/devops/git_group.md
+
+        - projects/centurion_erp/user/devops/git_repository.md
+
       - ITAM:
 
         - projects/centurion_erp/user/itam/index.md

@@ -12,3 +12,5 @@ Developer Operations or DevOps for short, is a module that contains items relate
 ## DevOps Components
 
 - [Feature Flags](./feature_flags.md)
+
+- [Git Repository Management](./git_repository.md)

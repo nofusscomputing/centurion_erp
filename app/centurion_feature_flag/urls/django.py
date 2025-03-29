@@ -24,6 +24,7 @@ if getattr(settings,'feature_flag', None):
             disable_downloading = settings.feature_flag.get('disable_downloading', False),
             unique_id = settings.feature_flag.get('unique_id', None),
             version = settings.feature_flag.get('version', None),
+            over_rides = settings.feature_flag.get('over_rides', None),
         )
 
     _feature_flagging.get()

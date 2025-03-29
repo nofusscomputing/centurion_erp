@@ -34,7 +34,9 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
 - Model VieSets must be tested against the following tests:
 
-    - _Unit Test Cases_ `from api.tests.abstract.viewsets import ViewSetModel`
+    - _Unit Test Cases_ `app/api/tests/unit/test_unit_common_viewset.py`
+
+        Within this file you'll find test cases that are suffixed with `InheritedCases`. The test case you should use is the one thats name begins with the class you inherited. for example, if the viewset inherits common ViewSet base class `ModelViewSet`, the class name of the pre-written test cases would be `ModelViewSetInheritedCases`.
 
     - _Functional test cases_ `from api.tests.abstract.api_serializer_viewset import SerializersTestCases`
 
@@ -140,6 +142,11 @@ The navigation menu is obtained by the UI as part of the metadata. The structure
 - `pages` [Menu entry](#menu-entry) dictionaries.
 
 Upon the UI requesting the navigation menu, the users permission are obtained, and if they have the permission for the menu entry within **any** organization, they will be presented with the menu that has a menu entries.
+
+
+## Testing
+
+As per the requirements listed above, viewsets must be tested. Although most if not all test cases are already written, if the view you create is different; You must write the test case(s) for this difference.
 
 
 ## Pre v1.3 Docs

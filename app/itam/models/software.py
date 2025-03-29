@@ -395,10 +395,10 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
             "name": "Tickets",
             "slug": "tickets",
             "sections": [
-                # {
-                #     "layout": "table",
-                #     "field": "tickets",
-                # }
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
             ],
         },
         {
@@ -446,7 +446,7 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
 
     def __str__(self):
 
-        return self.name
+        return self.software.name + ' ' + self.name
 
     def save_history(self, before: dict, after: dict) -> bool:
 
