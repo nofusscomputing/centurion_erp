@@ -139,6 +139,7 @@ INSTALLED_APPS = [
     'project_management.apps.ProjectManagementConfig',
     'devops.apps.DevOpsConfig',
     'centurion_feature_flag.apps.CenturionFeatureFlagConfig',
+    'human_resources.apps.HumanResourcesConfig',
     'itops.apps.ItOpsConfig',
 ]
 
