@@ -1,22 +1,20 @@
-from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from access.models.organization import Organization
-
 from api.tests.unit.test_unit_common_viewset import IndexViewsetInheritedCases
 
-from api.viewsets.index import Index
+from itim.viewsets.index import Index
 
 
-class HomeViewset(
+
+class ProjectManagementViewset(
+    IndexViewsetInheritedCases,
     TestCase,
-    IndexViewsetInheritedCases
 ):
 
     viewset = Index
 
-    route_name = 'API:_api_v2_home'
+    route_name = 'v2:_api_v2_project_management_home'
 
 
     @classmethod
@@ -27,11 +25,7 @@ class HomeViewset(
         3. create super user
         """
 
-        organization = Organization.objects.create(name='test_org')
-
-        self.organization = organization
-
-        self.view_user = User.objects.create_user(username="test_user_add", password="password", is_superuser=True)
+        super().setUpTestData()
 
 
         client = Client()
@@ -40,6 +34,3 @@ class HomeViewset(
 
         client.force_login(self.view_user)
         self.http_options_response_list = client.options(url)
-
-        self.kwargs = {}
-

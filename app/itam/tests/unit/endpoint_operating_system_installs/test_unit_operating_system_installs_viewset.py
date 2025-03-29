@@ -1,55 +1,22 @@
-import pytest
-
-from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from access.models.organization import Organization
-
-from api.tests.abstract.viewsets import ViewSetModel
+from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 from itam.models.operating_system import OperatingSystem
 from itam.viewsets.device_operating_system import ViewSet
 
 
 
-
-class ViewsetCommon(
-    ViewSetModel,
+class OperatingSystemInstallsViewsetList(
+    ModelViewSetInheritedCases,
+    TestCase,
 ):
 
     viewset = ViewSet
 
     route_name = 'v2:_api_v2_operating_system_installs'
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. Create an organization
-        3. create super user
-        """
-
-        organization = Organization.objects.create(name='test_org')
-
-        self.organization = organization
-
-        self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
-
-        self.kwargs = {
-            'operating_system_id': OperatingSystem.objects.create(
-                organization = organization,
-                name = 'os'
-            ).id
-        }
-
-
-
-class OperatingSystemInstallsViewsetList(
-    ViewsetCommon,
-    TestCase,
-):
 
 
     @classmethod
@@ -62,6 +29,12 @@ class OperatingSystemInstallsViewsetList(
 
         super().setUpTestData()
 
+        self.kwargs = {
+            'operating_system_id': OperatingSystem.objects.create(
+                organization = self.organization,
+                name = 'os'
+            ).id
+        }
 
         client = Client()
         
