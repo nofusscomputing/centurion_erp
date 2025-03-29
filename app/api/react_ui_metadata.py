@@ -405,6 +405,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 }
             },
+            'human_resources': {
+                "display_name": "Human Resources (HR)",
+                "name": "human_resources",
+                "pages": {
+                    # 'view_employees': {
+                    #     "display_name": "Employees",
+                    #     "name": "employees",
+                    #     "icon": "employees",
+                    #     "link": "/human_resources/employees"
+                    # }
+                }
+            },
             'itam': {
                 "display_name": "ITAM",
                 "name": "itam",
