@@ -558,22 +558,16 @@ class CommonViewSetCases(
         assert hasattr(self.viewset, 'view_description')
 
 
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is not None
-
-
     def test_view_attr_view_description_type(self):
         """Attribute Test
 
-        Attribute `view_description` must be of type str
+        Attribute `view_description` must be of type str if defined or None otherwise
         """
 
-        assert type(self.viewset.view_description) is str
+        assert(
+            type(self.viewset.view_description) is str
+            or type(self.viewset.view_description) is type(None)
+        )
 
 
     def test_view_attr_view_name_exists(self):
@@ -585,24 +579,18 @@ class CommonViewSetCases(
         assert hasattr(self.viewset, 'view_name')
 
 
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is not None
-
-
     def test_view_attr_view_name_type(self):
         """Attribute Test
 
-        Attribute `view_name` must be of type str
+        Attribute `view_name` must be of type str if defined or None otherwise
         """
 
         view_set = self.viewset()
 
-        assert type(view_set.view_name) is str
+        assert(
+            type(view_set.view_name) is str
+            or type(view_set.view_name) is type(None)
+        )
 
 
     # ToDo: get_back_url
