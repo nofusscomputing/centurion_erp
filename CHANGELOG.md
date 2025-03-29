@@ -1,3 +1,106 @@
+## 1.14.0 (2025-03-29)
+
+### feat
+
+- **itops**: Add navigation menu
+- New Module ITOps
+- **devops**: Ensure GitHub Groups can't be nested
+- **devops**: Models  Git Repository must use organization from `git_group` as must group if parent set
+- **devops**: Add git provider badge to git_group table fields
+- **devops**: Add git provider badge to git_repository table fields
+- **devops**: Add Git GRoup to navigation
+- **itam**: Add `back_url` to Software Version ViewSet
+- **itam**: Add `back_url` to Operating System ViewSet
+- **devops**: Add `page_layout` to Git Group model
+- **devops**: Add `page_layout` to GitLab repository model
+- **devops**: Add `page_layout` to GitHub repository model
+- **devops**: git_repository ViewSet updated to fetch queryset based off of repository provider
+- **devops**: Add ti git_repository ViewSet return and back urls
+- **devops**: Make fields `provider` and `provider_id` unique_together for git_repository model
+- **devops**: Add fields to ALL git_repository serializers
+- **devops**: Add fetching of URL to base git_repository model
+- **api**: Enable fetching of app_namespace from model
+- **access**: Add function get_page_layout
+- **feature_flag**: Provide user with ability to override feature flags
+- **base**: Add middleware feature_flag
+- **devops**: Disable notes for GIT Repository Base Model
+- **devops**: Add git_repository model tag migration
+- **devops**: Add git_repository as a model that can be linked to a ticket
+- **devops**: Git Group Notes Migration
+- **devops**: Git Group Notes ViewSet
+- **devops**: Git Group Notes Serializer
+- **devops**: Git Group Notes Model
+- **devops**: GitHub and GitLab Repository Notes Migrations
+- **devops**: GitLab Repository Notes Viewset
+- **devops**: GitHub Repository Notes Viewset
+- **devops**: GitLab Repository Notes Serializer
+- **devops**: GitHub Repository Notes Serializer
+- **devops**: GitLab Repository Notes Model
+- **devops**: GitHub Repository Notes Model
+- **devops**: Git Group History Migrations
+- **devops**: Git Group History
+- **devops**: GitLab and GitHub Repository History Migrations
+- **devops**: GitLab Repository History
+- **devops**: GitHub Repository History
+- **devops**: [2025-00001] Git Group and Repositories URLs
+- **devops**: Git Group and Repositories Migrations
+- **devops**: GIT Group ViewSet
+- **devops**: GIT Group Serializer
+- **devops**: GIT Group Model
+- **devops**: GIT Repositories Viewset
+- **devops**: GitLab Serializer for git repositories
+- **devops**: GitHub Serializer for git repositories
+- **devops**: Base Serializer for git repositories
+- **devops**: GitLab Repository Model
+- **devops**: GitHub Repository Model
+- **devops**: Base model for git repositories
+- **core**: Enable slash command related ticket to have multiple ticket references
+- **core**: Enable slash command linked model to have multiple models
+- **core**: process ticket slash commands by line
+- **core**: Migrations for new slash commands
+- **project_management**: Add project_state slash command
+- **core**: Add ticket_comment_category slash command
+- **core**: Add ticket_category slash command
+- **itam**: when displaying software version, add prefix with software name
+- **itam**: Add markdown tag $software_version
+- **itam**: Enable ticket tab on software version page
+
+### Fixes
+
+- **devops**: Correct git_group serializer parameter name
+- **devops**: Correct field path to no be unique for git_repository
+- **feature_flag**: if over_rides not set ensure val set to empty dict
+- **devops**: git_group serializers must define fields
+- **devops**: git_group serializers must return urls
+- **devops**: Correct git_repository notes urls
+- **devops**: Correct git_repository url regex
+- **devops**: Correct ViewSerializer for GitLab Repository
+- **devops**: Correct ViewSerializer for GitHib Repository
+- **devops**: Correct model git_group modified field name part 2
+- **devops**: Correct model git_group modified field name
+- **api**: Fetching of serializer_class must be dynamic
+- **core**: Don't create an empty ticket comment if the body is empty when slash commands removed
+- **core**: when processing slash commands trim each line prior to processing
+- **core**: slash command NL char is `\r\n` not `\n`, however support both
+- **core**: When processing slash commands trim whitespace on return
+- **core**: Ensure linked ticket models are unique
+- **itam**: Add back url to software_version model
+
+### Refactoring
+
+- **devops**: remove model unique_together constraint for git group and repository
+- **devops**: Field `provider_id` must not be user editable for git group or repository
+- **api**: mv _nav property to function get_nav_items
+
+### Tests
+
+- **api**: Correct test cases for view_name and view_description
+- Refactor all ViewSet Unit Test cases to use new test cases class
+- **api**: Common ViewSet classes Tests and Test cases for classes that inherit them
+- **api**: correct nav menu setup to use mock request
+- **core**: un-mark tests as skipped so that multiple linked items per ticket can be tested
+- **core**: correct ticket linked item to prevent duplicate creation
+
 ## 1.13.1 (2025-03-17)
 
 ### Fixes
