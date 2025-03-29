@@ -82,20 +82,22 @@ class TicketCommentModelSerializer(
             '_self': item.get_url( request = self._context['view'].request )
         }
 
-        threads = TicketComment.objects.filter(parent = item.id, ticket = ticket_id)
+        if item.id is not None:
 
-        if len(threads) > 0:
+            threads = TicketComment.objects.filter(parent = item.id, ticket = ticket_id)
 
-            urls.update({
-                'threads': reverse(
-                    'API:_api_v2_ticket_comment_threads-list',
-                    request = self._context['view'].request,
-                    kwargs={
-                        'ticket_id': ticket_id,
-                        'parent_id': item.id
-                    }
-                )
-            })
+            if len(threads) > 0:
+
+                urls.update({
+                    'threads': reverse(
+                        'API:_api_v2_ticket_comment_threads-list',
+                        request = self._context['view'].request,
+                        kwargs={
+                            'ticket_id': ticket_id,
+                            'parent_id': item.id
+                        }
+                    )
+                })
 
         return urls
 

@@ -1,3 +1,5 @@
+from rest_framework.reverse import reverse
+
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 # THis import only exists so that the migrations can be created
@@ -126,6 +128,17 @@ class ViewSet( ModelViewSet ):
     parent_model_pk_kwarg = 'software_id'
 
     view_description = 'Physical Softwares'
+
+
+    def get_back_url(self) -> str:
+
+
+        return reverse('v2:_api_v2_software-detail',
+            request = self.request,
+            kwargs = {
+                'pk': self.kwargs['software_id']
+            }
+        )
 
 
     def get_queryset(self):

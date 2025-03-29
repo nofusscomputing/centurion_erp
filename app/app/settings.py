@@ -69,6 +69,7 @@ CELERY_TASK_SEND_SENT_EVENT = True
 CELERY_WORKER_SEND_TASK_EVENTS = True # worker_send_task_events
 
 FEATURE_FLAGGING_ENABLED = True # Turn Feature Flagging on/off
+FEATURE_FLAG_OVERRIDES = None # Feature Flags to override fetched feature flags
 
 # PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(8010, 8010)
 # PROMETHEUS_METRICS_EXPORT_PORT = 8010
@@ -137,7 +138,8 @@ INSTALLED_APPS = [
     'config_management.apps.ConfigManagementConfig',
     'project_management.apps.ProjectManagementConfig',
     'devops.apps.DevOpsConfig',
-    'centurion_feature_flag',
+    'centurion_feature_flag.apps.CenturionFeatureFlagConfig',
+    'itops.apps.ItOpsConfig',
 ]
 
 MIDDLEWARE = [
@@ -152,7 +154,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.get_request.RequestMiddleware',
     'app.middleware.timezone.TimezoneMiddleware',
-    # 'centurion_feature_flag.middleware.feature_flag.FeatureFlagMiddleware',
+    'centurion_feature_flag.middleware.feature_flag.FeatureFlagMiddleware',
 ]
 
 
@@ -488,5 +490,29 @@ if FEATURE_FLAGGING_ENABLED:
         'cache_dir': str(BASE_DIR) + '/',
         'disable_downloading': False,
         'unique_id': unique_id,
-        'version': feature_flag_version
+        'version': feature_flag_version,
     }
+
+    if FEATURE_FLAG_OVERRIDES:
+
+        feature_flag.update({
+            'over_rides': FEATURE_FLAG_OVERRIDES
+        })
+
+    if DEBUG:
+
+        debug_feature_flags = [
+            {
+                "2025-00001": {
+                    "name": "DevOps/Git Repositories",
+                    "description": "Disables Git Repositories and Git Groups. see https://github.com/nofusscomputing/centurion_erp/issues/515",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            }
+        ]
+
+        feature_flag.update({
+            'over_rides': debug_feature_flags
+        })

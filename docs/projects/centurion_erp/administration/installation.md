@@ -91,6 +91,18 @@ Centurion ERP uses RabbitMQ for its worker queue. As tasks are created when usin
 
 The [API container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is the guts of Centurion ERP. It provides the endpoints for interacting with Centurion ERP. This container is scalable with the only additional requirement being that a load-balancer be placed in front of all web containers for traffic routing. If deploying to Kubernetes the service load-balancer is sufficient and setting the deployment `replicas` to the number of desired containers is the simplest method to scale.
 
+When setting up the reverse proxy, this container requires the following paths be passed to it:
+
+- `/account/` - Account pages.
+
+- `/admin/` - The Admin pages
+
+- `/api/` - API Pages
+
+- `/sso/` Single Sing on endpoint. This path is optional and only required if you have configured the Authentication to use an SSO service.
+
+- `/static/` - Static assets used by Centurion ERP. i.e. styles, images etc.
+
 
 ### UI Container
 
@@ -99,12 +111,18 @@ The [API container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is t
 
 The [UI container](https://hub.docker.com/r/nofusscomputing/centurion-erp-ui) is the user interface for Centurion. The user interface uses the react framework so as to take advantage of the UI running locally on the users machine. This reduces the bandwidth requirements for using Centurion to be approximatly the data they request and not the page as well.
 
+This container requires that the reverse proxy be setup to path the following path(s):
+
+- `/` - The root path for Centurion ERP. Contains the React Application that is the entire UI
+
 
 ### Background Worker Container
 
 The [Background Worker container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is a worker that waits for tasks sent to the RabbitMQ server. The worker is based upon [Celery](https://docs.celeryq.dev/en/stable/index.html). On the worker not being busy, it'll pickup and run the task. This container is scalable with nil additional requirements for launching additional workers. If deploying to Kubernetes the setting the deployment `replicas` to the number of desired containers is the simplest method to scale. There is no container start command, however you will need to set environmental variable `IS_WORKER` to value `'True'` within the container.
 
 Configuration for the worker resides in directory `/etc/itsm/` within the container. see below for the `CELERY_` configuration.
+
+This container does not require any paths be passed to it from the reverse proxy.
 
 
 ## Settings file

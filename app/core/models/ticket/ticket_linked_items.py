@@ -25,23 +25,35 @@ class TicketLinkedItem(TenancyObject):
             'id'
         ]
 
+        unique_together = (
+            'ticket',
+            'item_type',
+            'item',
+        )
+
         verbose_name = 'Ticket Linked Item'
 
         verbose_name_plural = 'Ticket linked Items'
 
 
     class Modules(models.IntegerChoices):
-        CLUSTER          = 1, 'Cluster'
-        CONFIG_GROUP     = 2, 'Config Group'
-        DEVICE           = 3, 'Device'
-        OPERATING_SYSTEM = 4, 'Operating System'
-        SERVICE          = 5, 'Service'
-        SOFTWARE         = 6, 'Software'
+        CLUSTER                 = 1, 'Cluster'
+        CONFIG_GROUP            = 2, 'Config Group'
+        DEVICE                  = 3, 'Device'
+        OPERATING_SYSTEM        = 4, 'Operating System'
+        SERVICE                 = 5, 'Service'
+        SOFTWARE                = 6, 'Software'
 
-        KB               = 7, 'Knowledge Base'
-        ORGANIZATION     = 8, 'Organization'
-        TEAM             = 9, 'Team'
-        FEATURE_FLAG     = 10, 'Feature Flag'
+        KB                      = 7, 'Knowledge Base'
+        ORGANIZATION            = 8, 'Organization'
+        TEAM                    = 9, 'Team'
+        FEATURE_FLAG            = 10, 'Feature Flag'
+        SOFTWARE_VERSION        = 11, 'Software Version'
+        TICKET_CATEGORY         = 12, 'Ticket Category'
+        TICKET_COMMENT_CATEGORY = 13, 'Ticket Comment Category'
+        PROJECT_STATE           = 14, 'Project State'
+        GIT_REPOSITORY          = 15, 'Git Repository'
+
 
     is_global = None
 
