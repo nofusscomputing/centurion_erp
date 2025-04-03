@@ -87,8 +87,10 @@ class Entity(
 
             if getattr(self, related_object.name, None):
 
-                return related_object.name
-                break
+                if not str(related_object.name).endswith('history'):
+
+                    return related_object.name
+                    break
 
 
         return ''
@@ -209,3 +211,16 @@ class Entity(
             self.entity_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from access.models.entity_history import EntityHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = EntityHistory
+        )
+
+        return history

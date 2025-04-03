@@ -10,7 +10,8 @@ from drf_spectacular.utils import (
     PolymorphicProxySerializer
 )
 
-from access.models.team_history import TeamHistory    # pylint: disable=W0611:unused-import
+# THis import only exists so that the migrations can be created
+from access.models.entity_history import EntityHistory    # pylint: disable=W0611:unused-import
 from access.models.entity import (
     Entity,
 )
