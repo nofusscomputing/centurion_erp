@@ -134,15 +134,17 @@ class ViewSet(ReadOnlyModelViewSet):
             content_type_id = self.get_content_type().id
         )
 
+        if len( self.queryset ) > 0:
 
-        related_object_name = self.queryset[0].get_related_field_name( self.queryset[0] )
+            related_object_name = self.queryset[0].get_related_field_name( self.queryset[0] )
 
 
-        self.queryset = self.queryset.filter(
-            **{
-                str(related_object_name + '__model_id'): int(self.kwargs['model_id']),
-            }
-        )
+            self.queryset = self.queryset.filter(
+                **{
+                    str(related_object_name + '__model_id'): int(self.kwargs['model_id']),
+                }
+            )
+
 
         return self.queryset
 
