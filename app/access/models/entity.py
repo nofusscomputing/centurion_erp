@@ -65,6 +65,10 @@ class Entity(
 
     # app_namespace = 'access'
 
+    history_app_label = 'access'
+
+    history_model_name = 'entity'
+
     kb_model_name = 'entity'
 
     note_basename = '_api_v2_entity_note'
