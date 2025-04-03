@@ -44,9 +44,17 @@ class APITestCases(
             **self.kwargs_item_create
         )
 
+        
         self.url_view_kwargs = {
             'pk': self.item.id
         }
+
+        if self.model._meta.model_name != 'entity':
+
+            self.url_view_kwargs.update({
+                'entity_model': self.item.entity_type,
+            })
+
 
         if self.model._meta.model_name != 'entity':
 

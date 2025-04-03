@@ -18,6 +18,7 @@ from app.viewsets.base import (
 
 from access.viewsets import (
     entity,
+    entity_notes,
     index as access_v2,
     organization as organization_v2,
     organization_notes,
@@ -134,6 +135,7 @@ router.register('', v2.Index, basename='_api_v2_home')
 router.register('access', access_v2.Index, basename='_api_v2_access_home')
 router.register('access/entity/(?P<entity_model>[a-z]+)?', entity.ViewSet, basename='_api_v2_entity_sub')
 router.register('access/entity', entity.NoDocsViewSet, basename='_api_v2_entity')
+router.register('access/entity/(?P<model_id>[0-9]+)/notes', entity_notes.ViewSet, basename='_api_v2_entity_note')
 
 router.register('access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
 router.register('access/organization/(?P<model_id>[0-9]+)/notes', organization_notes.ViewSet, basename='_api_v2_organization_note')
