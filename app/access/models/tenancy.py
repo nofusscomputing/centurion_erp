@@ -172,6 +172,12 @@ class TenancyObject(SaveHistory):
     the API version, i.e. `v2:devops`.
     """
 
+    note_basename: str = None
+    """URL BaseName for the notes endpoint.
+
+    Don't specify the `app_namespace`, use property `app_namespace` above.
+    """
+
 
     def get_page_layout(self):
         """ FEtch the page layout"""
