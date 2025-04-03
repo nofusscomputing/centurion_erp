@@ -172,6 +172,13 @@ class TenancyObject(SaveHistory):
     the API version, i.e. `v2:devops`.
     """
 
+    kb_model_name: str = None
+    """Model name to use for KB article linking
+    
+    This value is derived from `<model>._meta.model_name`. This value should
+    only be used when there is model inheritence.
+    """
+
     note_basename: str = None
     """URL BaseName for the notes endpoint.
 

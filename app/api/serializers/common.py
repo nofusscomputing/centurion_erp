@@ -60,15 +60,22 @@ class CommonModelSerializer(CommonBaseSerializer):
 
         get_url = {
             '_self': item.get_url( request = self._context['view'].request ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
         }
+
+        kb_model_name = self.Meta.model._meta.model_name
+        if getattr(item, 'kb_model_name'):
+
+            kb_model_name = item.kb_model_name
+
+
+        get_url['knowledge_base'] = reverse(
+            'v2:_api_v2_model_kb-list',
+            request=self._context['view'].request,
+            kwargs={
+                'model': kb_model_name,
+                'model_pk': item.pk
+            }
+        )
 
         if getattr(self.Meta.model, 'save_model_history', True):
 

@@ -65,6 +65,8 @@ class Entity(
 
     # app_namespace = 'access'
 
+    kb_model_name = 'entity'
+
     note_basename = '_api_v2_entity_note'
 
     documentation = ''

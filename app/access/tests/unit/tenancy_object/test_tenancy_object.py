@@ -41,6 +41,12 @@ class TenancyObjectTestCases:
         assert issubclass(TenancyObject, SaveHistory)
 
 
+    def test_has_attribute_kb_model_name(self):
+        """Attribute _kb_model_name exists """
+        
+        assert hasattr(self.item, 'kb_model_name')
+
+
     def test_has_attribute_organization(self):
         """ Field organization exists """
         
