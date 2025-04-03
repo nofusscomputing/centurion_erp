@@ -217,7 +217,11 @@ class Entity(
 
         related_model = self.get_related_model()
 
-        if related_model is not None:
+        if related_model is None:
+
+            related_model = self
+
+        if self.entity_type != str(related_model._meta.verbose_name).lower().replace(' ', '_'):
 
             self.entity_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
 
