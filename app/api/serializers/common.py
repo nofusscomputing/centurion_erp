@@ -79,12 +79,24 @@ class CommonModelSerializer(CommonBaseSerializer):
 
         if getattr(self.Meta.model, 'save_model_history', True):
 
+            history_app_label = self.Meta.model._meta.app_label
+            if getattr(item, 'history_app_label'):
+
+                history_app_label = item.history_app_label
+
+
+            history_model_name = self.Meta.model._meta.model_name
+            if getattr(item, 'history_model_name'):
+
+                history_model_name = item.history_model_name
+
+
             get_url['history'] = reverse(
                 "v2:_api_v2_model_history-list",
                 request = self._context['view'].request,
                 kwargs = {
-                    'app_label': self.Meta.model._meta.app_label,
-                    'model_name': self.Meta.model._meta.model_name,
+                    'app_label': history_app_label,
+                    'model_name': history_model_name,
                     'model_id': item.pk
                 }
             )
