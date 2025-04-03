@@ -102,7 +102,7 @@ class CommonModelSerializer(CommonBaseSerializer):
 
             note_basename = app_namespace + '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
 
-            if hasattr(item, 'note_basename'):
+            if getattr(item, 'note_basename'):
 
                 note_basename = app_namespace + item.note_basename
 

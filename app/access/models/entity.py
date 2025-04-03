@@ -65,6 +65,8 @@ class Entity(
 
     # app_namespace = 'access'
 
+    note_basename = '_api_v2_entity_note'
+
     documentation = ''
 
     page_layout: dict = []
@@ -87,7 +89,10 @@ class Entity(
 
             if getattr(self, related_object.name, None):
 
-                if not str(related_object.name).endswith('history'):
+                if( 
+                    not str(related_object.name).endswith('history')
+                    and not str(related_object.name).endswith('notes')
+                ):
 
                     return related_object.name
                     break
