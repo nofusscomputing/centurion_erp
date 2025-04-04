@@ -73,7 +73,9 @@ class ViewSetBase:
 
         self.url_view_kwargs.update({ 'pk': self.item.id })
 
-        self.add_data.update({'organization': self.organization.id})
+        if self.add_data is not None:
+
+            self.add_data.update({'organization': self.organization.id})
 
 
         view_permissions = Permission.objects.get(
@@ -198,8 +200,6 @@ class PermissionsAPITestCases(
     APIPermissions,
 ):
 
-    add_data: dict = { 'model_note': 'added model note' }
-
     change_data = {'model_notes': 'device'}
 
     model = None
@@ -228,7 +228,7 @@ class PermissionsAPITestCases(
 
 
 
-class PermissionsAPIInheritedCases(
+class EntityPermissionsAPIInheritedCases(
     PermissionsAPITestCases,
 ):
 
@@ -258,10 +258,12 @@ class PermissionsAPIInheritedCases(
 
 
 
-class TeamPermissionsAPITest(
+class EntityPermissionsAPITest(
     PermissionsAPITestCases,
     TestCase,
 ):
+
+    add_data: dict = { 'model_note': 'added model note' }
 
     kwargs_create_item: dict = {}
 
@@ -297,7 +299,7 @@ class ViewSetTestCases(
 
 
 
-class ViewSetInheritedCases(
+class EntityViewSetInheritedCases(
     ViewSetTestCases,
 ):
 
@@ -325,7 +327,7 @@ class ViewSetInheritedCases(
 
 
 
-class TeamViewSetTest(
+class EntityViewSetTest(
     ViewSetTestCases,
     TestCase,
 ):
@@ -363,7 +365,7 @@ class MetadataTestCases(
 
 
 
-class MetadataInheritedCases(
+class EntityMetadataInheritedCases(
     MetadataTestCases,
 ):
 
@@ -391,7 +393,7 @@ class MetadataInheritedCases(
 
 
 
-class TeamMetadataTest(
+class EntityMetadataTest(
     MetadataTestCases,
     TestCase,
 
