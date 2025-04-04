@@ -384,6 +384,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Organization",
                         "name": "organization",
                         "link": "/access/organization"
+                    },
+                    'view_contact': {
+                        "display_name": "Directory",
+                        "name": "directory",
+                        "link": "/access/entity/contact"
                     }
                 }
             },
