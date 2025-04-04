@@ -500,7 +500,10 @@ if FEATURE_FLAGGING_ENABLED:
             'over_rides': FEATURE_FLAG_OVERRIDES
         })
 
-    if DEBUG:
+
+    if DEBUG or RUNNING_TESTS:
+
+        feature_flag.update({ 'disable_downloading': True, })
 
         debug_feature_flags = [
             {
