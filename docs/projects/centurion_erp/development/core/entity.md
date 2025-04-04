@@ -26,7 +26,7 @@ When creating your model, do not re-define any field that is already specified w
 
 ### Example model
 
-This example demostrates how the contact model is created. As a Contact is a person, there must also be a Person "Entity" created.
+This example demonstrates how the contact model is created. As a Contact is a person, there must also be a Person "Entity" created.
 
 Create the person "Entity" only containing the fields for a "person"
 
@@ -45,4 +45,27 @@ Now Create the contact "Entity" only containing the fields for a "contact"
 ```
 
 !!! tip
-    Take note of the inheritence and the fact that children don't override parent objects.
+    Take note of the inheritance and the fact that children don't override parent objects.
+
+
+## Testing
+
+As with any other object within Centurion, the addition of a feature requires it be tested. The following Test Suites are available:
+
+- `Unit` Test Cases
+
+    - `access.tests.unit.contact.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Contact`)_ Test cases for sub-models
+
+    - `access.tests.unit.entity.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Entity`)_ Test cases for sub-models
+
+    - `access.tests.unit.people.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Person`)_ Test cases for sub-models
+
+- `Functional` Test Cases
+
+    - `access.tests.functional.contact.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Contact`)_ Test cases for sub-models
+
+    - `access.tests.functional.entity.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Entity`)_ Test cases for sub-models
+
+    - `access.tests.functional.people.<*>.<Inherited class name>InheritedCases` _(if inheriting from `People`)_ Test cases for sub-models
+
+The above listed test cases cover **all** tests for objects that are inherited from the base class. To complete the tests, you will need to add test cases for the differences your model introduces.
