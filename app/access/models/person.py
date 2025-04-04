@@ -1,0 +1,74 @@
+from django.db import models
+
+from access.models.entity import Entity
+
+
+
+class Person(
+    Entity
+):
+
+
+    class Meta:
+
+        ordering = [
+            'l_name',
+            'm_name',
+            'f_name',
+            'dob',
+        ]
+
+        verbose_name = 'Person'
+
+        verbose_name_plural = 'People'
+
+    f_name = models.CharField(
+        blank = False,
+        help_text = 'The persons first name',
+        max_length = 64,
+        unique = False,
+        verbose_name = 'First Name'
+    )
+
+    m_name = models.CharField(
+        blank = True,
+        default = None,
+        help_text = 'The persons middle name(s)',
+        max_length = 100,
+        null = True,
+        unique = False,
+        verbose_name = 'Middle Name(s)'
+    )
+
+    l_name = models.CharField(
+        blank = False,
+        help_text = 'The persons Last name',
+        max_length = 64,
+        unique = False,
+        verbose_name = 'Last Name'
+    )
+
+    dob = models.DateField(
+        blank = True,
+        default = None,
+        help_text = 'The Persons Date of Birth (DOB)',
+        null = True,
+        unique = False,
+        verbose_name = 'DOB',
+    )
+
+    def __str__(self) -> str:
+
+        return self.f_name + ' ' + self.l_name + f' (DOB: {self.dob})'
+
+    documentation = ''
+
+    page_layout: dict = []
+
+    table_fields: list = [
+        'organization',
+        'f_name',
+        'l_name',
+        'dob',
+        'created',
+    ]

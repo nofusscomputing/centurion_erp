@@ -2,7 +2,7 @@ from django.urls import include, path
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from rest_framework.routers import DefaultRouter
+from centurion_feature_flag.urls.routers import DefaultRouter
 
 from api.viewsets import (
     auth_token,
@@ -17,6 +17,8 @@ from app.viewsets.base import (
 )
 
 from access.viewsets import (
+    entity,
+    entity_notes,
     index as access_v2,
     organization as organization_v2,
     organization_notes,
@@ -131,6 +133,10 @@ router = DefaultRouter(trailing_slash=False)
 router.register('', v2.Index, basename='_api_v2_home')
 
 router.register('access', access_v2.Index, basename='_api_v2_access_home')
+router.register('access/entity/(?P<entity_model>[a-z]+)?', entity.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_sub')
+router.register('access/entity', entity.NoDocsViewSet, feature_flag = '2025-00002', basename='_api_v2_entity')
+router.register('access/entity/(?P<model_id>[0-9]+)/notes', entity_notes.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_note')
+
 router.register('access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
 router.register('access/organization/(?P<model_id>[0-9]+)/notes', organization_notes.ViewSet, basename='_api_v2_organization_note')
 router.register('access/organization/(?P<organization_id>[0-9]+)/team', team_v2.ViewSet, basename='_api_v2_organization_team')

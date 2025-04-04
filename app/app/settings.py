@@ -500,13 +500,25 @@ if FEATURE_FLAGGING_ENABLED:
             'over_rides': FEATURE_FLAG_OVERRIDES
         })
 
-    if DEBUG:
+
+    if DEBUG or RUNNING_TESTS:
+
+        feature_flag.update({ 'disable_downloading': True, })
 
         debug_feature_flags = [
             {
                 "2025-00001": {
                     "name": "DevOps/Git Repositories",
                     "description": "Disables Git Repositories and Git Groups. see https://github.com/nofusscomputing/centurion_erp/issues/515",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
+            {
+                "2025-00002": {
+                    "name": "Entities",
+                    "description": "Entities see https://github.com/nofusscomputing/centurion_erp/issues/704",
                     "enabled": True,
                     "created": "",
                     "modified": ""
