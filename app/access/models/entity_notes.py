@@ -32,8 +32,6 @@ class EntityNotes(
         verbose_name = 'Model',
     )
 
-    app_namespace = 'devops'
-
     table_fields: list = []
 
     page_layout: dict = []
