@@ -53,6 +53,7 @@ class TicketLinkedItem(TenancyObject):
         TICKET_COMMENT_CATEGORY = 13, 'Ticket Comment Category'
         PROJECT_STATE           = 14, 'Project State'
         GIT_REPOSITORY          = 15, 'Git Repository'
+        ENTITY                  = 16, 'Entity'
 
 
     is_global = None

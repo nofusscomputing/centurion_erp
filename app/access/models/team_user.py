@@ -73,6 +73,11 @@ class TeamUsers(SaveHistory):
         'manager'
     ]
 
+    history_app_label: str = None
+    history_model_name: str = None
+    kb_model_name: str = None
+    note_basename: str = None
+
 
     def delete(self, using=None, keep_parents=False):
         """ Delete Team

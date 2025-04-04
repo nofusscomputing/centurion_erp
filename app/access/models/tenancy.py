@@ -172,6 +172,33 @@ class TenancyObject(SaveHistory):
     the API version, i.e. `v2:devops`.
     """
 
+    history_app_label: str = None
+    """History Model Application Label
+
+    This value is derived from `<model>._meta.app_label`. This value should
+    only be used when there is model inheritence.
+    """
+
+    history_model_name: str = None
+    """History Model Model Name
+
+    This value is derived from `<model>._meta.model_name`. This value should
+    only be used when there is model inheritence.
+    """
+
+    kb_model_name: str = None
+    """Model name to use for KB article linking
+    
+    This value is derived from `<model>._meta.model_name`. This value should
+    only be used when there is model inheritence.
+    """
+
+    note_basename: str = None
+    """URL BaseName for the notes endpoint.
+
+    Don't specify the `app_namespace`, use property `app_namespace` above.
+    """
+
 
     def get_page_layout(self):
         """ FEtch the page layout"""

@@ -153,6 +153,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.DEVICE
 
+        elif model_type == 'entity':
+
+            from access.models.entity import Entity
+
+            model = Entity
+
+            item_type = TicketLinkedItem.Modules.ENTITY
+
         elif model_type == 'feature_flag':
 
             from devops.models.feature_flag import FeatureFlag

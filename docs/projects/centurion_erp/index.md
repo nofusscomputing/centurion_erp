@@ -111,6 +111,8 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
         - Location Management (Regions, Sites and Locations) _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_
 
+    - Corporate Directory (contacts) _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_
+
     - Customer Relationship Management (CRM) _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_
 
     - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_

@@ -384,6 +384,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Organization",
                         "name": "organization",
                         "link": "/access/organization"
+                    },
+                    'view_contact': {
+                        "display_name": "Directory",
+                        "name": "directory",
+                        "link": "/access/entity/contact"
                     }
                 }
             },
@@ -403,6 +408,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "icon": "information",
                         "link": "/assistance/knowledge_base"
                     }
+                }
+            },
+            'human_resources': {
+                "display_name": "Human Resources (HR)",
+                "name": "human_resources",
+                "pages": {
+                    # 'view_employees': {
+                    #     "display_name": "Employees",
+                    #     "name": "employees",
+                    #     "icon": "employees",
+                    #     "link": "/human_resources/employees"
+                    # }
                 }
             },
             'itam': {

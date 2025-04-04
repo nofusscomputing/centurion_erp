@@ -113,6 +113,11 @@ class AuthToken(models.Model):
     modified = AutoLastModifiedField()
 
 
+    history_app_label: str = None
+    history_model_name: str = None
+    kb_model_name: str = None
+    note_basename: str = None
+
     @property
     def generate(self) -> str:
 

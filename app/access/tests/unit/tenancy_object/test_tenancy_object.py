@@ -1,5 +1,4 @@
 import pytest
-import unittest
 
 from django.test import TestCase
 
@@ -8,11 +7,9 @@ from access.models.tenancy import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 
-from unittest.mock import patch
 
 
-
-class TenancyManagerTests(TestCase):
+class TenancyManagerTest(TestCase):
 
     item = TenancyManager
 
@@ -30,7 +27,7 @@ class TenancyManagerTests(TestCase):
 
 
 
-class TenancyObjectTests(TestCase):
+class TenancyObjectTestCases:
 
     item = TenancyObject
 
@@ -42,6 +39,24 @@ class TenancyObjectTests(TestCase):
         """
 
         assert issubclass(TenancyObject, SaveHistory)
+
+
+    def test_has_attribute_history_app_label(self):
+        """ Attribute history_app_name exists """
+        
+        assert hasattr(self.item, 'history_app_label')
+
+
+    def test_has_attribute_history_model_name(self):
+        """ Attribute history_model_name exists """
+        
+        assert hasattr(self.item, 'history_model_name')
+
+
+    def test_has_attribute_kb_model_name(self):
+        """Attribute _kb_model_name exists """
+        
+        assert hasattr(self.item, 'kb_model_name')
 
 
     def test_has_attribute_organization(self):
@@ -60,6 +75,12 @@ class TenancyObjectTests(TestCase):
         """ Field organization exists """
         
         assert hasattr(self.item, 'model_notes')
+
+
+    def test_has_attribute_note_basename(self):
+        """ Attribute note_basename exists """
+        
+        assert hasattr(self.item, 'note_basename')
 
 
     def test_has_attribute_get_organization(self):
@@ -102,3 +123,12 @@ class TenancyObjectTests(TestCase):
         """
 
         assert self.item.objects is not None
+
+
+
+class TenancyObjectTest(
+    TenancyObjectTestCases,
+    TestCase,
+):
+
+    pass

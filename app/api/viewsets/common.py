@@ -614,7 +614,7 @@ class CommonViewSet(
                 self.view_name = str(self.model._meta.verbose_name)
             
             else:
-                
+
                 self.view_name = str(self.model._meta.verbose_name_plural)
 
         return self.view_name
@@ -668,11 +668,9 @@ class ModelViewSetBase(
 
         self.queryset = self.model.objects.all()
 
-        if 'pk' in self.kwargs:
+        if 'pk' in getattr(self, 'kwargs', {}):
 
-            if self.kwargs['pk']:
-
-                self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
+            self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
 
 
         return self.queryset

@@ -66,6 +66,10 @@ class MockRequest:
 
         self.user = user
 
+        if not isinstance(viewset, viewset):
+
+            viewset = viewset()
+
         view_permission = Permission.objects.get(
             codename = 'view_' + viewset.model._meta.model_name,
             content_type = ContentType.objects.get(
