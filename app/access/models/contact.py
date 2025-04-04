@@ -42,11 +42,73 @@ class Contact(
 
     documentation = ''
 
-    page_layout: dict = []
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                },
+                {
+                    "name": "Personal Details",
+                    "layout": "double",
+                    "left": [
+                        'display_name',
+                        'dob',
+                    ],
+                    "right": [
+                        'f_name',
+                        'm_name',
+                        'l_name',
+                    ]
+                },
+                {
+                    "name": "",
+                    "layout": "double",
+                    "left": [
+                        'email',
+                    ],
+                    "right": [
+                        '',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
 
     table_fields: list = [
-        'organization',
+        {
+            "field": "display_name",
+            "type": "link",
+            "key": "_self"
+        },
         'f_name',
         'l_name',
+        'email',
+        'organization',
         'created',
     ]
