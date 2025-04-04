@@ -511,6 +511,15 @@ if FEATURE_FLAGGING_ENABLED:
                     "created": "",
                     "modified": ""
                 }
+            },
+            {
+                "2025-00002": {
+                    "name": "Entities",
+                    "description": "Entities see https://github.com/nofusscomputing/centurion_erp/issues/704",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
             }
         ]
 
