@@ -10,6 +10,8 @@ from drf_spectacular.utils import (
     PolymorphicProxySerializer
 )
 
+from rest_framework.reverse import reverse
+
 # THis import only exists so that the migrations can be created
 from access.models.entity_history import EntityHistory    # pylint: disable=W0611:unused-import
 from access.models.entity import (
@@ -286,6 +288,25 @@ class ViewSet( ModelViewSet ):
 
     view_description = 'All entities'
 
+
+    def get_back_url(self) -> str:
+
+        if(
+            self.back_url is None
+            and self.kwargs.get('entity_model', None) is not None
+        ):
+
+            self.back_url = reverse(
+                viewname = '_api_v2_entity_sub-list',
+                request = self.request,
+                kwargs = {
+                    'entity_model': self.kwargs['entity_model'],
+                }
+            )
+
+        return self.back_url
+
+
     def get_serializer_class(self):
 
         serializer_module = importlib.import_module(
@@ -308,28 +329,6 @@ class ViewSet( ModelViewSet ):
 
 
         return self.serializer_class
-
-
-    def get_return_url(self) -> str:
-
-        if getattr(self, '_get_return_url', None):
-
-            return self._get_return_url
-
-        if self.kwargs.get('pk', None) is None:
-
-
-            model = self.model
-
-            if not isinstance(model, Entity):
-
-                model = model()
-
-            self._get_return_url = model.get_url(request = self.request )
-
-            return self._get_return_url
-
-        return None
 
 
 
