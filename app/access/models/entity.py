@@ -81,7 +81,7 @@ class Entity(
     table_fields: list = [
         'organization',
         'entity_type',
-        'display_name'
+        'display_name',
         'created',
         'modified',
     ]
