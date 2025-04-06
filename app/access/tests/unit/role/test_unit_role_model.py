@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from access.models.role import Role
 from access.models.organization import Organization
+from access.models.tenancy import TenancyObject
 
 from app.tests.abstract.models import TenancyModel
 
@@ -40,6 +41,16 @@ class ModelTestCases(
         """
 
         assert self.model.is_global is None
+
+
+
+    def test_model_must_be_by_organization(self):
+        """Test model must be by organization
+
+        This model **must** be by organization.
+        """
+
+        assert issubclass(self.model, TenancyObject)
 
 
 
