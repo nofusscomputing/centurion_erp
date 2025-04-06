@@ -23,9 +23,15 @@ class Index(IndexViewset):
 
     def list(self, request, pk=None):
 
-        return Response(
-            {
+        response = {
                 "organization": reverse('v2:_api_v2_organization-list', request=request),
-                "role": reverse( 'v2:_api_v2_role-list', request=request ),
             }
-        )
+
+        if self.request.feature_flag['2025-00003']:
+            
+            response.update({
+                "role": reverse( 'v2:_api_v2_role-list', request=request ),
+            })
+
+
+        return Response(response)

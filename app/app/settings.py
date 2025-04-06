@@ -523,7 +523,16 @@ if FEATURE_FLAGGING_ENABLED:
                     "created": "",
                     "modified": ""
                 }
-            }
+            },
+            {
+                "2025-00003": {
+                    "name": "Role Based Access Control (RBAC)",
+                    "description": "Refactor of authentication and authorization to be RBAC based. see https://github.com/nofusscomputing/centurion_erp/issues/551",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
         ]
 
         feature_flag.update({

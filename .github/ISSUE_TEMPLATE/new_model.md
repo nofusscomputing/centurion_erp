@@ -50,7 +50,7 @@ Describe in detail the following:
     - [ ] 🆕 Model Created
     - [ ] 🛠️ Migrations added
     - [ ] Add `app_label` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().model_apps`
-    - [ ] _(Notes not used/required) - _ Add `model_name` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().excluded_models`
+    - [ ] _(Notes not used/required) -_ Add `model_name` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().excluded_models`
     - [ ] 🧪 [Unit tested](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/#testing)
     - [ ] 🧪 [Functional tested](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/#testing)
 
