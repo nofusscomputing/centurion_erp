@@ -31,6 +31,18 @@ class ModelTestCases(
 
 
 
+    def test_field_not_exists_is_global(self):
+        """Test model field not used
+
+        object must not be settable as a global object
+
+        Attribute `is_global` must be defined as None
+        """
+
+        assert self.model.is_global is None
+
+
+
 class RoleModelTest(
     ModelTestCases,
     TestCase,
