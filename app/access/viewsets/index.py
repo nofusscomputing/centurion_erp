@@ -25,6 +25,7 @@ class Index(IndexViewset):
 
         return Response(
             {
-                "organization": reverse('v2:_api_v2_organization-list', request=request)
+                "organization": reverse('v2:_api_v2_organization-list', request=request),
+                "role": reverse( 'v2:_api_v2_role-list', request=request ),
             }
         )

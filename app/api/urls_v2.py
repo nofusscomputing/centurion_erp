@@ -22,6 +22,7 @@ from access.viewsets import (
     index as access_v2,
     organization as organization_v2,
     organization_notes,
+    role,
     team as team_v2,
     team_notes,
     team_user as team_user_v2
@@ -143,6 +144,7 @@ router.register('access/organization/(?P<organization_id>[0-9]+)/team', team_v2.
 router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<model_id>[0-9]+)/notes', team_notes.ViewSet, basename='_api_v2_team_note')
 router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
 
+router.register('access/role', role.ViewSet, basename='_api_v2_role')
 
 router.register('assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
 router.register('assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
