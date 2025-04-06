@@ -201,6 +201,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.ORGANIZATION
 
+        elif  model_type == 'role':
+
+            from access.models.role import Role
+
+            model = Role
+
+            item_type = TicketLinkedItem.Modules.ROLE
+
         elif model_type == 'service':
 
             from itim.models.services import Service
