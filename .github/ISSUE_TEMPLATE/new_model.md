@@ -36,7 +36,6 @@ Describe in detail the following:
 - [ ] 🏷️ Model tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()` function
 
     - [ ] 📘 Tag updated in the [docs](https://nofusscomputing.com/projects/centurion_erp/user/core/markdown/#model-reference)
-    - [ ] tag added to `app/core/models/ticket/ticket_linked_items.TicketLinkedItem.__str__()`
     - [ ] tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()`
     - [ ] ⚒️ Migration _Ticket Linked Item item_type choices update_
 
