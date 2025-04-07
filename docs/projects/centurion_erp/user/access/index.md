@@ -15,6 +15,8 @@ The Access module provides the multi-tenancy for this application. Tenancy is or
 
 - [Organization](./organization.md)
 
+- [Roles](./role.md)
+
 - [Team](./team.md)
 
 

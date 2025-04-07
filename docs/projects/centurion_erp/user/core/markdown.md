@@ -96,7 +96,7 @@ A Model link is a reference to an item within the database. Supported model link
 | projectstate| `$project_state-<id>` |
 | projecttask| `$-<id>` |
 | projecttype| `$-<id>` |
-| role| `$role-<id>` |
+| [role](../access/role.md)| `$role-<id>` |
 | service| `$service-<id>` |
 | software| `$software-<id>` |
 | softwarecategory| `$-<id>` |
