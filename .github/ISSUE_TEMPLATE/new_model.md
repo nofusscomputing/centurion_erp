@@ -36,7 +36,6 @@ Describe in detail the following:
 - [ ] 🏷️ Model tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()` function
 
     - [ ] 📘 Tag updated in the [docs](https://nofusscomputing.com/projects/centurion_erp/user/core/markdown/#model-reference)
-    - [ ] tag added to `app/core/models/ticket/ticket_linked_items.TicketLinkedItem.__str__()`
     - [ ] tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()`
     - [ ] ⚒️ Migration _Ticket Linked Item item_type choices update_
 
@@ -51,7 +50,7 @@ Describe in detail the following:
     - [ ] 🆕 Model Created
     - [ ] 🛠️ Migrations added
     - [ ] Add `app_label` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().model_apps`
-    - [ ] _(Notes not used/required) - _ Add `model_name` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().excluded_models`
+    - [ ] _(Notes not used/required) -_ Add `model_name` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().excluded_models`
     - [ ] 🧪 [Unit tested](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/#testing)
     - [ ] 🧪 [Functional tested](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/#testing)
 

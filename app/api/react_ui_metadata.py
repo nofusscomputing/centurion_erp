@@ -541,6 +541,15 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             }
         }
 
+        nav['access']['pages'].update({
+            'view_role': {
+                "display_name": "Roles",
+                "name": "roles",
+                "icon": 'roles',
+                "link": "/access/role"
+            }
+        })
+
         if getattr(request, 'feature_flag', None):
 
             if request.feature_flag['2025-00001']:

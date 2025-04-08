@@ -47,6 +47,7 @@ class SaveHistory(models.Model):
 
         remove_keys = [
             '_django_version',
+            '_prefetched_objects_cache',
             '_state',
             'created',
             'modified'
