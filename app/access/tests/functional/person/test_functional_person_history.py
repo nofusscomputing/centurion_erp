@@ -1,7 +1,9 @@
 from django.test import TestCase
 
 from access.models.person import Person
-from access.tests.functional.entity.test_functional_entity_history import EntityHistoryInheritedCases
+from access.tests.functional.entity.test_functional_entity_history import (
+    EntityHistoryInheritedCases
+)
 
 
 
@@ -11,31 +13,21 @@ class PersonTestCases(
 
     field_name = 'model_notes'
 
-    kwargs_create_obj: dict = {}
+    kwargs_create_obj: dict = {
+        'f_name': 'Ian',
+        'm_name': 'Peter',
+        'l_name': 'Funny',
+        'dob': '2025-04-08',
+    }
 
-    kwargs_delete_obj: dict = {}
+    kwargs_delete_obj: dict = {
+        'f_name': 'Ian',
+        'm_name': 'Peter',
+        'l_name': 'Weird',
+        'dob': '2025-04-08',
+    }
 
     model = Person
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs_create_obj.update({
-            'f_name': 'Ian',
-            'm_name': 'Peter',
-            'l_name': 'Funny',
-            'dob': '2025-04-08',
-        })
-
-        self.kwargs_delete_obj.update({
-            'f_name': 'Ian',
-            'm_name': 'Peter',
-            'l_name': 'Weird',
-            'dob': '2025-04-08',
-        })
-
-        super().setUpTestData()
-
 
 
 class PersonHistoryInheritedCases(
@@ -48,6 +40,20 @@ class PersonHistoryInheritedCases(
     kwargs_create_obj: dict = None
 
     kwargs_delete_obj: dict = None
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        self.kwargs_create_obj.update(
+            super().kwargs_create_obj
+        )
+
+        self.kwargs_delete_obj.update(
+            super().kwargs_delete_obj
+        )
+
+        super().setUpTestData()
 
 
 

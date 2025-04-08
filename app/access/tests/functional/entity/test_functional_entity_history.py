@@ -18,7 +18,7 @@ class HistoryTestCases(
 
     kwargs_delete_obj: dict = {}
 
-    model = None
+    model = Entity
 
 
     @classmethod
@@ -50,6 +50,24 @@ class EntityHistoryInheritedCases(
     model = None
     """Entity model to test"""
 
+    kwargs_create_obj: dict = None
+
+    kwargs_delete_obj: dict = None
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        self.kwargs_create_obj.update(
+            super().kwargs_create_obj
+        )
+
+        self.kwargs_delete_obj.update(
+            super().kwargs_delete_obj
+        )
+
+        super().setUpTestData()
+
 
 
 class EntityHistoryTest(
@@ -57,4 +75,4 @@ class EntityHistoryTest(
     TestCase,
 ):
 
-    model = Entity
+    pass

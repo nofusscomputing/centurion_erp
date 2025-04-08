@@ -18,6 +18,23 @@ class SerializerTestCases(
     EntitySerializerInheritedCases,
 ):
 
+    create_model_serializer = ModelSerializer
+    """Serializer to test"""
+
+    duplicate_f_name_l_name_dob: dict = {
+        'f_name': 'fred',
+        'm_name': 'D',
+        'l_name': 'Flinstone',
+        'dob': '2025-04-08',
+    }
+
+    kwargs_create_item_duplicate_f_name_l_name_dob: dict = {
+        'f_name': 'fred',
+        'm_name': 'D',
+        'l_name': 'Flinstone',
+        'dob': '2025-04-08',
+    }
+
     kwargs_create_item: dict = {
         'f_name': 'Ian',
         'm_name': 'Peter',
@@ -27,9 +44,6 @@ class SerializerTestCases(
 
     model = Person
     """Model to test"""
-
-    create_model_serializer = ModelSerializer
-    """Serializer to test"""
 
     valid_data: dict = {
         'f_name': 'Ian',
@@ -131,7 +145,12 @@ class SerializerTestCases(
         dob already exists in the db a validation error occurs.
         """
 
-        data = self.kwargs_create_item.copy()
+        self.model.objects.create(
+            organization = self.organization,
+            **self.kwargs_create_item_duplicate_f_name_l_name_dob
+        )
+
+        data = self.duplicate_f_name_l_name_dob.copy()
 
         with pytest.raises(ValidationError) as err:
 
@@ -154,8 +173,23 @@ class PersonSerializerInheritedCases(
     create_model_serializer = None
     """Serializer to test"""
 
+    duplicate_f_name_l_name_dob: dict = None
+    """ Duplicate model serializer dict
+    
+    used for testing for duplicate f_name, l_name and dob fields.
+    """
+
     kwargs_create_item: dict = None
     """ Model kwargs to create item"""
+
+    kwargs_create_item_duplicate_f_name_l_name_dob: dict = None
+    """model kwargs to create object
+
+    **None:** Ensure that the fields of sub-model to person do not match
+    `self.duplicate_f_name_l_name_dob`. if they do the wrong exception will be thrown.
+
+    used for testing for duplicate f_name, l_name and dob fields.
+    """
 
     model = None
     """Model to test"""
@@ -167,6 +201,14 @@ class PersonSerializerInheritedCases(
     @classmethod
     def setUpTestData(self):
         """Setup Test"""
+
+        self.duplicate_f_name_l_name_dob.update(
+            super().duplicate_f_name_l_name_dob
+        )
+
+        self.kwargs_create_item_duplicate_f_name_l_name_dob.update(
+            super().kwargs_create_item_duplicate_f_name_l_name_dob
+        )
 
         self.kwargs_create_item.update(
             super().kwargs_create_item
