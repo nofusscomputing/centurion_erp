@@ -18,7 +18,7 @@ class ModelHistoryAPITestCases(
 
     audit_model = None
 
-    kwargs_create_audit_object: dict = None
+    kwargs_create_audit_object: dict = {}
 
     model = EntityHistory
 
@@ -59,6 +59,16 @@ class EntityModelHistoryAPIInheritedCases(
     audit_model = None
 
     kwargs_create_audit_object: dict = None
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        self.kwargs_create_audit_object.update(
+            super().kwargs_create_audit_object
+        )
+
+        super().setUpTestData()
 
 
 

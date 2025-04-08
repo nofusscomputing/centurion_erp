@@ -14,7 +14,12 @@ class ModelTestCases(
 
     model = Person
 
-    kwargs_item_create: dict = None
+    kwargs_item_create: dict = {
+        'f_name': 'Ian',
+        'm_name': 'Peter',
+        'l_name': 'Funny',
+        'dob': '2025-04-08',
+    }
 
 
 
@@ -71,17 +76,20 @@ class PersonModelInheritedCases(
     model = None
 
 
+    @classmethod
+    def setUpTestData(self):
+
+        self.kwargs_item_create.update(
+            super().kwargs_item_create
+        )
+
+        super().setUpTestData()
+
+
 
 class PersonModelTest(
     ModelTestCases,
     TestCase,
 ):
 
-    # model = Person
-
-    kwargs_item_create: dict = {
-        'f_name': 'Ian',
-        'm_name': 'Peter',
-        'l_name': 'Funny',
-        'dob': '2025-04-08',
-    }
+    pass

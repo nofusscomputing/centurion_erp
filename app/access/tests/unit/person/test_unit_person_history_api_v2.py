@@ -16,9 +16,14 @@ class PersonModelHistoryAPITestCases(
     attributes required to create the object.
     """
 
-    audit_model = None
+    audit_model = Person
 
-    kwargs_create_audit_object: dict = None
+    kwargs_create_audit_object: dict = {
+        'f_name': 'Ian',
+        'm_name': 'Peter',
+        'l_name': 'Funny',
+        'dob': '2025-04-08',
+    }
 
 
 
@@ -33,6 +38,16 @@ class PersonHistoryAPIInheritedCases(
     audit_model = None
 
     kwargs_create_audit_object: dict = None
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        self.kwargs_create_audit_object.update(
+            super().kwargs_create_audit_object
+        )
+
+        super().setUpTestData()
 
 
 
