@@ -3,7 +3,10 @@ from django.test import Client, TestCase
 from rest_framework.reverse import reverse
 
 
-from access.viewsets.entity import NoDocsViewSet
+from access.viewsets.entity import (
+    NoDocsViewSet,
+    ViewSet,
+)
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
@@ -53,7 +56,7 @@ class EntityViewsetInheritedCases(
 
     route_name = 'API:_api_v2_entity_sub'
 
-    viewset = None
+    viewset = ViewSet
 
 
     @classmethod
