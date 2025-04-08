@@ -55,13 +55,6 @@ class APITestCases(
                 'entity_model': self.item.entity_type,
             })
 
-
-        if self.model._meta.model_name != 'entity':
-
-            self.url_view_kwargs.update({
-                'entity_type': self.model._meta.model_name
-            })
-
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
@@ -173,7 +166,7 @@ class EntityAPIInheritedCases(
     APITestCases,
 ):
 
-    # kwargs_item_create: dict = None
+    kwargs_item_create: dict = None
 
     model = None
 
@@ -183,11 +176,20 @@ class EntityAPIInheritedCases(
     @classmethod
     def setUpTestData(self):
 
-        self.kwargs_item_create = {
+        self.kwargs_item_create.update({
             'entity_type': self.model._meta.model_name
-        }
+        })
 
         super().setUpTestData()
+
+
+    def test_api_field_exists_entity_value(self):
+        """ Test for value of API Field
+
+        entity_type field must match model name
+        """
+
+        assert self.api_data['entity_type'] == self.model._meta.model_name
 
 
 

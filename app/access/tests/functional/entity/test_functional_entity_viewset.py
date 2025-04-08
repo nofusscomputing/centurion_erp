@@ -1,8 +1,6 @@
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
+from django.test import TestCase
 
 from access.models.entity import Entity
 from access.models.organization import Organization
@@ -68,8 +66,6 @@ class ViewSetBase:
             **self.kwargs_create_item_diff_org
         )
 
-
-        # self.url_kwargs = {'organization_id': self.organization.id}
 
         self.url_view_kwargs.update({ 'pk': self.item.id })
 
@@ -200,6 +196,9 @@ class PermissionsAPITestCases(
     APIPermissions,
 ):
 
+
+    add_data: dict = {}
+
     change_data = {'model_notes': 'device'}
 
     model = None
@@ -213,6 +212,14 @@ class PermissionsAPITestCases(
     url_view_kwargs: dict = None
 
     url_name = None
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        self.add_data.update({ 'model_note': 'added model note' })
+
+        super().setUpTestData()
 
 
     def test_returned_data_from_user_and_global_organizations_only(self):
@@ -262,8 +269,6 @@ class EntityPermissionsAPITest(
     PermissionsAPITestCases,
     TestCase,
 ):
-
-    add_data: dict = { 'model_note': 'added model note' }
 
     kwargs_create_item: dict = {}
 

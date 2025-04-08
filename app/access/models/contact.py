@@ -56,6 +56,7 @@ class Contact(
                     ],
                     "right": [
                         'model_notes',
+                        'directory',
                     ]
                 },
                 {

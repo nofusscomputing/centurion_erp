@@ -11,9 +11,9 @@ class ModelTestCases(
     TenancyModel,
 ):
 
-    model = None
+    model = Entity
 
-    kwargs_item_create: dict = None
+    kwargs_item_create: dict = {}
 
     @classmethod
     def setUpTestData(self):
@@ -45,14 +45,20 @@ class EntityModelInheritedCases(
     model = None
 
 
+    @classmethod
+    def setUpTestData(self):
+
+        self.kwargs_item_create.update(
+            super().kwargs_item_create
+        )
+
+        super().setUpTestData()
+
+
 
 class EntityModelTest(
     ModelTestCases,
     TestCase,
 ):
 
-    model = Entity
-
-    kwargs_item_create: dict = {
-        # 'entity_type': 'entity'
-    }
+    pass

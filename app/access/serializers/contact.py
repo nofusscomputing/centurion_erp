@@ -44,6 +44,7 @@ class ModelSerializer(
             'l_name',
             'dob',
             'email',
+            'directory',
             'model_notes',
             'is_global',
             'created',
