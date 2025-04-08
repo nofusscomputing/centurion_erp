@@ -3,6 +3,7 @@ from django.test import TestCase
 
 from access.models.contact import Contact
 from access.tests.unit.person.test_unit_person_model import (
+    Person,
     PersonModelInheritedCases
 )
 
@@ -56,19 +57,14 @@ class ModelTestCases(
         )
 
 
-    # def test_model_field_l_name_mandatory(self):
-    #     """Test Field
+    def test_model_inherits_person(self):
+        """Test model inheritence
 
-    #     Field `l_name` must be a mandatory field
-    #     """
+        model must inherit from Entity sub-model `Person`
+        """
 
-    #     assert (
-    #         not (
-    #             self.model._meta.get_field('l_name').blank
-    #             and self.model._meta.get_field('l_name').null
-    #         )
-    #         and self.model._meta.get_field('l_name').default is NOT_PROVIDED
-    #     )
+        assert issubclass(self.model, Person)
+
 
 
 
