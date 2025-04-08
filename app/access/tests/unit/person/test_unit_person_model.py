@@ -1,3 +1,4 @@
+from django.db.models.fields import NOT_PROVIDED
 from django.test import TestCase
 
 from access.models.person import Person
@@ -11,9 +12,49 @@ class ModelTestCases(
     EntityModelInheritedCases,
 ):
 
-    model = None
+    model = Person
 
     kwargs_item_create: dict = None
+
+
+
+    def test_model_field_dob_optional(self):
+        """Test Field
+
+        Field `dob` must be an optional field
+        """
+
+        assert self.model._meta.get_field('dob').blank
+
+
+    def test_model_field_f_name_mandatory(self):
+        """Test Field
+
+        Field `f_name` must be a mandatory field
+        """
+
+        assert(
+            not (
+                self.model._meta.get_field('f_name').blank
+                and self.model._meta.get_field('f_name').null
+            )
+            and self.model._meta.get_field('f_name').default is NOT_PROVIDED
+        )
+
+
+    def test_model_field_l_name_mandatory(self):
+        """Test Field
+
+        Field `l_name` must be a mandatory field
+        """
+
+        assert (
+            not (
+                self.model._meta.get_field('l_name').blank
+                and self.model._meta.get_field('l_name').null
+            )
+            and self.model._meta.get_field('l_name').default is NOT_PROVIDED
+        )
 
 
 
@@ -36,7 +77,7 @@ class PersonModelTest(
     TestCase,
 ):
 
-    model = Person
+    # model = Person
 
     kwargs_item_create: dict = {
         'f_name': 'Ian',
