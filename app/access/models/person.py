@@ -1,5 +1,7 @@
 from django.db import models
 
+from core.exceptions import ValidationError
+
 from access.models.entity import Entity
 
 
@@ -72,3 +74,44 @@ class Person(
         'dob',
         'created',
     ]
+
+
+    def clean(self):
+
+        super().clean()
+
+        if self.dob is not None:
+
+            if self.pk:
+
+                duplicate_entry = Person.objects.filter(
+                    f_name = self.f_name,
+                    l_name = self.l_name,
+                ).exclude(
+                    pk = self.pk
+                )
+
+            else:
+
+                duplicate_entry = Person.objects.filter(
+                    f_name = self.f_name,
+                    l_name = self.l_name,
+                )
+
+
+            for entry in duplicate_entry:
+                    
+                if(
+                    entry.f_name == self.f_name
+                    and entry.m_name == self.m_name
+                    and entry.l_name == self.l_name
+                    and entry.dob == self.dob
+                ):
+
+                    raise ValidationError(
+                        detail = {
+                            'dob': f'Person {self.f_name} {self.l_name} already exists with this birthday {entry.dob}'
+                        },
+                        code = 'duplicate_person_on_dob'
+                    )
+
