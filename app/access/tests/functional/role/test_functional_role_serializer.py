@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 
 
 from access.models.organization import Organization
+from access.serializers.role import Role, ModelSerializer
 
 
 
@@ -13,17 +14,9 @@ class ValidationSerializer(
     TestCase,
 ):
 
-    model = None
+    model = Role
 
-    serializer = None
-
-
-    @classmethod
-    def tearDownClass(self):
-
-        self.model = None
-
-        self.serializer = None
+    serializer = ModelSerializer
 
 
     @classmethod
@@ -33,12 +26,6 @@ class ValidationSerializer(
         1. Create an org
         2. Create an item
         """
-
-        from access.serializers.role import Role, ModelSerializer
-
-        self.model = Role
-
-        self.serializer = ModelSerializer
 
         organization = Organization.objects.create(name='test_org')
 
