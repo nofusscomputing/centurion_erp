@@ -20,7 +20,7 @@
 
 <!-- dont remove tasks below strike through including the checkbox by enclosing in double tidle '~~' -->
 
- - [ ] **Feature Release ONLY** :red_square: Squash migration files :red_square: 
+ - [ ] **Feature Release ONLY** :red_square: [Squash migration files](https://docs.djangoproject.com/en/5.2/topics/migrations/#squashing-migrations) :red_square: 
     _Multiple migration files created as part of this release are to be sqauashed into a few files as possible so as to limit the number of migrations_ 
 
 - [ ] :firecracker: Contains breaking-change Any Breaking change(s)?
