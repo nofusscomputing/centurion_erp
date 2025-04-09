@@ -525,7 +525,8 @@ class CommonViewSet(
 
             elif getattr(self.model, '_meta', None):
 
-                self._model_documentation = self.model._meta.app_label + '/' + self.model._meta.model_name
+                self._model_documentation = self.model._meta.app_label + '/' + str(
+                    self.model._meta.verbose_name).lower().replace(' ', '_')
 
 
         return self._model_documentation
