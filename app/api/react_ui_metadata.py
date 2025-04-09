@@ -385,11 +385,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "organization",
                         "link": "/access/organization"
                     },
-                    'view_contact': {
-                        "display_name": "Directory",
-                        "name": "directory",
-                        "link": "/access/entity/contact"
-                    }
                 }
             },
             'accounting': {
@@ -574,6 +569,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "link": "/devops/git_repository"
                     }
                 })
+
+
+            if request.feature_flag['2025-00002']:
+
+                nav['access']['pages'].update({
+                    'view_contact': {
+                        "display_name": "Directory",
+                        "name": "directory",
+                        "link": "/access/entity/contact"
+                    }
+                })
+
 
         return nav
 
