@@ -486,6 +486,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "icon": 'ticketcategory',
                         "link": "/settings/ticket_category"
                     },
+                    'core.view_ticketcommentcategory': {
+                        "display_name": "Ticket Comment Category",
+                        "name": "ticketcommentcategory",
+                        "icon": 'ticketcommentcategory',
+                        "link": "/settings/ticket_comment_category"
+                    },
+                }
             },
             'devops': {
                 "display_name": "DevOPs",
@@ -631,8 +638,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         view_settings: list = [
             'assistance.view_knowledgebasecategory',
             'core.view_manufacturer',
-            'core.view_ticketcategory',
-            'core.view_ticketcommentcategory',
             'itam.view_devicemodel',
             'itam.view_devicetype',
             'itam.view_softwarecategory',
