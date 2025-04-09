@@ -541,15 +541,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             }
         }
 
-        nav['access']['pages'].update({
-            'view_role': {
-                "display_name": "Roles",
-                "name": "roles",
-                "icon": 'roles',
-                "link": "/access/role"
-            }
-        })
-
         if getattr(request, 'feature_flag', None):
 
             if request.feature_flag['2025-00001']:
@@ -578,6 +569,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Directory",
                         "name": "directory",
                         "link": "/access/entity/contact"
+                    }
+                })
+
+
+            if request.feature_flag['2025-00003']:
+
+                nav['access']['pages'].update({
+                    'view_role': {
+                        "display_name": "Roles",
+                        "name": "roles",
+                        "icon": 'roles',
+                        "link": "/access/role"
                     }
                 })
 
