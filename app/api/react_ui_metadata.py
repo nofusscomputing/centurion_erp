@@ -392,6 +392,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 }
             },
+            'accounting': {
+                "display_name": "Accounting",
+                "name": "accounting",
+                "pages": {}
+            },
             'assistance': {
                 "display_name": "Assistance",
                 "name": "assistance",

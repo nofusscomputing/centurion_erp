@@ -257,6 +257,7 @@ urlpatterns = [
 urlpatterns += router.urls
 
 urlpatterns += [
+    path("accounting/", include("accounting.urls")),
     path("devops/", include("devops.urls")),
     path("hr/", include('human_resources.urls')),
     path('public/', include('api.urls_public')),

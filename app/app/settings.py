@@ -141,6 +141,7 @@ INSTALLED_APPS = [
     'centurion_feature_flag.apps.CenturionFeatureFlagConfig',
     'human_resources.apps.HumanResourcesConfig',
     'itops.apps.ItOpsConfig',
+    'accounting.apps.AccountingConfig',
 ]
 
 MIDDLEWARE = [
