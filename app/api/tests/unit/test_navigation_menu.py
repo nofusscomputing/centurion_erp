@@ -1466,9 +1466,9 @@ class NavigationMenu(
 
         nav_menu = self.metadata.get_navigation(self.core_ticketcategory)
 
-        menu_name = 'settings'
+        menu_name = 'itops'
 
-        page_name = 'setting'
+        page_name = 'ticketcategory'
 
         menu_page_exists: bool = False
 
@@ -1521,9 +1521,9 @@ class NavigationMenu(
 
         nav_menu = self.metadata.get_navigation(self.core_ticketcommentcategory)
 
-        menu_name = 'settings'
+        menu_name = 'itops'
 
-        page_name = 'setting'
+        page_name = 'ticketcommentcategory'
 
         menu_page_exists: bool = False
 
