@@ -165,6 +165,9 @@ class CenturionFeatureFlagging:
                self._feature_flags is not None
                and self._last_modified is not None
             )
+            or (
+                self._over_rides is not None
+            )
         ):
 
             return True
