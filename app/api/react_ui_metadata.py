@@ -479,7 +479,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITOps",
                 "name": "itops",
                 "icon": "itops",
-                "pages": {}
+                "pages": {
+                    'core.view_ticketcategory': {
+                        "display_name": "Ticket Category",
+                        "name": "ticketcategory",
+                        "icon": 'ticketcategory',
+                        "link": "/settings/ticket_category"
+                    },
             },
             'devops': {
                 "display_name": "DevOPs",
