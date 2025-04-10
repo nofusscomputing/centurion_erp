@@ -1,3 +1,123 @@
+## 1.15.0 (2025-04-10)
+
+### feat
+
+- **settings**: Move Ticket Comment Category from settings to ITOps menu
+- **settings**: Move Ticket Category from settings to ITOps menu
+- **access**: place roles nav behind feature flag 2025-00003
+- **access**: place directory nav behind feature flag 2025-00002
+- **accounting**: add new module
+- **access**: Ensure that the same person cant be created more than once
+- **access**: Place Roles Model behind feature flag `2025-00003`
+- **access**: When querying permissions, select related field `content_type`
+- **core**: Model tag for Access/Role
+- **access**: Model Role notes endpoint
+- **access**: Add navigation entry for roles
+- **access**: Model Role History migrations
+- **access**: Add model Role History
+- **access**: Role Notes model viewset
+- **access**: Role Notes model serializer
+- **access**: Model Role Notes migrations
+- **access**: Add model Role Notes
+- **access**: Role model viewset
+- **access**: Role model serializer
+- **access**: Model Role migrations
+- **access**: Add model Role
+- **python**: Upgrade Django 5.1.7 -> 5.2
+- **access**: Place Entity URLs behind feature flag `2025-00002`
+- **access**: Add detail page layout for contact model
+- **access**: Add Menu entry for corporate directory
+- **access**: Add back_url to Entity metadata
+- **core**: Add Entity model tag
+- **access**: Update Entity field `entity_type` if it does not match the entity type
+- **access**: All Entity models to use the entity history endpoint
+- **access**: Enable specifying the history model to use for audit history for a model
+- **access**: Enable specifying the kb model to use for linking kb article to a model
+- **access**: All Entity models to use the entity notes endpoint
+- **access**: Enable specifying the notes `basename` for a model
+- **access**: ViewSet for Entity Notes model
+- **access**: Serializer for Entity Notes model
+- **access**: new model Entity Notes
+- **access**: New model Entity History
+- **access**: Add Entity URL routes
+- **access**: new serializer Contact
+- **access**: new model Contact
+- **access**: new serializer Person
+- **access**: new model Person
+- **access**: new ViewSet for for Entity and sub-entities
+- **access**: new serializer Entity
+- **access**: new model Entity
+- **human_resources**: Add navigation menu entry for Human Resources (HR)
+- **human_resources**: Add module Human Resources (HR) to API Urls
+- **base**: Add module Human Resources (HR) to installed apps
+- Add module Human Resources (HR)
+
+### Fixes
+
+- **api**: Correct documentation link to use models verbose name
+- **feature_flag**: cater for settings flag overrides
+- **access**: Add missing field directory to contact model
+- **settings**: Add Application Settings to Admin page
+- **access**: Remove app_namespace from Entity
+- **access**: add missing tenancy object fields to non-tenancy object models
+- **core**: Dont attempt to fetch history related objects if no history exists
+- **api**: Dont attempt to access kwargs if not exists within common serializer
+
+### Refactoring
+
+- **core**: When saving history, ensure field `_prefetched_objects_cache` is not included
+
+### Tests
+
+- **settings**: Correct nav menu entry for Ticket Category and Ticket Comment Category
+- **access**: Ensure Model Contacts inherits from Person Model
+- **access**: Functional Test Suite for Contact API Metadata, API Permissions and ViewSet
+- **access**: Functional Test Suite for Contact serializer
+- **access**: Functional Test Suite for Contact history
+- **access**: Correct Entity and person functional Test Suite so sub-model testing works
+- **access**: Correct table_fields test case to cater for dynamic field
+- **access**: Unit Test for Contact ViewSet
+- **access**: Unit Test for Contact model
+- **access**: Unit Test for Contact history API field checks
+- **access**: Unit Test for Contact API field checks
+- **access**: Unit Test for Person Tenancy Object
+- **access**: Correct Entity and person unit Test Suite so sub-model testing works
+- **access**: Entity Function Serializer test cases
+- **access**: Person Model field test cases
+- **access**: Functional Test for Person ViewSet, Permissions and Metadata
+- **access**: Functional Test for Person History
+- **access**: Correct Entity Function Test Suite so sub-model testing works
+- **access**: Unit Test for Person ViewSet
+- **access**: Unit Test for Person Model
+- **access**: Unit Test for Person History API fields
+- **access**: Unit Test for Person API fields
+- **access**: Unit Test for Person Tenancy Object
+- **access**: Correct Entity Test Suite so sub-model testing works
+- **app**: exclude any field check that ends in `_ptr_id`
+- **access**: Remove teardown from Function Test cases for Role serializer
+- **access**: Test cases for Role serializer
+- **access**: Function Test cases for Role SPI Permissions, ViewSet and Metadata
+- **access**: Function Test cases for Role History
+- **access**: Unit Test case to ensure Role is by organization
+- **access**: Unit Test case to ensure Role cant be set as global object
+- **access**: Unit Test cases for Role ViewSet
+- **access**: Unit Test cases for Role model
+- **access**: Unit Test cases for Role History API v2
+- **access**: Unit Test cases for Role API v2
+- **access**: Unit Test cases for Role Tenancy Object
+- During testing add debug_feature_flags so object behind can be tested
+- **access**: Notes ViewSet Functional Tests for Entity Model
+- **access**: Notes API Field Functional Tests for Entity Model
+- **access**: Correct functional ViewSet test suite for Entity model
+- **access**: History functional Tests for Entity model
+- **access**: PermissionsAPI, ViewSet and Metadata Tests for Entity model
+- **access**: Model test cases for Entity
+- **access**: API Rendering test cases for Entity model
+- **api**: Ensure that when mocking the request the viewset is instantiated
+- **access**: History tests for Entity model
+- **access**: ViewSet tests for Entity model
+- **access**: Tenancy object test for Entity model
+
 ## 1.14.0 (2025-03-29)
 
 ### feat
