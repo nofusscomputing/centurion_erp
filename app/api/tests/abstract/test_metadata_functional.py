@@ -398,7 +398,16 @@ class MetadataAttributesFunctionalTable:
 
         for item in response.data['table_fields']:
 
-            if type(item) is not str:
+            if( 
+                type(item) is not str
+                and not (
+                    type(item) is dict
+                    and 'field' in item
+                    and 'type' in item
+                    and item['type'] == 'link'
+                    and 'key' in item
+                )
+            ):
 
                 all_string = False
 

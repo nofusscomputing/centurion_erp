@@ -384,8 +384,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Organization",
                         "name": "organization",
                         "link": "/access/organization"
-                    }
+                    },
                 }
+            },
+            'accounting': {
+                "display_name": "Accounting",
+                "name": "accounting",
+                "pages": {}
             },
             'assistance': {
                 "display_name": "Assistance",
@@ -403,6 +408,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "icon": "information",
                         "link": "/assistance/knowledge_base"
                     }
+                }
+            },
+            'human_resources': {
+                "display_name": "Human Resources (HR)",
+                "name": "human_resources",
+                "pages": {
+                    # 'view_employees': {
+                    #     "display_name": "Employees",
+                    #     "name": "employees",
+                    #     "icon": "employees",
+                    #     "link": "/human_resources/employees"
+                    # }
                 }
             },
             'itam': {
@@ -462,7 +479,20 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITOps",
                 "name": "itops",
                 "icon": "itops",
-                "pages": {}
+                "pages": {
+                    'core.view_ticketcategory': {
+                        "display_name": "Ticket Category",
+                        "name": "ticketcategory",
+                        "icon": 'ticketcategory',
+                        "link": "/settings/ticket_category"
+                    },
+                    'core.view_ticketcommentcategory': {
+                        "display_name": "Ticket Comment Category",
+                        "name": "ticketcommentcategory",
+                        "icon": 'ticketcommentcategory',
+                        "link": "/settings/ticket_comment_category"
+                    },
+                }
             },
             'devops': {
                 "display_name": "DevOPs",
@@ -544,6 +574,30 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
+
+            if request.feature_flag['2025-00002']:
+
+                nav['access']['pages'].update({
+                    'view_contact': {
+                        "display_name": "Directory",
+                        "name": "directory",
+                        "link": "/access/entity/contact"
+                    }
+                })
+
+
+            if request.feature_flag['2025-00003']:
+
+                nav['access']['pages'].update({
+                    'view_role': {
+                        "display_name": "Roles",
+                        "name": "roles",
+                        "icon": 'roles',
+                        "link": "/access/role"
+                    }
+                })
+
+
         return nav
 
 
@@ -584,8 +638,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         view_settings: list = [
             'assistance.view_knowledgebasecategory',
             'core.view_manufacturer',
-            'core.view_ticketcategory',
-            'core.view_ticketcommentcategory',
             'itam.view_devicemodel',
             'itam.view_devicetype',
             'itam.view_softwarecategory',

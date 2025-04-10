@@ -1,3 +1,12 @@
+## Version 1.15.0
+
+- Entities model added behind feature flag `2025-00002` and will remain behind this flag until production ready.
+
+- Roles model added behind feature flag `2025-00003` and will remain behind this flag until production ready.
+
+- Accounting Module added behind feature flag `2025-00004` and will remain behind this flag until production ready.
+
+
 ## Version 1.14.0
 
 - Git Repository and Git Group Models added behind feature flag `2025-00001`. They will remain behind this feature flag until the Git features are fully developed and ready for use.

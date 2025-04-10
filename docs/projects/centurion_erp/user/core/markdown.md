@@ -78,6 +78,7 @@ A Model link is a reference to an item within the database. Supported model link
 | device| `$device-<id>` |
 | devicemodel| `$-<id>` |
 | devicetype| `$-<id>` |
+| entity | `$entity-<id>` |
 | externallink| `$-<id>` |
 | featureflag| `$feature_flag-<id>` |
 | gitrepository| `$git_repository-<id>` |
@@ -95,6 +96,7 @@ A Model link is a reference to an item within the database. Supported model link
 | projectstate| `$project_state-<id>` |
 | projecttask| `$-<id>` |
 | projecttype| `$-<id>` |
+| [role](../access/role.md)| `$role-<id>` |
 | service| `$service-<id>` |
 | software| `$software-<id>` |
 | softwarecategory| `$-<id>` |

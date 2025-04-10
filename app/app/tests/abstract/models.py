@@ -172,8 +172,11 @@ class BaseModel:
             print(f'Checking field {field.attname} is not empty')
 
             if (
-                field.help_text is None
-                or field.help_text == ''
+                (
+                    field.help_text is None
+                    or field.help_text == ''
+                )
+                and not str(field.attname).endswith('_ptr_id')
             ):
 
                 print(f'    Failure on field {field.attname}')
