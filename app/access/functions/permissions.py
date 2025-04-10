@@ -47,7 +47,7 @@ def permission_queryset():
         'view_history',
     ]
 
-    return Permission.objects.filter(
+    return Permission.objects.select_related('content_type').filter(
             content_type__app_label__in=apps,
         ).exclude(
             content_type__model__in=exclude_models

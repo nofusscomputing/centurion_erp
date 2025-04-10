@@ -60,24 +60,43 @@ class CommonModelSerializer(CommonBaseSerializer):
 
         get_url = {
             '_self': item.get_url( request = self._context['view'].request ),
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
         }
 
+        kb_model_name = self.Meta.model._meta.model_name
+        if getattr(item, 'kb_model_name'):
+
+            kb_model_name = item.kb_model_name
+
+
+        get_url['knowledge_base'] = reverse(
+            'v2:_api_v2_model_kb-list',
+            request=self._context['view'].request,
+            kwargs={
+                'model': kb_model_name,
+                'model_pk': item.pk
+            }
+        )
+
         if getattr(self.Meta.model, 'save_model_history', True):
+
+            history_app_label = self.Meta.model._meta.app_label
+            if getattr(item, 'history_app_label'):
+
+                history_app_label = item.history_app_label
+
+
+            history_model_name = self.Meta.model._meta.model_name
+            if getattr(item, 'history_model_name'):
+
+                history_model_name = item.history_model_name
+
 
             get_url['history'] = reverse(
                 "v2:_api_v2_model_history-list",
                 request = self._context['view'].request,
                 kwargs = {
-                    'app_label': self.Meta.model._meta.app_label,
-                    'model_name': self.Meta.model._meta.model_name,
+                    'app_label': history_app_label,
+                    'model_name': history_model_name,
                     'model_id': item.pk
                 }
             )
@@ -101,6 +120,10 @@ class CommonModelSerializer(CommonBaseSerializer):
                 app_namespace = str(item.app_namespace) + ':'
 
             note_basename = app_namespace + '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
+
+            if getattr(item, 'note_basename'):
+
+                note_basename = app_namespace + item.note_basename
 
             if getattr(self.Meta, 'note_basename', None):
 

@@ -51,14 +51,6 @@ class Index(IndexViewset):
                     "name": "External Links",
                     "model": "external_link"
                 },
-                {
-                    "name": "Ticket Category",
-                    "model": "ticket_category"
-                },
-                {
-                    "name": "Ticket Comment Category",
-                    "model": "ticket_comment_category"
-                }
             ]
         },
         {

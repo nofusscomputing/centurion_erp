@@ -112,6 +112,10 @@ class CenturionFeatureFlagging:
 
         self._disable_downloading = disable_downloading
 
+        if self._disable_downloading:
+
+            self._feature_flags = {}
+
         _over_rides: dict = {}
 
         if over_rides:
@@ -161,6 +165,9 @@ class CenturionFeatureFlagging:
                self._feature_flags is not None
                and self._last_modified is not None
             )
+            or (
+                self._over_rides is not None
+            )
         ):
 
             return True
@@ -183,7 +190,10 @@ class CenturionFeatureFlagging:
         Returns:
             dict: A complete Feature Flag.
         """
-        if self._feature_flags is None:
+        if(
+            self._feature_flags is None
+            and self._over_rides.get(key, None) is None
+        ):
 
             print('Feature Flagging has not been completly initialized.')
             print('    please ensure that the feature flags have been downloaded.')
