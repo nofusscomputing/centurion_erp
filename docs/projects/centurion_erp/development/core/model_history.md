@@ -87,7 +87,8 @@ def save_history(self, before: dict, after: dict) -> bool:
 
 As with any other object within Centurion, the addition of a feature requires it be tested. The following Test Suites are available:
 
-- `Unit` - API Fields checks
+- `Unit`
+    - `core.tests.unit.test_history.test_unit_history_model.ModelHistoryInheritedCases` History Models
 
     - `core.tests.abstract.test_unit_model_history_api_v2.PrimaryModelHistoryAPI` for parent / Primary history model
 
