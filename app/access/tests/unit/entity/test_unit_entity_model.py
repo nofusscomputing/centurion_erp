@@ -1,39 +1,102 @@
 from django.test import TestCase
 
 from access.models.entity import Entity
-from access.models.organization import Organization
 
-from app.tests.abstract.models import TenancyModel
+from app.tests.unit.test_unit_models import (
+    TenancyObjectInheritedCases
+)
 
 
 
-class ModelTestCases(
-    TenancyModel,
+
+class EntityModelTestCases(
+    TenancyObjectInheritedCases,
 ):
 
     model = Entity
 
     kwargs_item_create: dict = {}
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test"""
 
-        self.organization = Organization.objects.create(name='test_org')
+    def test_attribute_type_history_app_label(self):
+        """Attribute Type
 
-        different_organization = Organization.objects.create(name='test_different_organization')
+        history_app_name is of type str
+        """
 
-        self.item = self.model.objects.create(
-            organization = self.organization,
-            model_notes = 'notes',
-            entity_type = self.model._meta.model_name,
-            **self.kwargs_item_create,
-        )
+        assert type(self.model.history_app_label) is str
+
+
+    def test_attribute_value_history_app_label(self):
+        """Attribute Type
+
+        history_app_name is of type str
+        """
+
+        assert self.model.history_app_label == 'access'
+
+
+
+
+    def test_attribute_type_history_model_name(self):
+        """Attribute Type
+
+        history_model_name is of type str
+        """
+
+        assert type(self.model.history_model_name) is str
+
+
+    def test_attribute_value_history_model_name(self):
+        """Attribute Type
+
+        history_model_name is of type str
+        """
+
+        assert self.model.history_model_name == 'entity'
+
+
+
+    def test_attribute_type_kb_model_name(self):
+        """Attribute Type
+
+        kb_model_name is of type str
+        """
+
+        assert type(self.model.kb_model_name) is str
+
+
+    def test_attribute_value_kb_model_name(self):
+        """Attribute Type
+
+        kb_model_name is of type str
+        """
+
+        assert self.model.kb_model_name == 'entity'
+
+
+
+    def test_attribute_type_note_basename(self):
+        """Attribute Type
+
+        note_basename is of type str
+        """
+
+        assert type(self.model.note_basename) is str
+
+
+    def test_attribute_value_note_basename(self):
+        """Attribute Type
+
+        note_basename is of type str
+        """
+
+        assert self.model.note_basename == '_api_v2_entity_note'
 
 
 
 class EntityModelInheritedCases(
-    ModelTestCases,
+    EntityModelTestCases,
 ):
     """Sub-Entity Test Cases
 
@@ -57,7 +120,7 @@ class EntityModelInheritedCases(
 
 
 class EntityModelTest(
-    ModelTestCases,
+    EntityModelTestCases,
     TestCase,
 ):
 

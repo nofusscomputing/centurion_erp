@@ -8,8 +8,6 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Models are tested using the following test cases:
 
-- [Models](./models.md)
-
 - [ALL Model Permission](./model_permissions.md)
 
 - [ALL Model Permission (organization Manager)](./model_permissions_organization_manager.md)
@@ -31,7 +29,5 @@ Models are tested using the following test cases:
 - [View Permission (organization Manager)](./model_permission_view_organization_manager.md)
 
 - [Model Views](./model_views.md)
-
-- [Tenancy Objects](./model_tenancy_object.md)
 
 The above test cases are common to alot of models and function of this application and are intended to be inherited by your test class.

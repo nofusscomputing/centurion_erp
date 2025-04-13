@@ -72,12 +72,16 @@ This example is for adding notes to the Manufacturer Model
 
 As with any other object within Centurion, the addition of a feature requires it be tested. The following Test Suites are available:
 
-- `Unit` - `core.tests.abstract.test_unit_model_notes_model.ModelNotesModel`
+- `Unit`
 
-- `Unit` - `core.tests.abstract.test_unit_model_notes_serializer.ModelNotesSerializerTestCases`
+    - model - `core.tests.unit.model_notes.test_unit_model_notes.ModelNotesInheritedCases`
 
-- `Unit` - `api.tests.abstract.viewsets`
+    - Serializer - `core.tests.abstract.test_unit_model_notes_serializer.ModelNotesSerializerTestCases`
 
-- `Functional` - `core.tests.abstract.test_functional_notes_viewset`
+    - Viewset - `api.tests.abstract.viewsets`
 
-- `Functional` - `core.tests.abstract.model_notes_api_fields`
+- `Functional`
+
+    - ViewSet - `core.tests.abstract.test_functional_notes_viewset`
+
+    - API fields render - `core.tests.abstract.model_notes_api_fields`

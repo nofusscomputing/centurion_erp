@@ -159,9 +159,9 @@ Adding History to a model is a simple process. Please see the [Model History](./
 
 The following Unit test cases exists for models:
 
-- [BaseModel](./api/tests/models.md#base-unit-tests-for-all-models)
+- `app.tests.unit.test_unit_models.TenancyObjectInheritedCases` for models that inherit from `access.models.tenancy.TenancyObject`
 
-- [TenancyObject](./api/tests/models.md#tenancy-model-unit-tests)
+- `app.tests.unit.test_unit_models.NonTenancyObjectInheritedCases` for models other models that **do not** inherit from `access.models.tenancy.TenancyObject`
 
 !!! info
     If you add a feature you will have to write the test cases for that feature if they are not covered by existing test cases.

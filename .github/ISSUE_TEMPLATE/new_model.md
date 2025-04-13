@@ -29,7 +29,7 @@ Describe in detail the following:
 
 <!-- Don't remove tasks strike them out. use `~~` before and after the item. i.e. `- ~~[ ] Model Created~~` note: don't include the list dash-->
 
-- [ ] 🆕 Model Created
+- [ ] 🆕 [Model Created](https://nofusscomputing.com/projects/centurion_erp/development/models/)
 
 - [ ] 🛠️ Migrations added
 
@@ -66,16 +66,17 @@ Describe in detail the following:
 
 ### 🧪 Tests
 
-- [ ] Unit Test Model
-    - [ ] Unit Test Tenancy Object
-- [ ] Unit Test Serializer
-- [ ] Unit Test ViewSet
-- [ ] Function Test ViewSet
-- [ ] Function Test API Metadata
-- [ ] Function Test API Permissions
-- [ ] Function Test API Render (fields)
-- [ ] Function Test History Entries
-- [ ] Function Test History API Render (fields)
+- Unit Tests
+    - [ ] [Model](https://nofusscomputing.com/projects/centurion_erp/development/models/#tests)
+    - [ ] Serializer
+    - [ ] ViewSet
+- Function Test
+    - [ ] ViewSet
+    - [ ] API Metadata
+    - [ ] API Permissions
+    - [ ] API Render (fields)
+    - [ ] History Entries
+    - [ ] History API Render (fields)
 
 
 ## ✅ Requirements
