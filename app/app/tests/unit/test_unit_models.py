@@ -5,7 +5,7 @@ from django.db.models import fields
 from rest_framework.exceptions import ValidationError
 
 from access.models.organization import Organization
-from access.tests.unit.tenancy_object.test_unit_tenancy_object import (
+from access.tests.unit.tenancy_object.test_unit_tenancy_object_model import (
     TenancyObjectInheritedCases as AccessTenancyObjectInheritedCases
 )
 
@@ -300,23 +300,43 @@ class TenancyObjectInheritedCases(
     model = None
 
 
-    kwargs_item_create: dict = {
-        'name': 'one'
-    }
+    kwargs_item_create: dict = None
 
 
     @classmethod
     def setUpTestData(self):
         """Setup Test"""
 
-        self.organization = Organization.objects.create(name='test_org')
+        if not hasattr(self, 'organization'):
+
+            self.organization = Organization.objects.create(name='test_org')
 
         self.different_organization = Organization.objects.create(name='test_different_organization')
 
-        self.kwargs_item_create.update({
-            'organization': self.organization,
-            'model_notes': 'notes',
-        })
+
+        if self.kwargs_item_create is None:
+
+            self.kwargs_item_create: dict = {}
+
+
+        if 'name' in self.model().fields:
+
+            self.kwargs_item_create.update({
+                'name': 'one'
+            })
+
+        if 'organization' in self.model().fields:
+
+            self.kwargs_item_create.update({
+                'organization': self.organization,
+            })
+
+        if 'model_notes' in self.model().fields:
+
+            self.kwargs_item_create.update({
+                'model_notes': 'notes',
+            })
+
 
         self.item = self.model.objects.create(
             **self.kwargs_item_create,

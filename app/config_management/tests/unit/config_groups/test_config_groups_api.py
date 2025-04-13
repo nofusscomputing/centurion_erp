@@ -10,8 +10,6 @@ from access.models.organization import Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from app.tests.abstract.models import TenancyModel
-
 from config_management.models.groups import ConfigGroups
 
 

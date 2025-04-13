@@ -2,7 +2,10 @@ from django.test import TestCase
 
 from access.models.entity import Entity
 
-from app.tests.unit.test_unit_models import TenancyObjectInheritedCases
+from app.tests.unit.test_unit_models import (
+    TenancyObjectInheritedCases
+)
+
 
 
 
