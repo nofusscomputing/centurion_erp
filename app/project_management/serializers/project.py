@@ -90,6 +90,7 @@ class ProjectModelSerializer(
             'description',
             'priority',
             'state',
+            'duration_project',
             'completed',
             'project_type',
             'code',

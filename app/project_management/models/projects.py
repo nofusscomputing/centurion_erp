@@ -192,15 +192,25 @@ class Project(ProjectCommonFieldsName):
             "slug": "details",
             "sections": [
                 {
+                    "name": "Status",
+                    "layout": "double",
+                    "left": [
+                        'state',
+                        'completed',
+                        'priority',
+                    ],
+                    "right": [
+                        'duration_project',
+                    ]
+                },
+                {
+                    "name": "Details",
                     "layout": "double",
                     "left": [
                         'organization',
                         'code',
                         'name',
-                        'priority',
                         'project_type',
-                        'state',
-                        'completed',
                     ],
                     "right": [
                         'planned_start_date',
