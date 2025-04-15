@@ -13,7 +13,7 @@ from itim.serializers.problem import (
     ProblemTicketViewSerializer,
 )
 
-from core.viewsets.ticket import TicketViewSet
+from core.viewsets.ticket_depreciated import TicketViewSet
 
 
 

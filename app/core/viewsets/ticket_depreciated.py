@@ -12,7 +12,7 @@ from assistance.serializers.request import (
     RequestTicketViewSerializer
 )
 
-from core.serializers.ticket import (
+from core.serializers.ticket_depreciated import (
     Ticket,
 )
 
