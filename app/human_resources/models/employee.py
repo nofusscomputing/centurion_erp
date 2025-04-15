@@ -35,6 +35,10 @@ class Employee(
 
     documentation = ''
 
+    history_app_label = 'human_resources'
+
+    history_model_name = 'employee'
+
     page_layout: list = [
         {
             "name": "Details",
