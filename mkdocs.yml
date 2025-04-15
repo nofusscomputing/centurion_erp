@@ -201,6 +201,12 @@ nav:
 
         - projects/centurion_erp/user/devops/git_repository.md
 
+      - Human Resources:
+
+        - projects/centurion_erp/user/human_resources/index.md
+
+        - projects/centurion_erp/user/human_resources/employee.md
+
       - ITAM:
 
         - projects/centurion_erp/user/itam/index.md
