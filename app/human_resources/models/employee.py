@@ -56,7 +56,6 @@ class Employee(
                     "name": "Personal Details",
                     "layout": "double",
                     "left": [
-                        'employee_number',
                         'display_name',
                         'dob',
                     ],
@@ -67,10 +66,20 @@ class Employee(
                     ]
                 },
                 {
-                    "name": "",
+                    "name": "Contact Details",
                     "layout": "double",
                     "left": [
                         'email',
+                    ],
+                    "right": [
+                        '',
+                    ]
+                },
+                {
+                    "name": "Employee Details",
+                    "layout": "double",
+                    "left": [
+                        'employee_number',
                     ],
                     "right": [
                         '',
