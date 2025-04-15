@@ -42,6 +42,8 @@ class Contact(
 
     documentation = ''
 
+    history_model_name = 'contact'
+
     page_layout: list = [
         {
             "name": "Details",
