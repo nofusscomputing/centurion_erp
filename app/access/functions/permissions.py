@@ -14,6 +14,7 @@ def permission_queryset():
         'core',
         'devops',
         'django_celery_results',
+        'human_resources',
         'itam',
         'itim',
         'project_management',

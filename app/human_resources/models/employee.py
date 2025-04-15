@@ -1,11 +1,11 @@
 from django.db import models
 
-from access.models.person import Person
+from access.models.contact import Contact
 
 
 
-class Contact(
-    Person
+class Employee(
+    Contact
 ):
 
 
@@ -15,24 +15,17 @@ class Contact(
             'email',
         ]
 
-        verbose_name = 'Contact'
+        verbose_name = 'Employee'
 
-        verbose_name_plural = 'Contacts'
+        verbose_name_plural = 'Employees'
 
 
-    directory = models.BooleanField(
-        blank = True,
-        default = True,
-        help_text = 'Show contact details in directory',
-        null = False,
-        verbose_name = 'Show in Directory',
-    )
-
-    email = models.EmailField(
+    employee_number = models.IntegerField(
         blank = False,
-        help_text = 'E-mail address for this person',
+        help_text = 'Employees identification number.',
+        null = False,
         unique = True,
-        verbose_name = 'E-Mail',
+        verbose_name = 'Employee Number'
     )
 
 
@@ -42,7 +35,9 @@ class Contact(
 
     documentation = ''
 
-    history_model_name = 'contact'
+    history_app_label = 'human_resources'
+
+    history_model_name = 'employee'
 
     page_layout: list = [
         {
@@ -75,10 +70,20 @@ class Contact(
                     ]
                 },
                 {
-                    "name": "",
+                    "name": "Contact Details",
                     "layout": "double",
                     "left": [
                         'email',
+                    ],
+                    "right": [
+                        '',
+                    ]
+                },
+                {
+                    "name": "Employee Details",
+                    "layout": "double",
+                    "left": [
+                        'employee_number',
                     ],
                     "right": [
                         '',
@@ -105,7 +110,7 @@ class Contact(
 
     table_fields: list = [
         {
-            "field": "display_name",
+            "field": "employee_number",
             "type": "link",
             "key": "_self"
         },

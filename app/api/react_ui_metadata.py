@@ -585,6 +585,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
+                if request.feature_flag['2025-00005']:
+
+                    nav['human_resources']['pages'].update({
+                        'view_employee': {
+                            "display_name": "Employees",
+                            "name": "employees",
+                            "icon": "employees",
+                            "link": "/access/entity/employee"
+                        }
+                    })
+
 
             if request.feature_flag['2025-00003']:
 

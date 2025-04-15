@@ -543,6 +543,15 @@ if FEATURE_FLAGGING_ENABLED:
                     "modified": ""
                 }
             },
+            {
+                "2025-00005": {
+                    "name": "Human Resources/Employee",
+                    "description": "Employee Model. see https://github.com/nofusscomputing/centurion_erp/issues/92",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
         ]
 
         feature_flag.update({

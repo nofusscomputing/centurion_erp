@@ -33,7 +33,7 @@ class EntityModelTestCases(
         history_app_name is of type str
         """
 
-        assert self.model.history_app_label == 'access'
+        assert self.model.history_app_label == self.model._meta.app_label
 
 
 
@@ -53,7 +53,7 @@ class EntityModelTestCases(
         history_model_name is of type str
         """
 
-        assert self.model.history_model_name == 'entity'
+        assert self.model.history_model_name == self.model._meta.model_name
 
 
 
