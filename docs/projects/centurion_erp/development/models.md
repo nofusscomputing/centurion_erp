@@ -154,6 +154,17 @@ table_fields: list = [
 
 Adding History to a model is a simple process. Please see the [Model History](./core/model_history.md) docs.
 
+In the case the model you are creating is inherited from another model, (a non-abstrct model), you may need to add the following variables to the inherited class so that the model link works:
+
+- `history_app_label` The application label for the model in question
+
+- `history_model_name` The model name for the model in question.
+
+
+### Example
+
+If you created a model called employee in the human_resources app, which is a sub-model that inherits from `Contact`, `Person` then `Entity`. In this case the `Entity` model is where the history is derived, which would create link `/access/entity/<pk>/history`. This link is incorrect. adding variables `history_app_label = 'human_resources'` and `history_model_name = 'Emplyee'` to the `Employee` model class; will now create a valid link, `/human_resources/employee/<pk>/history`.
+
 
 ## Tests
 

@@ -44,7 +44,13 @@ Describe in detail the following:
 > - Two words are not to contain a space char, `\s`. It is to be replaced with an underscore `_`
 > - As much as practical, keep the tag as close to the model name as possible
 
-- [ ] 📝 New [History model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_history/) created 
+- [ ] 📝 New [History model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_history/) created
+
+    - Sub-Models **_ONLY_**
+
+        - [ ] Model class variable `history_app_label` set to correct application label
+
+        - [ ] Model class variable `history_model_name` set to correct model label
 
 - [ ] 📓 New [Notes model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/) created 
     - [ ] 🆕 Model Created
