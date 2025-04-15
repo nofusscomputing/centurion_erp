@@ -200,6 +200,7 @@ class Project(ProjectCommonFieldsName):
                         'priority',
                     ],
                     "right": [
+                        'estimation_project',
                         'duration_project',
                     ]
                 },
@@ -315,6 +316,32 @@ class Project(ProjectCommonFieldsName):
 
 
         return int(duration_project)
+
+
+    @property
+    def estimation_project(self) -> int:
+
+        estimation_project: int = 0
+
+        from core.models.ticket.ticket import Ticket
+
+        tickets = Ticket.objects.filter(
+            project = self.id
+        )
+
+        for ticket in tickets:
+            
+            estimation = ticket.estimate
+
+            if ticket.estimate is None:
+
+                estimation = 0
+
+
+            estimation_project = estimation_project + int(estimation)
+
+
+        return int(estimation_project)
 
 
     @property
