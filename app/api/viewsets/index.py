@@ -30,6 +30,7 @@ class Index(IndexViewset):
                 "devops": reverse('v2:devops:api-root', request=request),
                 "docs": reverse('v2:_api_v2_docs', request=request),
                 "base": reverse('v2:_api_v2_base_home-list', request=request),
+                "hr": reverse('v2:hr:_api_v2_access_home-list', request=request),
                 "itam": reverse('v2:_api_v2_itam_home-list', request=request),
                 "itim": reverse('v2:_api_v2_itim_home-list', request=request),
                 "config_management": reverse('v2:_api_v2_config_management_home-list', request=request),

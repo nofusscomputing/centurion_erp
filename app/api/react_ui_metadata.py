@@ -586,6 +586,16 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 })
 
 
+                nav['human_resources']['pages'].update({
+                     'view_employee': {
+                        "display_name": "Employees",
+                        "name": "employees",
+                        "icon": "employees",
+                        "link": "/access/entity/employee"
+                    }
+                })
+
+
             if request.feature_flag['2025-00003']:
 
                 nav['access']['pages'].update({
