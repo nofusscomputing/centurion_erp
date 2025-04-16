@@ -789,6 +789,14 @@ class SubModelViewSet(
 
             for related_object in model._meta.related_objects:
 
+                if(
+                    related_object.related_model._meta.verbose_name == self.base_model._meta.verbose_name
+                    or not issubclass(related_object.related_model, self.base_model)
+                ):
+
+                    continue
+
+
                 related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
 
                 if(
