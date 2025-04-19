@@ -24,7 +24,7 @@ from project_management.models.project_milestone import ProjectMilestone
 from core.models.ticket.ticket import Ticket, RelatedTickets, TicketCategory
 from core.models.ticket.ticket_comment import TicketComment
 
-from core.tests.unit.ticket.ticket_permission.field_based_permissions import ITSMTicketFieldBasedPermissions, ProjectTicketFieldBasedPermissions
+from core.tests.unit.ticket_depreciated.ticket_permission.field_based_permissions import ITSMTicketFieldBasedPermissions, ProjectTicketFieldBasedPermissions
 
 from settings.models.user_settings import UserSettings
 

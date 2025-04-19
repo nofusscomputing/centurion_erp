@@ -1,20 +1,19 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
+from drf_spectacular.utils import extend_schema_serializer
+
+from access.serializers.entity import BaseSerializer as EntityBaseSerializer
 from access.serializers.organization import OrganizationBaseSerializer
-from access.serializers.teams import TeamBaseSerializer
+
+from api.serializers import common
 
 from app.serializers.user import UserBaseSerializer
 
-from api.serializers import common
-from api.serializers.common import OrganizationField
-from api.exceptions import UnknownTicketType
-
 from core import exceptions as centurion_exception
 from core import fields as centurion_field
-from core.models.ticket.ticket import Ticket
-
-from core.fields.badge import Badge, BadgeField
+from core.fields.badge import BadgeField
+from core.models.ticket_base import TicketBase
 from core.serializers.ticket_category import TicketCategoryBaseSerializer
 
 from project_management.serializers.project import ProjectBaseSerializer
@@ -22,7 +21,10 @@ from project_management.serializers.project_milestone import ProjectMilestoneBas
 
 
 
-class TicketBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'TicketBaseBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
+    """Base Ticket Model"""
+
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -30,45 +32,44 @@ class TicketBaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
+    url = serializers.SerializerMethodField('get_url')
 
-    url = serializers.SerializerMethodField('my_url')
-
-    def my_url(self, item) -> str:
+    def get_url(self, item) -> str:
 
         return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
 
-        model = Ticket
+        model = TicketBase
 
         fields = [
             'id',
             'display_name',
-            'title',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            'title',
             'url',
         ]
 
-    is_import: bool = False
 
 
-class TicketModelSerializer(
+@extend_schema_serializer(component_name = 'TicketBaseModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    TicketBaseSerializer
+    BaseSerializer
 ):
+    """Ticket Base Model"""
+
 
     _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item) -> dict:
 
-        ticket_type = str(item.get_ticket_type_display()).lower().replace(' ', '_')
+        ticket_type = str(item.ticket_type)
 
         url_dict: dict = {
             '_self': item.get_url( request = self._context['view'].request ),
@@ -100,122 +101,99 @@ class TicketModelSerializer(
 
         return url_dict
 
-
     description = centurion_field.MarkdownField( required = True, style_class = 'large' )
-
-    duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 
     impact_badge = BadgeField(label='Impact')
 
-    priority_badge = BadgeField(label='Priority')
+    organization = common.OrganizationField(
+        required = True,
+        write_only = True,
+    )
 
-    status_badge = BadgeField(label='Status')
+    priority_badge = BadgeField(
+        label = 'Priority',
+        read_only = True,
+    )
 
-    urgency_badge = BadgeField(label='Urgency')
+    status_badge = BadgeField(
+        label = 'Status',
+        read_only = True,
+    )
 
-    organization = OrganizationField( required = True, write_only = True )
+    ticket_duration = serializers.IntegerField(
+        help_text = 'Total time spent on ticket',
+        label = 'Time Spent',
+        read_only = True,
+    )
+
+    ticket_estimation = serializers.IntegerField(
+        help_text = 'Time estimation to complete the ticket',
+        label = 'Time estimation',
+        read_only = True,
+    )
+
+    urgency_badge = BadgeField(
+        label = 'Urgency',
+        read_only = True,
+    )
 
 
     class Meta:
-        """Ticket Model Base Meta
 
-        This class specifically has only `id` in fields and all remaining fields
-        as ready only so as to prevent using this serializer directly. The intent
-        is that for each ticket type there is a seperate serializer for that ticket
-        type.
-
-        These serializers are for items that are common for ALL tickets.
-        """
-
-        model = Ticket
+        model = TicketBase
 
         fields = [
             'id',
-            '_urls',
-        ]
-
-        read_only_fields = [
-            'id',
-            'assigned_teams',
-            'assigned_users',
-            'category',
-            'created',
-            'modified',
+            'display_name',
+            'organization',
+            'external_system',
+            'external_ref',
+            'parent_ticket',
+            'ticket_type',
             'status',
             'status_badge',
-            'parent_ticket',
+            'category',
             'title',
             'description',
-            'estimate',
-            'duration',
+            'ticket_duration',
+            'ticket_estimation',
+            'project',
+            'milestone',
             'urgency',
             'urgency_badge',
             'impact',
             'impact_badge',
             'priority',
             'priority_badge',
-            'external_ref',
-            'external_system',
-            'ticket_type',
-            'is_deleted',
-            'date_closed',
+            'opened_by',
+            'subscribed_to',
+            'assigned_to',
             'planned_start_date',
             'planned_finish_date',
             'real_start_date',
             'real_finish_date',
-            'opened_by',
-            'organization',
-            'project',
-            'milestone',
-            'subscribed_teams',
-            'subscribed_users',
+            'is_deleted',
+            'is_solved',
+            'date_solved',
+            'is_closed',
+            'date_closed',
+            'created',
+            'modified',
             '_urls',
         ]
 
+        read_only_fields = [
+            'id',
+            'display_name',
+            'external_system',
+            'external_ref',
+            'ticket_type',
+            'created',
+            'modified',
+            '_urls',
+        ]
 
-
-    def validate_field_organization(self) -> bool:
-        """Check `organization field`
-
-        Raises:
-            ValidationError: user tried to change the organization
-
-        Returns:
-            True (bool): OK
-            False (bool): User tried to edit the organization
-        """
-
-        is_valid: bool = True
-
-        if self.instance is not None:
-
-            if self.instance.pk is not None:
-
-                if 'organization' in self.initial_data:
-
-                        is_valid = False
-
-                        raise centurion_exception.ValidationError(
-                            detail = 'cant edit field: organization',
-                            code = 'cant_edit_field_organization',
-                        )
-
-        elif self.instance is None:
-
-            if 'organization' not in self.initial_data:
-
-                is_valid = False
-
-                raise centurion_exception.ValidationError(
-                    detail = {
-                        'organization': 'this field is required'
-                    },
-                    code = 'required',
-                )
-
-
-        return is_valid
-
+    
 
     def validate_field_milestone( self ) -> bool:
 
@@ -252,111 +230,37 @@ class TicketModelSerializer(
         return is_valid
 
 
-    def validate(self, data):
 
-        if 'view' in self._context:
+    def validate(self, attrs):
 
-            if str(self._context['view']._ticket_type).lower().replace(' ', '_') == 'project_task':
+        attrs = super().validate(attrs)
 
-                data['project_id'] = int(self._context['view'].kwargs['project_id'])
+        if not self.validate_field_milestone:
 
-            if self._context['view'].action == 'create':
-
-                if hasattr(self._context['view'], 'request'):
-
-                    if self.is_import:
-
-                        if data['opened_by'] is None:
-
-                            raise centurion_exception.ValidationError(
-                                detail = {
-                                    'opened_by': 'Opened by user is required'
-                                },
-                                code = 'required',
-                            )
+            del attrs['milestone']
 
 
-                    else:
-
-                        data['opened_by_id'] = self._context['view'].request.user.id
-
-
-            if hasattr(self._context['view'], '_ticket_type_id'):
-
-                data['ticket_type'] = self._context['view']._ticket_type_id
-
-            else:
-
-                raise UnknownTicketType()
-
-
-            if self.instance is None:
-
-                subscribed_users: list = []
-
-                if 'subscribed_users' in data:
-
-                    subscribed_users: list = data['subscribed_users']
-
-                if self.is_import:
-
-                    data['subscribed_users'] = subscribed_users + [ data['opened_by'].id ]
-
-                else:
-
-                    data['subscribed_users'] = subscribed_users + [ data['opened_by_id'] ]
-
-
-                data['status'] = int(Ticket.TicketStatus.All.NEW)
-
-
-        if(
-            data.get('parent_ticket', None)
-            and (
-                self._context['view'].action == 'partial_update'
-                or self._context['view'].action == 'update'
-            )
-        ):
-
-            if not data['parent_ticket'].circular_dependency_check(
-                ticket = self.instance,
-                parent = data['parent_ticket']
-            ):
-
-                raise centurion_exception.ValidationError(
-                    detail = {
-                        'parent_ticket': 'Adding this ticket will create a circular dependency'
-                    },
-                    code = 'no_parent_circular_dependency',
-                )
+        return attrs
 
 
 
-        self.validate_field_organization()
 
-        self.validate_field_milestone()
+@extend_schema_serializer(component_name = 'TicketBaseViewSerializer')
+class ViewSerializer(ModelSerializer):
+    """Ticket Base View Model"""
 
-        return data
+    assigned_to = EntityBaseSerializer(many=True, label = 'assigned to')
 
+    category = TicketCategoryBaseSerializer(label = 'category')
 
-class TicketViewSerializer(TicketModelSerializer):
-
-    assigned_teams = TeamBaseSerializer(many=True)
-
-    assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
-
-    category = TicketCategoryBaseSerializer()
-
-    parent_ticket = TicketBaseSerializer()
+    milestone = ProjectMilestoneBaseSerializer(many=False, read_only=True)
 
     opened_by = UserBaseSerializer()
 
     organization = OrganizationBaseSerializer(many=False, read_only=True)
 
+    parent_ticket = BaseSerializer()
+
     project = ProjectBaseSerializer(many=False, read_only=True)
 
-    milestone = ProjectMilestoneBaseSerializer(many=False, read_only=True)
-
-    subscribed_teams = TeamBaseSerializer(many=True)
-
-    subscribed_users = UserBaseSerializer(many=True)
+    subscribed_to = EntityBaseSerializer(many=True, label = 'subscribved to')
