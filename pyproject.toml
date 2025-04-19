@@ -14,3 +14,6 @@ source-roots = [
 [tool.pylint.variables]
 allow-global-unused-variables = true
 init-import = true
+
+
+[tool.pytest.ini_options]
