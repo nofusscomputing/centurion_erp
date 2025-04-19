@@ -14,7 +14,7 @@ from assistance.serializers.request import (
     RequestTicketViewSerializer
 )
 
-from core.viewsets.ticket import TicketViewSet
+from core.viewsets.ticket_depreciated import TicketViewSet
 
 from settings.models.user_settings import UserSettings
 

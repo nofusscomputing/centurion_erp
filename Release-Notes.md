@@ -1,3 +1,8 @@
+## Version 1.16.0
+
+- Employees model added behind feature flag `2025-00002` and will remain behind this flag until production ready.
+
+
 ## Version 1.15.0
 
 - Entities model added behind feature flag `2025-00002` and will remain behind this flag until production ready.

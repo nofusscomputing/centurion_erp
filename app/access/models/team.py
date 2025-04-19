@@ -27,7 +27,9 @@ class Team(Group, TenancyObject):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
-        self.name = self.organization.name.lower().replace(' ', '_') + '_' + self.team_name.lower().replace(' ', '_')
+        if self.organization_id:
+
+            self.name = self.organization.name.lower().replace(' ', '_') + '_' + self.team_name.lower().replace(' ', '_')
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 

@@ -193,6 +193,8 @@ class TenancyObject(SaveHistory):
     only be used when there is model inheritence.
     """
 
+    page_layout: list = None
+
     note_basename: str = None
     """URL BaseName for the notes endpoint.
 

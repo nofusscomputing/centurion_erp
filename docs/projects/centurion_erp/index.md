@@ -53,9 +53,24 @@ Centurion ERP contains the following modules:
 
     - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)
 
+- [Corporate Directory (contacts)](./user/access/contact.md)
+
+    !!! info
+        This feature is still under active development _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_ for more details.
+
 - [Development Operations (DevOps)](./user/devops/index.md)
 
     - [Feature Flags](./user/devops/feature_flags.md)
+
+    - [Repository Management](./user/devops/git_repository.md)
+
+        !!! info
+            This feature is still under active development _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_ for more details.
+
+- [Human Resource Management](./user/human_resources/index.md)
+
+    !!! info
+        This feature is still under active development _[see #92](https://github.com/nofusscomputing/centurion_erp/issues/92)_ for more details.
 
 - Incident Management
 
@@ -111,17 +126,11 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
         - Location Management (Regions, Sites and Locations) _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_
 
-    - Corporate Directory (contacts) _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_
-
     - Customer Relationship Management (CRM) _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_
 
     - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_
 
     - Development Operations (DevOPS) _[see #68](https://github.com/nofusscomputing/centurion_erp/issues/58)_
-
-        - Repository Management _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_
-
-    - Human Resource Management _[see #92](https://github.com/nofusscomputing/centurion_erp/issues/92)_
 
     - IT Asset Management (ITAM)
 

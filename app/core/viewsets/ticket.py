@@ -1,371 +1,300 @@
-from api.exceptions import UnknownTicketType
-from api.viewsets.common import ModelViewSet
+import importlib
 
-from access.models.organization import Organization
+from django.apps import apps
 
-from assistance.serializers.request import (
-    RequestAddTicketModelSerializer,
-    RequestChangeTicketModelSerializer,
-    RequestTriageTicketModelSerializer,
-    RequestImportTicketModelSerializer,
-    RequestTicketModelSerializer,
-    RequestTicketViewSerializer
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+    OpenApiParameter,
+    OpenApiResponse,
+    PolymorphicProxySerializer
 )
 
-from core.serializers.ticket import (
-    Ticket,
+from rest_framework.reverse import reverse
+
+from api.viewsets.common import SubModelViewSet
+
+from core.models.ticket_base import TicketBase
+
+
+
+def spectacular_request_serializers( serializer_type = 'Model'):
+
+    serializers: dict = {}
+
+
+    for model in apps.get_models():
+
+        if issubclass(model, TicketBase):
+
+            serializer_module = importlib.import_module(
+                model._meta.app_label + '.serializers.' + str(
+                    model._meta.verbose_name
+                ).lower().replace(' ', '_')
+            )
+
+            serializers.update({
+                str(model._meta.verbose_name).lower().replace(' ', '_'): getattr(serializer_module, serializer_type + 'Serializer')
+            })
+
+    return serializers
+
+
+
+@extend_schema_view(
+    create=extend_schema(
+        summary = 'Create a Ticket',
+        description='.',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_model',
+                description = 'Enter the Ticket type. This is the name of the Ticket sub-model.',
+                location = OpenApiParameter.PATH,
+                type = str,
+                required = False,
+                allow_blank = True,
+            ),
+        ],
+        request = PolymorphicProxySerializer(
+            component_name = 'Tickets',
+            serializers = spectacular_request_serializers(),
+            resource_type_field_name = None,
+            many = False,
+        ),
+        responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = PolymorphicProxySerializer(
+                    component_name = 'Tickets (View)',
+                    serializers = spectacular_request_serializers( 'View' ),
+                    resource_type_field_name = None,
+                    many = False,
+                )
+            ),
+            201: OpenApiResponse(
+                description = 'Created',
+                response = PolymorphicProxySerializer(
+                    component_name = 'Tickets (View)',
+                    serializers = spectacular_request_serializers( 'View' ),
+                    resource_type_field_name = None,
+                    many = False,
+                )
+            ),
+            403: OpenApiResponse(description='User is missing add permissions'),
+        }
+    ),
+    destroy = extend_schema(
+        summary = 'Delete a Ticket',
+        description = '.',
+        parameters =[
+            OpenApiParameter(
+                name = 'ticket_model',
+                description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
+                location = OpenApiParameter.PATH,
+                type = str,
+                required = False,
+                allow_blank = True,
+            ),
+        ],
+        request = PolymorphicProxySerializer(
+            component_name = 'Tickets',
+            serializers = spectacular_request_serializers(),
+            resource_type_field_name = None,
+            many = False,
+        ),
+        responses = {
+            204: OpenApiResponse(description='Object deleted'),
+            403: OpenApiResponse(description='User is missing delete permissions'),
+        }
+    ),
+    list = extend_schema(
+        summary = 'Fetch all Tickets',
+        description='.',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_model',
+                description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
+                location = OpenApiParameter.PATH,
+                type = str,
+                required = False,
+                allow_blank = True,
+            ),
+        ],
+        request = PolymorphicProxySerializer(
+            component_name = 'Tickets',
+            serializers = spectacular_request_serializers(),
+            resource_type_field_name = None,
+            many = False,
+        ),
+        responses = {
+            200: OpenApiResponse(
+                description='',
+                response = PolymorphicProxySerializer(
+                    component_name = 'Tickets (View)',
+                    serializers = spectacular_request_serializers( 'View' ),
+                    resource_type_field_name = None,
+                    many = False,
+                )
+            ),
+            403: OpenApiResponse(description='User is missing view permissions'),
+        }
+    ),
+    retrieve = extend_schema(
+        summary = 'Fetch a single ticket',
+        description='.',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_model',
+                description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
+                location = OpenApiParameter.PATH,
+                type = str,
+                required = False,
+                allow_blank = True,
+            ),
+        ],
+        request = PolymorphicProxySerializer(
+            component_name = 'Tickets',
+            serializers = spectacular_request_serializers(),
+            resource_type_field_name = None,
+            many = False,
+        ),
+        responses = {
+            200: OpenApiResponse(
+                description='',
+                response = PolymorphicProxySerializer(
+                    component_name = 'Tickets (View)',
+                    serializers = spectacular_request_serializers( 'View' ),
+                    resource_type_field_name = None,
+                    many = False,
+                )
+            ),
+            403: OpenApiResponse(description='User is missing view permissions'),
+        }
+    ),
+    update = extend_schema(exclude = True),
+    partial_update = extend_schema(
+        summary = 'Update a Ticket',
+        description = '.',
+        parameters = [
+            OpenApiParameter(
+                name = 'tickets_model',
+                description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
+                location = OpenApiParameter.PATH,
+                type = str,
+                required = False,
+                allow_blank = True,
+            ),
+        ],
+        request = PolymorphicProxySerializer(
+            component_name = 'Tickets',
+            serializers = spectacular_request_serializers(),
+            resource_type_field_name = None,
+            many = False,
+        ),
+        responses = {
+            200: OpenApiResponse(
+                description='',
+                response = PolymorphicProxySerializer(
+                    component_name = 'Tickets (View)',
+                    serializers = spectacular_request_serializers( 'View' ),
+                    resource_type_field_name = None,
+                    many = False,
+                )
+            ),
+            403: OpenApiResponse(description='User is missing change permissions'),
+        }
+    ),
 )
+class ViewSet( SubModelViewSet ):
 
-from itim.serializers.change import (
-    ChangeAddTicketModelSerializer,
-    ChangeChangeTicketModelSerializer,
-    ChangeImportTicketModelSerializer,
-    ChangeTriageTicketModelSerializer,
-    ChangeTicketModelSerializer,
-    ChangeTicketViewSerializer,
-)
+    _has_import: bool = False
+    """User Permission
 
-from itim.serializers.incident import (
-    IncidentAddTicketModelSerializer,
-    IncidentChangeTicketModelSerializer,
-    IncidentImportTicketModelSerializer,
-    IncidentTriageTicketModelSerializer,
-    IncidentTicketModelSerializer,
-    IncidentTicketViewSerializer,
-)
+    get_permission_required() sets this to `True` when user has import permission.
+    """
 
-from itim.serializers.problem import (
-    ProblemAddTicketModelSerializer,
-    ProblemChangeTicketModelSerializer,
-    ProblemImportTicketModelSerializer,
-    ProblemTriageTicketModelSerializer,
-    ProblemTicketModelSerializer,
-    ProblemTicketViewSerializer,
-)
+    _has_purge: bool = False
+    """User Permission
 
-from project_management.serializers.project_task import (
-    ProjectTaskAddTicketModelSerializer,
-    ProjectTaskChangeTicketModelSerializer,
-    ProjectTaskImportTicketModelSerializer,
-    ProjectTaskTriageTicketModelSerializer,
-    ProjectTaskTicketModelSerializer,
-    ProjectTaskTicketViewSerializer,
-)
+    get_permission_required() sets this to `True` when user has purge permission.
+    """
 
-from settings.models.user_settings import UserSettings
+    _has_triage: bool = False
+    """User Permission
 
+    get_permission_required() sets this to `True` when user has triage permission.
+    """
 
-
-class TicketViewSet(ModelViewSet):
+    base_model = TicketBase
 
     filterset_fields = [
-        'category',
-        'external_system',
-        'impact',
-        'milestone',
         'organization',
-        'parent_ticket',
-        'priority',
-        'project',
-        'status',
-        'urgency',
+        'is_deleted'
     ]
+
+    model_kwarg = 'ticket_model'
 
     search_fields = [
         'title',
-        'description',
+        'description'
     ]
 
-    model = Ticket
+    view_description = 'All Tickets'
 
-    _ticket_type_id: int = None
 
-    _ticket_type: str = None
-    """Name for type of ticket
 
-    String is Camel Cased.
-    """
+    def get_back_url(self) -> str:
+
+        if(
+            self.back_url is None
+            and self.kwargs.get(self.model_kwarg, None) is not None
+        ):
+
+            self.back_url = reverse(
+                viewname = '_api_v2_ticket_sub-list',
+                request = self.request,
+                kwargs = {
+                    'ticket_model': self.kwargs[self.model_kwarg],
+                }
+            )
+
+        return self.back_url
+
 
 
     def get_permission_required(self):
 
-        organization = None
+        import_permission = self.model._meta.app_label + '.import_' + self.model._meta.model_name
 
-        if self._permission_required:
+        if(import_permission in self.request.tenancy._user_permissions):
 
-            return self._permission_required
+            self._has_import = True
 
 
-        if(
-            self.action == 'create'
-            or self.action == 'partial_update'
-            or self.action == 'update'
-        ):
+        purge_permission = self.model._meta.app_label + '.purge_' + self.model._meta.model_name
 
-            if 'organization' in self.request.data:
+        if(purge_permission in self.request.tenancy._user_permissions):
 
-                organization = Organization.objects.get(
-                    pk = int(self.request.data['organization'])
-                )
+            self._has_purge = True
 
-            elif(
-                self.action == 'partial_update'
-                or self.action == 'update'
-            ):
 
-                queryset = self.get_queryset()
+        triage_permission = self.model._meta.app_label + '.triage_' + self.model._meta.model_name
 
-                if len(queryset) > 0:
+        if(triage_permission in self.request.tenancy._user_permissions):
 
-                    obj = queryset[0]
+            self._has_triage = True
 
-                    organization = obj.organization
+        return super().get_permission_required()
 
-        if self.action == 'create':
 
-            action_keyword = 'add'
 
-            if organization:
-
-                if self.request.tenancy.has_organization_permission(
-                    organization = organization,
-                    permissions_required = str('core.import_ticket_' + self._ticket_type).lower().replace(' ', '_')
-                ):
-
-                    action_keyword = 'import'
-
-
-        elif self.action == 'destroy':
-
-            action_keyword = 'delete'
-
-        elif self.action == 'list':
-
-            action_keyword = 'view'
-
-        elif self.action == 'partial_update':
-
-            action_keyword = 'change'
-
-            if organization:
-
-                if self.request.tenancy.has_organization_permission(
-                    organization = organization,
-                    permissions_required = str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
-                ):
-
-                    action_keyword = 'triage'
-
-
-        elif self.action == 'retrieve':
-
-            action_keyword = 'view'
-
-        elif self.action == 'update':
-
-            action_keyword = 'change'
-
-            if self.request.tenancy.has_organization_permission(
-                organization = organization,
-                permissions_required = str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
-            ):
-
-                action_keyword = 'triage'
-
-
-        elif(
-            self.action is None
-            or self.action == 'metadata'
-        ):
-
-            action_keyword = 'view'
-
-        else:
-
-            raise ValueError('unable to determin the action_keyword')
-
-        self._permission_required = str(
-            'core.' + action_keyword + '_ticket_' + self._ticket_type).lower().replace(' ', '_'
-        )
-
-        return self._permission_required
-
-
-
-    def get_queryset(self):
-
-        if self.queryset is not None:
-
-            return self.queryset
-
-        self.get_ticket_type()
-
-
-        if self.kwargs.get('pk', None):
-
-            queryset = self.model.objects.select_related(
-                'organization',
-                'category',
-                'project',
-                'milestone',
-                'opened_by',
-            ).prefetch_related(
-                'assigned_teams',
-                'assigned_users',
-                'subscribed_teams',
-                'subscribed_users',
-            ).filter( pk = int( self.kwargs['pk'] ) )
-
-        else:
-
-            queryset = self.model.objects.select_related(
-                'organization',
-                'category',
-                'project',
-                'milestone',
-                'opened_by',
-            ).prefetch_related(
-                'assigned_teams',
-                'assigned_users',
-                'subscribed_teams',
-                'subscribed_users',
-            )
-
-        if str(self._ticket_type).lower().replace(' ', '_') == 'project_task':
-
-            queryset = queryset.filter(
-                project_id = int(self.kwargs['project_id'])
-            )
-
-        else:
-
-            queryset = queryset.filter(
-                ticket_type = self._ticket_type_id
-            )
-
-
-        self.queryset = queryset
-
-        return self.queryset
-
-
-    def get_ticket_type(self) -> None:
-
-        ticket_type_id: int = None
-
-        if self._ticket_type_id is None:
-
-            ticket_types = [e for e in Ticket.TicketType]
-
-            for i in range( 0, len(ticket_types) ):
-
-                if self._ticket_type.lower() == str(ticket_types[i].label).lower():
-
-                    ticket_type_id = int(ticket_types[i])
-
-                    break
-
-            self._ticket_type_id = ticket_type_id
-
-
-        if self._ticket_type_id is None:
-
-            raise UnknownTicketType()
-
-
-    def get_serializer_class(self):
-
-        serializer_prefix:str = None
-
-        self.get_ticket_type()
-
-        serializer_prefix = str(self._ticket_type).replace(' ', '')
-
-        if (
-            self.action == 'create'
-            or self.action == 'list'
-            or self.action == 'partial_update'
-            or self.action == 'update'
-        ):
-
-            organization = self._obj_organization
-
-
-            if organization:
-
-                if (    # Must be first as the priority to pickup
-                    self._ticket_type
-                    and self.action != 'list'
-                    and self.action != 'retrieve'
-                ):
-
-
-                    if self.request.tenancy.has_organization_permission(
-                        organization = organization,
-                        permissions_required = 'core.import_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ) and not self.request.user.is_superuser:
-
-                        serializer_prefix = serializer_prefix + 'Import'
-
-                    elif self.request.tenancy.has_organization_permission(
-                        organization = organization,
-                        permissions_required = 'core.triage_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ) or self.request.user.is_superuser:
-
-                        serializer_prefix = serializer_prefix + 'Triage'
-
-                    elif self.request.tenancy.has_organization_permission(
-                        organization = organization,
-                        permissions_required = 'core.change_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ):
-
-                        serializer_prefix = serializer_prefix + 'Change'
-
-                    elif self.request.tenancy.has_organization_permission(
-                        organization = organization,
-                        permissions_required = 'core.add_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ):
-
-                        serializer_prefix = serializer_prefix + 'Add'
-
-                    elif self.request.tenancy.has_organization_permission(
-                        organization = organization,
-                        permissions_required = 'core.view_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ):
-
-                        serializer_prefix = serializer_prefix + 'View'
-
-
-        if (
-            self.action == 'list'
-            or self.action == 'retrieve'
-        ):
-
-            self.serializer_class = globals()[serializer_prefix + 'TicketViewSerializer']
-
-        else:
-
-            self.serializer_class = globals()[serializer_prefix + 'TicketModelSerializer']
-
-        return self.serializer_class
-
-
-    def get_view_serializer_name(self) -> str:
-        """Get the Models `View` Serializer name.
-
-        Override this function if required and/or the serializer names deviate from default.
-
-        Returns:
-            str: Models View Serializer Class name
-        """
-
-        if self.view_serializer_name is None:
-
-            self.view_serializer_name = super().get_view_serializer_name()
-
-            for remove_str in [ 'ChangeTicketView', 'AddTicketView', 'ImportTicketView', 'TriageTicketView' ]:
-
-                self.view_serializer_name = self.view_serializer_name.replace(remove_str, 'TicketView')
-
-
-        return self.view_serializer_name
+@extend_schema_view( # prevent duplicate documentation of both /core/ticket endpoints
+    create = extend_schema(exclude = True),
+    destroy = extend_schema(exclude = True),
+    list = extend_schema(exclude = True),
+    retrieve = extend_schema(exclude = True),
+    update = extend_schema(exclude = True),
+    partial_update = extend_schema(exclude = True),
+)
+class NoDocsViewSet( ViewSet ):
+    pass

@@ -65,6 +65,8 @@ class Person(
 
     documentation = ''
 
+    history_model_name = 'person'
+
     page_layout: dict = []
 
     table_fields: list = [

@@ -1,14 +1,14 @@
 from django.test import TestCase
 
 from access.models.contact import Contact
-from access.tests.unit.entity.test_unit_entity_viewset import (
-    EntityViewsetInheritedCases
+from access.tests.unit.person.test_unit_person_viewset import (
+    PersonViewsetInheritedCases
 )
 
 
 
 class ViewsetTestCases(
-    EntityViewsetInheritedCases,
+    PersonViewsetInheritedCases,
 ):
 
     model: str = Contact

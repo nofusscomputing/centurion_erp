@@ -130,7 +130,7 @@ class APITestCases(
         _urls.history field must use the endpoint for entity model
         """
 
-        assert str(self.api_data['_urls']['history']).endswith('/access/entity/' + str(self.item.pk) + '/history')
+        assert str(self.api_data['_urls']['history']).endswith('/' + str(self.item._meta.app_label) + '/' + str(self.item._meta.model_name) + '/' + str(self.item.pk) + '/history')
 
 
 

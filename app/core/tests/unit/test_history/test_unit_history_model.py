@@ -3,18 +3,35 @@ from django.test import TestCase
 
 from access.models.organization import Organization
 
-from app.tests.abstract.models import TenancyModel
+from app.tests.unit.test_unit_models import TenancyObjectInheritedCases
 
-from core.models.manufacturer_history import Manufacturer, ManufacturerHistory
+from core.models.manufacturer_history import Manufacturer
 from core.models.model_history import ModelHistory
 
 
-class ManufacturerModel(
-    TestCase,
-    TenancyModel
+
+class ModelHistoryTestCases(
+    TenancyObjectInheritedCases
 ):
 
     model = ModelHistory
+
+    should_model_history_be_saved = True
+
+
+
+class ModelHistoryInheritedCases(
+    ModelHistoryTestCases
+):
+
+    model = None
+
+
+
+class ModelHistoryTest(
+    ModelHistoryTestCases,
+    TestCase,
+):
 
     should_model_history_be_saved = False
 
@@ -37,23 +54,42 @@ class ManufacturerModel(
             name = 'man',
         )
 
-
-        self.history_entry = ManufacturerHistory.objects.create(
-            organization = self.organization,
-            action = self.model.Actions.ADD,
-            user = User.objects.create_user(
+        self.kwargs_item_create = {
+            'action': self.model.Actions.ADD,
+            'user': User.objects.create_user(
                 username="test_user_view", password="password", is_superuser=True
             ),
-            before = {},
-            after = {},
-            content_type = ContentType.objects.get(
+            'before': {},
+            'after': {},
+            'content_type': ContentType.objects.get(
                 app_label = model._meta.app_label,
                 model = model._meta.model_name,
             ),
-            model = model,
-        )
+        }
 
-        self.item = ModelHistory.objects.get(
-            pk = self.history_entry.pk
-        )
+        super().setUpTestData()
 
+
+
+    def test_attribute_type_get_url(self):
+        """Attribute Type
+
+        This test case is a duplicate test of a case with the same name.
+        This model does not require this attribute.
+
+        get_url is of type str
+        """
+
+        assert not hasattr(self, 'item.get_url')
+
+
+    def test_attribute_type_get_url_kwargs(self):
+        """Attribute Type
+
+        This test case is a duplicate test of a case with the same name.
+        This model does not require this attribute.
+
+        get_url_kwargs is of type dict
+        """
+
+        assert not hasattr(self, 'item.get_url_kwargs')

@@ -90,6 +90,8 @@ class ProjectModelSerializer(
             'description',
             'priority',
             'state',
+            'estimation_project',
+            'duration_project',
             'completed',
             'project_type',
             'code',
@@ -109,6 +111,8 @@ class ProjectModelSerializer(
 
         read_only_fields = [
             'id',
+            'estimation_project',
+            'duration_project',
             'completed',
             'display_name',
             'external_ref',

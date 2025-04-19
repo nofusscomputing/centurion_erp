@@ -1,20 +1,12 @@
-import pytest
-import unittest
-import requests
-
 from django.test import TestCase
 
-from app.tests.abstract.models import PrimaryModel, ModelAdd, ModelChange, ModelDelete
+from app.tests.abstract.models import PrimaryModel
 
 
 
-# class TicketCommentViews(
-#     TestCase,
-#     PrimaryModel
-# ):
 class ProjectViews(
+    PrimaryModel,
     TestCase,
-    PrimaryModel
 ):
 
     add_module = 'project_management.views.project'
