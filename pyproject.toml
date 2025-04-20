@@ -17,3 +17,19 @@ init-import = true
 
 
 [tool.pytest.ini_options]
+
+addopts = '-s app'
+
+DJANGO_SETTINGS_MODULE = 'app.settings'
+# -- recommended but optional:
+# python_files = 'tests.py test_*.py *_tests.py'
+log_cli = true
+log_cli_level = 'INFO'
+log_cli_format = '%(asctime)s %(levelname)s %(message)s'
+log_cli_date_format = '%Y-%m-%d %H:%M:%S'
+
+# testpaths = [
+#     'tests/*.py',
+# #     'tests/functional/**/*.py',
+# #     'tests/unit/**/*.py',
+# ]
