@@ -8,6 +8,8 @@ about: https://github.com/nofusscomputing/centurion_erp
 
 Unit and functional tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
+We use PyTest as the testing framework. As such, All available features of pytest are available. We have slightly deviated from the standard naming convention wherein test class must be suffixed with `PyTest`. Please [see below](#writing-tests) for more details.
+
 !!! note
     As of release v1.3, the UI has moved to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui) with the current Django UI feature locked and depreciated.
 
