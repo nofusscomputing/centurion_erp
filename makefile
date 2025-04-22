@@ -39,14 +39,14 @@ docs: docs-lint
 lint: markdown-mkdocs-lint
 
 test:
-	pytest -s --cov --cov-branch --cov-report term --cov-report xml:../artifacts/coverage_unit_functional.xml --cov-report html:../artifacts/coverage/unit_functional/ --junit-xml=../artifacts/unit_functional.JUnit.xml **/tests/unit **/tests/functional
+	pytest -s --cov --cov-branch --cov-report term --cov-report xml:artifacts/coverage_unit_functional.xml --cov-report html:artifacts/coverage/unit_functional/ --junit-xml=artifacts/unit_functional.JUnit.xml app/**/tests/unit app/**/tests/functional
 
 test-functional:
-	pytest -s --cov --cov-branch --cov-report term --cov-report xml:../artifacts/coverage_functional.xml --cov-report html:../artifacts/coverage/functional/ --junit-xml=../artifacts/functional.JUnit.xml **/tests/functional
+	pytest -s --cov --cov-branch --cov-report term --cov-report xml:artifacts/coverage_functional.xml --cov-report html:artifacts/coverage/functional/ --junit-xml=artifacts/functional.JUnit.xml app/**/tests/functional
 
 
 test-unit:
-	pytest -s --cov --cov-branch --cov-report term --cov-report xml:../artifacts/coverage_unit.xml --cov-report html:../artifacts/coverage/unit/ --junit-xml=../artifacts/unit.JUnit.xml **/tests/unit
+	pytest -s --cov --cov-branch --cov-report term --cov-report xml:artifacts/coverage_unit.xml --cov-report html:artifacts/coverage/unit/ --junit-xml=artifacts/unit.JUnit.xml app/**/tests/unit
 
 
 

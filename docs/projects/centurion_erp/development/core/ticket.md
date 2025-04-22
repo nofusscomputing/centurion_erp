@@ -30,7 +30,7 @@ As with any other object within Centurion, the addition of a feature requires it
 
 - `Unit` Test Cases
 
-    - `core.tests.unit.contact.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Contact`)_ Test cases for sub-models
+    - `core.tests.unit.ticket_base.<*>.<Inherited class name>InheritedCases` _(if inheriting from `TicketBase`)_ Test cases for sub-models
 
 - `Functional` Test Cases
 
