@@ -23,37 +23,36 @@ class APITestCases(
     @pytest.fixture( scope = 'class')
     def setup_model(self, request, django_db_blocker,
         model,
-        organization_one,
     ):
 
         with django_db_blocker.unblock():
 
             request.cls.entity_user = Entity.objects.create(
-                organization = organization_one,
+                organization = request.cls.organization,
                 model_notes = 'asdas'
             )
 
             project = Project.objects.create(
-                organization = organization_one,
+                organization = request.cls.organization,
                 name = 'project'
             )
 
             parent_ticket = request.cls.model.objects.create(
-                organization = organization_one,
+                organization = request.cls.organization,
                 title = 'parent ticket',
                 description = 'bla bla',
                 opened_by = request.cls.view_user,
             )
 
             project_milestone = ProjectMilestone.objects.create(
-                organization = organization_one,
+                organization = request.cls.organization,
                 name = 'project milestone one',
                 project = project
             )
 
             request.cls.kwargs_create_item.update({
                 'category': TicketCategory.objects.create(
-                organization = organization_one,
+                organization = request.cls.organization,
                     name = 'a category'
                 ),
                 'opened_by': request.cls.view_user,
@@ -78,11 +77,11 @@ class APITestCases(
 
             request.cls.entity_user.delete()
 
+            parent_ticket.delete()
+
             project_milestone.delete()
 
             project.delete()
-
-            parent_ticket.delete()
 
             request.cls.kwargs_create_item['category'].delete()
 

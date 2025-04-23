@@ -2,6 +2,7 @@ import pytest
 
 from unittest.mock import patch
 
+from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from django.urls.exceptions import NoReverseMatch
@@ -633,7 +634,7 @@ class TenancyObjectTest(
     @classmethod
     def setUpTestData(self):
 
-        class TestModel(TenancyObject):
+        class MockTenancyObjectModel(TenancyObject):
 
             class Meta:
 
@@ -641,9 +642,23 @@ class TenancyObjectTest(
 
                 verbose_name = 'Test Model'
 
+        self.model = MockTenancyObjectModel
 
-        self.model = TestModel
-        self.item = TestModel()
+
+        self.item = MockTenancyObjectModel()
+
+
+
+    @classmethod
+    def tearDownClass(self):
+
+        self.item = None
+
+        del apps.all_models['access']['mocktenancyobjectmodel']
+
+        self.model = None
+
+        super().tearDownClass()
 
 
 

@@ -5,7 +5,6 @@ disable = [
 enable = [
     "variables"
 ]
-
 source-roots = [ 
     "app/"
 ]
@@ -16,11 +15,15 @@ allow-global-unused-variables = true
 init-import = true
 
 
+
 [tool.pytest.ini_options]
 
-addopts = '-s app'
+addopts = '--cov --cov-branch --cov-report term --tb=long --verbosity=2 --full-trace --showlocals app'
+
 
 DJANGO_SETTINGS_MODULE = 'app.settings'
+
+junit_family = 'xunit2'
 # -- recommended but optional:
 # python_files = 'tests.py test_*.py *_tests.py'
 log_cli = true

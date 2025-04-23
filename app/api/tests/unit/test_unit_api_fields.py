@@ -108,17 +108,17 @@ class APIFieldsTestCases:
                 user = request.cls.view_user
             )
 
-            yield
+        yield
 
-            with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-                team_user.delete()
+            team_user.delete()
 
-                view_team.delete()
+            view_team.delete()
 
-                request.cls.view_user.delete()
+            request.cls.view_user.delete()
 
-                del request.cls.kwargs_create_item
+            del request.cls.kwargs_create_item
 
 
     @pytest.fixture( scope = 'class')
@@ -139,9 +139,9 @@ class APIFieldsTestCases:
 
             request.cls.api_data = response.data
 
-            yield
+        yield
 
-            del request.cls.url_view_kwargs['pk']
+        del request.cls.url_view_kwargs['pk']
 
 
 

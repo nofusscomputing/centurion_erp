@@ -4,6 +4,10 @@
     "cSpell.enableFiletypes": [
         "!python"
     ],
+    "python.testing.pytestArgs": [
+        "--override-ini", "addopts=",
+        "app",
+    ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "testing.coverageToolbarEnabled": true,

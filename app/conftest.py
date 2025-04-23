@@ -9,6 +9,14 @@ from access.models.organization import Organization
 
 
 
+def pytest_configure(config):
+
+    print("\n--- Pytest Launch Arguments ---")
+    print(f"Command-line arguments: {config.invocation_params.args}")
+    print(f"Config file options: {config.getini('addopts')}")
+    print("\n-------------------------------")
+
+
 def pytest_pycollect_makeitem(collector, name, obj):
     """PyTest Test Creation
 
@@ -81,13 +89,13 @@ def create_model(request, django_db_blocker):
             **request.cls.kwargs_create_item
         )
 
-    request.cls.item = item
+        request.cls.item = item
 
     yield item
 
     with django_db_blocker.unblock():
 
-        request.cls.item.delete()
+        item.delete()
 
 
 

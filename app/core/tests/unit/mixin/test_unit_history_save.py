@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.db import models
 from django.test import TestCase
 
@@ -134,7 +135,7 @@ class SaveHistoryMixinTest(
     @classmethod
     def setUpTestData(self):
 
-        class MockModel(self.model):
+        class MockSaveHistoryModel(SaveHistory):
 
             class Meta:
 
@@ -142,7 +143,15 @@ class SaveHistoryMixinTest(
 
                 verbose_name = 'unit test'
 
-        self.item = MockModel()
+        self.item = MockSaveHistoryModel()
+
+
+    @classmethod
+    def tearDownClass(self):
+
+        self.item = None
+
+        del apps.all_models['core']['mocksavehistorymodel']
 
 
 
