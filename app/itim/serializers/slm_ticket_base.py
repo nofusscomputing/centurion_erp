@@ -89,8 +89,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'SLMTicketBaseViewSerializer')
 class ViewSerializer(
-    ModelSerializer,
     TicketViewSerializer,
+    ModelSerializer,
     ):
     """SLM Ticket Base View Model"""
 
