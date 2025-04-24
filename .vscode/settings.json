@@ -5,10 +5,7 @@
         "!python"
     ],
     "python.testing.pytestArgs": [
-        // "-v",
-        // "--cov",
-        // "--cov-report xml",
-        "-s",
+        "--override-ini", "addopts=",
         "app",
     ],
     "python.testing.unittestEnabled": false,

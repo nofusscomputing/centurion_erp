@@ -1,3 +1,27 @@
+[tool.coverage.run]
+source = [ "./app" ]
+omit = [
+    "*migrations/*",
+    "*tests/*/*",
+]
+
+
+[tool.coverage.report]
+omit = [
+    "*/tests/*/*",
+    "*/migrations/*",
+    "*apps.py",
+    "*conftest.py",
+    "*manage.py",
+    "*__init__.py",
+    "*asgi*",
+    "*wsgi*",
+    "*admin.py",
+    "*urls.py",
+]
+
+
+
 [tool.pylint.main]
 disable = [ 
     "all" 
@@ -5,7 +29,6 @@ disable = [
 enable = [
     "variables"
 ]
-
 source-roots = [ 
     "app/"
 ]
@@ -14,3 +37,26 @@ source-roots = [
 [tool.pylint.variables]
 allow-global-unused-variables = true
 init-import = true
+
+
+
+[tool.pytest.ini_options]
+
+addopts = '--cov --cov-branch --cov-report term --tb=long --verbosity=2 --full-trace --showlocals app'
+
+
+DJANGO_SETTINGS_MODULE = 'app.settings'
+
+junit_family = 'xunit2'
+# -- recommended but optional:
+# python_files = 'tests.py test_*.py *_tests.py'
+log_cli = true
+log_cli_level = 'INFO'
+log_cli_format = '%(asctime)s %(levelname)s %(message)s'
+log_cli_date_format = '%Y-%m-%d %H:%M:%S'
+
+# testpaths = [
+#     'tests/*.py',
+# #     'tests/functional/**/*.py',
+# #     'tests/unit/**/*.py',
+# ]

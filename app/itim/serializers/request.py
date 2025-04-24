@@ -20,7 +20,7 @@ class BaseSerializer(
 @extend_schema_serializer(component_name = 'RequestTicketModelSerializer')
 class ModelSerializer(
     SLMTicketModelSerializer,
-    BaseSerializer
+    BaseSerializer,
 ):
     """Service Request Ticket"""
 
@@ -30,6 +30,7 @@ class ModelSerializer(
 
         fields = [
             'id',
+            'display_name',
             'organization',
             'external_system',
             'external_ref',
@@ -89,8 +90,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'RequestTicketViewSerializer')
 class ViewSerializer(
-    ModelSerializer,
     SLMTicketViewSerializer,
+    ModelSerializer,
     ):
     """Service Request Ticket View Model"""
 

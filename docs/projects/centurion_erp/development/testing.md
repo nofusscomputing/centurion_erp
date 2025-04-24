@@ -8,6 +8,8 @@ about: https://github.com/nofusscomputing/centurion_erp
 
 Unit and functional tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
+We use PyTest as the testing framework. As such, All available features of pytest are available. We have slightly deviated from the standard naming convention wherein test class must be suffixed with `PyTest`. Please [see below](#writing-tests) for more details.
+
 !!! note
     As of release v1.3, the UI has moved to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui) with the current Django UI feature locked and depreciated.
 
@@ -66,23 +68,87 @@ We use class based tests with each test case being its own function. Naming of t
 
 - `TestCases` - Contains the test cases for the class being tested.
 
+    This class contains all of the tests for the area being tested.
+
 - `InheritedCases` - Is to inherit from `TestCases` and contains any additional tests for classes that inherit from the class being tested
 
-- `Test` - Is to inherit from `TestCases` and is the Test Suite for the class being tested.
+    This class is used by sub-models and/or sub-classes that inherit from the area being tested
 
-Test Cases are to test one object and one object **only**. If the object to be tested contains multiple objects/moving parts, instantiate that object within the test setup method `setUpTestData`. Some test may require that the test be setup before the tests begin. This is done via the `setUpTestData` method. Each test case must be documented using docstring.
+- `PyTest` - **Not** to inherit from `TestCases`. This _special_ suffix tells pytest during test collection, to build the test suite using PyTest.
 
-If you inherit test cases from another test class pay particular attention to the tests being inherited. If anywhere along the chain of inherited classes contain a `setUpTestData` method, you must call if from within you test suite. i.e.
+    This class is the class that test the actual object(s) being tested.
 
-``` py
+Do not deviate from the test class name suffix as we have setup pytest to automagically create the test classes based off of these names. For instance, classes that are suffixed (not prefixed as is the pytest norm), will be added as a test class and not as an abstract class.
 
-class MyViewSetTest:
+Test Cases are to test one object and one object **only**. If the object to be tested contains multiple objects/moving parts, instantiate that object within a fixture. Some test may require that the test be setup before the tests begin. This is done via fixture called `class_setup` that is called with `scope='class', autouse = True`. Each test case must be documented using docstring.
 
-    def setUpTestData(self):
+!!! tip
+    If you inherit from an `InheritedCases` Class and there is a `class_setup` fixture, don't forget to import this into your test suite. This ensures it's available for use when running tests
 
-        super().setUpTestData()
 
-```
+### Fixtures
+
+Fixtures are used to setup the test and to pass objects to test should they require it. We have some common and globally available fixtures, they are:
+
+- `create_model` Creates the model from class var `kwargs_create_item: dict`
+
+- `organization_one` Organization called `org one`
+
+- `organization_two` Organization called `org two`
+
+- `recursearray` Search through an array using dot notation (`dict.list.dict` i.e. `dict_1.2.dict_3`). The array can be a `dict`, `list` or combination of both.
+
+!!! info
+    Unless otherwise mentioned, fixtures are `scope = 'class'`
+
+There may also be a requirement that you add additional fixtures, they are:
+
+- `model` This fixture should be defined in `conftest.py` in the test suite files directory. _Only required if the model is required to be worked with._
+
+    ``` py filename="conftest.py"
+
+    import pytest
+
+    from itim.models.request_ticket import RequestTicket
+
+
+
+    @pytest.fixture( scope = 'class')
+    def model(request):
+
+        request.cls.model = RequestTicket
+
+        yield request.cls.model
+
+        del request.cls.model    # Don't forget to clean-up any objects created.
+
+    ```
+
+Due to how pytest and pytest-django works, there is no method available for class based tests that allows both database access and inheritance. As such, all test classes are expected to have a fixture called `class_setup` that is `scope = 'class'` and `autouse = True` that is intended to serve as the method of setting up the test suite. This fixture should also include as dependencies any other fixture required for setup and in the order required for setup to finish without error. This fixture (`class_setup`) is also intended to be an over-writable fixture in parent classes should you need to customise the load order of fixtures.
+
+!!! tip
+    Fixtures that are `scope = 'class'` are unable to accept fixture `db` including other database related marks, which is problematic for a class fixture that requires database access. As a workaround the following works:
+    <!-- markdownlint-disable -->
+
+    ``` py
+    @pytest.fixture( scope = 'class')
+    def setup_post(self, django_db_blocker):
+    
+        with django_db_blocker.unblock():
+    
+            # db transactions
+    
+        yield item    # required so that cleanup can be done
+                      # Note: use return if the db transaction was to create
+                      # a single object.
+    
+        with django_db_blocker.unblock():
+    
+            # db transactions for cleanup
+
+    ```
+
+    <!-- markdownlint-restore -->
 
 
 ## Running Tests

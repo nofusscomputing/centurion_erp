@@ -32,8 +32,6 @@ class ProjectMilestonePermissions(TestCase, ModelPermissions):
 
     url_name_delete = '_project_milestone_delete'
 
-    url_delete_response = reverse('Project Management:_project_view', kwargs={'pk': 1}) + '?tab=milestones'
-
     @classmethod
     def setUpTestData(self):
         """Setup Test
@@ -56,6 +54,8 @@ class ProjectMilestonePermissions(TestCase, ModelPermissions):
             name = 'test_item_' + self.model._meta.model_name,
             organization = self.organization
         )
+
+        self.url_delete_response = reverse('Project Management:_project_view', kwargs={'pk': self.project.id}) + '?tab=milestones'
 
         self.item = self.model.objects.create(
             name = 'test_item_' + self.model._meta.model_name,

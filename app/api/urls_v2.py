@@ -51,6 +51,7 @@ from core.viewsets import (
     history as history_v2,
     manufacturer as manufacturer_v2,
     manufacturer_notes,
+    ticket,
     ticket_category,
     ticket_category_notes,
     ticket_comment,
@@ -169,6 +170,9 @@ router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', 
 
 
 router.register('(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
+
+router.register('core/ticket/(?P<ticket_model>[a-z_]+)?', ticket.ViewSet, feature_flag = '2025-00002', basename='_api_v2_ticket_sub')
+router.register('core/ticket', ticket.NoDocsViewSet, basename='_api_v2_ticket')
 
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments', ticket_comment.ViewSet, basename='_api_v2_ticket_comment')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, basename='_api_v2_ticket_comment_threads')

@@ -30,10 +30,10 @@ As with any other object within Centurion, the addition of a feature requires it
 
 - `Unit` Test Cases
 
-    - `core.tests.unit.contact.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Contact`)_ Test cases for sub-models
+    - `core.tests.unit.ticket_base.<*>.<Inherited class name>InheritedCases` _(if inheriting from `TicketBase`)_ Test cases for sub-models
 
 - `Functional` Test Cases
 
-    - `core.tests.functional.contact.<*>.<Inherited class name>InheritedCases` _(if inheriting from `Contact`)_ Test cases for sub-models
+    - `core.tests.functional.ticket_base.<*>.<Inherited class name>InheritedCases` _(if inheriting from `TicketBase`)_ Test cases for sub-models
 
 The above listed test cases cover **all** tests for objects that are inherited from the base class. To complete the tests, you will need to add test cases for the differences your model introduces.
