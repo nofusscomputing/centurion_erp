@@ -128,9 +128,9 @@ Due to how pytest and pytest-django works, there is no method available for clas
 
 !!! tip
     Fixtures that are `scope = 'class'` are unable to accept fixture `db` including other database related marks, which is problematic for a class fixture that requires database access. As a workaround the following works:
-    
+    <!-- markdownlint-disable -->
+
     ``` py
-    
     @pytest.fixture( scope = 'class')
     def setup_post(self, django_db_blocker):
     
@@ -145,8 +145,10 @@ Due to how pytest and pytest-django works, there is no method available for clas
         with django_db_blocker.unblock():
     
             # db transactions for cleanup
-    
+
     ```
+
+    <!-- markdownlint-restore -->
 
 
 ## Running Tests
