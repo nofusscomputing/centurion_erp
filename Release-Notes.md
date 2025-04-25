@@ -12,6 +12,8 @@
 
     - Depreciated Request Ticket
 
+    - Depreciated Incident Ticket
+
     These endpoints still work and will remain so until the new Ticket and Ticket Comment Models are production ready.
 
 
