@@ -78,7 +78,9 @@ This is your typical model that you would define within any Django Application. 
 This model is known within Django as multi-table inherited models. That is where the base model is a concrete class (not an Abstract model) and the super model inherits from the concrete base model. In this instance both models get their own database tables.
 
 
+<!-- markdownlint-disable -->
 #### Requirements
+<!-- markdownlint-restore -->
 
 - Must **not** be an abstract class
 
