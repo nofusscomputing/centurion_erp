@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from human_resources.serializers.employee import (
+from human_resources.serializers.entity_employee import (
     Employee,
     ModelSerializer
 )

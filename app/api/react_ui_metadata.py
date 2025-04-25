@@ -608,6 +608,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
+            if request.feature_flag['2025-00006']:
+
+                nav['assistance']['pages'].update({
+                    'itim.view_requestticket': {
+                        "display_name": "Requests New",
+                        "name": "request_new",
+                        "icon": "ticket_request",
+                        "link": "/core/ticket/request"
+                    }
+                })
+
 
         return nav
 

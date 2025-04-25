@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema_serializer
 
-from itim.serializers.slm_ticket_base import (
+from itim.serializers.ticket_slm import (
     BaseSerializer as SLMTicketBaseSerializer,
     ModelSerializer as SLMTicketModelSerializer,
     ViewSerializer as SLMTicketViewSerializer

@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.serializers.person import (
+from access.serializers.entity_person import (
     Person,
     ModelSerializer
 )

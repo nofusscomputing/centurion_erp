@@ -1,10 +1,12 @@
+import datetime
+
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
-from rest_framework.fields import empty
 
-from access.serializers.organization import Organization, OrganizationBaseSerializer
-from access.serializers.teams import TeamBaseSerializer
+from drf_spectacular.utils import extend_schema_serializer
+
+from access.serializers.organization import OrganizationBaseSerializer
 
 from api.serializers import common
 from api.exceptions import UnknownTicketType
@@ -13,12 +15,14 @@ from app.serializers.user import UserBaseSerializer
 
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field
-from core.models.ticket.ticket_comment import Ticket, TicketComment
+from core.models.ticket_comment_base import TicketCommentBase
+from core.serializers.ticket import BaseSerializer as TicketBaseBaseSerializer
 from core.serializers.ticket_comment_category import TicketCommentCategoryBaseSerializer
 
 
 
-class TicketCommentBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'TicketCommentBaseBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -26,33 +30,35 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
-    url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_ticket_comment-detail", format="html"
-    )
+    url = serializers.SerializerMethodField('get_url')
+
+    def get_url(self, item) -> str:
+
+        return item.get_url( request = self.context['view'].request )
+
 
     class Meta:
 
-        model = TicketComment
+        model = TicketCommentBase
 
         fields = [
             'id',
             'display_name',
-            'name',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            'name',
             'url',
         ]
 
 
 
-class TicketCommentModelSerializer(
+@extend_schema_serializer(component_name = 'TicketCommentBaseModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    TicketCommentBaseSerializer,
+    BaseSerializer,
 ):
     """Base class for Ticket Comment Model
 
@@ -69,8 +75,6 @@ class TicketCommentModelSerializer(
 
         if item.ticket:
 
-            ticket_type_name = item.ticket.get_ticket_type_display()
-
             ticket_id = item.ticket.id
 
         else:
@@ -84,16 +88,17 @@ class TicketCommentModelSerializer(
 
         if item.id is not None:
 
-            threads = TicketComment.objects.filter(parent = item.id, ticket = ticket_id)
+            threads = TicketCommentBase.objects.filter(parent = item.id, ticket = ticket_id)
 
             if len(threads) > 0:
 
                 urls.update({
                     'threads': reverse(
-                        'API:_api_v2_ticket_comment_threads-list',
+                        'API:_api_v2_ticket_comment_base_sub_thread-list',
                         request = self._context['view'].request,
                         kwargs={
                             'ticket_id': ticket_id,
+                            'ticket_comment_model': 'comment',
                             'parent_id': item.id
                         }
                     )
@@ -107,33 +112,28 @@ class TicketCommentModelSerializer(
 
     class Meta:
 
-        model = TicketComment
+        model = TicketCommentBase
 
         fields = '__all__'
 
         fields = [
             'id',
+            'organization',
             'parent',
             'ticket',
             'external_ref',
             'external_system',
             'comment_type',
+            'category',
             'body',
             'private',
             'duration',
-            'category',
+            'estimation',
             'template',
             'is_template',
             'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
             'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
+            'is_closed',
             'date_closed',
             'created',
             'modified',
@@ -151,6 +151,7 @@ class TicketCommentModelSerializer(
             # 'parent',
             'external_ref',
             'external_system',
+            # 'comment_type',
             # 'private',
             'duration',
             # # 'category',
@@ -172,56 +173,18 @@ class TicketCommentModelSerializer(
             '_urls',
         ]
 
+
     is_triage: bool = False
     """ If the serializers is a Triage serializer"""
 
-    request = None
-    """ HTTP Request that wwas made"""
-
-
-    def __init__(self, instance=None, data=empty, **kwargs):
-
-        super().__init__(instance=instance, data=data, **kwargs)
-
-        if 'context' in kwargs:
-
-            if 'request' in kwargs['context']:
-
-                self.request = kwargs['context']['request']
-
-
-
     def validate(self, attrs):
 
-        if(
-            (
-                'comment_type' not in attrs
-                or attrs['comment_type'] is None
-            )
-            and self._context['view'].action == 'create'
-        ):
+        attrs['comment_type'] = self.context['view'].model._meta.sub_model_type
 
-            raise centurion_exceptions.ValidationError(
-                detail = {
-                    'comment_type': 'Comment Type is required'
-                },
-                code = 'required'
-            )
+        if attrs['comment_type'] == 'comment':
 
-        elif (
-            'comment_type' in attrs
-            and (
-                self._context['view'].action == 'partial_update'
-                or self._context['view'].action == 'update'
-            )
-        ):
-
-            raise centurion_exceptions.ValidationError(
-                detail = {
-                    'comment_type': 'Comment Type is not editable'
-                },
-                code = 'read_only'
-            )
+            attrs['is_closed'] = True
+            attrs['date_closed'] = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
 
         if self.is_triage:
 
@@ -239,456 +202,51 @@ class TicketCommentModelSerializer(
 
         is_valid = super().is_valid(raise_exception=raise_exception)
 
+        if self.context['view'].action == 'create':
 
-        self.validated_data['user'] = self.request.user
+            if 'ticket_id' in self._kwargs['context']['view'].kwargs:
 
-        if 'view' in self._context:
+                self.validated_data['ticket_id'] = int(self._kwargs['context']['view'].kwargs['ticket_id'])
 
-            if self._context['view'].action == 'create':
+                if 'parent_id' in self._kwargs['context']['view'].kwargs:
 
-                if 'ticket_id' in self._kwargs['context']['view'].kwargs:
+                    self.validated_data['parent_id'] = int(self._kwargs['context']['view'].kwargs['parent_id'])
 
-                    self.validated_data['ticket_id'] = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+                    comment = self.Meta.model.objects.filter( id = self.validated_data['parent_id'] )
 
-                    self.validated_data['organization'] = Ticket.objects.get(
-                            pk = int(self.validated_data['ticket_id'])
-                        ).organization
+                    if list(comment)[0].parent_id:
 
-                    if 'parent_id' in self._kwargs['context']['view'].kwargs:
+                        raise centurion_exceptions.ValidationError(
+                            detail = {
+                                'parent': 'Replying to a discussion reply is not possible'
+                            },
+                            code = 'single_discussion_replies_only'
+                        )
 
-                        self.validated_data['parent_id'] = int(self._kwargs['context']['view'].kwargs['parent_id'])
+            else:
 
-                        comment = self.Meta.model.objects.filter( id = self.validated_data['parent_id'] )
-
-                        if list(comment)[0].parent_id:
-
-                            raise centurion_exceptions.ValidationError(
-                                detail = {
-                                    'parent': 'Replying to a discussion reply is not possible'
-                                },
-                                code = 'single_discussion_replies_only'
-                            )
-
-                else:
-
-                    raise centurion_exceptions.ValidationError(
-                        detail = {
-                            'ticket': 'Ticket is a required field'
-                        },
-                        code = 'required'
-                    )
-
-        if str(self._validated_data['user']._meta.verbose_name).lower() != 'user':
-
-            raise centurion_exceptions.ValidationError(
-                detail = "Couldn't determine user",
-                code = 'user_required'
-            )
+                raise centurion_exceptions.ValidationError(
+                    detail = {
+                        'ticket': 'Ticket is a required field'
+                    },
+                    code = 'required'
+                )
 
         return is_valid
 
 
 
-class TicketCommentAddModelSerializer(
-    TicketCommentModelSerializer,
-):
-    """Dummy Serializer
-
-    This serializer exists so that the DRF API Browser functions.
-    """
-
-    pass
-
-class TicketCommentChangeModelSerializer(
-    TicketCommentModelSerializer,
-):
-    """Dummy Serializer
-
-    This serializer exists so that the DRF API Browser functions.
-    """
-
-    pass
-
-
-
-class TicketCommentITILModelSerializer(TicketCommentModelSerializer):
-    """ITIL Comment Model Base
-
-    This serializer is the base for ALL ITIL comment Types.
-
-    Args:
-        TicketCommentModelSerializer (class): Base comment class for ALL comments
-    """
-
-    class Meta(TicketCommentModelSerializer.Meta):
-
-        fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            'comment_type',
-            'body',
-            'private',
-            'duration',
-            'category',
-            'template',
-            'is_template',
-            'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-        read_only_fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            'body',
-            'private',
-            'duration',
-            'category',
-            'template',
-            'is_template',
-            'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-
-
-class TicketCommentITILFollowUpAddModelSerializer(TicketCommentITILModelSerializer):
-    """ITIL Followup Comment
-
-    Args:
-        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
-    """
-
-    class Meta(TicketCommentITILModelSerializer.Meta):
-
-        read_only_fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            'private',
-            'duration',
-            'category',
-            'template',
-            'is_template',
-            'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-
-
-class TicketCommentITILFollowUpChangeModelSerializer(TicketCommentITILFollowUpAddModelSerializer):
-
-    pass
-
-
-
-class TicketCommentITILFollowUpTriageModelSerializer(TicketCommentITILModelSerializer):
-    """ITIL Followup Comment
-
-    Args:
-        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
-    """
-
-    class Meta(TicketCommentITILModelSerializer.Meta):
-
-        read_only_fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            # 'private',
-            'duration',
-            # 'category',
-            # 'template',
-            # 'is_template',
-            # 'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-    is_triage: bool = True
-
-    def validate_triage(self, attrs):
-
-        return attrs
-
-
-class TicketCommentITILSolutionAddModelSerializer(TicketCommentITILModelSerializer):
-    """ITIL Solution Comment
-
-    Args:
-        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
-    """
-
-    class Meta(TicketCommentITILModelSerializer.Meta):
-
-        read_only_fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            'private',
-            'duration',
-            'is_template',
-            'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-
-
-class TicketCommentITILSolutionChangeModelSerializer(TicketCommentITILSolutionAddModelSerializer):
-
-    pass
-
-
-
-class TicketCommentITILSolutionTriageModelSerializer(TicketCommentITILModelSerializer):
-    """ITIL Solution Comment
-
-    Args:
-        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
-    """
-
-    class Meta(TicketCommentITILModelSerializer.Meta):
-
-        read_only_fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            # 'private',
-            'duration',
-            # 'is_template',
-            # 'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-    is_triage: bool = True
-
-    def validate_triage(self, attrs):
-
-        return attrs
-
-
-
-class TicketCommentITILTaskAddModelSerializer(TicketCommentITILModelSerializer):
-    """ITIL Task Comment
-
-    Args:
-        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
-    """
-
-    class Meta(TicketCommentITILModelSerializer.Meta):
-
-        read_only_fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            'private',
-            'duration',
-            'category',
-            'template',
-            'is_template',
-            'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-
-
-class TicketCommentITILTaskChangeModelSerializer(TicketCommentITILTaskAddModelSerializer):
-
-    pass
-
-
-
-class TicketCommentITILTaskTriageModelSerializer(TicketCommentITILModelSerializer):
-    """ITIL Task Comment
-
-    Args:
-        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
-    """
-
-    class Meta(TicketCommentITILModelSerializer.Meta):
-
-        read_only_fields = [
-            'id',
-            'parent',
-            'ticket',
-            'external_ref',
-            'external_system',
-            # 'body',
-            # 'private',
-            'duration',
-            # 'category',
-            # 'template',
-            # 'is_template',
-            # 'source',
-            # 'status',
-            # 'responsible_user',
-            # 'responsible_team',
-            'user',
-            # 'planned_start_date',
-            # 'planned_finish_date',
-            # 'real_start_date',
-            # 'real_finish_date',
-            'organization',
-            'date_closed',
-            'created',
-            'modified',
-            '_urls',
-        ]
-
-    is_triage: bool = True
-
-    def validate_triage(self, attrs):
-
-        return attrs
-
-
-
-class TicketCommentImportModelSerializer(TicketCommentModelSerializer):
-    """Import User Serializer
-
-    Args:
-        TicketCommentModelSerializer (class): Base class for ALL comment types.
-    """
-
-    class Meta(TicketCommentModelSerializer.Meta):
-
-        read_only_fields = [
-            'id',
-            # 'parent',
-            # 'ticket',
-            # 'external_ref',
-            # 'external_system',
-            # 'comment_type',
-            # 'body',
-            # 'private',
-            'duration',
-            # 'category',
-            # 'template',
-            # 'is_template',
-            # 'source',
-            # 'status',
-            # 'responsible_user',
-            # 'responsible_team',
-            # 'user',
-            # 'planned_start_date',
-            # 'planned_finish_date',
-            # 'real_start_date',
-            # 'real_finish_date',
-            # 'organization',
-            # 'date_closed',
-            # 'created',
-            # 'modified',
-            '_urls',
-        ]
-
-
-
-class TicketCommentViewSerializer(TicketCommentModelSerializer):
-
-    organization = OrganizationBaseSerializer( many = False )
+@extend_schema_serializer(component_name = 'TicketCommentBaseViewSerializer')
+class ViewSerializer(ModelSerializer):
 
     category = TicketCommentCategoryBaseSerializer( many = False, read_only = True )
 
+    organization = OrganizationBaseSerializer( many = False )
+
+    parent = BaseSerializer()
+
+    template = BaseSerializer()
+
+    ticket = TicketBaseBaseSerializer()
+
     user = UserBaseSerializer()
-
-    responsible_user = UserBaseSerializer()
-
-    responsible_team = TeamBaseSerializer()

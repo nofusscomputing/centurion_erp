@@ -67,11 +67,11 @@ class TicketBasePermissionsAPIInheritedCases(
     def inherited_var_setup(self, request):
 
         request.cls.url_kwargs.update({
-            'ticket_model': self.model._meta.model_name
+            'ticket_model': self.model._meta.sub_model_type
         })
 
         request.cls.url_view_kwargs.update({
-            'ticket_model': self.model._meta.model_name
+            'ticket_model': self.model._meta.sub_model_type
         })
 
 

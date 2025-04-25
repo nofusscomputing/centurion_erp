@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema_serializer
 
 from access.models.contact import Contact
 
-from access.serializers.person import (
+from access.serializers.entity_person import (
     BaseSerializer as BaseBaseSerializer,
     ModelSerializer as BaseModelSerializer,
 )

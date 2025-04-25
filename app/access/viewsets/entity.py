@@ -31,10 +31,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
         if issubclass(model, Entity):
 
+            serializer_name =  'entity'
+
+            if model != Entity:
+
+                serializer_name += '_' + model._meta.sub_model_type
+
             serializer_module = importlib.import_module(
                 model._meta.app_label + '.serializers.' + str(
-                    model._meta.verbose_name
-                ).lower().replace(' ', '_')
+                    serializer_name
+                )
             )
 
             serializers.update({

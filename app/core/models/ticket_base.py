@@ -1,5 +1,6 @@
 import datetime
 
+from django.apps import apps
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -110,6 +111,8 @@ class TicketBase(
 
         unique_together = ('external_system', 'external_ref',)
 
+        sub_model_type = 'ticket'
+
         verbose_name = "Ticket"
 
         verbose_name_plural = "Tickets"
@@ -176,7 +179,7 @@ class TicketBase(
             None: The ticket is for the Base class. Used to prevent creating a base ticket.
         """
 
-        ticket_type = str(self.Meta.verbose_name).lower().replace(' ', '_')
+        ticket_type = str(self.Meta.sub_model_type).lower().replace(' ', '_')
 
         if ticket_type == 'ticket':
 
@@ -185,9 +188,29 @@ class TicketBase(
         return ticket_type
 
 
+    def get_ticket_type_choices():
+
+        choices = []
+
+        if apps.ready:
+
+            all_models = apps.get_models()
+
+            for model in all_models:
+
+                if isinstance(model, TicketBase) or issubclass(model, TicketBase):
+
+                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
+
+
+        return choices
+
+
     ticket_type = models.CharField(
         blank = True,
-        default = Meta.verbose_name.lower().replace(' ', '_'),
+        choices = get_ticket_type_choices,
+        # default = get_ticket_type_default,
+        default = Meta.sub_model_type,
         help_text = 'Ticket Type. (derived from ticket model)',
         max_length = 30,
         null = False,
@@ -295,9 +318,33 @@ class TicketBase(
         verbose_name = 'Project',
     )
 
+
+
+    def get_milestone_choices():
+        # does not seem to work for model field (metadata.field.choices)
+
+        choices = []
+
+        for project in Project.objects.prefetch_related('projectmilestone_set'):
+
+            milestone_choices = []
+
+            for milestone in project.projectmilestone_set.all():
+
+                milestone_choices += [ (milestone.id, milestone.name) ]
+
+            if len(milestone_choices) > 0:
+
+                choices += [ (project.name, ( milestone_choices ) ) ]
+
+
+        return choices
+
+
     milestone = models.ForeignKey(
         ProjectMilestone,
         blank = True,
+        # choices = get_milestone_choices,
         help_text = 'Assign to a milestone',
         null = True,
         on_delete = models.PROTECT,
@@ -698,18 +745,18 @@ class TicketBase(
 
         model = self.get_related_model()
 
-        if len(self._meta.parents) == 0 and model is None:
+        # if len(self._meta.parents) == 0 and model is None:
 
-            return {
-                'pk': self.id
-            }
+        #     return {
+        #         'pk': self.id
+        #     }
 
         if model is None:
 
             model = self
 
         kwargs = {
-            'ticket_model': str(model._meta.verbose_name).lower().replace(' ', '_'),
+            'ticket_model': self.ticket_type,
         }
 
         if model.pk:
@@ -734,9 +781,9 @@ class TicketBase(
 
             related_model = self
 
-        if self.ticket_type != str(related_model._meta.verbose_name).lower().replace(' ', '_'):
+        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
 
-            self.ticket_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
+            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
 
         if self.date_solved is None and self.is_solved:
 

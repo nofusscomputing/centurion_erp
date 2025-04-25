@@ -59,6 +59,36 @@ All models must meet the following requirements:
 - Models must save audit history
 
 
+## Creating a Model
+
+Within Centurion ERP there are two types of models, they are:
+
+- Standard
+
+- Sub-Model
+
+
+### Standard Model
+
+This is your typical model that you would define within any Django Application. This includes Abstract models and precludes multi-table inherited models.
+
+
+### Sub-Model
+
+This model is known within Django as multi-table inherited models. That is where the base model is a concrete class (not an Abstract model) and the super model inherits from the concrete base model. In this instance both models get their own database tables.
+
+
+<!-- markdownlint-disable -->
+#### Requirements
+<!-- markdownlint-restore -->
+
+- Must **not** be an abstract class
+
+- Attribute `sub_model_type` must be specified within the models `Meta` sub-class
+
+- File name is `<base model>_<sub_model_type>` where `base model` is the value of `Meta.sub_model_type` or the first model in the chain.
+
+
 ## Checklist
 
 This section details the additional items that may need to be done when adding a new model:

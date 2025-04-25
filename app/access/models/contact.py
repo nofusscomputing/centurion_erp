@@ -15,6 +15,8 @@ class Contact(
             'email',
         ]
 
+        sub_model_type = 'contact'
+
         verbose_name = 'Contact'
 
         verbose_name_plural = 'Contacts'

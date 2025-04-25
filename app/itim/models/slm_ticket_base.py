@@ -19,6 +19,8 @@ class SLMTicket(
             'id',
         ]
 
+        sub_model_type = 'slm'
+
         verbose_name = 'SLM Ticket Base'
 
         verbose_name_plural = 'SLM Tickets'

@@ -16,6 +16,11 @@ import sys
 
 from pathlib import Path
 from split_settings.tools import optional, include
+import django.db.models.options as options
+
+options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type')
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -552,6 +557,15 @@ if FEATURE_FLAGGING_ENABLED:
                     "modified": ""
                 }
             },
+            {
+                "2025-00006": {
+                    "name": "Ticket Models",
+                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            }
         ]
 
         feature_flag.update({

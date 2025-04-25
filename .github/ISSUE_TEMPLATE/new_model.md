@@ -33,6 +33,10 @@ Describe in detail the following:
 
 - [ ] 🛠️ Migrations added
 
+- [ ] 🔄 [ViewSet Created](https://nofusscomputing.com/projects/centurion_erp/development/views/)
+
+- [ ] 🔗 URL Route Added
+
 - [ ] 🏷️ Model tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()` function
 
     - [ ] 📘 Tag updated in the [docs](https://nofusscomputing.com/projects/centurion_erp/user/core/markdown/#model-reference)

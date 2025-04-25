@@ -790,7 +790,7 @@ class SubModelViewSet(
             for related_object in model._meta.related_objects:
 
                 if(
-                    related_object.related_model._meta.verbose_name == self.base_model._meta.verbose_name
+                    getattr(related_object.related_model._meta,'sub_model_type', '' ) == self.base_model._meta.sub_model_type
                     or not issubclass(related_object.related_model, self.base_model)
                 ):
 
@@ -801,7 +801,7 @@ class SubModelViewSet(
 
                 if(
                     str(
-                        related_object.related_model._meta.verbose_name
+                        related_object.related_model._meta.sub_model_type
                     ).lower().replace(' ', '_') == model_kwarg
                 ):
 
@@ -815,14 +815,27 @@ class SubModelViewSet(
                     break
 
 
+        if related_model is None:
+
+            related_model = self.base_model
+
         return related_model
+
+
 
     def get_serializer_class(self):
 
+        serializer_name = self.base_model._meta.verbose_name.lower().replace(' ', '_')
+
+        if self.base_model != self.model:
+                      
+            serializer_name += '_' + self.model._meta.sub_model_type
+
+
         serializer_module = importlib.import_module(
             self.model._meta.app_label + '.serializers.' + str(
-                self.model._meta.verbose_name
-            ).lower().replace(' ', '_')
+                serializer_name
+            )
         )
 
         if (

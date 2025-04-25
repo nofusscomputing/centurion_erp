@@ -6,7 +6,7 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-Views are used with Centurion ERP to Fetch the data for rendering.
+Viewsets are used by Centurion ERP for each of the API views.
 
 !!! info
     Centurion release v1.3.0 added a feature lock to **ALL** Views and the current API. From this release, there is a new API at endpoint `api/v2`. As such we will only be using DRF `ViewSets`. This is required as the UI is being separated from the Centurion Codebase to its own repository. This means that Centurion will become an API only codebase. Release 2.0.0 will remove the current UI and api from Centurion. [See #](https://github.com/nofusscomputing/centurion_erp/issues/343) for details.
@@ -15,14 +15,6 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 ## Requirements
 
 - Views are class based
-
-- Inherits from one of the following base class':
-
-    - Index Viewset `api.viewsets.common.CommonViewSet`
-
-    - Model Viewset `api.viewsets.common.ModelViewSet`
-
-    - Model Viewset that are to be Read-Only `api.viewsets.common.ReadOnlyModelViewSet`
 
 - **ALL** views are `ViewSets`
 
@@ -49,6 +41,47 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 - View Added to Navigation
 
 - ViewSets that are used to expose data that is publicly available **must** have it's filename prefixed with `public_`
+
+
+## Creating a ViewSet
+
+All ViewSets are to be saved under the django app they belong to and within a directory called `viewsets`. Serializers are broken down to match the [model types](./models.md#creating-a-model):
+
+
+### Standard Model ViewSet
+
+
+<!-- markdownlint-disable -->
+#### Requirements
+<!-- markdownlint-restore -->
+
+- Inherits from one of the following base class':
+
+    - Index ViewSet `api.viewsets.common.CommonViewSet`
+
+    - Model ViewSet that are to be Read-Only `api.viewsets.common.ReadOnlyModelViewSet`
+
+    - If not any of the above, `api.viewsets.common.ModelViewSet`
+
+
+### Sub-Model ViewSet
+
+Unless you are creating a new base sub-model, you will not need to create a ViewSet. This is because the sub-model Viewset that is used is the lowest base model in the inheritance chain.
+
+
+<!-- markdownlint-disable -->
+#### Requirements
+<!-- markdownlint-restore -->
+
+- Attribute 'base_model' must be specified within the ViewSet
+
+- ViewSet must inherit from `api.viewsets.common.SubModelViewSet`
+
+- Tested against:
+
+    - Unit Tests:
+
+        - `api.tests.unit.test_unit_common_viewset.SubModelViewSetInheritedCases`
 
 
 ## Permissions
