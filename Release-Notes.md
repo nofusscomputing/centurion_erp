@@ -6,6 +6,8 @@
 
 - In preparation of the [Ticket and Ticket Comment model re-write](https://github.com/nofusscomputing/centurion_erp/issues/564)
 
+    - Depreciated Change Ticket
+
     - Depreciated Ticket Comment Endpoint
 
     - Depreciated Request Ticket
