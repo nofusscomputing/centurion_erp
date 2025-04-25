@@ -134,9 +134,9 @@ class TicketCommentBase(
     )
 
     body = models.TextField(
-        blank = False,
+        blank = True,
         help_text = 'Comment contents',
-        null = False,
+        null = True,
         verbose_name = 'Comment',
     )
 
