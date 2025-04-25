@@ -261,6 +261,16 @@ class TicketCommentBase(
                 )
 
 
+            if self.comment_type != self._meta.sub_model_type:
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'comment_type': 'Comment Type does not match. Check the http endpoint you are using.'
+                    },
+                    code = 'comment_type_wrong_endpoint'
+                )
+
+
     def get_url_kwargs_notes(self):
 
         return FeatureNotUsed
