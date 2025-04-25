@@ -64,6 +64,8 @@ All ViewSets are to be saved under the django app they belong to and within a di
 
 ### Sub-Model ViewSet
 
+Unless you are creating a new base sub-model, you will not need to create a ViewSet. This is because the sub-model Viewset that is used is the lowest base model in the inheritance chain.
+
 
 #### Requirements
 
