@@ -12,7 +12,7 @@ from api.views.mixin import OrganizationPermissionAPI
 from api.viewsets.common import ModelViewSet
 
 from core import exceptions as centurion_exceptions
-from core.serializers.ticket_comment import (
+from core.serializers.ticket_comment_depreciated import (
     Ticket,
     TicketComment,
     TicketCommentImportModelSerializer,
