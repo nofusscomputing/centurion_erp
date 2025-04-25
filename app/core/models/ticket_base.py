@@ -1,5 +1,6 @@
 import datetime
 
+from django.apps import apps
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -187,8 +188,28 @@ class TicketBase(
         return ticket_type
 
 
+    def get_ticket_type_choices():
+
+        choices = []
+
+        if apps.ready:
+
+            all_models = apps.get_models()
+
+            for model in all_models:
+
+                if isinstance(model, TicketBase) or issubclass(model, TicketBase):
+
+                    choices += [ (model._meta.verbose_name.lower().replace(' ', '_'), model._meta.verbose_name) ]
+
+
+        return choices
+
+
     ticket_type = models.CharField(
         blank = True,
+        choices = get_ticket_type_choices,
+        # default = get_ticket_type_default,
         default = Meta.verbose_name.lower().replace(' ', '_'),
         help_text = 'Ticket Type. (derived from ticket model)',
         max_length = 30,
@@ -297,9 +318,33 @@ class TicketBase(
         verbose_name = 'Project',
     )
 
+
+
+    def get_milestone_choices():
+        # does not seem to work for model field (metadata.field.choices)
+
+        choices = []
+
+        for project in Project.objects.prefetch_related('projectmilestone_set'):
+
+            milestone_choices = []
+
+            for milestone in project.projectmilestone_set.all():
+
+                milestone_choices += [ (milestone.id, milestone.name) ]
+
+            if len(milestone_choices) > 0:
+
+                choices += [ (project.name, ( milestone_choices ) ) ]
+
+
+        return choices
+
+
     milestone = models.ForeignKey(
         ProjectMilestone,
         blank = True,
+        # choices = get_milestone_choices,
         help_text = 'Assign to a milestone',
         null = True,
         on_delete = models.PROTECT,
