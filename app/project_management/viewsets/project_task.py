@@ -20,6 +20,7 @@ from core.viewsets.ticket_depreciated import TicketViewSet
 
 @extend_schema_view(
     create=extend_schema(
+        deprecated = True,
         summary = 'Create a Project Task',
         description='',
         parameters = [
@@ -46,6 +47,7 @@ from core.viewsets.ticket_depreciated import TicketViewSet
         }
     ),
     destroy = extend_schema(
+        deprecated = True,
         summary = 'Delete a Project Task',
         description = '',
         parameters = [
@@ -66,6 +68,7 @@ from core.viewsets.ticket_depreciated import TicketViewSet
         }
     ),
     list = extend_schema(
+        deprecated = True,
         summary = 'Fetch all Project Task',
         description='',
         parameters = [
@@ -81,6 +84,7 @@ from core.viewsets.ticket_depreciated import TicketViewSet
         }
     ),
     retrieve = extend_schema(
+        deprecated = True,
         summary = 'Fetch a Project Task',
         description='',
         parameters = [
@@ -102,6 +106,7 @@ from core.viewsets.ticket_depreciated import TicketViewSet
     ),
     update = extend_schema(exclude = True),
     partial_update = extend_schema(
+        deprecated = True,
         summary = 'Update a Project Task',
         description = '',
         parameters = [
