@@ -30,9 +30,15 @@ class TicketCommentBase(
             'id'
         ]
 
-        unique_together = ('external_system', 'external_ref',)
+        permissions = [
+            ('import_ticketcommentbase', 'Can import ticket comment.'),
+            ('purge_ticketcommentbase', 'Can purge ticket comment.'),
+            ('triage_ticketcommentbase', 'Can triage ticket comment.'),
+        ]
 
         sub_model_type = 'comment'
+
+        unique_together = ('external_system', 'external_ref',)
 
         verbose_name = "Ticket Comment"
 
