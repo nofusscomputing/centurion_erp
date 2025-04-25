@@ -41,6 +41,7 @@ from settings.models.user_settings import UserSettings
 
 @extend_schema_view(
     create=extend_schema(
+        deprecated = True,
         summary = 'Create a ticket comment',
         description="""Ticket Comment API requests depend upon the users permission and comment type. 
         To view an examaple of a request, select the correct schema _Link above example, called schema_.
@@ -81,6 +82,7 @@ Responses from the API are the same for all users when the request returns
         }
     ),
     destroy = extend_schema(
+        deprecated = True,
         summary = 'Delete a ticket comment',
         description = '',
         parameters = [
@@ -101,6 +103,7 @@ Responses from the API are the same for all users when the request returns
         }
     ),
     list = extend_schema(
+        deprecated = True,
         summary = 'Fetch all ticket comments',
         description='',
         parameters = [
@@ -116,6 +119,7 @@ Responses from the API are the same for all users when the request returns
         }
     ),
     retrieve = extend_schema(
+        deprecated = True,
         summary = 'Fetch a single ticket comment',
         description='',
         parameters = [
@@ -137,6 +141,7 @@ Responses from the API are the same for all users when the request returns
     ),
     update = extend_schema(exclude = True),
     partial_update = extend_schema(
+        deprecated = True,
         summary = 'Update a ticket comment',
         description = '',
         parameters = [
