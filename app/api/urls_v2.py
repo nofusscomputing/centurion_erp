@@ -55,6 +55,7 @@ from core.viewsets import (
     ticket_category,
     ticket_category_notes,
     ticket_comment,
+    ticket_comment_depreciated,
     ticket_comment_category,
     ticket_comment_category_notes,
     ticket_linked_item,
