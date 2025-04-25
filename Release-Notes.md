@@ -4,6 +4,11 @@
 
 - Ticket and Ticket Comment added behind feature flag `2025-00006` and will remain behind this flag until production ready.
 
+- In preparation of the [Ticket and Ticket Comment model re-write](https://github.com/nofusscomputing/centurion_erp/issues/564)
+    - Depreciated Request Ticket
+
+    These endpoints still work and will remain so until the new Ticket and Ticket Comment Models are production ready.
+
 
 ## Version 1.15.0
 
