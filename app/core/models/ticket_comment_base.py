@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.db import models
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -95,10 +96,27 @@ class TicketCommentBase(
 
         return comment_type
 
+    def get_comment_type_choices():
+
+        choices = []
+
+        if apps.ready:
+
+            all_models = apps.get_models()
+
+            for model in all_models:
+
+                if isinstance(model, TicketCommentBase) or issubclass(model, TicketCommentBase):
+
+                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
+
+
+        return choices
 
     comment_type = models.CharField(
         blank = False,
-        default = str(Meta.verbose_name).lower().replace(' ', '_'),
+        choices = get_comment_type_choices,
+        # default = get_comment_type,
         help_text = 'Type this comment is. derived from Meta.verbose_name',
         max_length = 30,
         null = False,
