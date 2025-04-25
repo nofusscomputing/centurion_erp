@@ -98,7 +98,7 @@ class TicketCommentBase(
     @property
     def get_comment_type(self):
 
-        comment_type = str(self.Meta.verbose_name).lower().replace(
+        comment_type = str(self.Meta.sub_model_type).lower().replace(
             ' ', '_'
         )
 

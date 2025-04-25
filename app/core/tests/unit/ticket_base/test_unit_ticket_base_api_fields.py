@@ -68,7 +68,7 @@ class APITestCases(
             if request.cls.model._meta.model_name != 'ticketbase':
 
                 request.cls.url_view_kwargs.update({
-                    'ticket_model': str(request.cls.model._meta.verbose_name).lower().replace(' ', '_'),
+                    'ticket_model': str(request.cls.model._meta.sub_model_type),
                 })
 
         yield

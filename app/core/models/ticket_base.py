@@ -179,7 +179,7 @@ class TicketBase(
             None: The ticket is for the Base class. Used to prevent creating a base ticket.
         """
 
-        ticket_type = str(self.Meta.verbose_name).lower().replace(' ', '_')
+        ticket_type = str(self.Meta.sub_model_type).lower().replace(' ', '_')
 
         if ticket_type == 'ticket':
 
@@ -200,7 +200,7 @@ class TicketBase(
 
                 if isinstance(model, TicketBase) or issubclass(model, TicketBase):
 
-                    choices += [ (model._meta.verbose_name.lower().replace(' ', '_'), model._meta.verbose_name) ]
+                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
 
 
         return choices
@@ -210,7 +210,7 @@ class TicketBase(
         blank = True,
         choices = get_ticket_type_choices,
         # default = get_ticket_type_default,
-        default = Meta.verbose_name.lower().replace(' ', '_'),
+        default = Meta.sub_model_type,
         help_text = 'Ticket Type. (derived from ticket model)',
         max_length = 30,
         null = False,
@@ -745,18 +745,18 @@ class TicketBase(
 
         model = self.get_related_model()
 
-        if len(self._meta.parents) == 0 and model is None:
+        # if len(self._meta.parents) == 0 and model is None:
 
-            return {
-                'pk': self.id
-            }
+        #     return {
+        #         'pk': self.id
+        #     }
 
         if model is None:
 
             model = self
 
         kwargs = {
-            'ticket_model': str(model._meta.verbose_name).lower().replace(' ', '_'),
+            'ticket_model': self.ticket_type,
         }
 
         if model.pk:
@@ -781,9 +781,9 @@ class TicketBase(
 
             related_model = self
 
-        if self.ticket_type != str(related_model._meta.verbose_name).lower().replace(' ', '_'):
+        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
 
-            self.ticket_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
+            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
 
         if self.date_solved is None and self.is_solved:
 
