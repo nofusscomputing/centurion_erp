@@ -200,12 +200,12 @@ router.register('(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/
 
 ticket_type_names = str(ticket_type_names)[:-1]
 
-router.register(f'core/ticket/(?P<ticket_model>[{ticket_type_names}]+)', ticket.ViewSet, feature_flag = '2025-00002', basename='_api_v2_ticket_sub')
+router.register(f'core/ticket/(?P<ticket_model>[{ticket_type_names}]+)', ticket.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_sub')
 router.register('core/ticket', ticket.NoDocsViewSet, basename='_api_v2_ticket')
 
 
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment', ticket_comment.NoDocsViewSet, basename='_api_v2_ticket_comment_base')
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, basename='_api_v2_ticket_comment_base_thread')
+router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment', ticket_comment.NoDocsViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base')
+router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_thread')
 
 
 
@@ -217,8 +217,8 @@ router.register('core/ticket/(?P<ticket_id>[0-9]+)/related_ticket', related_tick
 
 ticket_comment_names = str(ticket_comment_names)[:-1]
 
-router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)', ticket_comment.ViewSet, basename='_api_v2_ticket_comment_base_sub')
-router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, basename='_api_v2_ticket_comment_base_sub_thread')
+router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_sub')
+router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_sub_thread')
 
 
 router.register('core/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket', ticket_linked_item.ViewSet, basename='_api_v2_item_tickets')

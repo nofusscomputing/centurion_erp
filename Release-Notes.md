@@ -2,6 +2,8 @@
 
 - Employees model added behind feature flag `2025-00002` and will remain behind this flag until production ready.
 
+- Ticket and Ticket Comment added behind feature flag `2025-00006` and will remain behind this flag until production ready.
+
 
 ## Version 1.15.0
 
