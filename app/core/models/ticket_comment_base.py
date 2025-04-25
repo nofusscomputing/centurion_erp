@@ -29,6 +29,8 @@ class TicketCommentBase(
 
         unique_together = ('external_system', 'external_ref',)
 
+        sub_model_type = 'comment'
+
         verbose_name = "Ticket Comment"
 
         verbose_name_plural = "Ticket Comments"

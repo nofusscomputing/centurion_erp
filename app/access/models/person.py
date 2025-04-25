@@ -20,6 +20,8 @@ class Person(
             'dob',
         ]
 
+        sub_model_type = 'person'
+
         verbose_name = 'Person'
 
         verbose_name_plural = 'People'

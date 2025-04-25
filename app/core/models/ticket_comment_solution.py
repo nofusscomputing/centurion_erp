@@ -13,9 +13,11 @@ class TicketCommentSolution(
             'id'
         ]
 
-        verbose_name = "Solution"
+        sub_model_type = 'solution'
 
-        verbose_name_plural = "Solutions"
+        verbose_name = "Ticket Comment Solution"
+
+        verbose_name_plural = "Ticket Comment Solutions"
 
 
     def clean(self):

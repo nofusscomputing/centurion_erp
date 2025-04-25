@@ -110,6 +110,8 @@ class TicketBase(
 
         unique_together = ('external_system', 'external_ref',)
 
+        sub_model_type = 'ticket'
+
         verbose_name = "Ticket"
 
         verbose_name_plural = "Tickets"

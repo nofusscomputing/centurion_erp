@@ -15,6 +15,8 @@ class Employee(
             'email',
         ]
 
+        sub_model_type = 'employee'
+
         verbose_name = 'Employee'
 
         verbose_name_plural = 'Employees'

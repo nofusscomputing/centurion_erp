@@ -19,6 +19,8 @@ class RequestTicket(
             ('triage_requestticket', 'Can triage request ticket'),
         ]
 
+        sub_model_type = 'request'
+
         verbose_name = 'Request'
 
         verbose_name_plural = 'Requests'

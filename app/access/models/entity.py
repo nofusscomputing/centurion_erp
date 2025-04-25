@@ -22,6 +22,8 @@ class Entity(
             'organization',
         ]
 
+        sub_model_type = 'entity'
+
         verbose_name = 'Entity'
 
         verbose_name_plural = 'Entities'

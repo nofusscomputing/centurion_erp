@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema_serializer
 
-from access.serializers.contact import (
+from access.serializers.entity_contact import (
     BaseSerializer as ContactBaseSerializer,
     ModelSerializer as ContactModelSerializer,
 )
