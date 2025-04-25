@@ -154,6 +154,17 @@ class ViewSet( ModelViewSet ):
         return self.queryset
 
 
+    def get_return_url(self) -> str:
+
+
+        return reverse('v2:_api_v2_software-detail',
+            request = self.request,
+            kwargs = {
+                'pk': self.kwargs['software_id']
+            }
+        )
+
+
     def get_serializer_class(self):
 
         if (
