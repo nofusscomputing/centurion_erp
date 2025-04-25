@@ -815,7 +815,13 @@ class SubModelViewSet(
                     break
 
 
+        if related_model is None:
+
+            related_model = self.base_model
+
         return related_model
+
+
 
     def get_serializer_class(self):
 
