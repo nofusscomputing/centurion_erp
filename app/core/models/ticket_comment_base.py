@@ -1,6 +1,8 @@
 from django.apps import apps
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.entity import Entity
 from access.models.tenancy import TenancyObject
@@ -269,6 +271,112 @@ class TicketCommentBase(
                     },
                     code = 'comment_type_wrong_endpoint'
                 )
+
+
+
+    def get_related_model(self):
+        """Recursive model Fetch
+
+        Returns the lowest model found in a chain of inherited models.
+
+        Args:
+            model (models.Model, optional): Model to fetch the child model from. Defaults to None.
+
+        Returns:
+            models.Model: Lowset model found in inherited model chain
+        """
+
+        related_model_name = self.get_related_field_name()
+
+        related_model = getattr(self, related_model_name, None)
+
+        if related_model_name == '':
+
+            related_model = None
+
+        elif related_model is None:
+
+            related_model = self
+
+        elif hasattr(related_model, 'get_related_field_name'):
+
+            if related_model.get_related_field_name() != '':
+
+                related_model = related_model.get_related_model()
+
+
+        return related_model
+
+
+
+    def get_related_field_name(self) -> str:
+
+        meta = getattr(self, '_meta')
+
+        for related_object in getattr(meta, 'related_objects', []):
+
+            if not issubclass(related_object.related_model, TicketBase):
+
+                continue
+
+            if getattr(self, related_object.name, None):
+
+                if( 
+                    not str(related_object.name).endswith('history')
+                    and not str(related_object.name).endswith('notes')
+                ):
+
+                    return related_object.name
+                    break
+
+
+        return ''
+
+
+
+    def get_url( self, request = None ) -> str:
+
+        kwargs = self.get_url_kwargs()
+
+        if self.parent:
+
+            url_name = '_api_v2_ticket_comment_base_sub_thread'
+
+        else:
+
+            url_name = '_api_v2_ticket_comment_base_sub'
+
+
+        if request:
+
+            return reverse('v2:' + url_name + '-detail', request=request, kwargs = kwargs )
+
+
+        return reverse('v2:' + url_name + '-detail', kwargs = kwargs )
+
+
+
+    def get_url_kwargs(self) -> dict:
+
+        kwargs = {
+            'ticket_comment_model': self.comment_type,
+            'ticket_id': self.ticket.id,
+        }
+
+        if self.pk:
+
+            kwargs.update({
+                'pk': self.id
+            })
+
+        if self.parent:
+
+            kwargs.update({
+                'parent_id': self.parent.id
+            })
+
+
+        return kwargs
 
 
     def get_url_kwargs_notes(self):
