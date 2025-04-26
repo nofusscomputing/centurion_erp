@@ -728,13 +728,7 @@ class ModelViewSet(
 
 
 class SubModelViewSet(
-    ModelViewSetBase,
-    Create,
-    Retrieve,
-    Update,
-    Destroy,
-    List,
-    viewsets.ModelViewSet,
+    ModelViewSet,
 ):
 
     base_model = None
