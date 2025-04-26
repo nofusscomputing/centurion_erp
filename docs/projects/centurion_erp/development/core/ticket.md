@@ -32,8 +32,12 @@ As with any other object within Centurion, the addition of a feature requires it
 
     - `core.tests.unit.ticket_base.<*>.<Inherited class name>InheritedCases` _(if inheriting from `TicketBase`)_ Test cases for sub-models
 
+    - ViewSet `core.tests.unit.ticket_base.test_unit_ticket_base_viewset.TicketBaseViewsetInheritedCases`
+
 - `Functional` Test Cases
 
     - `core.tests.functional.ticket_base.<*>.<Inherited class name>InheritedCases` _(if inheriting from `TicketBase`)_ Test cases for sub-models
+
+    - API Permissions `core.tests.functional.ticket_base.test_functional_ticket_base_permission.TicketBasePermissionsAPIInheritedCases`
 
 The above listed test cases cover **all** tests for objects that are inherited from the base class. To complete the tests, you will need to add test cases for the differences your model introduces.

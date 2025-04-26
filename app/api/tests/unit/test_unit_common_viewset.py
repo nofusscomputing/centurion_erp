@@ -1,4 +1,7 @@
+import pytest
+
 from django.contrib.auth.models import ContentType, Permission, User
+from django.db import models
 from django.test import TestCase
 
 from unittest.mock import patch, PropertyMock
@@ -789,7 +792,7 @@ class ModelViewSetBaseCases(
 ):
     """Test Suite for class ModelViewSetBase"""
 
-    kwargs: dict
+    kwargs: dict = {}
 
     organization: Organization
 
@@ -805,8 +808,6 @@ class ModelViewSetBaseCases(
         self.organization = Organization.objects.create(name='test_org')
 
         self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
-
-        self.kwargs = {}
 
 
     def test_class_inherits_modelviewsetbase(self):
@@ -1312,6 +1313,95 @@ class SubModelViewSetTestCases(
         """
 
         assert issubclass(self.viewset, SubModelViewSet)
+
+
+    def test_view_attr_exists_base_model(self):
+        """Attribute Test
+
+        Attribute `base_model` must exist
+        """
+
+        assert hasattr(self.viewset, 'base_model')
+
+
+    def test_view_attr_type_base_model(self):
+        """Attribute Test
+
+        Attribute `base_model` must be of type Django Model
+        """
+
+        view_set = self.viewset()
+
+        assert issubclass(view_set.base_model, models.Model)
+
+
+
+    def test_view_attr_exists_model_kwarg(self):
+        """Attribute Test
+
+        Attribute `model_kwarg` must exist
+        """
+
+        assert hasattr(self.viewset, 'model_kwarg')
+
+
+    def test_view_attr_type_model_kwarg(self):
+        """Attribute Test
+
+        Attribute `model_kwarg` must be of type str
+        """
+
+        view_set = self.viewset()
+
+        assert type(view_set.model_kwarg) is str
+
+
+
+    def test_view_attr_value_model_kwarg(self):
+        """Attribute Test
+
+        Attribute `model_kwarg` must be equal to model._meta.sub_model_type
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.model_kwarg is not None
+
+
+
+    @pytest.mark.skip( reason = 'to be written')
+    def test_view_func_related_objects(self):
+        """ Function Test
+
+        Function `related_objects` must return the highest model in the chain
+        of models
+        """
+
+        pass
+
+
+
+    @pytest.mark.skip( reason = 'to be written')
+    def test_view_func_get_serializer_class_view(self):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        pass
+
+
+
+    @pytest.mark.skip( reason = 'to be written')
+    def test_view_func_get_serializer_class_create(self):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct create
+        serializer for the model in question.
+        """
+
+        pass
 
 
 
@@ -2434,6 +2524,61 @@ class SubModelViewSetInheritedCases(
     """The Sub Model that is returned from the model property"""
 
     viewset = None
+
+
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
+
+        1. make list request
+        """
+
+        self.viewset.kwargs = {}
+
+        self.viewset.kwargs[self.viewset.model_kwarg] = self.model._meta.sub_model_type
+
+        super().setUpTestData()
+
+
+
+    def test_api_render_field_allowed_methods_values(self):
+        """Attribute Test
+
+        Attribute `allowed_methods` only contains valid values
+        """
+
+        # Values valid for model views
+        valid_values: list = [
+            'DELETE',
+            'GET',
+            'HEAD',
+            'OPTIONS',
+            'PATCH',
+            'POST',
+            'PUT',
+        ]
+
+        all_valid: bool = True
+
+        for method in list(self.http_options_response_list.data['allowed_methods']):
+
+            if method not in valid_values:
+
+                all_valid = False
+
+        assert all_valid
+
+
+    def test_view_attr_model_value(self):
+        """Attribute Test
+
+        Attribute `model` must return the correct sub-model
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.model == self.model
+
 
 
 class PublicReadOnlyViewSetInheritedCases(
