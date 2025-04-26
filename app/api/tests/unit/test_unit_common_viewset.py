@@ -30,6 +30,7 @@ from api.viewsets.common import (
 
     CommonViewSet,
     ModelViewSet,
+    SubModelViewSet,
 
     ModelCreateViewSet,
     ModelListRetrieveDeleteViewSet,
@@ -1291,6 +1292,38 @@ class ModelViewSetTest(
 
 
 
+class SubModelViewSetTestCases(
+    ModelViewSetCases
+):
+
+    kwargs: dict
+
+    organization: Organization
+
+    view_user: User
+
+    viewset = SubModelViewSet
+
+
+    def test_class_inherits_submodelviewsetbase(self):
+        """Class Inheritence check
+
+        Class must inherit from `SubModelViewSet`
+        """
+
+        assert issubclass(self.viewset, SubModelViewSet)
+
+
+
+class SubModelViewSetTest(
+    SubModelViewSetTestCases,
+    TestCase,
+):
+
+    pass
+
+
+
 class ModelCreateViewSetCases(
     ModelViewSetBaseCases,
     CreateCases,
@@ -2380,6 +2413,27 @@ class ModelViewSetInheritedCases(
 
         assert all_valid
 
+
+
+class SubModelViewSetInheritedCases(
+    SubModelViewSetTestCases,
+    CommonViewSetAPIRenderOptionsCases,
+):
+    """Test Suite for classes that inherit SubModelViewSet
+    
+    Use this Test Suite for ViewSet classes that inherit from SubModelViewSet
+    """
+
+    http_options_response_list = None
+    """Inherited class must make and store here a HTTP/Options request"""
+
+    route_name = None
+    """Inherited class must define the url rout name with namespace"""
+
+    base_model = None
+    """The Sub Model that is returned from the model property"""
+
+    viewset = None
 
 
 class PublicReadOnlyViewSetInheritedCases(
