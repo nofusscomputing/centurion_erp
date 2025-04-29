@@ -22,9 +22,6 @@ class TicketBaseSerializerInheritedCases(
     SerializerTestCases,
 ):
 
-    kwargs_create_item: dict = {}
-    """ Model kwargs to create item"""
-
     model = None
     """Model to test"""
 

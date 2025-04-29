@@ -19,7 +19,7 @@ class SerializerTestCases(
 
     valid_data: dict = {
         'ttr': 2,
-        'ttr': 3,
+        'tto': 3,
     }
 
 
@@ -27,9 +27,6 @@ class SerializerTestCases(
 class SLMTicketSerializerInheritedCases(
     SerializerTestCases,
 ):
-
-    kwargs_create_item: dict = {}
-    """ Model kwargs to create item"""
 
     model = None
     """Model to test"""
