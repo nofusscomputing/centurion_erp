@@ -1410,7 +1410,91 @@ class SubModelViewSetTest(
     TestCase,
 ):
 
-    pass
+
+    def test_view_attr_model_not_empty(self):
+        """Attribute Test
+
+        This test case overrides a test case of the same name. As this test is
+        checking the base classes, it's return is different to a class that
+        has inherited from this or parent classes.
+
+        Attribute `model` must return a value that is not None
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.model is None
+
+
+
+    def test_view_attr_type_base_model(self):
+        """Attribute Test
+
+        This test case overrides a test case of the same name. As this test is
+        checking the base classes, it's return is different to a class that
+        has inherited from this or parent classes.
+
+        Attribute `base_model` must be of type Django Model
+        """
+
+        assert True
+
+
+    def test_view_attr_type_model_kwarg(self):
+        """Attribute Test
+
+        This test case overrides a test case of the same name. As this test is
+        checking the base classes, it's return is different to a class that
+        has inherited from this or parent classes.
+
+        Attribute `model_kwarg` must be of type str
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.model_kwarg is None
+
+
+    def test_view_attr_value_model_kwarg(self):
+        """Attribute Test
+
+        This test case overrides a test case of the same name. As this test is
+        checking the base classes, it's return is different to a class that
+        has inherited from this or parent classes.
+
+        Attribute `model_kwarg` must be equal to model._meta.sub_model_type
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.model_kwarg is None
+
+    def test_view_func_get_queryset_cache_result(self):
+        """Viewset Test
+
+        This test case overrides a test case of the same name. As this test is
+        checking the base classes, it's return is different to a class that
+        has inherited from this or parent classes.
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>.queryset`
+        """
+
+        assert True
+
+
+    def test_view_func_get_queryset_cache_result_used(self):
+        """Viewset Test
+
+        This test case overrides a test case of the same name. As this test is
+        checking the base classes, it's return is different to a class that
+        has inherited from this or parent classes.
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>.queryset`
+        """
+
+        assert True
 
 
 
