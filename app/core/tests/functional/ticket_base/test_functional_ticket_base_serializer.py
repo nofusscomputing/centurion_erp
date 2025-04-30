@@ -1,12 +1,15 @@
+import pytest
+
 from django.contrib.auth.models import User
-from django.test import TestCase
 
-from access.models.organization import Organization
-
-from core.serializers.ticket import (
-    TicketBase,
-    ModelSerializer
+from rest_framework.exceptions import (
+    ValidationError
 )
+
+from access.models.entity import Entity
+
+from core.models.ticket.ticket_category import TicketCategory
+from core.models.ticket_base import TicketBase
 
 from project_management.models.project_milestone import (
     Project,
@@ -15,104 +18,330 @@ from project_management.models.project_milestone import (
 
 
 
-class SerializerTestCases:
 
-    model = TicketBase
-    """Model to test"""
+class MockView:
 
-    create_model_serializer = ModelSerializer
-    """Serializer to test"""
+    _has_import: bool = False
+    """User Permission
+
+    get_permission_required() sets this to `True` when user has import permission.
+    """
+
+    _has_purge: bool = False
+    """User Permission
+
+    get_permission_required() sets this to `True` when user has purge permission.
+    """
+
+    _has_triage: bool = False
+    """User Permission
+
+    get_permission_required() sets this to `True` when user has triage permission.
+    """
+
+
+
+class TicketBaseSerializerTestCases:
+
+
+    parametrized_test_data: dict = {
+        "organization": {
+            'will_create': False,
+            'exception_obj': ValidationError,
+            'exception_code': 'required',
+            'exception_code_key': None,
+            'permission_import_required': False,
+        },
+        "external_system": {
+            'will_create': False,
+            'exception_obj': ValidationError,
+            'exception_code': 'external_system_missing',
+            'exception_code_key': None,
+            'permission_import_required': True,
+        },
+        "external_ref": {
+            'will_create': False,
+            'exception_obj': ValidationError,
+            'exception_code': 'external_ref_missing',
+            'exception_code_key': None,
+            'permission_import_required': True,
+        },
+        "parent_ticket": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        # "ticket_type": "request",
+        "status": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "category": True,
+        "title": {
+            'will_create': False,
+            'exception_obj': ValidationError,
+            'exception_code': 'required',
+            'exception_code_key': None,
+            'permission_import_required': False,
+        },
+        "description": {
+            'will_create': False,
+            'exception_obj': ValidationError,
+            'exception_code': 'required',
+            'exception_code_key': None,
+            'permission_import_required': False,
+        },
+        "project": {
+            'will_create': False,
+            'exception_obj': ValidationError,
+            'exception_code': 'milestone_requires_project',
+            'exception_code_key': 'milestone',
+            'permission_import_required': False,
+        },
+        "milestone": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "urgency": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "impact": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "priority": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "opened_by": {
+            'will_create': False,
+            'exception_obj': ValidationError,
+            'exception_code': 'required',
+            'exception_code_key': None,
+            'permission_import_required': True,
+        },
+        "subscribed_to": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "assigned_to": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "planned_start_date": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "planned_finish_date": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "real_start_date": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "real_finish_date": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "is_deleted": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "is_solved": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "date_solved": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "is_closed": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "date_closed": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+    }
 
     valid_data: dict = {
-        "display_name": "tester ticket",
-        "organization": None,
-        "external_system": TicketBase.Ticket_ExternalSystem.CUSTOM_1,
-        "external_ref": 1,
-        "parent_ticket": None,
-        "ticket_type": "request",
-        "status": TicketBase.TicketStatus.NEW,
-        "category": None,
-        "title": "title2",
-        "description": "the description",
-        "project": None,
-        "milestone": None,
-        "urgency": TicketBase.TicketUrgency.LOW,
-        "impact": TicketBase.TicketImpact.LOW,
-        "priority": TicketBase.TicketPriority.LOW,
-        "priority_badge": None,
-        "opened_by": None,
-        "subscribed_to": [],
-        "assigned_to": [],
-        "planned_start_date": '2025-04-29T00:00:00Z',
-        "planned_finish_date": '2025-04-29T01:00:00Z',
-        "real_start_date": '2025-04-29T00:02:00Z',
-        "real_finish_date": '2025-04-29T00:03:00Z',
-        "tto": 0,
-        "ttr": 0,
-        "is_deleted": False,
-        "is_solved": False,
-        "date_solved": None,
-        "is_closed": False,
-        "date_closed": None,
+        'external_ref': 1,
+        'title': 'ticket title',
+        'description': 'the ticket description',
+        'status': TicketBase.TicketStatus.NEW,
+        'planned_start_date': '2025-04-16T00:00:01',
+        'planned_finish_date': '2025-04-16T00:00:02',
+        'real_start_date': '2025-04-16T00:00:03',
+        'real_finish_date': '2025-04-16T00:00:04',
+        'is_deleted': False,
+        'is_solved': False,
+        'date_solved': '2025-04-16T00:00:04',
+        'is_closed': False,
+        'date_closed': '2025-04-16T00:00:04',
     }
     """Valid data used by serializer to create object"""
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test"""
-        
-        self.organization = Organization.objects.create(name='test_org')
 
-        self.user = User.objects.create_user(username="test_user_view", password="password")
+    @pytest.fixture( scope = 'class')
+    def setup_data(self,
+        request,
+        model,
+        django_db_blocker,
+        organization_one,
+    ):
 
-        self.project_one = Project.objects.create(
-            organization = self.organization,
-            name = 'proj 1'
-        )
+        with django_db_blocker.unblock():
 
-        self.milestone_one = ProjectMilestone.objects.create(
-            organization = self.organization,
-            name = 'milestone one',
-            project = self.project_one
-        )
+            request.cls.organization = organization_one
 
-        self.milestone_two = ProjectMilestone.objects.create(
-            organization = self.organization,
-            name = 'milestone two',
-            project = self.project_one
-        )
+            valid_data = {}
 
+            for base in reversed(request.cls.__mro__):
 
-        self.project_two = Project.objects.create(
-            organization = self.organization,
-            name = 'proj 2'
-        )
+                if hasattr(base, 'valid_data'):
 
-        self.milestone_three = ProjectMilestone.objects.create(
-            organization = self.organization,
-            name = 'milestone three',
-            project = self.project_two
-        )
+                    if base.valid_data is None:
 
-        self.valid_data.update({
-            'organization': self.organization.pk,
-            'opened_by': self.user.pk,
-            'project': self.project_one.pk,
-            'milestone': self.milestone_one.pk,
-        })
+                        continue
+
+                    valid_data.update(**base.valid_data)
 
 
+            if len(valid_data) > 0:
+
+                request.cls.valid_data = valid_data
 
 
-    def test_serializer_valid_data(self):
+            if 'organization' not in request.cls.valid_data:
+
+                request.cls.valid_data.update({
+                    'organization': request.cls.organization.pk
+                })
+
+
+            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view", password="password")
+
+
+        yield
+
+        with django_db_blocker.unblock():
+
+            request.cls.view_user.delete()
+
+            del request.cls.valid_data
+
+
+
+    @pytest.fixture( scope = 'class')
+    def setup_model_data(self, request, django_db_blocker):
+
+        with django_db_blocker.unblock():
+
+            request.cls.entity_user = Entity.objects.create(
+                organization = request.cls.organization,
+                model_notes = 'asdas'
+            )
+
+            project = Project.objects.create(
+                organization = request.cls.organization,
+                name = 'project'
+            )
+
+            parent_ticket = request.cls.model.objects.create(
+                organization = request.cls.organization,
+                title = 'parent ticket',
+                description = 'bla bla',
+                opened_by = request.cls.view_user,
+            )
+
+            project_milestone = ProjectMilestone.objects.create(
+                organization = request.cls.organization,
+                name = 'project milestone one',
+                project = project
+            )
+
+            request.cls.valid_data.update({
+                'category': TicketCategory.objects.create(
+                organization = request.cls.organization,
+                    name = 'a category'
+                ).pk,
+                'opened_by': request.cls.view_user.pk,
+                'project': project.pk,
+                'milestone': project_milestone.pk,
+                'parent_ticket': parent_ticket.pk,
+                'external_system': int(request.cls.model.Ticket_ExternalSystem.CUSTOM_1),
+                'impact': int(request.cls.model.TicketImpact.MEDIUM),
+                'priority': int(request.cls.model.TicketPriority.HIGH),
+                'urgency': TicketBase.TicketUrgency.LOW,
+                'assigned_to': [
+                    request.cls.entity_user.id,
+                ],
+                'subscribed_to': [
+                    request.cls.entity_user.id,
+                ],
+            })
+
+
+        yield
+
+        with django_db_blocker.unblock():
+
+            request.cls.entity_user.delete()
+
+            parent_ticket.delete()
+
+            project_milestone.delete()
+
+            project.delete()
+
+
+
+    @pytest.fixture( scope = 'class', autouse = True)
+    def class_setup(self,
+        setup_data,
+        setup_model_data,
+    ):
+
+        pass
+
+
+    def test_serializer_valid_data(self, create_serializer):
         """Serializer Validation Check
 
         Ensure that when creating an object with valid data, no validation
         error occurs.
         """
 
-        serializer = self.create_model_serializer(
+        view_set = MockView()
+
+        serializer = create_serializer(
+            context = {
+                'view': view_set,
+            },
+            data = self.valid_data
+        )
+
+        assert serializer.is_valid(raise_exception = True)
+
+
+    def test_serializer_valid_data_permission_import(self, create_serializer):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with valid data, no validation
+        error occurs. when the user has permission import.
+        """
+
+        view_set = MockView()
+
+        view_set._has_import = True
+
+        serializer = create_serializer(
+            context = {
+                'view': view_set,
+            },
             data = self.valid_data
         )
 
@@ -120,9 +349,103 @@ class SerializerTestCases:
 
 
 
+    def test_serializer_valid_data_missing_field_raises_exception(self, parameterized, param_key_test_data,
+        create_serializer,
+        param_value,
+        param_exception_obj,
+        param_exception_code_key,
+        param_exception_code
+    ):
+        """Serializer Validation Check
+
+        Ensure that when creating and the milestone is not from the project
+        assigned to the ticket that a validation error occurs.
+
+        Requires that all permissions be assigned so that test case can
+        function.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        del valid_data[param_value]
+
+        view_set = MockView()
+
+        view_set._has_import = True
+
+        with pytest.raises(param_exception_obj) as err:
+
+            serializer = create_serializer(
+                context = {
+                    'view': view_set,
+                },
+                data = valid_data,
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+
+        exception_code_key = param_value
+
+        if param_exception_code_key is not None:
+
+            exception_code_key = param_exception_code_key
+
+
+        assert err.value.get_codes()[exception_code_key][0] == param_exception_code
+
+
+
+    def test_serializer_valid_data_missing_field_is_valid_permission_import(self, parameterized, param_key_test_data,
+        create_serializer,
+        param_value,
+        param_will_create,
+        param_permission_import_required
+    ):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with a user with import permission
+        and with valid data, no validation error occurs.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        del valid_data[param_value]
+
+        view_set = MockView()
+
+        view_set._has_import = True
+
+        serializer = create_serializer(
+            context = {
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        is_valid = serializer.is_valid(raise_exception = False)
+
+        assert (
+            (   # import permission
+                param_permission_import_required
+                and not param_will_create
+                and param_will_create == is_valid
+            )
+        or
+            (   # does not require import permission
+                not param_permission_import_required
+                and param_will_create == is_valid
+
+            )
+        )
+
+
+
 class TicketBaseSerializerInheritedCases(
-    SerializerTestCases,
+    TicketBaseSerializerTestCases,
 ):
+
+    parametrized_test_data: dict = None
 
     create_model_serializer = None
     """Serializer to test"""
@@ -130,25 +453,13 @@ class TicketBaseSerializerInheritedCases(
     model = None
     """Model to test"""
 
-    valid_data: dict = {}
+    valid_data: dict = None
     """Valid data used by serializer to create object"""
 
 
-    @classmethod
-    def setUpTestData(self):
 
-        self.valid_data = {
-            **super().valid_data,
-            **self.valid_data
-        }
-
-        super().setUpTestData()
-
-
-
-class TicketBaseSerializerTest(
-    SerializerTestCases,
-    TestCase,
+class TicketBaseSerializerPyTest(
+    TicketBaseSerializerTestCases,
 ):
 
-    pass
+    parametrized_test_data: dict = None
