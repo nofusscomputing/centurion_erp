@@ -1,55 +1,46 @@
-from django.test import TestCase
-
 from core.tests.functional.ticket_base.test_functional_ticket_base_serializer import TicketBaseSerializerInheritedCases
 
-from itim.serializers.ticket_slm import (
-    SLMTicket,
-    ModelSerializer
-)
 
 
-
-class SerializerTestCases(
+class SLMTicketSerializerTestCases(
     TicketBaseSerializerInheritedCases,
 ):
 
-    model = SLMTicket
-
-    create_model_serializer = ModelSerializer
+    parametrized_test_data: dict = {
+        "tto": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+        "ttr": {
+            'will_create': True,
+            'permission_import_required': False,
+        },
+    }
 
     valid_data: dict = {
-        'ttr': 2,
-        'tto': 3,
+        'tto': 2,
+        'ttr': 3,
     }
 
 
 
 class SLMTicketSerializerInheritedCases(
-    SerializerTestCases,
+    SLMTicketSerializerTestCases,
 ):
 
     model = None
     """Model to test"""
 
-    valid_data: dict = {}
+    parametrized_test_data: dict = None
+
+    valid_data: dict = None
     """Valid data used by serializer to create object"""
 
 
-    @classmethod
-    def setUpTestData(self):
 
-        self.valid_data = {
-            **super().valid_data,
-            **self.valid_data
-        }
-
-        super().setUpTestData()
-
-
-
-class SLMTicketSerializerTest(
-    SerializerTestCases,
-    TestCase,
+class SLMTicketSerializerPyTest(
+    SLMTicketSerializerTestCases,
 ):
 
-    pass
+    parametrized_test_data: dict = None
+
