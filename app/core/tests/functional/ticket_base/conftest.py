@@ -12,3 +12,13 @@ def model(request):
     yield request.cls.model
 
     del request.cls.model
+
+
+
+@pytest.fixture(scope='function')
+def create_serializer():
+
+    from core.serializers.ticket import ModelSerializer
+
+
+    yield ModelSerializer

@@ -9,9 +9,12 @@ class TicketSLMAPITestCases(
 ):
 
     parametrized_test_data = {
-        'tto': int,
-        'ttr': int,
-
+        'tto': {
+            'expected': int
+        },
+        'ttr': {
+            'expected': int
+        }
     }
 
     kwargs_create_item: dict = {

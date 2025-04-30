@@ -84,7 +84,9 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "--collect-only"
+                "--override-ini", "addopts=",
+                "--collect-only",
+                "app",
             ],
             "console": "integratedTerminal",
             "justMyCode": false

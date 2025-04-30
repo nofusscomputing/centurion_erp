@@ -185,63 +185,113 @@ class ModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
-            'external_system',
-            'external_ref',
-            # 'ticket_type',
             'created',
             'modified',
             '_urls',
         ]
 
-    
 
-    def validate_field_milestone( self ) -> bool:
+    def __init__(self, *args, **kwargs):
 
-        is_valid: bool = False
+        super().__init__(*args, **kwargs)
 
-        if self.instance is not None:
+        if self.context.get('view', None) is not None:
 
-            if self.instance.milestone is None:
+            read_only_fields = [
+                'id',
+                'display_name',
+                'created',
+                'modified',
+                '_urls',
+            ]
 
-                return True
+            if not self.context['view']._has_import:
 
-            else:
+                read_only_fields += [
+                    'external_system',
+                    'external_ref',
+                    'ticket_type',
+                ]
 
-                if self.instance.project is None:
-
-                    raise centurion_exception.ValidationError(
-                        details = 'Milestones require a project',
-                        code = 'milestone_requires_project',
-                    )
-
-                    return False
-
-                if self.instance.project.id == self.instance.milestone.project.id:
-
-                    return True
-
-                else:
-
-                    raise centurion_exception.ValidationError(
-                        detail = 'Milestone must be from the same project',
-                        code = 'milestone_same_project',
-                    )
-
-        return is_valid
+            self.Meta.read_only_fields = read_only_fields
 
 
+    def validate_field_milestone( self, attrs, raise_exception = False ) -> bool:
 
-    def validate(self, attrs):
+        milestone = attrs.get('milestone', None)
 
-        attrs = super().validate(attrs)
+        project = attrs.get('project', None)
 
-        if not self.validate_field_milestone:
+        if milestone is not None:
 
-            del attrs['milestone']
+            if project is None:
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'milestone': 'Milestones require a project'
+                    },
+                    code = 'milestone_requires_project',
+                )
+
+
+            elif project.id != milestone.project.id:
+
+                del attrs['milestone']
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'milestone': 'Milestone must be from the same project'
+                    },
+                    code = 'milestone_same_project',
+                )
+
+        return attrs
+
+
+    def validate_field_external_system( self, attrs, raise_exception = False ) -> bool:
+
+        external_system = attrs.get('external_system', None)
+
+        external_ref = attrs.get('external_ref', None)
+
+        if external_system is None and external_ref is not None:
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'external_system': 'External System is required when an External Ref is defined'
+                },
+                code = 'external_system_missing',
+            )
+
+        elif external_system is not None and external_ref is None:
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'external_ref': 'External Ref is required when an External System is defined'
+                },
+                code = 'external_ref_missing',
+            )
 
 
         return attrs
 
+
+    def validate(self, attrs):
+
+        attrs = super().validate( attrs )
+
+        attrs = self.validate_field_milestone( attrs )
+
+        attrs = self.validate_field_external_system( attrs )
+
+        return attrs
+
+
+    def is_valid(self, raise_exception = False):
+
+        is_valid = super().is_valid( raise_exception = raise_exception )
+
+        return is_valid
 
 
 

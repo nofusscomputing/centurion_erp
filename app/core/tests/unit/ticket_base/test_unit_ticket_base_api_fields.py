@@ -114,93 +114,259 @@ class APITestCases(
 
 
     parametrized_test_data = {
-        'model_notes': DoesNotExist,
-        '_urls.notes': DoesNotExist,
-        'external_system': int,
-        'external_ref': int,
-        'parent_ticket': dict,
-        'parent_ticket.id': int,
-        'parent_ticket.display_name': str,
-        'parent_ticket.url': str,
-        'ticket_type': str,
-        'status': int,
-        'status_badge': dict,
-        'status_badge.icon': dict,
-        'status_badge.icon.name': str,
-        'status_badge.icon.style': str,
-        'status_badge.text': str,
-        'status_badge.text_style': str,
-        'status_badge.url': type(None),
-        'category': dict,
-        'category.id': int,
-        'category.display_name': str,
-        'category.url': Hyperlink,
-        'title': str,
-        'description': str,
-        'ticket_duration': int,
-        'ticket_estimation': int,
-        'project': dict,
-        'project.id': int,
-        'project.display_name': str,
-        'project.url': Hyperlink,
-        'milestone': dict,
-        'milestone.id': int,
-        'milestone.display_name': str,
-        'milestone.url': str,
-        'urgency': int,
-        'urgency_badge': dict,
-        'urgency_badge.icon': dict,
-        'urgency_badge.icon.name': str,
-        'urgency_badge.icon.style': str,
-        'urgency_badge.text': str,
-        'urgency_badge.text_style': str,
-        'urgency_badge.url': type(None),
-        'impact': int,
-        'impact_badge': dict,
-        'impact_badge.icon': dict,
-        'impact_badge.icon.name': str,
-        'impact_badge.icon.style': str,
-        'impact_badge.text': str,
-        'impact_badge.text_style': str,
-        'impact_badge.url': type(None),
-        'priority': int,
-        'priority_badge': dict,
-        'priority_badge.icon': dict,
-        'priority_badge.icon.name': str,
-        'priority_badge.icon.style': str,
-        'priority_badge.text': str,
-        'priority_badge.text_style': str,
-        'priority_badge.url': type(None),
-        'opened_by': dict,
-        'opened_by.id': int,
-        'opened_by.display_name': str,
-        'opened_by.first_name': str,
-        'opened_by.last_name': str,
-        'opened_by.username': str,
-        'opened_by.username': str,
-        'opened_by.is_active': bool,
-        'opened_by.url': Hyperlink,
+        'model_notes': {
+            'expected': DoesNotExist
+        },
+        '_urls.notes': {
+            'expected': DoesNotExist
+        },
+        'external_system': {
+            'expected': int
+        },
+        'external_ref': {
+            'expected': int
+        },
+        'parent_ticket': {
+            'expected': dict
+        },
+        'parent_ticket.id': {
+            'expected': int
+        },
+        'parent_ticket.display_name': {
+            'expected': str
+        },
+        'parent_ticket.url': {
+            'expected': str
+        },
+        'ticket_type': {
+            'expected': str
+        },
+        'status': {
+            'expected': int
+        },
+        'status_badge': {
+            'expected': dict
+        },
+        'status_badge.icon': {
+            'expected': dict
+        },
+        'status_badge.icon.name': {
+            'expected': str
+        },
+        'status_badge.icon.style': {
+            'expected': str
+        },
+        'status_badge.text': {
+            'expected': str
+        },
+        'status_badge.text_style': {
+            'expected': str
+        },
+        'status_badge.url': {
+            'expected': type(None)
+        },
+        'category': {
+            'expected': dict
+        },
+        'category.id': {
+            'expected': int
+        },
+        'category.display_name': {
+            'expected': str
+        },
+        'category.url': {
+            'expected': Hyperlink
+        },
+        'title': {
+            'expected': str
+        },
+        'description': {
+            'expected': str
+        },
+        'ticket_duration': {
+            'expected': int
+        },
+        'ticket_estimation': {
+            'expected': int
+        },
+        'project': {
+            'expected': dict
+        },
+        'project.id': {
+            'expected': int
+        },
+        'project.display_name': {
+            'expected': str
+        },
+        'project.url': {
+            'expected': Hyperlink
+        },
+        'milestone': {
+            'expected': dict
+        },
+        'milestone.id': {
+            'expected': int
+        },
+        'milestone.display_name': {
+            'expected': str
+        },
+        'milestone.url': {
+            'expected': str
+        },
+        'urgency': {
+            'expected': int
+        },
+        'urgency_badge': {
+            'expected': dict
+        },
+        'urgency_badge.icon': {
+            'expected': dict
+        },
+        'urgency_badge.icon.name': {
+            'expected': str
+        },
+        'urgency_badge.icon.style': {
+            'expected': str
+        },
+        'urgency_badge.text': {
+            'expected': str
+        },
+        'urgency_badge.text_style': {
+            'expected': str
+        },
+        'urgency_badge.url': {
+            'expected': type(None)
+        },
+        'impact': {
+            'expected': int
+        },
+        'impact_badge': {
+            'expected': dict
+        },
+        'impact_badge.icon': {
+            'expected': dict
+        },
+        'impact_badge.icon.name': {
+            'expected': str
+        },
+        'impact_badge.icon.style': {
+            'expected': str
+        },
+        'impact_badge.text': {
+            'expected': str
+        },
+        'impact_badge.text_style': {
+            'expected': str
+        },
+        'impact_badge.url': {
+            'expected': type(None)
+        },
+        'priority': {
+            'expected': int
+        },
+        'priority_badge': {
+            'expected': dict
+        },
+        'priority_badge.icon': {
+            'expected': dict
+        },
+        'priority_badge.icon.name': {
+            'expected': str
+        },
+        'priority_badge.icon.style': {
+            'expected': str
+        },
+        'priority_badge.text': {
+            'expected': str
+        },
+        'priority_badge.text_style': {
+            'expected': str
+        },
+        'priority_badge.url': {
+            'expected': type(None)
+        },
+        'opened_by': {
+            'expected': dict
+        },
+        'opened_by.id': {
+            'expected': int
+        },
+        'opened_by.display_name': {
+            'expected': str
+        },
+        'opened_by.first_name': {
+            'expected': str
+        },
+        'opened_by.last_name': {
+            'expected': str
+        },
+        'opened_by.username': {
+            'expected': str
+        },
+        'opened_by.username': {
+            'expected': str
+        },
+        'opened_by.is_active': {
+            'expected': bool
+        },
+        'opened_by.url': {
+            'expected': Hyperlink
+        },
 
-        'subscribed_to': list,
-        'subscribed_to.0.id': int,
-        'subscribed_to.0.display_name': str,
-        'subscribed_to.0.url': str,
+        'subscribed_to': {
+            'expected': list
+        },
+        'subscribed_to.0.id': {
+            'expected': int
+        },
+        'subscribed_to.0.display_name': {
+            'expected': str
+        },
+        'subscribed_to.0.url': {
+            'expected': str
+        },
 
-        'assigned_to': list,
-        'assigned_to.0.id': int,
-        'assigned_to.0.display_name': str,
-        'assigned_to.0.url': str,
+        'assigned_to': {
+            'expected': list
+        },
+        'assigned_to.0.id': {
+            'expected': int
+        },
+        'assigned_to.0.display_name': {
+            'expected': str
+        },
+        'assigned_to.0.url': {
+            'expected': str
+        },
 
-        'planned_start_date': str,
-        'planned_finish_date': str,
-        'real_start_date': str,
-        'real_finish_date': str,
+        'planned_start_date': {
+            'expected': str
+        },
+        'planned_finish_date': {
+            'expected': str
+        },
+        'real_start_date': {
+            'expected': str
+        },
+        'real_finish_date': {
+            'expected': str
+        },
 
-        'is_deleted': bool,
-        'is_solved': bool,
-        'date_solved': str,
-        'is_closed': bool,
-        'date_closed': str,
+        'is_deleted': {
+            'expected': bool
+        },
+        'is_solved': {
+            'expected': bool
+        },
+        'date_solved': {
+            'expected': str
+        },
+        'is_closed': {
+            'expected': bool
+        },
+        'date_closed': {
+            'expected': str
+        },
 
     }
 

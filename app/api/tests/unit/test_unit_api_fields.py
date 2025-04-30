@@ -16,24 +16,48 @@ from app.tests.common import DoesNotExist
 class APIFieldsTestCases:
     
     api_fields_common = {
-        'id': int,
-        'display_name': str,
-        '_urls': dict,
-        '_urls._self': str,
-        '_urls.notes': str
+        'id': {
+            'expected': int
+        },
+        'display_name': {
+            'expected': str
+        },
+        '_urls': {
+            'expected': dict
+        },
+        '_urls._self': {
+            'expected': str
+        },
+        '_urls.notes': {
+            'expected': str
+        },
     }
 
     api_fields_model = {
-        'model_notes': str,
-        'created': str,
-        'modified': str
+        'model_notes': {
+            'expected': str
+        },
+        'created': {
+            'expected': str
+        },
+        'modified': {
+            'expected': str
+        },
     }
 
     api_fields_tenancy = {
-        'organization': dict,
-        'organization.id': int,
-        'organization.display_name': str,
-        'organization.url': Hyperlink,
+        'organization': {
+            'expected': dict
+        },
+        'organization.id': {
+            'expected': int
+        },
+        'organization.display_name': {
+            'expected': str
+        },
+        'organization.url': {
+            'expected': Hyperlink
+        },
     }
 
     parametrized_test_data = {
@@ -156,12 +180,15 @@ class APIFieldsTestCases:
         pass
 
 
-    def test_api_field_exists(self, recursearray, test_name, test_value, expected):
+    def test_api_field_exists(self, recursearray, parameterized, param_key_test_data,
+        param_value,
+        param_expected
+    ):
         """Test for existance of API Field"""
 
-        api_data = recursearray(self.api_data, test_value)
+        api_data = recursearray(self.api_data, param_value)
 
-        if expected is DoesNotExist:
+        if param_expected is DoesNotExist:
 
             assert api_data['key'] not in api_data['obj']
 
@@ -171,18 +198,21 @@ class APIFieldsTestCases:
 
 
 
-    def test_api_field_type(self, recursearray, test_name, test_value, expected):
+    def test_api_field_type(self, recursearray, parameterized, param_key_test_data,
+        param_value,
+        param_expected
+    ):
         """Test for type for API Field"""
 
-        api_data = recursearray(self.api_data, test_value)
+        api_data = recursearray(self.api_data, param_value)
 
-        if expected is DoesNotExist:
+        if param_expected is DoesNotExist:
 
             assert api_data['key'] not in api_data['obj']
 
         else:
 
-            assert type( api_data['value'] ) is expected
+            assert type( api_data['value'] ) is param_expected
 
 
 
