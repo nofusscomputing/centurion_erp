@@ -44,7 +44,7 @@ class MockView:
 class TicketBaseSerializerTestCases:
 
 
-    parametrized_test_data: dict = {
+    parameterized_test_data: dict = {
         "organization": {
             'will_create': False,
             'exception_obj': ValidationError,
@@ -445,7 +445,7 @@ class TicketBaseSerializerInheritedCases(
     TicketBaseSerializerTestCases,
 ):
 
-    parametrized_test_data: dict = None
+    parameterized_test_data: dict = None
 
     create_model_serializer = None
     """Serializer to test"""
@@ -462,4 +462,4 @@ class TicketBaseSerializerPyTest(
     TicketBaseSerializerTestCases,
 ):
 
-    parametrized_test_data: dict = None
+    parameterized_test_data: dict = None
