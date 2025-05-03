@@ -90,7 +90,7 @@ class ModelMetaTestCases:
 
 
 class ModelFieldsTestCases:
-
+# these tests have been migrated to class ModelFieldsTestCasesReWrite as part of #729
 
 
     @pytest.mark.skip( reason = 'see test __doc__' )
@@ -392,3 +392,221 @@ class NonTenancyObjectInheritedCases(
         """
 
         assert issubclass(self.model, SaveHistory)
+
+################################################################################################################
+#
+#   PyTest Parameterized re-write
+#
+################################################################################################################
+
+
+class ModelFieldsTestCasesReWrite:
+
+    parameterized_fields: dict = {
+        "organization": {
+            'field_type': fields.Field,
+            'field_parameter_verbose_name_type': str
+        },
+        "model_notes": {
+            'field_type': fields.TextField,
+            'field_parameter_verbose_name_type': str
+        },
+        "is_global": {
+            'field_type': fields.BooleanField,
+            'field_parameter_verbose_name_type': str
+        }
+    }
+
+
+
+    def test_model_field_type(self, parameterized, param_key_fields,
+        param_field_name,
+        param_field_type
+    ):
+        """Field Type Check
+
+        Ensure that the model field is the expected type.
+        """
+
+        if param_field_type is None:
+
+            assert getattr(self.model, param_field_name) is None
+
+        else:
+
+            assert isinstance(self.model._meta.get_field(param_field_name), param_field_type)
+
+
+
+    @pytest.mark.skip( reason = 'see test __doc__' )
+    def test_model_fields_parameter_mandatory_has_no_default(self):
+        """Test Field called with Parameter
+
+        ## Test skipped
+
+        fields dont have enough info to determine if mandatory, so this item can't be 
+        tested.
+
+        Some fields can be set as `null=false` with `blank=false` however `default=<value>`
+        ensures it's populated with a desired default.
+
+        If a field is set as null=false, there must not be a default parameter
+        """
+
+        fields_have_test_value: bool = True
+
+        fields_to_skip_checking: list = [
+            'created',
+            'is_global',
+            'modified'
+        ]
+
+        for field in self.model._meta.fields:
+
+            if field.attname not in fields_to_skip_checking:
+
+                print(f'Checking field {field.attname} to see if mandatory')
+
+                if not getattr(field, 'null', True) and not getattr(field, 'blank', True):
+
+                    if getattr(field, 'default', fields.NOT_PROVIDED) != fields.NOT_PROVIDED:
+
+                        print(f'    Failure on field {field.attname}')
+
+                        fields_have_test_value = False
+
+
+        assert fields_have_test_value
+
+
+
+    def test_model_fields_parameter_exist_default(self, parameterized, param_key_fields,
+        param_field_name,
+        param_field_parameter_default_exists
+    ):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must not be `None` or empty ('')
+        """
+
+        if param_field_parameter_default_exists == False:
+
+            assert self.model._meta.get_field(param_field_name).default == fields.NOT_PROVIDED
+
+        else:
+
+            assert self.model._meta.get_field(param_field_name).has_default() == param_field_parameter_default_exists
+
+
+    def test_model_fields_parameter_value_default(self, parameterized, param_key_fields,
+        param_field_name,
+        param_field_parameter_default_value
+    ):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must not be `None` or empty ('')
+        """
+
+        assert getattr(self.model._meta.get_field(param_field_name), 'default') == param_field_parameter_default_value
+
+
+
+    def test_model_fields_parameter_type_help_text(self, parameterized, param_key_fields,
+        param_field_name,
+        param_field_parameter_verbose_name_type
+    ):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must be of type str
+        """
+
+        if param_field_parameter_verbose_name_type is None:
+
+            assert getattr(self.model, param_field_name) is None
+
+        else:
+        
+            assert type(getattr(self.model._meta.get_field(param_field_name), 'help_text')) is param_field_parameter_verbose_name_type
+
+
+    def test_model_fields_parameter_not_empty_help_text(self, parameterized, param_key_fields,
+        param_field_name,
+        param_field_parameter_verbose_name_type
+    ):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must not be `None` or empty ('')
+        """
+
+        if param_field_parameter_verbose_name_type is None:
+
+            assert getattr(self.model, param_field_name) is None
+
+        else:
+        
+            assert getattr(self.model._meta.get_field(param_field_name), 'help_text') != ''
+
+
+
+    def test_model_fields_parameter_type_verbose_name(self, parameterized, param_key_fields,
+        param_field_name,
+        param_field_parameter_verbose_name_type
+    ):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must be of type str
+        """
+
+        if param_field_parameter_verbose_name_type is None:
+
+            assert getattr(self.model, param_field_name) is None
+
+        else:
+        
+            assert type(getattr(self.model._meta.get_field(param_field_name), 'verbose_name')) is param_field_parameter_verbose_name_type
+
+
+    def test_model_fields_parameter_not_empty_verbose_name(self, parameterized, param_key_fields,
+        param_field_name,
+        param_field_parameter_verbose_name_type
+    ):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must not be `None` or empty ('')
+        """
+
+        if param_field_parameter_verbose_name_type is None:
+
+            assert getattr(self.model, param_field_name) is None
+
+        else:
+        
+            assert getattr(self.model._meta.get_field(param_field_name), 'verbose_name') != ''
+
+
+
+
+class PyTestTenancyObjectInheritedCases(
+    ModelMetaTestCases,
+    AccessTenancyObjectInheritedCases,
+    ModelFieldsTestCasesReWrite,
+
+):
+
+    def test_create_validation_exception_no_organization(self):
+        """ Tenancy objects must have an organization
+
+        Must not be able to create an item without an organization
+        """
+
+        kwargs_create_item = self.kwargs_create_item.copy()
+
+        del kwargs_create_item['organization']
+
+        with pytest.raises(ValidationError) as err:
+
+            self.model.objects.create(
+                **kwargs_create_item,
+            )
+
+        assert err.value.get_codes()['organization'] == 'required'
