@@ -441,6 +441,286 @@ class TicketBaseSerializerTestCases:
 
 
 
+    values_validation_status_change_permission = [
+        ( 'own_ticket_no_import_triage_default_status', False, False, True, None, True ),
+
+        ( 'own_ticket_no_import_triage_draft', False, False, True, TicketBase.TicketStatus.DRAFT, True ),
+        ( 'own_ticket_no_import_triage_new', False, False, True, TicketBase.TicketStatus.NEW, True ),
+        ( 'own_ticket_no_import_triage_assigned', False, False, True, TicketBase.TicketStatus.ASSIGNED, 'no_triage_status_assigned' ),
+        ( 'own_ticket_no_import_triage_assigned_planning', False, False, True, TicketBase.TicketStatus.ASSIGNED_PLANNING, 'no_triage_status_assigned' ),
+        ( 'own_ticket_no_import_triage_pending', False, False, True, TicketBase.TicketStatus.PENDING, 'no_triage_status_pending' ),
+        ( 'own_ticket_no_import_triage_solved', False, False, True, TicketBase.TicketStatus.SOLVED, True ),
+        ( 'own_ticket_no_import_triage_invalid', False, False, True, TicketBase.TicketStatus.INVALID, True ),
+        ( 'own_ticket_no_import_triage_closed', False, False, True, TicketBase.TicketStatus.CLOSED, 'no_triage_status_close' ),
+
+        ( 'own_ticket_import_no_triage_default_status', True, False, True, None, True ),
+
+        ( 'own_ticket_import_no_triage_draft', True, False, True, TicketBase.TicketStatus.DRAFT, True ),
+        ( 'own_ticket_import_no_triage_new', True, False, True, TicketBase.TicketStatus.NEW, True ),
+        ( 'own_ticket_import_no_triage_assigned', True, False, True, TicketBase.TicketStatus.ASSIGNED, True ),
+        ( 'own_ticket_import_no_triage_assigned_planning', True, False, True, TicketBase.TicketStatus.ASSIGNED_PLANNING, True ),
+        ( 'own_ticket_import_no_triage_pending', True, False, True, TicketBase.TicketStatus.PENDING, True ),
+        ( 'own_ticket_import_no_triage_solved', True, False, True, TicketBase.TicketStatus.SOLVED, True ),
+        ( 'own_ticket_import_no_triage_invalid', True, False, True, TicketBase.TicketStatus.INVALID, True ),
+        ( 'own_ticket_import_no_triage_closed', True, False, True, TicketBase.TicketStatus.CLOSED, True ),
+
+        ( 'import_no_triage_default_status', True, False, False, None, True ),
+
+        ( 'import_no_triage_draft', True, False, False, TicketBase.TicketStatus.DRAFT, True ),
+        ( 'import_no_triage_new', True, False, False, TicketBase.TicketStatus.NEW, True ),
+        ( 'import_no_triage_assigned', True, False, False, TicketBase.TicketStatus.ASSIGNED, True ),
+        ( 'import_no_triage_assigned_planning', True, False, False, TicketBase.TicketStatus.ASSIGNED_PLANNING, True ),
+        ( 'import_no_triage_pending', True, False, False, TicketBase.TicketStatus.PENDING, True ),
+        ( 'import_no_triage_solved', True, False, False, TicketBase.TicketStatus.SOLVED, True ),
+        ( 'import_no_triage_invalid', True, False, False, TicketBase.TicketStatus.INVALID, True ),
+        ( 'import_no_triage_closed', True, False, False, TicketBase.TicketStatus.CLOSED, True ),
+
+        ( 'triage_no_import_default_status',False, True, False, None, True ),
+
+        ( 'triage_no_import_draft', False, True, False, TicketBase.TicketStatus.DRAFT, True ),
+        ( 'triage_no_import_new', False, True, False, TicketBase.TicketStatus.NEW, True ),
+        ( 'triage_no_import_assigned', False, True, False, TicketBase.TicketStatus.ASSIGNED, True ),
+        ( 'triage_no_import_assigned_planning', False, True, False, TicketBase.TicketStatus.ASSIGNED_PLANNING, True ),
+        ( 'triage_no_import_pending', False, True, False, TicketBase.TicketStatus.PENDING, True ),
+        ( 'triage_no_import_solved', False, True, False, TicketBase.TicketStatus.SOLVED, True ),
+        ( 'triage_no_import_invalid', False, True, False, TicketBase.TicketStatus.INVALID, True ),
+        ( 'triage_no_import_closed', False, True, False, TicketBase.TicketStatus.CLOSED, True ),
+
+    ]
+
+    @pytest.mark.parametrize(
+        argnames = [
+            'name',
+            'param_permission_import',
+            'param_permission_triage',
+            'param_is_owner',
+            'status',
+            'expected_result',
+        ],
+        argvalues = values_validation_status_change_permission,
+        ids = [
+            name +'_'+ str(param_permission_import).lower() +'_'+ str(param_permission_triage).lower() +'_'+str(param_is_owner).lower() +'_'+str(status).lower() for 
+                    name,
+                    param_permission_import,
+                    param_permission_triage,
+                    param_is_owner,
+                    status,
+                    expected_result,
+                    in values_validation_status_change_permission
+            ]
+    )
+    def test_serializer_create_validation_status(self,
+        create_serializer,
+        name,
+        param_permission_import,
+        param_permission_triage,
+        param_is_owner,
+        status,
+        expected_result,
+    ):
+        """ Test Serializer Validation for Status
+
+        When creating a ticket, ensure the user has the correct permissions
+        to set the desired status
+        """
+
+        valid_data = self.valid_data.copy()
+
+        if status is None:
+
+            valid_data['status'] = TicketBase._meta.get_field('status').default
+
+        else:
+
+            valid_data['status'] = status
+
+
+        view_set = MockView()
+
+        view_set._has_import = param_permission_import
+
+        view_set._has_triage = param_permission_triage
+
+
+        class MockRequest:
+
+            class MockUser:
+
+                id = 999999
+
+                pk = 999999
+
+            user = MockUser()
+
+        mock_request = MockRequest()
+
+        if param_is_owner:
+
+            mock_request.user.id = self.view_user.pk
+
+            mock_request.user.pk = self.view_user.pk
+
+
+        serializer = create_serializer(
+            context = {
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        serializer.context['request'] = mock_request
+
+        if type(expected_result) is not bool:
+
+            with pytest.raises(ValidationError) as err:
+
+                serializer.is_valid(raise_exception = True)
+
+            assert err.value.get_codes()['status'][0] == expected_result
+
+        else:
+
+            assert serializer.is_valid(raise_exception = False) == expected_result
+
+
+
+    @pytest.fixture( scope = 'function' )
+    def existing_ticket(self, db, create_serializer):
+
+        view_set = MockView()
+
+        view_set._has_import = True
+
+        view_set._has_triage = True
+
+        valid_data = self.valid_data.copy()
+
+        valid_data['title'] = 'existing_ticket'
+
+        valid_data['status'] = TicketBase._meta.get_field('status').default
+
+        serializer = create_serializer(
+            context = {
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        serializer.is_valid(raise_exception = False)
+
+        serializer.save()
+
+        ticket = serializer.instance
+
+        yield ticket
+
+        if ticket.id:
+
+            ticket.delete()
+
+
+
+    @pytest.mark.parametrize(
+        argnames = [
+            'name',
+            'param_permission_import',
+            'param_permission_triage',
+            'param_is_owner',
+            'status',
+            'expected_result',
+        ],
+        argvalues = values_validation_status_change_permission,
+        ids = [
+            name +'_'+ str(param_permission_import).lower() +'_'+ str(param_permission_triage).lower() +'_'+str(param_is_owner).lower() +'_'+str(status).lower() for 
+                    name,
+                    param_permission_import,
+                    param_permission_triage,
+                    param_is_owner,
+                    status,
+                    expected_result,
+                    in values_validation_status_change_permission
+            ]
+    )
+    def test_serializer_update_validation_status(self,
+        create_serializer,
+        existing_ticket,
+        name,
+        param_permission_import,
+        param_permission_triage,
+        param_is_owner,
+        status,
+        expected_result,
+    ):
+        """ Test Serializer Validation for Status
+
+        When updating a ticket, ensure the user has the correct permissions
+        to set the desired status
+        """
+
+        valid_data = {
+            'status': None
+        }
+
+        if status is None:
+
+            valid_data['status'] = TicketBase._meta.get_field('status').default
+
+        else:
+
+            valid_data['status'] = status
+
+
+        view_set = MockView()
+
+        view_set._has_import = param_permission_import
+
+        view_set._has_triage = param_permission_triage
+
+
+        class MockRequest:
+
+            class MockUser:
+
+                id = 999999
+
+                pk = 999999
+
+            user = MockUser()
+
+        mock_request = MockRequest()
+
+        if param_is_owner:
+
+            mock_request.user.id = self.view_user.pk
+
+            mock_request.user.pk = self.view_user.pk
+
+
+        serializer = create_serializer(
+            instance = existing_ticket,
+            context = {
+                'view': view_set,
+            },
+            data = valid_data,
+            partial = True,
+        )
+
+        serializer.context['request'] = mock_request
+
+        if type(expected_result) is not bool:
+
+            with pytest.raises(ValidationError) as err:
+
+                serializer.is_valid(raise_exception = True)
+
+            assert err.value.get_codes()['status'][0] == expected_result
+
+        else:
+
+            assert serializer.is_valid(raise_exception = False) == expected_result
+
+
+
 class TicketBaseSerializerInheritedCases(
     TicketBaseSerializerTestCases,
 ):
