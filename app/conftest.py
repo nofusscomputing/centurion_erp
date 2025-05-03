@@ -92,7 +92,7 @@ def pytest_generate_tests(metafunc):
 
             for base in reversed(cls.__mro__):
 
-                base_values = getattr(base, 'parametrized_' + parameterized_key, None)
+                base_values = getattr(base, 'parameterized_' + parameterized_key, None)
 
                 if not isinstance(base_values, dict):
 

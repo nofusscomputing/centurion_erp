@@ -60,7 +60,7 @@ class APIFieldsTestCases:
         },
     }
 
-    parametrized_test_data = {
+    parameterized_test_data = {
         **api_fields_common,
         **api_fields_tenancy,
         **api_fields_model,

@@ -41,7 +41,7 @@ class SLMTicket(
 
         if(
             ticket_type is None
-            or ticket_type == 'slmticket'
+            or ticket_type == 'slm'
         ):
 
             return None

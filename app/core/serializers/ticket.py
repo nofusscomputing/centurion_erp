@@ -278,11 +278,92 @@ class ModelSerializer(
 
     def validate(self, attrs):
 
-        attrs = super().validate( attrs )
-
         attrs = self.validate_field_milestone( attrs )
 
         attrs = self.validate_field_external_system( attrs )
+
+        attrs = super().validate( attrs )
+
+        has_import_permission = self.context['view']._has_import
+
+        has_triage_permission = self.context['view']._has_triage
+
+        status = int(attrs.get('status', 0))
+
+        opened_by_id = int(attrs.get('opened_by_id', 0))
+
+        if self.context.get('request', None):
+
+            request_user_id = int(self.context['request'].user.id)
+
+        else:
+
+            request_user_id = 0
+
+        if opened_by_id == 0:
+
+            request_user_id = 0
+
+        if not (
+            has_triage_permission
+            or has_import_permission
+        ):
+
+            if(
+                status == TicketBase.TicketStatus.ASSIGNED
+                or status == TicketBase.TicketStatus.ASSIGNED_PLANNING
+            ):
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant assign a ticket if you dont have permission triage'
+                    },
+                    code = 'no_triage_status_assigned',
+                )
+
+            if status == TicketBase.TicketStatus.PENDING:
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant set a ticket to pending if you dont have permission triage'
+                    },
+                    code = 'no_triage_status_pending',
+                )
+
+            if(
+                status == TicketBase.TicketStatus.SOLVED
+                and opened_by_id != request_user_id
+            ):
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant solve a ticket if you dont have permission triage'
+                    },
+                    code = 'no_triage_status_solve',
+                )
+
+            if(
+                status == TicketBase.TicketStatus.INVALID
+                and opened_by_id != request_user_id
+            ):
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant mark a ticket as invalid if you did not raise the ticket or you dont have permission triage'
+                    },
+                    code = 'no_triage_status_invalid',
+                )
+
+            if status == TicketBase.TicketStatus.CLOSED:
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant close a ticket if you dont have permission triage'
+                    },
+                    code = 'no_triage_status_close',
+                )
+
+
 
         return attrs
 

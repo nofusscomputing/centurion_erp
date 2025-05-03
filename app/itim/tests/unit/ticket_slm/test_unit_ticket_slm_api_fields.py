@@ -8,7 +8,7 @@ class TicketSLMAPITestCases(
     TicketBaseAPIInheritedCases,
 ):
 
-    parametrized_test_data = {
+    parameterized_test_data = {
         'tto': {
             'expected': int
         },

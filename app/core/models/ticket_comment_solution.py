@@ -31,6 +31,8 @@ class TicketCommentSolution(
 
     def clean(self):
 
+        super().clean()
+
         if self.ticket.is_solved:
 
             raise centurion_exception.ValidationError(
@@ -38,8 +40,20 @@ class TicketCommentSolution(
                 code = 'ticket_already_solved'
             )
 
+        
+        try:
+        
+            self.ticket.get_can_resolve(raise_exceptions = True)
 
-        super().clean()
+        except centurion_exception.ValidationError as err:
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'body': err.detail['status']
+                },
+                code = err.code
+            )
+
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -57,5 +71,10 @@ class TicketCommentSolution(
         self.ticket.save()
 
         super().save(force_insert = force_insert, force_update = force_update, using = using, update_fields = update_fields)
+
+        # clear comment cache
+        if hasattr(self.ticket, '_ticket_comments'):
+
+            del self.ticket._ticket_comments
 
 

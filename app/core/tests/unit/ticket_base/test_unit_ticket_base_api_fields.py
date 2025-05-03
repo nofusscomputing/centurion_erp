@@ -113,7 +113,7 @@ class APITestCases(
         pass
 
 
-    parametrized_test_data = {
+    parameterized_test_data = {
         'model_notes': {
             'expected': DoesNotExist
         },
