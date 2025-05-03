@@ -139,7 +139,6 @@ class TicketBase(
     external_system = models.IntegerField(
         blank = True,
         choices = Ticket_ExternalSystem,
-        default = None,
         help_text = 'External system this item derives',
         null = True,
         verbose_name = 'External System',
@@ -147,7 +146,6 @@ class TicketBase(
 
     external_ref = models.IntegerField(
         blank = True,
-        default = None,
         help_text = 'External System reference',
         null = True,
         verbose_name = 'Reference Number',
@@ -156,7 +154,6 @@ class TicketBase(
     parent_ticket = models.ForeignKey(
         'self',
         blank = True,
-        default = None,
         help_text = 'Parent of this ticket',
         null = True,
         on_delete = models.PROTECT,
@@ -179,7 +176,7 @@ class TicketBase(
             None: The ticket is for the Base class. Used to prevent creating a base ticket.
         """
 
-        ticket_type = str(self.Meta.sub_model_type).lower().replace(' ', '_')
+        ticket_type = str(self._meta.sub_model_type).lower().replace(' ', '_')
 
         if ticket_type == 'ticket':
 
@@ -292,7 +289,7 @@ class TicketBase(
 
             duration = 0
 
-        return str(duration)
+        return int(duration)
 
 
     @property
@@ -306,7 +303,7 @@ class TicketBase(
 
             estimation = 0
 
-        return str(estimation)
+        return int(estimation)
 
 
     project = models.ForeignKey(

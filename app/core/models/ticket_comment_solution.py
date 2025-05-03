@@ -58,4 +58,9 @@ class TicketCommentSolution(
 
         super().save(force_insert = force_insert, force_update = force_update, using = using, update_fields = update_fields)
 
+        # clear comment cache
+        if hasattr(self.ticket, '_ticket_comments'):
+
+            del self.ticket._ticket_comments
+
 
