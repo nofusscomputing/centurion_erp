@@ -53,12 +53,14 @@ class TicketBaseModelTestCases(
         },
         "external_system": {
             'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': False,
+            'field_parameter_default_exists': True,
+            'field_parameter_default_value': None,
             'field_parameter_verbose_name_type': str,
         },
         "external_ref": {
             'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': False,
+            'field_parameter_default_exists': True,
+            'field_parameter_default_value': None,
             'field_parameter_verbose_name_type': str
         },
         "parent_ticket": {
@@ -544,14 +546,145 @@ class TicketBaseModelTestCases(
         assert type(self.model().get_can_close()) is bool
 
 
-    def test_function_get_can_close_value_false(self):
+
+    @pytest.fixture( scope = 'function' )
+    def ticket(self, db, model):
+
+        kwargs = self.kwargs_create_item.copy()
+
+        kwargs['title'] = 'can close ticket'
+
+        ticket = self.model.objects.create(
+            **kwargs,
+            status = self.model._meta.get_field('status').default,
+        )
+
+        yield ticket
+
+        if ticket.pk is not None:
+
+            ticket.delete()
+
+
+    @pytest.fixture( scope = 'function' )
+    def ticket_comment(self, db, ticket):
+
+        comment = TicketCommentBase.objects.create(
+            ticket = ticket,
+            body = 'comment body',
+            comment_type = TicketCommentBase._meta.sub_model_type,
+        )
+
+        yield comment
+
+        if comment.pk is not None:
+
+            comment.delete()
+
+
+    values_function_get_can_close = [
+        ('no_comments_default_status', False, None, True, None, False),
+
+        ('no_comments_set_draft', False, None, True, TicketBase.TicketStatus.DRAFT, False),
+        ('no_comments_set_new', False, None, True, TicketBase.TicketStatus.NEW, False),
+        ('no_comments_set_assigned', False, None, True, TicketBase.TicketStatus.ASSIGNED, False),
+        ('no_comments_set_assigned_planning', False, None, True, TicketBase.TicketStatus.ASSIGNED_PLANNING, False),
+        ('no_comments_set_pending', False, None, True, TicketBase.TicketStatus.PENDING, False),
+        ('no_comments_set_solved', False, None, True, TicketBase.TicketStatus.SOLVED, True),
+        ('no_comments_set_invalid', False, None, True, TicketBase.TicketStatus.INVALID, True),
+
+        ('comment_closed_default_status', True, True, True, True, False),
+
+        ('comment_closed_set_draft', True, True, True, TicketBase.TicketStatus.DRAFT, False),
+        ('comment_closed_set_new', True, True, True, TicketBase.TicketStatus.NEW, False),
+        ('comment_closed_set_assigned', True, True, True, TicketBase.TicketStatus.ASSIGNED, False),
+        ('comment_closed_set_assigned_planning', True, True, True, TicketBase.TicketStatus.ASSIGNED_PLANNING, False),
+        ('comment_closed_set_pending', True, True, True, TicketBase.TicketStatus.PENDING, False),
+        ('comment_closed_set_solved', True, True, True, TicketBase.TicketStatus.SOLVED, True),
+        ('comment_closed_set_invalid', True, True, True, TicketBase.TicketStatus.INVALID, True),
+
+        ('comment_not_closed_default_status', True, False, False, None, False),
+
+        ('comment_not_closed_set_draft', True, False, False, TicketBase.TicketStatus.DRAFT, False),
+        ('comment_not_closed_set_new', True, False, False, TicketBase.TicketStatus.NEW, False),
+        ('comment_not_closed_set_assigned', True, False, False, TicketBase.TicketStatus.ASSIGNED, False),
+        ('comment_not_closed_set_assigned_planning', True, False, False, TicketBase.TicketStatus.ASSIGNED_PLANNING, False),
+        ('comment_not_closed_set_pending', True, False, False, TicketBase.TicketStatus.PENDING, False),
+        ('comment_not_closed_set_solved', True, False, False, TicketBase.TicketStatus.SOLVED, False),
+        ('comment_not_closed_set_invalid', True, False, True, TicketBase.TicketStatus.INVALID, True),
+    ]
+
+    @pytest.mark.parametrize(
+        argnames = [
+            'name',
+            'param_has_comment',
+            'param_comment_is_closed',
+            'expected_value_solve',
+            'param_ticket_status',
+            'expected_value_close',
+        ],
+        argvalues = values_function_get_can_close,
+        ids = [
+            name +'_'+ str(param_has_comment).lower() +'_'+ str(param_ticket_status).lower() +'_'+str(expected_value_close).lower() for 
+                    name,
+                    param_has_comment,
+                    param_comment_is_closed,
+                    expected_value_solve,
+                    param_ticket_status,
+                    expected_value_close,
+                    in values_function_get_can_close
+            ]
+    )
+    def test_function_get_can_close(self, ticket_comment,
+        name,
+        param_has_comment,
+        param_comment_is_closed,
+        expected_value_solve,
+        param_ticket_status,
+        expected_value_close,
+    ):
         """Function test
 
-        Ensure that function `get_can_close` returns a value of `False` when
-        the ticket can not be closed
+        Ensure that function `get_can_close` works as intended:
+        - can't close ticket with unresolved comments
+        - can't close ticket when ticket not solved
+        - can close ticket with no comments when ticket solved.
+        - can close ticket if status invalid regardless of comment status
         """
 
-        assert self.model().get_can_close() == False
+        ticket = ticket_comment.ticket
+
+        if param_has_comment:
+
+            if param_comment_is_closed is not None:
+
+                ticket_comment.is_closed = param_comment_is_closed
+
+
+            if type(param_comment_is_closed) is bool and param_comment_is_closed:
+
+                ticket_comment.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+
+            ticket_comment.save()
+
+        else:
+
+            ticket_comment.delete()
+
+
+        if param_ticket_status is not None:
+
+            try:
+
+                ticket.status = param_ticket_status
+                ticket.save()
+
+            except centurion_exceptions.ValidationError:
+                pass
+
+
+        assert ticket.get_can_close() == expected_value_close
 
 
 
@@ -564,15 +697,78 @@ class TicketBaseModelTestCases(
         assert type(self.model().get_can_resolve()) is bool
 
 
-    @pytest.mark.skip( reason = 'write test')
-    def test_function_get_can_resolve_value_false(self):
+
+    @pytest.mark.parametrize(
+        argnames = [
+            'name',
+            'param_has_comment',
+            'param_comment_is_closed',
+            'expected_value_solve',
+            'param_ticket_status',
+            'expected_value_close',
+        ],
+        argvalues = values_function_get_can_close,
+        ids = [
+            name +'_'+ str(param_has_comment).lower() +'_'+ str(param_ticket_status).lower() +'_'+str(expected_value_solve).lower() for 
+                    name,
+                    param_has_comment,
+                    param_comment_is_closed,
+                    expected_value_solve,
+                    param_ticket_status,
+                    expected_value_close,
+                    in values_function_get_can_close
+            ]
+    )
+    def test_function_get_can_resolve(self, ticket_comment,
+        name,
+        param_has_comment,
+        param_comment_is_closed,
+        expected_value_solve,
+        param_ticket_status,
+        expected_value_close,
+    ):
         """Function test
 
-        Ensure that function `get_can_resolve` returns a value of `False` when
-        the ticket can not be closed
+        Ensure that function `get_can_resolve` works as intended:
+        - can't solve ticket with unresolved comments
+        - can solve ticket with no comments.
+        - can solve ticket if status invalid regardless of comment status
         """
 
-        assert self.model().get_can_resolve() == False
+        ticket = ticket_comment.ticket
+
+        if param_has_comment:
+
+            if param_comment_is_closed is not None:
+
+                ticket_comment.is_closed = param_comment_is_closed
+
+
+            if type(param_comment_is_closed) is bool and param_comment_is_closed:
+
+                ticket_comment.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+
+            ticket_comment.save()
+
+        else:
+
+            ticket_comment.delete()
+
+
+        if param_ticket_status is not None:
+
+            try:
+
+                ticket.status = param_ticket_status
+                ticket.save()
+
+            except centurion_exceptions.ValidationError:
+                pass
+
+
+        assert ticket.get_can_resolve() == expected_value_solve
+
 
 
     def test_function_get_can_resolve_value_true(self):

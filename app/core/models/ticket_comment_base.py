@@ -254,20 +254,6 @@ class TicketCommentBase(
                     code = 'ticket_closed_no_date'
                 )
 
-            
-            try:
-            
-                self.ticket.get_can_resolve(raise_exceptions = True)
-
-            except centurion_exception.ValidationError as err:
-
-                raise centurion_exception.ValidationError(
-                    detail = {
-                        'body': err.detail['status']
-                    },
-                    code = err.code
-                )
-
 
             if self.comment_type != self._meta.sub_model_type:
 

@@ -139,6 +139,7 @@ class TicketBase(
     external_system = models.IntegerField(
         blank = True,
         choices = Ticket_ExternalSystem,
+        default = None,
         help_text = 'External system this item derives',
         null = True,
         verbose_name = 'External System',
@@ -146,6 +147,7 @@ class TicketBase(
 
     external_ref = models.IntegerField(
         blank = True,
+        default = None,
         help_text = 'External System reference',
         null = True,
         verbose_name = 'Reference Number',
@@ -591,11 +593,23 @@ class TicketBase(
 
     def get_can_close(self, raise_exceptions = False ) -> bool:
 
-        if not self.is_solved and not raise_exceptions:
+        if(
+            (
+                not self.get_can_resolve( raise_exceptions = False)
+                or not self.is_solved
+            )
+            and not raise_exceptions
+        ):
 
             return False
 
-        elif not self.is_solved and raise_exceptions:
+        elif(
+            (
+                not self.get_can_resolve( raise_exceptions = False)
+                or not self.is_solved
+            )
+            and raise_exceptions
+        ):
 
             raise centurion_exception.ValidationError(
                 detail = {
@@ -611,22 +625,25 @@ class TicketBase(
 
         ticket_comments = self.get_comments( include_threads = True )
 
-        if self.is_solved:
+        for comment in ticket_comments:
 
-            for comment in ticket_comments:
+            if self.status == self.TicketStatus.INVALID:
 
-                if not comment.is_closed and not raise_exceptions:
+                return True
 
-                    return False
 
-                elif not comment.is_closed and raise_exceptions:
+            if not comment.is_closed and not raise_exceptions:
 
-                    raise centurion_exception.ValidationError(
-                        detail = {
-                            'status': 'You cant solved a ticket when there are un-resolved comments.'
-                        },
-                        code = 'resolution_with_un_resolved_comment_denied'
-                    )
+                return False
+
+            elif not comment.is_closed and raise_exceptions:
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant solve a ticket when there are un-resolved comments.'
+                    },
+                    code = 'resolution_with_un_resolved_comment_denied'
+                )
 
         return True
 
@@ -782,9 +799,21 @@ class TicketBase(
 
             self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
 
+        if(
+            (
+                self.status == self.TicketStatus.SOLVED
+                and self.get_can_resolve( raise_exceptions = False )
+            )
+            or self.status == self.TicketStatus.INVALID
+        ):
+
+            self.is_solved = True
+
+
         if self.date_solved is None and self.is_solved:
 
             self.date_solved = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
 
         if self.date_closed is None and self.is_closed:
 
