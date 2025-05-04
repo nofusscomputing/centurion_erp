@@ -606,6 +606,13 @@ class PyTestTenancyObjectInheritedCases(
 
 ):
 
+    parameterized_fields: dict = {
+        "model_notes": {
+            'field_type': fields.TextField,
+            'field_parameter_verbose_name_type': str
+        }
+    }
+
     def test_create_validation_exception_no_organization(self):
         """ Tenancy objects must have an organization
 

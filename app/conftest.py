@@ -189,7 +189,7 @@ def pytest_generate_tests(metafunc):
 
                             if type(item[1][key]) is type:
 
-                                ids_name += '_' + getattr(item[1][key], '__name__', 'None').lower()
+                                ids_name += '_' + getattr(item[1][key], '__name__', 'err_generate_tests').lower()
 
                             else:
 
