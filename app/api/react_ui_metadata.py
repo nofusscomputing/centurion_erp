@@ -608,6 +608,16 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
+            if request.feature_flag['2025-00004']:
+
+                nav['accounting']['pages'].update({
+                    'view_assetbase': {
+                        "display_name": "Assets",
+                        "name": "asset",
+                        "link": "/accounting/asset"
+                    }
+                })
+
             if request.feature_flag['2025-00006']:
 
                 nav['assistance']['pages'].update({
