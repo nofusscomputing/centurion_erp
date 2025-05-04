@@ -17,7 +17,7 @@ class ITAMAssetBase(
     """
 
 
-    app_namespace = ''
+    app_namespace = None
 
     class Meta:
 
