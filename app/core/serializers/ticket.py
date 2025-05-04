@@ -1,20 +1,19 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
+from drf_spectacular.utils import extend_schema_serializer
+
+from access.serializers.entity import BaseSerializer as EntityBaseSerializer
 from access.serializers.organization import OrganizationBaseSerializer
-from access.serializers.teams import TeamBaseSerializer
+
+from api.serializers import common
 
 from app.serializers.user import UserBaseSerializer
 
-from api.serializers import common
-from api.serializers.common import OrganizationField
-from api.exceptions import UnknownTicketType
-
 from core import exceptions as centurion_exception
 from core import fields as centurion_field
-from core.models.ticket.ticket import Ticket
-
-from core.fields.badge import Badge, BadgeField
+from core.fields.badge import BadgeField
+from core.models.ticket_base import TicketBase
 from core.serializers.ticket_category import TicketCategoryBaseSerializer
 
 from project_management.serializers.project import ProjectBaseSerializer
@@ -22,7 +21,10 @@ from project_management.serializers.project_milestone import ProjectMilestoneBas
 
 
 
-class TicketBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'TicketBaseBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
+    """Base Ticket Model"""
+
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -30,49 +32,48 @@ class TicketBaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
+    url = serializers.SerializerMethodField('get_url')
 
-    url = serializers.SerializerMethodField('my_url')
-
-    def my_url(self, item) -> str:
+    def get_url(self, item) -> str:
 
         return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
 
-        model = Ticket
+        model = TicketBase
 
         fields = [
             'id',
             'display_name',
-            'title',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            'title',
             'url',
         ]
 
-    is_import: bool = False
 
 
-class TicketModelSerializer(
+@extend_schema_serializer(component_name = 'TicketBaseModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    TicketBaseSerializer
+    BaseSerializer
 ):
+    """Ticket Base Model"""
+
 
     _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item) -> dict:
 
-        ticket_type = str(item.get_ticket_type_display()).lower().replace(' ', '_')
+        ticket_type = str(item.ticket_type)
 
         url_dict: dict = {
             '_self': item.get_url( request = self._context['view'].request ),
-            'comments': reverse('v2:_api_v2_ticket_comment-list', request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            'comments': reverse('v2:_api_v2_ticket_comment_base-list', request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
             'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
         }
 
@@ -100,263 +101,297 @@ class TicketModelSerializer(
 
         return url_dict
 
-
     description = centurion_field.MarkdownField( required = True, style_class = 'large' )
-
-    duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 
     impact_badge = BadgeField(label='Impact')
 
-    priority_badge = BadgeField(label='Priority')
+    organization = common.OrganizationField(
+        required = True,
+        write_only = True,
+    )
 
-    status_badge = BadgeField(label='Status')
+    priority_badge = BadgeField(
+        label = 'Priority',
+        read_only = True,
+    )
 
-    urgency_badge = BadgeField(label='Urgency')
+    status_badge = BadgeField(
+        label = 'Status',
+        read_only = True,
+    )
 
-    organization = OrganizationField( required = True, write_only = True )
+    ticket_duration = serializers.IntegerField(
+        help_text = 'Total time spent on ticket',
+        label = 'Time Spent',
+        read_only = True,
+    )
+
+    ticket_estimation = serializers.IntegerField(
+        help_text = 'Time estimation to complete the ticket',
+        label = 'Time estimation',
+        read_only = True,
+    )
+
+    urgency_badge = BadgeField(
+        label = 'Urgency',
+        read_only = True,
+    )
 
 
     class Meta:
-        """Ticket Model Base Meta
 
-        This class specifically has only `id` in fields and all remaining fields
-        as ready only so as to prevent using this serializer directly. The intent
-        is that for each ticket type there is a seperate serializer for that ticket
-        type.
-
-        These serializers are for items that are common for ALL tickets.
-        """
-
-        model = Ticket
+        model = TicketBase
 
         fields = [
             'id',
-            '_urls',
-        ]
-
-        read_only_fields = [
-            'id',
-            'assigned_teams',
-            'assigned_users',
-            'category',
-            'created',
-            'modified',
+            'display_name',
+            'organization',
+            'external_system',
+            'external_ref',
+            'parent_ticket',
+            'ticket_type',
             'status',
             'status_badge',
-            'parent_ticket',
+            'category',
             'title',
             'description',
-            'estimate',
-            'duration',
+            'ticket_duration',
+            'ticket_estimation',
+            'project',
+            'milestone',
             'urgency',
             'urgency_badge',
             'impact',
             'impact_badge',
             'priority',
             'priority_badge',
-            'external_ref',
-            'external_system',
-            'ticket_type',
-            'is_deleted',
-            'date_closed',
+            'opened_by',
+            'subscribed_to',
+            'assigned_to',
             'planned_start_date',
             'planned_finish_date',
             'real_start_date',
             'real_finish_date',
-            'opened_by',
-            'organization',
-            'project',
-            'milestone',
-            'subscribed_teams',
-            'subscribed_users',
+            'is_deleted',
+            'is_solved',
+            'date_solved',
+            'is_closed',
+            'date_closed',
+            'created',
+            'modified',
+            '_urls',
+        ]
+
+        read_only_fields = [
+            'id',
+            'display_name',
+            'created',
+            'modified',
             '_urls',
         ]
 
 
+    def __init__(self, *args, **kwargs):
 
-    def validate_field_organization(self) -> bool:
-        """Check `organization field`
+        super().__init__(*args, **kwargs)
 
-        Raises:
-            ValidationError: user tried to change the organization
+        if self.context.get('view', None) is not None:
 
-        Returns:
-            True (bool): OK
-            False (bool): User tried to edit the organization
-        """
+            read_only_fields = [
+                'id',
+                'display_name',
+                'created',
+                'modified',
+                '_urls',
+            ]
 
-        is_valid: bool = True
+            if not self.context['view']._has_import:
 
-        if self.instance is not None:
+                read_only_fields += [
+                    'external_system',
+                    'external_ref',
+                    'ticket_type',
+                ]
 
-            if self.instance.pk is not None:
+            self.Meta.read_only_fields = read_only_fields
 
-                if 'organization' in self.initial_data:
 
-                        is_valid = False
+    def validate_field_milestone( self, attrs, raise_exception = False ) -> bool:
 
-                        raise centurion_exception.ValidationError(
-                            detail = 'cant edit field: organization',
-                            code = 'cant_edit_field_organization',
-                        )
+        milestone = attrs.get('milestone', None)
 
-        elif self.instance is None:
+        project = attrs.get('project', None)
 
-            if 'organization' not in self.initial_data:
+        if milestone is not None:
 
-                is_valid = False
+            if project is None:
 
                 raise centurion_exception.ValidationError(
                     detail = {
-                        'organization': 'this field is required'
+                        'milestone': 'Milestones require a project'
                     },
-                    code = 'required',
+                    code = 'milestone_requires_project',
                 )
 
 
-        return is_valid
+            elif project.id != milestone.project.id:
+
+                del attrs['milestone']
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'milestone': 'Milestone must be from the same project'
+                    },
+                    code = 'milestone_same_project',
+                )
+
+        return attrs
 
 
-    def validate_field_milestone( self ) -> bool:
+    def validate_field_external_system( self, attrs, raise_exception = False ) -> bool:
 
-        is_valid: bool = False
+        external_system = attrs.get('external_system', None)
 
-        if self.instance is not None:
+        external_ref = attrs.get('external_ref', None)
 
-            if self.instance.milestone is None:
+        if external_system is None and external_ref is not None:
 
-                return True
-
-            else:
-
-                if self.instance.project is None:
-
-                    raise centurion_exception.ValidationError(
-                        details = 'Milestones require a project',
-                        code = 'milestone_requires_project',
-                    )
-
-                    return False
-
-                if self.instance.project.id == self.instance.milestone.project.id:
-
-                    return True
-
-                else:
-
-                    raise centurion_exception.ValidationError(
-                        detail = 'Milestone must be from the same project',
-                        code = 'milestone_same_project',
-                    )
-
-        return is_valid
-
-
-    def validate(self, data):
-
-        if 'view' in self._context:
-
-            if str(self._context['view']._ticket_type).lower().replace(' ', '_') == 'project_task':
-
-                data['project_id'] = int(self._context['view'].kwargs['project_id'])
-
-            if self._context['view'].action == 'create':
-
-                if hasattr(self._context['view'], 'request'):
-
-                    if self.is_import:
-
-                        if data['opened_by'] is None:
-
-                            raise centurion_exception.ValidationError(
-                                detail = {
-                                    'opened_by': 'Opened by user is required'
-                                },
-                                code = 'required',
-                            )
-
-
-                    else:
-
-                        data['opened_by_id'] = self._context['view'].request.user.id
-
-
-            if hasattr(self._context['view'], '_ticket_type_id'):
-
-                data['ticket_type'] = self._context['view']._ticket_type_id
-
-            else:
-
-                raise UnknownTicketType()
-
-
-            if self.instance is None:
-
-                subscribed_users: list = []
-
-                if 'subscribed_users' in data:
-
-                    subscribed_users: list = data['subscribed_users']
-
-                if self.is_import:
-
-                    data['subscribed_users'] = subscribed_users + [ data['opened_by'].id ]
-
-                else:
-
-                    data['subscribed_users'] = subscribed_users + [ data['opened_by_id'] ]
-
-
-                data['status'] = int(Ticket.TicketStatus.All.NEW)
-
-
-        if(
-            data.get('parent_ticket', None)
-            and (
-                self._context['view'].action == 'partial_update'
-                or self._context['view'].action == 'update'
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'external_system': 'External System is required when an External Ref is defined'
+                },
+                code = 'external_system_missing',
             )
+
+        elif external_system is not None and external_ref is None:
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'external_ref': 'External Ref is required when an External System is defined'
+                },
+                code = 'external_ref_missing',
+            )
+
+
+        return attrs
+
+
+    def validate(self, attrs):
+
+        attrs = self.validate_field_milestone( attrs )
+
+        attrs = self.validate_field_external_system( attrs )
+
+        attrs = super().validate( attrs )
+
+        has_import_permission = self.context['view']._has_import
+
+        has_triage_permission = self.context['view']._has_triage
+
+        status = int(attrs.get('status', 0))
+
+        opened_by_id = int(attrs.get('opened_by_id', 0))
+
+        if self.context.get('request', None):
+
+            request_user_id = int(self.context['request'].user.id)
+
+        else:
+
+            request_user_id = 0
+
+        if opened_by_id == 0:
+
+            request_user_id = 0
+
+        if not (
+            has_triage_permission
+            or has_import_permission
         ):
 
-            if not data['parent_ticket'].circular_dependency_check(
-                ticket = self.instance,
-                parent = data['parent_ticket']
+            if(
+                status == TicketBase.TicketStatus.ASSIGNED
+                or status == TicketBase.TicketStatus.ASSIGNED_PLANNING
             ):
 
                 raise centurion_exception.ValidationError(
                     detail = {
-                        'parent_ticket': 'Adding this ticket will create a circular dependency'
+                        'status': 'You cant assign a ticket if you dont have permission triage'
                     },
-                    code = 'no_parent_circular_dependency',
+                    code = 'no_triage_status_assigned',
+                )
+
+            if status == TicketBase.TicketStatus.PENDING:
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant set a ticket to pending if you dont have permission triage'
+                    },
+                    code = 'no_triage_status_pending',
+                )
+
+            if(
+                status == TicketBase.TicketStatus.SOLVED
+                and opened_by_id != request_user_id
+            ):
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant solve a ticket if you dont have permission triage'
+                    },
+                    code = 'no_triage_status_solve',
+                )
+
+            if(
+                status == TicketBase.TicketStatus.INVALID
+                and opened_by_id != request_user_id
+            ):
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant mark a ticket as invalid if you did not raise the ticket or you dont have permission triage'
+                    },
+                    code = 'no_triage_status_invalid',
+                )
+
+            if status == TicketBase.TicketStatus.CLOSED:
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'status': 'You cant close a ticket if you dont have permission triage'
+                    },
+                    code = 'no_triage_status_close',
                 )
 
 
 
-        self.validate_field_organization()
-
-        self.validate_field_milestone()
-
-        return data
+        return attrs
 
 
-class TicketViewSerializer(TicketModelSerializer):
+    def is_valid(self, raise_exception = False):
 
-    assigned_teams = TeamBaseSerializer(many=True)
+        is_valid = super().is_valid( raise_exception = raise_exception )
 
-    assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
+        return is_valid
 
-    category = TicketCategoryBaseSerializer()
 
-    parent_ticket = TicketBaseSerializer()
+
+@extend_schema_serializer(component_name = 'TicketBaseViewSerializer')
+class ViewSerializer(ModelSerializer):
+    """Ticket Base View Model"""
+
+    assigned_to = EntityBaseSerializer(many=True, label = 'assigned to')
+
+    category = TicketCategoryBaseSerializer(label = 'category')
+
+    milestone = ProjectMilestoneBaseSerializer(many=False, read_only=True)
 
     opened_by = UserBaseSerializer()
 
     organization = OrganizationBaseSerializer(many=False, read_only=True)
 
+    parent_ticket = BaseSerializer()
+
     project = ProjectBaseSerializer(many=False, read_only=True)
 
-    milestone = ProjectMilestoneBaseSerializer(many=False, read_only=True)
-
-    subscribed_teams = TeamBaseSerializer(many=True)
-
-    subscribed_users = UserBaseSerializer(many=True)
+    subscribed_to = EntityBaseSerializer(many=True, label = 'subscribved to')

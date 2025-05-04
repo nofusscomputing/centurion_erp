@@ -118,6 +118,53 @@ class ProjectAPI(
 
 
 
+
+    def test_api_field_exists_estimation_project(self):
+        """ Test for existance of API Field
+
+        This test is a custom test of a test case with the same name.
+        this model does not have a model_notes_field
+
+        estimation_project field must exist
+        """
+
+        assert 'estimation_project' in self.api_data
+
+
+
+    def test_api_field_type_estimation_project(self):
+        """ Test for type for API Field
+
+        estimation_project field must be int
+        """
+
+        assert type(self.api_data['estimation_project']) is int
+
+
+
+    def test_api_field_exists_duration_project(self):
+        """ Test for existance of API Field
+
+        This test is a custom test of a test case with the same name.
+        this model does not have a model_notes_field
+
+        duration_project field must exist
+        """
+
+        assert 'duration_project' in self.api_data
+
+
+
+    def test_api_field_type_duration_project(self):
+        """ Test for type for API Field
+
+        duration_project field must be int
+        """
+
+        assert type(self.api_data['duration_project']) is int
+
+
+
     def test_api_field_exists_completed(self):
         """ Test for existance of API Field
 

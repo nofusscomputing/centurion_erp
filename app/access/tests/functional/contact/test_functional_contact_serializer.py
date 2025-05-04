@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.serializers.contact import (
+from access.serializers.entity_contact import (
     Contact,
     ModelSerializer
 )

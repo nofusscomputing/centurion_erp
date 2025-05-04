@@ -15,6 +15,8 @@ class Contact(
             'email',
         ]
 
+        sub_model_type = 'contact'
+
         verbose_name = 'Contact'
 
         verbose_name_plural = 'Contacts'
@@ -41,6 +43,8 @@ class Contact(
         return self.f_name + ' ' + self.l_name
 
     documentation = ''
+
+    history_model_name = 'contact'
 
     page_layout: list = [
         {

@@ -3,7 +3,7 @@ import unittest
 
 from django.shortcuts import reverse
 from django.test import TestCase, Client
-
+# These tests have moved to app/api/tests/functional/test_functional_api_permissions.py. see #730
 
 
 class APIPermissionView:

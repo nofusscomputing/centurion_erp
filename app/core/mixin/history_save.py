@@ -1,5 +1,3 @@
-import json
-
 from django.contrib.auth.models import ContentType
 from django.db import models
 
@@ -213,12 +211,14 @@ class SaveHistory(models.Model):
         is the data that was saved to the DB.
         """
 
-        before = {}
+        if self.save_model_history:
 
-        try:
-            before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
-        except Exception:
-            pass
+            before = {}
+
+            try:
+                before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+            except Exception:
+                pass
 
         # Process the save
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)

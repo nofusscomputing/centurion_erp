@@ -8,6 +8,8 @@ about: https://github.com/nofusscomputing/centurion_erp
 
 Unit and functional tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
+We use PyTest as the testing framework. As such, All available features of pytest are available. We have slightly deviated from the standard naming convention wherein test class must be suffixed with `PyTest`. Please [see below](#writing-tests) for more details.
+
 !!! note
     As of release v1.3, the UI has moved to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui) with the current Django UI feature locked and depreciated.
 
@@ -66,23 +68,203 @@ We use class based tests with each test case being its own function. Naming of t
 
 - `TestCases` - Contains the test cases for the class being tested.
 
+    This class contains all of the tests for the area being tested.
+
 - `InheritedCases` - Is to inherit from `TestCases` and contains any additional tests for classes that inherit from the class being tested
 
-- `Test` - Is to inherit from `TestCases` and is the Test Suite for the class being tested.
+    This class is used by sub-models and/or sub-classes that inherit from the area being tested
 
-Test Cases are to test one object and one object **only**. If the object to be tested contains multiple objects/moving parts, instantiate that object within the test setup method `setUpTestData`. Some test may require that the test be setup before the tests begin. This is done via the `setUpTestData` method. Each test case must be documented using docstring.
+- `PyTest` - **Not** to inherit from `TestCases`. This _special_ suffix tells pytest during test collection, to build the test suite using PyTest.
 
-If you inherit test cases from another test class pay particular attention to the tests being inherited. If anywhere along the chain of inherited classes contain a `setUpTestData` method, you must call if from within you test suite. i.e.
+    This class is the class that test the actual object(s) being tested.
+
+Do not deviate from the test class name suffix as we have setup pytest to automagically create the test classes based off of these names. For instance, classes that are suffixed (not prefixed as is the pytest norm), will be added as a test class and not as an abstract class.
+
+Test Cases are to test one object and one object **only**. If the object to be tested contains multiple objects/moving parts, instantiate that object within a fixture. Some test may require that the test be setup before the tests begin. This is done via fixture called `class_setup` that is called with `scope='class', autouse = True`. Each test case must be documented using docstring.
+
+!!! tip
+    If you inherit from an `InheritedCases` Class and there is a `class_setup` fixture, don't forget to import this into your test suite. This ensures it's available for use when running tests
+
+
+### Fixtures
+
+Fixtures are used to setup the test and to pass objects to test should they require it. We have some common and globally available fixtures, they are:
+
+- `create_model` Creates the model from class var `kwargs_create_item: dict`
+
+- `organization_one` Organization called `org one`
+
+- `organization_two` Organization called `org two`
+
+- `recursearray` Search through an array using dot notation (`dict.list.dict` i.e. `dict_1.2.dict_3`). The array can be a `dict`, `list` or combination of both.
+
+!!! info
+    Unless otherwise mentioned, fixtures are `scope = 'class'`
+
+There may also be a requirement that you add additional fixtures, they are:
+
+- `model` This fixture should be defined in `conftest.py` in the test suite files directory. _Only required if the model is required to be worked with._
+
+    ``` py filename="conftest.py"
+
+    import pytest
+
+    from itim.models.request_ticket import RequestTicket
+
+
+
+    @pytest.fixture( scope = 'class')
+    def model(request):
+
+        request.cls.model = RequestTicket
+
+        yield request.cls.model
+
+        del request.cls.model    # Don't forget to clean-up any objects created.
+
+    ```
+
+Due to how pytest and pytest-django works, there is no method available for class based tests that allows both database access and inheritance. As such, all test classes are expected to have a fixture called `class_setup` that is `scope = 'class'` and `autouse = True` that is intended to serve as the method of setting up the test suite. This fixture should also include as dependencies any other fixture required for setup and in the order required for setup to finish without error. This fixture (`class_setup`) is also intended to be an over-writable fixture in parent classes should you need to customise the load order of fixtures.
+
+!!! tip
+    Fixtures that are `scope = 'class'` are unable to accept fixture `db` including other database related marks, which is problematic for a class fixture that requires database access. As a workaround the following works:
+    <!-- markdownlint-disable -->
+
+    ``` py
+    @pytest.fixture( scope = 'class')
+    def setup_post(self, django_db_blocker):
+    
+        with django_db_blocker.unblock():
+    
+            # db transactions
+    
+        yield item    # required so that cleanup can be done
+                      # Note: use return if the db transaction was to create
+                      # a single object.
+    
+        with django_db_blocker.unblock():
+    
+            # db transactions for cleanup
+
+    ```
+
+    <!-- markdownlint-restore -->
+
+
+## Parameterizing Tests
+
+To be able to paramertize any test case, the test must be setup to use PyTest. Within the test class the test data is required to be stored in a dictionary prefixed with string `paramaterized_<data_name>`. Variable `<data_name>` is the data key that you will specify within the test method.
+
+Our test setup allows for class inheritance which means you can within each class of the inheritance chain, add the `paramaterized_<data_name>` attribute. If you do this, starting from the lowest base class, each class that specifies the `paramaterized_<data_name>` attribute will be merged. The merge is an overwrite of the classes previous base class, meaning that the classes higher in the chain will overwrite the value of the lower class in the inheritance chain. You can not however remove a key from attribute `paramaterized_<data_name>`.
+
+The test method must be called with parameters:
+
+- 'parameterized'
+
+    Tells the test setup that this test case is a parameterized test.
+
+- `param_key_<data_name>`
+
+    Tells the test setup the suffix to use to find the test data. The value of variable `data_name` can be any value you wish as long as it only contains chars `a-z` and/or `_` (underscore). This value is also used in class parameter `paramaterized_<data_name>`.
+
+- `param_<name>`
+
+    Tells the test setup that this is data to be passed from the test. When test setup is run, these attributes will contain the test data. It's of paramount importance, that the dict You can have as many of these attributes you wish, as long as `<name>` is unique and `<name>` is always prefixed with `param_`. If you specify more than to parameters with the `param_` prefix, the value after the `param_` prefix, must match the dictionary key for the data you wish to be assigned to that parameter. what ever name you give the first `param_` key, will always receive the key name from the `parameterized_test_data` attribute in the test class.
+
+    The value of `<name>` for each and in the order specified is suffixed to the test case name
 
 ``` py
 
-class MyViewSetTest:
+class MyTestClassTestCases:
 
-    def setUpTestData(self):
 
-        super().setUpTestData()
+    parameterized_test_data: dict = {
+        'key_1': {
+            'expected': 'key_1'
+        },
+        'key_2': {
+            'random': 'key_2'
+        },
+    }
+
+
+class MyTestClassPyTest(
+    MyTestClassTestCases
+):
+
+    parameterized_test_data: dict = {
+        'key_2': {
+            'random': 'value'
+        }
+        'key_3': {
+            'expected': 'key_3',
+            'is_type': bool
+        }
+    }
+
+
+    parameterized_second_dict: dict = {
+        'key_1': {
+            'expected': 'key_1'
+        },
+    }
+
+    def test_my_test_case_one(self, parameterized, param_key_test_data, param_value, param_expected):
+
+        assert param_value == param_expected
+
+
+    def test_my_test_case_two(self, parameterized, param_key_test_data, param_value, param_random):
+
+        assert param_value == param_random
+
+
+    def test_my_test_case_three(self, parameterized, param_key_test_data, param_value, param_is_type):
+
+        my_test_dict = self.adict
+
+        assert type(my_test_dict[param_value]) is param_is_type
+
+
+    def test_my_test_case_four(self, parameterized, param_key_second_dict, param_arbitrary_name, param_expected):
+
+        my_test_dict = self.a_dict_that_is_defined_in_the_test_class
+
+        assert my_test_dict[param_arbitrary_name] == param_expected
 
 ```
+
+In this example:
+
+- The test class in this case is `MyTestClassPyTest` which inherits from `MyTestClassTestCases`. there are two parameterized variables: `test_data` and `second_dict`. Although, the concrete class attribute `parameterized_test_data` overrides the base classes variable of the same name, the test setup logic does merge `MyTestClassPyTest.parameterized_test_data` with `MyTestClassTestCases.parameterized_test_data`. So in this case the value dictionary `MyTestClassPyTest.parameterized_test_data[key_2][random]`, `value` will overwrite dictionary of the same name in the base class. In the same token, as dictionary `MyTestClassTestCases.parameterized_test_data[key_3]` does not exist, it will be added to the dictionary during merge so it exists in `MyTestClassPyTest.parameterized_test_data`
+
+- test suite `MyTestClassPyTest` will create a total of five parmeterized test cases for the following reasons:
+
+    - `test_my_test_case_one` will create two parameterized test cases.
+
+        - will use data in attribute `test_data` prefixed with `parameterized_` as this is the attribute prefixed with `param_key_`.
+
+        - `MyTestClassPyTest.parameterized_test_data['key_1']` is a dictionary, which contains key `expected` which is also one of the attributes specified with prefix `param_`
+
+        - `MyTestClassPyTest.parameterized_test_data['key_3']` is a dictionary, which contains key `expected` which is also one of the attributes specified with prefix `param_`
+
+    - `test_my_test_case_two` will create one parameterized test case.
+
+        - will use data in attribute `test_data` prefixed with `parameterized_` as this is the attribute prefixed with `param_key_`.
+
+        - `MyTestClassPyTest.parameterized_test_data['key_2']` is a dictionary, which contains key `random` which is also one of the attributes specified with prefix `param_`
+
+    - `test_my_test_case_three` will create one parameterized test case.
+
+        - will use data in attribute `test_data` prefixed with `parameterized_` as this is the attribute prefixed with `param_key_`.
+
+        - `MyTestClassPyTest.parameterized_test_data['key_3']` is a dictionary, which contains key `is_type` which is also one of the attributes specified with prefix `param_`
+
+    - `test_my_test_case_four` will create one parameterized test case.
+
+        - will use data in attribute `second_dict` prefixed with `parameterized_` as this is the attribute prefixed with `param_key_`.
+
+        - `MyTestClassPyTest.parameterized_second_dict['key_1']` is a dictionary, which contains key `expected` which is also one of the attributes specified with prefix `param_`
 
 
 ## Running Tests

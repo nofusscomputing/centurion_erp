@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.urls import include, path
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -51,9 +52,11 @@ from core.viewsets import (
     history as history_v2,
     manufacturer as manufacturer_v2,
     manufacturer_notes,
+    ticket,
     ticket_category,
     ticket_category_notes,
     ticket_comment,
+    ticket_comment_depreciated,
     ticket_comment_category,
     ticket_comment_category_notes,
     ticket_linked_item,
@@ -134,8 +137,32 @@ router = DefaultRouter(trailing_slash=False)
 
 router.register('', v2.Index, basename='_api_v2_home')
 
+entity_type_names = ''
+ticket_type_names = ''
+ticket_comment_names = ''
+
+for model in apps.get_models():
+
+    if issubclass(model, ticket.TicketBase):
+
+        ticket_type_names += model._meta.sub_model_type + '|'
+
+    if issubclass(model, ticket_comment.TicketCommentBase):
+
+        ticket_comment_names += model._meta.sub_model_type + '|'
+
+
+    if issubclass(model, entity.Entity):
+
+        entity_type_names += model._meta.sub_model_type + '|'
+
+
+
+entity_type_names = str(entity_type_names)[:-1]
+
+
 router.register('access', access_v2.Index, basename='_api_v2_access_home')
-router.register('access/entity/(?P<entity_model>[a-z]+)?', entity.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_sub')
+router.register(f'access/entity/(?P<entity_model>[{entity_type_names}]+)?', entity.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_sub')
 router.register('access/entity', entity.NoDocsViewSet, feature_flag = '2025-00002', basename='_api_v2_entity')
 router.register('access/entity/(?P<model_id>[0-9]+)/notes', entity_notes.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_note')
 
@@ -170,10 +197,30 @@ router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', 
 
 router.register('(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
 
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments', ticket_comment.ViewSet, basename='_api_v2_ticket_comment')
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, basename='_api_v2_ticket_comment_threads')
+
+ticket_type_names = str(ticket_type_names)[:-1]
+
+router.register(f'core/ticket/(?P<ticket_model>[{ticket_type_names}]+)', ticket.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_sub')
+router.register('core/ticket', ticket.NoDocsViewSet, basename='_api_v2_ticket')
+
+
+router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment', ticket_comment.NoDocsViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base')
+router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_thread')
+
+
+
+router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments', ticket_comment_depreciated.ViewSet, basename='_api_v2_ticket_comment')
+router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', ticket_comment_depreciated.ViewSet, basename='_api_v2_ticket_comment_threads')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/linked_item', ticket_linked_item.ViewSet, basename='_api_v2_ticket_linked_item')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/related_ticket', related_ticket.ViewSet, basename='_api_v2_ticket_related')
+
+
+ticket_comment_names = str(ticket_comment_names)[:-1]
+
+router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_sub')
+router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_sub_thread')
+
+
 router.register('core/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket', ticket_linked_item.ViewSet, basename='_api_v2_item_tickets')
 
 

@@ -6,7 +6,7 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from api.serializers import common
 
-from core.serializers.ticket import Ticket, TicketBaseSerializer
+from core.serializers.ticket_depreciated import Ticket, TicketBaseSerializer
 
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field
