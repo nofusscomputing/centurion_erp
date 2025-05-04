@@ -18,7 +18,7 @@ from pathlib import Path
 from split_settings.tools import optional, include
 import django.db.models.options as options
 
-options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type')
+options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type', 'itam_sub_model_type')
 
 
 
