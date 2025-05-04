@@ -1,3 +1,122 @@
+## 1.16.0 (2025-05-04)
+
+### feat
+
+- **core**: Add ViewSet for Ticket Comments
+- **project_management**: Depreciate Project Task Ticket Endpoint
+- **itim**: Depreciate Problem Ticket Endpoint
+- **itim**: Depreciate Incident Ticket Endpoint
+- **itim**: Depreciate Change Ticket Endpoint
+- **assistance**: Depreciate Ticket Comment
+- **assistance**: Depreciate Request Ticket Endpoint
+- **core**: Add routes for Ticket Comments
+- **core**: update ticket serializer to use new comment base url
+- **core**: Add permissions `import`, `purge` and `triage` to model TicketCommentSolution
+- **core**: Add permissions `import`, `purge` and `triage` to model TicketCommentBase
+- **core**: Filter ticket_comment_model routes to those defined in `Meta.sub_model_type`
+- **core**: Filter ticket_model routes to those defined in `Meta.sub_model_type`
+- **access**: Filter entity_model routes to thos defined in `Meta.sub_model_type`
+- **core**: Serializer for TicketCommentBase
+- **core**: Serializer for TicketCommentSolution
+- **core**: Ticket Comment Get URL functions
+- **core**: Ticket Comment Validation for comment_type
+- **core**: Update choices fields for TicketCommentBase model
+- **core**: init for model TicketCommentSolution
+- **core**: Migrations for choice fields for TicketBase model
+- **core**: Migrations for model TicketCommentSolution
+- **core**: Update choice fields for TicketBase model
+- **core**: New model TicketCommentSolution
+- **api**: when fetching related_object, default to base_model for SubModelViewSet
+- Add field `Meta.sub_model_type` to sub-models
+- **core**: New interim model TicketCommentSolution
+- **core**: add ticket routes
+- **itim**: serializer for SLMTicketBase
+- **itim**: Serializer for RequestTicket
+- **itim**: migrations for RequestTicket
+- **itim**: New Model RequestTicket
+- **itim**: migration for SLMTicketBase
+- **itim**: New Model SLMTicketBase
+- **core**: migrations for TicketCommentBase
+- **core**: New Model TicketCommentBase
+- **core**: viewset for TicketBase
+- **core**: serializer for TicketBase
+- **core**: migrations for TicketBase
+- **core**: New Model TicketBase
+- **project_management**: add estimation field to project api fields
+- **human_resources**: nav menu entries for Employee
+- **human_resources**: Serializer for Employee
+- **human_resources**: Migration for Employee
+- **human_resources**: New model Employee
+- **devops**: add missing api index menu entry for devops
+- **access**: add missing nav menu entries for entities
+- **human_resources**: add module to perms selector
+
+### Fixes
+
+- **test**: correct typo in attribute parameterized_
+- **core**: Ticktet comment can have empty body
+- **core**: If model does not save history, dont attempt to cache before
+- **itam**: provide return_url as part of software version meta
+- **itim**: correct ticket_slm serializer
+- **itim**: correct ticket_request serializer
+- **api**: SubModelViewSet.related_objects must be the same class as the base model
+- **access**: Ensure related model is a sub-model
+- **human_resources**: Correct history link generation and add docs
+- **human_resources**: Correct history link generation
+- **access**: add missing attribute to Tenancy object
+
+### Refactoring
+
+- **test**: rewrite model unit tests to use PyTest
+- **test**: Update test parameterization
+- **api**: SubModelViewSet must inherit from ModelViewSet as it's an extension
+- **core**: rename ticket model filename in preparation for base ticket model
+- **access**: migrate sub-model viewset logic to common
+- **project_management**: add duration field to project api fields
+- **human_resources**: Move employee details to its own section
+
+### Tests
+
+- **core**: Serializer Validation for ticket status change for TicketBase model
+- **core**: Prevent Closing / Solving of TicketBase Model if not ready
+- **itim**: Incomplete Model Unit Tests for RequestTicket
+- **itim**: Incomplete Model Unit Tests for SLMTicketBase
+- **core**: Incomplete Model Unit Tests for TicketBase
+- **itim**: RequestTicket Updated, yet incomplete Test Suite for Serializer
+- **itim**: SLMTicketBase Updated, yet incomplete Test Suite for Serializer
+- **core**: TicketBase Updated, yet incomplete Test Suite for Serializer
+- Correct Test Suite for Serializer for models TicketBase, TicketRequest and TicketSLM
+- **itim**: RequestTicket Initial Test Suite for Serializer
+- **itim**: SLMTicket Initial Test Suite for Serializer
+- **core**: TicketBase Initial Test Suite for Serializer
+- **core**: SLMTicket Test Suite for ViewSet
+- **core**: SLMTicket Test Suite for Metadata
+- **core**: Request Test Suite for ViewSet
+- **core**: Request Test Suite for Metadata
+- **core**: TicketBase Test Suite for ViewSet
+- **core**: TicketBase Test Suite for Metadata
+- **api**: update test cases for SubModelViewSet Base Test Class
+- **itim**: RequestTicket ViewSet Test Suite
+- **core**: TicketBase ViewSet Test Suite
+- **api**: Incomplete SubModelViewSet Test Cases
+- **api**: SubModelViewSet Test Suite Setup
+- correct tests from Meta.sub_model_type changes
+- correct serializer imports from recent file renames
+- Fixture for creating model with random data
+- **itim**: API Field checks for TicketSLMBase
+- **itim**: API Field checks for TicketRequest
+- **core**: API fields Tests for TicketBase
+- **core**: API fields Unit Test Suite
+- **core**: Correct model notes test suite
+- **core**: API Permission Test Cases for ticket_base model
+- **api**: add API Permission Test Cases
+- **access**: Correct history link test cases
+- **project_management**: Add test cases for api field render for model fields `estimation_project` and `duration_project`
+- **human_resources**: History Serializer and ViewSet Functional test suites for employee
+- **human_resources**: APIv2, History, Model and ViewSet Unit test suites for employee
+- Migrate models to use refactored model tests
+- Consolidate All model tests to remove duplicates and to simplify
+
 ## 1.15.1 (2025-04-10)
 
 ### Fixes
