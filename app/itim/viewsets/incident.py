@@ -13,12 +13,13 @@ from itim.serializers.incident import (
     IncidentTicketViewSerializer,
 )
 
-from core.viewsets.ticket import TicketViewSet
+from core.viewsets.ticket_depreciated import TicketViewSet
 
 
 
 @extend_schema_view(
     create=extend_schema(
+        deprecated = True,
         summary = 'Create a Incident Ticket',
         description='',
         request = PolymorphicProxySerializer(
@@ -38,6 +39,7 @@ from core.viewsets.ticket import TicketViewSet
         }
     ),
     destroy = extend_schema(
+        deprecated = True,
         summary = 'Delete a Incident Ticket',
         description = '',
         responses = {
@@ -46,6 +48,7 @@ from core.viewsets.ticket import TicketViewSet
         }
     ),
     list = extend_schema(
+        deprecated = True,
         summary = 'Fetch all Incident Tickets',
         description='',
         responses = {
@@ -54,6 +57,7 @@ from core.viewsets.ticket import TicketViewSet
         }
     ),
     retrieve = extend_schema(
+        deprecated = True,
         summary = 'Fetch a Incident Ticket',
         description='',
         responses = {
@@ -63,6 +67,7 @@ from core.viewsets.ticket import TicketViewSet
     ),
     update = extend_schema(exclude = True),
     partial_update = extend_schema(
+        deprecated = True,
         summary = 'Update a Incident Ticket',
         description = '',
         responses = {

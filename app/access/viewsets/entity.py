@@ -18,7 +18,7 @@ from access.models.entity import (
     Entity,
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common import SubModelViewSet
 
 
 
@@ -31,10 +31,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
         if issubclass(model, Entity):
 
+            serializer_name =  'entity'
+
+            if model != Entity:
+
+                serializer_name += '_' + model._meta.sub_model_type
+
             serializer_module = importlib.import_module(
                 model._meta.app_label + '.serializers.' + str(
-                    model._meta.verbose_name
-                ).lower().replace(' ', '_')
+                    serializer_name
+                )
             )
 
             serializers.update({
@@ -209,126 +215,41 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         }
     ),
 )
-class ViewSet( ModelViewSet ):
+class ViewSet( SubModelViewSet ):
+
+    base_model = Entity
 
     filterset_fields = [
         'organization',
         'is_global'
     ]
 
+    model_kwarg = 'entity_model'
+
     search_fields = [
         'model_notes',
     ]
 
-    def related_objects(self, model, model_kwarg):
-        """Recursive relate_objects fetch
-
-        Fetch the model that is lowest in the chain of inherited models
-
-        Args:
-            model (django.db.models.Model): The model to obtain the 
-                related_model from.
-            model_kwarg (str): The URL Kwarg of the model.
-
-        Returns:
-            _type_: _description_
-        """
-
-        related_model = None
-
-        if model_kwarg:
-
-            for related_object in model._meta.related_objects:
-
-                related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
-
-                if(
-                    str(
-                        related_object.related_model._meta.verbose_name
-                    ).lower().replace(' ', '_') == model_kwarg
-                ):
-
-                    related_model = related_object.related_model
-                    break
-                
-                elif related_objects:
-
-                    related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
-
-                    break
-
-
-
-        return related_model
-
-
-    @property
-    def model(self):
-
-
-        if getattr(self, '_model', None) is not None:
-
-            return self._model
-
-        model_kwarg = None
-
-        if hasattr(self, 'kwargs'):
-
-            model_kwarg = self.kwargs.get('entity_model', None)
-
-        if model_kwarg:
-
-            self._model = self.related_objects(Entity, model_kwarg)
-
-        else:
-
-            self._model = Entity
-
-        return self._model
-
     view_description = 'All entities'
+
 
 
     def get_back_url(self) -> str:
 
         if(
             self.back_url is None
-            and self.kwargs.get('entity_model', None) is not None
+            and self.kwargs.get(self.model_kwarg, None) is not None
         ):
 
             self.back_url = reverse(
                 viewname = '_api_v2_entity_sub-list',
                 request = self.request,
                 kwargs = {
-                    'entity_model': self.kwargs['entity_model'],
+                    'entity_model': self.kwargs[self.model_kwarg],
                 }
             )
 
         return self.back_url
-
-
-    def get_serializer_class(self):
-
-        serializer_module = importlib.import_module(
-            self.model._meta.app_label + '.serializers.' + str(
-                self.model._meta.verbose_name
-            ).lower().replace(' ', '_')
-        )
-
-        if (
-            self.action == 'list'
-            or self.action == 'retrieve'
-        ):
-
-            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
-
-
-        else:
-
-            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
-
-
-        return self.serializer_class
 
 
 

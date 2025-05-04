@@ -15,4 +15,7 @@ node_modules/
 package-lock.json
 package.json
 **.junit.xml
+**.JUnit.xml
 feature_flags.json
+coverage_*.json
+*-coverage.xml

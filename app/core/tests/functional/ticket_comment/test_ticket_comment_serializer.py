@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 from access.middleware.request import Tenancy
 from access.models.organization import Organization
 
-from core.serializers.ticket_comment import (
+from core.serializers.ticket_comment_depreciated import (
     Ticket,
     TicketComment,
 

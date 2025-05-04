@@ -1,3 +1,26 @@
+## Version 1.16.0
+
+- Employees model added behind feature flag `2025-00002` and will remain behind this flag until production ready.
+
+- Ticket and Ticket Comment added behind feature flag `2025-00006` and will remain behind this flag until production ready.
+
+- In preparation of the [Ticket and Ticket Comment model re-write](https://github.com/nofusscomputing/centurion_erp/issues/564)
+
+    - Depreciated Change Ticket
+
+    - Depreciated Ticket Comment Endpoint
+
+    - Depreciated Request Ticket
+
+    - Depreciated Incident Ticket
+
+    - Depreciated Problem Ticket
+
+    - Depreciated Project Task Ticket
+
+    These endpoints still work and will remain so until the new Ticket and Ticket Comment Models are production ready.
+
+
 ## Version 1.15.0
 
 - Entities model added behind feature flag `2025-00002` and will remain behind this flag until production ready.

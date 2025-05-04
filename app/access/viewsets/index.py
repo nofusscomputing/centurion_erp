@@ -27,6 +27,13 @@ class Index(IndexViewset):
                 "organization": reverse('v2:_api_v2_organization-list', request=request),
             }
 
+        if self.request.feature_flag['2025-00002']:
+            
+            response.update({
+                "directory": reverse( 'v2:_api_v2_entity_sub-list', request=request, kwargs = { 'entity_model': 'contact' } ),
+                "entities": reverse( 'v2:_api_v2_entity-list', request=request ),
+            })
+
         if self.request.feature_flag['2025-00003']:
             
             response.update({

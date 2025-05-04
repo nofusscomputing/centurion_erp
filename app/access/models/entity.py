@@ -22,6 +22,8 @@ class Entity(
             'organization',
         ]
 
+        sub_model_type = 'entity'
+
         verbose_name = 'Entity'
 
         verbose_name_plural = 'Entities'
@@ -93,6 +95,10 @@ class Entity(
 
         for related_object in getattr(meta, 'related_objects', []):
 
+            if not issubclass(related_object.related_model, Entity):
+
+                continue
+
             if getattr(self, related_object.name, None):
 
                 if( 
@@ -125,15 +131,17 @@ class Entity(
 
         if related_model_name == '':
 
-            return None
+            related_model = None
 
         elif related_model is None:
 
-            return self
+            related_model = self
 
-        elif related_model.get_related_field_name() != '':
+        elif hasattr(related_model, 'get_related_field_name'):
 
-            related_model = related_model.get_related_model()
+            if related_model.get_related_field_name() != '':
+
+                related_model = related_model.get_related_model()
 
 
         return related_model

@@ -20,6 +20,8 @@ class Person(
             'dob',
         ]
 
+        sub_model_type = 'person'
+
         verbose_name = 'Person'
 
         verbose_name_plural = 'People'
@@ -64,6 +66,8 @@ class Person(
         return self.f_name + ' ' + self.l_name + f' (DOB: {self.dob})'
 
     documentation = ''
+
+    history_model_name = 'person'
 
     page_layout: dict = []
 

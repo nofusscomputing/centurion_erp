@@ -727,6 +727,130 @@ class ModelViewSet(
 
 
 
+class SubModelViewSet(
+    ModelViewSet,
+):
+
+    base_model = None
+    """Model that is the base of this sub-model"""
+
+    model_kwarg: str = None
+    """Kwarg name for the sub-model"""
+
+
+    @property
+    def model(self):
+
+
+        if getattr(self, '_model', None) is not None:
+
+            return self._model
+
+        model_kwarg = None
+
+        if hasattr(self, 'kwargs'):
+
+            model_kwarg = self.kwargs.get(self.model_kwarg, None)
+
+        if model_kwarg:
+
+            self._model = self.related_objects(self.base_model, model_kwarg)
+
+        else:
+
+            self._model = self.base_model
+
+        return self._model
+
+
+    def related_objects(self, model, model_kwarg):
+        """Recursive relate_objects fetch
+
+        Fetch the model that is lowest in the chain of inherited models
+
+        Args:
+            model (django.db.models.Model): The model to obtain the 
+                related_model from.
+            model_kwarg (str): The URL Kwarg of the model.
+
+        Returns:
+            _type_: _description_
+        """
+
+        related_model = None
+
+        if model_kwarg:
+
+            for related_object in model._meta.related_objects:
+
+                if(
+                    getattr(related_object.related_model._meta,'sub_model_type', '' ) == self.base_model._meta.sub_model_type
+                    or not issubclass(related_object.related_model, self.base_model)
+                ):
+
+                    continue
+
+
+                related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
+
+                if(
+                    str(
+                        related_object.related_model._meta.sub_model_type
+                    ).lower().replace(' ', '_') == model_kwarg
+                ):
+
+                    related_model = related_object.related_model
+                    break
+                
+                elif related_objects:
+
+                    related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
+
+                    break
+
+
+        if related_model is None:
+
+            related_model = self.base_model
+
+        return related_model
+
+
+
+    def get_serializer_class(self):
+
+        serializer_name = self.base_model._meta.verbose_name.lower().replace(' ', '_')
+
+        if self.base_model != self.model:
+                      
+            serializer_name += '_' + self.model._meta.sub_model_type
+
+
+        serializer_module = importlib.import_module(
+            self.model._meta.app_label + '.serializers.' + str(
+                serializer_name
+            )
+        )
+
+        if (
+            self.action == 'list'
+            or self.action == 'retrieve'
+        ):
+
+            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
+
+
+        else:
+
+            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
+
+
+        return self.serializer_class
+
+
+
+
+
 class ModelCreateViewSet(
     ModelViewSetBase,
     Create,

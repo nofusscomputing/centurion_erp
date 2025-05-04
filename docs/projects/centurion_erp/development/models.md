@@ -59,6 +59,36 @@ All models must meet the following requirements:
 - Models must save audit history
 
 
+## Creating a Model
+
+Within Centurion ERP there are two types of models, they are:
+
+- Standard
+
+- Sub-Model
+
+
+### Standard Model
+
+This is your typical model that you would define within any Django Application. This includes Abstract models and precludes multi-table inherited models.
+
+
+### Sub-Model
+
+This model is known within Django as multi-table inherited models. That is where the base model is a concrete class (not an Abstract model) and the super model inherits from the concrete base model. In this instance both models get their own database tables.
+
+
+<!-- markdownlint-disable -->
+#### Requirements
+<!-- markdownlint-restore -->
+
+- Must **not** be an abstract class
+
+- Attribute `sub_model_type` must be specified within the models `Meta` sub-class
+
+- File name is `<base model>_<sub_model_type>` where `base model` is the value of `Meta.sub_model_type` or the first model in the chain.
+
+
 ## Checklist
 
 This section details the additional items that may need to be done when adding a new model:
@@ -154,14 +184,33 @@ table_fields: list = [
 
 Adding History to a model is a simple process. Please see the [Model History](./core/model_history.md) docs.
 
+In the case the model you are creating is inherited from another model, (a non-abstrct model), you may need to add the following variables to the inherited class so that the model link works:
+
+- `history_app_label` The application label for the model in question
+
+- `history_model_name` The model name for the model in question.
+
+
+### Example
+
+If you created a model called employee in the human_resources app, which is a sub-model that inherits from `Contact`, `Person` then `Entity`. In this case the `Entity` model is where the history is derived, which would create link `/access/entity/<pk>/history`. This link is incorrect. adding variables `history_app_label = 'human_resources'` and `history_model_name = 'Emplyee'` to the `Employee` model class; will now create a valid link, `/human_resources/employee/<pk>/history`.
+
 
 ## Tests
 
 The following Unit test cases exists for models:
 
-- [BaseModel](./api/tests/models.md#base-unit-tests-for-all-models)
+- Unit Tests
 
-- [TenancyObject](./api/tests/models.md#tenancy-model-unit-tests)
+    - `app.tests.unit.test_unit_models.TenancyObjectInheritedCases` for models that inherit from `access.models.tenancy.TenancyObject`
+
+    - `app.tests.unit.test_unit_models.NonTenancyObjectInheritedCases` for models other models that **do not** inherit from `access.models.tenancy.TenancyObject`
+
+- Functional Tests
+
+    - `api.tests.functional.test_functional_api_permissions.<permission type>InheriredCases` API Permission Tests.
+
+        Generally Test Cases from class `APIPermissionsInheritedCases` will be used as it covers the standard Django Permissions, `add`, `change`, `delete` and `view`.
 
 !!! info
     If you add a feature you will have to write the test cases for that feature if they are not covered by existing test cases.

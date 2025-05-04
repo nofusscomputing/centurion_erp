@@ -4,7 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "Centurion",
             "type": "debugpy",
@@ -18,7 +17,6 @@
             "program": "${workspaceFolder}/app/manage.py"
         },
         {
-
             "name": "Debug: Gunicorn",
             "type": "debugpy",
             "request": "launch",
@@ -32,7 +30,6 @@
                 "--bind",
                 "0.0.0.0:8002",
                 "app.wsgi:application",
-
             ],
             "django": true,
             "autoStartBrowser": false,
@@ -53,7 +50,6 @@
             "autoStartBrowser": false,
             "program": "${workspaceFolder}/app/manage.py"
         },
-        
         {
             "name": "Migrate",
             "type": "debugpy",
@@ -64,7 +60,6 @@
             "django": true,
             "autoStartBrowser": false,
             "program": "${workspaceFolder}/app/manage.py"
-
         },
         {
             "name": "Debug: Celery",
@@ -82,6 +77,34 @@
                 "debug-itsm@%h"
             ],
             "cwd": "${workspaceFolder}/app"
-        }
+        },
+        {
+            "name": "Debug pytest (collect)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "--override-ini", "addopts=",
+                "--collect-only",
+                "app",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Python Debugger: Local Attach",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ]
+        },
     ]
 }

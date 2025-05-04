@@ -585,6 +585,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
+                if request.feature_flag['2025-00005']:
+
+                    nav['human_resources']['pages'].update({
+                        'view_employee': {
+                            "display_name": "Employees",
+                            "name": "employees",
+                            "icon": "employees",
+                            "link": "/access/entity/employee"
+                        }
+                    })
+
 
             if request.feature_flag['2025-00003']:
 
@@ -594,6 +605,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "roles",
                         "icon": 'roles',
                         "link": "/access/role"
+                    }
+                })
+
+            if request.feature_flag['2025-00006']:
+
+                nav['assistance']['pages'].update({
+                    'itim.view_requestticket': {
+                        "display_name": "Requests New",
+                        "name": "request_new",
+                        "icon": "ticket_request",
+                        "link": "/core/ticket/request"
                     }
                 })
 

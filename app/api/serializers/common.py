@@ -24,9 +24,11 @@ class OrganizationField(serializers.PrimaryKeyRelatedField):
 
         if self.context.get('request', None):
 
-            if getattr(self.context['request'].app_settings, 'global_organization', None):
+            if hasattr(self.context['request'], 'app_settings'):
 
-                queryset = queryset.exclude(id=self.context['request'].app_settings.global_organization.id)
+                if getattr(self.context['request'].app_settings, 'global_organization', None):
+
+                    queryset = queryset.exclude(id=self.context['request'].app_settings.global_organization.id)
 
         return queryset
 
