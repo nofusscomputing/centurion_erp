@@ -131,6 +131,8 @@ nav:
 
           - projects/centurion_erp/development/api/tests/model_views.md
 
+      - projects/centurion_erp/development/accounting/asset.md
+      
       - projects/centurion_erp/development/fields.md
 
       - projects/centurion_erp/development/forms.md
@@ -168,6 +170,12 @@ nav:
         - projects/centurion_erp/user/access/role.md
 
         - projects/centurion_erp/user/access/team.md
+
+      - Accounting:
+
+        - projects/centurion_erp/user/accounting/index.md
+
+        - projects/centurion_erp/user/accounting/asset.md
 
       - Assistance:
 
