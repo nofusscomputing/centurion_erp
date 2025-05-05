@@ -94,6 +94,10 @@ def pytest_generate_tests(metafunc):
 
                 base_values = getattr(base, 'parameterized_' + parameterized_key, None)
 
+                if isinstance(base_values, property):
+
+                    base_values = getattr(base(), 'parameterized_' + parameterized_key, None)
+
                 if not isinstance(base_values, dict):
 
                     continue

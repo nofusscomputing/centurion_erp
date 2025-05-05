@@ -85,6 +85,53 @@ Test Cases are to test one object and one object **only**. If the object to be t
 !!! tip
     If you inherit from an `InheritedCases` Class and there is a `class_setup` fixture, don't forget to import this into your test suite. This ensures it's available for use when running tests
 
+!!! tip
+    If you find that a base classes variables are being mutated by other test classes, setup the variable within the base class as a property that contains the defaults as a variable within the function and returns the data as if the property was defined as a variable
+    <!-- markdownlint-disable -->
+
+    Don't do this as `my_variable` will be mutated by other test classes that inherit the base class.
+
+    ``` py
+
+    class MyTestClassBase:
+    
+        my_variable = 'a'
+
+
+
+    class MyTestClass(
+        MyTestClassBase
+    ):
+    
+        my_variable = 'b'
+
+    ```
+
+    Instead, do this. now `MyTestClass` wont override variable `my_variable` which means when another test class inherits from `MyTestClassBase`, variable `my_variable` will always return the desired default value.
+
+    ``` py
+
+    class MyTestClassBase:
+
+        @property
+        def my_variable(self):
+    
+            default = 'a'
+    
+            return default.copy()
+
+
+
+    class MyTestClass(
+        MyTestClassBase
+    ):
+
+        my_variable = 'b'
+
+    ```
+
+    <!-- markdownlint-restore -->
+
 
 ### Fixtures
 
