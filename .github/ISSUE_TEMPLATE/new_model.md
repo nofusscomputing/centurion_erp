@@ -52,9 +52,9 @@ Describe in detail the following:
 
     - Sub-Models **_ONLY_**
 
-        - [ ] Model class variable `history_app_label` set to correct application label
+        - [ ] Model class variable [`history_app_label`](https://nofusscomputing.com/projects/centurion_erp/development/models/#history) set to correct application label
 
-        - [ ] Model class variable `history_model_name` set to correct model label
+        - [ ] Model class variable [`history_model_name`](https://nofusscomputing.com/projects/centurion_erp/development/models/#history) set to correct model label
 
 - [ ] 📓 New [Notes model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/) created 
     - [ ] 🆕 Model Created
