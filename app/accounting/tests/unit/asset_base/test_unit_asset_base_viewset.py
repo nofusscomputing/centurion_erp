@@ -19,8 +19,6 @@ class AssetBaseViewsetTestCases(
 
     model = AssetBase
 
-    kwargs = None
-
     viewset = ViewSet
 
     base_model = AssetBase
@@ -37,6 +35,12 @@ class AssetBaseViewsetTestCases(
 
 
         super().setUpTestData()
+
+        self.kwargs = {
+            'asset_model': self.model._meta.sub_model_type
+        }
+
+        self.viewset.kwargs = self.kwargs
 
 
         client = Client()
@@ -76,17 +80,6 @@ class AssetBaseViewsetInheritedCases(
     """name of the model to test"""
 
     route_name = 'v2:accounting:_api_v2_asset_sub'
-
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs = {
-            'ticket_model': self.model._meta.sub_model_type
-        }
-
-        super().setUpTestData()
 
 
 
