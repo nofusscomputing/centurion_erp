@@ -129,7 +129,15 @@ For this command to process the following conditions must be met:
 
         from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
-        if model_type == 'cluster':
+        if model_type == 'asset':
+
+            from accounting.models.asset_base import AssetBase
+
+            model = AssetBase
+
+            item_type = TicketLinkedItem.Modules.ASSET
+
+        elif model_type == 'cluster':
 
             from itim.models.clusters import Cluster
 

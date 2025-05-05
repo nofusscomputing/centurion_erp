@@ -72,6 +72,7 @@ A Model link is a reference to an item within the database. Supported model link
 
 | Model | Tag |
 |:---|:---:|
+| [asset](../accounting/asset.md) | `$asset-<id>` |
 | cluster| `$cluster-<id>` |
 | clustertype| `$-<id>` |
 | config groups| `$config_group-<id>` |
