@@ -226,8 +226,8 @@ router.register('core/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket', 
 
 router.register('itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 
-# from accounting.viewsets import asset
-# router.register('itam/(?P<asset_model>device)?', asset.ViewSet, feature_flag = '2025-00004', basename='_api_v2_device')
+from accounting.viewsets import asset
+router.register('itam/(?P<asset_model>[it_asset]+)', asset.ViewSet, feature_flag = '2025-00007', basename='_api_v2_itam_asset')
 
 router.register('itam/device', device_v2.ViewSet, basename='_api_v2_device')
 router.register('itam/device/(?P<device_id>[0-9]+)/operating_system', device_operating_system.ViewSet, basename='_api_v2_device_operating_system')

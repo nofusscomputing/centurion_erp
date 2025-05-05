@@ -1,6 +1,8 @@
 from django.apps import apps
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from accounting.models.asset_base import AssetBase
 
 
@@ -87,7 +89,56 @@ class ITAMAssetBase(
     )
 
 
-    page_layout: list = []
+    
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'asset_type',
+                        'itam_type',
+                        'asset_number',
+                        'serial_number',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ],
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
 
     table_fields: list = [
         'id',
@@ -107,6 +158,22 @@ class ITAMAssetBase(
     def __str__(self):
 
         return self._meta.verbose_name + ' - ' + self.asset_number
+
+    
+
+    def get_url( self, request = None ) -> str:
+
+        kwargs = self.get_url_kwargs()
+
+        url_path_name = '_api_v2_itam_asset'
+
+        if request:
+
+            return reverse(f"v2:{url_path_name}-detail", request=request, kwargs = kwargs )
+
+
+        return reverse(f"v2:{url_path_name}-detail", kwargs = kwargs )
+
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):

@@ -85,12 +85,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         app_namespace = ''
 
-        if getattr(view, 'model', None):
-
-            if getattr(view.model, 'get_app_namespace', None):
-
-                app_namespace = view.model().get_app_namespace()
-
         base_model = getattr(view, 'base_model', None)
 
         if base_model is not None:
@@ -101,6 +95,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             ):
 
                 app_namespace = base_model.app_namespace + ':'
+
+
+        if getattr(view, 'model', None):
+
+            if getattr(view.model, 'get_app_namespace', None):
+
+                app_namespace = view.model().get_app_namespace()
 
 
         if view.kwargs.get('pk', None) is not None:
@@ -628,6 +629,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "link": "/accounting/asset"
                     }
                 })
+
+                if request.feature_flag['2025-00007']:
+
+                    nav['itam']['pages'] = {
+                        'view_itamassetbase': {
+                            "display_name": "IT Assets",
+                            "name": "itasset",
+                            "link": "/itam/it_asset"
+                        },
+                        **nav['itam']['pages']
+                    }
 
             if request.feature_flag['2025-00006']:
 
