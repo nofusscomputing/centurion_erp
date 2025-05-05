@@ -337,11 +337,6 @@ class AssetBase(
         return kwargs
 
 
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
-
-
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
