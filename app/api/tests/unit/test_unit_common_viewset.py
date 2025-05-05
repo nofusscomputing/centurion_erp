@@ -350,13 +350,14 @@ class CommonViewSetCases(
 ):
     """Test Suite for class CommonViewSet"""
 
-    kwargs: dict = {}
 
     viewset = CommonViewSet
 
 
     @classmethod
     def setUpTestData(self):
+
+        self.kwargs: dict = {}
 
         if self.viewset is CommonViewSet:
 
@@ -2655,18 +2656,18 @@ class SubModelViewSetInheritedCases(
     viewset = None
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
+    # @classmethod
+    # def setUpTestData(self):
+    #     """Setup Test
 
-        1. make list request
-        """
+    #     1. make list request
+    #     """
 
-        self.viewset.kwargs = {}
+    #     self.viewset.kwargs = {}
 
-        self.viewset.kwargs[self.viewset.model_kwarg] = self.model._meta.sub_model_type
+    #     self.viewset.kwargs[self.viewset.model_kwarg] = self.model._meta.sub_model_type
 
-        super().setUpTestData()
+    #     super().setUpTestData()
 
 
 

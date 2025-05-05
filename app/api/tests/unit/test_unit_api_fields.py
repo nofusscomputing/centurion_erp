@@ -82,6 +82,8 @@ class APIFieldsTestCases:
         organization_two
     ):
 
+        request.cls.url_view_kwargs = {}
+
         with django_db_blocker.unblock():
 
             request.cls.organization = organization_one

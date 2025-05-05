@@ -91,6 +91,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 app_namespace = view.model().get_app_namespace()
 
+        base_model = getattr(view, 'base_model', None)
+
+        if base_model is not None:
+
+            if(
+                base_model.app_namespace != ''
+                and base_model.app_namespace is not None
+            ):
+
+                app_namespace = base_model.app_namespace + ':'
+
 
         if view.kwargs.get('pk', None) is not None:
 
