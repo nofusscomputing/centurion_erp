@@ -34,14 +34,11 @@ class ModelSerializer(
             'id',
             'display_name',
             'organization',
+            'model_notes',
+            'asset_type',
             'itam_type',
             'asset_number',
             'serial_number',
-
-            # 'status',
-
-            # 'category',
-
             'created',
             'modified',
             '_urls',

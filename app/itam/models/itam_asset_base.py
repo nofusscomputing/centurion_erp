@@ -16,8 +16,10 @@ class ITAMAssetBase(
     **Don't** use this model directly, it should be used via a sub-model.
     """
 
-
     app_namespace = None
+
+    note_basename = 'accounting:_api_v2_asset_note'
+
 
     class Meta:
 
@@ -85,7 +87,6 @@ class ITAMAssetBase(
     )
 
 
-    # this model uses a custom page layout
     page_layout: list = []
 
     table_fields: list = [
