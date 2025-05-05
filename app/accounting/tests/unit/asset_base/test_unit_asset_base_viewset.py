@@ -3,9 +3,9 @@ from django.test import Client, TestCase
 from rest_framework.reverse import reverse
 
 
-from core.viewsets.ticket import (
+from accounting.viewsets.asset import (
     NoDocsViewSet,
-    TicketBase,
+    AssetBase,
     ViewSet,
 )
 
@@ -13,15 +13,15 @@ from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCase
 
 
 
-class ViewsetTestCases(
+class AssetBaseViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
 
-    model = None
+    model = AssetBase
 
     viewset = ViewSet
 
-    base_model = TicketBase
+    base_model = AssetBase
 
     route_name = None
 
@@ -33,21 +33,20 @@ class ViewsetTestCases(
         1. make list request
         """
 
+        self.model = AssetBase
 
-        if self.model is None:
+        self.viewset = ViewSet
 
-            self.model = TicketBase
 
         super().setUpTestData()
 
-        if self.model != TicketBase:
+        if self.model is not AssetBase:
 
             self.kwargs = {
-                'ticket_model': self.model._meta.sub_model_type
+                'asset_model': self.model._meta.sub_model_type
             }
 
             self.viewset.kwargs = self.kwargs
-
 
 
         client = Client()
@@ -71,12 +70,12 @@ class ViewsetTestCases(
 
         view_set = self.viewset()
 
-        assert view_set.model_kwarg == 'ticket_model'
+        assert view_set.model_kwarg == 'asset_model'
 
 
 
-class TicketBaseViewsetInheritedCases(
-    ViewsetTestCases,
+class AssetBaseViewsetInheritedCases(
+    AssetBaseViewsetTestCases,
 ):
     """Test Suite for Sub-Models of TicketBase
     
@@ -86,15 +85,17 @@ class TicketBaseViewsetInheritedCases(
     model: str = None
     """name of the model to test"""
 
-    route_name = 'v2:_api_v2_ticket_sub'
+    route_name = 'v2:accounting:_api_v2_asset_sub'
 
 
 
-class TicketBaseViewsetTest(
-    ViewsetTestCases,
+class AssetBaseViewsetTest(
+    AssetBaseViewsetTestCases,
     TestCase,
 ):
 
-    route_name = 'v2:_api_v2_ticket'
+    kwargs = {}
+
+    route_name = 'v2:accounting:_api_v2_asset'
 
     viewset = NoDocsViewSet

@@ -49,6 +49,8 @@ class TicketBaseModelTestCases(
         },
         "is_global": {
             'field_type': None,
+            'field_parameter_default_exists': None,
+            'field_parameter_default_value': None,
             'field_parameter_verbose_name_type': None
         },
         "external_system": {

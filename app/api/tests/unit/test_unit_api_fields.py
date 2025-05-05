@@ -14,57 +14,60 @@ from app.tests.common import DoesNotExist
 
 
 class APIFieldsTestCases:
-    
-    api_fields_common = {
-        'id': {
-            'expected': int
-        },
-        'display_name': {
-            'expected': str
-        },
-        '_urls': {
-            'expected': dict
-        },
-        '_urls._self': {
-            'expected': str
-        },
-        '_urls.notes': {
-            'expected': str
-        },
-    }
 
-    api_fields_model = {
-        'model_notes': {
-            'expected': str
-        },
-        'created': {
-            'expected': str
-        },
-        'modified': {
-            'expected': str
-        },
-    }
+    @property
+    def parameterized_test_data(self) -> dict:
 
-    api_fields_tenancy = {
-        'organization': {
-            'expected': dict
-        },
-        'organization.id': {
-            'expected': int
-        },
-        'organization.display_name': {
-            'expected': str
-        },
-        'organization.url': {
-            'expected': Hyperlink
-        },
-    }
+        api_fields_common = {
+            'id': {
+                'expected': int
+            },
+            'display_name': {
+                'expected': str
+            },
+            '_urls': {
+                'expected': dict
+            },
+            '_urls._self': {
+                'expected': str
+            },
+            '_urls.notes': {
+                'expected': str
+            },
+        }
 
-    parameterized_test_data = {
-        **api_fields_common,
-        **api_fields_tenancy,
-        **api_fields_model,
-    }
+        api_fields_model = {
+            'model_notes': {
+                'expected': str
+            },
+            'created': {
+                'expected': str
+            },
+            'modified': {
+                'expected': str
+            },
+        }
+
+        api_fields_tenancy = {
+            'organization': {
+                'expected': dict
+            },
+            'organization.id': {
+                'expected': int
+            },
+            'organization.display_name': {
+                'expected': str
+            },
+            'organization.url': {
+                'expected': Hyperlink
+            },
+        }
+
+        return {
+            **api_fields_common.copy(),
+            **api_fields_tenancy.copy(),
+            **api_fields_model.copy(),
+        }
 
     url_view_kwargs = {}
 
@@ -78,6 +81,8 @@ class APIFieldsTestCases:
         organization_one,
         organization_two
     ):
+
+        request.cls.url_view_kwargs = {}
 
         with django_db_blocker.unblock():
 
@@ -108,6 +113,14 @@ class APIFieldsTestCases:
                 request.cls.kwargs_create_item.update({
                     'organization': request.cls.organization
                 })
+
+
+            if 'model_notes' in self.model().fields:
+
+                request.cls.kwargs_create_item.update({
+                    'model_notes': 'notes',
+                })
+
 
             view_permissions = Permission.objects.get(
                     codename = 'view_' + request.cls.model._meta.model_name,
@@ -221,3 +234,5 @@ class APIFieldsInheritedCases(
 ):
 
     model = None
+
+    parameterized_test_data = {}

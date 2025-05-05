@@ -31,6 +31,8 @@ Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurio
 
 Centurion ERP contains the following modules:
 
+- [Accounting](./user/accounting/index.md)
+
 - Change Management
 
 - [Cluster Management](./user/itim/cluster.md)

@@ -9,6 +9,7 @@ def permission_queryset():
 
     apps = [
         'access',
+        'accounting',
         'assistance',
         'config_management',
         'core',

@@ -129,7 +129,15 @@ For this command to process the following conditions must be met:
 
         from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
-        if model_type == 'cluster':
+        if model_type == 'asset':
+
+            from accounting.models.asset_base import AssetBase
+
+            model = AssetBase
+
+            item_type = TicketLinkedItem.Modules.ASSET
+
+        elif model_type == 'cluster':
 
             from itim.models.clusters import Cluster
 
@@ -176,6 +184,14 @@ For this command to process the following conditions must be met:
             model = GitRepository
 
             item_type = TicketLinkedItem.Modules.GIT_REPOSITORY
+
+        elif model_type == 'it_asset':
+
+            from itam.models.itam_asset_base import ITAMAssetBase
+
+            model = ITAMAssetBase
+
+            item_type = TicketLinkedItem.Modules.IT_ASSET
 
         elif model_type == 'kb':
 

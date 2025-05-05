@@ -55,6 +55,8 @@ class TicketLinkedItem(TenancyObject):
         GIT_REPOSITORY          = 15, 'Git Repository'
         ENTITY                  = 16, 'Entity'
         ROLE                    = 17, 'Role'
+        ASSET                   = 18, 'Asset'
+        IT_ASSET                = 19, 'IT Asset'
 
 
     is_global = None

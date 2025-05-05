@@ -67,6 +67,14 @@ Within Centurion ERP there are two types of models, they are:
 
 - Sub-Model
 
+Within Centurion ERP there are some base models that are designed to be used for extending Centurion. They are:
+
+- [Asset](./accounting/asset.md)
+
+- [Entity](./core/entity.md)
+
+Using a base model reduces the effort required to add a feature. This is such due to how the base model / sub-model has been designed. That is the base model has the core features so you don't need to add them. All that is required for the extension is that you add your fields and test the differences.
+
 
 ### Standard Model
 
