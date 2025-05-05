@@ -185,6 +185,14 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.GIT_REPOSITORY
 
+        elif model_type == 'it_asset':
+
+            from itam.models.itam_asset_base import ITAMAssetBase
+
+            model = ITAMAssetBase
+
+            item_type = TicketLinkedItem.Modules.IT_ASSET
+
         elif model_type == 'kb':
 
             from assistance.models.knowledge_base import KnowledgeBase
