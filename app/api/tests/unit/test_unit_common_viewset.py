@@ -811,6 +811,18 @@ class ModelViewSetBaseCases(
         self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
 
 
+        @classmethod
+        def tearDownClass(cls):
+
+            cls.model = None
+
+            cls.organization.delete()
+
+            cls.view_user.delete()
+
+            super().tearDownClass()
+
+
     def test_class_inherits_modelviewsetbase(self):
         """Class Inheritence check
 

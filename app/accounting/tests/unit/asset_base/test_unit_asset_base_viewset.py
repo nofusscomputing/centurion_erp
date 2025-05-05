@@ -33,14 +33,20 @@ class AssetBaseViewsetTestCases(
         1. make list request
         """
 
+        self.model = AssetBase
+
+        self.viewset = ViewSet
+
 
         super().setUpTestData()
 
-        self.kwargs = {
-            'asset_model': self.model._meta.sub_model_type
-        }
+        if self.model is not AssetBase:
 
-        self.viewset.kwargs = self.kwargs
+            self.kwargs = {
+                'asset_model': self.model._meta.sub_model_type
+            }
+
+            self.viewset.kwargs = self.kwargs
 
 
         client = Client()

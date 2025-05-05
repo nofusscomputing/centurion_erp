@@ -59,6 +59,25 @@ class ITAMAssetBaseModelTestCases(
         assert self.model.app_namespace is None
 
 
+    def test_attribute_type_note_basename(self):
+        """Attribute Type
+
+        note_basename is of type str
+        """
+
+        assert type(self.model.note_basename) is str
+
+
+    def test_attribute_value_note_basename(self):
+        """Attribute Type
+
+        note_basename has been set, override this test case with the value
+        of attribute `note_basename`
+        """
+
+        assert self.model.note_basename == 'accounting:_api_v2_asset_note'
+
+
 
 class ITAMAssetBaseModelInheritedCases(
     ITAMAssetBaseModelTestCases,
