@@ -356,3 +356,18 @@ class AssetBase(
             self.asset_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+
+
+    def save_history(self, before: dict, after: dict) -> bool:
+
+        from accounting.models.asset_base_history import AssetBaseHistory
+
+        history = super().save_history(
+            before = before,
+            after = after,
+            history_model = AssetBaseHistory
+        )
+
+
+        return history
