@@ -565,6 +565,15 @@ if FEATURE_FLAGGING_ENABLED:
                     "created": "",
                     "modified": ""
                 }
+            },
+            {
+                "2025-00007": {
+                    "name": "itam.ITAMAssetBase",
+                    "description": "ITAM Asset Base model. see https://github.com/nofusscomputing/centurion_erp/issues/692",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
             }
         ]
 
