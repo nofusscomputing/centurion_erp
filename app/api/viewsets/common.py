@@ -634,6 +634,9 @@ class ModelViewSetBase(
     _Optional_, if specified, these fields can be used to filter the API response
     """
 
+    lookup_value_regex = '[0-9]+'
+    """PK value regex"""
+
     model: object = None
     """Django Model
     _Mandatory_, Django model used for this view.

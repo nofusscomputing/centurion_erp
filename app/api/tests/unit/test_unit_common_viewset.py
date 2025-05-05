@@ -850,6 +850,51 @@ class ModelViewSetBaseCases(
         )
 
 
+
+    def test_view_attr_lookup_value_regex_exists(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must exist
+        """
+
+        assert hasattr(self.viewset, 'lookup_value_regex')
+
+
+    def test_view_attr_lookup_value_regex_not_empty(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must return a value
+        """
+
+        assert self.viewset.lookup_value_regex is not None
+
+
+    def test_view_attr_lookup_value_regex_type(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must be of type list
+        """
+
+        view_set = self.viewset()
+
+        assert (
+            type(view_set.lookup_value_regex) is str
+        )
+
+
+    def test_view_attr_lookup_value_regex_value(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must have a value of `[0-9]+` as this
+        is used for the PK lookup which is always a number.
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.lookup_value_regex == '[0-9]+'
+
+
+
     def test_view_attr_model_exists(self):
         """Attribute Test
 
