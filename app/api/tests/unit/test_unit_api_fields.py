@@ -109,6 +109,14 @@ class APIFieldsTestCases:
                     'organization': request.cls.organization
                 })
 
+
+            if 'model_notes' in self.model().fields:
+
+                request.cls.kwargs_create_item.update({
+                    'model_notes': 'notes',
+                })
+
+
             view_permissions = Permission.objects.get(
                     codename = 'view_' + request.cls.model._meta.model_name,
                     content_type = ContentType.objects.get(
