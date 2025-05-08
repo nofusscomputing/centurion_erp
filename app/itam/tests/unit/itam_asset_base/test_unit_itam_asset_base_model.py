@@ -78,6 +78,29 @@ class ITAMAssetBaseModelTestCases(
         assert self.model.note_basename == 'accounting:_api_v2_asset_note'
 
 
+    def test_function_is_property_get_itam_model_type(self):
+        """Function test
+
+        Confirm function `get_itam_model_type` is a property
+        """
+
+        assert type(self.model.get_itam_model_type) is property
+
+
+    def test_function_value_get_itam_model_type(self):
+        """Function test
+
+        Confirm function `get_itam_model_type` is a property
+        """
+
+        assert self.item.get_itam_model_type is None
+
+
+    def test_function_value_get_url(self):
+
+        assert self.item.get_url() == '/api/v2/itam/it_asset/' + str(self.item.id)
+
+
 
 class ITAMAssetBaseModelInheritedCases(
     ITAMAssetBaseModelTestCases,
@@ -99,9 +122,24 @@ class ITAMAssetBaseModelInheritedCases(
     """
 
 
+    def test_function_value_not_None_get_itam_model_type(self):
+        """Function test
+
+        Confirm function `get_itam_model_type` is a property
+        """
+
+        assert self.item.get_itam_model_type is not None
+
+
 
 class ITAMAssetBaseModelPyTest(
     ITAMAssetBaseModelTestCases,
 ):
 
-    pass
+    def test_function_value_get_related_model(self):
+        """Function test
+
+        Confirm function `get_related_model` is None for base model
+        """
+
+        assert self.item.get_related_model() is None
