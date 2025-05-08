@@ -135,6 +135,38 @@ class AssetBaseModelTestCases(
         assert self.model.app_namespace == 'accounting'
 
 
+    def test_function_is_property_get_model_type(self):
+        """Function test
+
+        Confirm function `get_model_type` is a property
+        """
+
+        assert type(self.model.get_model_type) is property
+
+
+    def test_function_value_get_model_type(self):
+        """Function test
+
+        Confirm function `get_model_type` returns None for base model
+        """
+
+        assert self.item.get_model_type is None
+
+
+    def test_function_value_get_related_model(self):
+        """Function test
+
+        Confirm function `get_related_model` is of the sub-model type
+        """
+
+        assert type(self.item.get_related_model()) == self.model
+
+
+    def test_function_value_get_url(self):
+
+        assert self.item.get_url() == '/api/v2/accounting/asset/' + str(self.item.id)
+
+
 
 class AssetBaseModelInheritedCases(
     AssetBaseModelTestCases,
@@ -156,9 +188,26 @@ class AssetBaseModelInheritedCases(
     """
 
 
+    def test_function_value_get_model_type(self):
+        """Function test
+
+        Confirm function `get_model_type` does not have a value of None
+        value should be equaul to Meta.sub_model_type
+        """
+
+        assert self.item.get_model_type == self.item._meta.sub_model_type
+
+
 
 class AssetBaseModelPyTest(
     AssetBaseModelTestCases,
 ):
 
-    pass
+
+    def test_function_value_get_related_model(self):
+        """Function test
+
+        Confirm function `get_related_model` is None for base model
+        """
+
+        assert self.item.get_related_model() is None
