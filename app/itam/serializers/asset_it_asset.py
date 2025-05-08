@@ -47,6 +47,7 @@ class ModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
+            'asset_type',
             'itam_type',
             'created',
             'modified',
