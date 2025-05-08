@@ -12,6 +12,8 @@ class ITAMAssetBaseModelTestCases(
 
     kwargs_create_item: dict = {}
 
+    it_asset_base_model = ITAMAssetBase
+
     sub_model_type = 'itam_base'
     """Sub Model Type
     
@@ -37,6 +39,36 @@ class ITAMAssetBaseModelTestCases(
         """
 
         assert issubclass(self.model, ITAMAssetBase)
+
+
+    def test_attribute_meta_exists_itam_sub_model_type(self):
+        """Attribute check
+
+        meta.itam_sub_model_type must exist
+        """
+
+        assert hasattr(self.model()._meta, 'itam_sub_model_type')
+
+
+    def test_sanity_is_it_asset_sub_model(self):
+        """Sanity Test
+        
+        This test ensures that the model being tested `self.model` is a
+        sub-model of `self.it_asset_base_model`.
+        This test is required as the same viewset is used for all sub-models
+        of `ITAMAssetBase`
+        """
+
+        assert issubclass(self.model, self.it_asset_base_model)
+
+
+    def test_attribute_meta_type_itam_sub_model_type(self):
+        """Attribute type
+
+        meta.itam_sub_model_type must be of type str
+        """
+
+        assert type(self.model()._meta.itam_sub_model_type) is str
 
 
 
