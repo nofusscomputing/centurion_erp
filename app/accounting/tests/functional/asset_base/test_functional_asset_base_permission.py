@@ -11,66 +11,34 @@ class PermissionsAPITestCases(
 ):
 
     add_data: dict = {
-        'title': 'ticket one',
-        'description': 'sadsa'
+        'asset_number': 'abc',
+        'serial_number': 'def',
+        'model_notes': 'sdasds',
     }
 
     app_namespace = 'v2'
 
-    change_data = {'description': 'device'}
+    change_data = {'asset_number': 'xyz'}
 
     delete_data = {}
 
     kwargs_create_item: dict = {
-        'title': 'ticket two',
-        'description': 'sadsa'
+        'asset_number': 'ghi',
+        'serial_number': 'jkl',
+        'model_notes': 'sdasds',
     }
 
     kwargs_create_item_diff_org: dict = {
-        'title': 'ticket three',
-        'description': 'sadsa'
+        'asset_number': 'mno',
+        'serial_number': 'pqr',
+        'model_notes': 'sdasds',
     }
 
     url_kwargs: dict = {}
 
-    url_name = '_api_v2_ticket'
+    url_name = 'accounting:_api_v2_asset'
 
     url_view_kwargs: dict = {}
-
-
-
-
-    @pytest.fixture(scope='class')
-    def opened_by_var_setup(self, request):
-
-        request.cls.kwargs_create_item.update({
-            'opened_by': request.cls.view_user
-        })
-
-        request.cls.kwargs_create_item_diff_org.update({
-            'opened_by': request.cls.view_user
-        })
-
-        if request.cls.add_data is not None:
-
-            request.cls.add_data.update({
-                'opened_by': request.cls.view_user.pk
-            })
-
-
-
-    @pytest.fixture(scope='class', autouse = True)
-    def class_setup(self, request, django_db_blocker,
-        model,
-        var_setup,
-        prepare,
-        opened_by_var_setup,
-        diff_org_model,
-        create_model,
-        post_model
-    ):
-
-        pass
 
 
 
@@ -87,7 +55,7 @@ class PermissionsAPITestCases(
 
 
 
-class TicketBasePermissionsAPIInheritedCases(
+class AssetBasePermissionsAPIInheritedCases(
     PermissionsAPITestCases,
 ):
 
@@ -97,16 +65,18 @@ class TicketBasePermissionsAPIInheritedCases(
 
     kwargs_create_item_diff_org: dict = None
 
+    url_name = 'accounting:_api_v2_asset_sub'
+
 
     @pytest.fixture(scope='class')
     def inherited_var_setup(self, request):
 
         request.cls.url_kwargs.update({
-            'ticket_model': self.model._meta.sub_model_type
+            'asset_model': self.model._meta.sub_model_type
         })
 
         request.cls.url_view_kwargs.update({
-            'ticket_model': self.model._meta.sub_model_type
+            'asset_model': self.model._meta.sub_model_type
         })
 
 
@@ -116,7 +86,6 @@ class TicketBasePermissionsAPIInheritedCases(
         model,
         var_setup,
         prepare,
-        opened_by_var_setup,
         inherited_var_setup,
         diff_org_model,
         create_model,
@@ -125,7 +94,7 @@ class TicketBasePermissionsAPIInheritedCases(
         pass
 
 
-class TicketBasePermissionsAPIPyTest(
+class AssetBasePermissionsAPIPyTest(
     PermissionsAPITestCases,
 ):
 

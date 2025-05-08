@@ -12,6 +12,8 @@ class ITAMAssetBaseModelTestCases(
 
     kwargs_create_item: dict = {}
 
+    it_asset_base_model = ITAMAssetBase
+
     sub_model_type = 'itam_base'
     """Sub Model Type
     
@@ -37,6 +39,36 @@ class ITAMAssetBaseModelTestCases(
         """
 
         assert issubclass(self.model, ITAMAssetBase)
+
+
+    def test_attribute_meta_exists_itam_sub_model_type(self):
+        """Attribute check
+
+        meta.itam_sub_model_type must exist
+        """
+
+        assert hasattr(self.model()._meta, 'itam_sub_model_type')
+
+
+    def test_sanity_is_it_asset_sub_model(self):
+        """Sanity Test
+        
+        This test ensures that the model being tested `self.model` is a
+        sub-model of `self.it_asset_base_model`.
+        This test is required as the same viewset is used for all sub-models
+        of `ITAMAssetBase`
+        """
+
+        assert issubclass(self.model, self.it_asset_base_model)
+
+
+    def test_attribute_meta_type_itam_sub_model_type(self):
+        """Attribute type
+
+        meta.itam_sub_model_type must be of type str
+        """
+
+        assert type(self.model()._meta.itam_sub_model_type) is str
 
 
 
@@ -78,6 +110,29 @@ class ITAMAssetBaseModelTestCases(
         assert self.model.note_basename == 'accounting:_api_v2_asset_note'
 
 
+    def test_function_is_property_get_itam_model_type(self):
+        """Function test
+
+        Confirm function `get_itam_model_type` is a property
+        """
+
+        assert type(self.model.get_itam_model_type) is property
+
+
+    def test_function_value_get_itam_model_type(self):
+        """Function test
+
+        Confirm function `get_itam_model_type` is a property
+        """
+
+        assert self.item.get_itam_model_type is None
+
+
+    def test_function_value_get_url(self):
+
+        assert self.item.get_url() == '/api/v2/itam/it_asset/' + str(self.item.id)
+
+
 
 class ITAMAssetBaseModelInheritedCases(
     ITAMAssetBaseModelTestCases,
@@ -99,9 +154,24 @@ class ITAMAssetBaseModelInheritedCases(
     """
 
 
+    def test_function_value_not_None_get_itam_model_type(self):
+        """Function test
+
+        Confirm function `get_itam_model_type` is a property
+        """
+
+        assert self.item.get_itam_model_type is not None
+
+
 
 class ITAMAssetBaseModelPyTest(
     ITAMAssetBaseModelTestCases,
 ):
 
-    pass
+    def test_function_value_get_related_model(self):
+        """Function test
+
+        Confirm function `get_related_model` is None for base model
+        """
+
+        assert self.item.get_related_model() is None

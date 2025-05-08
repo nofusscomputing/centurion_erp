@@ -118,13 +118,13 @@ class AssetBase(
             None: The ticket is for the Base class. Used to prevent creating a base ticket.
         """
 
-        ticket_type = str(self._meta.sub_model_type).lower().replace(' ', '_')
+        sub_model_type = str(self._meta.sub_model_type).lower().replace(' ', '_')
 
-        if ticket_type == 'ticket':
+        if sub_model_type == 'asset':
 
             return None
 
-        return ticket_type
+        return sub_model_type
 
 
     def get_model_type_choices():

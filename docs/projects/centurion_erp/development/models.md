@@ -86,6 +86,21 @@ This is your typical model that you would define within any Django Application. 
 This model is known within Django as multi-table inherited models. That is where the base model is a concrete class (not an Abstract model) and the super model inherits from the concrete base model. In this instance both models get their own database tables.
 
 
+#### Available Sub-Models
+
+We do have some core sub-models available. There intended purpose is to serve as a single place for all items of that type. Available sub-models are:
+
+- [Asset](./accounting/asset.md)
+
+    - [IT Asset](./itam/it_asset.md)
+
+- [Ticket](./core/ticket.md)
+
+- Ticket Comment
+
+All sub-models are intended to be extended and contain the core features for ALL models. This aids in extensibility and reduces the work required to add a model.
+
+
 <!-- markdownlint-disable -->
 #### Requirements
 <!-- markdownlint-restore -->
