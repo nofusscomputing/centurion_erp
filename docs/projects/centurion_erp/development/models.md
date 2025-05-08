@@ -92,6 +92,8 @@ We do have some core sub-models available. There intended purpose is to serve as
 
 - [Asset](./accounting/asset.md)
 
+    - [IT Asset](./itam/it_asset.md)
+
 - [Ticket](./core/ticket.md)
 
 - Ticket Comment
