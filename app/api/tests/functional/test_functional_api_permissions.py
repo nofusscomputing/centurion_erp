@@ -440,7 +440,7 @@ class APIPermissionsInheritedCases(
     @pytest.fixture(scope='class')
     def var_setup(self, request):
 
-
+            add_data = {}
             kwargs_create_item = {}
 
             kwargs_create_item_diff_org = {}
@@ -450,6 +450,12 @@ class APIPermissionsInheritedCases(
             url_view_kwargs = {}
 
             for base in reversed(request.cls.__mro__):
+
+                if hasattr(base, 'add_data'):
+
+                    if base.add_data is not None:
+
+                        add_data.update(**base.add_data)
 
                 if hasattr(base, 'kwargs_create_item'):
 
@@ -476,6 +482,7 @@ class APIPermissionsInheritedCases(
                         url_view_kwargs.update(**base.url_view_kwargs)
 
 
+            request.cls.add_data = add_data
             request.cls.kwargs_create_item = kwargs_create_item
             request.cls.kwargs_create_item_diff_org = kwargs_create_item_diff_org
             request.cls.url_kwargs = url_kwargs
