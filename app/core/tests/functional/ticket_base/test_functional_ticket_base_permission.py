@@ -39,6 +39,41 @@ class PermissionsAPITestCases(
 
 
 
+
+    @pytest.fixture(scope='class')
+    def opened_by_var_setup(self, request):
+
+        request.cls.kwargs_create_item.update({
+            'opened_by': request.cls.view_user
+        })
+
+        request.cls.kwargs_create_item_diff_org.update({
+            'opened_by': request.cls.view_user
+        })
+
+        if request.cls.add_data is not None:
+
+            request.cls.add_data.update({
+                'opened_by': request.cls.view_user.pk
+            })
+
+
+
+    @pytest.fixture(scope='class', autouse = True)
+    def class_setup(self, request, django_db_blocker,
+        model,
+        var_setup,
+        prepare,
+        opened_by_var_setup,
+        diff_org_model,
+        create_model,
+        post_model
+    ):
+
+        pass
+
+
+
     def test_returned_data_from_user_and_global_organizations_only(self):
         """Check items returned
 
@@ -81,7 +116,9 @@ class TicketBasePermissionsAPIInheritedCases(
         model,
         var_setup,
         prepare,
+        opened_by_var_setup,
         inherited_var_setup,
+        diff_org_model,
         create_model,
     ):
 

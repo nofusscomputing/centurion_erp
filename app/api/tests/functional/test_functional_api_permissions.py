@@ -516,24 +516,17 @@ class APIPermissionsInheritedCases(
 
             request.cls.kwargs_create_item.update({
                 'organization': request.cls.organization,
-                'opened_by': request.cls.view_user
             })
 
             request.cls.kwargs_create_item_diff_org.update({
                 'organization': request.cls.different_organization,
-                'opened_by': request.cls.view_user
             })
-
-            request.cls.other_org_item = request.cls.model.objects.create(
-                **request.cls.kwargs_create_item_diff_org
-            )
 
 
             if request.cls.add_data is not None:
 
                 request.cls.add_data.update({
                     'organization': request.cls.organization.id,
-                    'opened_by': request.cls.view_user.pk
                 })
 
             view_permissions = Permission.objects.get(
@@ -651,11 +644,6 @@ class APIPermissionsInheritedCases(
 
             yield
 
-            request.cls.other_org_item.delete()
-
-            del request.cls.other_org_item
-
-
             request.cls.add_user.delete()
 
             add_team.delete()
@@ -679,6 +667,26 @@ class APIPermissionsInheritedCases(
             different_organization_team.delete()
 
 
+
+    @pytest.fixture(scope='class', autouse = True)
+    def diff_org_model(self, request, django_db_blocker):
+
+        with django_db_blocker.unblock():
+
+            request.cls.other_org_item = request.cls.model.objects.create(
+                **request.cls.kwargs_create_item_diff_org
+            )
+
+        yield request.cls.other_org_item
+
+        with django_db_blocker.unblock():
+
+            request.cls.other_org_item.delete()
+
+            del request.cls.other_org_item
+
+
+
     @pytest.fixture(scope='class', autouse = True)
     def post_model(self, request):
 
@@ -690,6 +698,7 @@ class APIPermissionsInheritedCases(
         model,
         var_setup,
         prepare,
+        diff_org_model,
         create_model,
         post_model
     ):
