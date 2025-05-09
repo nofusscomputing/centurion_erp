@@ -45,6 +45,19 @@ class TicketCommentBase(
         verbose_name_plural = "Ticket Comments"
 
 
+    def field_validation_not_empty(value):
+
+        if value == '' or value is None:
+
+            raise centurion_exception.ValidationError(
+                    detail = {
+                        'comment_type': 'Comment Type requires a value.'
+                    },
+                    code = 'comment_type_empty_or_null'
+                )
+
+        return True
+
 
     model_notes = None
 
@@ -125,6 +138,9 @@ class TicketCommentBase(
         help_text = 'Type this comment is. derived from Meta.verbose_name',
         max_length = 30,
         null = False,
+        validators = [
+            field_validation_not_empty
+        ],
         verbose_name = 'Type',
     ) 
 
