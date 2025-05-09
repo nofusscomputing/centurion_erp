@@ -40,7 +40,7 @@ class TicketCommentBaseModelTestCases(
         'source': TicketBase.TicketSource.HELPDESK,
         'user': '',
         'is_closed': True,
-        'date_closed': '2025-05-08T171000',
+        'date_closed': '2025-05-08T17:10Z',
     }
 
 

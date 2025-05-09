@@ -135,6 +135,8 @@ class APIFieldsTestCases:
                 organization = request.cls.organization,
             )
 
+            request.cls.view_team = view_team
+
             view_team.permissions.set([view_permissions])
 
 
