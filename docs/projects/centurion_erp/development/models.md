@@ -96,7 +96,7 @@ We do have some core sub-models available. There intended purpose is to serve as
 
 - [Ticket](./core/ticket.md)
 
-- Ticket Comment
+- [Ticket Comment](./core/ticket_comment.md)
 
 All sub-models are intended to be extended and contain the core features for ALL models. This aids in extensibility and reduces the work required to add a model.
 
