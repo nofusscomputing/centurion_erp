@@ -850,6 +850,51 @@ class TicketBaseModelTestCases(
 
 
 
+    def test_function_called_clean_ticketcommentbase(self, model, mocker):
+        """Function Check
+
+        Ensure function `TicketBase.clean` is called
+        """
+
+        spy = mocker.spy(TicketBase, 'clean')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was clean called'
+
+        del valid_data['external_system']
+
+        model.objects.create(
+            **valid_data
+        )
+
+        assert spy.assert_called_once
+
+
+
+    def test_function_called_save_ticketcommentbase(self, model, mocker):
+        """Function Check
+
+        Ensure function `TicketBase.save` is called
+        """
+
+        spy = mocker.spy(TicketBase, 'save')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was save called'
+
+        del valid_data['external_system']
+
+        model.objects.create(
+            **valid_data
+        )
+
+        assert spy.assert_called_once
+
+
+
+
 class TicketBaseModelInheritedCases(
     TicketBaseModelTestCases,
 ):
