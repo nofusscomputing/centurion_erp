@@ -20,4 +20,4 @@ package.json
 feature_flags.json
 coverage_*.json
 *-coverage.xml
-
+log/

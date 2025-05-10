@@ -80,6 +80,95 @@ FEATURE_FLAG_OVERRIDES = None # Feature Flags to override fetched feature flags
 # PROMETHEUS_METRICS_EXPORT_PORT = 8010
 # PROMETHEUS_METRICS_EXPORT_ADDRESS = ''
 
+
+LOG_FILES = {    # defaults for devopment. docker includes settings has correct locations
+    "centurion": "../log/centurion.log",
+    "weblog": "../log/weblog.log",
+    "rest_api": "../log/rest_api.log",
+    "catch_all":"../log/catch-all.log"
+}
+
+CENTURION_LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {
+                "format": "{asctime} {levelname} {message}",
+                "style": "{",
+            },
+            "verbose": {
+                "format": "{asctime} {levelname} {name} {module} {process:d} {thread:d} {message}",
+                "style": "{",
+            },
+            "simple": {
+                "format": "{levelname} {message}",
+                "style": "{",
+            },
+            "web_log": {
+                "format": "{asctime} {levelname} {name} {module} {process:d} {thread:d} {message}",
+                "style": "{",
+            },
+        },
+        "handlers": {
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'console',
+            },
+            "file_centurion": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "centurion.log",
+                'formatter': 'verbose',
+            },
+            "file_weblog": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "weblog.log",
+                'formatter': 'web_log',
+            },
+            "file_rest_api": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "rest_api.log",
+                'formatter': 'verbose',
+            },
+            "file_catch_all": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "catch-all.log",
+                'formatter': 'verbose',
+            }
+        },
+        "loggers": {
+            "centurion": {
+                "handlers": ['console', 'file_centurion'],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "django.server": {
+                "handlers": ["file_weblog", 'console'],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "django": {
+                "handlers": ['console', 'file_catch_all'],
+                "level": "INFO",
+                "propagate": False,
+            },
+            'rest_framework': {
+                'handlers': ['file_rest_api', 'console'],
+                'level': 'INFO',
+                'propagate': False,
+            },
+            '': {
+                'handlers': ['file_catch_all'],
+                'level': 'INFO',
+                'propagate': True,
+                },
+        },
+    }
+
 METRICS_ENABLED = False                      # Enable Metrics
 METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
 METRICS_MULTIPROC_DIR = '/tmp/prometheus'    # path the metrics from multiple-process' save to
@@ -393,7 +482,22 @@ CSRF_TRUSTED_ORIGINS = [
     *TRUSTED_ORIGINS
 ]
 
+
+# Add the user specified log files
+CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
+CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
+CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
+CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_all']
+
+
+if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('../log'):
+
+    if not os.path.exists('../log'): # Create log dir
+
+        os.makedirs('../log')
+
 if DEBUG:
+
     INSTALLED_APPS += [
         'debug_toolbar',
     ]
@@ -405,6 +509,10 @@ if DEBUG:
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
+
+
+# Setup Logging
+LOGGING = CENTURION_LOGGING
 
 
 if METRICS_ENABLED:
