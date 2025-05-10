@@ -4,6 +4,7 @@ __pycache__
 **.sqlite3
 **.sqlite
 **.coverage
+.coverage*
 artifacts/
 **.tmp.*
 volumes/
@@ -19,3 +20,4 @@ package.json
 feature_flags.json
 coverage_*.json
 *-coverage.xml
+

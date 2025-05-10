@@ -154,7 +154,14 @@ class TicketCommentBaseAPITestCases(
 
         with django_db_blocker.unblock():
 
-            request.cls.item_two = TicketCommentBase.objects.create(
+            request.cls.item.ticket.is_closed = False
+            request.cls.item.ticket.date_closed = None
+            request.cls.item.ticket.is_solved = False
+            request.cls.item.ticket.date_solved = None
+            request.cls.item.ticket.status = TicketBase.TicketStatus.NEW
+            request.cls.item.ticket.save()
+
+            request.cls.item_two = model.objects.create(
                 **valid_data
             )
 
