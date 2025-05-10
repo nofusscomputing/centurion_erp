@@ -1,4 +1,6 @@
 import importlib
+import logging
+
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets, pagination
@@ -242,6 +244,8 @@ class Retrieve(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -315,6 +319,8 @@ class Update(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -382,6 +388,8 @@ class Update(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -430,6 +438,16 @@ class CommonViewSet(
 
     _Optional_, if specified will be add to list view metadata
     """
+
+    _log: logging.Logger = None
+    
+    def get_log(self):
+
+        if self._log is None:
+
+            self._log = logging.getLogger('centurion.' + self.model._meta.app_label)
+
+        return self._log
 
 
     metadata_class = ReactUIMetadata
