@@ -25,9 +25,9 @@ class UserPermissionsAPI(TestCase):
 
         self.url_kwargs = {}
 
-        self.url_view_kwargs = {'pk': 1}
-
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.url_view_kwargs = {'pk': self.view_user.pk}
 
 
 

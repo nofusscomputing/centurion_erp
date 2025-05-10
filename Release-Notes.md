@@ -1,3 +1,22 @@
+## Version 1.17.0
+
+- Added setting for log files.
+
+    Enables user to specify a default path for centurion's logging. Add the following to your settings file `/etc/itsm/settings.py`
+
+    ``` py
+    LOG_FILES = {
+        "centurion": "/var/log/centurion.log",    # Normal Centurion Operations
+        "weblog": "/var/log/weblog.log",          # All web requests made to Centurion
+        "rest_api": "/var/log/rest_api.log",      # Rest API
+        "catch_all":"/var/log/catch-all.log"      # A catch all log. Note: does not log anything that has already been logged.
+    }
+
+    ```
+
+    With this new setting, the previous setting `LOGGING` will no longer function.
+
+
 ## Version 1.16.0
 
 - Employees model added behind feature flag `2025-00002` and will remain behind this flag until production ready.

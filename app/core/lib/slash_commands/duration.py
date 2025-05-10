@@ -82,7 +82,10 @@ For this command to process the following conditions must be met:
                 user = self.opened_by,
             )
 
-        elif str(self._meta.verbose_name).lower().replace(' ', '_') == 'ticket_comment':
+        elif(
+            str(self._meta.verbose_name).lower().replace(' ', '_') == 'ticket_comment'
+            or str(self.__class__.__name__).lower().startswith('ticketcomment')
+        ):
 
             self.duration = duration
 

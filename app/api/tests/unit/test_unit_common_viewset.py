@@ -350,13 +350,14 @@ class CommonViewSetCases(
 ):
     """Test Suite for class CommonViewSet"""
 
-    kwargs: dict = {}
 
     viewset = CommonViewSet
 
 
     @classmethod
     def setUpTestData(self):
+
+        self.kwargs: dict = {}
 
         if self.viewset is CommonViewSet:
 
@@ -810,6 +811,18 @@ class ModelViewSetBaseCases(
         self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
 
 
+        @classmethod
+        def tearDownClass(cls):
+
+            cls.model = None
+
+            cls.organization.delete()
+
+            cls.view_user.delete()
+
+            super().tearDownClass()
+
+
     def test_class_inherits_modelviewsetbase(self):
         """Class Inheritence check
 
@@ -848,6 +861,51 @@ class ModelViewSetBaseCases(
         assert (
             type(view_set.filterset_fields) is list
         )
+
+
+
+    def test_view_attr_lookup_value_regex_exists(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must exist
+        """
+
+        assert hasattr(self.viewset, 'lookup_value_regex')
+
+
+    def test_view_attr_lookup_value_regex_not_empty(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must return a value
+        """
+
+        assert self.viewset.lookup_value_regex is not None
+
+
+    def test_view_attr_lookup_value_regex_type(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must be of type list
+        """
+
+        view_set = self.viewset()
+
+        assert (
+            type(view_set.lookup_value_regex) is str
+        )
+
+
+    def test_view_attr_lookup_value_regex_value(self):
+        """Attribute Test
+
+        Attribute `lookup_value_regex` must have a value of `[0-9]+` as this
+        is used for the PK lookup which is always a number.
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.lookup_value_regex == '[0-9]+'
+
 
 
     def test_view_attr_model_exists(self):
@@ -2610,18 +2668,18 @@ class SubModelViewSetInheritedCases(
     viewset = None
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
+    # @classmethod
+    # def setUpTestData(self):
+    #     """Setup Test
 
-        1. make list request
-        """
+    #     1. make list request
+    #     """
 
-        self.viewset.kwargs = {}
+    #     self.viewset.kwargs = {}
 
-        self.viewset.kwargs[self.viewset.model_kwarg] = self.model._meta.sub_model_type
+    #     self.viewset.kwargs[self.viewset.model_kwarg] = self.model._meta.sub_model_type
 
-        super().setUpTestData()
+    #     super().setUpTestData()
 
 
 

@@ -1,1 +1,2 @@
 from .device_software_history import DeviceSoftwareHistory
+from .itam_asset_base import ITAMAssetBase

@@ -33,6 +33,15 @@ FEATURE_FLAGGING_ENABLED = True    # Turn Feature Flagging on/off
 
 FEATURE_FLAG_OVERRIDES = []    # Feature Flag Overrides. Takes preceedence over downloaded feature flags.
 
+
+LOG_FILES = {    # Location where log files will be created
+    "centurion": "/var/log/centurion.log",
+    "weblog": "/var/log/weblog.log",
+    "rest_api": "/var/log/rest_api.log",
+    "catch_all":"/var/log/catch-all.log"
+}
+
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SECURE_SSL_REDIRECT = True
