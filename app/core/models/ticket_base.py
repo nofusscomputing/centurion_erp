@@ -819,5 +819,18 @@ class TicketBase(
 
             self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
 
+
+        if(
+            self.description != ''
+            and self.description is not None
+        ):
+
+            description = self.slash_command(self.description)
+
+            if description != self.description:
+
+                self.description = description
+
+
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 

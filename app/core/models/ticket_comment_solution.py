@@ -62,6 +62,8 @@ class TicketCommentSolution(
 
         self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
 
+        super().save(force_insert = force_insert, force_update = force_update, using = using, update_fields = update_fields)
+
         self.ticket.is_solved = self.is_closed
 
         self.ticket.date_solved = self.date_closed
@@ -69,8 +71,6 @@ class TicketCommentSolution(
         self.ticket.status = self.ticket.TicketStatus.SOLVED
 
         self.ticket.save()
-
-        super().save(force_insert = force_insert, force_update = force_update, using = using, update_fields = update_fields)
 
         # clear comment cache
         if hasattr(self.ticket, '_ticket_comments'):

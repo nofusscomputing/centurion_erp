@@ -45,6 +45,19 @@ class TicketCommentBase(
         verbose_name_plural = "Ticket Comments"
 
 
+    def field_validation_not_empty(value):
+
+        if value == '' or value is None:
+
+            raise centurion_exception.ValidationError(
+                    detail = {
+                        'comment_type': 'Comment Type requires a value.'
+                    },
+                    code = 'comment_type_empty_or_null'
+                )
+
+        return True
+
 
     model_notes = None
 
@@ -62,7 +75,6 @@ class TicketCommentBase(
     parent = models.ForeignKey(
         'self',
         blank = True,
-        default = None,
         help_text = 'Parent ID for creating discussion threads',
         null = True,
         on_delete = models.PROTECT,
@@ -80,7 +92,6 @@ class TicketCommentBase(
 
     external_ref = models.IntegerField(
         blank = True,
-        default = None,
         help_text = 'External System reference',
         null = True,
         verbose_name = 'Reference Number',
@@ -89,7 +100,6 @@ class TicketCommentBase(
     external_system = models.IntegerField(
         blank = True,
         choices=TicketBase.Ticket_ExternalSystem,
-        default=None,
         help_text = 'External system this item derives',
         null=True,
         verbose_name = 'External System',
@@ -98,7 +108,7 @@ class TicketCommentBase(
     @property
     def get_comment_type(self):
 
-        comment_type = str(self.Meta.sub_model_type).lower().replace(
+        comment_type = str(self._meta.sub_model_type).lower().replace(
             ' ', '_'
         )
 
@@ -128,13 +138,15 @@ class TicketCommentBase(
         help_text = 'Type this comment is. derived from Meta.verbose_name',
         max_length = 30,
         null = False,
+        validators = [
+            field_validation_not_empty
+        ],
         verbose_name = 'Type',
     ) 
 
     category = models.ForeignKey(
         TicketCommentCategory,
         blank = True,
-        default = None,
         help_text = 'Category of the comment',
         null = True,
         on_delete = models.PROTECT,
@@ -411,10 +423,3 @@ class TicketCommentBase(
             if hasattr(self.ticket, '_ticket_comments'):
 
                 del self.ticket._ticket_comments
-
-            # if self.comment_type == self.CommentType.SOLUTION:
-
-            #     update_ticket =  self.ticket.__class__.objects.get(pk=self.ticket.id)
-            #     update_ticket.status = int(TicketBase.TicketStatus.All.SOLVED.value)
-
-            #     update_ticket.save()
