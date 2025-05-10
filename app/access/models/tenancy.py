@@ -1,4 +1,4 @@
-# from django.conf import settings
+import logging
 from django.db import models
 # from django.contrib.auth.models import User, Group
 
@@ -192,6 +192,16 @@ class TenancyObject(SaveHistory):
     This value is derived from `<model>._meta.model_name`. This value should
     only be used when there is model inheritence.
     """
+
+    _log: logging.Logger = None
+    
+    def get_log(self):
+
+        if self._log is None:
+
+            self._log = logging.getLogger('centurion.' + self._meta.app_label)
+
+        return self._log
 
     page_layout: list = None
 
