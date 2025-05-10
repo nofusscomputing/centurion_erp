@@ -1910,108 +1910,122 @@ class SlashCommandsCommon:
     single_line_command_own_line_blank_line_crlf = 'A single line comment\r\nCOMMAND\r\n'
 
 
-    parameterized_slash_command = {
-        'relate_existing_ticket': {
-            'relate': True,
-            'slash_command': 'relate',
-            'command_obj': '#EXISTINGTICKET',
-        },
+    @property
+    def parameterized_slash_command(self):
+        
+        return {
+            ###############################################################################################
+            #
+            # Sof Skipped due to ticket model re-write.
+            #    model core.models.ticket.ticket.RelatedTickets still uses the old ticket model
+            #
+            ###############################################################################################
+            # 'relate_existing_ticket': {
+            #     'relate': True,
+            #     'slash_command': 'relate',
+            #     'command_obj': '#EXISTINGTICKET',
+            # },
 
-        'blocks_existing_ticket': {
-            'blocks': True,
-            'slash_command': 'blocks',
-            'command_obj': '#EXISTINGTICKET',
-        },
+            # 'blocks_existing_ticket': {
+            #     'blocks': True,
+            #     'slash_command': 'blocks',
+            #     'command_obj': '#EXISTINGTICKET',
+            # },
 
-        'blocked_by_existing_ticket': {
-            'blocked_by': True,
-            'slash_command': 'blocked_by',
-            'command_obj': '#EXISTINGTICKET',
-        },
+            # 'blocked_by_existing_ticket': {
+            #     'blocked_by': True,
+            #     'slash_command': 'blocked_by',
+            #     'command_obj': '#EXISTINGTICKET',
+            # },
+            ###############################################################################################
+            #
+            # Eof Skipped due to ticket model re-write.
+            #
+            ###############################################################################################
 
-        'spend_full_no_spaces': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '1h2m3s',
-        },
-        'spend_full_spaces': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '1h 2m 3s',
-        },
-        'spend_hour_minute_spaces': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '1h 2m',
-        },
-        'spend_hour_second_spaces': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '1h 3s',
-        },
-        'spend_minute_second_spaces': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '5m 3s',
-        },
-        'spend_hour': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '1h',
-        },
-        'spend_minute': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '1m',
-        },
-        'spend_second': {
-            'spend': True,
-            'slash_command': 'spend',
-            'command_obj': '4s',
-        },
+            'spend_full_no_spaces': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '1h2m3s',
+            },
+            'spend_full_spaces': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '1h 2m 3s',
+            },
+            'spend_hour_minute_spaces': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '1h 2m',
+            },
+            'spend_hour_second_spaces': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '1h 3s',
+            },
+            'spend_minute_second_spaces': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '5m 3s',
+            },
+            'spend_hour': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '1h',
+            },
+            'spend_minute': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '1m',
+            },
+            'spend_second': {
+                'spend': True,
+                'slash_command': 'spend',
+                'command_obj': '4s',
+            },
 
-        'spent_full_no_spaces': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '1h2m3s',
-        },
-        'spent_full_spaces': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '1h 2m 3s',
-        },
-        'spent_hour_minute_spaces': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '1h 2m',
-        },
-        'spent_hour_second_spaces': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '1h 3s',
-        },
-        'spent_minute_second_spaces': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '5m 3s',
-        },
-        'spent_hour': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '1h',
-        },
-        'spent_minute': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '1m',
-        },
-        'spent_second': {
-            'spend': True,
-            'slash_command': 'spent',
-            'command_obj': '4s',
-        },
+            'spent_full_no_spaces': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '1h2m3s',
+            },
+            'spent_full_spaces': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '1h 2m 3s',
+            },
+            'spent_hour_minute_spaces': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '1h 2m',
+            },
+            'spent_hour_second_spaces': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '1h 3s',
+            },
+            'spent_minute_second_spaces': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '5m 3s',
+            },
+            'spent_hour': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '1h',
+            },
+            'spent_minute': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '1m',
+            },
+            'spent_second': {
+                'spend': True,
+                'slash_command': 'spent',
+                'command_obj': '4s',
+            },
 
-    }
+        }
 
 
 
