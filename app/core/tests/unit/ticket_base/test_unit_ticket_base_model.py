@@ -893,6 +893,26 @@ class TicketBaseModelTestCases(
         assert spy.assert_called_once
 
 
+    def test_function_save_called_slash_command(self, model, mocker, ticket):
+        """Function Check
+
+        Ensure function `TicketCommentBase.clean` is called
+        """
+
+        spy = mocker.spy(self.model, 'slash_command')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was save called'
+
+        del valid_data['external_system']
+
+        item = model.objects.create(
+            **valid_data
+        )
+
+        spy.assert_called_with(item, valid_data['description'])
+
 
 
 class TicketBaseModelInheritedCases(
@@ -945,3 +965,27 @@ class TicketBaseModelPyTest(
         """
 
         assert type(self.model().get_related_model()) is type(None)
+
+
+    def test_function_save_called_slash_command(self, model, mocker, ticket):
+        """Function Check
+
+        This test case is a duplicate of a test with the same name. This
+        test is required so that the base class `save()` function can be tested.
+
+        Ensure function `TicketCommentBase.clean` is called
+        """
+
+        spy = mocker.spy(self.model, 'slash_command')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was save called'
+
+        del valid_data['external_system']
+
+        item = model.objects.create(
+            **valid_data
+        )
+
+        spy.assert_called_with(item, valid_data['description'])
