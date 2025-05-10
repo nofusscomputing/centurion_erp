@@ -1,6 +1,7 @@
 import pytest
 
 from django.contrib.auth.models import ContentType, Permission, User
+from django.shortcuts import reverse
 
 from rest_framework.relations import Hyperlink
 
@@ -65,26 +66,23 @@ class TicketCommentBaseAPITestCases(
                 organization = request.cls.organization,
             )
 
+            request.cls.comment_user = comment_user
+
 
             valid_data = request.cls.kwargs_create_item.copy()
 
-            valid_data['body'] = 'the parent comment'
-            valid_data['user'] = comment_user
-            valid_data['ticket'] = ticket
-            valid_data['comment_type'] = TicketCommentBase._meta.sub_model_type
-
+            valid_data['body'] = 'the template comment'
+            
             del valid_data['external_ref']
             del valid_data['external_system']
             del valid_data['category']
-            del valid_data['parent']
             del valid_data['template']
+            del valid_data['parent']
 
-            parent_comment = TicketCommentBase.objects.create(
-                **valid_data
-            )
+            valid_data['comment_type'] = TicketCommentBase._meta.sub_model_type
+            valid_data['ticket'] = ticket
+            valid_data['user'] = request.cls.comment_user
 
-
-            valid_data['body'] = 'the template comment'
 
             template_comment = TicketCommentBase.objects.create(
                 **valid_data
@@ -95,25 +93,22 @@ class TicketCommentBaseAPITestCases(
                 'category': category,
                 'ticket': ticket,
                 'user': comment_user,
-                'parent': parent_comment,
+                'parent': None,
                 'template': template_comment,
                 'comment_type': model._meta.sub_model_type
             })
 
 
-
         yield
 
 
-
         with django_db_blocker.unblock():
-
-            parent_comment.delete()
 
             template_comment.delete()
 
             category.delete()
 
+            del request.cls.comment_user
 
             for comment in ticket.ticketcommentbase_set.all():
 
@@ -128,7 +123,7 @@ class TicketCommentBaseAPITestCases(
 
 
     @pytest.fixture( scope = 'class')
-    def post_model(self, request, model ):
+    def post_model(self, request, model, django_db_blocker ):
 
         request.cls.url_view_kwargs.update({
             'ticket_id': request.cls.item.ticket.id
@@ -143,14 +138,48 @@ class TicketCommentBaseAPITestCases(
                 'ticket_comment_model': model._meta.sub_model_type
             })
 
-        if self.item.parent:
 
-            request.cls.url_ns_name = '_api_v2_ticket_comment_base_sub_thread'
+        valid_data = request.cls.kwargs_create_item.copy()
+        valid_data['body'] = 'the child comment'
 
-            request.cls.url_view_kwargs.update({
-                'parent_id': self.item.parent.id
-            })
+        valid_data['comment_type'] = TicketCommentBase._meta.sub_model_type
+        valid_data['parent'] = request.cls.item
+        valid_data['ticket'] = request.cls.item.ticket
+        valid_data['user'] = request.cls.comment_user
 
+        del valid_data['external_ref']
+        del valid_data['external_system']
+        del valid_data['category']
+        del valid_data['template']
+
+        with django_db_blocker.unblock():
+
+            request.cls.item_two = TicketCommentBase.objects.create(
+                **valid_data
+            )
+
+        url_ns_name = '_api_v2_ticket_comment_base_sub_thread'
+
+        request.cls.url_two = reverse(
+            'v2:' + url_ns_name + '-detail',
+            kwargs = {
+                **request.cls.url_view_kwargs,
+                'pk': request.cls.item_two.id,
+                'parent_id': request.cls.item.id,
+                'ticket_comment_model': model._meta.sub_model_type
+            }
+        )
+
+
+        yield
+
+        with django_db_blocker.unblock():
+
+            request.cls.item_two.delete(keep_parents = False)
+
+            del request.cls.item_two
+
+            del request.cls.url_two
 
 
 

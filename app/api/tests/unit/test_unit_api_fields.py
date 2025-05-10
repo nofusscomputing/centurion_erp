@@ -14,6 +14,25 @@ from app.tests.common import DoesNotExist
 
 
 class APIFieldsTestCases:
+    """ API field Rendering Test Suite
+
+    This test suite tests the rendering of API fieilds.
+
+    ## Additional Items
+
+    You may find a scenario where you are unable to have all fileds available
+    within a single request. to overcome this this test suite has the features
+    available wherein you can prepare an additional item for an additional
+    check. the following is required before the API request is made
+    (setup_post fixture):
+
+    - additional item created and stored in attribute `self.item_two`
+    - additional url as a string and stored in attribute `self.url_two`
+
+    Once you have these two objects, an additional check will be done and each
+    test will check both API requests. if the field is found in either api
+    request the test will pass
+    """
 
     @property
     def parameterized_test_data(self) -> dict:
@@ -178,9 +197,24 @@ class APIFieldsTestCases:
 
             request.cls.api_data = response.data
 
+            item_two = getattr(request.cls, 'url_two', None)
+
+            if item_two:
+
+                response_two = client.get(request.cls.url_two)
+
+                request.cls.api_data_two = response_two.data
+
+            else:
+
+                request.cls.api_data_two = {}
+
+
         yield
 
         del request.cls.url_view_kwargs['pk']
+
+        del request.cls.api_data_two
 
 
 
@@ -203,13 +237,21 @@ class APIFieldsTestCases:
 
         api_data = recursearray(self.api_data, param_value)
 
+        api_data_two = recursearray(self.api_data_two, param_value)
+
         if param_expected is DoesNotExist:
 
-            assert api_data['key'] not in api_data['obj']
+            assert(
+                api_data['key'] not in api_data['obj']
+                and api_data_two['key'] not in api_data_two['obj']
+            )
 
         else:
 
-            assert api_data['key'] in api_data['obj']
+            assert(
+                api_data['key'] in api_data['obj']
+                or api_data_two['key'] in api_data_two['obj']
+            )
 
 
 
@@ -221,13 +263,21 @@ class APIFieldsTestCases:
 
         api_data = recursearray(self.api_data, param_value)
 
+        api_data_two = recursearray(self.api_data_two, param_value)
+
         if param_expected is DoesNotExist:
 
-            assert api_data['key'] not in api_data['obj']
+            assert(
+                api_data['key'] not in api_data['obj']
+                and api_data_two['key'] not in api_data_two['obj']
+            )
 
         else:
 
-            assert type( api_data['value'] ) is param_expected
+            assert(
+                type( api_data['value'] ) is param_expected
+                or type( api_data_two.get('value', 'is empty') ) is param_expected
+            )
 
 
 
