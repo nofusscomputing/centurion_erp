@@ -77,16 +77,17 @@ Describe in detail the following:
 ### 🧪 Tests
 
 - Unit Tests
+    - [ ] API Render (fields)
     - [ ] [Model](https://nofusscomputing.com/projects/centurion_erp/development/models/#tests)
-    - [ ] Serializer
     - [ ] ViewSet
 - Function Test
-    - [ ] ViewSet
+    - [ ] History API Render (fields)
+    - [ ] History Entries
     - [ ] API Metadata
     - [ ] API Permissions
-    - [ ] API Render (fields)
-    - [ ] History Entries
-    - [ ] History API Render (fields)
+    - [ ] Model
+    - [ ] Serializer
+    - [ ] ViewSet
 
 
 ## ✅ Requirements
@@ -94,6 +95,24 @@ Describe in detail the following:
 A Requirement is a must have. In addition will also be tested.
 
 - [ ] Must have a [model_tag](https://nofusscomputing.com/projects/centurion_erp/user/core/markdown/#model-reference)
+
+<!--
+
+When detailing requirements the following must be taken into account:
+
+- what the user should be able to do
+
+- what the user should not be able to do
+
+- what should occur when a user performs an action
+
+-->
+
+- Functional Requirements
+
+
+- Non-Functional Requirements
+
 
 ---
 

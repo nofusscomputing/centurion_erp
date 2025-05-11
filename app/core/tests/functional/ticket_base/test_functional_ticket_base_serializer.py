@@ -241,6 +241,7 @@ class TicketBaseSerializerTestCases:
             )
 
             request.cls.valid_data.update({
+                'organization': request.cls.organization,
                 'category': TicketCategory.objects.create(
                 organization = request.cls.organization,
                     name = 'a category'
@@ -262,9 +263,27 @@ class TicketBaseSerializerTestCases:
             })
 
 
+            project_two = Project.objects.create(
+                organization = request.cls.organization,
+                name = 'project_two'
+            )
+
+            request.cls.project_milestone_two = ProjectMilestone.objects.create(
+                organization = request.cls.organization,
+                name = 'project milestone two',
+                project = project_two
+            )
+
+
+
+
         yield
 
         with django_db_blocker.unblock():
+
+            request.cls.project_milestone_two.delete()
+
+            project_two.delete()
 
             request.cls.entity_user.delete()
 
@@ -332,6 +351,70 @@ class TicketBaseSerializerTestCases:
         )
 
         assert serializer.is_valid(raise_exception = True)
+
+
+
+    def test_serializer_valid_data_milestone_from_different_project_not_valid(self, fake_view, create_serializer):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with valid data, no validation
+        error occurs.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        valid_data['milestone'] = self.project_milestone_two.id
+
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+            _has_triage = True
+        )
+
+
+        serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        assert not serializer.is_valid(raise_exception = False)
+
+
+
+    def test_serializer_valid_data_milestone_from_different_project_raises_exception(self, fake_view, create_serializer):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with valid data, no validation
+        error occurs.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        valid_data['milestone'] = self.project_milestone_two.id
+
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+            _has_triage = True
+        )
+
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = create_serializer(
+                context = {
+                    'request': view_set.request,
+                    'view': view_set,
+                },
+                data = valid_data
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['milestone'][0] == 'milestone_same_project'
 
 
 
