@@ -23,4 +23,5 @@
         "yellow": 60,
         "green": 90
     },
+    "telemetry.feedback.enabled": false,
 }

@@ -62,6 +62,7 @@ class APITestCases(
                 'external_system': int(request.cls.model.Ticket_ExternalSystem.CUSTOM_1),
                 'impact': int(request.cls.model.TicketImpact.MEDIUM),
                 'priority': int(request.cls.model.TicketPriority.HIGH),
+                'status': request.cls.model.TicketStatus.CLOSED,
             })
 
 
@@ -379,7 +380,9 @@ class APITestCases(
         'real_start_date': '2025-04-16T00:00:03',
         'real_finish_date': '2025-04-16T00:00:04',
         'is_solved': True,
+        'date_solved': '2025-05-12T02:30:01',
         'is_closed': True,
+        'date_closed': '2025-05-12T02:30:02',
     }
 
     url_ns_name = '_api_v2_ticket'

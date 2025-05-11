@@ -278,6 +278,16 @@ class ModelSerializer(
 
     def validate(self, attrs):
 
+
+        if getattr(self.context['view'], 'action', '') in [ 'create' ]:
+            # Always set that the ticket was opened by user ho is making the request
+
+            try:
+                attrs['opened_by'] = self.context['request'].user
+            except KeyError:
+                pass
+
+
         attrs = self.validate_field_milestone( attrs )
 
         attrs = self.validate_field_external_system( attrs )
@@ -290,15 +300,13 @@ class ModelSerializer(
 
         status = int(attrs.get('status', 0))
 
-        opened_by_id = int(attrs.get('opened_by_id', 0))
+        opened_by_id = attrs.get('opened_by', 0)
 
-        if self.context.get('request', None):
+        if opened_by_id != 0:
 
-            request_user_id = int(self.context['request'].user.id)
+            opened_by_id = opened_by_id.id
 
-        else:
-
-            request_user_id = 0
+        request_user_id = int(self.context['request'].user.id)
 
         if opened_by_id == 0:
 
@@ -363,6 +371,21 @@ class ModelSerializer(
                     code = 'no_triage_status_close',
                 )
 
+
+        elif (
+            has_triage_permission
+            or has_import_permission
+        ):
+
+            if(
+                (
+                    'status' not in attrs
+                    or attrs.get('status', 0) == self.Meta.model.TicketStatus.NEW
+                )
+                and 'assigned_to' in attrs
+            ):
+
+                attrs['status'] = self.Meta.model.TicketStatus.ASSIGNED
 
 
         return attrs

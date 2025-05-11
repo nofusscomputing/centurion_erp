@@ -157,25 +157,10 @@ When using slash commands, there is only to be one slash command per line. All s
         summary: true
 
 
-## Ticket Types
+## Re-Opening a Ticket
 
-::: app.core.models.ticket.ticket.Ticket.TicketType
-    options:
-        inherited_members: false
-        members: []
-        show_bases: false
-        show_submodules: false
-        summary: true
+To re-open a ticket is as simple as changing the status and saving. Not everyone can re-open a ticket, it depends upon the following:
 
+- The user who raised the ticket can re-open the ticket only when the status is `SOLVED`
 
-## Ticket Comments
-
-Within Centurion ERP the ticket comment model is common to all comment types. As with tickets the differences are the available fields, which depend upon comment type and permissions.
-
-::: app.core.models.ticket.ticket_comment.TicketComment.CommentType
-    options:
-        inherited_members: false
-        members: []
-        show_bases: false
-        show_submodules: false
-        summary: true
+- A User with `Triage` permission can re-open a ticket when the status is `SOLVED` or `CLOSED` regardless of who raised the ticket.

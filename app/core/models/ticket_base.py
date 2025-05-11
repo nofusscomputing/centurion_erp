@@ -434,9 +434,9 @@ class TicketBase(
 
     opened_by = models.ForeignKey(
         User,
-        blank = False,
+        blank = True,
         help_text = 'Who is the ticket for',
-        null = False,
+        null = True,
         on_delete = models.PROTECT,
         related_name = 'ticket_opened',
         verbose_name = 'Opened By',
@@ -567,6 +567,16 @@ class TicketBase(
                 there are unresolved ticket comments.
         """
 
+        if self.opened_by is None:
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'opened_by': 'This field is required.'
+                },
+                code = 'required'
+            )
+
+
         if self.milestone:
 
             if self.milestone.project != self.project:
@@ -578,15 +588,78 @@ class TicketBase(
                     code = 'milestone_different_project'
                 )
 
+
+        if(
+            (
+                self.status == self.TicketStatus.SOLVED
+                and self.get_can_resolve( raise_exceptions = False )
+            )
+            or self.status == self.TicketStatus.INVALID
+        ):
+
+            self.is_solved = True
+
+
+        elif(    # Re-Open Ticket
+            ( self.is_solved or self.is_closed )
+            and self.status != self.TicketStatus.CLOSED
+            and self.status != self.TicketStatus.INVALID
+            and self.status != self.TicketStatus.SOLVED
+        ):
+
+            if self.is_closed:
+
+                self.is_closed = False
+
+            if self.is_solved:
+
+                self.is_solved = False
+
+
+        elif not self.is_closed and self.status == self.TicketStatus.CLOSED:    # Close Ticket
+
+            self.is_solved = True
+            self.is_closed = True
+
+
         if self.is_solved:
 
             self.get_can_resolve( raise_exceptions = True )
 
-            
 
         if self.is_closed:
 
             self.get_can_close( raise_exceptions = True )
+
+
+        related_model = self.get_related_model()
+
+        if related_model is None:
+
+            related_model = self
+
+        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
+
+            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
+
+
+        if self.date_solved is None and self.is_solved:
+
+            self.date_solved = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        elif self.date_solved is not None and not self.is_solved:
+
+            self.date_solved = None
+
+
+        if self.date_closed is None and self.is_closed:
+
+            self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        if self.date_closed is not None and not self.is_closed:
+
+            self.date_closed = None
+
 
 
 
@@ -788,36 +861,6 @@ class TicketBase(
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        related_model = self.get_related_model()
-
-        if related_model is None:
-
-            related_model = self
-
-        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
-
-            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
-
-        if(
-            (
-                self.status == self.TicketStatus.SOLVED
-                and self.get_can_resolve( raise_exceptions = False )
-            )
-            or self.status == self.TicketStatus.INVALID
-        ):
-
-            self.is_solved = True
-
-
-        if self.date_solved is None and self.is_solved:
-
-            self.date_solved = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
-
-
-        if self.date_closed is None and self.is_closed:
-
-            self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
 
 
         if(
