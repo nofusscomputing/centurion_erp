@@ -850,7 +850,7 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_function_called_clean_ticketcommentbase(self, model, mocker):
+    def test_function_called_clean_ticketbase(self, model, mocker):
         """Function Check
 
         Ensure function `TicketBase.clean` is called
@@ -872,7 +872,7 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_function_called_save_ticketcommentbase(self, model, mocker):
+    def test_function_called_save_ticketbase(self, model, mocker):
         """Function Check
 
         Ensure function `TicketBase.save` is called

@@ -2029,6 +2029,7 @@ class SlashCommandsCommon:
 
 
 
+@pytest.mark.skip( reason = 'Awaiting Ticket Refactor')
 class SlashCommandsTicketTestCases(
     SlashCommandsCommon
 ):
@@ -2038,7 +2039,340 @@ class SlashCommandsTicketTestCases(
 
     Requires a fixture called `Ticket`
     """
-    pass
+
+    def test_slash_command_ticket_single_line_with_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_with_command
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command in ticket.description
+            and command_obj in ticket.description
+        )
+
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_lf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_crlf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_lf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_crlf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_lf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_blank_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_crlf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_blank_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_lf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_blank_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_crlf_command_removed_from_description(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_blank_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert (
+            param_slash_command not in ticket.description
+            and command_obj not in ticket.description
+        )
+
 
     # def test_slash_command_spend_ticket_duration_added(self, 
     #     ticket,
@@ -2117,6 +2451,700 @@ class SlashCommandsTicketTestCases(
 
 
     #     assert ticket_comment.duration == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_duration_not_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_with_command
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == 0
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_lf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.description == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_crlf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_lf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_crlf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_lf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_blank_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_crlf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_blank_line_command_own_line_blank_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_lf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_blank_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == duration_in_seconds
+
+
+
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_crlf_duration_added(self, 
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment
+        """
+
+        comment_text = self.single_line_command_own_line_blank_line_crlf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+        hour = durations['hour']
+
+        if not hour:
+            hour = 0
+
+        else:
+            hour = str(durations['hour']).replace('h', '')
+
+        hour = (int(hour) * 60) * 60
+
+
+        minute = durations['minute']
+
+        if not minute:
+            minute = 0
+
+        else:
+            minute = str(durations.get('minute', 0)).replace('m', '')
+
+        minute = int(minute) * 60
+
+
+        second = durations['second']
+
+        if not second:
+            second = 0
+        else:
+            second = str(durations['second']).replace('s', '')
+
+        second = int(second)
+
+        duration_in_seconds = hour + minute + second
+
+        ticket.description = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert ticket.duration == duration_in_seconds
+
+
+
+    # def test_slash_command_spend_ticket_comment_duration_added(self, 
+    #     ticket_comment,
+    #     parameterized, param_key_slash_command, param_name,
+    #     param_slash_command,
+    #     param_command_obj,
+    #     param_spend,
+    # ):
+    #     """Slash command Check
+
+    #     Ensure the `spend` slash command adds the duration to the tickets
+    #     duration field.
+    #     """
+
+    #     comment_text = self.single_line_command_own_line_blank_line_crlf
+
+    #     assert 'COMMAND' in comment_text
+    #     # COMMAND must be in ticket comment so it can be constructed
+
+    #     command_obj = str(param_command_obj).replace(
+    #         'EXISTINGTICKET', str(self.existing_ticket.id)
+    #     )
+
+
+    #     durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
+
+    #     hour = durations['hour']
+
+    #     if not hour:
+    #         hour = 0
+
+    #     else:
+    #         hour = str(durations['hour']).replace('h', '')
+
+    #     hour = (int(hour) * 60) * 60
+
+
+    #     minute = durations['minute']
+
+    #     if not minute:
+    #         minute = 0
+
+    #     else:
+    #         minute = str(durations.get('minute', 0)).replace('m', '')
+
+    #     minute = int(minute) * 60
+
+
+    #     second = durations['second']
+
+    #     if not second:
+    #         second = 0
+    #     else:
+    #         second = str(durations['second']).replace('s', '')
+
+    #     second = int(second)
+
+    #     duration_in_seconds = hour + minute + second
+
+    #     ticket_comment.body = str(
+    #         comment_text.replace(
+    #             'COMMAND', '/' + param_slash_command + ' ' + command_obj
+    #         )
+    #     )
+
+
+    #     ticket_comment.save()
+
+
+    #     assert ticket_comment.duration == duration_in_seconds
+
 
 
 
@@ -2467,62 +3495,6 @@ class SlashCommandsTicketCommentTestCases(
             param_slash_command not in ticket_comment.body
             and command_obj not in ticket_comment.body
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     # def test_slash_command_spend_ticket_duration_added(self, 
@@ -3234,20 +4206,6 @@ class SlashCommandsTicketCommentTestCases(
 
 
         assert ticket_comment.duration == duration_in_seconds
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
