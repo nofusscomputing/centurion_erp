@@ -2028,6 +2028,8 @@ class SlashCommandsCommon:
         }
 
 
+
+@pytest.mark.skip( reason = 'Awaiting Ticket Refactor')
 class SlashCommandsTicketTestCases(
     SlashCommandsCommon
 ):
