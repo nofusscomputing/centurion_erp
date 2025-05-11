@@ -51,6 +51,16 @@ def pytest_generate_tests(metafunc):
 
     if {'parameterized'} <= set(metafunc.fixturenames):
 
+        for mark in metafunc.definition.own_markers:    # Skip tests markd to skip
+
+            if mark.name == 'skip':
+                return None
+
+        for mark in getattr(metafunc.cls, 'pytestmark', []):    # Skip test suite markd to skip
+
+            if mark.name == 'skip':
+                return None
+
         all_fixture_parameters = metafunc.fixturenames
 
         fixture_parameters += ['parameterized']
