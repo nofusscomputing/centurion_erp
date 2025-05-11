@@ -599,3 +599,80 @@ def recursearray() -> dict[dict, str, any]:
         }
 
     return _recursearray
+
+
+@pytest.fixture( scope = 'function')
+def fake_view():
+
+
+    class MockView:
+
+        class MockRequest:
+
+            class MockUser:
+
+                id: int
+
+                pk: int
+
+            user = None
+
+            def __init__(cls, user = 0):
+
+                if user != 0:
+
+                    cls.user = user
+
+                # cls.user.id = user_id
+                # cls.user.pk = user_id
+
+
+        _has_import: bool
+        """User Permission
+
+        get_permission_required() sets this to `True` when user has import permission.
+        """
+
+        _has_purge: bool
+        """User Permission
+
+        get_permission_required() sets this to `True` when user has purge permission.
+        """
+
+        _has_triage: bool
+        """User Permission
+
+        get_permission_required() sets this to `True` when user has triage permission.
+        """
+
+        action:str
+        """ The View Action
+
+        This must be set to whatever is occuring
+        """
+
+        request: MockRequest
+
+        def __init__(cls,
+            _has_import: bool = False,
+            _has_purge: bool = False,
+            _has_triage: bool = False,
+            action: str = 'create',
+            user = 0,
+        ):
+
+            cls.request = cls.MockRequest(
+                user = user
+            )
+
+            cls._has_import = _has_import
+            cls._has_purge = _has_purge
+            cls._has_triage = _has_triage
+            cls.action = action
+
+
+    fake_view = MockView
+
+    yield fake_view
+
+    del fake_view
