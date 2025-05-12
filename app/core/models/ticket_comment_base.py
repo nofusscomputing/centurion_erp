@@ -1,3 +1,5 @@
+import datetime
+
 from django.apps import apps
 from django.db import models
 
@@ -255,16 +257,17 @@ class TicketCommentBase(
 
     def clean(self):
 
+
+        if not self.organization:
+
+            self.organization = self.ticket.organization
+
+
         if not self.is_template:
 
             if self.is_closed and self.date_closed is None:
 
-                raise centurion_exception.ValidationError(
-                    detail = {
-                        'date_closed': 'Ticket has been marked as closed and field date_closed is empty.'
-                    },
-                    code = 'ticket_closed_no_date'
-                )
+                self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
 
 
             if self.comment_type != self._meta.sub_model_type:
@@ -396,8 +399,6 @@ class TicketCommentBase(
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        self.organization = self.ticket.organization
 
         body = self.body
 
