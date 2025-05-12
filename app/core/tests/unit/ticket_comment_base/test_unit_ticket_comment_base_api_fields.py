@@ -301,7 +301,7 @@ class TicketCommentBaseAPITestCases(
             'expected': str
         },
         'user.url': {
-            'expected': Hyperlink
+            'expected': str
         },
 
         'is_closed': {

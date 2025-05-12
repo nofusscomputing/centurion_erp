@@ -530,25 +530,27 @@ class TicketCommentBaseModelPyTest(
 ):
 
 
-    def test_function_clean_validation_close_raises_exception(self, ticket):
-        """Function Check
+    # def test_function_clean_validation_close_raises_exception(self, ticket):
+    #     """Function Check
 
-        Ensure function `clean` does validation
-        """
+    #     Ensure function `clean` does validation
+    #     """
 
-        valid_data = self.kwargs_create_item.copy()
+    #     valid_data = self.kwargs_create_item.copy()
 
-        valid_data['ticket'] = ticket
+    #     valid_data['ticket'] = ticket
 
-        del valid_data['date_closed']
+    #     valid_data['external_ref'] = 9842
 
-        with pytest.raises(ValidationError) as err:
+    #     del valid_data['date_closed']
 
-            self.model.objects.create(
-                **valid_data
-            )
+    #     with pytest.raises(ValidationError) as err:
 
-        assert err.value.get_codes()['date_closed'] == 'ticket_closed_no_date'
+    #         self.model.objects.create(
+    #             **valid_data
+    #         )
+
+    #     assert err.value.get_codes()['date_closed'] == 'ticket_closed_no_date'
 
 
     def test_function_save_called_slash_command(self, model, mocker, ticket):

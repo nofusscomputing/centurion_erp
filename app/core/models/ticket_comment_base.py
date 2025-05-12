@@ -257,9 +257,10 @@ class TicketCommentBase(
 
     def clean(self):
 
+        try:
+            self.organization
 
-        if not self.organization:
-
+        except:
             self.organization = self.ticket.organization
 
 

@@ -6,12 +6,12 @@ from rest_framework import serializers
 
 from drf_spectacular.utils import extend_schema_serializer
 
+from access.serializers.entity import BaseSerializer as EntityBaseSerializer
 from access.serializers.organization import OrganizationBaseSerializer
 
 from api.serializers import common
 from api.exceptions import UnknownTicketType
 
-from app.serializers.user import UserBaseSerializer
 
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field
@@ -114,8 +114,6 @@ class ModelSerializer(
 
         model = TicketCommentBase
 
-        fields = '__all__'
-
         fields = [
             'id',
             'organization',
@@ -174,21 +172,131 @@ class ModelSerializer(
         ]
 
 
-    is_triage: bool = False
-    """ If the serializers is a Triage serializer"""
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        if kwargs['context']['view'].action in ['create', 'partial_update', 'update']:
+
+            self.fields.fields['parent'].write_only = True
+            self.fields.fields['ticket'].write_only = True
+            self.fields.fields['user'].write_only = True
+
+        if self.context.get('view', None) is not None:
+
+            read_only_fields = [
+                'id',
+                'display_name',
+                '_urls',
+            ]
+
+            if not self.context['view']._has_import:
+
+                read_only_fields += [
+                    'created',
+                    'modified',
+                    'organization'
+                    'external_system',
+                    'external_ref',
+                    'duration',
+                ]
+
+            if(
+                not self.context['view']._has_import
+                and not self.context['view']._has_triage
+            ):
+
+                read_only_fields += [
+                    'category',
+                    'source',
+                ]
+
+        self.Meta.read_only_fields = read_only_fields
+
+
+
+    def validate_triage(self, attrs):
+
+        return attrs
+
+
+    def validate_new_comment(self, attrs):
+
+        # attrs['user'] = self.context['request'].user
+
+
+        if 'ticket_id' in self.context['view'].kwargs:
+
+            attrs['ticket_id'] = int(self.context['view'].kwargs['ticket_id'])
+
+
+            if 'parent_id' in self.context['view'].kwargs:
+
+                attrs['parent_id'] = int(self.context['view'].kwargs['parent_id'])
+
+                comment = self.Meta.model.objects.filter( id = attrs['parent_id'] )
+
+
+                if list(comment)[0].parent_id:
+
+                    raise centurion_exceptions.ValidationError(
+                        detail = {
+                            'parent': 'Replying to a discussion reply is not possible'
+                        },
+                        code = 'single_discussion_replies_only'
+                    )
+
+        else:
+
+                    raise centurion_exceptions.ValidationError(
+                        detail = {
+                            'parent': 'Replying to a discussion reply is not possible'
+                        },
+                        code = 'single_discussion_replies_only'
+                    )
+
+        return attrs
+
+
+
+    def validate_update_comment(self, attrs):
+
+        if self.instance.user != self.context['request'].user:    # Owner Edit
+
+            if 'private' in attrs:
+
+                if self.instance.private:
+
+                    raise centurion_exceptions.ValidationError(
+                        detail = {
+                            'private': 'Once a comment is made private it can\'t be undone.'
+                        },
+                        code = 'owner_cant_remove_private'
+                    )
+
+
+        return attrs
+
+
+
 
     def validate(self, attrs):
 
         attrs['comment_type'] = self.context['view'].model._meta.sub_model_type
 
-        if attrs['comment_type'] == 'comment':
+        if self.context['view']._has_triage:
 
-            attrs['is_closed'] = True
-            attrs['date_closed'] = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+            attrs = self.validate_triage( attrs )
 
-        if self.is_triage:
 
-            attrs = self.validate_triage(attrs)
+        if self.context['view'].action == 'create':
+
+            attrs = self.validate_new_comment( attrs )
+
+        elif self.context['view'].action in [ 'partial_update', 'update' ]:
+
+            attrs = self.validate_update_comment( attrs )
 
 
         return attrs
@@ -201,36 +309,6 @@ class ModelSerializer(
         is_valid: bool = False
 
         is_valid = super().is_valid(raise_exception=raise_exception)
-
-        if self.context['view'].action == 'create':
-
-            if 'ticket_id' in self._kwargs['context']['view'].kwargs:
-
-                self.validated_data['ticket_id'] = int(self._kwargs['context']['view'].kwargs['ticket_id'])
-
-                if 'parent_id' in self._kwargs['context']['view'].kwargs:
-
-                    self.validated_data['parent_id'] = int(self._kwargs['context']['view'].kwargs['parent_id'])
-
-                    comment = self.Meta.model.objects.filter( id = self.validated_data['parent_id'] )
-
-                    if list(comment)[0].parent_id:
-
-                        raise centurion_exceptions.ValidationError(
-                            detail = {
-                                'parent': 'Replying to a discussion reply is not possible'
-                            },
-                            code = 'single_discussion_replies_only'
-                        )
-
-            else:
-
-                raise centurion_exceptions.ValidationError(
-                    detail = {
-                        'ticket': 'Ticket is a required field'
-                    },
-                    code = 'required'
-                )
 
         return is_valid
 
@@ -249,4 +327,4 @@ class ViewSerializer(ModelSerializer):
 
     ticket = TicketBaseBaseSerializer()
 
-    user = UserBaseSerializer()
+    user = EntityBaseSerializer()
