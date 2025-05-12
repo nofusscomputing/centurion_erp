@@ -89,6 +89,8 @@ class Create(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -138,6 +140,8 @@ class Destroy(
                     },
                     status = 501
                 )
+
+                self.get_log().exception(e)
 
             else:
 
@@ -189,6 +193,8 @@ class List(
                     },
                     status = 501
                 )
+
+                self.get_log().exception(e)
 
             else:
 
