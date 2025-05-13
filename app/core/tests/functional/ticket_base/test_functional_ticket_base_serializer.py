@@ -809,6 +809,10 @@ class TicketBaseSerializerTestCases:
 
             if serializer.instance:
 
+                for comment in serializer.instance.ticketcommentbase_set.all():
+
+                    comment.delete()
+
                 serializer.instance.delete()
 
 

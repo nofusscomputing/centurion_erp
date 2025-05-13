@@ -313,6 +313,10 @@ class TicketBaseModelTestCases(
 
             request.cls.entity_user.delete()
 
+            for comment in parent_ticket.ticketcommentbase_set.all():
+
+                comment.delete()
+
             parent_ticket.delete()
 
             project_milestone.delete()
@@ -564,6 +568,10 @@ class TicketBaseModelTestCases(
         yield ticket
 
         if ticket.pk is not None:
+
+            for comment in ticket.ticketcommentbase_set.all():
+
+                comment.delete()
 
             ticket.delete()
 
