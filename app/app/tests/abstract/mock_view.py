@@ -1,10 +1,12 @@
 
-from django.contrib.auth.models import User
+import django
 
 from access.middleware.request import Tenancy
 from access.models.organization import Organization
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

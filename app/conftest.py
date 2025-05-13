@@ -1,3 +1,4 @@
+import datetime
 import pytest
 import sys
 
@@ -485,8 +486,10 @@ def organization_one(django_db_blocker):
 
     with django_db_blocker.unblock():
 
+        random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+
         item = Organization.objects.create(
-            name = 'org one'
+            name = 'org one from global' + str(random_str)
         )
 
     yield item
@@ -504,8 +507,10 @@ def organization_two(django_db_blocker):
 
     with django_db_blocker.unblock():
 
+        random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+
         item = Organization.objects.create(
-            name = 'org two'
+            name = 'org two from global' + str(random_str)
         )
 
     yield item

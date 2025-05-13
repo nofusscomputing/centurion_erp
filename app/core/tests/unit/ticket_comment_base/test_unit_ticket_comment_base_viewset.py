@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+import django
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -11,6 +12,9 @@ from core.viewsets.ticket_comment import (
     TicketCommentBase,
     ViewSet
 )
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class TicketCommentBaseViewsetTestCases(

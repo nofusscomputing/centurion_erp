@@ -1,9 +1,10 @@
+import django
 import re
 
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -27,6 +28,8 @@ from core.models.ticket.ticket_comment import TicketComment
 from core.tests.unit.ticket_depreciated.ticket_permission.field_based_permissions import ITSMTicketFieldBasedPermissions, ProjectTicketFieldBasedPermissions
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

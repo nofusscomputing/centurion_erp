@@ -1,4 +1,6 @@
-from django.contrib.auth.models import User, ContentType
+import django
+
+from django.contrib.auth.models import ContentType
 from django.test import TestCase
 
 from access.models.organization import Organization
@@ -7,6 +9,8 @@ from app.tests.unit.test_unit_models import TenancyObjectInheritedCases
 
 from core.models.manufacturer_history import Manufacturer
 from core.models.model_history import ModelHistory
+
+User = django.contrib.auth.get_user_model()
 
 
 

@@ -1,4 +1,7 @@
-from django.contrib.auth.models import ContentType, User
+import django
+
+from django.conf import settings
+from django.contrib.auth.models import ContentType
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -8,6 +11,8 @@ from access.models.organization import Organization
 from access.models.tenancy import TenancyObject
 
 from core.lib.feature_not_used import FeatureNotUsed
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -77,7 +82,7 @@ class ModelHistory(
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= False,
         help_text = 'User whom performed the action this history relates to',
         null = True,

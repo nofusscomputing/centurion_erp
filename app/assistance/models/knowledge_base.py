@@ -1,10 +1,13 @@
-from django.contrib.auth.models import User
+import django
 from django.db import models
 from django.forms import ValidationError
 
 from access.fields import *
 from access.models.team import Team
 from access.models.tenancy import TenancyObject
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class KnowledgeBaseCategory(TenancyObject):

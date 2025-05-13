@@ -1,5 +1,7 @@
+import django
+
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
 from rest_framework.reverse import reverse
 
@@ -10,6 +12,8 @@ from access.fields import (
 )
 
 from core.mixin.history_save import SaveHistory
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -44,7 +48,7 @@ class Organization(SaveHistory):
     )
 
     manager = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = False,
         help_text = 'Manager for this organization',
         null = True,

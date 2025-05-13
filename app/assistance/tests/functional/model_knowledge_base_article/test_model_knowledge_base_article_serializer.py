@@ -1,7 +1,7 @@
+import django
 import json
 import pytest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
@@ -13,6 +13,8 @@ from assistance.models.model_knowledge_base_article import KnowledgeBase, ModelK
 from assistance.serializers.model_knowledge_base_article import ModelKnowledgeBaseArticleModelSerializer
 
 from itam.models.device import Device
+
+User = django.contrib.auth.get_user_model()
 
 
 

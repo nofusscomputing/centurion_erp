@@ -1,4 +1,5 @@
-from django.contrib.auth.models import Permission, User
+import django
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import Client, TestCase
 
@@ -7,6 +8,10 @@ from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from api.react_ui_metadata import ReactUIMetadata
+
+User = django.contrib.auth.get_user_model()
+
+
 
 class MockRequst:
 

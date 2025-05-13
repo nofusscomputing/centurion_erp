@@ -1,9 +1,9 @@
+import django
 import hashlib
 import json
 
 from datetime import datetime, timedelta
 
-from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
@@ -12,6 +12,10 @@ from access.models.organization import Organization
 from api.models.tokens import AuthToken
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
+
+
 
 class APIAuthToken(TestCase):
 

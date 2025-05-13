@@ -89,6 +89,8 @@ class Create(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -138,6 +140,8 @@ class Destroy(
                     },
                     status = 501
                 )
+
+                self.get_log().exception(e)
 
             else:
 
@@ -189,6 +193,8 @@ class List(
                     },
                     status = 501
                 )
+
+                self.get_log().exception(e)
 
             else:
 
@@ -827,7 +833,6 @@ class SubModelViewSet(
 
                     related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
 
-                    break
 
 
         if related_model is None:

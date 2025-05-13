@@ -1,6 +1,7 @@
+import django
 import pytest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -20,6 +21,9 @@ from api.tests.abstract.api_permissions_viewset import (
 )
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class TaskResultPermissionsAPI(

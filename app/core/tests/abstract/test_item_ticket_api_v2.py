@@ -1,4 +1,6 @@
-from django.contrib.auth.models import User, Permission
+import django
+
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase
@@ -12,6 +14,8 @@ from access.models.team_user import TeamUsers
 from api.tests.abstract.api_fields import APITenancyObject
 
 from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
+
+User = django.contrib.auth.get_user_model()
 
 
 

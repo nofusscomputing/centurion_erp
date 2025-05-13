@@ -20,7 +20,7 @@ import django.db.models.options as options
 
 options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type', 'itam_sub_model_type')
 
-
+AUTH_USER_MODEL = 'auth.User'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,10 +82,10 @@ FEATURE_FLAG_OVERRIDES = None # Feature Flags to override fetched feature flags
 
 
 LOG_FILES = {    # defaults for devopment. docker includes settings has correct locations
-    "centurion": "../log/centurion.log",
-    "weblog": "../log/weblog.log",
-    "rest_api": "../log/rest_api.log",
-    "catch_all":"../log/catch-all.log"
+    "centurion": "log/centurion.log",
+    "weblog": "log/weblog.log",
+    "rest_api": "log/rest_api.log",
+    "catch_all":"log/catch-all.log"
 }
 
 CENTURION_LOGGING = {
@@ -172,6 +172,10 @@ CENTURION_LOGGING = {
 METRICS_ENABLED = False                      # Enable Metrics
 METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
 METRICS_MULTIPROC_DIR = '/tmp/prometheus'    # path the metrics from multiple-process' save to
+
+
+RUNNING_TESTS = 'test' in str(sys.argv)
+
 
 # django setting.
 CACHES = {
@@ -457,8 +461,6 @@ DATETIME_FORMAT = 'j N Y H:i:s'
 # Settings for unit tests
 #
 
-RUNNING_TESTS = 'test' in str(sys.argv)
-
 if RUNNING_TESTS:
     SECRET_KEY = 'django-insecure-tests_are_being_run'
 
@@ -490,11 +492,11 @@ CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api
 CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_all']
 
 
-if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('../log'):
+if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log') and not RUNNING_TESTS:
 
-    if not os.path.exists('../log'): # Create log dir
+    if not os.path.exists(os.path.join(BASE_DIR, 'log')): # Create log dir
 
-        os.makedirs('../log')
+        os.makedirs(os.path.join(BASE_DIR, 'log'))
 
 if DEBUG:
 
@@ -511,8 +513,9 @@ if DEBUG:
     ]
 
 
-# Setup Logging
-LOGGING = CENTURION_LOGGING
+if not RUNNING_TESTS:
+    # Setup Logging
+    LOGGING = CENTURION_LOGGING
 
 
 if METRICS_ENABLED:

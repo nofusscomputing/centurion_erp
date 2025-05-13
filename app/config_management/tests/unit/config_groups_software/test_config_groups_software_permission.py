@@ -1,6 +1,7 @@
-# from django.conf import settings
+import django
+
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -19,6 +20,8 @@ from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 
 from itam.models.device import DeviceSoftware
 from itam.models.software import Software
+
+User = django.contrib.auth.get_user_model()
 
 
 

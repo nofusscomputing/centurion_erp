@@ -1,7 +1,7 @@
+import django
 import json
 import pytest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
@@ -13,6 +13,8 @@ from app.tests.abstract.mock_view import MockView
 
 from assistance.models.knowledge_base import KnowledgeBase
 from assistance.serializers.knowledge_base import KnowledgeBaseModelSerializer
+
+User = django.contrib.auth.get_user_model()
 
 
 

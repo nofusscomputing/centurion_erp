@@ -1,4 +1,6 @@
-from django.contrib.auth.models import User
+import django
+
+from django.conf import settings
 from django.db import models
 from django.forms import ValidationError
 
@@ -13,6 +15,8 @@ from core.lib.slash_commands import SlashCommands
 
 from .ticket import Ticket
 from .ticket_comment_category import TicketCommentCategory
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -241,7 +245,7 @@ class TicketComment(
     ) 
 
     responsible_user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= True,
         default = None,
         help_text = 'User whom is responsible for the completion of comment',
@@ -263,7 +267,7 @@ class TicketComment(
     )
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= False,
         help_text = 'Who made the comment',
         null = True,

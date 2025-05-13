@@ -1,4 +1,6 @@
-from django.contrib.auth.models import Permission, User
+import django
+
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -22,6 +24,8 @@ from api.tests.abstract.api_serializer_viewset import (
 from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

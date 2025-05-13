@@ -1,7 +1,8 @@
+import django
 import pytest
 import unittest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -11,6 +12,8 @@ from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from config_management.models.groups import ConfigGroups
+
+User = django.contrib.auth.get_user_model()
 
 
 

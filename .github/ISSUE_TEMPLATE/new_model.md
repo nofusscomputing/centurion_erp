@@ -33,6 +33,8 @@ Describe in detail the following:
 
 - [ ] 🛠️ Migrations added
 
+- [ ] ♻️ Serializer Created
+
 - [ ] 🔄 [ViewSet Created](https://nofusscomputing.com/projects/centurion_erp/development/views/)
 
 - [ ] 🔗 URL Route Added

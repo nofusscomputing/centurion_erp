@@ -1,8 +1,8 @@
+import django
 import pytest
 import re
 import unittest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from access.models.organization import Organization
@@ -17,6 +17,9 @@ from core.models.ticket_comment_base import TicketBase, TicketCommentBase
 
 from itam.models.device import Device
 from itam.models.software import Software
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class SlashCommandsCommon:

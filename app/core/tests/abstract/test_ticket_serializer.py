@@ -1,6 +1,7 @@
+import django
 import pytest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -19,6 +20,8 @@ from project_management.models.projects import Project
 from project_management.models.project_milestone import ProjectMilestone
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

@@ -1,11 +1,14 @@
+import django
 import pytest
 
-from django.contrib.auth.models import ContentType, Permission, User
+from django.contrib.auth.models import ContentType, Permission
 from django.shortcuts import reverse
 from django.test import Client
 
 from access.models.team import Team
 from access.models.team_user import TeamUsers
+
+User = django.contrib.auth.get_user_model()
 
 
 

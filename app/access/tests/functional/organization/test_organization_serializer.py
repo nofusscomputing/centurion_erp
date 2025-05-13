@@ -1,6 +1,6 @@
+import django
 import pytest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
@@ -9,6 +9,8 @@ from access.serializers.organization import (
     Organization,
     OrganizationModelSerializer
 )
+
+User = django.contrib.auth.get_user_model()
 
 
 
