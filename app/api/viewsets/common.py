@@ -833,7 +833,6 @@ class SubModelViewSet(
 
                     related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
 
-                    break
 
 
         if related_model is None:
