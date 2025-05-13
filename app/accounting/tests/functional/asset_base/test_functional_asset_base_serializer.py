@@ -1,6 +1,7 @@
+import django
 import pytest
 
-from django.contrib.auth.models import User
+User = django.contrib.auth.get_user_model()
 
 
 
