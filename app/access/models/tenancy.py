@@ -1,10 +1,9 @@
+import django
 import logging
+
 from django.db import models
-# from django.contrib.auth.models import User, Group
 
 from rest_framework.reverse import reverse
-
-# from .fields import *
 
 from access.models.organization import Organization
 

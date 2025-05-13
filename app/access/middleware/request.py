@@ -1,9 +1,11 @@
+import django
+
 from django.contrib.auth.middleware import (
     AuthenticationMiddleware,
     SimpleLazyObject,
     partial,
 )
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.utils.deprecation import MiddlewareMixin
 
 
@@ -12,6 +14,8 @@ from access.models.team import Team
 
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 class RequestTenancy(MiddlewareMixin):

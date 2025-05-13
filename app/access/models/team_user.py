@@ -1,6 +1,8 @@
+import django
+
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 
 from rest_framework.reverse import reverse
 
@@ -14,6 +16,8 @@ from access.models.team import Team
 
 from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
+
+User = django.contrib.auth.get_user_model()
 
 
 

@@ -1,8 +1,12 @@
-from django.contrib.auth.models import User, Group
+import django
+
+from django.contrib.auth.models import Group
 from django.db import models
 
 from access.models.organization import Organization
 from access.models.team import Team
+
+User = django.contrib.auth.get_user_model()
 
 
 
