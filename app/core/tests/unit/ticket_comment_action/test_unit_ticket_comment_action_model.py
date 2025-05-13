@@ -46,9 +46,11 @@ class TicketCommentActionModelTestCases(
         del valid_data['external_system']
         del valid_data['external_ref']
 
-        model.objects.create(
+        comment = model.objects.create(
             **valid_data
         )
+
+        comment.delete()
 
         assert spy.assert_called_once
 

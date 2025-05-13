@@ -183,19 +183,19 @@ class TicketCommentBaseModelTestCases(
 
             comment_category = TicketCommentCategory.objects.create(
                 organization = request.cls.organization,
-                name = 'test cat comment'
+                name = 'test cat comment'+ str(random_str)
             )
 
             ticket = TicketBase.objects.create(
                 organization = request.cls.organization,
-                title = 'tester comment ticket',
+                title = 'tester comment ticket'+ str(random_str),
                 description = 'aa',
                 opened_by = request.cls.view_user,
             )
 
             user = Person.objects.create(
                 organization = request.cls.organization,
-                f_name = 'ip',
+                f_name = 'ip'+ str(random_str),
                 l_name = 'funny'                
             )
 
@@ -219,6 +219,10 @@ class TicketCommentBaseModelTestCases(
             del request.cls.kwargs_create_item
 
             comment_category.delete()
+
+            for comment in ticket.ticketcommentbase_set.all():
+
+                comment.delete()
 
             ticket.delete()
 
@@ -477,9 +481,11 @@ class TicketCommentBaseModelTestCases(
         del valid_data['external_system']
         del valid_data['external_ref']
 
-        model.objects.create(
+        comment = model.objects.create(
             **valid_data
         )
+
+        comment.delete()
 
         assert spy.assert_called_once
 
