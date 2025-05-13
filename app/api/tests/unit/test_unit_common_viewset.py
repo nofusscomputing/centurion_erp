@@ -1,6 +1,7 @@
+import django
 import pytest
 
-from django.contrib.auth.models import ContentType, Permission, User
+from django.contrib.auth.models import ContentType, Permission
 from django.db import models
 from django.test import TestCase
 
@@ -46,6 +47,8 @@ from api.viewsets.common import (
 )
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 
