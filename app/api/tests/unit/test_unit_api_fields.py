@@ -1,3 +1,4 @@
+import datetime
 import pytest
 
 from django.contrib.auth.models import ContentType, Permission, User
@@ -105,6 +106,8 @@ class APIFieldsTestCases:
 
         with django_db_blocker.unblock():
 
+            random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+
             request.cls.organization = organization_one
 
             request.cls.different_organization = organization_two
@@ -150,7 +153,7 @@ class APIFieldsTestCases:
                 )
 
             view_team = Team.objects.create(
-                team_name = 'cs_api_view_team',
+                team_name = 'cs_api_view_team' + str(random_str),
                 organization = request.cls.organization,
             )
 
@@ -158,8 +161,7 @@ class APIFieldsTestCases:
 
             view_team.permissions.set([view_permissions])
 
-
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view", password="password")
+            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view" + str(random_str), password="password")
 
             team_user = TeamUsers.objects.create(
                 team = view_team,

@@ -1,3 +1,4 @@
+import datetime
 import pytest
 
 from django.contrib.auth.models import User
@@ -154,6 +155,8 @@ class TicketCommentBaseModelTestCases(
 
         with django_db_blocker.unblock():
 
+            random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+
             request.cls.organization = organization_one
 
             request.cls.different_organization = organization_two
@@ -176,7 +179,7 @@ class TicketCommentBaseModelTestCases(
                 request.cls.kwargs_create_item = kwargs_create_item
 
 
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view", password="password")
+            request.cls.view_user = User.objects.create_user(username="ticket_comment_user_"+ str(random_str), password="password")
 
             comment_category = TicketCommentCategory.objects.create(
                 organization = request.cls.organization,

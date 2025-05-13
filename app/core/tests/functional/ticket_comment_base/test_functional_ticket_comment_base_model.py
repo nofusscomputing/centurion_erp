@@ -39,6 +39,10 @@ class TicketCommentBaseModelTestCases(
 
         with django_db_blocker.unblock():
 
+            for comment in ticket.ticketcommentbase_set.all():
+
+                comment.delete()
+
             ticket.delete()
 
 
