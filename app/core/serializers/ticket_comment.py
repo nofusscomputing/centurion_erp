@@ -177,7 +177,7 @@ class ModelSerializer(
 
         super().__init__(*args, **kwargs)
 
-        if kwargs['context']['view'].action in ['create', 'partial_update', 'update']:
+        if getattr(kwargs['context'].get('view'), 'action', '') in ['create', 'partial_update', 'update']:
 
             self.fields.fields['parent'].write_only = True
             self.fields.fields['ticket'].write_only = True
@@ -212,7 +212,7 @@ class ModelSerializer(
                     'source',
                 ]
 
-        self.Meta.read_only_fields = read_only_fields
+            self.Meta.read_only_fields = read_only_fields
 
 
 
