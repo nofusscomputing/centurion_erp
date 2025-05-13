@@ -1,7 +1,7 @@
 import datetime
+import django
 import pytest
 
-from django.contrib.auth.models import User
 from django.db import models
 
 from rest_framework.exceptions import ValidationError
@@ -13,6 +13,8 @@ from app.tests.unit.test_unit_models import (
 )
 
 from core.models.ticket_comment_base import TicketBase, TicketCommentBase, TicketCommentCategory
+
+User = django.contrib.auth.get_user_model()
 
 
 

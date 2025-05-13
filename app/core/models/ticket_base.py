@@ -1,8 +1,9 @@
 import datetime
 import difflib
+import django
 
 from django.apps import apps
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -20,6 +21,8 @@ from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket.ticket_enum_values import TicketValues
 
 from project_management.models.project_milestone import Project, ProjectMilestone
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -444,7 +447,7 @@ class TicketBase(
 
 
     opened_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         help_text = 'Who is the ticket for',
         null = True,

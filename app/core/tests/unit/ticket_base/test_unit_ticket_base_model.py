@@ -1,7 +1,7 @@
-import pytest
 import datetime
+import django
+import pytest
 
-from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.db import models
 from django.test import TestCase
@@ -21,6 +21,8 @@ from core.models.ticket_base import TicketBase
 from core.models.ticket_comment_base import TicketCommentBase
 
 from project_management.models.project_milestone import Project, ProjectMilestone
+
+User = django.contrib.auth.get_user_model()
 
 
 

@@ -1,6 +1,7 @@
 import difflib
+import django
 
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.db.models import Q, signals, Sum
 from django.forms import ValidationError
@@ -20,6 +21,8 @@ from core.middleware.get_request import get_request
 from core.models.ticket.ticket_category import TicketCategory, KnowledgeBase
 
 from project_management.models.project_milestone import Project, ProjectMilestone
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -470,7 +473,7 @@ class Ticket(
 
 
     opened_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= False,
         help_text = 'Who is the ticket for',
         null = False,
@@ -481,7 +484,7 @@ class Ticket(
 
 
     subscribed_users = models.ManyToManyField(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= True,
         help_text = 'Subscribe a User(s) to the ticket to receive updates',
         related_name = 'subscribed_users',
@@ -500,7 +503,7 @@ class Ticket(
     )
 
     assigned_users = models.ManyToManyField(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= True,
         help_text = 'Assign the ticket to a User(s)',
         related_name = 'assigned_users',

@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+import django
+
 from django.db import models
 
 from access.fields import *
@@ -7,6 +8,8 @@ from access.models.tenancy import TenancyObject
 from core.mixin.history_save import SaveHistory
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

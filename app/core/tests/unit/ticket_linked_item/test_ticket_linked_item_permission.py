@@ -1,7 +1,8 @@
+import django
 import re
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -26,6 +27,9 @@ from core.models.ticket.ticket_linked_items import TicketLinkedItem
 from itam.models.device import Device
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class TicketLinkedItemPermissions(

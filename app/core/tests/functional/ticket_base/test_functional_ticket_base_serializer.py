@@ -1,6 +1,5 @@
+import django
 import pytest
-
-from django.contrib.auth.models import User
 
 from rest_framework.exceptions import (
     ValidationError
@@ -15,6 +14,8 @@ from project_management.models.project_milestone import (
     Project,
     ProjectMilestone,
 )
+
+User = django.contrib.auth.get_user_model()
 
 
 

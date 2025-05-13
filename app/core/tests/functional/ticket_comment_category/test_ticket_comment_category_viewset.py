@@ -1,10 +1,11 @@
+import django
 import pytest
 import unittest
 import requests
 
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -19,6 +20,8 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

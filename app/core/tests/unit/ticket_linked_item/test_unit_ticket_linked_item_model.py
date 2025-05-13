@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+import django
+
 from django.test import TestCase
 
 from access.models.organization import Organization
@@ -15,6 +16,8 @@ from itam.models.software import Software
 
 from itim.models.clusters import Cluster
 from itim.models.services import Service
+
+User = django.contrib.auth.get_user_model()
 
 
 

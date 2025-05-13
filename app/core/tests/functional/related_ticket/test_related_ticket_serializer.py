@@ -1,6 +1,6 @@
+import django
 import pytest
 
-from django.contrib.auth.models import  User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
@@ -14,6 +14,8 @@ from core.serializers.ticket_related import (
     RelatedTickets,
     RelatedTicketModelSerializer,
 )
+
+User = django.contrib.auth.get_user_model()
 
 
 

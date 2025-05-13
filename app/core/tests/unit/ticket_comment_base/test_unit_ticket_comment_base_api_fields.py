@@ -1,6 +1,7 @@
+import django
 import pytest
 
-from django.contrib.auth.models import ContentType, Permission, User
+from django.contrib.auth.models import ContentType, Permission
 from django.shortcuts import reverse
 
 from rest_framework.relations import Hyperlink
@@ -17,6 +18,8 @@ from core.models.ticket_comment_base import (
     TicketCommentBase,
     TicketCommentCategory
 )
+
+User = django.contrib.auth.get_user_model()
 
 
 

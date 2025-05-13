@@ -1,4 +1,6 @@
-from django.contrib.auth.models import Permission, User
+import django
+
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -13,6 +15,8 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 from core.models.ticket.ticket_comment import Ticket, TicketComment
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 
