@@ -1,7 +1,8 @@
+import django
 import pytest
 import unittest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -16,6 +17,8 @@ from api.tests.abstract.api_fields import APICommonFields
 
 from settings.models.app_settings import AppSettings
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

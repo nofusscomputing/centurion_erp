@@ -1,8 +1,8 @@
+import django
 import zoneinfo
 
 from rest_framework.reverse import reverse
 
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
@@ -19,6 +19,8 @@ TIMEZONES = tuple(zip(
     sorted_timezones,
     sorted_timezones
 ))
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -64,7 +66,7 @@ class UserSettings(UserSettingsCommonFields):
 
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= False,
         help_text = 'User this Setting belongs to',
         on_delete=models.CASCADE,
