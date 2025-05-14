@@ -1,6 +1,6 @@
-# from django.conf import settings
-# from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+import django
+
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -16,6 +16,9 @@ from access.models.team_user import TeamUsers
 from app.tests.abstract.model_permissions import ModelPermissions
 
 from itam.models.device import DeviceModel
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class DeviceModelPermissions(TestCase, ModelPermissions):

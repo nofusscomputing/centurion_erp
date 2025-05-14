@@ -1,6 +1,7 @@
+import django
 import pytest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,6 +14,8 @@ from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from itam.models.device import Device, DeviceSoftware
 from itam.models.software import Software
+
+User = django.contrib.auth.get_user_model()
 
 
 
