@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Q
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team_user import TeamUsers
 
 from core.forms.common import CommonModelForm

@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import ContentType
 from django.db import migrations, models
 
-from access.models.organization_history import Organization, OrganizationHistory
+from access.models.organization_history import Tenant, OrganizationHistory
 from access.models.team_history import Team, TeamHistory
 
 from assistance.models.knowledge_base_history import KnowledgeBase, KnowledgeBaseHistory
@@ -334,7 +334,7 @@ def model_details(item_pk, item_class) -> dict:
 
         case 'organization':
 
-            model_class = Organization
+            model_class = Tenant
 
             history_class = OrganizationHistory
 

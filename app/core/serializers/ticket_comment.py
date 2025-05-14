@@ -7,7 +7,7 @@ from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_serializer
 
 from access.serializers.entity import BaseSerializer as EntityBaseSerializer
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 from api.exceptions import UnknownTicketType
@@ -319,7 +319,7 @@ class ViewSerializer(ModelSerializer):
 
     category = TicketCommentCategoryBaseSerializer( many = False, read_only = True )
 
-    organization = OrganizationBaseSerializer( many = False )
+    organization = TenantBaseSerializer( many = False )
 
     parent = BaseSerializer()
 

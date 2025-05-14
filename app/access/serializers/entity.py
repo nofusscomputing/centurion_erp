@@ -6,7 +6,7 @@ from access.models.entity import Entity
 
 from api.serializers import common
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 
 
@@ -87,4 +87,4 @@ class ModelSerializer(
 class ViewSerializer(ModelSerializer):
     """Entity Base View Model"""
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    organization = TenantBaseSerializer(many=False, read_only=True)

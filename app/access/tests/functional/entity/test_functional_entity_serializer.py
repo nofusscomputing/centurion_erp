@@ -2,7 +2,7 @@ import pytest
 
 from django.test import TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.serializers.entity import (
     Entity,
     ModelSerializer

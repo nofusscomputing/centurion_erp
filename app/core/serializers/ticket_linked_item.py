@@ -2,7 +2,7 @@ from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from assistance.serializers.request import TicketBaseSerializer
 
@@ -157,7 +157,7 @@ class TicketLinkedItemModelSerializer(
 class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
 
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    organization = TenantBaseSerializer(many=False, read_only=True)
 
     item = serializers.SerializerMethodField('get_item')
 
@@ -214,11 +214,11 @@ class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
 
             model = OperatingSystem
 
-        elif item.item_type == TicketLinkedItem.Modules.ORGANIZATION:
+        elif item.item_type == TicketLinkedItem.Modules.TENANT:
 
-            from access.serializers.organization import Organization, OrganizationBaseSerializer
+            from access.serializers.organization import Organization, TenantBaseSerializer
 
-            base_serializer = OrganizationBaseSerializer
+            base_serializer = TenantBaseSerializer
 
             model = Organization
 

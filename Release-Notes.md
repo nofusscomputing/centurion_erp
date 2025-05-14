@@ -16,6 +16,10 @@
 
     With this new setting, the previous setting `LOGGING` will no longer function.
 
+- Renamed `Organization` model to `Tenant` so as to reflect what is actually is.
+
+- `robots.txt` file now being served from the API container at path `/robots.txt` with `User-agent: *` and `Disallow: /`
+
 
 ## Version 1.16.0
 

@@ -7,7 +7,7 @@ from django.shortcuts import reverse
 from django.test import Client, TestCase
 from django import urls
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 

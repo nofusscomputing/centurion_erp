@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from access.serializers.organization import Organization, OrganizationBaseSerializer
+from access.serializers.organization import Organization, TenantBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
 from api.serializers import common
@@ -683,7 +683,7 @@ class TicketCommentImportModelSerializer(TicketCommentModelSerializer):
 
 class TicketCommentViewSerializer(TicketCommentModelSerializer):
 
-    organization = OrganizationBaseSerializer( many = False )
+    organization = TenantBaseSerializer( many = False )
 
     category = TicketCommentCategoryBaseSerializer( many = False, read_only = True )
 

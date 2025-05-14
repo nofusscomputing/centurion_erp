@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 
 from access.middleware.request import Tenancy
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from access.serializers.teams import (
     Team,

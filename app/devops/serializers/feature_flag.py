@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from access.serializers.organization import Organization, OrganizationBaseSerializer
+from access.serializers.organization import Organization, TenantBaseSerializer
 
 from api.serializers import common
 
@@ -164,6 +164,6 @@ class ModelSerializer(
 
 class ViewSerializer(ModelSerializer):
 
-    organization = OrganizationBaseSerializer( read_only = True )
+    organization = TenantBaseSerializer( read_only = True )
 
     software = SoftwareBaseSerializer( read_only = True )

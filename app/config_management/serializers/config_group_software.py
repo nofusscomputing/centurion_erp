@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
@@ -210,7 +210,7 @@ class ConfigGroupSoftwareViewSerializer(ConfigGroupSoftwareModelSerializer):
 
     config_group = ConfigGroupBaseSerializer(read_only = True )
 
-    organization = OrganizationBaseSerializer( many=False, read_only=True )
+    organization = TenantBaseSerializer( many=False, read_only=True )
 
     software = SoftwareBaseSerializer( read_only = True )
 

@@ -2,7 +2,7 @@ from django.contrib.auth.models import ContentType
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
@@ -106,7 +106,7 @@ class ModelNoteModelSerializer(
 
             attrs['model_id'] = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
 
-            if str(related_model._meta.model_name).lower() == 'organization':
+            if str(related_model._meta.model_name).lower() == 'tenant':
 
                 attrs['organization'] = related_model.objects.get(
                     pk = int(self.fields.fields['model'].context['view'].kwargs['model_id'])
@@ -142,7 +142,7 @@ class ModelNoteModelSerializer(
 
 class ModelNoteViewSerializer(ModelNoteModelSerializer):
 
-    organization = OrganizationBaseSerializer( many = False, read_only = True )
+    organization = TenantBaseSerializer( many = False, read_only = True )
 
     created_by = UserBaseSerializer( many = False, read_only = True )
 

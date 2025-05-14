@@ -9,7 +9,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from access.fields import *
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from core.lib.feature_not_used import FeatureNotUsed
 
@@ -83,13 +83,13 @@ class UserSettings(UserSettingsCommonFields):
     ) 
 
     default_organization = models.ForeignKey(
-        Organization,
+        Tenant,
         blank= True,
         default = None,
-        help_text = 'Users default Organization',
+        help_text = 'Users default Tenant',
         null = True,
         on_delete=models.SET_DEFAULT,
-        verbose_name = 'Default Organization'
+        verbose_name = 'Default Tenant'
     )
 
     timezone = models.CharField(

@@ -13,7 +13,7 @@ from rest_framework.utils.field_mapping import ClassLookupDict
 
 from rest_framework_json_api.utils import get_related_resource_type
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from app.serializers.user import User, UserBaseSerializer
 
@@ -392,9 +392,10 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "Access",
                 "name": "access",
                 "pages": {
-                    'view_organization': {
-                        "display_name": "Organization",
-                        "name": "organization",
+                    'view_tenant': {
+                        "display_name": "Tenancy",
+                        "name": "tenant",
+                        "icon": "organization",
                         "link": "/access/organization"
                     },
                 }
@@ -705,7 +706,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         # user = view.request.user
 
-        user_orgainzations = Organization.objects.filter(
+        user_orgainzations = Tenant.objects.filter(
             manager = request.user
         )
 

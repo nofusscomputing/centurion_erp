@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
 from ..models.software import Software

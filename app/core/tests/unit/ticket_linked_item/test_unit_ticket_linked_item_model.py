@@ -2,7 +2,7 @@ import django
 
 from django.test import TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from assistance.models.knowledge_base import KnowledgeBase
 

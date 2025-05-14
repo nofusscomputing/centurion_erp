@@ -158,7 +158,7 @@ class SaveHistory(models.Model):
 
         organization = getattr(self, 'organization', None)
 
-        if self._meta.model_name == 'organization':
+        if self._meta.model_name == 'tenant':
 
             organization = self
 

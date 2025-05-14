@@ -7,7 +7,7 @@ from access.models.team import Team
 from api.serializers import common
 
 from access.functions.permissions import permission_queryset
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from app.serializers.permission import Permission, PermissionBaseSerializer
 
@@ -127,6 +127,6 @@ class TeamModelSerializer(
 
 class TeamViewSerializer(TeamModelSerializer):
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    organization = TenantBaseSerializer(many=False, read_only=True)
 
     permissions = PermissionBaseSerializer(many = True)

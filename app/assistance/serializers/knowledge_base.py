@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
@@ -187,7 +187,7 @@ class KnowledgeBaseViewSerializer(KnowledgeBaseModelSerializer):
 
     category = KnowledgeBaseCategoryBaseSerializer( read_only = True )
 
-    organization = OrganizationBaseSerializer( many=False, read_only=True )
+    organization = TenantBaseSerializer( many=False, read_only=True )
 
     responsible_teams = TeamBaseSerializer( read_only = True, many = True)
 

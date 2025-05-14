@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 from django.utils.deprecation import MiddlewareMixin
 
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 
 

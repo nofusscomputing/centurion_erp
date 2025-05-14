@@ -182,7 +182,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
                 if 'pk' in view.kwargs:
 
-                    if object_organization is None and view.queryset.model._meta.model_name == 'organization' and view.kwargs['pk']:
+                    if object_organization is None and view.queryset.model._meta.model_name == 'tenant' and view.kwargs['pk']:
 
                         object_organization = view.kwargs['pk']
 

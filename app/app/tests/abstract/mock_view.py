@@ -2,7 +2,7 @@
 import django
 
 from access.middleware.request import Tenancy
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from settings.models.app_settings import AppSettings
 

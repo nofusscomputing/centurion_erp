@@ -4,7 +4,7 @@ from access.serializers.entity_contact import (
     BaseSerializer as ContactBaseSerializer,
     ModelSerializer as ContactModelSerializer,
 )
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from human_resources.models.employee import Employee
 
@@ -73,4 +73,4 @@ class ViewSerializer(
     This model inherits from the Contact model.
     """
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    organization = TenantBaseSerializer(many=False, read_only=True)

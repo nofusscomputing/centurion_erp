@@ -6,7 +6,7 @@ from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 
 from access.middleware.request import Tenancy
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from itam.serializers.device_software import Device, DeviceSoftware, DeviceSoftwareModelSerializer, SoftwareInstallsModelSerializer
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
