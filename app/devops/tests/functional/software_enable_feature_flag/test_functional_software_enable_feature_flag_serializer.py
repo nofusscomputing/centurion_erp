@@ -1,6 +1,6 @@
+import django
 import pytest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
@@ -12,6 +12,8 @@ from app.tests.abstract.mock_view import MockView
 from devops.serializers.software_enable_feature_flag import SoftwareEnableFeatureFlag, ModelSerializer
 
 from itam.models.software import Software
+
+User = django.contrib.auth.get_user_model()
 
 
 

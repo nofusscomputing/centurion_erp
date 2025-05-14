@@ -1,4 +1,6 @@
-from django.contrib.auth.models import Permission, User
+import django
+
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -14,6 +16,8 @@ from api.tests.abstract.api_fields import APITenancyObject
 from devops.models.feature_flag import FeatureFlag
 
 from itam.models.software import Software
+
+User = django.contrib.auth.get_user_model()
 
 
 
