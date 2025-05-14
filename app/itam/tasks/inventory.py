@@ -7,7 +7,7 @@ from celery import shared_task, current_task
 from celery.utils.log import get_task_logger
 from celery import states
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from itam.serializers.inventory import InventorySerializer
 

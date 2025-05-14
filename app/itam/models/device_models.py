@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db import models
 
 from itam.models.device_common import DeviceCommonFieldsName
@@ -9,6 +8,8 @@ from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
 
 from settings.models.app_settings import AppSettings
+
+
 
 class DeviceModel(DeviceCommonFieldsName, SaveHistory):
 

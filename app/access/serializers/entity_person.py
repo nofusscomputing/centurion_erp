@@ -6,7 +6,7 @@ from access.serializers.entity import (
     BaseSerializer as BaseBaseSerializer,
     ModelSerializer as BaseModelSerializer,
 )
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 
 
@@ -70,4 +70,4 @@ class ViewSerializer(
     This model inherits from the Entity base model.
     """
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    organization = TenantBaseSerializer(many=False, read_only=True)

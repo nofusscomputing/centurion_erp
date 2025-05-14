@@ -45,7 +45,7 @@ class TicketLinkedItem(TenancyObject):
         SOFTWARE                = 6, 'Software'
 
         KB                      = 7, 'Knowledge Base'
-        ORGANIZATION            = 8, 'Organization'
+        TENANT                  = 8, 'Tenant'
         TEAM                    = 9, 'Team'
         FEATURE_FLAG            = 10, 'Feature Flag'
         SOFTWARE_VERSION        = 11, 'Software Version'
@@ -152,9 +152,9 @@ class TicketLinkedItem(TenancyObject):
 
             item_type = 'operating_system'
 
-        elif self.item_type == TicketLinkedItem.Modules.ORGANIZATION:
+        elif self.item_type == TicketLinkedItem.Modules.TENANT:
 
-            item_type = 'organization'
+            item_type = 'tenant'
 
         elif self.item_type == TicketLinkedItem.Modules.SERVICE:
 

@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from app.tests.unit.test_unit_models import (
     TenancyObjectInheritedCases

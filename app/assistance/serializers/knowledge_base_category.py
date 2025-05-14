@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ParseError, ValidationError
 
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
@@ -182,7 +182,7 @@ class KnowledgeBaseCategoryModelSerializer(
 
 class KnowledgeBaseCategoryViewSerializer(KnowledgeBaseCategoryModelSerializer):
 
-    organization = OrganizationBaseSerializer( many=False, read_only=True )\
+    organization = TenantBaseSerializer( many=False, read_only=True )\
     
     parent_category = KnowledgeBaseCategoryBaseSerializer( many = False, read_only = True)
 

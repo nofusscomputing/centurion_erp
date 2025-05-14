@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from django.urls.exceptions import NoReverseMatch
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.tenancy import TenancyManager
 from access.models.tenancy import (
     TenancyObject,

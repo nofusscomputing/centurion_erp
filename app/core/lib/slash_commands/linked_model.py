@@ -209,11 +209,11 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM
 
-        elif  model_type == 'organization':
+        elif model_type == 'tenant':
 
-            from access.models.organization import Organization
+            from access.models.tenant import Tenant
 
-            model = Organization
+            model = Tenant
 
             item_type = TicketLinkedItem.Modules.ORGANIZATION
 

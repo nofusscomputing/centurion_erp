@@ -10,7 +10,7 @@ import pytest
 import unittest
 import requests
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 from access.tests.abstract.model_permissions_organization_manager import OrganizationManagerModelPermissionChange, OrganizationManagerModelPermissionView
@@ -20,7 +20,7 @@ from app.tests.abstract.model_permissions import ModelPermissionsView, ModelPerm
 User = django.contrib.auth.get_user_model()
 
 
-class OrganizationPermissions(
+class TenantPermissions(
     TestCase,
     ModelPermissionsView,
     ModelPermissionsChange, 
@@ -28,7 +28,7 @@ class OrganizationPermissions(
     OrganizationManagerModelPermissionView,
 ):
 
-    model = Organization
+    model = Tenant
 
     app_namespace = 'Access'
 
@@ -53,11 +53,11 @@ class OrganizationPermissions(
         4. create a user per team
         """
 
-        organization = Organization.objects.create(name='test_org')
+        organization = Tenant.objects.create(name='test_org')
 
         self.organization = organization
 
-        different_organization = Organization.objects.create(
+        different_organization = Tenant.objects.create(
             name='test_different_organization'
         )
 

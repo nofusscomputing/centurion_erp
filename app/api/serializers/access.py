@@ -1,7 +1,7 @@
 from rest_framework import serializers, request
 from rest_framework.reverse import reverse
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 
 from django.contrib.auth.models import Permission

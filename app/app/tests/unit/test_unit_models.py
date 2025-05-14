@@ -4,7 +4,7 @@ from django.db.models import fields
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.tests.unit.tenancy_object.test_unit_tenancy_object_model import (
     TenancyObjectInheritedCases as AccessTenancyObjectInheritedCases
 )

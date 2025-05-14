@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models.tenancy import Organization, TenancyObject
+from access.models.tenancy import Tenant, TenancyObject
 
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
@@ -148,14 +148,14 @@ class Software(SoftwareCommonFields, SaveHistory):
 
 
     organization = models.ForeignKey(
-        Organization,
+        Tenant,
         blank = False,
-        help_text = 'Organization this belongs to',
+        help_text = 'Tenant this belongs to',
         null = False,
         on_delete = models.CASCADE,
         related_name = 'software',
         validators = [ TenancyObject.validatate_organization_exists ],
-        verbose_name = 'Organization',
+        verbose_name = 'Tenant',
     )
 
     publisher = models.ForeignKey(

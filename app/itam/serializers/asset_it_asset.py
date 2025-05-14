@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from drf_spectacular.utils import extend_schema_serializer
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from accounting.serializers.asset import (
     BaseSerializer,
@@ -78,4 +78,4 @@ class ViewSerializer(
 ):
     """IT Asset Base View Model"""
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    organization = TenantBaseSerializer(many=False, read_only=True)

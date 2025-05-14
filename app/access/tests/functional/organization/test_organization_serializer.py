@@ -6,8 +6,8 @@ from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 
 from access.serializers.organization import (
-    Organization,
-    OrganizationModelSerializer
+    Tenant,
+    TenantModelSerializer
 )
 
 User = django.contrib.auth.get_user_model()
@@ -18,7 +18,7 @@ class OrganizationValidationAPI(
     TestCase,
 ):
 
-    model = Organization
+    model = Tenant
 
     @classmethod
     def setUpTestData(self):
@@ -47,7 +47,7 @@ class OrganizationValidationAPI(
         Ensure that if creating and no name is provided a validation error occurs
         """
 
-        serializer = OrganizationModelSerializer(
+        serializer = TenantModelSerializer(
             data = self.valid_data
         )
 
@@ -67,7 +67,7 @@ class OrganizationValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = OrganizationModelSerializer(
+            serializer = TenantModelSerializer(
                 data = data
             )
 
@@ -87,7 +87,7 @@ class OrganizationValidationAPI(
         
         del data['manager']
 
-        serializer = OrganizationModelSerializer(
+        serializer = TenantModelSerializer(
             data = data
         )
 

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from api.models.tokens import AuthToken
 

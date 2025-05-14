@@ -1,10 +1,11 @@
+import django
 import pytest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -15,6 +16,8 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 from project_management.models.project_states import ProjectState
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

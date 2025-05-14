@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from devops.serializers.public_feature_flag import FeatureFlag, ViewSerializer

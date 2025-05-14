@@ -11,7 +11,7 @@ from access.fields import (
     AutoLastModifiedField
 )
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 from access.models.team import Team
 
 from core.lib.feature_not_used import FeatureNotUsed
@@ -99,7 +99,7 @@ class TeamUsers(SaveHistory):
         user.groups.remove(group)
 
 
-    def get_organization(self) -> Organization:
+    def get_organization(self) -> Tenant:
         return self.team.organization
 
 

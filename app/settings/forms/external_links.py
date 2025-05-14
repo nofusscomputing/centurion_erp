@@ -1,9 +1,8 @@
 
 from django import forms
-# from django.contrib.auth.models import User
 from django.urls import reverse
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team_user import TeamUsers
 
 from app import settings

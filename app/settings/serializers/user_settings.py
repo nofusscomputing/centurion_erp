@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from settings.models.user_settings import UserSettings
 
@@ -87,4 +87,4 @@ class UserSettingsModelSerializer(UserSettingsBaseSerializer):
 
 class UserSettingsViewSerializer(UserSettingsModelSerializer):
 
-    default_organization = OrganizationBaseSerializer( many = False, read_only = True )
+    default_organization = TenantBaseSerializer( many = False, read_only = True )

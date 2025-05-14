@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from app.tests.abstract.mock_view import MockView
 

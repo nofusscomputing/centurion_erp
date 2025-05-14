@@ -38,7 +38,7 @@ class SoftwareChange(SoftwareForm):
             )
 
             self.fields['organization'] = forms.CharField(
-                label = 'Organization',
+                label = 'Tenant',
                 initial = self.instance.organization
             )
 
@@ -102,7 +102,7 @@ class DetailForm(SoftwareForm):
 
 
         self.fields[ 'organization' ] = forms.CharField(
-            label = 'Organization',
+            label = 'Tenant',
             initial = self.instance.organization
         )
 

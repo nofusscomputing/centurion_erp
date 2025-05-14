@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
-from access.models.organization_history import Organization, OrganizationHistory
+from access.models.organization_history import Tenant as Organization, OrganizationHistory
 
 
 

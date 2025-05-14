@@ -5,7 +5,7 @@ import unittest
 
 from django.test import TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.person import Person
 
 from core.models.ticket.ticket import Ticket

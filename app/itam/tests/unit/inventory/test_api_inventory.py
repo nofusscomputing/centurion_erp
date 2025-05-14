@@ -1,9 +1,10 @@
 import datetime
+import django
 import json
 import pytest
 import unittest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -11,7 +12,7 @@ from django.test.utils import override_settings
 
 from unittest.mock import patch
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -24,6 +25,8 @@ from itam.models.software import Software, SoftwareCategory, SoftwareVersion
 from itam.tasks.inventory import process_inventory
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

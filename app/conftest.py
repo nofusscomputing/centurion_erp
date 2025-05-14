@@ -6,7 +6,7 @@ from django.test import (
     TestCase
 )
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 
 
@@ -488,7 +488,7 @@ def organization_one(django_db_blocker):
 
         random_str = datetime.datetime.now(tz=datetime.timezone.utc)
 
-        item = Organization.objects.create(
+        item = Tenant.objects.create(
             name = 'org one from global' + str(random_str)
         )
 
@@ -509,7 +509,7 @@ def organization_two(django_db_blocker):
 
         random_str = datetime.datetime.now(tz=datetime.timezone.utc)
 
-        item = Organization.objects.create(
+        item = Tenant.objects.create(
             name = 'org two from global' + str(random_str)
         )
 

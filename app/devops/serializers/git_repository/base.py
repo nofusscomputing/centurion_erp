@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema_serializer
 
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
@@ -112,6 +112,6 @@ class ModelSerializer(
 @extend_schema_serializer(component_name = 'GitViewSerializer')
 class ViewSerializer(ModelSerializer):
 
-    organization = OrganizationBaseSerializer( read_only = True )
+    organization = TenantBaseSerializer( read_only = True )
 
     git_group = GitGroupBaseSerializer( read_only = True )

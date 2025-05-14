@@ -1,6 +1,6 @@
 from django.db import models
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from core.models.model_notes import ModelNotes
 
@@ -23,7 +23,7 @@ class OrganizationNotes(
 
 
     model = models.ForeignKey(
-        Organization,
+        Tenant,
         blank = False,
         help_text = 'Model this note belongs to',
         null = False,
