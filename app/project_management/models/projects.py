@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 from access.models.team import Team
@@ -152,7 +152,7 @@ class Project(ProjectCommonFieldsName):
     )
 
     manager_user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= True,
         help_text = 'User who is the Project Manager',
         on_delete=models.SET_NULL,
@@ -173,7 +173,7 @@ class Project(ProjectCommonFieldsName):
     model_notes = None
 
     team_members = models.ManyToManyField(
-        to = User,
+        to = settings.AUTH_USER_MODEL,
         blank = True,
     )
 

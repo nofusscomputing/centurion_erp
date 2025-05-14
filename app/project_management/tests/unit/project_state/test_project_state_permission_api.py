@@ -1,8 +1,9 @@
+import django
 import pytest
 import unittest
 import requests
 
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,6 +14,8 @@ from access.models.team_user import TeamUsers
 from api.tests.abstract.api_permissions import APIPermissions
 
 from project_management.models.project_states import ProjectState
+
+User = django.contrib.auth.get_user_model()
 
 
 
