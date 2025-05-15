@@ -402,23 +402,27 @@ class NonTenancyObjectInheritedCases(
 
 class ModelFieldsTestCasesReWrite:
 
-    parameterized_fields: dict = {
-        "organization": {
-            'field_type': fields.Field,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "model_notes": {
-            'field_type': fields.TextField,
-            'field_parameter_verbose_name_type': str
-        },
-        "is_global": {
-            'field_type': fields.BooleanField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': False,
-            'field_parameter_verbose_name_type': str
+
+    @property
+    def parameterized_fields(self) -> dict:
+
+        return {
+            "organization": {
+                'field_type': fields.Field,
+                'field_parameter_default_exists': False,
+                'field_parameter_verbose_name_type': str
+            },
+            "model_notes": {
+                'field_type': fields.TextField,
+                'field_parameter_verbose_name_type': str
+            },
+            "is_global": {
+                'field_type': fields.BooleanField,
+                'field_parameter_default_exists': True,
+                'field_parameter_default_value': False,
+                'field_parameter_verbose_name_type': str
+            }
         }
-    }
 
 
 

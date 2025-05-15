@@ -37,9 +37,9 @@ class Entity(
         verbose_name = 'ID'
     )
 
+
     entity_type = models.CharField(
         blank = False,
-        default = Meta.verbose_name.lower(),
         help_text = 'Type this entity is',
         max_length = 30,
         unique = False,
