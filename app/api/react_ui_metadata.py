@@ -396,7 +396,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Tenancy",
                         "name": "tenant",
                         "icon": "organization",
-                        "link": "/access/organization"
+                        "link": "/access/tenant"
                     },
                 }
             },
