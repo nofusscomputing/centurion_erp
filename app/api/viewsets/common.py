@@ -841,7 +841,7 @@ class SubModelViewSet(
 
                     if(
                         str(
-                            related_model._meta.sub_model_type
+                            getattr(related_model, '._meta.sub_model_type', '')
                         ).lower().replace(' ', '_') == model_kwarg
                     ):
 
