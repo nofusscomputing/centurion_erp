@@ -793,7 +793,8 @@ class SubModelViewSet(
     def related_objects(self, model, model_kwarg):
         """Recursive relate_objects fetch
 
-        Fetch the model that is lowest in the chain of inherited models
+        Fetch the model where <model>._meta.sub_model_type matches the
+        model_kwarg value.
 
         Args:
             model (django.db.models.Model): The model to obtain the 
@@ -801,12 +802,14 @@ class SubModelViewSet(
             model_kwarg (str): The URL Kwarg of the model.
 
         Returns:
-            _type_: _description_
+            Model: The model for the ViewSet
         """
 
         related_model = None
 
         if model_kwarg:
+
+            is_nested_lookup = False
 
             for related_object in model._meta.related_objects:
 
@@ -833,9 +836,23 @@ class SubModelViewSet(
 
                     related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
 
+                    is_nested_lookup = True
 
 
-        if related_model is None:
+                    if(
+                        str(
+                            related_model._meta.sub_model_type
+                        ).lower().replace(' ', '_') == model_kwarg
+                    ):
+
+                        break
+
+                    else:
+
+                        related_model = None
+
+
+        if related_model is None and not is_nested_lookup:
 
             related_model = self.base_model
 
