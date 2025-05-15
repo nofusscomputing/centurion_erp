@@ -1,5 +1,4 @@
 import django
-
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
@@ -9,8 +8,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
-from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 User = django.contrib.auth.get_user_model()
@@ -19,23 +16,34 @@ User = django.contrib.auth.get_user_model()
 
 class ViewSetBase:
 
-    add_data: dict = None
+    add_data: dict = {
+       'model_notes': 'added model note'
+    }
 
     app_namespace = 'v2'
+
+    base_model = Entity
+    """Base model for this sub model
+    don't change or override this value
+    """
 
     change_data = None
 
     delete_data = {}
 
-    kwargs_create_item: dict = {}
+    kwargs_create_item: dict = {
+        'model_notes': 'added model note'
+    }
 
-    kwargs_create_item_diff_org: dict = {}
+    kwargs_create_item_diff_org: dict = {
+       'model_notes': 'added model note'
+    }
 
     model = None
 
-    url_kwargs: dict = None
+    url_kwargs: dict = {}
 
-    url_view_kwargs: dict = None
+    url_view_kwargs: dict = {}
 
     url_name = None
 
@@ -57,16 +65,15 @@ class ViewSetBase:
 
         self.different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.view_user = User.objects.create_user(username="test_user_view", password="password")
 
         self.item = self.model.objects.create(
             organization = organization,
-            model_notes = 'some notes',
             **self.kwargs_create_item
         )
 
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
-            model_notes = 'some more notes',
             **self.kwargs_create_item_diff_org
         )
 
@@ -75,7 +82,9 @@ class ViewSetBase:
 
         if self.add_data is not None:
 
-            self.add_data.update({'organization': self.organization.id})
+            self.add_data.update({
+                'organization': self.organization.id,
+            })
 
 
         view_permissions = Permission.objects.get(
@@ -148,7 +157,6 @@ class ViewSetBase:
         self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
 
 
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
         TeamUsers.objects.create(
             team = view_team,
             user = self.view_user
@@ -194,98 +202,16 @@ class ViewSetBase:
         )
 
 
-
-class PermissionsAPITestCases(
-    ViewSetBase,
-    APIPermissions,
-):
-
-
-    add_data: dict = {}
-
-    change_data = {'model_notes': 'device'}
-
-    model = None
-
-    kwargs_create_item: dict = None
-
-    kwargs_create_item_diff_org: dict = None
-
-    url_kwargs: dict = None
-
-    url_view_kwargs: dict = None
-
-    url_name = None
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.add_data.update({ 'model_note': 'added model note' })
-
-        super().setUpTestData()
-
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
+    def test_sanity_is_asset_sub_model(self):
+        """Sanity Test
+        
+        This test ensures that the model being tested `self.model` is a
+        sub-model of `self.base_model`.
+        This test is required as the same viewset is used for all sub-models
+        of `Entity`
         """
-        pass
 
-
-
-class EntityPermissionsAPIInheritedCases(
-    PermissionsAPITestCases,
-):
-
-    add_data: dict = None
-
-    model = None
-
-    kwargs_create_item: dict = None
-
-    kwargs_create_item_diff_org: dict = None
-
-    url_name = '_api_v2_entity_sub'
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.url_kwargs = {
-            'entity_model': self.model._meta.model_name
-        }
-
-        self.url_view_kwargs = {
-            'entity_model': self.model._meta.model_name
-        }
-
-        super().setUpTestData()
-
-
-
-class EntityPermissionsAPITest(
-    PermissionsAPITestCases,
-    TestCase,
-):
-
-    kwargs_create_item: dict = {}
-
-    kwargs_create_item_diff_org: dict = {}
-
-    model = Entity
-
-    url_kwargs: dict = {}
-
-    url_view_kwargs: dict = {}
-
-    url_name = '_api_v2_entity'
-
+        assert issubclass(self.model, self.base_model)
 
 
 
@@ -294,17 +220,7 @@ class ViewSetTestCases(
     SerializersTestCases,
 ):
 
-    kwargs_create_item: dict = None
-
-    kwargs_create_item_diff_org: dict = None
-
-    model = None
-
-    url_kwargs: dict = None
-
-    url_view_kwargs: dict = None
-
-    url_name = None
+    model = Entity
 
 
 
@@ -314,22 +230,28 @@ class EntityViewSetInheritedCases(
 
     model = None
 
-    kwargs_create_item: dict = None
-
-    kwargs_create_item_diff_org: dict = None
-
     url_name = '_api_v2_entity_sub'
 
 
     @classmethod
     def setUpTestData(self):
 
+        self.kwargs_create_item = {
+            **super().kwargs_create_item,
+            **self.kwargs_create_item
+        }
+
+        self.kwargs_create_item_diff_org = {
+            **super().kwargs_create_item_diff_org,
+            **self.kwargs_create_item_diff_org
+        }
+
         self.url_kwargs = {
-            'entity_model': self.model._meta.model_name
+            'entity_model': self.model._meta.sub_model_type
         }
 
         self.url_view_kwargs = {
-            'entity_model': self.model._meta.model_name
+            'entity_model': self.model._meta.sub_model_type
         }
 
         super().setUpTestData()
@@ -341,168 +263,4 @@ class EntityViewSetTest(
     TestCase,
 ):
 
-    kwargs_create_item: dict = {}
-
-    kwargs_create_item_diff_org: dict = {}
-
-    model = Entity
-
-    url_kwargs: dict = {}
-
-    url_view_kwargs: dict = {}
-
     url_name = '_api_v2_entity'
-
-
-
-class MetadataTestCases(
-    ViewSetBase,
-    MetadataAttributesFunctional,
-):
-
-    kwargs_create_item: dict = None
-
-    kwargs_create_item_diff_org: dict = None
-
-    model = None
-
-    url_kwargs: dict = None
-
-    url_view_kwargs: dict = None
-
-    url_name = None
-
-
-
-class EntityMetadataInheritedCases(
-    MetadataTestCases,
-):
-
-    model = None
-
-    kwargs_create_item: dict = None
-
-    kwargs_create_item_diff_org: dict = None
-
-    url_name = '_api_v2_entity_sub'
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.url_kwargs = {
-            'entity_model': self.model._meta.model_name
-        }
-
-        self.url_view_kwargs = {
-            'entity_model': self.model._meta.model_name
-        }
-
-        super().setUpTestData()
-
-
-
-class EntityMetadataTest(
-    MetadataTestCases,
-    TestCase,
-
-):
-
-    kwargs_create_item: dict = {}
-
-    kwargs_create_item_diff_org: dict = {}
-
-    model = Entity
-
-    url_kwargs: dict = {}
-
-    url_view_kwargs: dict = {}
-
-    url_name = '_api_v2_entity'
-
-
-    # def test_method_options_request_detail_data_has_key_urls_back(self):
-    #     """Test HTTP/Options Method
-
-    #     Ensure the request data returned has key `urls.back`
-    #     """
-
-    #     client = Client()
-    #     client.force_login(self.view_user)
-
-    #     response = client.options(
-    #         reverse(
-    #             self.app_namespace + ':' + self.url_name + '-detail',
-    #             kwargs=self.url_view_kwargs
-    #         ),
-    #         content_type='application/json'
-    #     )
-
-    #     assert 'back' in response.data['urls']
-
-
-    # def test_method_options_request_detail_data_key_urls_back_is_str(self):
-    #     """Test HTTP/Options Method
-
-    #     Ensure the request data key `urls.back` is str
-    #     """
-
-    #     client = Client()
-    #     client.force_login(self.view_user)
-
-    #     response = client.options(
-    #         reverse(
-    #             self.app_namespace + ':' + self.url_name + '-detail',
-    #             kwargs=self.url_view_kwargs
-    #         ),
-    #         content_type='application/json'
-    #     )
-
-    #     assert type(response.data['urls']['back']) is str
-
-
-
-    # def test_method_options_request_list_data_has_key_urls_return_url(self):
-    #     """Test HTTP/Options Method
-
-    #     Ensure the request data returned has key `urls.return_url`
-    #     """
-
-    #     client = Client()
-    #     client.force_login(self.view_user)
-
-    #     if self.url_kwargs:
-
-    #         url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-    #     else:
-
-    #         url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-    #     response = client.options( url, content_type='application/json' )
-
-    #     assert 'return_url' in response.data['urls']
-
-
-    # def test_method_options_request_list_data_key_urls_return_url_is_str(self):
-    #     """Test HTTP/Options Method
-
-    #     Ensure the request data key `urls.return_url` is str
-    #     """
-
-    #     client = Client()
-    #     client.force_login(self.view_user)
-
-    #     if self.url_kwargs:
-
-    #         url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-    #     else:
-
-    #         url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-    #     response = client.options( url, content_type='application/json' )
-
-    #     assert type(response.data['urls']['return_url']) is str
-
-
