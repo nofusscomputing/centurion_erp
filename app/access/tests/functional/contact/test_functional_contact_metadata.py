@@ -1,14 +1,15 @@
 from django.test import TestCase
 
 from access.models.contact import Contact
-from access.tests.functional.person.test_functional_person_viewset import (
-    PersonViewSetInheritedCases
+
+from access.tests.functional.person.test_functional_person_metadata import (
+    PersonMetadataInheritedCases
 )
 
 
 
-class ViewSetTestCases(
-    PersonViewSetInheritedCases,
+class ContactMetadataTestCases(
+    PersonMetadataInheritedCases,
 ):
 
     add_data: dict = {
@@ -27,11 +28,16 @@ class ViewSetTestCases(
 
 
 
-class ContactViewSetInheritedCases(
-    ViewSetTestCases,
+
+class ContactMetadataInheritedCases(
+    ContactMetadataTestCases,
 ):
 
     model = None
+
+    kwargs_create_item: dict = {}
+
+    kwargs_create_item_diff_org: dict = {}
 
 
     @classmethod
@@ -51,8 +57,9 @@ class ContactViewSetInheritedCases(
 
 
 
-class ContactViewSetTest(
-    ViewSetTestCases,
+class ContactMetadataTest(
+    ContactMetadataTestCases,
     TestCase,
+
 ):
     pass

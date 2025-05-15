@@ -2,32 +2,32 @@ import pytest
 
 from django.db import models
 
-from access.tests.unit.contact.test_unit_contact_model import (
-    ContactModelInheritedCases
+from access.models.company_base import Company
+
+from access.tests.unit.entity.test_unit_entity_model import (
+    EntityModelInheritedCases
 )
 
-from human_resources.models.employee import Employee
 
 
-
-class EmployeeModelTestCases(
-    ContactModelInheritedCases,
+class CompanyModelTestCases(
+    EntityModelInheritedCases,
 ):
 
     kwargs_create_item: dict = {
-        'employee_number': 12345,
+        'name': 'Ian',
     }
 
-    sub_model_type = 'employee'
+    sub_model_type = 'company'
     """Sub Model Type
-
+    
     sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
     """
 
 
     parameterized_fields: dict = {
-        "employee_number": {
-            'field_type': models.fields.IntegerField,
+        "name": {
+            'field_type': models.fields.CharField,
             'field_parameter_default_exists': False,
             'field_parameter_verbose_name_type': str,
         }
@@ -35,13 +35,13 @@ class EmployeeModelTestCases(
 
 
 
-    def test_class_inherits_employee(self):
+    def test_class_inherits_company(self):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, Employee)
+        assert issubclass(self.model, Company)
 
 
     def test_attribute_value_history_app_label(self):
@@ -51,7 +51,7 @@ class EmployeeModelTestCases(
         of attribute `history_app_label`
         """
 
-        assert self.model.history_app_label == 'human_resources'
+        assert self.model.history_app_label == 'access'
 
 
     def test_attribute_value_history_model_name(self):
@@ -61,18 +61,18 @@ class EmployeeModelTestCases(
         of attribute `history_model_name`
         """
 
-        assert self.model.history_model_name == 'employee'
+        assert self.model.history_model_name == 'company'
 
 
 
     def test_function_value_get_url(self):
 
-        assert self.item.get_url() == '/api/v2/access/entity/employee/' + str(self.item.id)
+        assert self.item.get_url() == '/api/v2/access/entity/company/' + str(self.item.id)
 
 
 
-class EmployeeModelInheritedCases(
-    EmployeeModelTestCases,
+class CompanyModelInheritedCases(
+    CompanyModelTestCases,
 ):
     """Sub-Ticket Test Cases
 
@@ -91,8 +91,8 @@ class EmployeeModelInheritedCases(
 
 
 
-class EmployeeModelPyTest(
-    EmployeeModelTestCases,
+class CompanyModelPyTest(
+    CompanyModelTestCases,
 ):
 
 

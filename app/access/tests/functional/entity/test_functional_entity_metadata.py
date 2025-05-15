@@ -8,17 +8,19 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
+from accounting.models.asset_base import AssetBase
+
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 User = django.contrib.auth.get_user_model()
 
 
 
-class ViewSetBase:
+class EntityMetadataTestCases(
+    MetadataAttributesFunctional,
+):
 
-    add_data: dict = {
-       'model_notes': 'added model note'
-    }
+    add_data: dict = {}
 
     app_namespace = 'v2'
 
@@ -31,15 +33,11 @@ class ViewSetBase:
 
     delete_data = {}
 
-    kwargs_create_item: dict = {
-        'model_notes': 'added model note'
-    }
+    kwargs_create_item: dict = {}
 
-    kwargs_create_item_diff_org: dict = {
-       'model_notes': 'added model note'
-    }
+    kwargs_create_item_diff_org: dict = {}
 
-    model = None
+    model = Entity
 
     url_kwargs: dict = {}
 
@@ -202,33 +200,28 @@ class ViewSetBase:
         )
 
 
-    def test_sanity_is_asset_sub_model(self):
+    def test_sanity_is_entity_sub_model(self):
         """Sanity Test
         
         This test ensures that the model being tested `self.model` is a
         sub-model of `self.base_model`.
         This test is required as the same viewset is used for all sub-models
-        of `Entity`
+        of `AssetBase`
         """
 
         assert issubclass(self.model, self.base_model)
 
 
 
-class ViewSetTestCases(
-    ViewSetBase,
-    SerializersTestCases,
-):
-
-    model = Entity
-
-
-
-class EntityViewSetInheritedCases(
-    ViewSetTestCases,
+class EntityMetadataInheritedCases(
+    EntityMetadataTestCases,
 ):
 
     model = None
+
+    kwargs_create_item: dict = {}
+
+    kwargs_create_item_diff_org: dict = {}
 
     url_name = '_api_v2_entity_sub'
 
@@ -258,9 +251,10 @@ class EntityViewSetInheritedCases(
 
 
 
-class EntityViewSetTest(
-    ViewSetTestCases,
+class EntityMetadataTest(
+    EntityMetadataTestCases,
     TestCase,
+
 ):
 
     url_name = '_api_v2_entity'

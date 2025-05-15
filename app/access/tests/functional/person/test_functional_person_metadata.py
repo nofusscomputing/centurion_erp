@@ -1,14 +1,16 @@
 from django.test import TestCase
 
 from access.models.person import Person
-from access.tests.functional.entity.test_functional_entity_viewset import (
-    EntityViewSetInheritedCases
+from access.tests.functional.entity.test_functional_entity_metadata import (
+    EntityMetadataInheritedCases
 )
 
+from accounting.models.asset_base import AssetBase
 
 
-class ViewSetTestCases(
-    EntityViewSetInheritedCases,
+
+class PersonMetadataTestCases(
+    EntityMetadataInheritedCases,
 ):
 
     add_data: dict = {
@@ -36,11 +38,16 @@ class ViewSetTestCases(
 
 
 
-class PersonViewSetInheritedCases(
-    ViewSetTestCases,
+
+class PersonMetadataInheritedCases(
+    PersonMetadataTestCases,
 ):
 
     model = None
+
+    kwargs_create_item: dict = {}
+
+    kwargs_create_item_diff_org: dict = {}
 
 
     @classmethod
@@ -56,12 +63,21 @@ class PersonViewSetInheritedCases(
             **self.kwargs_create_item_diff_org
         }
 
+        # self.url_kwargs = {
+        #     'entity_model': self.model._meta.sub_model_type
+        # }
+
+        # self.url_view_kwargs = {
+        #     'entity_model': self.model._meta.sub_model_type
+        # }
+
         super().setUpTestData()
 
 
 
-class PersonViewSetTest(
-    ViewSetTestCases,
+class PersonMetadataTest(
+    PersonMetadataTestCases,
     TestCase,
+
 ):
     pass

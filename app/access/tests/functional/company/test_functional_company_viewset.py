@@ -1,33 +1,33 @@
 from django.test import TestCase
 
-from access.models.contact import Contact
-from access.tests.functional.person.test_functional_person_viewset import (
-    PersonViewSetInheritedCases
+from access.models.company_base import Company
+from access.tests.functional.entity.test_functional_entity_viewset import (
+    EntityViewSetInheritedCases
 )
 
 
 
 class ViewSetTestCases(
-    PersonViewSetInheritedCases,
+    EntityViewSetInheritedCases,
 ):
 
     add_data: dict = {
-        'email': 'ipfunny@unit.test',
+        'name': 'Ian',
     }
 
     kwargs_create_item: dict = {
-        'email': 'ipweird@unit.test',
+        'name': 'Ian2',
     }
 
     kwargs_create_item_diff_org: dict = {
-        'email': 'ipstrange@unit.test',
+        'name': 'Ian3',
     }
 
-    model = Contact
+    model = Company
 
 
 
-class ContactViewSetInheritedCases(
+class CompanyViewSetInheritedCases(
     ViewSetTestCases,
 ):
 
@@ -51,7 +51,7 @@ class ContactViewSetInheritedCases(
 
 
 
-class ContactViewSetTest(
+class CompanyViewSetTest(
     ViewSetTestCases,
     TestCase,
 ):

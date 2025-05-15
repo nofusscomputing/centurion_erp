@@ -2,34 +2,34 @@ import pytest
 
 from rest_framework.exceptions import ValidationError
 
-from access.tests.functional.person.test_functional_person_serializer import (
+from access.tests.functional.entity.test_functional_entity_serializer import (
     MockView,
-    PersonSerializerInheritedCases
+    EntitySerializerInheritedCases
 )
 
 
 
-class ContactSerializerTestCases(
-    PersonSerializerInheritedCases
+class CompanySerializerTestCases(
+    EntitySerializerInheritedCases
 ):
 
 
     parameterized_test_data: dict = {
-        "email": {
+        "name": {
             'will_create': False,
             'exception_key': 'required'
-        }
+        },
     }
 
     valid_data: dict = {
-        'email': 'contactentityduplicatetwo@unit.test',
+        'name': 'Ian',
     }
     """Valid data used by serializer to create object"""
 
 
 
-class ContactSerializerInheritedCases(
-    ContactSerializerTestCases,
+class CompanySerializerInheritedCases(
+    CompanySerializerTestCases,
 ):
 
     parameterized_test_data: dict = None
@@ -39,8 +39,8 @@ class ContactSerializerInheritedCases(
 
 
 
-class ContactSerializerPyTest(
-    ContactSerializerTestCases,
+class CompanySerializerPyTest(
+    CompanySerializerTestCases,
 ):
 
     parameterized_test_data: dict = None

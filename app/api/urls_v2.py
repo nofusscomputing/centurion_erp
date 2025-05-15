@@ -162,15 +162,18 @@ entity_type_names = str(entity_type_names)[:-1]
 
 
 router.register('access', access_v2.Index, basename='_api_v2_access_home')
+
+router.register('access/(?P<entity_model>[company]+)', entity.ViewSet, feature_flag = '2025-00008', basename='_api_v2_company')
+
 router.register(f'access/entity/(?P<entity_model>[{entity_type_names}]+)?', entity.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_sub')
 router.register('access/entity', entity.NoDocsViewSet, feature_flag = '2025-00002', basename='_api_v2_entity')
 router.register('access/entity/(?P<model_id>[0-9]+)/notes', entity_notes.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_note')
 
-router.register('access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
-router.register('access/organization/(?P<model_id>[0-9]+)/notes', organization_notes.ViewSet, basename='_api_v2_organization_note')
-router.register('access/organization/(?P<organization_id>[0-9]+)/team', team_v2.ViewSet, basename='_api_v2_organization_team')
-router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<model_id>[0-9]+)/notes', team_notes.ViewSet, basename='_api_v2_team_note')
-router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
+router.register('access/tenant', organization_v2.ViewSet, basename='_api_v2_organization')
+router.register('access/tenant/(?P<model_id>[0-9]+)/notes', organization_notes.ViewSet, basename='_api_v2_organization_note')
+router.register('access/tenant/(?P<organization_id>[0-9]+)/team', team_v2.ViewSet, basename='_api_v2_organization_team')
+router.register('access/tenant/(?P<organization_id>[0-9]+)/team/(?P<model_id>[0-9]+)/notes', team_notes.ViewSet, basename='_api_v2_team_note')
+router.register('access/tenant/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
 
 router.register('access/role', role.ViewSet, feature_flag = '2025-00003', basename='_api_v2_role')
 router.register('access/role/(?P<model_id>[0-9]+)/notes', role_notes.ViewSet, feature_flag = '2025-00003', basename='_api_v2_role_note')

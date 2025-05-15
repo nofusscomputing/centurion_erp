@@ -13,6 +13,8 @@ The Access module provides the multi-tenancy for this application. Tenancy is or
 
 - [Contact / Corporate Directory](./contact.md)
 
+- [Company](./company.md)
+
 - [Tenant](./tenant.md)
 
 - [Roles](./role.md)
