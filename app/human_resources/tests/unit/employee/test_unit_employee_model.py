@@ -1,8 +1,8 @@
-from django.db.models.fields import NOT_PROVIDED
-from django.test import TestCase
+import pytest
+
+from django.db import models
 
 from access.tests.unit.contact.test_unit_contact_model import (
-    Contact,
     ContactModelInheritedCases
 )
 
@@ -10,72 +10,96 @@ from human_resources.models.employee import Employee
 
 
 
-class ModelTestCases(
+class EmployeeModelTestCases(
     ContactModelInheritedCases,
 ):
 
-    model = Employee
+    kwargs_create_item: dict = {
+        'employee_number': 12345,
+    }
 
-    kwargs_item_create: dict = {
-        'email': 'ipweird@unit.test',
-        'employee_number': 123456,
+    sub_model_type = 'employee'
+    """Sub Model Type
+
+    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
+    """
+
+
+    parameterized_fields: dict = {
+        "employee_number": {
+            'field_type': models.fields.IntegerField,
+            'field_parameter_default_exists': False,
+            'field_parameter_verbose_name_type': str,
+        }
     }
 
 
 
-    def test_model_field_employee_number_mandatory(self):
-        """Test Field
+    def test_class_inherits_employee(self):
+        """ Class inheritence
 
-        Field `employee_number` must be a mandatory field
+        TenancyObject must inherit SaveHistory
         """
 
-        assert(
-            not (
-                self.model._meta.get_field('employee_number').blank
-                and self.model._meta.get_field('employee_number').null
-            )
-            and self.model._meta.get_field('employee_number').default is NOT_PROVIDED
-        )
+        assert issubclass(self.model, Employee)
 
 
-    def test_model_inherits_contact(self):
-        """Test model inheritence
+    def test_attribute_value_history_app_label(self):
+        """Attribute Type
 
-        model must inherit from Entity sub-model `Contact`
+        history_app_label has been set, override this test case with the value
+        of attribute `history_app_label`
         """
 
-        assert issubclass(self.model, Contact)
+        assert self.model.history_app_label == 'human_resources'
 
+
+    def test_attribute_value_history_model_name(self):
+        """Attribute Type
+
+        history_model_name has been set, override this test case with the value
+        of attribute `history_model_name`
+        """
+
+        assert self.model.history_model_name == 'employee'
+
+
+
+    def test_function_value_get_url(self):
+
+        assert self.item.get_url() == '/api/v2/access/entity/employee/' + str(self.item.id)
 
 
 
 class EmployeeModelInheritedCases(
-    ModelTestCases,
+    EmployeeModelTestCases,
 ):
-    """Sub-Entity Test Cases
+    """Sub-Ticket Test Cases
 
-    Test Cases for Entity models that inherit from model Employee
+    Test Cases for Ticket models that inherit from model Entity
     """
 
-    kwargs_item_create: dict = None
+    kwargs_create_item: dict = {}
 
     model = None
 
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs_item_create.update(
-            super().kwargs_item_create
-        )
-
-        super().setUpTestData()
+    sub_model_type = None
+    """Ticket Sub Model Type
+    
+    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
+    """
 
 
 
-class EmployeeModelTest(
-    ModelTestCases,
-    TestCase,
+class EmployeeModelPyTest(
+    EmployeeModelTestCases,
 ):
 
-    pass
+
+    def test_function_value_get_related_model(self):
+        """Function test
+
+        Confirm function `get_related_model` is None for base model
+        """
+
+        assert self.item.get_related_model() is None
