@@ -87,9 +87,6 @@ class EntityModelTestCases(
 
         yield
 
-        with django_db_blocker.unblock():
-
-            del request.cls.kwargs_create_item
 
 
     @pytest.fixture( scope = 'class', autouse = True)

@@ -839,17 +839,19 @@ class SubModelViewSet(
                     is_nested_lookup = True
 
 
-                    if(
+
+                    if not hasattr(related_model, '_meta'):
+
+                        related_model = None
+
+                    elif(
                         str(
-                            getattr(related_model, '._meta.sub_model_type', '')
+                            getattr(related_model._meta, 'sub_model_type', '')
                         ).lower().replace(' ', '_') == model_kwarg
                     ):
 
                         break
 
-                    else:
-
-                        related_model = None
 
 
         if related_model is None and not is_nested_lookup:
