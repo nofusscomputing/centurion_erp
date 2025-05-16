@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from django_celery_results.models import TaskResult
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 

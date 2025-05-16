@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from settings.models.app_settings import AppSettings
 
@@ -85,4 +85,4 @@ class AppSettingsModelSerializer(AppSettingsBaseSerializer):
 
 class AppSettingsViewSerializer(AppSettingsModelSerializer):
 
-    global_organization = OrganizationBaseSerializer( many = False, read_only = True )
+    global_organization = TenantBaseSerializer( many = False, read_only = True )

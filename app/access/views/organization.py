@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import *
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from access.forms.organization import OrganizationForm
 
@@ -15,7 +15,7 @@ class IndexView(IndexView):
 
     model = Organization
     permission_required = [
-        'access.view_organization'
+        'access.view_tenant'
     ]
     template_name = 'access/index.html.j2'
     context_object_name = "organization_list"
@@ -61,7 +61,7 @@ class View(ChangeView):
 
                 return self.handle_no_permission()
 
-        if not self.permission_check(request, [ 'access.view_organization' ]):
+        if not self.permission_check(request, [ 'access.view_tenant' ]):
 
             raise PermissionDenied('You are not part of this organization')
 
@@ -97,7 +97,7 @@ class View(ChangeView):
 
                 return self.handle_no_permission()
 
-        if not self.permission_check(request, [ 'access.change_organization' ]):
+        if not self.permission_check(request, [ 'access.change_tenant' ]):
 
             raise PermissionDenied('You are not part of this organization')
 

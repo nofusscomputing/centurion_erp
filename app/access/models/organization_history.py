@@ -2,7 +2,7 @@ from django.db import models
 
 from core.models.model_history import ModelHistory
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 
 
@@ -23,7 +23,7 @@ class OrganizationHistory(
 
 
     model = models.ForeignKey(
-        Organization,
+        Tenant,
         blank = False,
         help_text = 'Model this note belongs to',
         null = False,
@@ -46,8 +46,8 @@ class OrganizationHistory(
 
         model = None
 
-        from access.serializers.organization import OrganizationBaseSerializer
+        from access.serializers.organization import TenantBaseSerializer
 
-        model = OrganizationBaseSerializer(self.model, context = serializer_context)
+        model = TenantBaseSerializer(self.model, context = serializer_context)
 
         return model

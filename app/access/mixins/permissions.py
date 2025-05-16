@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions
 from rest_framework.permissions import DjangoObjectPermissions
 
-from access.models.tenancy import Organization, TenancyObject
+from access.models.tenancy import Tenant, TenancyObject
 
 from core import exceptions as centurion_exceptions
 
@@ -14,10 +14,10 @@ from core import exceptions as centurion_exceptions
 class OrganizationPermissionMixin(
     DjangoObjectPermissions,
 ):
-    """Organization Permission Mixin
+    """Tenant Permission Mixin
 
     This class is to be used as the permission class for API `Views`/`ViewSets`.
-    In combination with the `OrganizationPermissionsMixin`, permission checking
+    In combination with the `TenantPermissionsMixin`, permission checking
     will be done to ensure the user has the correct permissions to perform the
     CRUD operation.
 
@@ -166,7 +166,7 @@ class OrganizationPermissionMixin(
                 raise centurion_exceptions.PermissionDenied()
 
 
-            obj_organization: Organization = view.get_obj_organization(
+            obj_organization: Tenant = view.get_obj_organization(
                 request = request
             )
 

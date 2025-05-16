@@ -1,11 +1,14 @@
-from django.contrib.auth.models import  User
+import django
+
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from app.tests.abstract.mock_view import MockView
+
+User = django.contrib.auth.get_user_model()
 
 
 

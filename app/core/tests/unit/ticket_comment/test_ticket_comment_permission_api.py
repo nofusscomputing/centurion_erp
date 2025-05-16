@@ -1,13 +1,14 @@
+import django
 import pytest
 import unittest
 import requests
 
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -15,6 +16,9 @@ from api.tests.abstract.api_permissions import APIPermissions, APIPermissionAdd,
 
 from core.models.ticket.ticket import Ticket
 from core.models.ticket.ticket_comment import TicketComment
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class TicketCommentPermissionsAPI(

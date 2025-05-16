@@ -1,12 +1,15 @@
-from django.contrib.auth.models import User
+import django
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from api.tests.unit.test_unit_common_viewset import IndexViewsetInheritedCases
 
 from api.viewsets.index import Index
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class HomeViewset(

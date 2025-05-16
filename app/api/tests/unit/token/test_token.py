@@ -1,22 +1,21 @@
+import django
 import hashlib
 import json
-import pytest
-import requests
-import unittest
 
 from datetime import datetime, timedelta
 
-from django.contrib.auth.models import AnonymousUser, Permission, User
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-from access.models.organization import Organization
-from access.models.team import Team
-from access.models.team_user import TeamUsers
+from access.models.tenant import Tenant as Organization
 
 from api.models.tokens import AuthToken
 
 from settings.models.user_settings import UserSettings
+
+User = django.contrib.auth.get_user_model()
+
+
 
 class APIAuthToken(TestCase):
 
@@ -61,6 +60,8 @@ class APIAuthToken(TestCase):
 
         token.save()
 
+        self.token = token
+
         self.api_token_does_not_exist = hashlib.sha256(str('a random string').encode('utf-8')).hexdigest()
 
 
@@ -92,7 +93,7 @@ class APIAuthToken(TestCase):
         url = reverse('_user_auth_token_add', kwargs={'user_id': self.add_user.id})
 
 
-        response = client.post(url, kwargs={'user_id': self.add_user.id})
+        response = client.post(url)
 
         assert response.status_code == 200
 
@@ -109,7 +110,7 @@ class APIAuthToken(TestCase):
         url = reverse('_user_auth_token_add', kwargs={'user_id': 999})
 
 
-        response = client.post(url, kwargs={'user_id': 999})
+        response = client.post(url)
 
         assert response.status_code == 403
 
@@ -123,12 +124,12 @@ class APIAuthToken(TestCase):
 
         client = Client()
         client.force_login(self.add_user)
-        url = reverse('_user_auth_token_delete', kwargs={'user_id': self.add_user.id, 'pk': 1})
+        url = reverse('_user_auth_token_delete', kwargs={'user_id': self.add_user.id, 'pk': self.token.id})
 
 
-        response = client.post(url, kwargs={'user_id': self.add_user.id, 'pk': 1})
+        response = client.post(url)
 
-        assert response.status_code == 302 and response.url == '/account/settings/1'
+        assert response.status_code == 302 and response.url == '/account/settings/' + str(self.add_user.id)
 
 
 
@@ -140,10 +141,10 @@ class APIAuthToken(TestCase):
 
         client = Client()
         client.force_login(self.add_user)
-        url = reverse('_user_auth_token_delete', kwargs={'user_id': 999, 'pk': 1})
+        url = reverse('_user_auth_token_delete', kwargs={'user_id': 999, 'pk': self.token.id})
 
 
-        response = client.post(url, data={'id': 1}, kwargs={'user_id': 999, 'pk': 1})
+        response = client.post(url, data={'id': 1})
 
         assert response.status_code == 403
 

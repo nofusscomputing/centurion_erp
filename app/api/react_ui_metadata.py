@@ -13,7 +13,7 @@ from rest_framework.utils.field_mapping import ClassLookupDict
 
 from rest_framework_json_api.utils import get_related_resource_type
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from app.serializers.user import User, UserBaseSerializer
 
@@ -84,6 +84,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         url_self = None
 
         app_namespace = ''
+
+        base_model = getattr(view, 'base_model', None)
+
+        if base_model is not None:
+
+            if(
+                base_model.app_namespace != ''
+                and base_model.app_namespace is not None
+            ):
+
+                app_namespace = base_model.app_namespace + ':'
+
 
         if getattr(view, 'model', None):
 
@@ -380,10 +392,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "Access",
                 "name": "access",
                 "pages": {
-                    'view_organization': {
-                        "display_name": "Organization",
-                        "name": "organization",
-                        "link": "/access/organization"
+                    'view_tenant': {
+                        "display_name": "Tenancy",
+                        "name": "tenant",
+                        "icon": "organization",
+                        "link": "/access/tenant"
                     },
                 }
             },
@@ -574,8 +587,32 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
-
             if request.feature_flag['2025-00002']:
+
+
+                if request.feature_flag['2025-00003']:
+
+                    nav['access']['pages'].update({
+                        'view_role': {
+                            "display_name": "Roles",
+                            "name": "roles",
+                            "icon": 'roles',
+                            "link": "/access/role"
+                        }
+                    })
+
+
+                if request.feature_flag['2025-00008']:
+
+                    nav['access']['pages'].update({
+                        'view_company': {
+                            "display_name": "Companies",
+                            "name": "organization",
+                            "icon": 'organization',
+                            "link": "/access/company"
+                        }
+                    })
+
 
                 nav['access']['pages'].update({
                     'view_contact': {
@@ -584,6 +621,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "link": "/access/entity/contact"
                     }
                 })
+
 
                 if request.feature_flag['2025-00005']:
 
@@ -597,16 +635,26 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     })
 
 
-            if request.feature_flag['2025-00003']:
+            if request.feature_flag['2025-00004']:
 
-                nav['access']['pages'].update({
-                    'view_role': {
-                        "display_name": "Roles",
-                        "name": "roles",
-                        "icon": 'roles',
-                        "link": "/access/role"
+                nav['accounting']['pages'].update({
+                    'view_assetbase': {
+                        "display_name": "Assets",
+                        "name": "asset",
+                        "link": "/accounting/asset"
                     }
                 })
+
+                if request.feature_flag['2025-00007']:
+
+                    nav['itam']['pages'] = {
+                        'view_itamassetbase': {
+                            "display_name": "IT Assets",
+                            "name": "itasset",
+                            "link": "/itam/it_asset"
+                        },
+                        **nav['itam']['pages']
+                    }
 
             if request.feature_flag['2025-00006']:
 
@@ -672,7 +720,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         # user = view.request.user
 
-        user_orgainzations = Organization.objects.filter(
+        user_orgainzations = Tenant.objects.filter(
             manager = request.user
         )
 

@@ -1,7 +1,9 @@
 import datetime
+import difflib
+import django
 
 from django.apps import apps
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -10,14 +12,17 @@ from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.entity import Entity
 from access.models.tenancy import TenancyObject
 
-from core import exceptions as centurion_exception
+from core import exceptions as centurion_exceptions
 from core.classes.badge import Badge
 from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
+from core.middleware.get_request import get_request
 from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket.ticket_enum_values import TicketValues
 
 from project_management.models.project_milestone import Project, ProjectMilestone
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -26,6 +31,15 @@ class TicketBase(
     TenancyObject,
 ):
 
+    _after: dict
+    """History After
+    Data after save was called
+    """
+
+    _before: dict
+    """History Before
+    Data before save was called
+    """
 
     save_model_history: bool = False
 
@@ -433,10 +447,10 @@ class TicketBase(
 
 
     opened_by = models.ForeignKey(
-        User,
-        blank = False,
+        settings.AUTH_USER_MODEL,
+        blank = True,
         help_text = 'Who is the ticket for',
-        null = False,
+        null = True,
         on_delete = models.PROTECT,
         related_name = 'ticket_opened',
         verbose_name = 'Opened By',
@@ -561,32 +575,105 @@ class TicketBase(
         """Model Validation
 
         Raises:
-            centurion_exception.ValidationError: Milestone project does not
+            centurion_exceptions.ValidationError: Milestone project does not
                 match the project assigned to the ticket.
-            centurion_exception.ValidationError: Tried to solve a ticket when
+            centurion_exceptions.ValidationError: Tried to solve a ticket when
                 there are unresolved ticket comments.
         """
+
+        if self.opened_by is None:
+
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'opened_by': 'This field is required.'
+                },
+                code = 'required'
+            )
+
 
         if self.milestone:
 
             if self.milestone.project != self.project:
 
-                raise centurion_exception.ValidationError(
+                raise centurion_exceptions.ValidationError(
                     detail = {
                         'milestone': f'Milestone is from project {self.milestone.project} when it should be from project {self.project}.'
                     },
                     code = 'milestone_different_project'
                 )
 
+
+        if(
+            (
+                self.status == self.TicketStatus.SOLVED
+                and self.get_can_resolve( raise_exceptions = False )
+            )
+            or self.status == self.TicketStatus.INVALID
+        ):
+
+            self.is_solved = True
+
+
+        elif(    # Re-Open Ticket
+            ( self.is_solved or self.is_closed )
+            and self.status != self.TicketStatus.CLOSED
+            and self.status != self.TicketStatus.INVALID
+            and self.status != self.TicketStatus.SOLVED
+        ):
+
+            if self.is_closed:
+
+                self.is_closed = False
+
+            if self.is_solved:
+
+                self.is_solved = False
+
+
+        elif not self.is_closed and self.status == self.TicketStatus.CLOSED:    # Close Ticket
+
+            self.is_solved = True
+            self.is_closed = True
+
+
         if self.is_solved:
 
             self.get_can_resolve( raise_exceptions = True )
 
-            
 
         if self.is_closed:
 
             self.get_can_close( raise_exceptions = True )
+
+
+        related_model = self.get_related_model()
+
+        if related_model is None:
+
+            related_model = self
+
+        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
+
+            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
+
+
+        if self.date_solved is None and self.is_solved:
+
+            self.date_solved = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        elif self.date_solved is not None and not self.is_solved:
+
+            self.date_solved = None
+
+
+        if self.date_closed is None and self.is_closed:
+
+            self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        if self.date_closed is not None and not self.is_closed:
+
+            self.date_closed = None
+
 
 
 
@@ -611,7 +698,7 @@ class TicketBase(
             and raise_exceptions
         ):
 
-            raise centurion_exception.ValidationError(
+            raise centurion_exceptions.ValidationError(
                 detail = {
                     'status': 'You cant close this ticket.'
                 },
@@ -638,7 +725,7 @@ class TicketBase(
 
             elif not comment.is_closed and raise_exceptions:
 
-                raise centurion_exception.ValidationError(
+                raise centurion_exceptions.ValidationError(
                     detail = {
                         'status': 'You cant solve a ticket when there are un-resolved comments.'
                     },
@@ -787,37 +874,280 @@ class TicketBase(
         return FeatureNotUsed
 
 
+
+    def create_action_comment(self) -> None:
+
+        from core.models.ticket_comment_action import TicketCommentAction
+
+        request = get_request()
+
+        excluded_fields: list = [
+            'created',
+            'date_closed',
+            'date_solved',
+            'is_closed',
+            'is_solved',
+            'modified'
+        ]
+        changed_fields: list = []
+
+        for field, value in self._before.items():
+
+            if (
+                self._before[field] != self._after[field]
+                and field not in excluded_fields
+                and field in self.fields
+            ):
+
+                changed_fields = changed_fields + [ field ]
+
+
+        for field in changed_fields:
+
+            comment_text: str = None
+
+            if field == 'category_id':
+
+                value = 'None'
+
+                if self._before[field]:
+
+                    value = f"$ticket_category-{self._before[field]}"
+
+                to_value = getattr(self.category, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$ticket_category-{getattr(self.category, 'id', 'None')}"
+
+
+                comment_text = f"changed category from {value} to {to_value}"
+
+            elif field == 'impact':
+
+                comment_text = f"changed {field} to {self.get_impact_display()}"
+
+            elif field == 'urgency':
+
+                comment_text = f"changed {field} to {self.get_urgency_display()}"
+
+            elif field == 'priority':
+
+                comment_text = f"changed {field} to {self.get_priority_display()}"
+
+
+            elif field == 'organization':
+
+                comment_text = f"Ticket moved from $organization-{self._before[field]} to $organization-{self._after[field]}"
+
+            elif field == 'parent_ticket_id':
+
+                value = 'None'
+
+                if self._before[field]:
+
+                    value = f"#{self._before[field]}"
+
+                to_value = getattr(self.parent_ticket, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"#{getattr(self.parent_ticket, 'id', 'None')}"
+
+                comment_text = f"Parent ticket changed from {value} to {to_value}"
+
+            elif field == 'status':
+
+                comment_text = f"changed {field} to {self.get_status_display()}"
+
+            elif field == 'title':
+
+                comment_text = f"Title changed ~~{self._before[field]}~~ to **{self._after[field]}**"
+
+            elif field == 'project_id':
+
+                value = 'None'
+
+                if self._before[field]:
+
+                    value = f"$project-{self._before[field]}"
+
+                to_value = getattr(self.project, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$project-{getattr(self.project, 'id', 'None')}"
+
+
+                comment_text = f"changed project from {value} to {to_value}"
+
+            elif field == 'milestone_id':
+
+                value = 'None'
+
+                if self._before[field]:
+
+                    value = f"$milestone-{self._before[field]}"
+
+                to_value = getattr(self.milestone, 'id', 'None')
+
+                if to_value != 'None':
+
+                    to_value = f"$milestone-{getattr(self.milestone, 'id', 'None')}"
+
+
+                comment_text = f"changed milestone from {value} to {to_value}"
+
+            elif field == 'planned_start_date':
+
+                to_value = self._after[field]
+
+                if to_value:
+
+                    to_value = str(self._after[field].utcfromtimestamp(self._after[field].timestamp()))+ '+00:00'
+
+                comment_text = f"changed Planned Start Date from _{self._before[field]}_ to **{to_value}**"
+
+            elif field == 'planned_finish_date':
+
+                to_value = self._after[field]
+
+                if to_value:
+
+                    to_value = str(self._after[field].utcfromtimestamp(self._after[field].timestamp()))+ '+00:00'
+
+                comment_text = f"changed Planned Finish Date from _{self._before[field]}_ to **{to_value}**"
+
+            elif field == 'real_start_date':
+
+                to_value = self._after[field]
+
+                if to_value:
+
+                    to_value = str(self._after[field].utcfromtimestamp(self._after[field].timestamp()))+ '+00:00'
+
+                comment_text = f"changed Real Start Date from _{self._before[field]}_ to **{to_value}**"
+
+                to_value = self._after[field]
+
+                if to_value:
+
+                    to_value = str(self._after[field].utcfromtimestamp(self._after[field].timestamp()))+ '+00:00'
+
+            elif field == 'real_finish_date':
+
+                to_value = self._after[field]
+
+                if to_value:
+
+                    to_value = str(self._after[field].utcfromtimestamp(self._after[field].timestamp()))+ '+00:00'
+
+                comment_text = f"changed Real Finish Date from _{self._before[field]}_ to **{to_value}**"
+
+
+            elif field == 'description':
+
+                comment_text = ''.join(
+                    str(x) for x in list(
+                        difflib.unified_diff(
+                            str(self._before[field] + '\n').splitlines(keepends=True),
+                            str(self._after[field] + '\n').splitlines(keepends=True),
+                            fromfile = 'before',
+                            tofile = 'after',
+                            n = 10000,
+                            lineterm = '\n'
+                        )
+                    )
+                ) + ''
+
+                comment_text = '<details><summary>Changed the Description</summary>\n\n``` diff \n\n' + comment_text + '\n\n```\n\n</details>'
+
+
+            if (
+                comment_text is None
+                and field != 'created'
+                and field != 'modified'
+            ):
+
+                raise centurion_exceptions.APIError(
+                    detail = f'Action comment for field {field} will not be created. please report this as a bug.',
+                    code = 'no_action_comment'
+                )
+
+            elif comment_text:
+
+                if request:
+
+                    if request.user.pk:
+
+                        comment_user = request.user
+
+                    else:
+
+                        comment_user = None
+
+                else:
+
+                    comment_user = None
+
+                comment = TicketCommentAction.objects.create(
+                    organization = self.organization,
+                    ticket = self,
+                    comment_type = TicketCommentAction._meta.sub_model_type,
+                    body = comment_text,
+                    # user = user
+                )
+
+                # comment.save()
+                a = 'b'
+
+
+
+
+
+        # return None
+
+
+
+    # def create_action_comment(self, user):
+
+    #     from core.models.ticket_comment_action import TicketCommentAction
+
+    #     comment = TicketCommentAction.objects.create(
+    #         organization = self.organization,
+    #         ticket = self.ticket,
+    #         body = body,
+    #         # user = user
+    #     )
+
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
-        related_model = self.get_related_model()
-
-        if related_model is None:
-
-            related_model = self
-
-        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
-
-            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
 
         if(
-            (
-                self.status == self.TicketStatus.SOLVED
-                and self.get_can_resolve( raise_exceptions = False )
-            )
-            or self.status == self.TicketStatus.INVALID
+            self.description != ''
+            and self.description is not None
         ):
 
-            self.is_solved = True
+            description = self.slash_command(self.description)
+
+            if description != self.description:
+
+                self.description = description
 
 
-        if self.date_solved is None and self.is_solved:
+        self._before = {}
 
-            self.date_solved = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
-
-
-        if self.date_closed is None and self.is_closed:
-
-            self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+        try:
+            self._before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+        except Exception:
+            pass
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        self._after = self.__dict__.copy()
+
+        if self._before:
+
+            self.create_action_comment()
 

@@ -3,7 +3,7 @@ from django.db import models
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
@@ -56,9 +56,9 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
 
 
     owner_organization = models.ForeignKey(
-        Organization,
+        Tenant,
         blank= True,
-        help_text = 'Organization the settings belong to',
+        help_text = 'Tenant the settings belong to',
         default = None,
         null = True,
         on_delete=models.SET_DEFAULT,
@@ -101,14 +101,14 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
     )
 
     global_organization = models.ForeignKey(
-        Organization,
+        Tenant,
         on_delete=models.SET_DEFAULT,
         blank= True,
         default = None,
-        help_text = 'Organization global items will be created in',
+        help_text = 'Tenant global items will be created in',
         null = True,
         related_name = 'global_organization',
-        verbose_name = 'Global Organization'
+        verbose_name = 'Global Tenant'
     )
 
     table_fields: list = []

@@ -1,15 +1,17 @@
+import django
 import pytest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from app.tests.unit.test_unit_models import (
     TenancyObjectInheritedCases
 )
 
 from core.models.ticket.ticket_comment import Ticket, TicketComment
+
+User = django.contrib.auth.get_user_model()
 
 
 class TicketCommentModel(

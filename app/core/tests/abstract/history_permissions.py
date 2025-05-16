@@ -1,13 +1,15 @@
+import django
 import pytest
 import unittest
 
-from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
 from core.models.history import History
 
 from itam.models.device import Device
+
+User = django.contrib.auth.get_user_model()
 
 
 

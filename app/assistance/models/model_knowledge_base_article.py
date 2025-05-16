@@ -20,12 +20,14 @@ def all_models() -> list(tuple()):
 
     model_apps: list = [
         'access',
+        'accounting',
         'api',
         'app',
         'assistance',
         'config_management',
         'core',
         'devops',
+        'human_resources',
         'itam',
         'itim',
         'project_management',

@@ -1,15 +1,18 @@
+import django
 import pytest
 
 from django.test import TestCase
-from django.contrib.auth.models import User
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from core.serializers.ticket_linked_item import Ticket, TicketLinkedItem, TicketLinkedItemModelSerializer
 
 from itam.models.device import Device
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class TicketLinkedItemValidationAPI(

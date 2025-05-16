@@ -1,7 +1,7 @@
 
 from django.test import TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from core.tests.unit.model_notes.test_unit_model_notes_model import (
     ModelNotesInheritedCases

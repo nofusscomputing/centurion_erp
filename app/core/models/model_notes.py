@@ -1,4 +1,7 @@
-from django.contrib.auth.models import User, ContentType
+import django
+
+from django.conf import settings
+from django.contrib.auth.models import ContentType
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -15,6 +18,8 @@ from itam.models.software import Software
 from itam.models.operating_system import OperatingSystem
 
 from itim.models.services import Service
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -63,7 +68,7 @@ class ModelNotes(TenancyObject):
 
 
     created_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         help_text = 'User whom added the Note',
         null = False,
@@ -73,7 +78,7 @@ class ModelNotes(TenancyObject):
     )
 
     modified_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= True,
         default = None,
         help_text = 'User whom modified the note',

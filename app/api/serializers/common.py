@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import Organization
+from access.serializers.organization import Tenant
 
 from assistance.models.model_knowledge_base_article import all_models
 
@@ -20,7 +20,7 @@ class OrganizationField(serializers.PrimaryKeyRelatedField):
         if defined.
         """
 
-        queryset = Organization.objects.all()
+        queryset = Tenant.objects.all()
 
         if self.context.get('request', None):
 

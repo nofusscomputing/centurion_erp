@@ -1,7 +1,12 @@
-from django.contrib.auth.models import User
+import django
+
+from django.conf import settings
 from django.db import models
 
 from access.fields import *
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class HistoryCommonFields(models.Model):
@@ -70,7 +75,7 @@ class History(HistoryCommonFields):
 
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= False,
         help_text = 'User whom performed the action this history relates to',
         null = True,

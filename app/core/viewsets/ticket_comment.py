@@ -1,35 +1,17 @@
-# from django.db.models import Q
-# from django.shortcuts import get_object_or_404
 import importlib
 
 from django.apps import apps
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, PolymorphicProxySerializer
 
-# from rest_framework import generics, viewsets
-# from rest_framework.response import Response
-
-# from access.mixin import OrganizationMixin
-
-# from api.views.mixin import OrganizationPermissionAPI
 from api.viewsets.common import SubModelViewSet
 
-# from core import exceptions as centurion_exceptions
-# from core.models.ticket_base import TicketBase
 from core.models.ticket_comment_base import (
     TicketBase,
     TicketCommentBase
 )
-# from core.serializers.ticket_comment import (
-#     # Ticket,
-#     # TicketComment,
-#     TicketCommentBase,
-#     # ModelSerializer,
-#     # ViewSerializer,
 
-# )
 
-# from settings.models.user_settings import UserSettings
 
 def spectacular_request_serializers( serializer_type = 'Model'):
 

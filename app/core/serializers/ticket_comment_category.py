@@ -1,7 +1,7 @@
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
@@ -117,4 +117,4 @@ class TicketCommentCategoryModelSerializer(
 
 class TicketCommentCategoryViewSerializer(TicketCommentCategoryModelSerializer):
 
-    organization = OrganizationBaseSerializer( read_only = True )
+    organization = TenantBaseSerializer( read_only = True )

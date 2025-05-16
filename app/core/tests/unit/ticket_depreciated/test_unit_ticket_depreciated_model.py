@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+import django
+
 from django.test import TestCase
 
 from app.tests.unit.test_unit_models import (
@@ -6,6 +7,8 @@ from app.tests.unit.test_unit_models import (
 )
 
 from core.models.ticket.ticket import Ticket
+
+User = django.contrib.auth.get_user_model()
 
 
 class TicketModel(

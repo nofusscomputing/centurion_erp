@@ -1,20 +1,23 @@
+import django
 import pytest
 import unittest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
 from rest_framework.relations import Hyperlink
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APITenancyObject
 
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
+
+User = django.contrib.auth.get_user_model()
 
 
 

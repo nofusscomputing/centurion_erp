@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import Organization, OrganizationBaseSerializer
+from access.serializers.organization import Organization, TenantBaseSerializer
 
 from api.serializers import common
 from app.serializers.user import UserBaseSerializer
@@ -147,7 +147,7 @@ class ProjectViewSerializer(ProjectModelSerializer):
 
     manager_user = UserBaseSerializer( many = False, read_only = True )
 
-    organization = OrganizationBaseSerializer( many = False, read_only = True )
+    organization = TenantBaseSerializer( many = False, read_only = True )
 
     state = ProjectStateBaseSerializer( many = False, read_only = True )
 

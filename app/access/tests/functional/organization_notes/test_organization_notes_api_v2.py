@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from core.tests.abstract.model_notes_api_fields import ModelNotesNotesAPIFields
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.organization_notes import OrganizationNotes
 
 

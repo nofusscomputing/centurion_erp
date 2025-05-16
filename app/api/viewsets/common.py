@@ -1,4 +1,6 @@
 import importlib
+import logging
+
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets, pagination
@@ -87,6 +89,8 @@ class Create(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -136,6 +140,8 @@ class Destroy(
                     },
                     status = 501
                 )
+
+                self.get_log().exception(e)
 
             else:
 
@@ -187,6 +193,8 @@ class List(
                     },
                     status = 501
                 )
+
+                self.get_log().exception(e)
 
             else:
 
@@ -241,6 +249,8 @@ class Retrieve(
                     },
                     status = 501
                 )
+
+                self.get_log().exception(e)
 
             else:
 
@@ -315,6 +325,8 @@ class Update(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -382,6 +394,8 @@ class Update(
                     status = 501
                 )
 
+                self.get_log().exception(e)
+
             else:
 
                 response = Response(
@@ -430,6 +444,16 @@ class CommonViewSet(
 
     _Optional_, if specified will be add to list view metadata
     """
+
+    _log: logging.Logger = None
+    
+    def get_log(self):
+
+        if self._log is None:
+
+            self._log = logging.getLogger('centurion.' + self.model._meta.app_label)
+
+        return self._log
 
 
     metadata_class = ReactUIMetadata
@@ -634,6 +658,9 @@ class ModelViewSetBase(
     _Optional_, if specified, these fields can be used to filter the API response
     """
 
+    lookup_value_regex = '[0-9]+'
+    """PK value regex"""
+
     model: object = None
     """Django Model
     _Mandatory_, Django model used for this view.
@@ -766,7 +793,8 @@ class SubModelViewSet(
     def related_objects(self, model, model_kwarg):
         """Recursive relate_objects fetch
 
-        Fetch the model that is lowest in the chain of inherited models
+        Fetch the model where <model>._meta.sub_model_type matches the
+        model_kwarg value.
 
         Args:
             model (django.db.models.Model): The model to obtain the 
@@ -774,12 +802,14 @@ class SubModelViewSet(
             model_kwarg (str): The URL Kwarg of the model.
 
         Returns:
-            _type_: _description_
+            Model: The model for the ViewSet
         """
 
         related_model = None
 
         if model_kwarg:
+
+            is_nested_lookup = False
 
             for related_object in model._meta.related_objects:
 
@@ -806,10 +836,25 @@ class SubModelViewSet(
 
                     related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
 
-                    break
+                    is_nested_lookup = True
 
 
-        if related_model is None:
+
+                    if not hasattr(related_model, '_meta'):
+
+                        related_model = None
+
+                    elif(
+                        str(
+                            getattr(related_model._meta, 'sub_model_type', '')
+                        ).lower().replace(' ', '_') == model_kwarg
+                    ):
+
+                        break
+
+
+
+        if related_model is None and not is_nested_lookup:
 
             related_model = self.base_model
 

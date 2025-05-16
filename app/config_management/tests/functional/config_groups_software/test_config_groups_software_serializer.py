@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from config_management.serializers.config_group_software import ConfigGroupSoftware, ConfigGroupSoftwareModelSerializer
 from config_management.models.groups import ConfigGroups

@@ -1,10 +1,12 @@
+import django
 import pytest
 import unittest
 import requests
 
-from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client, TestCase
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -25,9 +27,9 @@ class UserPermissionsAPI(TestCase):
 
         self.url_kwargs = {}
 
-        self.url_view_kwargs = {'pk': 1}
-
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.url_view_kwargs = {'pk': self.view_user.pk}
 
 
 

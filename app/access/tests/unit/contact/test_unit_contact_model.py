@@ -1,100 +1,110 @@
-from django.db.models.fields import NOT_PROVIDED
-from django.test import TestCase
+import pytest
+
+from django.db import models
 
 from access.models.contact import Contact
 from access.tests.unit.person.test_unit_person_model import (
-    Person,
     PersonModelInheritedCases
 )
 
 
 
-class ModelTestCases(
+class ContactModelTestCases(
     PersonModelInheritedCases,
 ):
 
-    model = Contact
-
-    kwargs_item_create: dict = {
+    kwargs_create_item: dict = {
         'email': 'ipweird@unit.test',
+    }
+
+    sub_model_type = 'contact'
+    """Sub Model Type
+
+    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
+    """
+
+
+    parameterized_fields: dict = {
+        "email": {
+            'field_type': models.fields.CharField,
+            'field_parameter_default_exists': False,
+            'field_parameter_verbose_name_type': str,
+        },
+        "directory": {
+            'field_type': models.fields.BooleanField,
+            'field_parameter_default_exists': True,
+            'field_parameter_default_value': True,
+            'field_parameter_verbose_name_type': str,
+        }
     }
 
 
 
-    def test_model_field_directory_optional(self):
-        """Test Field
+    def test_class_inherits_contact(self):
+        """ Class inheritence
 
-        Field `dob` must be an optional field
+        TenancyObject must inherit SaveHistory
         """
 
-        assert self.model._meta.get_field('directory').blank
+        assert issubclass(self.model, Contact)
 
 
-    def test_model_field_directory_optional_default(self):
-        """Test Field
+    # def test_attribute_value_history_app_label(self):
+    #     """Attribute Type
 
-        Field `directory` default value is `True`
+    #     history_app_label has been set, override this test case with the value
+    #     of attribute `history_app_label`
+    #     """
+
+    #     assert self.model.history_app_label == 'access'
+
+
+    def test_attribute_value_history_model_name(self):
+        """Attribute Type
+
+        history_model_name has been set, override this test case with the value
+        of attribute `history_model_name`
         """
 
-        assert (
-            self.model._meta.get_field('directory').default is True
-            and self.model._meta.get_field('directory').null is False
-        )
+        assert self.model.history_model_name == 'contact'
 
 
-    def test_model_field_email_mandatory(self):
-        """Test Field
 
-        Field `email` must be a mandatory field
-        """
+    def test_function_value_get_url(self):
 
-        assert(
-            not (
-                self.model._meta.get_field('email').blank
-                and self.model._meta.get_field('email').null
-            )
-            and self.model._meta.get_field('email').default is NOT_PROVIDED
-        )
-
-
-    def test_model_inherits_person(self):
-        """Test model inheritence
-
-        model must inherit from Entity sub-model `Person`
-        """
-
-        assert issubclass(self.model, Person)
-
+        assert self.item.get_url() == '/api/v2/access/entity/contact/' + str(self.item.id)
 
 
 
 class ContactModelInheritedCases(
-    ModelTestCases,
+    ContactModelTestCases,
 ):
-    """Sub-Entity Test Cases
+    """Sub-Ticket Test Cases
 
-    Test Cases for Entity models that inherit from model Contact
+    Test Cases for Ticket models that inherit from model Entity
     """
 
-    kwargs_item_create: dict = None
+    kwargs_create_item: dict = {}
 
     model = None
 
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs_item_create.update(
-            super().kwargs_item_create
-        )
-
-        super().setUpTestData()
+    sub_model_type = None
+    """Ticket Sub Model Type
+    
+    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
+    """
 
 
 
-class ContactModelTest(
-    ModelTestCases,
-    TestCase,
+class ContactModelPyTest(
+    ContactModelTestCases,
 ):
 
-    pass
+
+    def test_function_value_get_related_model(self):
+        """Function test
+
+        Confirm function `get_related_model` is None for base model
+        """
+
+        assert self.item.get_related_model() is None

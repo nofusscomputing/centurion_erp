@@ -1,5 +1,6 @@
-from django.db.models.fields import NOT_PROVIDED
-from django.test import TestCase
+import pytest
+
+from django.db import models
 
 from access.models.person import Person
 from access.tests.unit.entity.test_unit_entity_model import (
@@ -8,88 +9,114 @@ from access.tests.unit.entity.test_unit_entity_model import (
 
 
 
-class ModelTestCases(
+class PersonModelTestCases(
     EntityModelInheritedCases,
 ):
 
-    model = Person
-
-    kwargs_item_create: dict = {
+    kwargs_create_item: dict = {
         'f_name': 'Ian',
         'm_name': 'Peter',
         'l_name': 'Funny',
         'dob': '2025-04-08',
     }
 
+    sub_model_type = 'person'
+    """Sub Model Type
+    
+    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
+    """
 
 
-    def test_model_field_dob_optional(self):
-        """Test Field
+    parameterized_fields: dict = {
+        "f_name": {
+            'field_type': models.fields.CharField,
+            'field_parameter_default_exists': False,
+            'field_parameter_verbose_name_type': str,
+        },
+        "m_name": {
+            'field_type': models.fields.CharField,
+            'field_parameter_default_exists': False,
+            'field_parameter_verbose_name_type': str,
+        },
+        "l_name": {
+            'field_type': models.fields.CharField,
+            'field_parameter_default_exists': False,
+            'field_parameter_verbose_name_type': str,
+        },
+        "dob": {
+            'field_type': models.fields.DateField,
+            'field_parameter_default_exists': False,
+            'field_parameter_verbose_name_type': str,
+        },
+    }
 
-        Field `dob` must be an optional field
+
+
+    def test_class_inherits_person(self):
+        """ Class inheritence
+
+        TenancyObject must inherit SaveHistory
         """
 
-        assert self.model._meta.get_field('dob').blank
+        assert issubclass(self.model, Person)
 
 
-    def test_model_field_f_name_mandatory(self):
-        """Test Field
+    def test_attribute_value_history_app_label(self):
+        """Attribute Type
 
-        Field `f_name` must be a mandatory field
+        history_app_label has been set, override this test case with the value
+        of attribute `history_app_label`
         """
 
-        assert(
-            not (
-                self.model._meta.get_field('f_name').blank
-                and self.model._meta.get_field('f_name').null
-            )
-            and self.model._meta.get_field('f_name').default is NOT_PROVIDED
-        )
+        assert self.model.history_app_label == 'access'
 
 
-    def test_model_field_l_name_mandatory(self):
-        """Test Field
+    def test_attribute_value_history_model_name(self):
+        """Attribute Type
 
-        Field `l_name` must be a mandatory field
+        history_model_name has been set, override this test case with the value
+        of attribute `history_model_name`
         """
 
-        assert (
-            not (
-                self.model._meta.get_field('l_name').blank
-                and self.model._meta.get_field('l_name').null
-            )
-            and self.model._meta.get_field('l_name').default is NOT_PROVIDED
-        )
+        assert self.model.history_model_name == 'person'
+
+
+
+    def test_function_value_get_url(self):
+
+        assert self.item.get_url() == '/api/v2/access/entity/person/' + str(self.item.id)
 
 
 
 class PersonModelInheritedCases(
-    ModelTestCases,
+    PersonModelTestCases,
 ):
-    """Sub-Entity Test Cases
+    """Sub-Ticket Test Cases
 
-    Test Cases for Entity models that inherit from model Person
+    Test Cases for Ticket models that inherit from model Entity
     """
 
-    kwargs_item_create: dict = None
+    kwargs_create_item: dict = {}
 
     model = None
 
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs_item_create.update(
-            super().kwargs_item_create
-        )
-
-        super().setUpTestData()
+    sub_model_type = None
+    """Ticket Sub Model Type
+    
+    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
+    """
 
 
 
-class PersonModelTest(
-    ModelTestCases,
-    TestCase,
+class PersonModelPyTest(
+    PersonModelTestCases,
 ):
 
-    pass
+
+    def test_function_value_get_related_model(self):
+        """Function test
+
+        Confirm function `get_related_model` is None for base model
+        """
+
+        assert self.item.get_related_model() is None

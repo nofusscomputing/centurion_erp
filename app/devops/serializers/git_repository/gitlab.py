@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema_serializer
 
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 

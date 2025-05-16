@@ -1,9 +1,11 @@
-from django.contrib.auth.models import ContentType, Permission, User
+import django
+
+from django.contrib.auth.models import ContentType, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -19,6 +21,8 @@ from itam.models.device import Device
 from itam.models.device_history import DeviceHistory
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

@@ -67,7 +67,10 @@ class SlashCommands(
 
                 returned_line = ''
 
-                if command == 'spend':
+                if(
+                    command == 'spend'
+                    or command == 'spent'
+                ):
 
                     returned_line = re.sub(self.time_spent, self.command_duration, line)
 

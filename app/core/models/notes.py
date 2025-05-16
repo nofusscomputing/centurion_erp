@@ -1,4 +1,6 @@
-from django.contrib.auth.models import User
+import django
+
+from django.conf import settings
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -13,6 +15,8 @@ from itam.models.software import Software
 from itam.models.operating_system import OperatingSystem
 
 from itim.models.services import Service
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -65,7 +69,7 @@ class Notes(NotesCommonFields):
 
 
     usercreated = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= True,
         default = None,
         help_text = 'User whom added Note',
@@ -76,7 +80,7 @@ class Notes(NotesCommonFields):
     )
 
     usermodified = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= True,
         default = None,
         help_text = 'User whom modified the note',

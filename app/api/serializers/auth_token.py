@@ -3,7 +3,7 @@ import re
 
 from rest_framework import serializers
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.models.tokens import AuthToken
 from api.serializers import common
@@ -132,4 +132,4 @@ class AuthTokenModelSerializer(
 
 class AuthTokenViewSerializer(AuthTokenModelSerializer):
 
-    organization = OrganizationBaseSerializer( many = False, read_only = True )
+    organization = TenantBaseSerializer( many = False, read_only = True )

@@ -31,6 +31,8 @@ Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurio
 
 Centurion ERP contains the following modules:
 
+- [Accounting](./user/accounting/index.md)
+
 - Change Management
 
 - [Cluster Management](./user/itim/cluster.md)
@@ -49,7 +51,7 @@ Centurion ERP contains the following modules:
 
     - [Markdown](./user/core/markdown.md)
 
-    - [Multi-Tenant](./user/access/organization.md)
+    - [Multi-Tenant](./user/access/tenant.md)
 
     - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)
 

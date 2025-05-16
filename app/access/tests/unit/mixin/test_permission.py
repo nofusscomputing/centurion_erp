@@ -1,7 +1,9 @@
+import django
+
 import pytest
 from unittest.mock import Mock, patch
 
-from django.contrib.auth.models import User, Permission, AnonymousUser
+from django.contrib.auth.models import Permission, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,7 +15,7 @@ from api.viewsets.common import ModelViewSet
 
 from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import OrganizationPermissionMixin
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -22,6 +24,8 @@ from core import exceptions as centurion_exceptions
 from core.models.manufacturer import Manufacturer
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 
