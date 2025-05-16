@@ -151,7 +151,13 @@ class ViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
 
-        self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
+        model_name = str( self.model._meta.verbose_name).replace(' ', '')
+
+        if model_name == 'ModelHistory':
+
+            model_name = 'History'
+
+        self.serializer_class = globals()[model_name + 'ViewSerializer']
 
         return self.serializer_class
 
