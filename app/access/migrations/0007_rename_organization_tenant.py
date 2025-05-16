@@ -7,12 +7,11 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('access', '0005_entity_person_entityhistory_entitynotes_role_and_more'),
-        ('accounting', '0003_assetbasenotes'),
         ('assistance', '0005_knowledgebasecategoryhistory_knowledgebasehistory'),
         ('config_management', '0007_configgroupshistory_configgrouphostshistory_and_more'),
-        ('core', '0025_ticketcommentaction'),
+        ('core', '0022_ticketcommentbase_ticketbase_ticketcommentsolution_and_more'),
         ('devops', '0011_alter_gitgroup_unique_together_and_more'),
-        ('itam', '0011_itamassetbase'),
+        ('itam', '0010_alter_software_organization'),
         ('itim', '0009_slmticket_requestticket'),
         ('project_management', '0005_projecthistory_projectmilestonehistory_and_more'),
         ('settings', '0011_appsettingshistory_externallinkhistory'),
