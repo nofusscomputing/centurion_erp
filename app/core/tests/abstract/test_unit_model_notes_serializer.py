@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 
 from access.models.tenant import Tenant as Organization
 
-from app.tests.abstract.mock_view import MockView
+from centurion.tests.abstract.mock_view import MockView
 
 User = django.contrib.auth.get_user_model()
 

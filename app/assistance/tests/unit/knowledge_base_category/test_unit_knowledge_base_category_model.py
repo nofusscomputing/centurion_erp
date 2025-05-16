@@ -1,4 +1,4 @@
-from app.tests.unit.test_unit_models import (
+from centurion.tests.unit.test_unit_models import (
     TenancyObjectInheritedCases
 )
 

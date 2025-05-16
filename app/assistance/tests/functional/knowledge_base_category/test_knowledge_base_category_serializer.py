@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 
-from app.tests.abstract.mock_view import MockView
+from centurion.tests.abstract.mock_view import MockView
 
 from assistance.serializers.knowledge_base_category import KnowledgeBaseCategory, KnowledgeBaseCategoryModelSerializer
 

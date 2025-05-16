@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from api.serializers import common
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from core.serializers.model_notes import (
     ModelNotes,

@@ -3,7 +3,7 @@ from django import forms
 from django.urls import reverse
 from django.forms import ValidationError
 
-from app import settings
+from django.conf import settings
 
 from assistance.models.knowledge_base import KnowledgeBase
 

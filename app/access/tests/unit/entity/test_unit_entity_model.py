@@ -4,7 +4,7 @@ from django.db import models
 
 from access.models.entity import Entity
 
-from app.tests.unit.test_unit_models import (
+from centurion.tests.unit.test_unit_models import (
     PyTestTenancyObjectInheritedCases,
 )
 

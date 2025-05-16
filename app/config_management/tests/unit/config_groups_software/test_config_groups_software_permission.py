@@ -14,7 +14,7 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from app.tests.abstract.model_permissions import ModelPermissionsAdd, ModelPermissionsChange, ModelPermissionsDelete
+from centurion.tests.abstract.model_permissions import ModelPermissionsAdd, ModelPermissionsChange, ModelPermissionsDelete
 
 from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 

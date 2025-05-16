@@ -253,12 +253,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.get_request.RequestMiddleware',
-    'app.middleware.timezone.TimezoneMiddleware',
+    'centurion.middleware.timezone.TimezoneMiddleware',
     'centurion_feature_flag.middleware.feature_flag.FeatureFlagMiddleware',
 ]
 
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'centurion.urls'
 
 TEMPLATES = [
     {
@@ -273,13 +273,13 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'app.context_processors.base.common',
+                'centurion.context_processors.base.common',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'app.wsgi.application'
+WSGI_APPLICATION = 'centurion.wsgi.application'
 
 
 # Database

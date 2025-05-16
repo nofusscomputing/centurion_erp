@@ -12,7 +12,7 @@ from prometheus_client import CollectorRegistry, multiprocess, start_http_server
 
 logger = logging.getLogger(__name__)
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'centurion.settings')
 
 worker = Celery('app')
 

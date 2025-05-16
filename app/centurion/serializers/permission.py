@@ -3,7 +3,7 @@ from django.contrib.auth.models import Permission
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from app.serializers.content_type import ContentTypeBaseSerializer
+from centurion.serializers.content_type import ContentTypeBaseSerializer
 
 
 class PermissionBaseSerializer(serializers.ModelSerializer):

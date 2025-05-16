@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from itim.models.services import Service
 
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 

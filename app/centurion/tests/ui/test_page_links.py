@@ -5,7 +5,7 @@ import unittest
 
 from django.test import LiveServerTestCase
 
-from app.urls import urlpatterns
+from centurion.urls import urlpatterns
 
 from conftest import Data
 

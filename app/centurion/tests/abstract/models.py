@@ -1,4 +1,4 @@
-from app.tests.abstract.views import AddView, ChangeView, DeleteView, DisplayView, IndexView
+from centurion.tests.abstract.views import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
 
 
