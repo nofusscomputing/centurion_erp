@@ -1,3 +1,170 @@
+## 1.17.0 (2025-05-16)
+
+### feat
+
+- **access**: model access.Company feature flag `2025-00008`
+- **access**: URL route for model access.Company
+- **access**: Migration for model access.Company
+- **access**: Serializer for model access.Company
+- **access**: New model access.Company
+- **access**: Organization -> Tenant Permission Migration
+- **docker**: Serve a robots.txt file for NO indexing
+- **access**: Organization -> Tenant Permission Migration
+- **base**: Add var `AUTH_USER_MODEL` to settings
+- **core**: Add Action comments on ticket change
+- **core**: Remove add, change and delete permissions for model TicketCommentAction from permission selector
+- **core**: Serializer for model TicketCommentAction
+- **core**: Migrations for model TicketCommentAction
+- **core**: New model TicketCommentAction
+- **core**: Setup serializer to meet requirements
+- **core**: Setup model to meet requirements
+- **api**: Add exception logging to ViewSetCommon
+- **python**: Upgrade DRF Spectacular 0.27.2 -> 0.28.0
+- **python**: Upgrade DRF 3.15.2 -> 3.16.0
+- **core**: When processing slash command duration, cater for new ticket models
+- **api**: Add Logging function to Common ViewSet
+- **access**: Add Logging function to Tenancy model
+- **base**: Enable user to customize log file location
+- **core**: Do validate the comment_type field for TicketCommentBase
+- **itam**: Add Feature Flag `2025-00007` ITAMAssetBase
+- **itam**: Add endpoint for ITAMAssetBase
+- Model tag migration for Asset and IT Asset
+- **itam**: Model tag for ITAsset
+- **accounting**: Model tag for Asset
+- **accounting**: Add app label to kb articles for notes
+- **accounting**: Migrations for notes model for AssetBase
+- **accounting**: Migrations for history model for AssetBase
+- **accounting**: Notes Viewset for AssetBase
+- **accounting**: Notes Serializer for AssetBase
+- **accounting**: Notes model for AssetBase
+- **accounting**: History model for AssetBase
+- **itam**: Serializer for ITAssetBase
+- **itam**: Migrations for ITAssetBase
+- **itam**: Add Model ITAssetBase
+- **accounting**: Viewset for Assets
+- **accounting**: Serializer for model AssetBase
+- **accounting**: Migrations for model AssetBase
+- **accounting**: Add Model AssetBase
+
+### Fixes
+
+- **api**: Dont try to access attribute if not exist in common viewset
+- **api**: Dont try to access attribute if not exist in common viewset
+- **api**: Correct ViewSet Sub-Model lookup
+- **core**: Only take action on ticket comment if view exists
+- **api**: Ensure multi-nested searching for sub-models works
+- **core**: ensure slash command is called on ticket description
+- **core**: Spent slash command is valid for time spent
+- **core**: Correct logic for TicketCommentSolution
+- **core**: Correct logic for TicketCommentBase
+- **accounting**: Ensure correct sub-model check is conducted within model type
+- **itam**: ensure RO field asset_type is set
+- **itim**: Ensure that itam base model is always imported
+
+### Refactoring
+
+- **human_resources**: Update Functional ViewSet to use PyTest for Employee Model
+- **Access**: Update Functional ViewSet to use PyTest for Person Model
+- **Access**: Update Functional ViewSet to use PyTest for Entity Model
+- **Access**: Update Functional ViewSet to use PyTest for Contact Model
+- **Access**: Update Functional Permission to use PyTest for Person Model
+- **Access**: Update Functional Permission to use PyTest for Entity Model
+- **Access**: Update Functional Permission to use PyTest for Contact Model
+- **Access**: Update Functional Serializer to use PyTest for Contact Model
+- **Access**: Update Functional Serializer to use PyTest for Entity Model
+- **Access**: Update Functional Serializer to use PyTest for Person Model
+- **human_resources**: Update Functional Serializer to use PyTest for Employee Model
+- **human_resources**: Update Functional Permissions to use PyTest for Employee Model
+- **human_resources**: Update Functional Metadata to use PyTest for Employee Model
+- **access**: Update Functional Metadata to use PyTest for Person Model
+- **access**: Update Functional Metadata to use PyTest for Entity Model
+- **access**: Update Functional Metadata to use PyTest for Contact Model
+- **access**: Update Model Entity to use PyTest for Model Test Suite
+- **access**: Update Model Contact to use PyTest for Model Test Suite
+- **access**: Update Model Person to use PyTest for Model Test Suite
+- **human_resources**: Update Model Employee to use PyTest for Model Test Suite
+- **human_resources**: Update Model Employee to use PyTest API Fields Render
+- **access**: Update Model Person to use PyTest API Fields Render
+- **access**: Update Model Contact to use PyTest API Fields Render
+- **access**: Update Model Entity to use PyTest API Fields Render
+- **access**: Rename model Organization -> Tenant
+- **settings**: Update all references to `User` to use `get_user_model()`
+- **project_management**: Update all references to `User` to use `get_user_model()`
+- **itam**: Update all references to `User` to use `get_user_model()`
+- **devops**: Update all references to `User` to use `get_user_model()`
+- **core**: Update all references to `User` to use `get_user_model()`
+- **config_management**: Update all references to `User` to use `get_user_model()`
+- **assistance**: Update all references to `User` to use `get_user_model()`
+- **app**: Update all references to `User` to use `get_user_model()`
+- **api**: Update all references to `User` to use `get_user_model()`
+- **accounting**: Update all references to `User` to use `get_user_model()`
+- **access**: Update all references to `User` to use `get_user_model()`
+- **access**: when fetching parent object, use the parent_model get function
+- **api**: Limit url pk regex to ensure the value is a number
+
+### Tests
+
+- **access**: Functional ViewSet Test Suite Company model
+- **access**: Functional Serializer Test Suite Company model
+- **access**: Functional Permissions Test Suite Company model
+- **access**: Functional MetaData Test Suite Company model
+- **access**: ViewSet Test Suite Company model
+- **access**: API field render Test Suite Company model
+- **access**: Model Test Suite Company model
+- **core**: Unit viewset Test Cases for TicketCommentAction model
+- **core**: Unit model Test Cases for TicketCommentAction model
+- **core**: Unit API Render Test Cases for TicketCommentAction model
+- **core**: Interim Functional model Test Case TicketCommentAction
+- **core**: Ensure that a ticket milestone comes from the same assigned project
+- **core**: SKIP Tests TicketBase Description Slash command Checks
+- **core**: TicketBase Description Slash command Checks
+- **core**: TicketBase Remaining Serializer Chacks
+- **core**: Partial functional Model Test Suite covering some slash commande for TicketCommentSolution
+- **core**: ensure ticket is un-solved for ticketcomment unit api render fields check
+- **core**: ensure slash command is called on ticket comment
+- **core**: Unit ViewSet Test Suite for TicketCommentSolution
+- **core**: Unit ViewSet Test Suite for TicketCommentBase
+- **core**: Skip Related slash command checks until migrating tickets to new model
+- **core**: Add ability to unit api field rendering test case for second api request if required
+- **core**: Partial Functional Model test cases (Slash Commands) for TicketCommentBase
+- **core**: Functional Model test cases (Slash Commands) for TicketBaseModel
+- **core**: Partial Slash Command re-write
+- **core**: correct field so its valid for unit TicketCommentBase model
+- **core**: Unit API Fields Render for TicketCommentSolution model
+- **core**: Unit API Fields Render for TicketCommentBase model
+- **core**: Unit Model assert save and call are called for TicketBase
+- **core**: Unit Model Checks for TicketCommentSolution
+- **core**: Unit Model Checks for TicketCommentBase
+- **itam**: test meta attribute itam_sub_model_type for ITAMBaseModel
+- **itam**: Dont use constants where variables should be used
+- **itam**: Remaining Unit Model test cases for AssetBase
+- **accounting**: Remaining Unit Model test cases for AssetBase
+- **itam**: Functional ViewSet Test Cases for ITAMAssetBase
+- **itam**: Functional Serializer Test Cases for ITAMAssetBase
+- **itam**: Functional Permissions Test Cases for ITAMAssetBase
+- **itam**: Functional Metadata Test Cases for ITAMAssetBase
+- **itam**: Functional History Test Cases for ITAMAssetBase
+- **accounting**: Functional ViewSet Test Cases for AssetBase
+- **accounting**: Functional Serializer Test Cases for AssetBase
+- **accounting**: Functional Permissions Test Cases for AssetBase
+- **accounting**: Functional Metadata Test Cases for AssetBase
+- **accounting**: History Test Cases for AssetBase
+- add missing merge of add_data for api permissions tests
+- remove ticket only vars from api permissions tests
+- **api**: dont use constants for variable data
+- correct viewset tests
+- **itam**: Unit Viewset checks for AssetBase Model
+- **core**: Add missing fields is_global checks for ticket base
+- **api**: Add submodel url resolution for metadata
+- **itam**: Unit API Fields checks for ITAM AssetBase Model
+- **accounting**: Unit API Fields checks for AssetBase Model
+- Support variables that were defined as properties.
+- **api**: Ensure that model notes is added to model create for api field tests
+- **accounting**: Unit Viewset checks for AssetBase Model
+- **itam**: Unit Model checks for ITAMAssetBase Model
+- **base**: update Model base test suite for model_notes field
+- **accounting**: Unit Model checks for AssetBase Model
+
 ## 1.16.0 (2025-05-04)
 
 ### feat
