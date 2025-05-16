@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from access.models.person import Person
 
-from app.tests.unit.test_unit_models import (
+from centurion.tests.unit.test_unit_models import (
     PyTestTenancyObjectInheritedCases,
 )
 

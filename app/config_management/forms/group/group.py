@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse
 
-from app import settings
+from django.conf import settings
 
 from config_management.models.groups import ConfigGroups
 

@@ -35,7 +35,7 @@ class AuthToken(models.Model):
     def validate_note_no_token(self, note, token, raise_exception = True) -> bool:
         """ Ensure plaintext token cant be saved to notes field.
 
-        called from app.settings.views.user_settings.TokenAdd.form_valid()
+        called from centurion.settings.views.user_settings.TokenAdd.form_valid()
 
         Args:
             note (Field): _Note field_

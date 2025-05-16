@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 
-from app.tests.unit.test_unit_models import TenancyObjectInheritedCases
+from centurion.tests.unit.test_unit_models import TenancyObjectInheritedCases
 
 from core.models.model_notes import ModelNotes
 

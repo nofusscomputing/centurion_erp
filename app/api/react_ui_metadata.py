@@ -15,7 +15,7 @@ from rest_framework_json_api.utils import get_related_resource_type
 
 from access.models.tenant import Tenant
 
-from app.serializers.user import User, UserBaseSerializer
+from centurion.serializers.user import User, UserBaseSerializer
 
 from core import fields as centurion_field
 from core.fields.badge import BadgeField

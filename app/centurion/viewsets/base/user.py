@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import AuthUserReadOnlyModelViewSet
 
-from app.serializers.user import (
+from centurion.serializers.user import (
     User,
     UserBaseSerializer
 )
