@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from itim.models.clusters import ClusterType
 
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 

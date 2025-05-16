@@ -7,7 +7,7 @@ from .team_users import TeamUsersForm, TeamUsers
 from access.models.team import Team
 from access.functions import permissions
 
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 

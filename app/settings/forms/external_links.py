@@ -5,7 +5,7 @@ from django.urls import reverse
 from access.models.tenant import Tenant as Organization
 from access.models.team_user import TeamUsers
 
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 

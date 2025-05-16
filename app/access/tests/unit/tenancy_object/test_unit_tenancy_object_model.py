@@ -617,7 +617,7 @@ class TenancyObjectInheritedCases(
     """Test Cases for models that inherit from
 
     **Note:** dont use these test cases use 
-    `app.tests.unit.test_unit_models.TenancyObjectInheritedCases` instead
+    `centurion.tests.unit.test_unit_models.TenancyObjectInheritedCases` instead
     
     access.models.tenancy.TenancyObject"""
 

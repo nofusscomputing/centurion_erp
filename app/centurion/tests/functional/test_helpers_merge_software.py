@@ -2,7 +2,7 @@ from django.conf import settings as django_settings
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-from app.helpers.merge_software import merge_software
+from centurion.helpers.merge_software import merge_software
 
 
 import pytest

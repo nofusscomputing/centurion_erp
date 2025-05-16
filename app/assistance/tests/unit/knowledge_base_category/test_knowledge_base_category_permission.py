@@ -14,7 +14,7 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from app.tests.abstract.model_permissions import ModelPermissions
+from centurion.tests.abstract.model_permissions import ModelPermissions
 
 from assistance.models.knowledge_base import KnowledgeBaseCategory
 

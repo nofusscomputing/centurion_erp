@@ -2,7 +2,7 @@ from django import forms
 from django.db.models import Q
 from django.forms import ValidationError
 
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 

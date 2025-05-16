@@ -8,7 +8,7 @@ from access.models.tenant import Tenant as Organization
 
 from api.serializers.auth_token import AuthToken, AuthTokenModelSerializer
 
-from app.tests.abstract.mock_view import MockView, User
+from centurion.tests.abstract.mock_view import MockView, User
 
 # from core.serializers.manufacturer import Manufacturer, ManufacturerModelSerializer
 

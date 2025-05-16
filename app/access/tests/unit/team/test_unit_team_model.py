@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from access.models.team import Team
 
-from app.tests.unit.test_unit_models import (
+from centurion.tests.unit.test_unit_models import (
     TenancyObjectInheritedCases
 )
 

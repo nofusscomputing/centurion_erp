@@ -45,7 +45,7 @@ init-import = true
 addopts = '--cov --cov-branch --cov-report term --tb=long --verbosity=2 --full-trace --showlocals app'
 
 
-DJANGO_SETTINGS_MODULE = 'app.settings'
+DJANGO_SETTINGS_MODULE = 'centurion.settings'
 
 junit_family = 'xunit2'
 # -- recommended but optional:

@@ -4,7 +4,7 @@ import requests
 
 from django.test import TestCase
 
-from app.tests.abstract.models import PrimaryModel, ModelAdd, ModelChange, ModelDelete
+from centurion.tests.abstract.models import PrimaryModel, ModelAdd, ModelChange, ModelDelete
 
 
 
