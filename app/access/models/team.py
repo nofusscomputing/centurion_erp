@@ -8,7 +8,7 @@ from access.fields import (
     AutoLastModifiedField
 )
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
@@ -55,13 +55,13 @@ class Team(Group, TenancyObject):
     )
 
     organization = models.ForeignKey(
-        Organization,
+        Tenant,
         blank = False,
-        help_text = 'Organization this belongs to',
+        help_text = 'Tenant this belongs to',
         null = False,
         on_delete = models.CASCADE,
         validators = [validatate_organization_exists],
-        verbose_name = 'Organization'
+        verbose_name = 'Tenant'
     )
 
     created = AutoCreatedField()

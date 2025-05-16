@@ -17,9 +17,7 @@ class ViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
 
-    model = TicketBase
-
-    kwargs = None
+    model = None
 
     viewset = ViewSet
 
@@ -36,7 +34,20 @@ class ViewsetTestCases(
         """
 
 
+        if self.model is None:
+
+            self.model = TicketBase
+
         super().setUpTestData()
+
+        if self.model != TicketBase:
+
+            self.kwargs = {
+                'ticket_model': self.model._meta.sub_model_type
+            }
+
+            self.viewset.kwargs = self.kwargs
+
 
 
         client = Client()
@@ -79,23 +90,10 @@ class TicketBaseViewsetInheritedCases(
 
 
 
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs = {
-            'ticket_model': self.model._meta.sub_model_type
-        }
-
-        super().setUpTestData()
-
-
-
 class TicketBaseViewsetTest(
     ViewsetTestCases,
     TestCase,
 ):
-
-    kwargs = {}
 
     route_name = 'v2:_api_v2_ticket'
 

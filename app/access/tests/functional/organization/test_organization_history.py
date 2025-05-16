@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from access.models.organization_history import Organization, OrganizationHistory
+from access.models.organization_history import Tenant as Organization, OrganizationHistory
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 

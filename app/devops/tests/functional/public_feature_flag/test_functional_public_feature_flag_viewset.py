@@ -4,7 +4,7 @@ from dateutil import tz
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from api.tests.abstract.api_serializer_viewset import SerializerView
 

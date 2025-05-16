@@ -1,12 +1,17 @@
-from django.contrib.auth.models import Permission, User
+import django
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import Client, TestCase
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from api.react_ui_metadata import ReactUIMetadata
+
+User = django.contrib.auth.get_user_model()
+
+
 
 class MockRequst:
 
@@ -31,8 +36,8 @@ class NavigationMenu(
         users_to_create: dict = {
             'access': [
                 {
-                    'content_model': 'organization',
-                    'permission_model': 'organization'
+                    'content_model': 'tenant',
+                    'permission_model': 'tenant'
                 }
             ],
             'assistance': [
@@ -184,18 +189,18 @@ class NavigationMenu(
 
 
 
-    def test_navigation_menu_visible_access_organization_exist(self):
+    def test_navigation_menu_visible_access_tenant_exist(self):
         """Navigation Menu Check
 
         Ensure that if the user has the permission, the navigation menu and
         page is available for the user
         """
 
-        nav_menu = self.metadata.get_navigation(self.access_organization)
+        nav_menu = self.metadata.get_navigation(self.access_tenant)
 
         menu_name = 'access'
 
-        page_name = 'organization'
+        page_name = 'tenant'
 
         menu_page_exists: bool = False
 
@@ -216,14 +221,14 @@ class NavigationMenu(
 
 
 
-    def test_navigation_menu_visible_access_organization_no_additional_exist(self):
+    def test_navigation_menu_visible_access_tenant_no_additional_exist(self):
         """Navigation Menu Check
 
         Ensure that only the navigation menu and entry is the only one displayed
         for the user who has the desired permission
         """
 
-        nav_menu = self.metadata.get_navigation(self.access_organization)
+        nav_menu = self.metadata.get_navigation(self.access_tenant)
 
         pages_found: int = 0
 

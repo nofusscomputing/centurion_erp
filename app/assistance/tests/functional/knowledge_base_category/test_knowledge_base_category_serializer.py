@@ -1,17 +1,19 @@
+import django
 import json
 import pytest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 
-from app.tests.abstract.mock_view import MockView, User
+from app.tests.abstract.mock_view import MockView
 
 from assistance.serializers.knowledge_base_category import KnowledgeBaseCategory, KnowledgeBaseCategoryModelSerializer
+
+User = django.contrib.auth.get_user_model()
 
 
 

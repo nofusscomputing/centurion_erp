@@ -1,16 +1,17 @@
+import django
 import pytest
 import unittest
 import requests
 
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -26,6 +27,8 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 from assistance.models.model_knowledge_base_article import KnowledgeBase, ModelKnowledgeBaseArticle
 
 from itam.models.device import Device
+
+User = django.contrib.auth.get_user_model()
 
 
 

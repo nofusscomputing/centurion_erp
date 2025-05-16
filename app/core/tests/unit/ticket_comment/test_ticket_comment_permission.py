@@ -1,7 +1,8 @@
+import django
 import re
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -10,7 +11,7 @@ import pytest
 import unittest
 import requests
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -21,6 +22,7 @@ from project_management.models.projects import Project
 from core.models.ticket.ticket import Ticket, RelatedTickets
 from core.models.ticket.ticket_comment import TicketComment
 
+User = django.contrib.auth.get_user_model()
 
 
 

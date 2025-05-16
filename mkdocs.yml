@@ -131,6 +131,8 @@ nav:
 
           - projects/centurion_erp/development/api/tests/model_views.md
 
+      - projects/centurion_erp/development/accounting/asset.md
+      
       - projects/centurion_erp/development/fields.md
 
       - projects/centurion_erp/development/forms.md
@@ -143,11 +145,15 @@ nav:
 
       - projects/centurion_erp/development/core/model_notes.md
 
+      - projects/centurion_erp/development/itam/it_asset.md
+
       - projects/centurion_erp/development/templates.md
 
       - projects/centurion_erp/development/testing.md
 
       - projects/centurion_erp/development/core/ticket.md
+
+      - projects/centurion_erp/development/core/ticket_comment.md
 
       - projects/centurion_erp/development/views.md
 
@@ -163,11 +169,19 @@ nav:
 
         - projects/centurion_erp/user/access/contact.md
 
-        - projects/centurion_erp/user/access/organization.md
+        - projects/centurion_erp/user/access/company.md
 
         - projects/centurion_erp/user/access/role.md
 
         - projects/centurion_erp/user/access/team.md
+
+        - projects/centurion_erp/user/access/tenant.md
+
+      - Accounting:
+
+        - projects/centurion_erp/user/accounting/index.md
+
+        - projects/centurion_erp/user/accounting/asset.md
 
       - Assistance:
 

@@ -1,17 +1,19 @@
+import django
 import pytest
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
 from access.middleware.request import Tenancy
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from itam.serializers.device_software import Device, DeviceSoftware, DeviceSoftwareModelSerializer, SoftwareInstallsModelSerializer
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
 
 
 

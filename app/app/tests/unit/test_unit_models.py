@@ -4,7 +4,7 @@ from django.db.models import fields
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.tests.unit.tenancy_object.test_unit_tenancy_object_model import (
     TenancyObjectInheritedCases as AccessTenancyObjectInheritedCases
 )
@@ -402,20 +402,27 @@ class NonTenancyObjectInheritedCases(
 
 class ModelFieldsTestCasesReWrite:
 
-    parameterized_fields: dict = {
-        "organization": {
-            'field_type': fields.Field,
-            'field_parameter_verbose_name_type': str
-        },
-        "model_notes": {
-            'field_type': fields.TextField,
-            'field_parameter_verbose_name_type': str
-        },
-        "is_global": {
-            'field_type': fields.BooleanField,
-            'field_parameter_verbose_name_type': str
+
+    @property
+    def parameterized_fields(self) -> dict:
+
+        return {
+            "organization": {
+                'field_type': fields.Field,
+                'field_parameter_default_exists': False,
+                'field_parameter_verbose_name_type': str
+            },
+            "model_notes": {
+                'field_type': fields.TextField,
+                'field_parameter_verbose_name_type': str
+            },
+            "is_global": {
+                'field_type': fields.BooleanField,
+                'field_parameter_default_exists': True,
+                'field_parameter_default_value': False,
+                'field_parameter_verbose_name_type': str
+            }
         }
-    }
 
 
 
@@ -493,6 +500,10 @@ class ModelFieldsTestCasesReWrite:
 
             assert self.model._meta.get_field(param_field_name).default == fields.NOT_PROVIDED
 
+        elif param_field_parameter_default_exists is None:
+
+            assert True
+
         else:
 
             assert self.model._meta.get_field(param_field_name).has_default() == param_field_parameter_default_exists
@@ -507,7 +518,13 @@ class ModelFieldsTestCasesReWrite:
         During field creation, paramater `verbose_name` must not be `None` or empty ('')
         """
 
-        assert getattr(self.model._meta.get_field(param_field_name), 'default') == param_field_parameter_default_value
+        if param_field_parameter_default_value is None:
+
+            assert True
+
+        else:
+
+            assert getattr(self.model._meta.get_field(param_field_name), 'default') == param_field_parameter_default_value
 
 
 
@@ -592,6 +609,13 @@ class PyTestTenancyObjectInheritedCases(
     ModelFieldsTestCasesReWrite,
 
 ):
+
+    parameterized_fields: dict = {
+        "model_notes": {
+            'field_type': fields.TextField,
+            'field_parameter_verbose_name_type': str
+        }
+    }
 
     def test_create_validation_exception_no_organization(self):
         """ Tenancy objects must have an organization

@@ -1,15 +1,15 @@
+import django
 import zoneinfo
 
 from rest_framework.reverse import reverse
 
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from access.fields import *
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from core.lib.feature_not_used import FeatureNotUsed
 
@@ -19,6 +19,8 @@ TIMEZONES = tuple(zip(
     sorted_timezones,
     sorted_timezones
 ))
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -64,7 +66,7 @@ class UserSettings(UserSettingsCommonFields):
 
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank= False,
         help_text = 'User this Setting belongs to',
         on_delete=models.CASCADE,
@@ -81,13 +83,13 @@ class UserSettings(UserSettingsCommonFields):
     ) 
 
     default_organization = models.ForeignKey(
-        Organization,
+        Tenant,
         blank= True,
         default = None,
-        help_text = 'Users default Organization',
+        help_text = 'Users default Tenant',
         null = True,
         on_delete=models.SET_DEFAULT,
-        verbose_name = 'Default Organization'
+        verbose_name = 'Default Tenant'
     )
 
     timezone = models.CharField(

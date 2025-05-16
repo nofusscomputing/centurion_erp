@@ -3,9 +3,9 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 # THis import only exists so that the migrations can be created
 from access.models.organization_history import OrganizationHistory    # pylint: disable=W0611:unused-import
 from access.serializers.organization import (
-    Organization,
-    OrganizationModelSerializer,
-    OrganizationViewSerializer
+    Tenant,
+    TenantModelSerializer,
+    TenantViewSerializer
 )
 
 from api.viewsets.common import ModelViewSet
@@ -19,7 +19,7 @@ from api.viewsets.common import ModelViewSet
         description='',
         responses = {
             # 200: OpenApiResponse(description='Allready exists', response=OrganizationViewSerializer),
-            201: OpenApiResponse(description='Created', response=OrganizationViewSerializer),
+            201: OpenApiResponse(description='Created', response=TenantViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),
         }
@@ -36,7 +36,7 @@ from api.viewsets.common import ModelViewSet
         summary = 'Fetch all orgnaizations',
         description='',
         responses = {
-            200: OpenApiResponse(description='', response=OrganizationViewSerializer),
+            200: OpenApiResponse(description='', response=TenantViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
@@ -44,7 +44,7 @@ from api.viewsets.common import ModelViewSet
         summary = 'Fetch a single orgnaization',
         description='',
         responses = {
-            200: OpenApiResponse(description='', response=OrganizationViewSerializer),
+            200: OpenApiResponse(description='', response=TenantViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
@@ -53,7 +53,7 @@ from api.viewsets.common import ModelViewSet
         summary = 'Update an orgnaization',
         description = '',
         responses = {
-            200: OpenApiResponse(description='', response=OrganizationViewSerializer),
+            200: OpenApiResponse(description='', response=TenantViewSerializer),
             # 201: OpenApiResponse(description='Created', response=OrganizationViewSerializer),
             # # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing change permissions'),
@@ -71,9 +71,9 @@ class ViewSet( ModelViewSet ):
         'name',
     ]
 
-    model = Organization
+    model = Tenant
 
-    view_description = 'Centurion Organizations'
+    view_description = 'Centurion Tenants'
 
     def get_serializer_class(self):
 

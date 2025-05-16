@@ -1,12 +1,11 @@
-# from django.conf import settings
+import django
+import logging
+
 from django.db import models
-# from django.contrib.auth.models import User, Group
 
 from rest_framework.reverse import reverse
 
-# from .fields import *
-
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from core import exceptions as centurion_exceptions
 from core.middleware.get_request import get_request
@@ -137,14 +136,14 @@ class TenancyObject(SaveHistory):
     )
 
     organization = models.ForeignKey(
-        Organization,
+        Tenant,
         blank = False,
-        help_text = 'Organization this belongs to',
+        help_text = 'Tenancy this belongs to',
         null = False,
         on_delete = models.CASCADE,
         related_name = '+',
         validators = [validatate_organization_exists],
-        verbose_name = 'Organization'
+        verbose_name = 'Tenant'
     )
 
     is_global = models.BooleanField(
@@ -162,7 +161,7 @@ class TenancyObject(SaveHistory):
         verbose_name = 'Notes',
     )
 
-    def get_organization(self) -> Organization:
+    def get_organization(self) -> Tenant:
         return self.organization
 
     app_namespace: str = None
@@ -192,6 +191,16 @@ class TenancyObject(SaveHistory):
     This value is derived from `<model>._meta.model_name`. This value should
     only be used when there is model inheritence.
     """
+
+    _log: logging.Logger = None
+    
+    def get_log(self):
+
+        if self._log is None:
+
+            self._log = logging.getLogger('centurion.' + self._meta.app_label)
+
+        return self._log
 
     page_layout: list = None
 
@@ -282,7 +291,7 @@ class TenancyObject(SaveHistory):
 
             raise centurion_exceptions.ValidationError(
                 detail = {
-                    'organization': 'Organization is required'
+                    'organization': 'Tenant is required'
                 },
                 code = 'required'
             )

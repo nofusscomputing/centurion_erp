@@ -1,7 +1,7 @@
-import pytest
 import datetime
+import django
+import pytest
 
-from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.db import models
 from django.test import TestCase
@@ -21,6 +21,8 @@ from core.models.ticket_base import TicketBase
 from core.models.ticket_comment_base import TicketCommentBase
 
 from project_management.models.project_milestone import Project, ProjectMilestone
+
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -49,6 +51,8 @@ class TicketBaseModelTestCases(
         },
         "is_global": {
             'field_type': None,
+            'field_parameter_default_exists': None,
+            'field_parameter_default_value': None,
             'field_parameter_verbose_name_type': None
         },
         "external_system": {
@@ -311,6 +315,10 @@ class TicketBaseModelTestCases(
 
             request.cls.entity_user.delete()
 
+            for comment in parent_ticket.ticketcommentbase_set.all():
+
+                comment.delete()
+
             parent_ticket.delete()
 
             project_milestone.delete()
@@ -562,6 +570,10 @@ class TicketBaseModelTestCases(
         yield ticket
 
         if ticket.pk is not None:
+
+            for comment in ticket.ticketcommentbase_set.all():
+
+                comment.delete()
 
             ticket.delete()
 
@@ -848,6 +860,71 @@ class TicketBaseModelTestCases(
 
 
 
+    def test_function_called_clean_ticketbase(self, model, mocker):
+        """Function Check
+
+        Ensure function `TicketBase.clean` is called
+        """
+
+        spy = mocker.spy(TicketBase, 'clean')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was clean called'
+
+        del valid_data['external_system']
+
+        model.objects.create(
+            **valid_data
+        )
+
+        assert spy.assert_called_once
+
+
+
+    def test_function_called_save_ticketbase(self, model, mocker):
+        """Function Check
+
+        Ensure function `TicketBase.save` is called
+        """
+
+        spy = mocker.spy(TicketBase, 'save')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was save called'
+
+        del valid_data['external_system']
+
+        model.objects.create(
+            **valid_data
+        )
+
+        assert spy.assert_called_once
+
+
+    def test_function_save_called_slash_command(self, model, mocker, ticket):
+        """Function Check
+
+        Ensure function `TicketCommentBase.clean` is called
+        """
+
+        spy = mocker.spy(self.model, 'slash_command')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was save called'
+
+        del valid_data['external_system']
+
+        item = model.objects.create(
+            **valid_data
+        )
+
+        spy.assert_called_with(item, valid_data['description'])
+
+
+
 class TicketBaseModelInheritedCases(
     TicketBaseModelTestCases,
 ):
@@ -898,3 +975,27 @@ class TicketBaseModelPyTest(
         """
 
         assert type(self.model().get_related_model()) is type(None)
+
+
+    def test_function_save_called_slash_command(self, model, mocker, ticket):
+        """Function Check
+
+        This test case is a duplicate of a test with the same name. This
+        test is required so that the base class `save()` function can be tested.
+
+        Ensure function `TicketCommentBase.clean` is called
+        """
+
+        spy = mocker.spy(self.model, 'slash_command')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['title'] = 'was save called'
+
+        del valid_data['external_system']
+
+        item = model.objects.create(
+            **valid_data
+        )
+
+        spy.assert_called_with(item, valid_data['description'])

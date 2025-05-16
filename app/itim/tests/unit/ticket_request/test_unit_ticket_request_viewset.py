@@ -15,6 +15,20 @@ class ViewsetTestCases(
     model = RequestTicket
 
 
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
+
+        1. make list request
+        """
+
+
+        if self.model is None:
+
+            self.model = RequestTicket
+
+        super().setUpTestData()
+
 
 class TicketRequestViewsetTest(
     ViewsetTestCases,

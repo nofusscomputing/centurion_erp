@@ -28,7 +28,7 @@ Within the services the following fields are available:
 
 - Name _name of the cluster_
 
-- [Organization](../access/organization.md) _organization this cluster belongs to_
+- [Tenant](../access/tenant.md) _tenant this cluster belongs to_
 
 - [Nodes](../itam/device.md) _Cluster Nodes_
 

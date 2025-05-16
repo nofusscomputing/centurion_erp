@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from access.forms.team import TeamForm, TeamFormAdd
 from access.mixin import *
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 

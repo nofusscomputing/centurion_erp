@@ -1,3 +1,4 @@
+import datetime
 import pytest
 import sys
 
@@ -5,7 +6,7 @@ from django.test import (
     TestCase
 )
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 
 
@@ -51,6 +52,16 @@ def pytest_generate_tests(metafunc):
 
     if {'parameterized'} <= set(metafunc.fixturenames):
 
+        for mark in metafunc.definition.own_markers:    # Skip tests markd to skip
+
+            if mark.name == 'skip':
+                return None
+
+        for mark in getattr(metafunc.cls, 'pytestmark', []):    # Skip test suite markd to skip
+
+            if mark.name == 'skip':
+                return None
+
         all_fixture_parameters = metafunc.fixturenames
 
         fixture_parameters += ['parameterized']
@@ -93,6 +104,10 @@ def pytest_generate_tests(metafunc):
             for base in reversed(cls.__mro__):
 
                 base_values = getattr(base, 'parameterized_' + parameterized_key, None)
+
+                if isinstance(base_values, property):
+
+                    base_values = getattr(base(), 'parameterized_' + parameterized_key, None)
 
                 if not isinstance(base_values, dict):
 
@@ -189,7 +204,7 @@ def pytest_generate_tests(metafunc):
 
                             if type(item[1][key]) is type:
 
-                                ids_name += '_' + getattr(item[1][key], '__name__', 'None').lower()
+                                ids_name += '_' + getattr(item[1][key], '__name__', 'err_generate_tests').lower()
 
                             else:
 
@@ -471,8 +486,10 @@ def organization_one(django_db_blocker):
 
     with django_db_blocker.unblock():
 
-        item = Organization.objects.create(
-            name = 'org one'
+        random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+
+        item = Tenant.objects.create(
+            name = 'org one from global' + str(random_str)
         )
 
     yield item
@@ -490,8 +507,10 @@ def organization_two(django_db_blocker):
 
     with django_db_blocker.unblock():
 
-        item = Organization.objects.create(
-            name = 'org two'
+        random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+
+        item = Tenant.objects.create(
+            name = 'org two from global' + str(random_str)
         )
 
     yield item
@@ -595,3 +614,80 @@ def recursearray() -> dict[dict, str, any]:
         }
 
     return _recursearray
+
+
+@pytest.fixture( scope = 'function')
+def fake_view():
+
+
+    class MockView:
+
+        class MockRequest:
+
+            class MockUser:
+
+                id: int
+
+                pk: int
+
+            user = None
+
+            def __init__(cls, user = 0):
+
+                if user != 0:
+
+                    cls.user = user
+
+                # cls.user.id = user_id
+                # cls.user.pk = user_id
+
+
+        _has_import: bool
+        """User Permission
+
+        get_permission_required() sets this to `True` when user has import permission.
+        """
+
+        _has_purge: bool
+        """User Permission
+
+        get_permission_required() sets this to `True` when user has purge permission.
+        """
+
+        _has_triage: bool
+        """User Permission
+
+        get_permission_required() sets this to `True` when user has triage permission.
+        """
+
+        action:str
+        """ The View Action
+
+        This must be set to whatever is occuring
+        """
+
+        request: MockRequest
+
+        def __init__(cls,
+            _has_import: bool = False,
+            _has_purge: bool = False,
+            _has_triage: bool = False,
+            action: str = 'create',
+            user = 0,
+        ):
+
+            cls.request = cls.MockRequest(
+                user = user
+            )
+
+            cls._has_import = _has_import
+            cls._has_purge = _has_purge
+            cls._has_triage = _has_triage
+            cls.action = action
+
+
+    fake_view = MockView
+
+    yield fake_view
+
+    del fake_view

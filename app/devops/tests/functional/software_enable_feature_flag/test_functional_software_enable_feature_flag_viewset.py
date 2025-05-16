@@ -1,13 +1,14 @@
+import django
+
 from django.contrib.auth.models import (
     Permission,
-    User,
 )
 from django.contrib.contenttypes.models import ContentType
 from django.test import Client, TestCase
 
 from django.shortcuts import reverse
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -22,6 +23,7 @@ from itam.models.software import Software
 
 from settings.models.app_settings import AppSettings
 
+User = django.contrib.auth.get_user_model()
 
 
 

@@ -9,6 +9,7 @@ def permission_queryset():
 
     apps = [
         'access',
+        'accounting',
         'assistance',
         'config_management',
         'core',
@@ -36,14 +37,17 @@ def permission_queryset():
         'add_history',
         'add_organization',
         'add_taskresult',
+        'add_ticketcommentaction',
         'change_checkin',
         'change_history',
         'change_organization',
         'change_taskresult',
+        'change_ticketcommentaction',
         'delete_checkin',
         'delete_history',
         'delete_organization',
         'delete_taskresult',
+        'delete_ticketcommentaction',
         'view_checkin',
         'view_history',
     ]

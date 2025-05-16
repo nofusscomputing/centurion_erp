@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 
 
@@ -260,7 +260,7 @@ class OrganizationMixin():
             self.permission_required = permissions_required
 
         organization_manager_models = [
-            'access.organization',
+            'access.tenant',
             'access.team',
             'access.teamusers',
         ]
@@ -326,7 +326,7 @@ class OrganizationMixin():
 
             if required_permission.replace(
                     'view_', ''
-                ) == 'access.organization' and len(self.kwargs) == 0:
+                ) == 'access.tenant' and len(self.kwargs) == 0:
 
                 return True
 

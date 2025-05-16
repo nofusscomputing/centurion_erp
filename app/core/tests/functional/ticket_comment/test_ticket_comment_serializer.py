@@ -1,12 +1,12 @@
+import django
 import pytest
 
 from django.test import TestCase
-from django.contrib.auth.models import User
 
 from rest_framework.exceptions import ValidationError
 
 from access.middleware.request import Tenancy
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 
 from core.serializers.ticket_comment_depreciated import (
     Ticket,
@@ -22,6 +22,9 @@ from core.serializers.ticket_comment_depreciated import (
 )
 
 from settings.models.app_settings import AppSettings
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class MockView:

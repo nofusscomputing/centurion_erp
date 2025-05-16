@@ -2,15 +2,16 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant
 
 from app.serializers.user import UserBaseSerializer
 
 from core import fields as centurion_field
 
+Organization = Tenant
 
 
-class OrganizationBaseSerializer(serializers.ModelSerializer):
+class TenantBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -24,7 +25,7 @@ class OrganizationBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = Organization
+        model = Tenant
 
         fields = [
             'id',
@@ -42,8 +43,8 @@ class OrganizationBaseSerializer(serializers.ModelSerializer):
 
 
 
-class OrganizationModelSerializer(
-    OrganizationBaseSerializer
+class TenantModelSerializer(
+    TenantBaseSerializer
 ):
 
     _urls = serializers.SerializerMethodField('get_url')
@@ -74,7 +75,7 @@ class OrganizationModelSerializer(
 
     class Meta:
 
-        model = Organization
+        model = Tenant
 
         fields = '__all__'
 
@@ -98,7 +99,7 @@ class OrganizationModelSerializer(
         ]
 
 
-class OrganizationViewSerializer(OrganizationModelSerializer):
+class TenantViewSerializer(TenantModelSerializer):
     pass
 
     manager = UserBaseSerializer(many=False, read_only = True)

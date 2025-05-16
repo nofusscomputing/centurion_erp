@@ -67,6 +67,14 @@ Within Centurion ERP there are two types of models, they are:
 
 - Sub-Model
 
+Within Centurion ERP there are some base models that are designed to be used for extending Centurion. They are:
+
+- [Asset](./accounting/asset.md)
+
+- [Entity](./core/entity.md)
+
+Using a base model reduces the effort required to add a feature. This is such due to how the base model / sub-model has been designed. That is the base model has the core features so you don't need to add them. All that is required for the extension is that you add your fields and test the differences.
+
 
 ### Standard Model
 
@@ -76,6 +84,21 @@ This is your typical model that you would define within any Django Application. 
 ### Sub-Model
 
 This model is known within Django as multi-table inherited models. That is where the base model is a concrete class (not an Abstract model) and the super model inherits from the concrete base model. In this instance both models get their own database tables.
+
+
+#### Available Sub-Models
+
+We do have some core sub-models available. There intended purpose is to serve as a single place for all items of that type. Available sub-models are:
+
+- [Asset](./accounting/asset.md)
+
+    - [IT Asset](./itam/it_asset.md)
+
+- [Ticket](./core/ticket.md)
+
+- [Ticket Comment](./core/ticket_comment.md)
+
+All sub-models are intended to be extended and contain the core features for ALL models. This aids in extensibility and reduces the work required to add a model.
 
 
 <!-- markdownlint-disable -->

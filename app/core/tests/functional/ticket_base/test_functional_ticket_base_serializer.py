@@ -1,6 +1,5 @@
+import django
 import pytest
-
-from django.contrib.auth.models import User
 
 from rest_framework.exceptions import (
     ValidationError
@@ -16,28 +15,7 @@ from project_management.models.project_milestone import (
     ProjectMilestone,
 )
 
-
-
-
-class MockView:
-
-    _has_import: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has import permission.
-    """
-
-    _has_purge: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has purge permission.
-    """
-
-    _has_triage: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has triage permission.
-    """
+User = django.contrib.auth.get_user_model()
 
 
 
@@ -114,11 +92,8 @@ class TicketBaseSerializerTestCases:
             'permission_import_required': False,
         },
         "opened_by": {
-            'will_create': False,
-            'exception_obj': ValidationError,
-            'exception_code': 'required',
-            'exception_code_key': None,
-            'permission_import_required': True,
+            'will_create': True,
+            'permission_import_required': False,
         },
         "subscribed_to": {
             'will_create': True,
@@ -224,12 +199,15 @@ class TicketBaseSerializerTestCases:
 
             request.cls.view_user = User.objects.create_user(username="cafs_test_user_view", password="password")
 
+            request.cls.other_user = User.objects.create_user(username="cafs_test_user_other", password="password")
+
 
         yield
 
         with django_db_blocker.unblock():
 
             request.cls.view_user.delete()
+            request.cls.other_user.delete()
 
             del request.cls.valid_data
 
@@ -264,6 +242,7 @@ class TicketBaseSerializerTestCases:
             )
 
             request.cls.valid_data.update({
+                'organization': request.cls.organization,
                 'category': TicketCategory.objects.create(
                 organization = request.cls.organization,
                     name = 'a category'
@@ -285,9 +264,27 @@ class TicketBaseSerializerTestCases:
             })
 
 
+            project_two = Project.objects.create(
+                organization = request.cls.organization,
+                name = 'project_two'
+            )
+
+            request.cls.project_milestone_two = ProjectMilestone.objects.create(
+                organization = request.cls.organization,
+                name = 'project milestone two',
+                project = project_two
+            )
+
+
+
+
         yield
 
         with django_db_blocker.unblock():
+
+            request.cls.project_milestone_two.delete()
+
+            project_two.delete()
 
             request.cls.entity_user.delete()
 
@@ -308,17 +305,23 @@ class TicketBaseSerializerTestCases:
         pass
 
 
-    def test_serializer_valid_data(self, create_serializer):
+    def test_serializer_valid_data(self, fake_view, create_serializer):
         """Serializer Validation Check
 
         Ensure that when creating an object with valid data, no validation
         error occurs.
         """
 
-        view_set = MockView()
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+            _has_triage = True
+        )
+
 
         serializer = create_serializer(
             context = {
+                'request': view_set.request,
                 'view': view_set,
             },
             data = self.valid_data
@@ -327,19 +330,22 @@ class TicketBaseSerializerTestCases:
         assert serializer.is_valid(raise_exception = True)
 
 
-    def test_serializer_valid_data_permission_import(self, create_serializer):
+    def test_serializer_valid_data_permission_import(self, fake_view, create_serializer):
         """Serializer Validation Check
 
         Ensure that when creating an object with valid data, no validation
         error occurs. when the user has permission import.
         """
 
-        view_set = MockView()
-
-        view_set._has_import = True
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+            _has_triage = False
+        )
 
         serializer = create_serializer(
             context = {
+                'request': view_set.request,
                 'view': view_set,
             },
             data = self.valid_data
@@ -349,7 +355,71 @@ class TicketBaseSerializerTestCases:
 
 
 
-    def test_serializer_valid_data_missing_field_raises_exception(self, parameterized, param_key_test_data,
+    def test_serializer_valid_data_milestone_from_different_project_not_valid(self, fake_view, create_serializer):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with valid data, no validation
+        error occurs.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        valid_data['milestone'] = self.project_milestone_two.id
+
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+            _has_triage = True
+        )
+
+
+        serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        assert not serializer.is_valid(raise_exception = False)
+
+
+
+    def test_serializer_valid_data_milestone_from_different_project_raises_exception(self, fake_view, create_serializer):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with valid data, no validation
+        error occurs.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        valid_data['milestone'] = self.project_milestone_two.id
+
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+            _has_triage = True
+        )
+
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = create_serializer(
+                context = {
+                    'request': view_set.request,
+                    'view': view_set,
+                },
+                data = valid_data
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['milestone'][0] == 'milestone_same_project'
+
+
+
+    def test_serializer_valid_data_missing_field_raises_exception(self, fake_view, parameterized, param_key_test_data,
         create_serializer,
         param_value,
         param_exception_obj,
@@ -369,14 +439,16 @@ class TicketBaseSerializerTestCases:
 
         del valid_data[param_value]
 
-        view_set = MockView()
-
-        view_set._has_import = True
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+        )
 
         with pytest.raises(param_exception_obj) as err:
 
             serializer = create_serializer(
                 context = {
+                    'request': view_set.request,
                     'view': view_set,
                 },
                 data = valid_data,
@@ -396,7 +468,7 @@ class TicketBaseSerializerTestCases:
 
 
 
-    def test_serializer_valid_data_missing_field_is_valid_permission_import(self, parameterized, param_key_test_data,
+    def test_serializer_valid_data_missing_field_is_valid_permission_import(self, fake_view, parameterized, param_key_test_data,
         create_serializer,
         param_value,
         param_will_create,
@@ -412,12 +484,14 @@ class TicketBaseSerializerTestCases:
 
         del valid_data[param_value]
 
-        view_set = MockView()
-
-        view_set._has_import = True
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+        )
 
         serializer = create_serializer(
             context = {
+                'request': view_set.request,
                 'view': view_set,
             },
             data = valid_data
@@ -510,6 +584,7 @@ class TicketBaseSerializerTestCases:
             ]
     )
     def test_serializer_create_validation_status(self,
+        fake_view,
         create_serializer,
         name,
         param_permission_import,
@@ -535,40 +610,25 @@ class TicketBaseSerializerTestCases:
             valid_data['status'] = status
 
 
-        view_set = MockView()
+        view_set = fake_view(
+            user = self.other_user,
+            _has_import = param_permission_import,
+            _has_triage = param_permission_triage
+        )
 
-        view_set._has_import = param_permission_import
-
-        view_set._has_triage = param_permission_triage
-
-
-        class MockRequest:
-
-            class MockUser:
-
-                id = 999999
-
-                pk = 999999
-
-            user = MockUser()
-
-        mock_request = MockRequest()
 
         if param_is_owner:
 
-            mock_request.user.id = self.view_user.pk
-
-            mock_request.user.pk = self.view_user.pk
+            view_set.request.user = self.view_user
 
 
         serializer = create_serializer(
             context = {
+                'request': view_set.request,
                 'view': view_set,
             },
             data = valid_data
         )
-
-        serializer.context['request'] = mock_request
 
         if type(expected_result) is not bool:
 
@@ -585,13 +645,13 @@ class TicketBaseSerializerTestCases:
 
 
     @pytest.fixture( scope = 'function' )
-    def existing_ticket(self, db, create_serializer):
+    def existing_ticket(self, db, fake_view, create_serializer):
 
-        view_set = MockView()
-
-        view_set._has_import = True
-
-        view_set._has_triage = True
+        view_set = fake_view(
+            user = self.view_user,
+            _has_import = True,
+            _has_triage = True
+        )
 
         valid_data = self.valid_data.copy()
 
@@ -601,6 +661,7 @@ class TicketBaseSerializerTestCases:
 
         serializer = create_serializer(
             context = {
+                'request': view_set.request,
                 'view': view_set,
             },
             data = valid_data
@@ -641,7 +702,7 @@ class TicketBaseSerializerTestCases:
                     in values_validation_status_change_permission
             ]
     )
-    def test_serializer_update_validation_status(self,
+    def test_serializer_update_validation_status(self, fake_view,
         create_serializer,
         existing_ticket,
         name,
@@ -670,42 +731,28 @@ class TicketBaseSerializerTestCases:
             valid_data['status'] = status
 
 
-        view_set = MockView()
-
-        view_set._has_import = param_permission_import
-
-        view_set._has_triage = param_permission_triage
-
-
-        class MockRequest:
-
-            class MockUser:
-
-                id = 999999
-
-                pk = 999999
-
-            user = MockUser()
-
-        mock_request = MockRequest()
+        view_set = fake_view(
+            user = self.other_user,
+            _has_import = param_permission_import,
+            _has_triage = param_permission_triage,
+            action = 'partial_update',
+        )
 
         if param_is_owner:
 
-            mock_request.user.id = self.view_user.pk
-
-            mock_request.user.pk = self.view_user.pk
+            view_set.request.user = self.view_user
 
 
         serializer = create_serializer(
-            instance = existing_ticket,
+            existing_ticket,
             context = {
+                'request': view_set.request,
                 'view': view_set,
             },
             data = valid_data,
             partial = True,
         )
 
-        serializer.context['request'] = mock_request
 
         if type(expected_result) is not bool:
 
@@ -718,6 +765,309 @@ class TicketBaseSerializerTestCases:
         else:
 
             assert serializer.is_valid(raise_exception = False) == expected_result
+
+
+
+    @pytest.fixture( scope = 'function' )
+    def fresh_ticket_serializer(self, request, django_db_blocker, fake_view, create_serializer):
+
+        view_set = fake_view(
+            user = request.cls.view_user
+        )
+
+        valid_data = request.cls.valid_data.copy()
+
+        valid_data['title'] = 'ticktet with minimum fields'
+
+        valid_data_keep_fields = [
+            'title',
+            'organization',
+            'description',
+        ]
+
+        for field, value in valid_data.copy().items():
+
+            if field not in valid_data_keep_fields:
+
+                del valid_data[field]
+
+
+        serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+
+        yield {
+            'serializer': serializer,
+            'valid_data': valid_data,
+        }
+
+        with django_db_blocker.unblock():
+
+            if serializer.instance:
+
+                for comment in serializer.instance.ticketcommentbase_set.all():
+
+                    comment.delete()
+
+                serializer.instance.delete()
+
+
+
+    def test_action_triage_user_assign_user_sets_status_assigned(self, model, fresh_ticket_serializer):
+        """Ticket Function Check
+
+        Assigning the ticket must set the status to new
+        """
+
+        serializer = fresh_ticket_serializer['serializer']
+
+        serializer.initial_data['assigned_to'] = [ self.entity_user.id ]
+
+        serializer.context['view']._has_triage = True
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        ticket = serializer.instance
+
+        assert ticket.status == model.TicketStatus.ASSIGNED
+
+
+
+    def test_action_triage_user_assign_user_and_status_no_status_update(self, model, fresh_ticket_serializer):
+        """Ticket Function Check
+
+        Assigning the ticket and setting the status, does not set the status to assigned
+        """
+
+        serializer = fresh_ticket_serializer['serializer']
+
+        serializer.initial_data['assigned_to'] = [ self.entity_user.id ]
+        serializer.initial_data['status'] = model.TicketStatus.PENDING
+
+        serializer.context['view']._has_triage = True
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        ticket = serializer.instance
+
+        assert ticket.status == model.TicketStatus.PENDING
+
+
+
+    date_action_clear_solved_ticket = [
+        ('triage', True, False, 'is_solved', False),
+        ('triage', True, False, 'date_solved', None),
+
+        ('ticket_owner', False, False, 'is_solved', False),
+        ('ticket_owner', False, False, 'date_solved', None),
+
+        ('import', False, True, 'is_solved', False),
+        ('import', False, True, 'date_solved', None),
+    ]
+
+    date_action_clear_closed_ticket = [
+        ('triage', True, False, 'is_closed', False),
+        ('triage', True, False, 'date_closed', None),
+
+        ('ticket_owner', False, False, 'is_closed', False),
+        ('ticket_owner', False, False, 'date_closed', None),
+
+        ('import', False, True, 'is_closed', False),
+        ('import', False, True, 'date_closed', None),
+    ]
+
+
+    data_action_reopen_solved_ticket = [
+        *date_action_clear_solved_ticket,
+    ]
+
+    date_action_reopen_closed_ticket = [
+        *date_action_clear_solved_ticket,
+        *date_action_clear_closed_ticket
+    ]
+
+
+    @pytest.mark.parametrize(
+        argnames = [
+            'name',
+            'triage_user',
+            'import_user',
+            'field_name',
+            'expected',
+        ],
+        argvalues = data_action_reopen_solved_ticket,
+        ids = [
+            name +'_'+ field_name +'_'+str(expected).lower() for 
+                    name,
+                    triage_user,
+                    import_user,
+                    field_name,
+                    expected
+                    in data_action_reopen_solved_ticket
+            ]
+    )
+    def test_action_reopen_solved_ticket(self,
+        model,
+        fresh_ticket_serializer,
+        create_serializer,
+        name,
+        triage_user,
+        import_user,
+        field_name,
+        expected
+    ):
+        """Ticket Action Check
+
+        When a ticket is reopened the following should occur:
+        - is_solved = False
+        - date_closed = None
+
+        Only the following are supposed to be able to re-open a solved ticket:
+        - ticket owner
+        - triage user
+        - import user
+        """
+
+        # Create Solved Ticket
+        serializer = fresh_ticket_serializer['serializer']
+
+        serializer.initial_data['status'] = model.TicketStatus.SOLVED
+
+        serializer.context['view']._has_triage = True
+        serializer.context['view']._has_import = True
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        ticket = serializer.instance
+
+        # Confirm State
+        assert ticket.status == model.TicketStatus.SOLVED
+        assert ticket.is_solved
+        assert ticket.date_solved is not None
+
+        # Re-Open Ticket
+        edit_serializer = create_serializer(
+            ticket,
+            context = serializer.context,
+            data = {
+                'status': model.TicketStatus.NEW
+            },
+            partial = True
+        )
+
+        edit_serializer.context['view']._has_triage = triage_user
+        edit_serializer.context['view']._has_import = import_user
+
+        edit_serializer.is_valid(raise_exception = True)
+
+        edit_serializer.save()
+
+        ticket = edit_serializer.instance
+
+
+        assert getattr(ticket, field_name) == expected
+
+
+
+    @pytest.mark.parametrize(
+        argnames = [
+            'name',
+            'triage_user',
+            'import_user',
+            'field_name',
+            'expected',
+        ],
+        argvalues = date_action_reopen_closed_ticket,
+        ids = [
+            name +'_'+ field_name +'_'+str(expected).lower() for 
+                    name,
+                    triage_user,
+                    import_user,
+                    field_name,
+                    expected
+                    in date_action_reopen_closed_ticket
+            ]
+    )
+    def test_action_reopen_closed_ticket(self,
+        model,
+        fresh_ticket_serializer,
+        create_serializer,
+        name,
+        triage_user,
+        import_user,
+        field_name,
+        expected
+    ):
+        """Ticket Action Check
+
+        When a ticket is reopened the following should occur:
+        - is_closed = False
+        - date_closed = None
+        - is_solved = False
+        - date_closed = None
+
+        Only the following are supposed to be able to re-open a closed ticket:
+        - ticket owner
+        - triage user
+        - import user
+        """
+
+        # Create Closed Ticket
+        serializer = fresh_ticket_serializer['serializer']
+
+        serializer.initial_data['status'] = model.TicketStatus.CLOSED
+
+        serializer.context['view']._has_triage = True
+        serializer.context['view']._has_import = True
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        ticket = serializer.instance
+
+        # Confirm State
+        assert ticket.status == model.TicketStatus.CLOSED
+        assert ticket.is_closed
+        assert ticket.date_closed is not None
+        assert ticket.is_solved
+        assert ticket.date_solved is not None
+
+        # Re-Open Ticket
+        edit_serializer = create_serializer(
+            ticket,
+            context = serializer.context,
+            data = {
+                'status': model.TicketStatus.NEW
+            },
+            partial = True
+        )
+
+        edit_serializer.context['view']._has_triage = triage_user
+        edit_serializer.context['view']._has_import = import_user
+
+        edit_serializer.is_valid(raise_exception = True)
+
+        edit_serializer.save()
+
+        ticket = edit_serializer.instance
+
+
+        assert getattr(ticket, field_name) == expected
+
+
+
 
 
 

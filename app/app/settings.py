@@ -18,9 +18,9 @@ from pathlib import Path
 from split_settings.tools import optional, include
 import django.db.models.options as options
 
-options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type')
+options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type', 'itam_sub_model_type')
 
-
+AUTH_USER_MODEL = 'auth.User'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,9 +80,102 @@ FEATURE_FLAG_OVERRIDES = None # Feature Flags to override fetched feature flags
 # PROMETHEUS_METRICS_EXPORT_PORT = 8010
 # PROMETHEUS_METRICS_EXPORT_ADDRESS = ''
 
+
+LOG_FILES = {    # defaults for devopment. docker includes settings has correct locations
+    "centurion": "log/centurion.log",
+    "weblog": "log/weblog.log",
+    "rest_api": "log/rest_api.log",
+    "catch_all":"log/catch-all.log"
+}
+
+CENTURION_LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {
+                "format": "{asctime} {levelname} {message}",
+                "style": "{",
+            },
+            "verbose": {
+                "format": "{asctime} {levelname} {name} {module} {process:d} {thread:d} {message}",
+                "style": "{",
+            },
+            "simple": {
+                "format": "{levelname} {message}",
+                "style": "{",
+            },
+            "web_log": {
+                "format": "{asctime} {levelname} {name} {module} {process:d} {thread:d} {message}",
+                "style": "{",
+            },
+        },
+        "handlers": {
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'console',
+            },
+            "file_centurion": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "centurion.log",
+                'formatter': 'verbose',
+            },
+            "file_weblog": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "weblog.log",
+                'formatter': 'web_log',
+            },
+            "file_rest_api": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "rest_api.log",
+                'formatter': 'verbose',
+            },
+            "file_catch_all": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "catch-all.log",
+                'formatter': 'verbose',
+            }
+        },
+        "loggers": {
+            "centurion": {
+                "handlers": ['console', 'file_centurion'],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "django.server": {
+                "handlers": ["file_weblog", 'console'],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "django": {
+                "handlers": ['console', 'file_catch_all'],
+                "level": "INFO",
+                "propagate": False,
+            },
+            'rest_framework': {
+                'handlers': ['file_rest_api', 'console'],
+                'level': 'INFO',
+                'propagate': False,
+            },
+            '': {
+                'handlers': ['file_catch_all'],
+                'level': 'INFO',
+                'propagate': True,
+                },
+        },
+    }
+
 METRICS_ENABLED = False                      # Enable Metrics
 METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
 METRICS_MULTIPROC_DIR = '/tmp/prometheus'    # path the metrics from multiple-process' save to
+
+
+RUNNING_TESTS = 'test' in str(sys.argv)
+
 
 # django setting.
 CACHES = {
@@ -368,8 +461,6 @@ DATETIME_FORMAT = 'j N Y H:i:s'
 # Settings for unit tests
 #
 
-RUNNING_TESTS = 'test' in str(sys.argv)
-
 if RUNNING_TESTS:
     SECRET_KEY = 'django-insecure-tests_are_being_run'
 
@@ -393,7 +484,22 @@ CSRF_TRUSTED_ORIGINS = [
     *TRUSTED_ORIGINS
 ]
 
+
+# Add the user specified log files
+CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
+CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
+CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
+CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_all']
+
+
+if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log') and not RUNNING_TESTS:
+
+    if not os.path.exists(os.path.join(BASE_DIR, 'log')): # Create log dir
+
+        os.makedirs(os.path.join(BASE_DIR, 'log'))
+
 if DEBUG:
+
     INSTALLED_APPS += [
         'debug_toolbar',
     ]
@@ -405,6 +511,11 @@ if DEBUG:
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
+
+
+if not RUNNING_TESTS:
+    # Setup Logging
+    LOGGING = CENTURION_LOGGING
 
 
 if METRICS_ENABLED:
@@ -561,6 +672,24 @@ if FEATURE_FLAGGING_ENABLED:
                 "2025-00006": {
                     "name": "Ticket Models",
                     "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
+            {
+                "2025-00007": {
+                    "name": "itam.ITAMAssetBase",
+                    "description": "ITAM Asset Base model. see https://github.com/nofusscomputing/centurion_erp/issues/692",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
+            {
+                "2025-00008": {
+                    "name": "access.Company",
+                    "description": "Company Entity Role. See https://github.com/nofusscomputing/centurion_erp/issues/704",
                     "enabled": True,
                     "created": "",
                     "modified": ""

@@ -36,7 +36,6 @@ class Person(
 
     m_name = models.CharField(
         blank = True,
-        default = None,
         help_text = 'The persons middle name(s)',
         max_length = 100,
         null = True,
@@ -54,7 +53,6 @@ class Person(
 
     dob = models.DateField(
         blank = True,
-        default = None,
         help_text = 'The Persons Date of Birth (DOB)',
         null = True,
         unique = False,

@@ -1,6 +1,7 @@
-# from django.conf import settings
+import django
+
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -9,13 +10,16 @@ import pytest
 import unittest
 import requests
 
-from access.models.organization import Organization
+from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from app.tests.abstract.model_permissions import ModelPermissions
 
 from core.models.manufacturer import Manufacturer
+
+User = django.contrib.auth.get_user_model()
+
 
 
 class ManufacturerPermissions(TestCase, ModelPermissions):
