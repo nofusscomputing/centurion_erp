@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ValidationError
 from django.urls import reverse
 
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 from core.models.ticket.ticket_comment_category import TicketCommentCategory

@@ -1,6 +1,6 @@
 import re
 
-from app.urls import urlpatterns
+from centurion.urls import urlpatterns
 
 from django.conf import settings
 from django.urls import URLPattern, URLResolver

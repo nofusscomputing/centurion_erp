@@ -4,7 +4,7 @@ from django.conf import settings as django_settings
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-from app import settings
+from django.conf import settings
 
 
 

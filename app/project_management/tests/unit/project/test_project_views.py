@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from app.tests.abstract.models import PrimaryModel
+from centurion.tests.abstract.models import PrimaryModel
 
 
 

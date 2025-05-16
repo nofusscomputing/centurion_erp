@@ -9,7 +9,7 @@ from access.serializers.teams import TeamBaseSerializer
 from api.serializers import common
 from api.exceptions import UnknownTicketType
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field

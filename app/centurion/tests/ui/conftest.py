@@ -1,4 +1,4 @@
-from app.urls import urlpatterns
+from centurion.urls import urlpatterns
 
 class Data:
 

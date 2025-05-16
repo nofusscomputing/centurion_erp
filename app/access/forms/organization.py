@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Q
 
-from app import settings
+from django.conf import settings
 
 from access.models.tenant import Tenant as Organization
 

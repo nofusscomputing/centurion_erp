@@ -14,7 +14,7 @@ from access.models.team import Team
 from access.models.team_user import TeamUsers
 from access.tests.abstract.model_permissions_organization_manager import OrganizationManagerModelPermissions
 
-from app.tests.abstract.model_permissions import ModelPermissions
+from centurion.tests.abstract.model_permissions import ModelPermissions
 
 User = django.contrib.auth.get_user_model()
 

@@ -1,4 +1,4 @@
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 from core.models.notes import Notes

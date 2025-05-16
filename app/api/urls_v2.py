@@ -10,7 +10,7 @@ from api.viewsets import (
     index as v2
 )
 
-from app.viewsets.base import (
+from centurion.viewsets.base import (
     index as base_index_v2,
     content_type as content_type_v2,
     permisson as permission_v2,

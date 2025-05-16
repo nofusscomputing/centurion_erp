@@ -6,7 +6,7 @@ from django.shortcuts import reverse
 
 from rest_framework.relations import Hyperlink
 
-from app.tests.common import DoesNotExist
+from centurion.tests.common import DoesNotExist
 
 from api.tests.unit.test_unit_api_fields import (
     APIFieldsInheritedCases,

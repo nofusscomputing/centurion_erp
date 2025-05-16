@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
 

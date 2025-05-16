@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from access.models.tenant import Tenant
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from core import fields as centurion_field
 
