@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
-from itim.models.cluster_type_history import ClusterType, ClusterTypeHistory
+from itim.models.cluster_type_history import ClusterType, ClusterTypeAuditHistory
 
 
 
@@ -13,7 +13,7 @@ class History(
 
     model = ClusterType
 
-    history_model = ClusterTypeHistory
+    history_model = ClusterTypeAuditHistory
 
 
     @classmethod

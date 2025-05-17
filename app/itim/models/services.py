@@ -148,12 +148,12 @@ class Port(TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from itim.models.port_history import PortHistory
+        from itim.models.port_history import PortAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = PortHistory,
+            history_model = PortAuditHistory,
         )
 
 
@@ -422,12 +422,12 @@ class Service(TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from itim.models.service_history import ServiceHistory
+        from itim.models.service_history import ServiceAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ServiceHistory,
+            history_model = ServiceAuditHistory,
         )
 
 

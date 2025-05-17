@@ -6,7 +6,7 @@ from itim.models.services import Service
 
 
 
-class ServiceHistory(
+class ServiceAuditHistory(
     ModelHistory
 ):
 

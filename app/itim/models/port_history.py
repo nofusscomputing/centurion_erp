@@ -6,7 +6,7 @@ from itim.models.services import Port
 
 
 
-class PortHistory(
+class PortAuditHistory(
     ModelHistory
 ):
 

@@ -30,10 +30,10 @@ from itam.models.software_history import Software, SoftwareHistory
 from itam.models.software_category_history import SoftwareCategory, SoftwareCategoryHistory
 from itam.models.software_version_history import SoftwareVersion, SoftwareVersionHistory
 
-from itim.models.cluster_history import Cluster, ClusterHistory
-from itim.models.cluster_type_history import ClusterType, ClusterTypeHistory
-from itim.models.port_history import Port, PortHistory
-from itim.models.service_history import Service, ServiceHistory
+from itim.models.cluster_history import Cluster, ClusterAuditHistory
+from itim.models.cluster_type_history import ClusterType, ClusterTypeAuditHistory
+from itim.models.port_history import Port, PortAuditHistory
+from itim.models.service_history import Service, ServiceAuditHistory
 
 from project_management.models.project_history import Project, ProjectHistory
 from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneHistory
@@ -239,13 +239,13 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = Cluster
 
-            history_class = ClusterHistory
+            history_class = ClusterAuditHistory
 
         case 'clustertype':
 
             model_class = ClusterType
 
-            history_class = ClusterTypeHistory
+            history_class = ClusterTypeAuditHistory
 
         case 'configgrouphosts':
 
@@ -342,7 +342,7 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = Port
 
-            history_class = PortHistory
+            history_class = PortAuditHistory
 
         case 'project':
 
@@ -372,7 +372,7 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = Service
 
-            history_class = ServiceHistory
+            history_class = ServiceAuditHistory
 
         case 'software':
 

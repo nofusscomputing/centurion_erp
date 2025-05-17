@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from itim.models.cluster_type_history import ClusterType, ClusterTypeHistory
+from itim.models.cluster_type_history import ClusterType, ClusterTypeAuditHistory
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
 
@@ -13,7 +13,7 @@ class ModelHistoryAPI(
 
     audit_model = ClusterType
 
-    model = ClusterTypeHistory
+    model = ClusterTypeAuditHistory
 
     @classmethod
     def setUpTestData(self):
