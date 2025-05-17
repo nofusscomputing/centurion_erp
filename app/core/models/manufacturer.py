@@ -120,12 +120,12 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from core.models.manufacturer_history import ManufacturerHistory
+        from core.models.manufacturer_history import ManufacturerAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ManufacturerHistory
+            history_model = ManufacturerAuditHistory
         )
 
 

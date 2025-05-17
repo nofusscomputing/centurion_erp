@@ -17,7 +17,7 @@ from config_management.models.config_groups_hosts_history import ConfigGroupHost
 from config_management.models.config_groups_software_history import ConfigGroupSoftware, ConfigGroupSoftwareHistory
 
 from core.models.history import History
-from core.models.manufacturer_history import Manufacturer, ManufacturerHistory
+from core.models.manufacturer_history import Manufacturer, ManufacturerAuditHistory
 
 from itam.models.device_history import Device, DeviceHistory
 from itam.models.device_model_history import DeviceModel, DeviceModelHistory
@@ -318,7 +318,7 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = Manufacturer
 
-            history_class = ManufacturerHistory
+            history_class = ManufacturerAuditHistory
 
         case 'operatingsystem':
 

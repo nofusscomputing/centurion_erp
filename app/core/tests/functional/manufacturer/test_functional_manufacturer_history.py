@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from core.models.manufacturer_history import Manufacturer, ManufacturerHistory
+from core.models.manufacturer_history import Manufacturer, ManufacturerAuditHistory
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
 
@@ -12,7 +12,7 @@ class History(
 
     model = Manufacturer
 
-    history_model = ManufacturerHistory
+    history_model = ManufacturerAuditHistory
 
 
     @classmethod
