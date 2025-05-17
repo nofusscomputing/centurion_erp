@@ -6,7 +6,7 @@ from devops.models.git_group import GitGroup
 
 
 
-class GitGroupHistory(
+class GitGroupAuditHistory(
     ModelHistory
 ):
 

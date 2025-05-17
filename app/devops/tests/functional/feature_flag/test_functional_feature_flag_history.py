@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
-from devops.models.feature_flag_history import FeatureFlag, FeatureFlagHistory
+from devops.models.feature_flag_history import FeatureFlag, FeatureFlagAuditHistory
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
 from itam.models.software import Software
@@ -16,7 +16,7 @@ class History(
 
     model = FeatureFlag
 
-    history_model = FeatureFlagHistory
+    history_model = FeatureFlagAuditHistory
 
 
     @classmethod

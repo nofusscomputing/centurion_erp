@@ -139,12 +139,12 @@ class GitHubRepository(
  
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from devops.models.git_repository.github_history import GitHubHistory
+        from devops.models.git_repository.github_history import GitHubAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = GitHubHistory
+            history_model = GitHubAuditHistory
         )
 
 

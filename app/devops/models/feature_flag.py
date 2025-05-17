@@ -134,12 +134,12 @@ class FeatureFlag(
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from devops.models.feature_flag_history import FeatureFlagHistory
+        from devops.models.feature_flag_history import FeatureFlagAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = FeatureFlagHistory
+            history_model = FeatureFlagAuditHistory
         )
 
 

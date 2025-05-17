@@ -6,7 +6,7 @@ from devops.models.feature_flag import FeatureFlag
 
 
 
-class FeatureFlagHistory(
+class FeatureFlagAuditHistory(
     ModelHistory
 ):
 

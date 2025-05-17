@@ -5,7 +5,7 @@ from drf_spectacular.utils import (
 )
 
 # THis import only exists so that the migrations can be created
-from devops.models.git_group_history import GitGroupHistory    # pylint: disable=W0611:unused-import
+from devops.models.git_group_history import GitGroupAuditHistory    # pylint: disable=W0611:unused-import
 from devops.serializers.git_group import (
     GitGroup,
     ModelSerializer,
