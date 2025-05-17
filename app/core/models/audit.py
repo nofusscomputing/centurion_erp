@@ -143,7 +143,8 @@ class ModelHistory(
         TenancyObject (_type_): Centurion Tenancy Abstract model.
     """
 
-    audit_enabled: bool = False
+    _audit_enabled: bool = False
+    """Don't Save audit history for audit history model"""
 
 
     class Meta:
