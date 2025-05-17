@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from project_management.models.project_history import Project, ProjectHistory
+from project_management.models.project_history import Project, ProjectAuditHistory
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
 
@@ -13,7 +13,7 @@ class ModelHistoryAPI(
 
     audit_model = Project
 
-    model = ProjectHistory
+    model = ProjectAuditHistory
 
     @classmethod
     def setUpTestData(self):

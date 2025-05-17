@@ -35,10 +35,10 @@ from itim.models.cluster_type_history import ClusterType, ClusterTypeAuditHistor
 from itim.models.port_history import Port, PortAuditHistory
 from itim.models.service_history import Service, ServiceAuditHistory
 
-from project_management.models.project_history import Project, ProjectHistory
-from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneHistory
-from project_management.models.project_state_history import ProjectState, ProjectStateHistory
-from project_management.models.project_type_history import ProjectType, ProjectTypeHistory
+from project_management.models.project_history import Project, ProjectAuditHistory
+from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneAuditHistory
+from project_management.models.project_state_history import ProjectState, ProjectStateAuditHistory
+from project_management.models.project_type_history import ProjectType, ProjectTypeAuditHistory
 
 from settings.models.external_link_history import ExternalLink, ExternalLinkHistory
 
@@ -348,25 +348,25 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = Project
 
-            history_class = ProjectHistory
+            history_class = ProjectAuditHistory
 
         case 'projectmilestone':
 
             model_class = ProjectMilestone
 
-            history_class = ProjectMilestoneHistory
+            history_class = ProjectMilestoneAuditHistory
 
         case 'projectstate':
 
             model_class = ProjectState
 
-            history_class = ProjectStateHistory
+            history_class = ProjectStateAuditHistory
 
         case 'projecttype':
 
             model_class = ProjectType
 
-            history_class = ProjectTypeHistory
+            history_class = ProjectTypeAuditHistory
 
         case 'service':
 

@@ -6,7 +6,7 @@ from project_management.models.project_milestone import ProjectMilestone
 
 
 
-class ProjectMilestoneHistory(
+class ProjectMilestoneAuditHistory(
     ModelHistory
 ):
 

@@ -163,12 +163,12 @@ class ProjectMilestone(ProjectCommonFieldsName):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from project_management.models.project_milestone_history import ProjectMilestoneHistory
+        from project_management.models.project_milestone_history import ProjectMilestoneAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ProjectMilestoneHistory,
+            history_model = ProjectMilestoneAuditHistory,
         )
 
 

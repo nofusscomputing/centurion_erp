@@ -3,7 +3,7 @@ from django.test import TestCase
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
 from project_management.models.projects import Project
-from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneHistory
+from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneAuditHistory
 
 
 
@@ -14,7 +14,7 @@ class History(
 
     model = ProjectMilestone
 
-    history_model = ProjectMilestoneHistory
+    history_model = ProjectMilestoneAuditHistory
 
 
     @classmethod

@@ -4,7 +4,7 @@ from django.test import TestCase
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
 from project_management.models.projects import Project
-from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneHistory
+from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneAuditHistory
 
 
 
@@ -17,7 +17,7 @@ class ModelHistoryAPI(
 
     # audit_model_child = 
 
-    model = ProjectMilestoneHistory
+    model = ProjectMilestoneAuditHistory
 
     @classmethod
     def setUpTestData(self):

@@ -122,12 +122,12 @@ class ProjectState(ProjectStateCommonFields):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from project_management.models.project_state_history import ProjectStateHistory
+        from project_management.models.project_state_history import ProjectStateAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ProjectStateHistory,
+            history_model = ProjectStateAuditHistory,
         )
 
 

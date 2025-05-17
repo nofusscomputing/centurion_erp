@@ -6,7 +6,7 @@ from project_management.models.project_states import ProjectState
 
 
 
-class ProjectStateHistory(
+class ProjectStateAuditHistory(
     ModelHistory
 ):
 

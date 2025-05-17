@@ -6,7 +6,7 @@ from project_management.models.projects import Project
 
 
 
-class ProjectHistory(
+class ProjectAuditHistory(
     ModelHistory
 ):
 
