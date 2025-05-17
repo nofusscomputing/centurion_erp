@@ -6,7 +6,7 @@ from settings.models.external_link import ExternalLink
 
 
 
-class ExternalLinkHistory(
+class ExternalLinkAuditHistory(
     ModelHistory
 ):
 

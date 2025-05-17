@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
-from settings.models.external_link_history import ExternalLink, ExternalLinkHistory
+from settings.models.external_link_history import ExternalLink, ExternalLinkAuditHistory
 
 
 
@@ -14,7 +14,7 @@ class ModelHistoryAPI(
 
     audit_model = ExternalLink
 
-    model = ExternalLinkHistory
+    model = ExternalLinkAuditHistory
 
     @classmethod
     def setUpTestData(self):

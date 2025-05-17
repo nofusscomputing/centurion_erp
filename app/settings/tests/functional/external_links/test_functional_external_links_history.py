@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
-from settings.models.external_link_history import ExternalLink, ExternalLinkHistory
+from settings.models.external_link_history import ExternalLink, ExternalLinkAuditHistory
 
 
 
@@ -13,7 +13,7 @@ class History(
 
     model = ExternalLink
 
-    history_model = ExternalLinkHistory
+    history_model = ExternalLinkAuditHistory
 
 
     @classmethod

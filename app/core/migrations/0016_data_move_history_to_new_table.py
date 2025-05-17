@@ -40,7 +40,7 @@ from project_management.models.project_milestone_history import ProjectMilestone
 from project_management.models.project_state_history import ProjectState, ProjectStateAuditHistory
 from project_management.models.project_type_history import ProjectType, ProjectTypeAuditHistory
 
-from settings.models.external_link_history import ExternalLink, ExternalLinkHistory
+from settings.models.external_link_history import ExternalLink, ExternalLinkAuditHistory
 
 
 
@@ -300,7 +300,7 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = ExternalLink
 
-            history_class = ExternalLinkHistory
+            history_class = ExternalLinkAuditHistory
 
         case 'knowledgebase':
 

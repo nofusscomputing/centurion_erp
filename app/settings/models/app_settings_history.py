@@ -6,7 +6,7 @@ from settings.models.app_settings import AppSettings
 
 
 
-class AppSettingsHistory(
+class AppSettingsAuditHistory(
     ModelHistory
 ):
 
