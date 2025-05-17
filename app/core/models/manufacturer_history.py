@@ -6,7 +6,7 @@ from core.models.manufacturer import Manufacturer
 
 
 
-class ManufacturerHistory(
+class ManufacturerAuditHistory(
     ModelHistory
 ):
 

@@ -112,12 +112,12 @@ class ProjectType(ProjectTypeCommonFields):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from project_management.models.project_type_history import ProjectTypeHistory
+        from project_management.models.project_type_history import ProjectTypeAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ProjectTypeHistory,
+            history_model = ProjectTypeAuditHistory,
         )
 
 

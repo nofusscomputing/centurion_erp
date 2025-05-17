@@ -6,7 +6,7 @@ from devops.models.git_repository.github import GitHubRepository
 
 
 
-class GitHubHistory(
+class GitHubAuditHistory(
     ModelHistory
 ):
 

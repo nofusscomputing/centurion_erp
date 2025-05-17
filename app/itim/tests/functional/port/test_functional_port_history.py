@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
-from itim.models.port_history import Port, PortHistory
+from itim.models.port_history import Port, PortAuditHistory
 
 
 
@@ -13,7 +13,7 @@ class History(
 
     model = Port
 
-    history_model = PortHistory
+    history_model = PortAuditHistory
 
 
     @classmethod

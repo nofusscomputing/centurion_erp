@@ -113,12 +113,12 @@ class KnowledgeBaseCategory(TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from assistance.models.knowledge_base_category_history import KnowledgeBaseCategoryHistory
+        from assistance.models.knowledge_base_category_history import KnowledgeBaseCategoryAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = KnowledgeBaseCategoryHistory,
+            history_model = KnowledgeBaseCategoryAuditHistory,
         )
 
 
@@ -334,12 +334,12 @@ class KnowledgeBase(TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from assistance.models.knowledge_base_history import KnowledgeBaseHistory
+        from assistance.models.knowledge_base_history import KnowledgeBaseAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = KnowledgeBaseHistory,
+            history_model = KnowledgeBaseAuditHistory,
         )
 
 

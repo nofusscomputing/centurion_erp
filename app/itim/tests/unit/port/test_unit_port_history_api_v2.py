@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from itim.models.port_history import Port, PortHistory
+from itim.models.port_history import Port, PortAuditHistory
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
 
@@ -13,7 +13,7 @@ class ModelHistoryAPI(
 
     audit_model = Port
 
-    model = PortHistory
+    model = PortAuditHistory
 
     @classmethod
     def setUpTestData(self):

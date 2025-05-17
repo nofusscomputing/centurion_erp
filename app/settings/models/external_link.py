@@ -166,12 +166,12 @@ class ExternalLink(TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from settings.models.external_link_history import ExternalLinkHistory
+        from settings.models.external_link_history import ExternalLinkAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ExternalLinkHistory,
+            history_model = ExternalLinkAuditHistory,
         )
 
 

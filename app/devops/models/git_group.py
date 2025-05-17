@@ -189,12 +189,12 @@ class GitGroup(
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from devops.models.git_group_history import GitGroupHistory
+        from devops.models.git_group_history import GitGroupAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = GitGroupHistory
+            history_model = GitGroupAuditHistory
         )
 
 

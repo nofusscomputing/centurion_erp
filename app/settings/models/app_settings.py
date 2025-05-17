@@ -179,12 +179,12 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from settings.models.app_settings_history import AppSettingsHistory
+        from settings.models.app_settings_history import AppSettingsAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = AppSettingsHistory,
+            history_model = AppSettingsAuditHistory,
         )
 
 

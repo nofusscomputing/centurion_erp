@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
-from project_management.models.project_type_history import ProjectType, ProjectTypeHistory
+from project_management.models.project_type_history import ProjectType, ProjectTypeAuditHistory
 
 
 
@@ -13,7 +13,7 @@ class History(
 
     model = ProjectType
 
-    history_model = ProjectTypeHistory
+    history_model = ProjectTypeAuditHistory
 
 
     @classmethod

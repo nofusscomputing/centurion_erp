@@ -6,7 +6,7 @@ from devops.models.git_repository.gitlab import GitLabRepository
 
 
 
-class GitlabHistory(
+class GitlabAuditHistory(
     ModelHistory
 ):
 

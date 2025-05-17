@@ -6,7 +6,7 @@ from itim.models.clusters import Cluster
 
 
 
-class ClusterHistory(
+class ClusterAuditHistory(
     ModelHistory
 ):
 

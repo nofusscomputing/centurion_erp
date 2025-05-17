@@ -1,1 +1,1 @@
-from .asset_base_history import AssetBaseHistory
+from .asset_base_history import AssetBaseAuditHistory

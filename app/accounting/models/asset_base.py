@@ -356,12 +356,12 @@ class AssetBase(
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from accounting.models.asset_base_history import AssetBaseHistory
+        from accounting.models.asset_base_history import AssetBaseAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = AssetBaseHistory
+            history_model = AssetBaseAuditHistory
         )
 
 

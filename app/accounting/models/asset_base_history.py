@@ -6,7 +6,7 @@ from core.models.model_history import ModelHistory
 
 
 
-class AssetBaseHistory(
+class AssetBaseAuditHistory(
     ModelHistory
 ):
 

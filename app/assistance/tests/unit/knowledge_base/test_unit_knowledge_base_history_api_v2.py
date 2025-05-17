@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
-from assistance.models.knowledge_base_history import KnowledgeBase, KnowledgeBaseHistory
+from assistance.models.knowledge_base_history import KnowledgeBase, KnowledgeBaseAuditHistory
 
 
 
@@ -14,7 +14,7 @@ class ModelHistoryAPI(
 
     audit_model = KnowledgeBase
 
-    model = KnowledgeBaseHistory
+    model = KnowledgeBaseAuditHistory
 
     @classmethod
     def setUpTestData(self):

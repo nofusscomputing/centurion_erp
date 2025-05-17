@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
-from itim.models.service_history import Service, ServiceHistory
+from itim.models.service_history import Service, ServiceAuditHistory
 
 
 
@@ -13,7 +13,7 @@ class History(
 
     model = Service
 
-    history_model = ServiceHistory
+    history_model = ServiceAuditHistory
 
 
     @classmethod

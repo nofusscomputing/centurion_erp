@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from assistance.models.knowledge_base_category_history import KnowledgeBaseCategory, KnowledgeBaseCategoryHistory
+from assistance.models.knowledge_base_category_history import KnowledgeBaseCategory, KnowledgeBaseCategoryAuditHistory
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
@@ -13,7 +13,7 @@ class History(
 
     model = KnowledgeBaseCategory
 
-    history_model = KnowledgeBaseCategoryHistory
+    history_model = KnowledgeBaseCategoryAuditHistory
 
 
     @classmethod

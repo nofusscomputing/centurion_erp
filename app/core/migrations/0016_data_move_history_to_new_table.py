@@ -9,15 +9,15 @@ from django.db import migrations, models
 from access.models.organization_history import Tenant, OrganizationHistory
 from access.models.team_history import Team, TeamHistory
 
-from assistance.models.knowledge_base_history import KnowledgeBase, KnowledgeBaseHistory
-from assistance.models.knowledge_base_category_history import KnowledgeBaseCategory, KnowledgeBaseCategoryHistory
+from assistance.models.knowledge_base_history import KnowledgeBase, KnowledgeBaseAuditHistory
+from assistance.models.knowledge_base_category_history import KnowledgeBaseCategory, KnowledgeBaseCategoryAuditHistory
 
 from config_management.models.config_groups_history import ConfigGroups, ConfigGroupsHistory
 from config_management.models.config_groups_hosts_history import ConfigGroupHosts, ConfigGroupHostsHistory
 from config_management.models.config_groups_software_history import ConfigGroupSoftware, ConfigGroupSoftwareHistory
 
 from core.models.history import History
-from core.models.manufacturer_history import Manufacturer, ManufacturerHistory
+from core.models.manufacturer_history import Manufacturer, ManufacturerAuditHistory
 
 from itam.models.device_history import Device, DeviceHistory
 from itam.models.device_model_history import DeviceModel, DeviceModelHistory
@@ -30,17 +30,17 @@ from itam.models.software_history import Software, SoftwareHistory
 from itam.models.software_category_history import SoftwareCategory, SoftwareCategoryHistory
 from itam.models.software_version_history import SoftwareVersion, SoftwareVersionHistory
 
-from itim.models.cluster_history import Cluster, ClusterHistory
-from itim.models.cluster_type_history import ClusterType, ClusterTypeHistory
-from itim.models.port_history import Port, PortHistory
-from itim.models.service_history import Service, ServiceHistory
+from itim.models.cluster_history import Cluster, ClusterAuditHistory
+from itim.models.cluster_type_history import ClusterType, ClusterTypeAuditHistory
+from itim.models.port_history import Port, PortAuditHistory
+from itim.models.service_history import Service, ServiceAuditHistory
 
-from project_management.models.project_history import Project, ProjectHistory
-from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneHistory
-from project_management.models.project_state_history import ProjectState, ProjectStateHistory
-from project_management.models.project_type_history import ProjectType, ProjectTypeHistory
+from project_management.models.project_history import Project, ProjectAuditHistory
+from project_management.models.project_milestone_history import ProjectMilestone, ProjectMilestoneAuditHistory
+from project_management.models.project_state_history import ProjectState, ProjectStateAuditHistory
+from project_management.models.project_type_history import ProjectType, ProjectTypeAuditHistory
 
-from settings.models.external_link_history import ExternalLink, ExternalLinkHistory
+from settings.models.external_link_history import ExternalLink, ExternalLinkAuditHistory
 
 
 
@@ -239,13 +239,13 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = Cluster
 
-            history_class = ClusterHistory
+            history_class = ClusterAuditHistory
 
         case 'clustertype':
 
             model_class = ClusterType
 
-            history_class = ClusterTypeHistory
+            history_class = ClusterTypeAuditHistory
 
         case 'configgrouphosts':
 
@@ -300,25 +300,25 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = ExternalLink
 
-            history_class = ExternalLinkHistory
+            history_class = ExternalLinkAuditHistory
 
         case 'knowledgebase':
 
             model_class = KnowledgeBase
 
-            history_class = KnowledgeBaseHistory
+            history_class = KnowledgeBaseAuditHistory
 
         case 'knowledgebasecategory':
 
             model_class = KnowledgeBaseCategory
 
-            history_class = KnowledgeBaseCategoryHistory
+            history_class = KnowledgeBaseCategoryAuditHistory
 
         case 'manufacturer':
 
             model_class = Manufacturer
 
-            history_class = ManufacturerHistory
+            history_class = ManufacturerAuditHistory
 
         case 'operatingsystem':
 
@@ -342,37 +342,37 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = Port
 
-            history_class = PortHistory
+            history_class = PortAuditHistory
 
         case 'project':
 
             model_class = Project
 
-            history_class = ProjectHistory
+            history_class = ProjectAuditHistory
 
         case 'projectmilestone':
 
             model_class = ProjectMilestone
 
-            history_class = ProjectMilestoneHistory
+            history_class = ProjectMilestoneAuditHistory
 
         case 'projectstate':
 
             model_class = ProjectState
 
-            history_class = ProjectStateHistory
+            history_class = ProjectStateAuditHistory
 
         case 'projecttype':
 
             model_class = ProjectType
 
-            history_class = ProjectTypeHistory
+            history_class = ProjectTypeAuditHistory
 
         case 'service':
 
             model_class = Service
 
-            history_class = ServiceHistory
+            history_class = ServiceAuditHistory
 
         case 'software':
 

@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
-from settings.models.app_settings_history import AppSettings, AppSettingsHistory
+from settings.models.app_settings_history import AppSettings, AppSettingsAuditHistory
 
 
 
@@ -13,7 +13,7 @@ class History(
 
     model = AppSettings
 
-    history_model = AppSettingsHistory
+    history_model = AppSettingsAuditHistory
 
 
     @classmethod

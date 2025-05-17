@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
-from settings.models.app_settings_history import AppSettings, AppSettingsHistory
+from settings.models.app_settings_history import AppSettings, AppSettingsAuditHistory
 
 
 
@@ -14,7 +14,7 @@ class ModelHistoryAPI(
 
     audit_model = AppSettings
 
-    model = AppSettingsHistory
+    model = AppSettingsAuditHistory
 
     @classmethod
     def setUpTestData(self):

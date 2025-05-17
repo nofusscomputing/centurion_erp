@@ -131,12 +131,12 @@ class ClusterType(TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from itim.models.cluster_type_history import ClusterTypeHistory
+        from itim.models.cluster_type_history import ClusterTypeAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ClusterTypeHistory,
+            history_model = ClusterTypeAuditHistory,
         )
 
 
@@ -371,12 +371,12 @@ class Cluster(TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from itim.models.cluster_history import ClusterHistory
+        from itim.models.cluster_history import ClusterAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = ClusterHistory,
+            history_model = ClusterAuditHistory,
         )
 
 
