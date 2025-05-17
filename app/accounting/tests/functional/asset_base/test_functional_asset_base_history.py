@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from accounting.models.asset_base_history import AssetBase, AssetBaseHistory
+from accounting.models.asset_base_history import AssetBase, AssetBaseAuditHistory
 
 from core.tests.abstract.test_functional_history import HistoryEntriesCommon
 
@@ -13,7 +13,7 @@ class History(
 
     model = AssetBase
 
-    history_model = AssetBaseHistory
+    history_model = AssetBaseAuditHistory
 
 
     @classmethod
