@@ -6,7 +6,7 @@ from assistance.models.knowledge_base import KnowledgeBaseCategory
 
 
 
-class KnowledgeBaseCategoryHistory(
+class KnowledgeBaseCategoryAuditHistory(
     ModelHistory
 ):
 

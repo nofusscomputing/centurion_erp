@@ -9,8 +9,8 @@ from django.db import migrations, models
 from access.models.organization_history import Tenant, OrganizationHistory
 from access.models.team_history import Team, TeamHistory
 
-from assistance.models.knowledge_base_history import KnowledgeBase, KnowledgeBaseHistory
-from assistance.models.knowledge_base_category_history import KnowledgeBaseCategory, KnowledgeBaseCategoryHistory
+from assistance.models.knowledge_base_history import KnowledgeBase, KnowledgeBaseAuditHistory
+from assistance.models.knowledge_base_category_history import KnowledgeBaseCategory, KnowledgeBaseCategoryAuditHistory
 
 from config_management.models.config_groups_history import ConfigGroups, ConfigGroupsHistory
 from config_management.models.config_groups_hosts_history import ConfigGroupHosts, ConfigGroupHostsHistory
@@ -306,13 +306,13 @@ def model_details(item_pk, item_class) -> dict:
 
             model_class = KnowledgeBase
 
-            history_class = KnowledgeBaseHistory
+            history_class = KnowledgeBaseAuditHistory
 
         case 'knowledgebasecategory':
 
             model_class = KnowledgeBaseCategory
 
-            history_class = KnowledgeBaseCategoryHistory
+            history_class = KnowledgeBaseCategoryAuditHistory
 
         case 'manufacturer':
 
