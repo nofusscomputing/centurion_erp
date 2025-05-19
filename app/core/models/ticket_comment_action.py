@@ -1,7 +1,3 @@
-import datetime
-
-
-from core import exceptions as centurion_exception
 from core.models.ticket_comment_base import TicketCommentBase
 
 

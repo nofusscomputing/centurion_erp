@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from project_management.models.project_milestone_history import ProjectMilestoneHistory    # pylint: disable=W0611:unused-import
-from project_management.serializers.project_milestone import (
+from project_management.serializers.project_milestone import (    # pylint: disable=W0611:unused-import
     ProjectMilestone,
     ProjectMilestoneModelSerializer,
     ProjectMilestoneViewSerializer

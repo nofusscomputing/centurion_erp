@@ -4,7 +4,6 @@ import os
 from django.conf import settings
 
 from celery import Celery, signals
-from celery.fixups.django import DjangoFixup
 
 from pathlib import Path
 

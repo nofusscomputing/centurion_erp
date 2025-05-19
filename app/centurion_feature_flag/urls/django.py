@@ -1,6 +1,6 @@
-from django.urls.conf import (
+from django.urls.conf import (    # pylint: disable=W0611:unused-import
     _path as _django_path,
-    include,    # pylint: disable=W0611:unused-import
+    include,
     partial,
     RegexPattern as DjangoRegexPattern,
     RoutePattern as DjangoRoutePattern,

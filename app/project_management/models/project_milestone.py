@@ -2,7 +2,7 @@ from django.db import models
 
 from access.fields import AutoCreatedField
 
-from .projects import Project, ProjectCommonFieldsName, SaveHistory
+from .projects import Project, ProjectCommonFieldsName
 
 
 

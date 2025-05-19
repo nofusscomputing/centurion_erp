@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from access.serializers.organization import Organization, TenantBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
 from api.serializers import common

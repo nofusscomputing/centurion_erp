@@ -2,8 +2,6 @@ from django.urls import reverse
 
 from rest_framework import serializers
 
-from api.serializers.config import ParentGroupSerializer
-
 from config_management.models.groups import ConfigGroups
 
 from itam.models.device import Device

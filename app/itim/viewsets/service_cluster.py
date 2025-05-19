@@ -1,8 +1,8 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from api.viewsets.common import ReadOnlyModelViewSet
 
-from itim.serializers.service import (
+from itim.serializers.service import (    # pylint: disable=W0611:unused-import
     Service,
     ServiceModelSerializer,
     ServiceViewSerializer

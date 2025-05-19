@@ -1,6 +1,3 @@
-from django.urls import reverse
-
-from itam.models.device import Device
 from rest_framework import serializers
 
 

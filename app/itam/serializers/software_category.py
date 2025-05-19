@@ -1,11 +1,8 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-
-from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.software import SoftwareCategory
 

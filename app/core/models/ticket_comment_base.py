@@ -335,7 +335,6 @@ class TicketCommentBase(
                 ):
 
                     return related_object.name
-                    break
 
 
         return ''

@@ -2,12 +2,10 @@ from django.db.models import Q
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from access.mixin import OrganizationMixin
-
 from api.viewsets.common import ModelListRetrieveDeleteViewSet
 
-from core.serializers.ticket_related import (
-    Ticket,
+from core.models.ticket.ticket import Ticket
+from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-import
     RelatedTickets,
     RelatedTicketModelSerializer,
     RelatedTicketViewSerializer,
