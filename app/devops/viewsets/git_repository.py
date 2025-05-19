@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 from devops.models.git_repository.github_history import GitHubHistory    # pylint: disable=W0611:unused-import
 from devops.models.git_repository.gitlab_history import GitlabHistory    # pylint: disable=W0611:unused-import
 from devops.models.git_group import GitGroup
-from devops.serializers.git_repository.base import (
+from devops.serializers.git_repository.base import (    # pylint: disable=W0611:unused-import
     GitRepository,
     ModelSerializer,
     ViewSerializer,

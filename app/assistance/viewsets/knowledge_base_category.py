@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from assistance.serializers.knowledge_base_category import (
+from assistance.serializers.knowledge_base_category import (    # pylint: disable=W0611:unused-import
     KnowledgeBaseCategory,
     KnowledgeBaseCategoryModelSerializer,
     KnowledgeBaseCategoryViewSerializer

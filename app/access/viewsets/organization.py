@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 # THis import only exists so that the migrations can be created
 from access.models.organization_history import OrganizationHistory    # pylint: disable=W0611:unused-import
-from access.serializers.organization import (
+from access.serializers.organization import (    # pylint: disable=W0611:unused-import
     Tenant,
     TenantModelSerializer,
     TenantViewSerializer

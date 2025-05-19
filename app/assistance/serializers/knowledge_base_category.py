@@ -1,7 +1,7 @@
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError, ValidationError
+from rest_framework.exceptions import ValidationError
 
 
 from access.serializers.organization import TenantBaseSerializer

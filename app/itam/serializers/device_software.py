@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
 from access.serializers.organization import TenantBaseSerializer
@@ -7,7 +6,7 @@ from access.serializers.organization import TenantBaseSerializer
 from api.serializers import common
 
 from core import exceptions as centurion_exception
-from core.fields.badge import Badge, BadgeField
+from core.fields.badge import BadgeField
 
 from itam.models.device import Device, DeviceSoftware
 from itam.serializers.device import DeviceBaseSerializer

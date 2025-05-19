@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 # THis import only exists so that the migrations can be created
 from itam.models.software_history import SoftwareHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.software import (
+from itam.serializers.software import (    # pylint: disable=W0611:unused-import
     Software,
     SoftwareModelSerializer,
     SoftwareViewSerializer

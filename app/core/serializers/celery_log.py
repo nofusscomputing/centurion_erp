@@ -1,13 +1,7 @@
-import json
-
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from django_celery_results.models import TaskResult
-
-from access.serializers.organization import TenantBaseSerializer
-
-from centurion.serializers.user import UserBaseSerializer
 
 from core import fields as centurion_field
 

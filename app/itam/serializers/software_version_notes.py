@@ -1,5 +1,4 @@
 from core.serializers.model_notes import (
-    ModelNotes,
     ModelNoteBaseSerializer,
     ModelNoteModelSerializer,
     ModelNoteViewSerializer

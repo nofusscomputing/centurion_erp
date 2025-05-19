@@ -4,7 +4,11 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from settings.models.external_link_history import ExternalLinkHistory    # pylint: disable=W0611:unused-import
-from settings.serializers.external_links import ExternalLink, ExternalLinkModelSerializer, ExternalLinkViewSerializer
+from settings.serializers.external_links import (    # pylint: disable=W0611:unused-import
+    ExternalLink,
+    ExternalLinkModelSerializer,
+    ExternalLinkViewSerializer,
+)
 
 
 

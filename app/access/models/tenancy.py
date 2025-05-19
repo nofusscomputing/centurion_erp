@@ -1,4 +1,3 @@
-import django
 import logging
 
 from django.db import models
@@ -52,6 +51,10 @@ class TenancyManager(models.Manager):
 
         user_organizations: list(str()) = []
 
+        has_tenant_field = False
+        if hasattr(self.model, 'organization'):
+            has_tenant_field = True
+
 
         if request:
 
@@ -70,31 +73,53 @@ class TenancyManager(models.Manager):
 
                     if team.organization.id not in user_organizations:
 
-                        if not user_organizations:
+                        # if not user_organizations:
 
-                            self.user_organizations = []
+                        #     self.user_organizations = []
 
                         user_organizations += [ team.organization.id ]
 
 
-                # if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:
                 if len(user_organizations) > 0 and not user.is_superuser:
 
                     if getattr(self.model, 'is_global', False) is True:
 
-                        return super().get_queryset().filter(
-                            models.Q(organization__in=user_organizations)
-                            |
-                            models.Q(is_global = True)
-                        )
+                        if has_tenant_field:
+
+                            return super().get_queryset().select_related('organization').filter(
+                                models.Q(organization__in=user_organizations)
+                                |
+                                models.Q(is_global = True)
+                            )
+
+                        else:
+
+                            return super().get_queryset().filter(
+                                models.Q(organization__in=user_organizations)
+                                |
+                                models.Q(is_global = True)
+                            )
+
 
                     else:
 
-                        return super().get_queryset().filter(
-                            models.Q(organization__in=user_organizations)
-                        )
+                        if has_tenant_field:
 
-        return super().get_queryset()
+                            return super().get_queryset().select_related('organization').filter(
+                                models.Q(organization__in=user_organizations)
+                            )
+
+                        else:
+
+                            return super().get_queryset().filter(
+                                models.Q(organization__in=user_organizations)
+                            )
+
+
+        if has_tenant_field:
+            return super().get_queryset().select_related('organization')
+        else:
+            return super().get_queryset().select_related('organization')
 
 
 

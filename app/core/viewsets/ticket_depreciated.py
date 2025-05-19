@@ -3,7 +3,7 @@ from api.viewsets.common import ModelViewSet
 
 from access.models.tenant import Tenant as Organization
 
-from assistance.serializers.request import (
+from assistance.serializers.request import (    # pylint: disable=W0611:unused-import
     RequestAddTicketModelSerializer,
     RequestChangeTicketModelSerializer,
     RequestTriageTicketModelSerializer,
@@ -16,7 +16,7 @@ from core.serializers.ticket_depreciated import (
     Ticket,
 )
 
-from itim.serializers.change import (
+from itim.serializers.change import (    # pylint: disable=W0611:unused-import
     ChangeAddTicketModelSerializer,
     ChangeChangeTicketModelSerializer,
     ChangeImportTicketModelSerializer,
@@ -25,7 +25,7 @@ from itim.serializers.change import (
     ChangeTicketViewSerializer,
 )
 
-from itim.serializers.incident import (
+from itim.serializers.incident import (    # pylint: disable=W0611:unused-import
     IncidentAddTicketModelSerializer,
     IncidentChangeTicketModelSerializer,
     IncidentImportTicketModelSerializer,
@@ -34,7 +34,7 @@ from itim.serializers.incident import (
     IncidentTicketViewSerializer,
 )
 
-from itim.serializers.problem import (
+from itim.serializers.problem import (    # pylint: disable=W0611:unused-import
     ProblemAddTicketModelSerializer,
     ProblemChangeTicketModelSerializer,
     ProblemImportTicketModelSerializer,
@@ -43,7 +43,7 @@ from itim.serializers.problem import (
     ProblemTicketViewSerializer,
 )
 
-from project_management.serializers.project_task import (
+from project_management.serializers.project_task import (    # pylint: disable=W0611:unused-import
     ProjectTaskAddTicketModelSerializer,
     ProjectTaskChangeTicketModelSerializer,
     ProjectTaskImportTicketModelSerializer,
@@ -51,8 +51,6 @@ from project_management.serializers.project_task import (
     ProjectTaskTicketModelSerializer,
     ProjectTaskTicketViewSerializer,
 )
-
-from settings.models.user_settings import UserSettings
 
 
 

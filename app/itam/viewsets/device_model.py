@@ -4,13 +4,11 @@ from api.viewsets.common import ModelViewSet
 
 # THis import only exists so that the migrations can be created
 from itam.models.device_model_history import DeviceModelHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.device_model import (
+from itam.serializers.device_model import (    # pylint: disable=W0611:unused-import
     DeviceModel,
     DeviceModelModelSerializer,
     DeviceModelViewSerializer
 )
-
-from api.views.mixin import OrganizationPermissionAPI
 
 
 

@@ -5,7 +5,7 @@ from drf_spectacular.utils import (
     PolymorphicProxySerializer,
 )
 
-from assistance.serializers.request import (
+from assistance.serializers.request import (    # pylint: disable=W0611:unused-import
     RequestAddTicketModelSerializer,
     RequestChangeTicketModelSerializer,
     RequestTriageTicketModelSerializer,
@@ -15,8 +15,6 @@ from assistance.serializers.request import (
 )
 
 from core.viewsets.ticket_depreciated import TicketViewSet
-
-from settings.models.user_settings import UserSettings
 
 
 

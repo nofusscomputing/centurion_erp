@@ -1,16 +1,13 @@
 import json
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
-
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-from api.viewsets.common import ModelViewSet
 
-from core.fields.icon import Icon, IconField
+from core.fields.icon import IconField
 
 from itam.models.device import Device
 from itam.serializers.device_model import DeviceModelBaseSerializer
