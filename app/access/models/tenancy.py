@@ -311,7 +311,7 @@ class TenancyObject(SaveHistory):
 
         if(
             not getattr(self, 'organization', None)
-            and self._meta.model_name !='appsettingsaudithistory'    # App Settings for
+            and self._meta.model_name !='appsettingshistory'    # App Settings for
         ):
 
             raise centurion_exceptions.ValidationError(
