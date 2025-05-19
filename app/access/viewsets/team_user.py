@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from access.models.team import Team
 
-from access.serializers.team_user import (
+from access.serializers.team_user import (    # pylint: disable=W0611:unused-import
     TeamUsers,
     TeamUserModelSerializer,
     TeamUserViewSerializer

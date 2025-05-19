@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from core.models.manufacturer_history import Manufacturer, ManufacturerHistory
 from core.tests.abstract.test_unit_model_history_api_v2 import PrimaryModelHistoryAPI
 
 from devops.models.feature_flag_history import FeatureFlag, FeatureFlagHistory

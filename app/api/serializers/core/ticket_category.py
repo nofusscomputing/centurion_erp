@@ -1,11 +1,6 @@
-from django.urls import reverse
-
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from api.serializers.core.ticket_comment import TicketCommentSerializer
-
-from core.forms.validate_ticket import TicketValidation
 from core.models.ticket.ticket_category import TicketCategory
 
 

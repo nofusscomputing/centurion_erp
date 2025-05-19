@@ -2,11 +2,9 @@ from drf_spectacular.utils import extend_schema_serializer
 
 from rest_framework import serializers
 
-from api.serializers import common
-
 from devops.models.git_group import GitGroup
 from devops.models.git_repository.github import GitHubRepository
-from devops.serializers.git_repository.base import (
+from devops.serializers.git_repository.base import (    # pylint: disable=W0611:unused-import
     BaseSerializer,
     ModelSerializer as GitModelSerializer,
     ViewSerializer as GitViewSerializer

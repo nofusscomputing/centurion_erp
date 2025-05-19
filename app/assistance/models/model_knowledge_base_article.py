@@ -2,9 +2,6 @@ import importlib
 
 from django.apps import apps
 from django.db import models
-from django.forms import ValidationError
-
-from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models.tenancy import TenancyObject

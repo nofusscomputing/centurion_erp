@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 # THis import only exists so that the migrations can be created
 from itam.models.operating_system_history import OperatingSystemHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.operating_system import (
+from itam.serializers.operating_system import (    # pylint: disable=W0611:unused-import
     OperatingSystem,
     OperatingSystemModelSerializer,
     OperatingSystemViewSerializer

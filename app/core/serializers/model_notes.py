@@ -1,5 +1,4 @@
 from django.contrib.auth.models import ContentType
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer

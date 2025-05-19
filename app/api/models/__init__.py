@@ -1,1 +1,1 @@
-from . import tokens
+from . import tokens    # pylint: disable=W0611:unused-import

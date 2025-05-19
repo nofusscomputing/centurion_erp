@@ -4,7 +4,7 @@ from api.viewsets.common import ModelRetrieveUpdateViewSet
 
 # This import only exists so that the migrations can be created
 from settings.models.app_settings_history import AppSettingsHistory    # pylint: disable=W0611:unused-import
-from settings.serializers.app_settings import (
+from settings.serializers.app_settings import (    # pylint: disable=W0611:unused-import
     AppSettings,
     AppSettingsModelSerializer,
     AppSettingsViewSerializer

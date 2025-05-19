@@ -3,8 +3,6 @@ from rest_framework.fields import empty
 
 from core.classes.badge import Badge
 
-from core.fields.icon import Icon, IconField
-
 
 
 class BadgeField(serializers.DictField):

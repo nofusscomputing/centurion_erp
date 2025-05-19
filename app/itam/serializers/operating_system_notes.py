@@ -1,8 +1,4 @@
-
-from centurion.serializers.user import UserBaseSerializer
-
 from core.serializers.model_notes import (
-    ModelNotes,
     ModelNoteBaseSerializer,
     ModelNoteModelSerializer,
     ModelNoteViewSerializer

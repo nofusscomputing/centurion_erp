@@ -1,5 +1,5 @@
 
-from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property

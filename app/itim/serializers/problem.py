@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from centurion.serializers.user import UserBaseSerializer
-
 from core.models.ticket.ticket_category import TicketCategory
 from core.serializers.ticket_depreciated import (
     Ticket,
