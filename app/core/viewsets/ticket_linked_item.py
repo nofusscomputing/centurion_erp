@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from api.views.mixin import OrganizationPermissionAPI
 from api.viewsets.common import ModelViewSet
 
 from assistance.models.knowledge_base import KnowledgeBase
@@ -9,7 +8,7 @@ from config_management.models.groups import ConfigGroups
 
 from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket.ticket_comment_category import TicketCommentCategory
-from core.serializers.ticket_linked_item import (
+from core.serializers.ticket_linked_item import (    # pylint: disable=W0611:unused-import
     Ticket,
     TicketLinkedItem,
     TicketLinkedItemModelSerializer,

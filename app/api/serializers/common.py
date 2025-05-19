@@ -4,8 +4,6 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import Tenant
 
-from assistance.models.model_knowledge_base_article import all_models
-
 from core import fields as centurion_field
 from core.lib.feature_not_used import FeatureNotUsed
 

@@ -9,8 +9,8 @@ from access.models.tenant import Tenant as Organization
 
 from centurion.tests.abstract.mock_view import MockView
 
+from core.models.ticket.ticket import Ticket
 from core.serializers.ticket_related import (
-    Ticket,
     RelatedTickets,
     RelatedTicketModelSerializer,
 )

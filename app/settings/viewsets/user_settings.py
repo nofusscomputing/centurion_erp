@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelRetrieveUpdateViewSet
 
-from settings.serializers.user_settings import (
+from settings.serializers.user_settings import (    # pylint: disable=W0611:unused-import
     UserSettings,
     UserSettingsModelSerializer,
     UserSettingsViewSerializer

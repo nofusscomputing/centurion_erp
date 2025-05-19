@@ -1,11 +1,11 @@
-from django.core.exceptions import (
+from django.core.exceptions import (    # pylint: disable=W0611:unused-import
     ObjectDoesNotExist
 )
 
-from django.http import Http404
+from django.http import Http404    # pylint: disable=W0611:unused-import
 
 from rest_framework import exceptions, status
-from rest_framework.exceptions import (
+from rest_framework.exceptions import (    # pylint: disable=W0611:unused-import
     MethodNotAllowed,
     NotFound,
     NotAuthenticated,

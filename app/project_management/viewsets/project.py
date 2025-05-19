@@ -1,18 +1,16 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from access.models.tenant import Tenant
 from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from project_management.models.project_history import ProjectHistory    # pylint: disable=W0611:unused-import
-from project_management.serializers.project import (
+from project_management.serializers.project import (    # pylint: disable=W0611:unused-import
     Project,
     ProjectImportSerializer,
     ProjectModelSerializer,
     ProjectViewSerializer,
-    Organization,
 )
-
-from settings.models.user_settings import UserSettings
 
 
 
@@ -88,7 +86,7 @@ class ViewSet( ModelViewSet ):
 
             organization = int(self.request.data['organization'])
 
-            organization = Organization.objects.get( pk = organization )
+            organization = Tenant.objects.get( pk = organization )
 
         elif self.queryset:
         

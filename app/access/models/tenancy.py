@@ -1,4 +1,3 @@
-import django
 import logging
 
 from django.db import models

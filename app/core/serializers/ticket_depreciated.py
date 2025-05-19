@@ -14,7 +14,7 @@ from core import exceptions as centurion_exception
 from core import fields as centurion_field
 from core.models.ticket.ticket import Ticket
 
-from core.fields.badge import Badge, BadgeField
+from core.fields.badge import BadgeField
 from core.serializers.ticket_category import TicketCategoryBaseSerializer
 
 from project_management.serializers.project import ProjectBaseSerializer
@@ -232,11 +232,10 @@ class TicketModelSerializer(
                 if self.instance.project is None:
 
                     raise centurion_exception.ValidationError(
-                        details = 'Milestones require a project',
+                        detail = 'Milestones require a project',
                         code = 'milestone_requires_project',
                     )
 
-                    return False
 
                 if self.instance.project.id == self.instance.milestone.project.id:
 

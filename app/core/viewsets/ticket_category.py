@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # THis import only exists so that the migrations can be created
 from core.models.ticket.ticket_category_history import TicketCategoryHistory    # pylint: disable=W0611:unused-import
-from core.serializers.ticket_category import (
+from core.serializers.ticket_category import (    # pylint: disable=W0611:unused-import
     TicketCategory,
     TicketCategoryModelSerializer,
     TicketCategoryViewSerializer

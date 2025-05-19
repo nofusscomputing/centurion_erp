@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from config_management.serializers.config_group_software import (
+from config_management.serializers.config_group_software import (    # pylint: disable=W0611:unused-import
     ConfigGroupSoftware,
     ConfigGroupSoftwareModelSerializer,
     ConfigGroupSoftwareViewSerializer
