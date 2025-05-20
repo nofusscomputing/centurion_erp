@@ -3,15 +3,11 @@ from django.contrib.auth.models import ContentType
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from rest_framework.reverse import reverse
-from access.models.tenant import Tenant
-
 from core.models.centurion import (
     CenturionModel,
     CenturionSubModel,
 )
 
-from core.lib.feature_not_used import FeatureNotUsed
 
 
 
