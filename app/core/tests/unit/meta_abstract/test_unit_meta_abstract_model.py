@@ -3,11 +3,12 @@ import pytest
 
 @pytest.mark.models
 class MetaAbstractModelTestCases:
-    pass
+    
 
-    @pytest.fixture( scope = 'class', autouse = True)
-    def setup_class(cls, model):
-        pass
+    # @pytest.fixture( scope = 'class', autouse = True)
+    # def setup_class(cls, model):
+    #     
+    pass
 
 
     # check models with model._audit_enabled=True have a model created

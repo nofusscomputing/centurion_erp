@@ -1,14 +1,14 @@
-import pytest
+# import pytest
 
-from core.models.centurion import CenturionModel
+# from core.models.centurion import CenturionModel
 
 
 
-@pytest.fixture( scope = 'class')
-def model(request):
+# @pytest.fixture( scope = 'class')
+# def model(request):
 
-    request.cls.model = CenturionModel
+#     request.cls.model = CenturionModel
 
-    yield request.cls.model
+#     yield request.cls.model
 
-    del request.cls.model
+#     del request.cls.model
