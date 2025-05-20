@@ -65,8 +65,10 @@ ignore = [
     "conftest.py",
     "CVS",
     "docs",
+    "forms",         # Not required for API app
     "migrations",
     "tests",
+    "views",         # Not required for API app
 ]
 
 # Add files or directories matching the regular expressions patterns to the
@@ -848,6 +850,7 @@ enable = [
     "deprecated-attribute",
     "deprecated-argument",
     "import-self",
+    "unused-import",
 
 ]
 
