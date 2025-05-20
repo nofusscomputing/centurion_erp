@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.timezone import now
 
+
+
 class AutoCreatedField(models.DateTimeField):
     """
     A DateTimeField that automatically populates itself at
@@ -49,7 +51,7 @@ class AutoLastModifiedField(AutoCreatedField):
 
     def pre_save(self, model_instance, add):
 
-        value = now()
+        value = now().replace(microsecond=0)
 
         setattr(model_instance, self.attname, value)
 
