@@ -4,10 +4,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 from rest_framework.reverse import reverse
-
-from access.fields import AutoCreatedField
 from access.models.tenant import Tenant
-from access.models.tenancy import TenancyObject
 
 from core.models.centurion import (
     CenturionModel,
@@ -20,7 +17,6 @@ from core.lib.feature_not_used import FeatureNotUsed
 
 class CenturionAudit(
     CenturionModel,
-    TenancyObject,
 ):
     """Centurion Audit History
 
@@ -28,7 +24,6 @@ class CenturionAudit(
     model history is via the `delete` and `save` signals
 
     Args:
-        ModelHistoryOld (_type_): Old Model attributes and functions due for removal.
         CenturionModel (_type_): Centurion Model attributes, functions and method
         TenancyObject (_type_): Centurion Tenancy Abstract model.
     """
@@ -43,7 +38,7 @@ class CenturionAudit(
     class Meta:
 
         # db_table = 'centurion_audit'
-        db_table = 'core_model_history'
+        db_table = 'core_audithistory'
 
         ordering = [
             '-created'
@@ -54,36 +49,15 @@ class CenturionAudit(
         verbose_name_plural = 'Model Histories'
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of the item',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    organization = models.ForeignKey(
-        Tenant,
-        blank = False,
-        help_text = 'Tenancy this belongs to',
-        null = True,
-        on_delete = models.CASCADE,
-        related_name = '+',
-        # validators = [
-        #     CenturionModel.validate_field_not_none,
-        # ],
-        verbose_name = 'Tenant'
-    )
-
     content_type = models.ForeignKey(
         ContentType,
         blank= True,
         help_text = 'Model this history is for',
         null = False,
         on_delete = models.CASCADE,
-        # validators = [
-        #     CenturionModel.validate_field_not_none,
-        # ],
+        validators = [
+            CenturionModel.validate_field_not_none,
+        ],
         verbose_name = 'Content Model'
     )
 
@@ -92,9 +66,9 @@ class CenturionAudit(
         default = None,
         help_text = 'Value before Change',
         null = True,
-        # validators = [
-        #     CenturionModel.validate_field_not_none,
-        # ],
+        validators = [
+            CenturionModel.validate_field_not_none,
+        ],
         verbose_name = 'Before'
     )
 
@@ -104,9 +78,9 @@ class CenturionAudit(
         default = None,
         help_text = 'Value Change to',
         null = True,
-        # validators = [
-        #     CenturionModel.validate_field_not_none,
-        # ],
+        validators = [
+            CenturionModel.validate_field_not_none,
+        ],
         verbose_name = 'After'
     )
 
@@ -122,9 +96,9 @@ class CenturionAudit(
         default = None,
         help_text = 'History action performed',
         null = True,
-        # validators = [
-        #     CenturionModel.validate_field_not_none,
-        # ],
+        validators = [
+            CenturionModel.validate_field_not_none,
+        ],
         verbose_name = 'Action'
     )
 
@@ -134,14 +108,10 @@ class CenturionAudit(
         help_text = 'User whom performed the action',
         null = True,
         on_delete = models.DO_NOTHING,
-        # validators = [
-        #     CenturionModel.validate_field_not_none,
-        # ],
+        validators = [
+            CenturionModel.validate_field_not_none,
+        ],
         verbose_name = 'User'
-    )
-
-    created = AutoCreatedField(
-        editable = True
     )
 
 
@@ -163,13 +133,6 @@ class CenturionAudit(
 
 
     def clean_fields(self, exclude = None):
-
-        if not self.get_model_history():
-
-            raise ValidationError(
-                code = 'did_not_process_history',
-                message = 'Unable to process the history.'
-            )
 
         super().clean_fields(exclude = exclude)
 
@@ -230,6 +193,21 @@ class AuditMetaModel(
 ):
 
 
-        class Meta:
-            abstract = True
-            proxy = False
+    class Meta:
+        abstract = True
+        proxy = False
+
+
+
+    def clean_fields(self, exclude = None):
+
+        if hasattr(self, 'model'):
+
+            if not self.get_model_history(self.model):
+
+                raise ValidationError(
+                    code = 'did_not_process_history',
+                    message = 'Unable to process the history.'
+                )
+
+        super().clean_fields(exclude = exclude)
