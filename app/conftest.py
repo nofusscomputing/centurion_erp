@@ -206,6 +206,10 @@ def pytest_generate_tests(metafunc):
 
                                 ids_name += '_' + getattr(item[1][key], '__name__', 'err_generate_tests').lower()
 
+                            elif callable(item[1][key]):
+
+                                ids_name  += '_' + item[1][key].__name__
+
                             else:
 
                                 ids_name += '_' + str(item[1][key]).lower()
