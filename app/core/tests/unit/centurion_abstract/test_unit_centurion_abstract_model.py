@@ -4,9 +4,10 @@ import pytest
 @pytest.mark.models
 class CenturionAbstractModelTestCases:
 
-    @pytest.fixture( scope = 'class', autouse = True)
-    def setup_class(cls, model):
-        pass
+    # @pytest.fixture( scope = 'class', autouse = True)
+    # def setup_class(cls, model):
+    #     pass
+    pass
 
 
 
