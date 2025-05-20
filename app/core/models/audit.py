@@ -128,9 +128,28 @@ class CenturionAudit(
 
 
 
-    def clean_fields(self, exclude = None):
+    def clean_fields(self, exclude: set = None):
+        """Clean Model Fields
 
-        super().clean_fields(exclude = exclude)
+        The Audit Sub-Model that inherits from this model must implement this
+        method so as to populate the history fields with the history data.
+
+        Args:
+            exclude (set, optional): List of fields to exclude. Defaults to
+                None.
+
+        Raises:
+            NotImplementedError: The Audit sub-model that inheirts has failed
+                to implement this method.
+        """
+
+        if not isinstance(self, CenturionAudit):
+
+            raise NotImplementedError(
+                'Audit sub models must implement this method to populate fields'
+            )
+
+        super().clean_fields( exclude = exclude )
 
 
 
