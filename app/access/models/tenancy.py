@@ -118,8 +118,9 @@ class TenancyManager(models.Manager):
 
         if has_tenant_field:
             return super().get_queryset().select_related('organization')
-        else:
-            return super().get_queryset().select_related('organization')
+
+
+        return super().get_queryset()
 
 
 
