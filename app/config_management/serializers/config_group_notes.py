@@ -1,11 +1,4 @@
-from rest_framework import serializers
-
-from api.serializers import common
-
-from app.serializers.user import UserBaseSerializer
-
 from core.serializers.model_notes import (
-    ModelNotes,
     ModelNoteBaseSerializer,
     ModelNoteModelSerializer,
     ModelNoteViewSerializer

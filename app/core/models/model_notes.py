@@ -4,20 +4,10 @@ from django.conf import settings
 from django.contrib.auth.models import ContentType
 from django.db import models
 
-from rest_framework.reverse import reverse
-
 from access.fields import *
 from access.models.tenancy import TenancyObject
 
-from config_management.models.groups import ConfigGroups
-
 from core.lib.feature_not_used import FeatureNotUsed
-
-from itam.models.device import Device
-from itam.models.software import Software
-from itam.models.operating_system import OperatingSystem
-
-from itim.models.services import Service
 
 User = django.contrib.auth.get_user_model()
 

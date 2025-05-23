@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import Organization, TenantBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from access.serializers.teams import TeamBaseSerializer
 

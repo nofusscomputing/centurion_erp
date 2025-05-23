@@ -3,11 +3,8 @@ import re
 from django.conf import settings
 from django.utils.encoding import force_str
 
-from django.contrib.auth.models import ContentType, Permission
-
 from rest_framework import serializers
 from rest_framework_json_api.metadata import JSONAPIMetadata
-from rest_framework.request import clone_request
 from rest_framework.reverse import reverse
 from rest_framework.utils.field_mapping import ClassLookupDict
 
@@ -15,7 +12,7 @@ from rest_framework_json_api.utils import get_related_resource_type
 
 from access.models.tenant import Tenant
 
-from app.serializers.user import User, UserBaseSerializer
+from centurion.serializers.user import User, UserBaseSerializer
 
 from core import fields as centurion_field
 from core.fields.badge import BadgeField

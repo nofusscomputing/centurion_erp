@@ -1,7 +1,6 @@
 from django.urls import path
 
-from . import views
-from .views import device, device_type, software, software_category, software_version, operating_system, operating_system_version
+from .views import device, software, software_version, operating_system, operating_system_version
 
 app_name = "ITAM"
 urlpatterns = [

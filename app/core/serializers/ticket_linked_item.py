@@ -1,5 +1,3 @@
-from rest_framework.fields import empty
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
@@ -7,7 +5,6 @@ from access.serializers.organization import TenantBaseSerializer
 from assistance.serializers.request import TicketBaseSerializer
 
 from core import fields as centurion_field
-from core.fields.badge import BadgeField
 from core.models.ticket.ticket import Ticket
 from core.models.ticket.ticket_linked_items import TicketLinkedItem
 

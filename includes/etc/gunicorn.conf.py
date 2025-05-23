@@ -9,7 +9,7 @@ from prometheus_client import CollectorRegistry, multiprocess, start_http_server
 
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'centurion.settings')
 
 access_logfile = '-'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" "%({x-forwarded-for}i)s"'

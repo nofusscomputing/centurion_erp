@@ -1,22 +1,12 @@
 from django.contrib.auth.models import ContentType
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
-
-from core.serializers.model_notes import (
+from core.serializers.model_notes import (    # pylint: disable=W0611:unused-import
     ModelNotes,
     ModelNoteModelSerializer,
     ModelNoteViewSerializer
 )
 
 from api.viewsets.common import ModelViewSet
-
-from config_management.models.groups import ConfigGroups
-
-from itam.models.device import Device
-from itam.models.operating_system import OperatingSystem
-from itam.models.software import Software
-
-from itim.models.services import Service
 
 
 

@@ -1,5 +1,4 @@
 from django.db.models import Q
-from django.urls import reverse
 
 from rest_framework import serializers
 

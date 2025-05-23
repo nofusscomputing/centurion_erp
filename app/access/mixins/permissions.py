@@ -1,8 +1,5 @@
 import traceback
 
-from django.core.exceptions import ObjectDoesNotExist
-
-from rest_framework import exceptions
 from rest_framework.permissions import DjangoObjectPermissions
 
 from access.models.tenancy import Tenant, TenancyObject

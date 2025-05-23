@@ -1,13 +1,10 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.forms import ValidationError
 
 from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models.team import Team
 from access.models.tenancy import TenancyObject
 
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model

@@ -3,7 +3,7 @@ from django import forms
 
 from api.models.tokens import AuthToken
 
-from app import settings
+from django.conf import settings
 
 from core.forms.common import CommonModelForm
 

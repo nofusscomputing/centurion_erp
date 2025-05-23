@@ -9,12 +9,10 @@ from django.dispatch import receiver
 from django.forms import ValidationError
 
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from access.fields import *
-from access.models.tenancy import TenancyObject
 
-from app.helpers.merge_software import merge_software
+from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 from core.lib.feature_not_used import FeatureNotUsed

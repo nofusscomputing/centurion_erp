@@ -1,12 +1,11 @@
 from django.contrib.auth.models import ContentType
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from core.models.model_notes import ModelNotes
 

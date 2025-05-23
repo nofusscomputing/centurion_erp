@@ -1,7 +1,6 @@
 from core.models.manufacturer_notes import ManufacturerNotes
 
 from core.serializers.model_notes import (
-    ModelNotes,
     ModelNoteBaseSerializer,
     ModelNoteModelSerializer,
     ModelNoteViewSerializer

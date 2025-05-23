@@ -3,15 +3,14 @@ import re
 
 from django.utils import timezone
 
-from celery import shared_task, current_task
+from celery import shared_task
 from celery.utils.log import get_task_logger
-from celery import states
 
 from access.models.tenant import Tenant as Organization
 
 from itam.serializers.inventory import InventorySerializer
 
-from itam.models.device import Device, DeviceType, DeviceOperatingSystem, DeviceSoftware
+from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
 
@@ -449,5 +448,3 @@ def process_inventory(self, data, organization: int):
         logger.critical('Exception')
 
         raise Exception(e)
-
-        return str(f'Exception Occured: {e}')

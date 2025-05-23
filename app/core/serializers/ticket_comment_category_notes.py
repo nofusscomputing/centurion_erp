@@ -1,7 +1,6 @@
 from core.models.ticket.ticket_comment_category_notes import TicketCommentCategoryNotes
 
 from core.serializers.model_notes import (
-    ModelNotes,
     ModelNoteBaseSerializer,
     ModelNoteModelSerializer,
     ModelNoteViewSerializer

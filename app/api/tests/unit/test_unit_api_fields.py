@@ -11,7 +11,7 @@ from rest_framework.relations import Hyperlink
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from app.tests.common import DoesNotExist
+from centurion.tests.common import DoesNotExist
 
 User = django.contrib.auth.get_user_model()
 

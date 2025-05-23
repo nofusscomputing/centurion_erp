@@ -8,7 +8,7 @@ from api.serializers import common
 
 from core.fields.badge import BadgeField
 
-from devops.models.git_repository.base import GitRepository, GitGroup
+from devops.models.git_repository.base import GitRepository
 from devops.serializers.git_group import BaseSerializer as GitGroupBaseSerializer
 
 

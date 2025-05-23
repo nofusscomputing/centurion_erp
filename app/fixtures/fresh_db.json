@@ -1,0 +1,17 @@
+[
+{
+  "model": "settings.appsettings",
+  "pk": 1,
+  "fields": {
+    "created": "2025-05-23T08:33:31.728Z",
+    "modified": "2025-05-23T08:33:31Z",
+    "owner_organization": null,
+    "device_model_is_global": false,
+    "device_type_is_global": false,
+    "manufacturer_is_global": false,
+    "software_is_global": false,
+    "software_categories_is_global": false,
+    "global_organization": null
+  }
+}
+]

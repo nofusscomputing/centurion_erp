@@ -6,6 +6,7 @@
     ],
     "python.testing.pytestArgs": [
         "--override-ini", "addopts=",
+        "--no-migrations",
         "app",
     ],
     "python.testing.unittestEnabled": false,

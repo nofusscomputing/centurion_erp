@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import OrganizationPermissionMixin
 
-from api.auth import TokenScheme
 from api.react_ui_metadata import ReactUIMetadata
 
 

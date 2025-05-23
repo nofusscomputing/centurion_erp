@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 # THis import only exists so that the migrations can be created
 from itam.models.operating_system_version_history import OperatingSystemVersionHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.operating_system_version import (
+from itam.serializers.operating_system_version import (    # pylint: disable=W0611:unused-import
     OperatingSystem,
     OperatingSystemVersion,
     OperatingSystemVersionModelSerializer,

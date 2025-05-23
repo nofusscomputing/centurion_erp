@@ -35,6 +35,30 @@ docs: docs-lint
 	mkdocs build --clean
 
 
+fixtures:
+	${ACTIVATE_VENV}
+	mv app/db.sqlite3 app/db.sqlite3-current
+	if [ ! -f app/db.sqlite3-current ]; then echo "failed to save current db"; exit 1; fi;
+	python app/manage.py migrate;
+	python app/manage.py dumpdata \
+		--natural-foreign \
+		--natural-primary \
+		--exclude=contenttypes \
+		--exclude=auth.permission \
+		--indent 2 > app/fixtures/fresh_db.json;
+	sqlite3 app/db.sqlite3 .dump | \
+		grep -a -v 'INSERT INTO django_migrations' | \
+		grep -a -v 'INSERT INTO django_content_type' | \
+		grep -a -v 'INSERT INTO auth_permission' | \
+		grep -a -v 'INSERT INTO settings_appsettings' | \
+		grep -a -v 'CREATE UNIQUE INDEX' | \
+		grep -a -v 'CREATE INDEX' \
+		> app/fixtures/fresh_db.sql;
+	rm -f app/db.sqlite3
+	if [ ! -f app/db.sqlite3 ]; then cp app/db.sqlite3-current app/db.sqlite3; fi;
+	if [ -f app/db.sqlite3 ]; then rm -f app/db.sqlite3-current; fi;
+
+
 
 lint: markdown-mkdocs-lint
 
