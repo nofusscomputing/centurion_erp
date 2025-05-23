@@ -27,11 +27,6 @@ class CenturionModel(
     _notes_enabled: bool = True
     """Should a table for notes be created for this model"""
 
-    context: dict = {
-        'logger': None,
-        'request': None,
-    }
-
 
 
     class Meta:
@@ -218,16 +213,10 @@ class CenturionModel(
 
             if self.id:
                 
-                self._before = self.__class__.objects.get( id = self.id ).get_audit_values()
+                self._before = self.objects.get( id = self.id ).get_audit_values()
 
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-
-
-    def validate_constraints(self, exclude = None) -> None:
-
-        super().validate_constraints(exclude = exclude)
 
 
 
