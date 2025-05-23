@@ -1040,6 +1040,11 @@ log_cli_level = 'INFO'
 log_cli_format = '%(asctime)s %(levelname)s %(message)s'
 log_cli_date_format = '%Y-%m-%d %H:%M:%S'
 
+markers = [
+    "models: Selects tests for all models",
+    "unit: All Unit Tests",
+]
+
 # testpaths = [
 #     'tests/*.py',
 # #     'tests/functional/**/*.py',

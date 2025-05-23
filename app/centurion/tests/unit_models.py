@@ -1,5 +1,7 @@
 import pytest
 
+from django.apps import apps
+
 from centurion.tests.unit_class import ClassTestCases
 
 
@@ -74,6 +76,7 @@ class ModelTestCases(
                 class Meta:
                     app_label = 'core'
                     verbose_name = 'mock instance'
+                    managed = False
 
             instance = MockModel()
 
@@ -82,6 +85,10 @@ class ModelTestCases(
             instance = model()
 
         yield instance
+
+        del instance
+
+        del apps.all_models['core']['mockmodel']
 
 
 
