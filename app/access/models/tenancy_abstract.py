@@ -78,7 +78,7 @@ class TenancyAbstractModel(
 
     context: dict = {
         'logger': None,
-        'request': None,
+        'user': None,
     }
     """ Model Context
 
