@@ -70,13 +70,7 @@ class CenturionModel(
 
 
 
-    def clean_fields(self, exclude=None) -> None:
-
-        super().clean_fields(exclude = exclude)
-
-
-
-    def delete(self, using = None, keep_parents = _is_submodel):
+    def delete(self, using = None, keep_parents = None):
         """Delete Centurion Model
 
         If a model has `_audit_enabled = True`, audit history is populated and
@@ -88,11 +82,14 @@ class CenturionModel(
                 value if is_submodel so as not to delete parent models.
         """
 
+        if keep_parents is None:
+            keep_parents = self._is_submodel
+
         if self._audit_enabled:
 
             self._after = {}
 
-            self._before = self.__class__.objects.get( id = self.id ).get_audit_values()
+            self._before = self.objects.get( id = self.id ).get_audit_values()
 
 
         super().delete(using = using, keep_parents = keep_parents)
