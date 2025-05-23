@@ -1,7 +1,11 @@
 import datetime
 import pytest
+import os
+import sqlite3
 import sys
 
+from django.core.management import call_command
+from django.conf import settings
 from django.test import (
     TestCase
 )
@@ -10,12 +14,36 @@ from access.models.tenant import Tenant
 
 
 
-def pytest_configure(config):
+@pytest.fixture(scope="session", autouse = True)
+def load_sqlite_fixture(django_db_setup, django_db_blocker):
+    """
+    Load the SQLite database from an SQL dump file.
+    This runs during test setup and loads the schema and data via SQLite directly.
+    """
+    db_path = settings.DATABASES['default']['NAME']
+    sql_file_path = os.path.join('app/fixtures', 'fresh_db.sql')
 
-    print("\n--- Pytest Launch Arguments ---")
+
+    with django_db_blocker.unblock():
+        with open(sql_file_path, 'r') as f:
+            sql_script = f.read()
+        conn = sqlite3.connect(db_path)
+        try:
+            conn.executescript(sql_script)
+        finally:
+            conn.close()
+
+    
+    with django_db_blocker.unblock():
+
+        call_command('loaddata','fresh_db')
+
+
+
+def pytest_report_header(config):
+
     print(f"Command-line arguments: {config.invocation_params.args}")
     print(f"Config file options: {config.getini('addopts')}")
-    print("\n-------------------------------")
 
 
 def pytest_pycollect_makeitem(collector, name, obj):
@@ -205,6 +233,10 @@ def pytest_generate_tests(metafunc):
                             if type(item[1][key]) is type:
 
                                 ids_name += '_' + getattr(item[1][key], '__name__', 'err_generate_tests').lower()
+
+                            elif callable(item[1][key]):
+
+                                ids_name  += '_' + item[1][key].__name__
 
                             else:
 
@@ -496,7 +528,10 @@ def organization_one(django_db_blocker):
 
     with django_db_blocker.unblock():
 
-        item.delete()
+        try:
+            item.delete()
+        except:
+            pass
 
 
 

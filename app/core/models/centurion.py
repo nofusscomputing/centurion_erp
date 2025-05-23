@@ -2,6 +2,9 @@ from django.conf import settings
 from django.core.exceptions import (
     ValidationError
 )
+from django.db import models
+
+from access.fields import AutoCreatedField
 
 from rest_framework.reverse import reverse
 
@@ -11,7 +14,6 @@ from access.models.tenancy_abstract import TenancyAbstractModel
 
 class CenturionModel(
     TenancyAbstractModel,
-    # models.Model
 ):
 
 
@@ -25,21 +27,33 @@ class CenturionModel(
     _notes_enabled: bool = True
     """Should a table for notes be created for this model"""
 
-    context: dict = {
-        'logger': None,
-        'request': None,
-    }
-    """ Model Context
-
-    **ToDo:** Drop request and add user when user model refactored with tenancy.
-
-    Context for actions within the model.
-    """
 
 
     class Meta:
 
         abstract = True
+
+
+    id = models.AutoField(
+        blank=False,
+        help_text = 'ID of the item',
+        primary_key=True,
+        unique=True,
+        verbose_name = 'ID'
+    )
+
+
+    model_notes = models.TextField(
+        blank = True,
+        help_text = 'Tid bits of information',
+        null = True,
+        verbose_name = 'Notes',
+    )
+
+
+    created = AutoCreatedField(
+        editable = True
+    )
 
 
     @staticmethod
@@ -51,13 +65,7 @@ class CenturionModel(
 
 
 
-    def clean_fields(self, exclude=None) -> None:
-
-        super().clean_fields(exclude = exclude)
-
-
-
-    def delete(self, using = None, keep_parents = _is_submodel):
+    def delete(self, using = None, keep_parents = None):
         """Delete Centurion Model
 
         If a model has `_audit_enabled = True`, audit history is populated and
@@ -69,11 +77,14 @@ class CenturionModel(
                 value if is_submodel so as not to delete parent models.
         """
 
+        if keep_parents is None:
+            keep_parents = self._is_submodel
+
         if self._audit_enabled:
 
             self._after = {}
 
-            self._before = self.__class__.objects.get( id = self.id ).get_audit_values()
+            self._before = self.objects.get( id = self.id ).get_audit_values()
 
 
         super().delete(using = using, keep_parents = keep_parents)
@@ -110,20 +121,14 @@ class CenturionModel(
 
         clean_data: dict = {}
 
-        for name, data in data.items():
+        for field in self._meta.fields:
 
-            for field in self._meta.fields:
-
-                if name == field.name:
-
-                    clean_data.update({
-                        name: data
-                    })
-
-                    break
+            clean_data.update({
+                field.name: getattr(self, field.name)
+            })
 
 
-        return data
+        return clean_data
 
 
 
@@ -208,16 +213,10 @@ class CenturionModel(
 
             if self.id:
                 
-                self._before = self.__class__.objects.get( id = self.id ).get_audit_values()
+                self._before = self.objects.get( id = self.id ).get_audit_values()
 
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-
-
-    def validate_constraints(self, exclude = None) -> None:
-
-        super().validate_constraints(exclude = exclude)
 
 
 

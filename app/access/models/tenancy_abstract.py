@@ -1,5 +1,3 @@
-import logging
-
 from django.core.exceptions import (
     ValidationError,
 )
@@ -28,65 +26,40 @@ class TenancyManager(
             (queryset): **not super user**: return data from the stored unique organizations.
         """
 
-        # user = None    # When CenturionUser in use
-
-        # if hasattr(self.model, 'context'):
-
-        #     user = self.model.context['user']
-
-
-        # if user:
-
-        #     tencies = user.get_tenancies(int_list = True)
-
-        #     if len(tenancies) > 0 and not request.user.is_superuser:
-
-        #         if hasattr(self.model, 'organization'):
-        #             return super().get_queryset().select_related('organization').filter(
-        #                 models.Q(organization__in = tenancies)
-        #             )
-
-        #         return super().get_queryset().select_related('organization').filter(
-        #             models.Q(organization__in = tenancies)
-        #         )
-
-        request = None
+        user = None    # When CenturionUser in use
 
         if hasattr(self.model, 'context'):
 
-            request = self.model.context['request']
-
-        if request is not None:
-
-            tenancies: list(str()) = []
-
-            if request.app_settings.global_organization:
-
-                tenancies += [ request.app_settings.global_organization.id ]
+            user = self.model.context['user']
 
 
-            if request.user.is_authenticated:
-
-                for team in request.tenancy._user_teams:
-
-                    if team.organization.id in tenancies:
-                        continue
-
-                    tenancies += [ team.organization.id ]
+        has_tenant_field = False
+        if hasattr(self.model, 'organization'):
+            has_tenant_field = True
 
 
-                if len(tenancies) > 0 and not request.user.is_superuser:
+        if user:
 
-                    if hasattr(self.model, 'organization'):
-                        return super().get_queryset().select_related('organization').filter(
-                            models.Q(organization__in = tenancies)
-                        )
+            tencies = user.get_tenancies(int_list = True)
 
+            if len(tenancies) > 0 and not request.user.is_superuser:
+
+                if has_tenant_field:
                     return super().get_queryset().select_related('organization').filter(
                         models.Q(organization__in = tenancies)
                     )
 
-        return super().get_queryset().select_related('organization')
+
+                return super().get_queryset().select_related('organization').filter(
+                    models.Q(organization__in = tenancies)
+                )
+
+
+        if has_tenant_field:
+            return super().get_queryset().select_related('organization')
+
+
+        return super().get_queryset()
 
 
 
@@ -101,6 +74,15 @@ class TenancyAbstractModel(
 
     Raises:
         ValidationError: User failed to supply organization
+    """
+
+    context: dict = {
+        'logger': None,
+        'user': None,
+    }
+    """ Model Context
+
+    Context for actions within the model.
     """
 
     objects = TenancyManager()
@@ -123,15 +105,6 @@ class TenancyAbstractModel(
                 message = 'You must provide an organization'
             )
 
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of the item',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     organization = models.ForeignKey(
         Tenant,
         blank = False,
@@ -143,22 +116,6 @@ class TenancyAbstractModel(
             validatate_organization_exists
         ],
         verbose_name = 'Tenant'
-    )
-
-    is_global = models.BooleanField(
-        blank = False,
-        default = False,
-        help_text = 'Is this a global object?',
-        null = False,
-        verbose_name = 'Global Object'
-    )
-
-    model_notes = models.TextField(
-        blank = True,
-        default = None,                            # ToDo: Remove this field
-        help_text = 'Tid bits of information',
-        null = True,
-        verbose_name = 'Notes',
     )
 
 
