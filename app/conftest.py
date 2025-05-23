@@ -1,12 +1,42 @@
 import datetime
 import pytest
+import os
+import sqlite3
 import sys
 
+from django.core.management import call_command
+from django.conf import settings
 from django.test import (
     TestCase
 )
 
 from access.models.tenant import Tenant
+
+
+
+@pytest.fixture(scope="session", autouse = True)
+def load_sqlite_fixture(django_db_setup, django_db_blocker):
+    """
+    Load the SQLite database from an SQL dump file.
+    This runs during test setup and loads the schema and data via SQLite directly.
+    """
+    db_path = settings.DATABASES['default']['NAME']
+    sql_file_path = os.path.join('app/fixtures', 'fresh_db.sql')
+
+
+    with django_db_blocker.unblock():
+        with open(sql_file_path, 'r') as f:
+            sql_script = f.read()
+        conn = sqlite3.connect(db_path)
+        try:
+            conn.executescript(sql_script)
+        finally:
+            conn.close()
+
+    
+    with django_db_blocker.unblock():
+
+        call_command('loaddata','fresh_db')
 
 
 
