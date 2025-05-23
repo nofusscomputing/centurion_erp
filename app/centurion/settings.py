@@ -80,6 +80,9 @@ FEATURE_FLAG_OVERRIDES = None # Feature Flags to override fetched feature flags
 # PROMETHEUS_METRICS_EXPORT_PORT = 8010
 # PROMETHEUS_METRICS_EXPORT_ADDRESS = ''
 
+FIXTURE_DIRS = [
+    os.path.join(BASE_DIR, 'fixtures')
+]
 
 LOG_FILES = {    # defaults for devopment. docker includes settings has correct locations
     "centurion": "log/centurion.log",
