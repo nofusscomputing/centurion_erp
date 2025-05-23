@@ -126,20 +126,14 @@ class CenturionModel(
 
         clean_data: dict = {}
 
-        for name, data in data.items():
+        for field in self._meta.fields:
 
-            for field in self._meta.fields:
-
-                if name == field.name:
-
-                    clean_data.update({
-                        name: data
-                    })
-
-                    break
+            clean_data.update({
+                field.name: getattr(self, field.name)
+            })
 
 
-        return data
+        return clean_data
 
 
 
