@@ -40,12 +40,10 @@ def load_sqlite_fixture(django_db_setup, django_db_blocker):
 
 
 
-def pytest_configure(config):
+def pytest_report_header(config):
 
-    print("\n--- Pytest Launch Arguments ---")
     print(f"Command-line arguments: {config.invocation_params.args}")
     print(f"Config file options: {config.getini('addopts')}")
-    print("\n-------------------------------")
 
 
 def pytest_pycollect_makeitem(collector, name, obj):
@@ -530,7 +528,10 @@ def organization_one(django_db_blocker):
 
     with django_db_blocker.unblock():
 
-        item.delete()
+        try:
+            item.delete()
+        except:
+            pass
 
 
 
