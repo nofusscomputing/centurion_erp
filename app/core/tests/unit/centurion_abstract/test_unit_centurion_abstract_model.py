@@ -149,7 +149,7 @@ class CenturionAbstractModelTestCases(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         super_delete = mocker.patch('django.db.models.base.Model.delete', return_value = None)
 
@@ -315,7 +315,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance._audit_enabled = True
 
@@ -360,7 +360,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance._is_submodel = True
 
@@ -387,7 +387,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance._is_submodel = False
 
@@ -417,7 +417,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         super_delete = mocker.patch('django.db.models.base.Model.delete', return_value = None)
 
@@ -836,7 +836,7 @@ class CenturionAbstractModelPyTest(
             def get(self, *args, **kwargs):
                 return self.MockObj()
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance.id = 1
 
@@ -879,7 +879,7 @@ class CenturionAbstractModelPyTest(
             def get(self, *args, **kwargs):
                 return self.MockObj()
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance.id = 1
 
