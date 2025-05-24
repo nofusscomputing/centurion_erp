@@ -30,6 +30,7 @@ class CenturionAudit(
     _notes_enabled: bool = False
     """Don't create notes table for istory model"""
 
+    model_notes = None
 
     class Meta:
 
@@ -204,6 +205,7 @@ class AuditMetaModel(
     CenturionSubModel,
 ):
 
+    model_notes = None
 
     class Meta:
         abstract = True
