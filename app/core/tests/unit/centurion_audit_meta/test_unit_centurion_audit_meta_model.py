@@ -13,8 +13,8 @@ from core.tests.unit.centurion_audit.test_unit_centurion_audit_model import (
 
 @pytest.mark.models
 class MetaAbstractModelTestCases(
+    CenturionAuditModelInheritedCases,
     CenturionSubAbstractModelInheritedCases,
-    CenturionAuditModelInheritedCases
 ):
 
     def test_method_centurionauditsub_clean_fields_called(self, mocker, model_instance):

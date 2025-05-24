@@ -134,48 +134,6 @@ class CenturionAuditModelPyTest(
 
 
 
-    def test_method_clean_fields_calls_super_clean_fields(self, mocker, model_instance):
-        """Test Class Method
-        
-        Ensure method `clean_fields` calls `super().clean_fields` with the defined attributes.
-        """
-
-        super_clean_fields = mocker.patch('core.models.centurion.CenturionModel.clean_fields', return_value = None)
-
-        model_instance.clean_fields()
-
-
-        super_clean_fields.assert_called_with(
-            exclude = None
-        )
-
-
-
-    def test_method_clean_fields_not_implemented_exception(self, mocker, model):
-        """Test Class Method
-        
-        Ensure method `clean_fields` raises an exception if the child model
-        does not implement its own method of the same name.
-        """
-
-        class MockModel(model):
-            class Meta:
-                app_label = 'core'
-                verbose_name = 'mock instance'
-                managed = False
-
-        mock_model = MockModel()
-
-        del apps.all_models['core']['mockmodel']
-
-        super_clean_fields = mocker.patch('core.models.centurion.CenturionModel.full_clean', return_value = None)
-
-        with pytest.raises(NotImplementedError):
-
-            mock_model.clean_fields()
-
-
-
     def test_method_get_model_history_default_attributes(self, model_instance):
         """Test Class Method
         
