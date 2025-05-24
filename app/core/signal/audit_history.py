@@ -15,7 +15,7 @@ def audit_history(sender, instance, **kwargs):
 
     if getattr(instance, '_audit_enabled', False):
 
-        audit_model = apps.get_model( instance._meta.object_name + 'AuditHistory')
+        audit_model = apps.get_model( instance._meta.app_label, instance._meta.object_name + 'AuditHistory')
 
         audit_action = audit_model.Actions.UPDATE
 
@@ -34,8 +34,7 @@ def audit_history(sender, instance, **kwargs):
                 app_label = instance._meta.app_label,
                 model = instance._meta.model_name,
             ),
-            before = instance.get_before(),
-            after = instance.get_after(),
             action = audit_action,
-            user = get_request().user
+            user = get_request().user,
+            model = instance,
         )
