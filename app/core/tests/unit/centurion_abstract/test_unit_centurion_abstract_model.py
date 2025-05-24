@@ -31,27 +31,30 @@ class CenturionAbstractModelTestCases(
 
 
 
-    parameterized_class_attributes = {
-        '_audit_enabled': {
-            'type': bool,
-            'value': True,
-        },
-        '_is_submodel': {
-            'type': bool,
-            'value': False,
-        },
-        '_notes_enabled': {
-            'type': bool,
-            'value': True,
-        },
-        'context': {
-            'type': dict,
-            'value': {
-                'logger': None,
-                'user': None,
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {
+            '_audit_enabled': {
+                'type': bool,
+                'value': True,
+            },
+            '_is_submodel': {
+                'type': bool,
+                'value': False,
+            },
+            '_notes_enabled': {
+                'type': bool,
+                'value': True,
+            },
+            'context': {
+                'type': dict,
+                'value': {
+                    'logger': None,
+                    'user': None,
+                }
             }
         }
-    }
 
 
     parameterized_model_fields = {
@@ -209,6 +212,17 @@ class CenturionAbstractModelTestCases(
 class CenturionAbstractModelInheritedCases(
     CenturionAbstractModelTestCases,
 ):
+
+
+    parameterized_class_attributes = {
+        'page_layout': {
+            'type': list,
+        },
+        'table_fields': {
+            'type': list,
+        }
+    }
+
 
 
     def test_model_creation(self, model):
@@ -693,7 +707,7 @@ class CenturionAbstractModelPyTest(
         Ensure method `get_url` calls reverse
         """
 
-        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = None)
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = 'None')
 
         model_instance.id = 1
         url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
@@ -701,6 +715,48 @@ class CenturionAbstractModelPyTest(
         url = model_instance.get_url()
 
         reverse.assert_called_with( url_basename, None, { 'pk': model_instance.id }, None, None )
+
+
+
+    def test_method_get_url_returned_non_relative(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        settings.SITE_URL = 'https://domain.tld'
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        test_value = settings.SITE_URL + site_path
+
+        model_instance.id = 1
+        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
+
+        url = model_instance.get_url( relative = False)
+
+        assert url == test_value
+
+
+
+    def test_method_get_url_returned_relative(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        model_instance.id = 1
+        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        assert url == site_path
 
 
 

@@ -88,7 +88,9 @@ class ModelTestCases(
 
         del instance
 
-        del apps.all_models['core']['mockmodel']
+        if 'mockmodel' in apps.all_models['core']:
+
+            del apps.all_models['core']['mockmodel']
 
 
 

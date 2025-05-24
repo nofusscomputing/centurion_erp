@@ -1,18 +1,31 @@
 import pytest
 
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelTestCases,
+    CenturionAbstractModelInheritedCases,
+)
+
+
 
 @pytest.mark.models
-class CenturionSubAbstractModelTestCases:
+@pytest.mark.unit
+class CenturionSubAbstractModelTestCases(
+    CenturionAbstractModelTestCases
+):
 
-    # @pytest.fixture( scope = 'class', autouse = True)
-    # def setup_class(cls, model):
-    #     pass
-    pass
+
+    parameterized_class_attributes = {
+        '_is_submodel': {
+            'value': True,
+        }
+    }
+
 
 
 
 class CenturionSubAbstractModelInheritedCases(
     CenturionSubAbstractModelTestCases,
+    CenturionAbstractModelInheritedCases,
 ):
 
     pass
@@ -22,4 +35,7 @@ class CenturionSubAbstractModelInheritedCases(
 class CenturionSubAbstractModelPyTest(
     CenturionSubAbstractModelTestCases,
 ):
-    pass
+
+    def test_model_is_abstract(self, model):
+
+        assert model._meta.abstract

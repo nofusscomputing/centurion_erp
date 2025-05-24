@@ -1,10 +1,10 @@
 import pytest
 
-from core.models.audit import CenturionAudit
+from core.models.audit import AuditMetaModel
 
 
 
 @pytest.fixture( scope = 'class')
 def model(request):
 
-    yield CenturionAudit
+    yield AuditMetaModel

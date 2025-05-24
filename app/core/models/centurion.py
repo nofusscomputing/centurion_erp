@@ -180,7 +180,7 @@ class CenturionModel(
 
         url = reverse( viewname = url_basename, kwargs = { 'pk': self.id } )
 
-        if relative:
+        if not relative:
 
             url = settings.SITE_URL + url
 

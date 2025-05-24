@@ -1,4 +1,5 @@
 import datetime
+import django
 import pytest
 import os
 import sqlite3
@@ -12,7 +13,7 @@ from django.test import (
 
 from access.models.tenant import Tenant
 
-
+User = django.contrib.auth.get_user_model()
 
 @pytest.fixture(scope="session", autouse = True)
 def load_sqlite_fixture(django_db_setup, django_db_blocker):
@@ -726,3 +727,23 @@ def fake_view():
     yield fake_view
 
     del fake_view
+
+
+
+@pytest.fixture(scope = 'class')
+def user(django_db_blocker):
+
+    with django_db_blocker.unblock():
+
+        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+
+        user = User.objects.create(
+            username="test_user-" + random_str,
+            password="password"
+        )
+
+    yield user
+
+    with django_db_blocker.unblock():
+
+        user.delete()
