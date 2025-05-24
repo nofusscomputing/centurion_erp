@@ -83,10 +83,21 @@ class CenturionAuditModelTestCases(
 
         with django_db_blocker.unblock():
 
-            content_type = ContentType.objects.get(
-                app_label = model._meta.app_label,
-                model = model._meta.model_name,
-            )
+            try:
+
+                content_type = ContentType.objects.get(
+                    app_label = model._meta.app_label,
+                    model = model._meta.model_name,
+                )
+
+            except ContentType.DoesNotExist:
+                # Enable Abstract models to be tested
+
+                content_type = ContentType.objects.get(
+                    pk = 1,
+                )
+
+
 
         self.kwargs_create_item.update({
             'content_type': content_type,
