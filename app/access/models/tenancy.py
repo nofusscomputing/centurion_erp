@@ -255,7 +255,7 @@ class TenancyObject(SaveHistory):
 
         if self.app_namespace:
 
-            app_namespace = self.app_namespace + ':'
+            app_namespace = self.app_namespace
 
         return str(app_namespace)
 
@@ -274,12 +274,17 @@ class TenancyObject(SaveHistory):
 
         model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
 
+        namespace = f'v2'
+
+        if self.get_app_namespace():
+            namespace = namespace + ':' + self.get_app_namespace()
+
 
         if request:
 
-            return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
+            return reverse(f"{namespace}:_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
 
-        return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
+        return reverse(f"{namespace}:_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
 
 
     def get_url_kwargs(self) -> dict:

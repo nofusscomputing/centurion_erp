@@ -131,7 +131,7 @@ Within All of our models including when they are created via an API serializer, 
     You have defined a model that has a user field that must always have a value. This model can be access via the API, in which the user field is auto-populated by object `request.user`. In the same token you have admin commands that uses this model.
     Now every time you use the admin command to create this model, it will fail validation due to there being no value for the user field. This is where the models validator methods come into play. defining method `clean()` within the model with the logic required to ensure that the user field has value for the user field ensures that the model now when used by the admin command is consistant and meets the intent of the models purpose.
 
-Whilst most data that will use a model will be via an API Serializer, which in turn has its own validation. The models Validation is only to serve the purpose of ensuring data consistancy. 
+Whilst most data that will use a model will be via an API Serializer, which in turn has its own validation. The models Validation is only to serve the purpose of ensuring data consistancy.
 
 
 ## page_layout Attribute
@@ -223,7 +223,7 @@ table_fields: list = [
 
         - adding `model.save()` method
 
-    - Do 
+    - Do
 
         - Add `model.clean()` To set/modify any field values, _if required_
 
