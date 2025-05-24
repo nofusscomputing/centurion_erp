@@ -145,21 +145,21 @@ class CenturionAudit(
             Fail (bool): History fields not populated
         """
 
-        if not hasattr(model, 'before'):
+        if not hasattr(model, '_before'):
 
             raise ValidationError(
                 code = 'model_missing_before_data',
                 message = 'Unable to save model history as the "before" data is missing.'
             )
 
-        if not hasattr(model, 'after'):
+        if not hasattr(model, '_after'):
 
             raise ValidationError(
                 code = 'model_missing_after_data',
                 message = 'Unable to save model history as the "after" data is missing.'
             )
 
-        if model.before == model.after:
+        if model._before == model._after:
 
             raise ValidationError(
                 code = 'before_and_after_same',
