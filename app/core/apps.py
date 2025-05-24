@@ -8,3 +8,4 @@ class CoreConfig(AppConfig):
     def ready(self):
 
         import core.models.meta
+        from core.signal import audit_history
