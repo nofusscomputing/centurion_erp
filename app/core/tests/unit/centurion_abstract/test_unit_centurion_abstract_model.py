@@ -31,27 +31,30 @@ class CenturionAbstractModelTestCases(
 
 
 
-    parameterized_class_attributes = {
-        '_audit_enabled': {
-            'type': bool,
-            'value': True,
-        },
-        '_is_submodel': {
-            'type': bool,
-            'value': False,
-        },
-        '_notes_enabled': {
-            'type': bool,
-            'value': True,
-        },
-        'context': {
-            'type': dict,
-            'value': {
-                'logger': None,
-                'user': None,
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {
+            '_audit_enabled': {
+                'type': bool,
+                'value': True,
+            },
+            '_is_submodel': {
+                'type': bool,
+                'value': False,
+            },
+            '_notes_enabled': {
+                'type': bool,
+                'value': True,
+            },
+            'context': {
+                'type': dict,
+                'value': {
+                    'logger': None,
+                    'user': None,
+                }
             }
         }
-    }
 
 
     parameterized_model_fields = {
