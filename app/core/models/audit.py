@@ -59,7 +59,6 @@ class CenturionAudit(
 
     before = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Value before Change',
         null = True,
         validators = [
@@ -71,7 +70,6 @@ class CenturionAudit(
 
     after = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Value Change to',
         null = True,
         validators = [
@@ -89,7 +87,6 @@ class CenturionAudit(
     action = models.IntegerField(
         blank = False,
         choices = Actions,
-        default = None,
         help_text = 'History action performed',
         null = True,
         validators = [
@@ -102,7 +99,7 @@ class CenturionAudit(
         settings.AUTH_USER_MODEL,
         blank = False,
         help_text = 'User whom performed the action',
-        null = True,
+        null = False,
         on_delete = models.DO_NOTHING,
         validators = [
             CenturionModel.validate_field_not_none,
@@ -143,7 +140,7 @@ class CenturionAudit(
                 to implement this method.
         """
 
-        if not isinstance(self, CenturionAudit):
+        if type(self) is not CenturionAudit:
 
             raise NotImplementedError(
                 'Audit sub models must implement this method to populate fields'
