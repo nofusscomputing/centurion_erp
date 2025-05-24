@@ -13,7 +13,7 @@ from core.middleware.get_request import get_request
 @receiver(post_save, dispatch_uid="audit_history_save")
 def audit_history(sender, instance, **kwargs):
 
-    if getattr(instance, 'audit_enabled', False):
+    if getattr(instance, '_audit_enabled', False):
 
         audit_model = apps.get_model( instance._meta.object_name + 'AuditHistory')
 
