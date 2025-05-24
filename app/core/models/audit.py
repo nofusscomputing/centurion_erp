@@ -1,5 +1,9 @@
 from django.conf import settings
 from django.contrib.auth.models import ContentType
+from django.core.serializers.json import (
+    DjangoJSONEncoder,
+    json,
+)
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -167,11 +171,51 @@ class CenturionAudit(
             )
 
 
-        # loop through before and after and remove from after any fields that are the same.
+        serializable_before: dict = {}
+        for field_name, value in model.get_before().items():
+
+            if hasattr(model, field_name + '_id') and value is not None:
+
+                serializable_before.update({
+                    field_name + '_id': value.id
+                })
+                continue
+
+            serializable_before.update({
+                field_name: value
+            })
 
 
+        before_encoded = json.loads(DjangoJSONEncoder().encode(serializable_before))
 
-        return None
+
+        serializable_after: dict = {}
+        for field_name, value in model.get_after().items():
+
+            if hasattr(model, field_name + '_id') and value is not None:
+
+                serializable_after.update({
+                    field_name + '_id': value.id
+                })
+                continue
+
+            serializable_after.update({
+                field_name: value
+            })
+
+        after_encoded = json.loads(DjangoJSONEncoder().encode(serializable_after))
+
+
+        for field, value in before_encoded.items():
+
+            if after_encoded[field] == value:
+                del after_encoded[field]
+
+
+        self.before = before_encoded
+        self.after = after_encoded
+
+        return True
 
 
 
