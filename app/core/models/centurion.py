@@ -84,7 +84,7 @@ class CenturionModel(
 
             self._after = {}
 
-            self._before = self.objects.get( id = self.id ).get_audit_values()
+            self._before = type(self).objects.get( id = self.id ).get_audit_values()
 
 
         super().delete(using = using, keep_parents = keep_parents)
@@ -213,7 +213,7 @@ class CenturionModel(
 
             if self.id:
                 
-                self._before = self.objects.get( id = self.id ).get_audit_values()
+                self._before = type(self).objects.get( id = self.id ).get_audit_values()
 
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
