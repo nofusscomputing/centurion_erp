@@ -1,5 +1,7 @@
 import pytest
 
+from django.core.exceptions import ValidationError
+
 from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model import (
     CenturionSubAbstractModelInheritedCases,
 )
@@ -14,28 +16,19 @@ class MetaAbstractModelTestCases(
     CenturionSubAbstractModelInheritedCases,
     CenturionAuditModelInheritedCases
 ):
-    pass
-    # parameterized_class_attributes = {
-    #     '_audit_enabled': {
-    #         'value': False,
-    #     },
-    #     '_notes_enabled': {
-    #         'value': False,
-    #     }
-    # }
 
+    def test_method_centurionauditsub_clean_fields_called(self, mocker, model_instance):
+        """Test Class Method
 
+        Ensure method `CenturionSubAbstractModel.clean_fields` is called.
+        """
 
-    # check models with model._audit_enabled=True have a model created
+        clean_fields = mocker.patch('core.models.audit.AuditMetaModel.clean_fields', return_value = None)
 
-    # check models with model._audit_enabled=False DONT have a model created
+        model_instance.clean_fields()
 
-    # check the Meta class has the correct attributes
+        clean_fields.assert_called_once()
 
-
-    # confirm it exists in sys.modules
-
-    # check they inherit form audithistory parent class
 
 
 
@@ -66,3 +59,74 @@ class MetaAbstractModelPyTest(
         is an abstract model this test is not required.
         """
         pass
+
+
+    def test_method_clean_fields_calls_super_clean_fields(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean_fields` calls `super.clean_fields` when auditing
+        is enabled.
+        """
+
+        model_instance.model = model_instance
+
+        mocker.patch('core.models.audit.CenturionAudit.get_model_history', return_value = True)
+
+        super_clean_fields = mocker.patch('core.models.audit.CenturionAudit.clean_fields', return_value = None)
+
+        model_instance.clean_fields()
+
+
+        super_clean_fields.assert_called_with(
+            exclude = None
+        )
+
+
+    def test_method_clean_fields_exception_no_model_history(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean_fields` calls `super.clean_fields` when auditing
+        is enabled.
+        """
+
+        model_instance.model = model_instance
+
+        mocker.patch('core.models.audit.CenturionAudit.get_model_history', return_value = False)
+
+        # super_clean_fields = mocker.patch('core.models.audit.CenturionAudit.clean_fields', return_value = None)
+
+
+        with pytest.raises( ValidationError ) as e:
+
+            model_instance.clean_fields()
+
+
+        assert e.value.code == 'did_not_process_history'
+        # super_clean_fields.assert_called_with(
+        #     exclude = None
+        # )
+
+
+    def test_method_clean_fields_exception_no_model(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean_fields` calls `super.clean_fields` when auditing
+        is enabled.
+        """
+
+        model_instance.model = None
+
+        # mocker.patch('core.models.audit.CenturionAudit.get_model_history', return_value = False)
+
+        # super_clean_fields = mocker.patch('core.models.audit.CenturionAudit.clean_fields', return_value = None)
+
+
+        with pytest.raises( ValidationError ) as e:
+
+            model_instance.clean_fields()
+
+
+        assert e.value.code == 'no_model_supplied'
+        # super_clean_fields.assert_called_with(
+        #     exclude = None
+        # )

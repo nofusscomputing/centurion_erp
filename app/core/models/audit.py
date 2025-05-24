@@ -200,8 +200,8 @@ class CenturionAudit(
 
 
 class AuditMetaModel(
-    CenturionSubModel,
     CenturionAudit,
+    CenturionSubModel,
 ):
 
 
@@ -213,7 +213,7 @@ class AuditMetaModel(
 
     def clean_fields(self, exclude = None):
 
-        if hasattr(self, 'model'):
+        if getattr(self, 'model', None):
 
             if not self.get_model_history(self.model):
 
@@ -221,5 +221,13 @@ class AuditMetaModel(
                     code = 'did_not_process_history',
                     message = 'Unable to process the history.'
                 )
+
+        else:
+
+                raise ValidationError(
+                    code = 'no_model_supplied',
+                    message = 'Unable to process the history, no model was supplied.'
+                )
+
 
         super().clean_fields(exclude = exclude)
