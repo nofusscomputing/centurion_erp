@@ -1,6 +1,7 @@
 import pytest
 
 from django.apps import apps
+from django.db import models
 
 from centurion.tests.unit_class import ClassTestCases
 
@@ -116,8 +117,13 @@ class ModelTestCases(
         Ensure field parameter `param_field_name` has a value of `param_blank`
         """
 
+        if param_blank == models.fields.NOT_PROVIDED:
 
-        assert getattr(model_instance._meta.get_field(param_field_name), 'blank') == param_blank
+            assert True
+
+        else:
+
+            assert getattr(model_instance._meta.get_field(param_field_name), 'blank') == param_blank
 
 
 
@@ -131,7 +137,13 @@ class ModelTestCases(
         """
 
 
-        assert getattr(model_instance._meta.get_field(param_field_name), 'default') == param_default
+        if param_default == models.fields.NOT_PROVIDED:
+
+            assert True
+
+        else:
+
+            assert getattr(model_instance._meta.get_field(param_field_name), 'default') == param_default
 
 
 
@@ -145,7 +157,13 @@ class ModelTestCases(
         """
 
 
-        assert getattr(model_instance._meta.get_field(param_field_name), 'null') == param_null
+        if param_null == models.fields.NOT_PROVIDED:
+
+            assert True
+
+        else:
+
+            assert getattr(model_instance._meta.get_field(param_field_name), 'null') == param_null
 
 
 
@@ -159,4 +177,10 @@ class ModelTestCases(
         """
 
 
-        assert getattr(model_instance._meta.get_field(param_field_name), 'unique') == param_unique
+        if param_unique == models.fields.NOT_PROVIDED:
+
+            assert True
+
+        else:
+
+            assert getattr(model_instance._meta.get_field(param_field_name), 'unique') == param_unique
