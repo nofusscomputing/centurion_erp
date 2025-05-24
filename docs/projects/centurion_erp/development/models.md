@@ -20,7 +20,7 @@ When designing or even implementing a model do consider that what is defined wit
 
 When creating models they must meet the following requirements:
 
-- inherits from `core.models.centurion.CenturionModel` or if a submodel `core.models.centurion.CenturionSubModel` and its base model.
+- inherits from [`core.models.centurion.CenturionModel`](./api/models/centurion.md) or if a submodel [`core.models.centurion.CenturionSubModel`](./api/models/centurion_sub.md) and its base model.
 
 - class has  the folloing objects defined:
 
@@ -213,21 +213,7 @@ table_fields: list = [
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Depreciated Docs undergoing re-write
 
 - ToDo
 
@@ -242,28 +228,15 @@ table_fields: list = [
         - Add `model.clean()` To set/modify any field values, _if required_
 
 
-
-
-
-
-
-
-
-
-
-
+<!-- markdownlint-disable -->
 ## Requirements
+<!-- markdownlint-restore -->
 
 - `clean()` method within a model is **only** used to ensure that the data entered into the DB is valid and/or to ensure application wide changes/validation is conducted prior to saving model.
 
 - Tenancy models must have the ability to have a [knowledge base article](#knowledge-base-article-linking) linked to it.
 
 - Models must save audit history
-
-
-
-
-
 
 
 <!-- markdownlint-disable -->
@@ -284,7 +257,6 @@ This section details the additional items that may need to be done when adding a
 - If the model is a primary model, add it to model reference rendering in `app/core/lib/markdown_plugins/model_reference.py` function `tag_html`
 
 - If the model is a primary model, add it to the model link slash command in `app/core/lib/slash_commands/linked_model.py` function `command_linked_model`
-
 
 
 ## History
