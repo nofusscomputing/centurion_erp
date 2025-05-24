@@ -40,7 +40,7 @@ if apps.models_ready:
                 '__doc__': f'Auto-generated meta model for {name} Audit History.',
                 'Meta': type('Meta', (), {
                             'app_label': model._meta.app_label,
-                            'db_table': model._meta.db_table + '_history',
+                            'db_table': model._meta.db_table + '_audithistory',
                             'managed': True,
                             'verbose_name': model._meta.verbose_name + ' History',
                             'verbose_name_plural': model._meta.verbose_name + ' Histories',
