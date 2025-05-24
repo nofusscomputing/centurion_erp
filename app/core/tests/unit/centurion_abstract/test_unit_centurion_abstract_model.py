@@ -704,6 +704,48 @@ class CenturionAbstractModelPyTest(
 
 
 
+    def test_method_get_url_returned_non_relative(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        settings.SITE_URL = 'https://domain.tld'
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        test_value = settings.SITE_URL + site_path
+
+        model_instance.id = 1
+        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
+
+        url = model_instance.get_url( relative = False)
+
+        assert url == test_value
+
+
+
+    def test_method_get_url_returned_relative(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        model_instance.id = 1
+        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        assert url == site_path
+
+
+
     def test_method_save_audit_enabled_sets__after_create_model(self, mocker, model_instance):
         """Test Class Method
         
