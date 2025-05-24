@@ -211,6 +211,17 @@ class CenturionAbstractModelInheritedCases(
 ):
 
 
+    parameterized_class_attributes = {
+        'page_layout': {
+            'type': list,
+        },
+        'table_fields': {
+            'type': list,
+        }
+    }
+
+
+
     def test_model_creation(self, model):
 
         model_object = model.objects.create(
@@ -693,7 +704,7 @@ class CenturionAbstractModelPyTest(
         Ensure method `get_url` calls reverse
         """
 
-        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = None)
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = 'None')
 
         model_instance.id = 1
         url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
