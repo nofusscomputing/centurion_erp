@@ -56,30 +56,32 @@ class CenturionAbstractModelTestCases(
             }
         }
 
-
-    parameterized_model_fields = {
-        'id': {
-            'blank': True,
-            'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
-            'null': False,
-            'unique': True,
-        },
-        'model_notes': {
-            'blank': True,
-            'default': models.fields.NOT_PROVIDED,
-            'field_type': models.TextField,
-            'null': True,
-            'unique': False,
-        },
-        'created': {
-            'blank': False,
-            'default': now,
-            'field_type': models.IntegerField,
-            'null': False,
-            'unique': False,
-        },
-    }
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
+            'id': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.IntegerField,
+                'null': False,
+                'unique': True,
+            },
+            'model_notes': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.TextField,
+                'null': True,
+                'unique': False,
+            },
+            'created': {
+                'blank': False,
+                'default': now,
+                'field_type': models.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+        }
 
 
 
