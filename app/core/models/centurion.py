@@ -138,10 +138,6 @@ class CenturionModel(
             dict: Model fields
         """
 
-        if self.id is None:
-            return {}
-
-
         data = self.__dict__.copy()
 
         clean_data: dict = {}
@@ -239,11 +235,13 @@ class CenturionModel(
 
             self._after = self.get_audit_values()
 
-            self._before = {}
-
             if self.id:
                 
                 self._before = type(self).objects.get( id = self.id ).get_audit_values()
+
+            else:
+
+                self._before = {}
 
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
