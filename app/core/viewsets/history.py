@@ -117,6 +117,8 @@ class ViewSet(ReadOnlyModelViewSet):
         history_models = ContentType.objects.filter(
             model__contains = 'history'
         ).exclude(
+            model__contains = 'audithistory'
+        ).exclude(
             app_label = 'core',
             model = 'modelhistory'
         ).exclude(    # Old history model. This exclude block can be removed when the model is removed.
