@@ -12,7 +12,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 )
 
 
-@pytest.mark.models
+@pytest.mark.audit_models
 class CenturionAuditModelTestCases(
     CenturionAbstractModelInheritedCases
 ):

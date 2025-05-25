@@ -16,8 +16,7 @@ from core.models.centurion import CenturionModel
 
 
 
-@pytest.mark.models
-@pytest.mark.unit
+@pytest.mark.centurion_models
 class CenturionAbstractModelTestCases(
     TenancyAbstractModelInheritedCases
 ):

@@ -9,7 +9,7 @@ from access.models.tenancy_abstract import TenancyAbstractModel
 
 
 
-@pytest.mark.models
+@pytest.mark.tenancy_models
 class TenancyAbstractModelTestCases(
     ModelTestCases
 ):

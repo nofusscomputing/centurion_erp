@@ -11,7 +11,7 @@ from core.tests.unit.centurion_audit.test_unit_centurion_audit_model import (
 
 
 
-@pytest.mark.models
+@pytest.mark.meta_models
 class MetaAbstractModelTestCases(
     CenturionAuditModelInheritedCases,
     CenturionSubAbstractModelInheritedCases,
