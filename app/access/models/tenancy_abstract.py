@@ -3,6 +3,9 @@ from django.core.exceptions import (
 )
 from django.db import models
 
+from access.models.tenancy import (
+    TenancyManager as TenancyManagerDepreciated
+)
 from access.models.tenant import Tenant
 
 
@@ -82,11 +85,29 @@ class TenancyAbstractModel(
     }
     """ Model Context
 
+    Generally model usage will be from an API serializer, Admin Site or
+    a management command. These sources are to pass through and set this
+    context. The keys are:
+
+    !!! warning
+        Failing to specify the user will prevent the tenancy manager from
+        being multi-tenant. As such, the results retured will not be
+        restricted to the users tenancy
+
+    returns:
+        logger (logging.Logger): Instance of a logger for logging.
+        user (User): The user that is logged into the system
+
     Context for actions within the model.
     """
 
-    objects = TenancyManager()
-    """ Multi-Tenanant Objects """
+    objects = TenancyManagerDepreciated()
+    """ ~~Multi-Tenant Manager~~
+
+    **Note:** ~~This manager relies upon the model class having `context['user']`
+    set. without a user the manager can not perform multi-tenant queries.~~
+    """
+
 
     class Meta:
         abstract = True

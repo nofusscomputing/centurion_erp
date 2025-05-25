@@ -6,16 +6,15 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
-from core.middleware.get_request import get_request
 
 
 @receiver(post_delete, dispatch_uid="audit_history_delete")
 @receiver(post_save, dispatch_uid="audit_history_save")
 def audit_history(sender, instance, **kwargs):
 
-    if getattr(instance, 'audit_enabled', False):
+    if getattr(instance, '_audit_enabled', False):
 
-        audit_model = apps.get_model( instance._meta.object_name + 'AuditHistory')
+        audit_model = apps.get_model( instance._meta.app_label, instance._meta.object_name + 'AuditHistory')
 
         audit_action = audit_model.Actions.UPDATE
 
@@ -34,8 +33,7 @@ def audit_history(sender, instance, **kwargs):
                 app_label = instance._meta.app_label,
                 model = instance._meta.model_name,
             ),
-            before = instance.get_before(),
-            after = instance.get_after(),
             action = audit_action,
-            user = get_request().user
+            user = instance.context['user'],
+            model = instance,
         )

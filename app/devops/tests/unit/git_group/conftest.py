@@ -1,10 +1,10 @@
 import pytest
 
-from core.models.audit import CenturionAudit
+from devops.models.git_group import GitGroup
 
 
 
 @pytest.fixture( scope = 'class')
 def model(request):
 
-    yield CenturionAudit
+    yield GitGroup

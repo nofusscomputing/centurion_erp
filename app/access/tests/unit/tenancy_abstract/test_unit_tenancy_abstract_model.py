@@ -1,12 +1,7 @@
-# import inspect
+import inspect
 import pytest
-# import rest_framework
 
 from django.db import models
-# from django.core.exceptions import (
-#     ValidationError
-# )
-# from django.utils.timezone import now
 
 from centurion.tests.unit_models import ModelTestCases
 
@@ -14,7 +9,7 @@ from access.models.tenancy_abstract import TenancyAbstractModel
 
 
 
-@pytest.mark.models
+@pytest.mark.tenancy_models
 class TenancyAbstractModelTestCases(
     ModelTestCases
 ):

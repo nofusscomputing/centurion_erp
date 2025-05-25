@@ -16,8 +16,7 @@ from core.models.centurion import CenturionModel
 
 
 
-@pytest.mark.models
-@pytest.mark.unit
+@pytest.mark.centurion_models
 class CenturionAbstractModelTestCases(
     TenancyAbstractModelInheritedCases
 ):
@@ -31,52 +30,57 @@ class CenturionAbstractModelTestCases(
 
 
 
-    parameterized_class_attributes = {
-        '_audit_enabled': {
-            'type': bool,
-            'value': True,
-        },
-        '_is_submodel': {
-            'type': bool,
-            'value': False,
-        },
-        '_notes_enabled': {
-            'type': bool,
-            'value': True,
-        },
-        'context': {
-            'type': dict,
-            'value': {
-                'logger': None,
-                'user': None,
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {
+            '_audit_enabled': {
+                'type': bool,
+                'value': True,
+            },
+            '_is_submodel': {
+                'type': bool,
+                'value': False,
+            },
+            '_notes_enabled': {
+                'type': bool,
+                'value': True,
+            },
+            'context': {
+                'type': dict,
+                'value': {
+                    'logger': None,
+                    'user': None,
+                }
             }
         }
-    }
 
-
-    parameterized_model_fields = {
-        'id': {
-            'blank': True,
-            'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
-            'null': False,
-            'unique': True,
-        },
-        'model_notes': {
-            'blank': True,
-            'default': models.fields.NOT_PROVIDED,
-            'field_type': models.TextField,
-            'null': True,
-            'unique': False,
-        },
-        'created': {
-            'blank': False,
-            'default': now,
-            'field_type': models.IntegerField,
-            'null': False,
-            'unique': False,
-        },
-    }
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
+            'id': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.IntegerField,
+                'null': False,
+                'unique': True,
+            },
+            'model_notes': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.TextField,
+                'null': True,
+                'unique': False,
+            },
+            'created': {
+                'blank': False,
+                'default': now,
+                'field_type': models.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+        }
 
 
 
@@ -146,7 +150,7 @@ class CenturionAbstractModelTestCases(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         super_delete = mocker.patch('django.db.models.base.Model.delete', return_value = None)
 
@@ -211,11 +215,28 @@ class CenturionAbstractModelInheritedCases(
 ):
 
 
-    def test_model_creation(self, model):
+    parameterized_class_attributes = {
+        'page_layout': {
+            'type': list,
+        },
+        'table_fields': {
+            'type': list,
+        }
+    }
+
+
+
+    def test_model_creation(self, model, user):
+
+        default_val = model.context['user']
+
+        model.context['user'] = user
 
         model_object = model.objects.create(
             **self.kwargs_create_item
         )
+
+        model.context['user'] = default_val
 
         assert type(model_object.id) is int
 
@@ -301,7 +322,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance._audit_enabled = True
 
@@ -346,7 +367,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance._is_submodel = True
 
@@ -373,7 +394,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance._is_submodel = False
 
@@ -403,7 +424,7 @@ class CenturionAbstractModelPyTest(
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         super_delete = mocker.patch('django.db.models.base.Model.delete', return_value = None)
 
@@ -582,14 +603,22 @@ class CenturionAbstractModelPyTest(
         (is an empty model)
         """
 
+        for field, value in self.kwargs_create_item.items():
+
+            setattr(model_instance, field, value)
+
         class MockManager:
 
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
 
-        assert model_instance.get_audit_values() == {}
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
+
+        assert model_instance.get_audit_values() == {
+            'id': None,
+            **self.kwargs_create_item
+        }
 
 
 
@@ -693,7 +722,7 @@ class CenturionAbstractModelPyTest(
         Ensure method `get_url` calls reverse
         """
 
-        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = None)
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = 'None')
 
         model_instance.id = 1
         url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
@@ -701,6 +730,48 @@ class CenturionAbstractModelPyTest(
         url = model_instance.get_url()
 
         reverse.assert_called_with( url_basename, None, { 'pk': model_instance.id }, None, None )
+
+
+
+    def test_method_get_url_returned_non_relative(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        settings.SITE_URL = 'https://domain.tld'
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        test_value = settings.SITE_URL + site_path
+
+        model_instance.id = 1
+        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
+
+        url = model_instance.get_url( relative = False)
+
+        assert url == test_value
+
+
+
+    def test_method_get_url_returned_relative(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        model_instance.id = 1
+        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        assert url == site_path
 
 
 
@@ -780,7 +851,7 @@ class CenturionAbstractModelPyTest(
             def get(self, *args, **kwargs):
                 return self.MockObj()
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance.id = 1
 
@@ -823,7 +894,7 @@ class CenturionAbstractModelPyTest(
             def get(self, *args, **kwargs):
                 return self.MockObj()
 
-        model_instance.objects = MockManager()
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         model_instance.id = 1
 

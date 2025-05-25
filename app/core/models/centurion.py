@@ -27,6 +27,12 @@ class CenturionModel(
     _notes_enabled: bool = True
     """Should a table for notes be created for this model"""
 
+    app_namespace: str = None
+    """URL Application namespace.
+
+    **Note:** This attribute is a temp attribute until all models urls return
+    to their own `urls.py` file from `api/urls_v2.py`.
+    """
 
 
     class Meta:
@@ -84,7 +90,7 @@ class CenturionModel(
 
             self._after = {}
 
-            self._before = self.objects.get( id = self.id ).get_audit_values()
+            self._before = type(self).objects.get( id = self.id ).get_audit_values()
 
 
         super().delete(using = using, keep_parents = keep_parents)
@@ -100,6 +106,25 @@ class CenturionModel(
         )
 
 
+    def get_app_namespace(self) -> str:
+        """Fetch the Application namespace if specified.
+
+        **Note:** This attribute is a temp attribute until all models urls return
+        to their own `urls.py` file from `api/urls_v2.py`.
+
+        Returns:
+            str: Application namespace suffixed with colin `:`
+            None: No application namespace found.
+        """
+
+        if not self.app_namespace:
+            return None
+
+        app_namespace = self.app_namespace
+
+        return str(app_namespace)
+
+
     def get_audit_values(self) -> dict:
         """Retrieve the field Values
 
@@ -112,10 +137,6 @@ class CenturionModel(
         Returns:
             dict: Model fields
         """
-
-        if self.id is None:
-            return {}
-
 
         data = self.__dict__.copy()
 
@@ -163,12 +184,14 @@ class CenturionModel(
 
 
 
-    def get_url( self, relative: bool = False, api_version: int = 2 ) -> str:
+    def get_url( self, relative: bool = False, api_version: int = 2, request: any = None ) -> str:
         """Return the models API URL
 
         Args:
             relative (bool, optional): Return the relative URL for the model. Defaults to False.
             api_version (int, optional): API Version to use. Defaults to `2``.
+            request (any, optional): Temp and unused attribute until rest of
+                codebase re-written not to pass through.
 
         Returns:
             str: API URL for the model
@@ -176,11 +199,14 @@ class CenturionModel(
 
         namespace = f'v{api_version}'
 
+        if self.get_app_namespace():
+            namespace = namespace + ':' + self.get_app_namespace()
+
         url_basename = f'{namespace}:_api_{self._meta.model_name}-detail'
 
         url = reverse( viewname = url_basename, kwargs = { 'pk': self.id } )
 
-        if relative:
+        if not relative:
 
             url = settings.SITE_URL + url
 
@@ -209,11 +235,13 @@ class CenturionModel(
 
             self._after = self.get_audit_values()
 
-            self._before = {}
-
             if self.id:
                 
-                self._before = self.objects.get( id = self.id ).get_audit_values()
+                self._before = type(self).objects.get( id = self.id ).get_audit_values()
+
+            else:
+
+                self._before = {}
 
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
