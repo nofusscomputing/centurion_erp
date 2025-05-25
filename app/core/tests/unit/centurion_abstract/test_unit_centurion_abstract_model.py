@@ -600,14 +600,22 @@ class CenturionAbstractModelPyTest(
         (is an empty model)
         """
 
+        for field, value in self.kwargs_create_item.items():
+
+            setattr(model_instance, field, value)
+
         class MockManager:
 
             def get(*args, **kwargs):
                 return model_instance
 
-        model_instance.objects = MockManager()
 
-        assert model_instance.get_audit_values() == {}
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
+
+        assert model_instance.get_audit_values() == {
+            'id': None,
+            **self.kwargs_create_item
+        }
 
 
 
