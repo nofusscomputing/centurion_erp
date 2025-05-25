@@ -3,6 +3,9 @@ from django.core.exceptions import (
 )
 from django.db import models
 
+from access.models.tenancy import (
+    TenancyManager as TenancyManagerDepreciated
+)
 from access.models.tenant import Tenant
 
 
@@ -98,11 +101,11 @@ class TenancyAbstractModel(
     Context for actions within the model.
     """
 
-    objects = TenancyManager()
-    """ Multi-Tenant Manager
+    objects = TenancyManagerDepreciated()
+    """ ~~Multi-Tenant Manager~~
 
-    **Note:** This manager relies upon the model class having `context['user']`
-    set. without a user the manager can not perform multi-tenant queries.
+    **Note:** ~~This manager relies upon the model class having `context['user']`
+    set. without a user the manager can not perform multi-tenant queries.~~
     """
 
 
