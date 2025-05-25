@@ -24,7 +24,7 @@ router.register(r'git_repository(?:/(?P<git_provider>gitlab|github))?', git_repo
 router.register('git_repository/github/(?P<model_id>[0-9]+)/notes', github_repository_notes.ViewSet, feature_flag = '2025-00001', basename='_api_v2_github_repository_note')
 router.register('git_repository/gitlab/(?P<model_id>[0-9]+)/notes', gitlab_repository_notes.ViewSet, feature_flag = '2025-00001', basename='_api_v2_gitlab_repository_note')
 
-router.register('git_group', git_group.ViewSet, feature_flag = '2025-00001', basename='_api_v2_git_group')
+router.register('git_group', git_group.ViewSet, feature_flag = '2025-00001', basename='_api_gitgroup')
 router.register('git_group/(?P<model_id>[0-9]+)/notes', git_group_notes.ViewSet, feature_flag = '2025-00001', basename='_api_v2_git_group_note')
 
 urlpatterns = router.urls
