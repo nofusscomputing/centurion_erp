@@ -6,7 +6,6 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
-from core.middleware.get_request import get_request
 
 
 @receiver(post_delete, dispatch_uid="audit_history_delete")
@@ -35,6 +34,6 @@ def audit_history(sender, instance, **kwargs):
                 model = instance._meta.model_name,
             ),
             action = audit_action,
-            user = get_request().user,
+            user = instance.context['user'],
             model = instance,
         )

@@ -225,7 +225,9 @@ class CenturionAbstractModelInheritedCases(
 
 
 
-    def test_model_creation(self, model):
+    def test_model_creation(self, model, user):
+
+        model.context['user'] = user
 
         model_object = model.objects.create(
             **self.kwargs_create_item
