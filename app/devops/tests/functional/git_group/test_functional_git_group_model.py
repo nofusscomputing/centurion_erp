@@ -25,6 +25,30 @@ class GitGroupModelTestCases(
 
 
 
+    def test_model_create_with_parent_sets_tenancy(self, created_model, model):
+        """Model Created
+
+        Ensure that the model when created with a parent git group, that its
+        tenancy is set to that of the parent group
+        """
+
+        kwargs_create_item = self.kwargs_create_item.copy()
+
+        del kwargs_create_item['organization']
+        kwargs_create_item['parent_group'] = created_model
+
+        child_group = model.objects.create(
+            **kwargs_create_item
+        )
+
+        organization = child_group.organization
+
+        child_group.delete()
+
+        assert child_group.organization == created_model.organization
+
+
+
 class GitGroupModelInheritedCases(
     GitGroupModelTestCases,
 ):
