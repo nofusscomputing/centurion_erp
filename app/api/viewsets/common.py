@@ -954,6 +954,10 @@ class SubModelViewSet_ReWrite(
 
             self._model = self.base_model
 
+        self._model.context['user'] = self.request.user
+
+        self._model.context['logger'] = self.get_log()
+
         return self._model
 
 
