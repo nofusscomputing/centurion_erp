@@ -3,6 +3,9 @@ import pytest
 
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 
 from core.models.audit import CenturionAudit
@@ -153,3 +156,96 @@ class CenturionAuditModelPyTest(
         assert(
             model == inspect._empty
         )
+
+
+
+    def test_method_get_model_history_model_missing__before(self, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_model_history` raises an exception if the model does
+        not have attribute `_before` populated
+        """
+
+        with pytest.raises(ValidationError) as e:
+
+            model_instance.get_model_history( model = model_instance )
+
+        assert e.value.code == 'model_missing_before_data'
+
+
+
+    def test_method_get_model_history_model_missing__after(self, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_model_history` raises an exception if the model does
+        not have attribute `_after` populated
+        """
+
+        with pytest.raises(ValidationError) as e:
+
+            model_instance._before = {'key': 'value'}
+
+            model_instance.get_model_history( model = model_instance )
+
+        del model_instance._before
+
+        assert e.value.code == 'model_missing_after_data'
+
+
+
+    def test_method_get_model_history_model_no_change(self, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_model_history` raises an exception if the models
+        `_after` and `_before` attributes are te same
+        """
+
+        with pytest.raises(ValidationError) as e:
+
+            model_instance._after = {'key': 'value'}
+            model_instance._before = {'key': 'value'}
+
+            model_instance.get_model_history( model = model_instance )
+
+        del model_instance._after
+        del model_instance._before
+
+        assert e.value.code == 'before_and_after_same'
+
+
+
+    def test_method_get_model_history_populates_field_after(self, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_model_history` correctly populates field `after`.
+        """
+
+        test_value = {'key_1': 'value_1'}
+        model_instance._after = {'key': 'value', **test_value}
+        model_instance._before = {'key': 'value'}
+
+        model_instance.get_model_history( model = model_instance )
+
+        del model_instance._after
+        del model_instance._before
+
+        assert model_instance.after == test_value
+
+
+
+    def test_method_get_model_history_populates_field_before(self, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_model_history` correctly populates field `after`.
+        """
+
+        test_value = { 'key': 'value' }
+        model_instance._after = { **test_value, 'key_1': 'value_1' }
+        model_instance._before = { **test_value }
+
+        model_instance.get_model_history( model = model_instance )
+
+        del model_instance._after
+        del model_instance._before
+
+        assert model_instance.before == test_value
