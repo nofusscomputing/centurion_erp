@@ -1,3 +1,6 @@
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -173,6 +176,16 @@ class GitGroup(
     def clean_fields(self, exclude = None):
 
         if self.parent_group:
+
+            if self.provider == self.GitProvider.GITHUB:
+
+                raise ValidationError(
+                    code = 'no_parent_for_github_group',
+                    message = 'Github Organizations cant be assigned a parent group',
+                    params = {
+                        'field': 'parent_group'
+                    }
+                )
 
             self.organization = self.parent_group.organization
 
