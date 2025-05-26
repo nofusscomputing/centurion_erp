@@ -127,6 +127,8 @@ nav:
 
       - projects/centurion_erp/development/core/model_notes.md
 
+      - projects/centurion_erp/development/serializers.md
+
       - projects/centurion_erp/development/itam/it_asset.md
 
       - projects/centurion_erp/development/templates.md
