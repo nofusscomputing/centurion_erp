@@ -1043,6 +1043,7 @@ log_cli_date_format = '%Y-%m-%d %H:%M:%S'
 markers = [
     "audit_models: Selects Audit models...",
     "centurion_models: Selects Centurion models",
+    "functional: Selects all Functional tests.",
     "meta_models: Selects Meta models",
     "models: Selects all models tests.",
     "tenancy_models: Selects Tenancy models.",
