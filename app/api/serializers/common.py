@@ -91,9 +91,22 @@ class CommonModelSerializer(CommonBaseSerializer):
                 history_model_name = item.history_model_name
 
 
-            if(
+            if getattr(self.Meta.model, '_audit_enabled', False):
+
+                get_url['history'] = reverse(
+                    "v2:_api_centurionaudit_sub-list",
+                    request = self._context['view'].request,
+                    kwargs = {
+                        'app_label': history_app_label,
+                        'model_name': history_model_name,
+                        'model_id': item.pk
+                    }
+                )
+
+            elif(
                 history_app_label is not None
                 and history_model_name is not None
+                and not hasattr(self.Meta.model, '_audit_enabled')
             ):
 
                 get_url['history'] = reverse(
