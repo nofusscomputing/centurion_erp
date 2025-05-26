@@ -125,7 +125,7 @@ All models must contain the core features, being:
 
 ## Validation Methods
 
-Within All of our models including when they are created via an API serializer, the models [validators](https://docs.djangoproject.com/en/5.1/ref/models/instances/#validating-objects) are called. The models validators are responsible for ensuring that no data goes into the database that may create an inconsistancy.
+Within All of our models including when they are created via an [API serializer](./serializers.md), the models [validators](https://docs.djangoproject.com/en/5.1/ref/models/instances/#validating-objects) are called. The models validators are responsible for ensuring that no data goes into the database that may create an inconsistancy.
 
 !!! example
     You have defined a model that has a user field that must always have a value. This model can be access via the API, in which the user field is auto-populated by object `request.user`. In the same token you have admin commands that uses this model.
