@@ -208,6 +208,9 @@ class CenturionAudit(
 
         for field, value in before_encoded.items():
 
+            if field not in after_encoded:
+                continue
+
             if after_encoded[field] == value:
                 del after_encoded[field]
 
