@@ -909,6 +909,144 @@ class SubModelViewSet(
 
 
 
+class SubModelViewSet_ReWrite(
+    SubModelViewSet,
+):
+    """Temp class for SubModelViewSet
+
+    This class contains the changed objects from parent `SubModelViewSet`. On
+    all models be re-written, this class can be collapsed into its parent
+    and replacing with the objects in this class
+    """
+
+
+    @property
+    def model(self):
+
+
+        if getattr(self, '_model', None) is not None:
+
+            return self._model
+
+        model_kwarg = None
+
+        if hasattr(self, 'kwargs'):
+
+            model_kwarg = self.kwargs.get(self.model_kwarg, None)
+
+        if model_kwarg:
+
+            if self.model_prefix:
+
+                model_kwarg = model_kwarg + self.model_prefix
+
+            self._model = self.related_objects(self.base_model, model_kwarg)
+
+        else:
+
+            self._model = self.base_model
+
+        return self._model
+
+
+    def related_objects(self, model, model_kwarg):
+        """Recursive relate_objects fetch
+
+        Fetch the model where <model>._meta.model_name matches the
+        model_kwarg value.
+
+        Args:
+            model (django.db.models.Model): The model to obtain the 
+                related_model from.
+            model_kwarg (str): The URL Kwarg of the model.
+
+        Returns:
+            Model: The model for the ViewSet
+        """
+
+        related_model = None
+
+        if model_kwarg:
+
+            is_nested_lookup = False
+
+            for related_object in model._meta.related_objects:
+
+                if(
+                    getattr(related_object.related_model._meta,'model_name', '' ) == self.base_model._meta.model_name
+                    or not issubclass(related_object.related_model, self.base_model)
+                ):
+                    continue
+
+
+                related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
+
+                if(
+                    str(
+                        related_object.related_model._meta.model_name
+                    ).lower().replace(' ', '_') == model_kwarg
+                ):
+
+                    related_model = related_object.related_model
+                    break
+                
+                elif related_objects:
+
+                    related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
+
+                    is_nested_lookup = True
+
+                    if not hasattr(related_model, '_meta'):
+
+                        related_model = None
+
+                    elif(
+                        str(
+                            getattr(related_model._meta, 'model_name', '')
+                        ).lower().replace(' ', '_') == model_kwarg
+                    ):
+
+                        break
+
+
+        if related_model is None and not is_nested_lookup:
+
+            related_model = self.base_model
+
+        return related_model
+
+
+
+    def get_serializer_class(self):
+
+        serializer_name = self.base_model._meta.model_name
+
+        if self.base_model != self.model:
+                      
+            serializer_name += '_' + str( self.kwargs[self.model_kwarg] )
+
+
+        serializer_module = importlib.import_module(
+            self.model._meta.app_label + '.serializers.' + str(
+                serializer_name
+            )
+        )
+
+        if (
+            self.action == 'list'
+            or self.action == 'retrieve'
+        ):
+
+            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
+
+
+        else:
+
+            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
+
+
+        return self.serializer_class
+
 
 
 class ModelCreateViewSet(
