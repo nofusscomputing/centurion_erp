@@ -53,11 +53,11 @@ class CenturionAbstractModelTestCases(
         entry.
         """
 
-        if created_model._meta.abstract:
+        if model._meta.abstract:
 
             pytest.xfail( reason = 'Model is an Abstract Model and can not be created.' )
 
-        elif not getattr(created_model, '_audit_enabled', False):
+        elif not getattr(model, '_audit_enabled', False):
 
             pytest.xfail( reason = 'Model has audit history disabled.' )
 
