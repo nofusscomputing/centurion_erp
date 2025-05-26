@@ -48,6 +48,7 @@ from config_management.viewsets import (
 )
 
 from core.viewsets import (
+    audit_history,
     celery_log as celery_log_v2,
     history as history_v2,
     manufacturer as manufacturer_v2,
@@ -138,14 +139,26 @@ router = DefaultRouter(trailing_slash=False)
 router.register('', v2.Index, basename='_api_v2_home')
 
 entity_type_names = ''
+history_type_names = ''
+history_app_labels = ''
 ticket_type_names = ''
 ticket_comment_names = ''
 
 for model in apps.get_models():
 
+    if getattr(model, '_audit_enabled', False):
+
+        history_type_names += model._meta.model_name + '|'
+
+        if model._meta.app_label not in history_app_labels:
+
+            history_app_labels += model._meta.app_label + '|'
+
+
     if issubclass(model, ticket.TicketBase):
 
         ticket_type_names += model._meta.sub_model_type + '|'
+
 
     if issubclass(model, ticket_comment.TicketCommentBase):
 
@@ -197,6 +210,10 @@ router.register('config_management/group/(?P<parent_group>[0-9]+)/child_group', 
 router.register('config_management/group/(?P<model_id>[0-9]+)/notes', config_group_notes.ViewSet, basename='_api_v2_config_group_note')
 router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
 
+
+history_type_names = str(history_type_names)[:-1]
+router.register(f'(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names}]+)/(?P<model_id>[0-9]+)/history', audit_history.ViewSet, basename='_api_centurionaudit_sub')
+router.register('core/history', audit_history.NoDocsViewSet, basename='_api_centurionaudit')
 
 router.register('(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
 
