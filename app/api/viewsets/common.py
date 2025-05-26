@@ -919,6 +919,14 @@ class SubModelViewSet_ReWrite(
     and replacing with the objects in this class
     """
 
+    model_suffix: str = None
+    """Model Suffix
+
+    This Value is added to `<model>._meta.model_name` when locating the models
+    name. This field will normally not be required, except in the case of some
+    sib-models.
+    """
+
 
     @property
     def model(self):
@@ -936,9 +944,9 @@ class SubModelViewSet_ReWrite(
 
         if model_kwarg:
 
-            if self.model_prefix:
+            if self.model_suffix:
 
-                model_kwarg = model_kwarg + self.model_prefix
+                model_kwarg = model_kwarg + self.model_suffix
 
             self._model = self.related_objects(self.base_model, model_kwarg)
 
