@@ -175,6 +175,9 @@ class ModelSerializer(
 
         super().__init__(*args, **kwargs)
 
+        if 'context' not in kwargs:
+            return
+
         if getattr(kwargs['context'].get('view'), 'action', '') in ['create', 'partial_update', 'update']:
 
             self.fields.fields['parent'].write_only = True
