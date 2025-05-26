@@ -695,9 +695,25 @@ class ModelViewSetBase(
 
         self.queryset = self.model.objects.all()
 
+        qs_filter = {}
+
         if 'pk' in getattr(self, 'kwargs', {}):
 
-            self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
+            qs_filter.update({
+                'pk': int( self.kwargs['pk'] )
+            })
+
+        if(
+            getattr(self.model, '_is_submodel', False)
+            and 'model_id' in self.kwargs
+        ):
+
+            qs_filter.update({
+                'model_id': int( self.kwargs['model_id'] )
+            })
+
+
+        self.queryset = self.queryset.filter( **qs_filter  )
 
 
         return self.queryset
