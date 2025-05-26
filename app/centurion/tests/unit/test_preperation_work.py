@@ -66,7 +66,7 @@ class MetaChecksPyTest:
 
 
 
-    notes_models = get_models( [ 'base', 'history', 'note', 'ticket' ] )
+    notes_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket' ] )
 
 
     @pytest.mark.xfail( reason = 'Test Checks if installed models has a notes table' )
@@ -100,7 +100,7 @@ class MetaChecksPyTest:
 
 
 
-    history_models = get_models( [ 'base', 'history', 'note', 'ticket' ] )
+    history_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket' ] )
 
 
     @pytest.mark.xfail( reason = 'Test Checks if installed models has a History table' )
