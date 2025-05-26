@@ -21,6 +21,31 @@ class CenturionAbstractModelTestCases(
 
 
 
+    def test_model_has_history_model(self, model):
+        """Audit History Table check
+
+        Check if the model has a corresponding audit history table that should be
+        called `<app_label>_<model_name>_audithistory`
+        """
+
+        if model._meta.abstract:
+
+            pytest.xfail( reason = 'Model is an Abstract Model and can not be created.' )
+
+        elif not getattr(model, '_audit_enabled', False):
+
+            pytest.xfail( reason = 'Model has audit history disabled.' )
+
+
+        history_model = apps.get_model(
+            app_label = model._meta.app_label,
+            model_name = model().get_history_model_name()
+        )
+
+        assert history_model.__name__ == model().get_history_model_name()
+
+
+
     def test_model_create_has_history_entry(self, content_type, created_model, model):
         """Model Created
 
@@ -28,9 +53,13 @@ class CenturionAbstractModelTestCases(
         entry.
         """
 
-        if model._meta.abstract:
+        if created_model._meta.abstract:
 
             pytest.xfail( reason = 'Model is an Abstract Model and can not be created.' )
+
+        elif not getattr(created_model, '_audit_enabled', False):
+
+            pytest.xfail( reason = 'Model has audit history disabled.' )
 
 
         history_model = apps.get_model( created_model._meta.app_label, created_model.get_history_model_name() )
