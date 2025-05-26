@@ -266,7 +266,7 @@ def pytest_generate_tests(metafunc):
 
 
 
-@pytest.fixture( scope = 'function')
+@pytest.fixture( scope = 'class')
 def content_type():
 
     from django.contrib.contenttypes.models import ContentType
