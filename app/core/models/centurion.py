@@ -223,7 +223,7 @@ class CenturionModel(
             url_basename = url_basename + '-detail'
 
 
-        url = reverse( viewname = url_basename, kwargs = { 'pk': self.id } )
+        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs() )
 
         if not relative:
 
@@ -231,6 +231,24 @@ class CenturionModel(
 
 
         return url
+
+
+
+    def get_url_kwargs(self) -> dict:
+        """Get URL Kwargs
+
+        Fecth the kwargs required for building a models URL using the reverse
+        method.
+
+        **Note:** It's advisable that if you override this function, that you
+        call it's super, so as not to duplicate code. That way each override
+        builds up[on the parent `get_url_kwargs` function.
+
+        Returns:
+            dict: Kwargs required for reverse function to build a models URL.
+        """
+
+        return { 'pk': self.id }
 
 
 
