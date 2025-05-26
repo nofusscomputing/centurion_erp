@@ -1,14 +1,14 @@
 from django.apps import apps
 from django.contrib.auth.models import ContentType
 from django.db.models.signals import (
-    post_delete,
+    # post_delete,
     post_save
 )
 from django.dispatch import receiver
 
 
 
-@receiver(post_delete, dispatch_uid="audit_history_delete")
+# @receiver(post_delete, dispatch_uid="audit_history_delete")
 @receiver(post_save, dispatch_uid="audit_history_save")
 def audit_history(sender, instance, **kwargs):
 
