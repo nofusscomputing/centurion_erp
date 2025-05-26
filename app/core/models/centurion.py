@@ -34,6 +34,13 @@ class CenturionModel(
     to their own `urls.py` file from `api/urls_v2.py`.
     """
 
+    url_model_name: str = None
+    """URL Model Name override
+
+    Optionally use this attribute to set the model name for the url `basename`,
+    i.e. `_api_<url_model_name>`
+    """
+
 
     class Meta:
 
@@ -202,7 +209,19 @@ class CenturionModel(
         if self.get_app_namespace():
             namespace = namespace + ':' + self.get_app_namespace()
 
+
         url_basename = f'{namespace}:_api_{self._meta.model_name}-detail'
+
+        if self.url_model_name:
+
+            url_basename = f'{namespace}:_api_{self.url_model_name}'
+
+            if self._is_submodel:
+
+                url_basename = url_basename + '_sub'
+
+            url_basename = url_basename + '-detail'
+
 
         url = reverse( viewname = url_basename, kwargs = { 'pk': self.id } )
 
