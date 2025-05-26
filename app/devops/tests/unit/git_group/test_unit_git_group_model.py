@@ -11,8 +11,7 @@ from devops.models.git_group import GitGroup
 
 
 
-@pytest.mark.models
-@pytest.mark.unit
+@pytest.mark.model_gitgroup
 class GitGroupModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
