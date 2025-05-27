@@ -37,6 +37,10 @@ class GitGroupModelTestCases(
                 'type': type(None),
                 'value': None,
             },
+            'model_tag': {
+                'type': str,
+                'value': 'git_group'
+            },
         }
 
 

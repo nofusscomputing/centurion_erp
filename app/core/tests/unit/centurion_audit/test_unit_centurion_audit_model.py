@@ -38,6 +38,14 @@ class CenturionAuditModelTestCases(
         },
         '_notes_enabled': {
             'value': False,
+        },
+        'model_tag': {
+            'type': type(None),
+            'value': None,
+        },
+        'url_model_name': {
+            'type': str,
+            'value': 'centurionaudit',
         }
     }
 
@@ -125,6 +133,17 @@ class CenturionAuditModelInheritedCases(
 class CenturionAuditModelPyTest(
     CenturionAuditModelTestCases,
 ):
+
+
+
+    @pytest.mark.xfail( reason = 'This model is an abstract model')
+    def test_model_tag_defined(self, model):
+        """ Model Tag
+
+        Ensure that the model has a tag defined.
+        """
+
+        assert model.model_tag is not None
 
 
     def test_method_clean_fields_default_attributes(self, model_instance):
