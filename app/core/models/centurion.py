@@ -34,6 +34,13 @@ class CenturionModel(
     to their own `urls.py` file from `api/urls_v2.py`.
     """
 
+    model_tag: str = None
+    """Model Tag
+    
+    String that is used as this models tag. Used within ticketing for linking a
+    model to a ticket and wihin markdown for referencing a model.
+    """
+
     url_model_name: str = None
     """URL Model Name override
 
