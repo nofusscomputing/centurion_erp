@@ -52,6 +52,12 @@ class CenturionAbstractModelTestCases(
                     'logger': None,
                     'user': None,
                 }
+            },
+            'model_tag': {
+                'type': str,
+            },
+            'url_model_name': {
+                'type': type(None),
             }
         }
 
@@ -242,9 +248,33 @@ class CenturionAbstractModelInheritedCases(
 
 
 
+    def test_model_tag_defined(self, model):
+        """ Model Tag
+
+        Ensure that the model has a tag defined.
+        """
+
+        assert model.model_tag is not None
+
+
+
 class CenturionAbstractModelPyTest(
     CenturionAbstractModelTestCases,
 ):
+
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {
+            'model_tag': {
+                'type': type(None),
+                'value': None,
+            },
+            'url_model_name': {
+                'type': type(None),
+                'value': None,
+            }
+        }
 
 
 

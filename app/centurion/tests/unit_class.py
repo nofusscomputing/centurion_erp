@@ -54,7 +54,13 @@ class ClassTestCases:
         Ensure that field `param_field_name` has a type of `param_type`
         """
 
-        assert type(getattr(test_class, param_field_name)) is param_type
+        if type(getattr(test_class, param_field_name)) is property:
+
+            assert type( getattr(test_class, param_field_name).fget(test_class) ) is param_type
+
+        else:
+
+            assert type(getattr(test_class, param_field_name)) is param_type
 
 
 
@@ -67,4 +73,11 @@ class ClassTestCases:
         Ensure that field `param_field_name`has a value of `param_value`
         """
 
-        assert getattr(test_class, param_field_name) == param_value
+
+        if type(getattr(test_class, param_field_name)) is property:
+
+            assert getattr(test_class, param_field_name).fget(test_class) == param_value
+
+        else:
+
+            assert getattr(test_class, param_field_name) == param_value
