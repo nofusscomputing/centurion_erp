@@ -17,6 +17,8 @@ class GitGroup(
 
     documentation = ''
 
+    model_tag = 'git_group'
+
     page_layout: dict = [
         {
             "name": "Details",
