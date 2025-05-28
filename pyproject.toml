@@ -107,6 +107,9 @@ limit-inference-results = 100
 # usually to register additional checkers.
 load-plugins = [
     "pylint.extensions.bad_builtin",
+    "pylint.extensions.docparams",
+    "pylint.extensions.redefined_variable_type",
+    "pylint.extensions.typing",
 ]
 
 # Pickle collected data for later comparisons.
@@ -345,7 +348,7 @@ max-line-length = 100
 # Maximum number of lines in a module.
 max-module-lines = 1000
 
-# Allow the body of a class to be on the same line as the declaration if body
+# Allow the body of a class to be on the same line as the declaration if body                      
 # contains single statement.
 # single-line-class-stmt =
 
@@ -796,6 +799,7 @@ enable = [
     "fatal",
     "method-check-failed",
     "parse-error",
+
     # Error
     "abstract-class-instantiated",
     "assigning-non-slot",
@@ -840,6 +844,7 @@ enable = [
     "raising-bad-type",
     "raising-non-exception",
     "syntax-error",
+
     # Warning
     # "abstract-method",              # investigate if going to use
     "bad-builtin",
@@ -851,6 +856,26 @@ enable = [
     "deprecated-argument",
     "import-self",
     "unused-import",
+    "useless-type-doc",
+
+    # Convention
+    "bad-file-encoding",
+    "line-too-long",
+    "mixed-line-endings",
+    "multiple-imports",
+    "multiple-statements",
+    "trailing-newlines",
+    "trailing-whitespace",
+    "ungrouped-imports",
+    "unidiomatic-typecheck",
+    "useless-import-alias",
+    "wrong-import-order",
+    "wrong-import-position",
+
+    # Refactor
+    "redefined-variable-type",
+    "redundant-typehint-argument",
+    "too-many-nested-blocks",
 
 ]
 
