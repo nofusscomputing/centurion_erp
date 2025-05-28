@@ -186,3 +186,35 @@ class ModelTestCases(
         else:
 
             assert getattr(model_instance._meta.get_field(param_field_name), 'unique') == param_unique
+
+
+
+    def test_method_type___str__(self, model, model_instance ):
+        """Test Method
+
+        Ensure method `__str__` is of type `str`
+        """
+
+        if model._meta.abstract:
+
+            pytest.xfail(reason = 'Model is an abstract model')
+
+
+        assert type(model_instance.__str__()) is str
+
+
+
+    def test_method_value_not_default___str__(self, model, model_instance ):
+        """Test Method
+
+        Ensure method `__str__` does not return the default value.
+        """
+
+        if model._meta.abstract:
+
+            pytest.xfail(reason = 'Model is an abstract model')
+
+
+        default_value = f'{model_instance._meta.object_name} object ({str(model_instance.id)})'
+
+        assert model_instance.__str__() != default_value
