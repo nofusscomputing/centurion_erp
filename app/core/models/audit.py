@@ -267,10 +267,8 @@ class AuditMetaModel(
         kwargs = {}
 
         kwargs.update({
-            'app_label': self._meta.app_label,
-            'model_name': str(self._meta.model_name).replace('audithistory', ''),
-            'model_id': self.model.id,
             **super().get_url_kwargs(),
+            'model_name': str(self._meta.model_name).replace('audithistory', ''),
         })
 
         return kwargs

@@ -58,6 +58,7 @@ class CenturionAbstractModelTestCases(
             },
             'url_model_name': {
                 'type': type(None),
+                'value': None,
             }
         }
 
@@ -190,6 +191,20 @@ class CenturionAbstractModelTestCases(
 
 
 
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        model_instance.id = 1
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == { 'pk': model_instance.id }
+
+
+
     def test_method_validate_field_not_none_raises_exception(self, model):
         """ Test Class Method
 
@@ -272,7 +287,6 @@ class CenturionAbstractModelPyTest(
             },
             'url_model_name': {
                 'type': type(None),
-                'value': None,
             }
         }
 
@@ -778,7 +792,6 @@ class CenturionAbstractModelPyTest(
         test_value = settings.SITE_URL + site_path
 
         model_instance.id = 1
-        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
 
         url = model_instance.get_url( relative = False)
 
@@ -797,11 +810,33 @@ class CenturionAbstractModelPyTest(
         reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
 
         model_instance.id = 1
-        url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
 
         url = model_instance.get_url( relative = True)
 
         assert url == site_path
+
+
+
+    def test_method_get_url_attribute_url_model_name_set(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        model_instance.id = 1
+        model_instance.url_model_name = 'testmodel'
+
+        url_basename = f'v2:_api_testmodel-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        model_instance.url_model_name = None    # Reset Val
+
+        reverse.assert_called_with( url_basename, None, { 'pk': model_instance.id }, None, None )
 
 
 

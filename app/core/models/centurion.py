@@ -217,17 +217,17 @@ class CenturionModel(
             namespace = namespace + ':' + self.get_app_namespace()
 
 
-        url_basename = f'{namespace}:_api_{self._meta.model_name}-detail'
+        url_basename = f'{namespace}:_api_{self._meta.model_name}'
 
         if self.url_model_name:
 
             url_basename = f'{namespace}:_api_{self.url_model_name}'
 
-            if self._is_submodel:
+        if self._is_submodel:
 
-                url_basename = url_basename + '_sub'
+            url_basename += '_sub'
 
-            url_basename = url_basename + '-detail'
+        url_basename += '-detail'
 
 
         url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs() )
@@ -303,3 +303,17 @@ class CenturionSubModel(
     class Meta:
 
         abstract = True
+
+
+    def get_url_kwargs(self):
+
+        kwargs = {}
+
+        kwargs.update({
+            **super().get_url_kwargs(),
+            'app_label': self._meta.app_label,
+            'model_name': str(self._meta.model_name),
+            'model_id': self.model.id,
+        })
+
+        return kwargs
