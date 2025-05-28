@@ -173,7 +173,7 @@ for model in apps.get_models():
 
 entity_type_names = str(entity_type_names)[:-1]
 
-
+# pylint: disable=C0301:line-too-long
 router.register('access', access_v2.Index, basename='_api_v2_access_home')
 
 router.register('access/(?P<entity_model>[company]+)', entity.ViewSet, feature_flag = '2025-00008', basename='_api_v2_company')
