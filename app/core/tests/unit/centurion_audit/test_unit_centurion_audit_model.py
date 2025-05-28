@@ -122,6 +122,25 @@ class CenturionAuditModelTestCases(
         })
 
 
+    @pytest.mark.xfail( reason = 'Does not require method' )
+    def test_method_value_not_default___str__(self, model, model_instance ):
+        """Test Method
+
+        Ensure method `__str__` does not return the default value.
+        """
+
+        if model._meta.abstract:
+
+            pytest.xfail(reason = 'Model is an abstract model')
+
+
+        default_value = f'{model_instance._meta.object_name} object ({str(model_instance.id)})'
+
+        assert model_instance.__str__() != default_value
+
+
+
+
 class CenturionAuditModelInheritedCases(
     CenturionAuditModelTestCases,
 ):
