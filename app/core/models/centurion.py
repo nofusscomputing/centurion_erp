@@ -303,3 +303,17 @@ class CenturionSubModel(
     class Meta:
 
         abstract = True
+
+
+    def get_url_kwargs(self):
+
+        kwargs = {}
+
+        kwargs.update({
+            **super().get_url_kwargs(),
+            'app_label': self._meta.app_label,
+            'model_name': str(self._meta.model_name),
+            'model_id': self.model.id,
+        })
+
+        return kwargs
