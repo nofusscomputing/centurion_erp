@@ -792,7 +792,6 @@ class CenturionAbstractModelPyTest(
         test_value = settings.SITE_URL + site_path
 
         model_instance.id = 1
-        # url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
 
         url = model_instance.get_url( relative = False)
 
@@ -811,7 +810,6 @@ class CenturionAbstractModelPyTest(
         reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
 
         model_instance.id = 1
-        # url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
 
         url = model_instance.get_url( relative = True)
 
