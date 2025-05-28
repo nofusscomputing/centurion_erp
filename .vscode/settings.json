@@ -25,4 +25,5 @@
         "green": 90
     },
     "telemetry.feedback.enabled": false,
+    "python.languageServer": "None",
 }
