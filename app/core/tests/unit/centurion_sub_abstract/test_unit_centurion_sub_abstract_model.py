@@ -21,6 +21,28 @@ class CenturionSubAbstractModelTestCases(
     }
 
 
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url` calls reverse
+        """
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+        model_instance.id = 1
+
+        model_instance.model = model_instance
+
+        url_basename = f'v2:_api_{model_instance._meta.model_name}_sub-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        del model_instance.model
+
+        reverse.assert_called_with( url_basename, None, { 'pk': model_instance.id }, None, None )
+
 
 
 class CenturionSubAbstractModelInheritedCases(
