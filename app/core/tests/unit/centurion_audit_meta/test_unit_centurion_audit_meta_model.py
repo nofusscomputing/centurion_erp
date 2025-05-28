@@ -139,18 +139,13 @@ class MetaAbstractModelPyTest(
 
         mocker.patch('core.models.audit.CenturionAudit.get_model_history', return_value = False)
 
-        # super_clean_fields = mocker.patch('core.models.audit.CenturionAudit.clean_fields', return_value = None)
-
-
         with pytest.raises( ValidationError ) as e:
 
             model_instance.clean_fields()
 
 
         assert e.value.code == 'did_not_process_history'
-        # super_clean_fields.assert_called_with(
-        #     exclude = None
-        # )
+
 
 
     def test_method_clean_fields_exception_no_model(self, mocker, model_instance):
@@ -162,10 +157,6 @@ class MetaAbstractModelPyTest(
 
         model_instance.model = None
 
-        # mocker.patch('core.models.audit.CenturionAudit.get_model_history', return_value = False)
-
-        # super_clean_fields = mocker.patch('core.models.audit.CenturionAudit.clean_fields', return_value = None)
-
 
         with pytest.raises( ValidationError ) as e:
 
@@ -173,6 +164,3 @@ class MetaAbstractModelPyTest(
 
 
         assert e.value.code == 'no_model_supplied'
-        # super_clean_fields.assert_called_with(
-        #     exclude = None
-        # )

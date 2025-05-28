@@ -39,9 +39,41 @@ class CenturionSubAbstractModelTestCases(
 
         url = model_instance.get_url( relative = True)
 
-        del model_instance.model
+        reverse.assert_called_with(
+            url_basename,
+            None,
+            {
+                'app_label': model_instance._meta.app_label,
+                'model_name': model_instance._meta.model_name,
+                'model_id': model_instance.model.id,
+                'pk': model_instance.id,
+            },
+            None,
+            None
+        )
 
-        reverse.assert_called_with( url_basename, None, { 'pk': model_instance.id }, None, None )
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        model_instance.id = 1
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'app_label': model_instance._meta.app_label,
+            'model_name': model_instance._meta.model_name,
+            'model_id': model_instance.model.id,
+            'pk': model_instance.id,
+        }
+
+
+
 
 
 

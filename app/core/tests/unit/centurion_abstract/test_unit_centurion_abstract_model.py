@@ -191,6 +191,20 @@ class CenturionAbstractModelTestCases(
 
 
 
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        model_instance.id = 1
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == { 'pk': model_instance.id }
+
+
+
     def test_method_validate_field_not_none_raises_exception(self, model):
         """ Test Class Method
 
@@ -825,36 +839,6 @@ class CenturionAbstractModelPyTest(
         model_instance.url_model_name = None    # Reset Val
 
         reverse.assert_called_with( url_basename, None, { 'pk': model_instance.id }, None, None )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
