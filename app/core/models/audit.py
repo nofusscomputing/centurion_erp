@@ -36,6 +36,10 @@ class CenturionAudit(
 
     model_notes = None
 
+    @property
+    def url_model_name(self):
+        return CenturionAudit._meta.model_name
+
     class Meta:
 
         # db_table = 'centurion_audit'
@@ -208,6 +212,9 @@ class CenturionAudit(
 
         for field, value in before_encoded.items():
 
+            if field not in after_encoded:
+                continue
+
             if after_encoded[field] == value:
                 del after_encoded[field]
 
@@ -252,3 +259,18 @@ class AuditMetaModel(
 
 
         super().clean_fields(exclude = exclude)
+
+
+
+    def get_url_kwargs(self):
+
+        kwargs = {}
+
+        kwargs.update({
+            'app_label': self._meta.app_label,
+            'model_name': str(self._meta.model_name).replace('audithistory', ''),
+            'model_id': self.model.id,
+            **super().get_url_kwargs(),
+        })
+
+        return kwargs

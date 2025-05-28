@@ -34,6 +34,20 @@ class CenturionModel(
     to their own `urls.py` file from `api/urls_v2.py`.
     """
 
+    model_tag: str = None
+    """Model Tag
+    
+    String that is used as this models tag. Used within ticketing for linking a
+    model to a ticket and wihin markdown for referencing a model.
+    """
+
+    url_model_name: str = None
+    """URL Model Name override
+
+    Optionally use this attribute to set the model name for the url `basename`,
+    i.e. `_api_<url_model_name>`
+    """
+
 
     class Meta:
 
@@ -202,9 +216,21 @@ class CenturionModel(
         if self.get_app_namespace():
             namespace = namespace + ':' + self.get_app_namespace()
 
+
         url_basename = f'{namespace}:_api_{self._meta.model_name}-detail'
 
-        url = reverse( viewname = url_basename, kwargs = { 'pk': self.id } )
+        if self.url_model_name:
+
+            url_basename = f'{namespace}:_api_{self.url_model_name}'
+
+            if self._is_submodel:
+
+                url_basename = url_basename + '_sub'
+
+            url_basename = url_basename + '-detail'
+
+
+        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs() )
 
         if not relative:
 
@@ -212,6 +238,24 @@ class CenturionModel(
 
 
         return url
+
+
+
+    def get_url_kwargs(self) -> dict:
+        """Get URL Kwargs
+
+        Fecth the kwargs required for building a models URL using the reverse
+        method.
+
+        **Note:** It's advisable that if you override this function, that you
+        call it's super, so as not to duplicate code. That way each override
+        builds up[on the parent `get_url_kwargs` function.
+
+        Returns:
+            dict: Kwargs required for reverse function to build a models URL.
+        """
+
+        return { 'pk': self.id }
 
 
 
