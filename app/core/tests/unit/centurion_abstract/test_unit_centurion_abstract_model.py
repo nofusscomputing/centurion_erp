@@ -828,6 +828,36 @@ class CenturionAbstractModelPyTest(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def test_method_save_audit_enabled_sets__after_create_model(self, mocker, model_instance):
         """Test Class Method
         
