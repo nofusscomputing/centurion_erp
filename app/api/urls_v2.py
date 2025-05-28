@@ -17,19 +17,6 @@ from centurion.viewsets.base import (
     user as user_v2
 )
 
-from access.viewsets import (
-    entity,
-    entity_notes,
-    index as access_v2,
-    organization as organization_v2,
-    organization_notes,
-    role,
-    role_notes,
-    team as team_v2,
-    team_notes,
-    team_user as team_user_v2
-)
-
 from assistance.viewsets import (
     index as assistance_index_v2,
     knowledge_base as knowledge_base_v2,
@@ -138,7 +125,6 @@ router = DefaultRouter(trailing_slash=False)
 
 router.register('', v2.Index, basename='_api_v2_home')
 
-entity_type_names = ''
 history_type_names = ''
 history_app_labels = ''
 ticket_type_names = ''
@@ -164,32 +150,7 @@ for model in apps.get_models():
 
         ticket_comment_names += model._meta.sub_model_type + '|'
 
-
-    if issubclass(model, entity.Entity):
-
-        entity_type_names += model._meta.sub_model_type + '|'
-
-
-
-entity_type_names = str(entity_type_names)[:-1]
-
 # pylint: disable=C0301:line-too-long
-router.register('access', access_v2.Index, basename='_api_v2_access_home')
-
-router.register('access/(?P<entity_model>[company]+)', entity.ViewSet, feature_flag = '2025-00008', basename='_api_v2_company')
-
-router.register(f'access/entity/(?P<entity_model>[{entity_type_names}]+)?', entity.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_sub')
-router.register('access/entity', entity.NoDocsViewSet, feature_flag = '2025-00002', basename='_api_v2_entity')
-router.register('access/entity/(?P<model_id>[0-9]+)/notes', entity_notes.ViewSet, feature_flag = '2025-00002', basename='_api_v2_entity_note')
-
-router.register('access/tenant', organization_v2.ViewSet, basename='_api_v2_organization')
-router.register('access/tenant/(?P<model_id>[0-9]+)/notes', organization_notes.ViewSet, basename='_api_v2_organization_note')
-router.register('access/tenant/(?P<organization_id>[0-9]+)/team', team_v2.ViewSet, basename='_api_v2_organization_team')
-router.register('access/tenant/(?P<organization_id>[0-9]+)/team/(?P<model_id>[0-9]+)/notes', team_notes.ViewSet, basename='_api_v2_team_note')
-router.register('access/tenant/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
-
-router.register('access/role', role.ViewSet, feature_flag = '2025-00003', basename='_api_v2_role')
-router.register('access/role/(?P<model_id>[0-9]+)/notes', role_notes.ViewSet, feature_flag = '2025-00003', basename='_api_v2_role_note')
 
 router.register('assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
 router.register('assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
@@ -328,6 +289,7 @@ urlpatterns = [
 urlpatterns += router.urls
 
 urlpatterns += [
+    path("access/", include("access.urls_api")),
     path("accounting/", include("accounting.urls")),
     path("devops/", include("devops.urls")),
     path("hr/", include('human_resources.urls')),
