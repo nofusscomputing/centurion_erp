@@ -87,7 +87,8 @@ router.register(
     feature_flag = '2025-00006', basename = '_api_v2_ticket_comment_base_sub'
 )
 router.register(
-    prefix=f'ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)/(?P<parent_id>[0-9]+)/threads',
+    prefix=f'ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names} \
+        ]+)/(?P<parent_id>[0-9]+)/threads',
     viewset = ticket_comment.ViewSet,
     feature_flag = '2025-00006', basename = '_api_v2_ticket_comment_base_sub_thread'
 )
