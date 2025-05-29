@@ -31,7 +31,8 @@ router.register(
     basename = '_api_v2_config_group_note'
 )
 router.register(
-    prefix = 'group/(?P<config_group_id>[0-9]+)/software', viewset = config_group_software_v2.ViewSet,
+    prefix = 'group/(?P<config_group_id>[0-9]+)/software',
+    viewset = config_group_software_v2.ViewSet,
     basename = '_api_v2_config_group_software'
 )
 
