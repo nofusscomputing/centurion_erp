@@ -1,9 +1,15 @@
 from django.conf import settings
 from django.contrib.auth.models import ContentType
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 
 from access.fields import AutoLastModifiedField
-from core.models.centurion import CenturionModel
+from core.models.centurion import (
+    CenturionModel,
+    CenturionSubModel,
+)
 
 
 
@@ -11,6 +17,13 @@ class CenturionModelNote(
     CenturionModel
 ):
     """ Base Centurion Notes Model"""
+
+    _audit_enabled = False
+
+
+    @property
+    def url_model_name(self):
+        return CenturionModelNote._meta.model_name
 
 
     class Meta:
@@ -77,3 +90,58 @@ class CenturionModelNote(
     # This model is not expected to be viewable in a table
     # as it's a sub-model
     table_fields: list = []
+
+
+
+class NoteAuditMetaModel(
+    CenturionModelNote,
+    CenturionSubModel,
+):
+
+    model_notes = None
+
+    class Meta:
+        abstract = True
+        proxy = False
+
+
+
+    def clean_fields(self, exclude = None):
+
+        if not getattr(self, 'model', None):
+
+            raise ValidationError(
+                code = 'no_model_supplied',
+                message = 'Unable to process the history, no model was supplied.'
+            )
+
+
+        self.organization = self.model.organization
+
+        if not self.id:
+
+            self.created_by = self.context['user']
+
+        else:
+
+            self.modified_by = self.context['user']
+
+        self.content_type = ContentType.objects.get(
+            app_label = self.model._meta.app_label,
+            model = self.model._meta.model_name
+        )
+
+        super().clean_fields(exclude = exclude)
+
+
+
+    def get_url_kwargs(self):
+
+        kwargs = {}
+
+        kwargs.update({
+            **super().get_url_kwargs(),
+            'model_name': str(self._meta.model_name).replace('centurionmodelnote', ''),
+        })
+
+        return kwargs
