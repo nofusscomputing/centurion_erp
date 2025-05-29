@@ -22,13 +22,6 @@ from assistance.viewsets import (
     knowledge_base_category_notes,
 )
 
-from config_management.viewsets import (
-    index as config_management_v2,
-    config_group as config_group_v2,
-    config_group_notes,
-    config_group_software as config_group_software_v2
-)
-
 from core.viewsets import (
     audit_history,
     celery_log as celery_log_v2,
@@ -152,13 +145,6 @@ router.register('base', base_index_v2.Index, basename='_api_v2_base_home')
 router.register('base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
 router.register('base/permission', permission_v2.ViewSet, basename='_api_v2_permission')
 router.register('base/user', user_v2.ViewSet, basename='_api_v2_user')
-
-
-router.register('config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
-router.register('config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
-router.register('config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
-router.register('config_management/group/(?P<model_id>[0-9]+)/notes', config_group_notes.ViewSet, basename='_api_v2_config_group_note')
-router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
 
 
 history_type_names = str(history_type_names)[:-1]
