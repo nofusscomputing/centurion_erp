@@ -20,41 +20,79 @@ if apps.models_ready:
 
     for model in apps.get_models():
 
-        if not getattr(model, '_audit_enabled', False):
-            continue
-
         name = model.__name__
 
-        audit_meta_name = model().get_history_model_name()
+        if getattr(model, '_audit_enabled', False):
 
-        if audit_meta_name in existing_models:
-            continue
+            audit_meta_name = model().get_history_model_name()
+
+            if audit_meta_name in existing_models:
+                continue
 
 
-        AuditMetaModel = type(
-            audit_meta_name,
-            ( import_string("core.models.audit.AuditMetaModel"), ),
-            {
-                '__module__': module_path,
-                '__qualname__': audit_meta_name,
-                '__doc__': f'Auto-generated meta model for {name} Audit History.',
-                'Meta': type('Meta', (), {
-                            'app_label': model._meta.app_label,
-                            'db_table': model._meta.db_table + '_audithistory',
-                            'managed': True,
-                            'verbose_name': model._meta.verbose_name + ' History',
-                            'verbose_name_plural': model._meta.verbose_name + ' Histories',
-                        }),
-                'model': models.ForeignKey(
-                    model,
-                    blank = False,
-                    help_text = 'Model this history belongs to',
-                    null = False,
-                    on_delete = models.CASCADE,
-                    related_name = 'audit_history',
-                    verbose_name = 'Model',
-                )
-            }
-        )
+            AuditMetaModel = type(
+                audit_meta_name,
+                ( import_string("core.models.audit.AuditMetaModel"), ),
+                {
+                    '__module__': module_path,
+                    '__qualname__': audit_meta_name,
+                    '__doc__': f'Auto-generated meta model for {name} Audit History.',
+                    'Meta': type('Meta', (), {
+                                'app_label': model._meta.app_label,
+                                'db_table': model._meta.db_table + '_audithistory',
+                                'managed': True,
+                                'verbose_name': model._meta.verbose_name + ' History',
+                                'verbose_name_plural': model._meta.verbose_name + ' Histories',
+                            }),
+                    'model': models.ForeignKey(
+                        model,
+                        blank = False,
+                        help_text = 'Model this history belongs to',
+                        null = False,
+                        on_delete = models.CASCADE,
+                        related_name = 'audit_history',
+                        verbose_name = 'Model',
+                    )
+                }
+            )
 
-        setattr(sys.modules[module_path], audit_meta_name, AuditMetaModel)
+            setattr(sys.modules[module_path], audit_meta_name, AuditMetaModel)
+
+
+        if getattr(model, '_notes_enabled', False):
+            # continue
+
+            # audit_meta_name = model().get_history_model_name()
+            notes_meta_name = f'{model._meta.object_name}CenturionNote'
+
+            if notes_meta_name in existing_models:
+                continue
+
+
+            NotesMetaModel = type(
+                notes_meta_name,
+                ( import_string("core.models.centurion_notes.CenturionNotesMetaModel"), ),
+                {
+                    '__module__': module_path,
+                    '__qualname__': notes_meta_name,
+                    '__doc__': f'Auto-generated meta model for {name} Notes.',
+                    'Meta': type('Meta', (), {
+                                'app_label': model._meta.app_label,
+                                'db_table': model._meta.db_table + '_centurionnotes',
+                                'managed': True,
+                                'verbose_name': model._meta.verbose_name + ' Note',
+                                'verbose_name_plural': model._meta.verbose_name + ' Notes',
+                            }),
+                    'model': models.ForeignKey(
+                        model,
+                        blank = False,
+                        help_text = 'Model this note belongs to',
+                        null = False,
+                        on_delete = models.CASCADE,
+                        related_name = '+',
+                        verbose_name = 'Model',
+                    )
+                }
+            )
+
+            setattr(sys.modules[module_path], notes_meta_name, NotesMetaModel)
