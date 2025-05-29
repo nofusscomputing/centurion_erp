@@ -47,19 +47,10 @@ from itam.viewsets import (
 )
 
 from itim.viewsets import (
-    index as itim_v2,
-    change,
-    cluster as cluster_v2,
-    cluster_notes,
     cluster_type as cluster_type_v2,
     cluster_type_notes,
-    incident,
     port as port_v2,
     port_notes,
-    problem,
-    service as service_v2,
-    service_cluster,
-    service_notes,
 )
 
 from project_management.viewsets import (
@@ -138,19 +129,6 @@ router.register(
 )
 
 
-
-
-router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
-router.register('itim/ticket/change', change.ViewSet, basename='_api_v2_ticket_change')
-router.register('itim/cluster', cluster_v2.ViewSet, basename='_api_v2_cluster')
-router.register('itim/cluster/(?P<cluster_id>[0-9]+)/service', service_cluster.ViewSet, basename='_api_v2_service_cluster')
-router.register('itim/cluster/(?P<model_id>[0-9]+)/notes', cluster_notes.ViewSet, basename='_api_v2_cluster_note')
-router.register('itim/ticket/incident', incident.ViewSet, basename='_api_v2_ticket_incident')
-router.register('itim/ticket/problem', problem.ViewSet, basename='_api_v2_ticket_problem')
-router.register('itim/service', service_v2.ViewSet, basename='_api_v2_service')
-router.register('itim/service/(?P<model_id>[0-9]+)/notes', service_notes.ViewSet, basename='_api_v2_service_note')
-
-
 router.register('project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 router.register('project_management/project', project_v2.ViewSet, basename='_api_v2_project')
 router.register('project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
@@ -207,6 +185,7 @@ urlpatterns += [
     path(route = "core/", view = include("core.urls_api")),
     path(route = "devops/", view = include("devops.urls")),
     path(route = "itam/", view = include("itam.urls_api")),
+    path(route = "itim/", view = include("itim.urls_api")),
     path(route = "hr/", view = include('human_resources.urls')),
     path(route = 'public/', view = include('api.urls_public')),
 ]
