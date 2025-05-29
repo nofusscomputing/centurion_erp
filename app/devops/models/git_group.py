@@ -12,7 +12,6 @@ class GitGroup(
     CenturionModel
 ):
 
-    _notes_enabled = False
 
     app_namespace = 'devops'
 
