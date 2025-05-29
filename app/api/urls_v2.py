@@ -54,14 +54,8 @@ from itim.viewsets import (
 )
 
 from project_management.viewsets import (
-    index as project_management_v2,
-    project as project_v2,
-    project_milestone as project_milestone_v2,
-    project_milestone_notes,
-    project_notes,
     project_state as project_state_v2,
     project_state_notes,
-    project_task,
     project_type as project_type_v2,
     project_type_notes,
 )
@@ -129,14 +123,6 @@ router.register(
 )
 
 
-router.register('project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
-router.register('project_management/project', project_v2.ViewSet, basename='_api_v2_project')
-router.register('project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
-router.register('project_management/project/(?P<project_id>[0-9]+)/milestone/(?P<model_id>[0-9]+)/notes', project_milestone_notes.ViewSet, basename='_api_v2_project_milestone_note')
-router.register('project_management/project/(?P<model_id>[0-9]+)/notes', project_notes.ViewSet, basename='_api_v2_project_note')
-router.register('project_management/project/(?P<project_id>[0-9]+)/project_task', project_task.ViewSet, basename='_api_v2_ticket_project_task')
-
-
 router.register('settings', settings_index_v2.Index, basename='_api_v2_settings_home')
 router.register('settings/app_settings', app_settings_v2.ViewSet, basename='_api_v2_app_settings')
 router.register('settings/celery_log', celery_log_v2.ViewSet, basename='_api_v2_celery_log')
@@ -184,8 +170,9 @@ urlpatterns += [
     path(route = "config_management/", view = include("config_management.urls_api")),
     path(route = "core/", view = include("core.urls_api")),
     path(route = "devops/", view = include("devops.urls")),
+    path(route = "hr/", view = include('human_resources.urls')),
     path(route = "itam/", view = include("itam.urls_api")),
     path(route = "itim/", view = include("itim.urls_api")),
-    path(route = "hr/", view = include('human_resources.urls')),
+    path(route = "project_management/", view = include("project_management.urls_api")),
     path(route = 'public/', view = include('api.urls_public')),
 ]
