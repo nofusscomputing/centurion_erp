@@ -18,13 +18,8 @@ from centurion.viewsets.base import (
 )
 
 from assistance.viewsets import (
-    index as assistance_index_v2,
-    knowledge_base as knowledge_base_v2,
-    knowledge_base_notes,
     knowledge_base_category as knowledge_base_category_v2,
     knowledge_base_category_notes,
-    model_knowledge_base_article,
-    request as request_ticket_v2,
 )
 
 from config_management.viewsets import (
@@ -151,12 +146,6 @@ for model in apps.get_models():
         ticket_comment_names += model._meta.sub_model_type + '|'
 
 # pylint: disable=C0301:line-too-long
-
-router.register('assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
-router.register('assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
-router.register('assistance/knowledge_base/(?P<model_id>[0-9]+)/notes', knowledge_base_notes.ViewSet, basename='_api_v2_knowledge_base_note')
-router.register('assistance/(?P<model>.+)/(?P<model_pk>[0-9]+)/knowledge_base', model_knowledge_base_article.ViewSet, basename='_api_v2_model_kb')
-router.register('assistance/ticket/request', request_ticket_v2.ViewSet, basename='_api_v2_ticket_request')
 
 
 router.register('base', base_index_v2.Index, basename='_api_v2_base_home')
