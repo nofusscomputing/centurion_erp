@@ -56,7 +56,8 @@ router.register('base/user', user_v2.ViewSet, basename='_api_v2_user')
 
 
 router.register(
-    prefix = f'(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names}]+)/(?P<model_id>[0-9]+)/history',
+    prefix = f'(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names} \
+        ]+)/(?P<model_id>[0-9]+)/history',
     viewset = audit_history.ViewSet,
     basename = '_api_centurionaudit_sub'
 )
