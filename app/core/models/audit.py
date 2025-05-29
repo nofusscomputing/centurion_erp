@@ -22,10 +22,6 @@ class CenturionAudit(
 
     This model is responsible for recording change to a model. The saving of
     model history is via the `delete` and `save` signals
-
-    Args:
-        CenturionModel (_type_): Centurion Model attributes, functions and method
-        TenancyObject (_type_): Centurion Tenancy Abstract model.
     """
 
     _audit_enabled: bool = False

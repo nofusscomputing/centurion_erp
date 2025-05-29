@@ -5,10 +5,9 @@ from django.core.exceptions import (
 from django.db import models
 
 from access.fields import AutoCreatedField
+from access.models.tenancy_abstract import TenancyAbstractModel
 
 from rest_framework.reverse import reverse
-
-from access.models.tenancy_abstract import TenancyAbstractModel
 
 
 
@@ -78,7 +77,7 @@ class CenturionModel(
 
     @staticmethod
     def validate_field_not_none(value):
-        
+
         if value is None:
 
             raise ValidationError(code = 'field_value_not_none', message = 'Value can not be none.')
@@ -111,11 +110,13 @@ class CenturionModel(
 
 
 
-    def full_clean(self, exclude = None, validate_unique = True, validate_constraints = True) -> None:
+    def full_clean(self, exclude = None,
+        validate_unique = True, validate_constraints = True
+    ) -> None:
 
         super().full_clean(
             exclude = exclude,
-            validate_unique = validate_unique, 
+            validate_unique = validate_unique,
             validate_constraints = validate_constraints
         )
 
@@ -193,7 +194,7 @@ class CenturionModel(
         Returns:
             str: Name of the history model (`<model class name>AuditHistory`)
         """
-        
+
         return f'{self._meta.object_name}AuditHistory'
 
 
@@ -280,7 +281,7 @@ class CenturionModel(
             self._after = self.get_audit_values()
 
             if self.id:
-                
+
                 self._before = type(self).objects.get( id = self.id ).get_audit_values()
 
             else:
@@ -288,7 +289,9 @@ class CenturionModel(
                 self._before = {}
 
 
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+        super().save(force_insert=force_insert, force_update=force_update,
+            using=using, update_fields=update_fields
+        )
 
 
 
