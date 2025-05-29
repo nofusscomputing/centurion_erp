@@ -1,5 +1,6 @@
-# from django.contrib.auth.models import ContentType
 from rest_framework import serializers
+
+from drf_spectacular.utils import extend_schema_serializer
 
 from access.serializers.organization import TenantBaseSerializer
 
@@ -11,7 +12,8 @@ from core.models.centurion_notes import CenturionModelNote
 
 
 
-class ModelNoteBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'CenturionModelNoteBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -43,9 +45,10 @@ class ModelNoteBaseSerializer(serializers.ModelSerializer):
 
 
 
-class ModelNoteModelSerializer(
+@extend_schema_serializer(component_name = 'CenturionModelNoteModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    ModelNoteBaseSerializer
+    BaseSerializer
 ):
 
 
@@ -58,13 +61,16 @@ class ModelNoteModelSerializer(
         }
 
 
+    organization = common.OrganizationField(required = False, read_only = True)
+
+
     class Meta:
 
         model = CenturionModelNote
 
         fields =  [
              'id',
-            'organization',
+            # 'organization',
             'display_name',
             'body',
             'created_by',
@@ -88,15 +94,6 @@ class ModelNoteModelSerializer(
         ]
 
 
-    def validate(self, attrs):
-
-        is_valid = False
-
-
-        is_valid = super().validate(attrs)
-
-        return is_valid
-
 
     def is_valid(self, *, raise_exception=False) -> bool:
 
@@ -106,7 +103,8 @@ class ModelNoteModelSerializer(
 
 
 
-class ModelNoteViewSerializer(ModelNoteModelSerializer):
+@extend_schema_serializer(component_name = 'CenturionModelNoteViewSerializer')
+class ViewSerializer(ModelSerializer):
 
     organization = TenantBaseSerializer( many = False, read_only = True )
 
