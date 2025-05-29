@@ -32,11 +32,8 @@ from core.viewsets import (
     ticket_category,
     ticket_category_notes,
     ticket_comment,
-    ticket_comment_depreciated,
     ticket_comment_category,
     ticket_comment_category_notes,
-    ticket_linked_item,
-    related_ticket,
 
 )
 
@@ -147,37 +144,18 @@ router.register('base/permission', permission_v2.ViewSet, basename='_api_v2_perm
 router.register('base/user', user_v2.ViewSet, basename='_api_v2_user')
 
 
-history_type_names = str(history_type_names)[:-1]
-router.register(f'(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names}]+)/(?P<model_id>[0-9]+)/history', audit_history.ViewSet, basename='_api_centurionaudit_sub')
-router.register('core/history', audit_history.NoDocsViewSet, basename='_api_centurionaudit')
 
-router.register('(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
+router.register(
+    prefix = f'(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names}]+)/(?P<model_id>[0-9]+)/history',
+    viewset = audit_history.ViewSet,
+    basename = '_api_centurionaudit_sub'
+)
+router.register(
+    prefix = '(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/history',
+    viewset = history_v2.ViewSet,
+    basename = '_api_v2_model_history'
+)
 
-
-ticket_type_names = str(ticket_type_names)[:-1]
-
-router.register(f'core/ticket/(?P<ticket_model>[{ticket_type_names}]+)', ticket.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_sub')
-router.register('core/ticket', ticket.NoDocsViewSet, basename='_api_v2_ticket')
-
-
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment', ticket_comment.NoDocsViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base')
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comment/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_thread')
-
-
-
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments', ticket_comment_depreciated.ViewSet, basename='_api_v2_ticket_comment')
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', ticket_comment_depreciated.ViewSet, basename='_api_v2_ticket_comment_threads')
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/linked_item', ticket_linked_item.ViewSet, basename='_api_v2_ticket_linked_item')
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/related_ticket', related_ticket.ViewSet, basename='_api_v2_ticket_related')
-
-
-ticket_comment_names = str(ticket_comment_names)[:-1]
-
-router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_sub')
-router.register(f'core/ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, feature_flag = '2025-00006', basename='_api_v2_ticket_comment_base_sub_thread')
-
-
-router.register('core/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket', ticket_linked_item.ViewSet, basename='_api_v2_item_tickets')
 
 
 router.register('itam', itam_index_v2.Index, basename='_api_v2_itam_home')
@@ -264,9 +242,12 @@ urlpatterns = [
 urlpatterns += router.urls
 
 urlpatterns += [
-    path("access/", include("access.urls_api")),
-    path("accounting/", include("accounting.urls")),
-    path("devops/", include("devops.urls")),
-    path("hr/", include('human_resources.urls')),
-    path('public/', include('api.urls_public')),
+    path(route = "access/", view = include("access.urls_api")),
+    path(route = "accounting/", view = include("accounting.urls")),
+    path(route = "assistance/", view = include("assistance.urls_api")),
+    path(route = "config_management/", view = include("config_management.urls_api")),
+    path(route = "core/", view = include("core.urls_api")),
+    path(route = "devops/", view = include("devops.urls")),
+    path(route = "hr/", view = include('human_resources.urls')),
+    path(route = 'public/', view = include('api.urls_public')),
 ]
