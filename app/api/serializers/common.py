@@ -129,6 +129,7 @@ class CommonModelSerializer(CommonBaseSerializer):
         if(
             not str(item._meta.model_name).lower().endswith('notes')
             and obj is not FeatureNotUsed
+            and not hasattr(self.Meta.model, '_notes_enabled')
         ):
 
             app_namespace = ''
@@ -154,5 +155,17 @@ class CommonModelSerializer(CommonBaseSerializer):
                     request = self._context['view'].request,
                     kwargs = item.get_url_kwargs_notes()
                 )
+
+        elif hasattr(self.Meta.model, '_notes_enabled'):
+
+            get_url['notes'] = reverse(
+                "v2:_api_centurionmodelnote_sub-list",
+                request = self._context['view'].request,
+                kwargs = {
+                    'app_label': item._meta.app_label,
+                    'model_name': item._meta.model_name,
+                    'model_id': item.pk
+                }
+            )
 
         return get_url
