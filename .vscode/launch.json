@@ -51,6 +51,18 @@
             "program": "${workspaceFolder}/app/manage.py"
         },
         {
+            "name": "Centurion Model (Management Command)",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "models",
+                // "0.0.0.0:8002"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/app/manage.py"
+        },
+        {
             "name": "Migrate",
             "type": "debugpy",
             "request": "launch",
