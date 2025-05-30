@@ -8,7 +8,7 @@ from rest_framework.relations import Hyperlink
 
 from centurion.tests.common import DoesNotExist
 
-from api.tests.unit.test_unit_api_fields import (
+from api.tests.functional.test_functional_api_fields import (
     APIFieldsInheritedCases,
 )
 
