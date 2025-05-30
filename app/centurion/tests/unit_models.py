@@ -99,7 +99,7 @@ class ModelTestCases(
 
     @pytest.fixture( scope = 'class', autouse = True)
     def setup_class(cls, request, model):
-        
+
         pass
 
 
@@ -111,7 +111,7 @@ class ModelTestCases(
 
 
     def test_model_field_parameter_value_blank(self,
-        model_instance, 
+        model_instance,
         parameterized, param_key_model_fields, param_field_name, param_blank
     ):
         """Test Model Field Parameter
@@ -130,7 +130,7 @@ class ModelTestCases(
 
 
     def test_model_field_parameter_value_default(self,
-        model_instance, 
+        model_instance,
         parameterized, param_key_model_fields, param_field_name, param_default
     ):
         """Test Model Field Parameter
@@ -150,7 +150,7 @@ class ModelTestCases(
 
 
     def test_model_field_parameter_value_null(self,
-        model_instance, 
+        model_instance,
         parameterized, param_key_model_fields, param_field_name, param_null
     ):
         """Test Model Field Parameter
@@ -170,7 +170,7 @@ class ModelTestCases(
 
 
     def test_model_field_parameter_value_unique(self,
-        model_instance, 
+        model_instance,
         parameterized, param_key_model_fields, param_field_name, param_unique
     ):
         """Test Model Field Parameter

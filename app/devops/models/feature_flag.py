@@ -1,15 +1,23 @@
 from django.db import models
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
+
+from core.models.centurion import CenturionModel
 
 from itam.models.software import Software
 
 
 
 class FeatureFlag(
-    TenancyObject
+    CenturionModel
 ):
+
+
+    app_namespace = 'devops'
+
+    documentation = 'devops/feature_flags'
+
+    model_tag = 'feature_flag'
 
 
     class Meta:
@@ -22,14 +30,6 @@ class FeatureFlag(
 
         verbose_name_plural = 'Feature Flag'
 
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Primary key of the entry',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
 
     software = models.ForeignKey(
         Software,
@@ -53,7 +53,6 @@ class FeatureFlag(
 
     description = models.TextField(
         blank = True,
-        default = None,
         help_text = 'Description of this feature',
         max_length = 300,
         null = True,
@@ -68,8 +67,6 @@ class FeatureFlag(
         verbose_name = 'Enabled'
     )
 
-    created = AutoCreatedField()
-
     modified = AutoLastModifiedField()
 
     is_global = None    # Field not requied.
@@ -78,10 +75,6 @@ class FeatureFlag(
     def __str__(self) -> str:
 
         return self.name
-
-    app_namespace = 'devops'
-
-    documentation = 'devops/feature_flags'
 
     page_layout: dict = [
         {
@@ -131,16 +124,3 @@ class FeatureFlag(
         'created',
         # 'modified'
     ]
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from devops.models.feature_flag_history import FeatureFlagHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = FeatureFlagHistory
-        )
-
-
-        return history
