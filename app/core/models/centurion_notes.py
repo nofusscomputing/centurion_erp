@@ -108,13 +108,25 @@ class NoteMetaModel(
 
 
 
+    def clean(self):
+
+        if not self.created_by:
+
+            raise ValidationError(
+                code = 'no_user_supplied',
+                message = 'No user was supplied for this model note.'
+            )
+
+        super().clean()
+
+
     def clean_fields(self, exclude = None):
 
         if not getattr(self, 'model', None):
 
             raise ValidationError(
                 code = 'no_model_supplied',
-                message = 'Unable to process the history, no model was supplied.'
+                message = 'No model was supplied for his "Model note".'
             )
 
 
