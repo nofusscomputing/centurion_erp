@@ -60,10 +60,8 @@ if apps.models_ready:
 
 
         if getattr(model, '_notes_enabled', False):
-            # continue
 
-            # audit_meta_name = model().get_history_model_name()
-            notes_meta_name = f'{model._meta.object_name}CenturionNote'
+            notes_meta_name = f'{model._meta.object_name}CenturionModelNote'
 
             if notes_meta_name in existing_models:
                 continue
@@ -71,14 +69,14 @@ if apps.models_ready:
 
             NotesMetaModel = type(
                 notes_meta_name,
-                ( import_string("core.models.centurion_notes.CenturionNotesMetaModel"), ),
+                ( import_string("core.models.centurion_notes.NoteMetaModel"), ),
                 {
                     '__module__': module_path,
                     '__qualname__': notes_meta_name,
                     '__doc__': f'Auto-generated meta model for {name} Notes.',
                     'Meta': type('Meta', (), {
                                 'app_label': model._meta.app_label,
-                                'db_table': model._meta.db_table + '_centurionnotes',
+                                'db_table': model._meta.db_table + '_centurionmodelnote',
                                 'managed': True,
                                 'verbose_name': model._meta.verbose_name + ' Note',
                                 'verbose_name_plural': model._meta.verbose_name + ' Notes',
