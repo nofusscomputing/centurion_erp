@@ -1,4 +1,9 @@
+import inspect
 import pytest
+
+from django.core.exceptions import (
+    ValidationError
+)
 
 from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model import (
     CenturionSubAbstractModelInheritedCases,
@@ -14,6 +19,46 @@ class MetaAbstractModelTestCases(
     CenturionNoteModelInheritedCases,
     CenturionSubAbstractModelInheritedCases,
 ):
+
+
+
+    def test_method_centurionnotes_clean_fields_called(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `core.models.centurion.CenturionModel.delete()` is called
+        when `model.delete()` is called.
+        """
+
+        clean_fields = mocker.patch('core.models.centurion_notes.NoteMetaModel.clean_fields', return_value = None)
+
+        model_instance.clean_fields()
+
+        clean_fields.assert_called_once()
+
+
+
+    def test_method_centurionnotes_clean_fields_no_model_exception(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `core.models.centurion.CenturionModel.delete()` is called
+        when `model.delete()` is called.
+        """
+
+        class MockManager:
+
+            def get(*args, **kwargs):
+                return model_instance
+
+        model_instance.objects = MockManager()
+        model_instance.model = None
+
+        # clean_fields = mocker.patch('core.models.centurion_notes.NoteMetaModel.clean_fields', return_value = None)
+        with pytest.raises( ValidationError ) as e:
+
+            model_instance.clean_fields()
+
+        assert e.value.code == 'no_model_supplied'
+
 
 
     def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
@@ -67,7 +112,7 @@ class MetaAbstractModelInheritedCases(
         assert model.model_tag is not None
 
 
-    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, audit_model):
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, note_model):
         """Test Class Method
         
         Ensure method `get_url` calls reverse
@@ -79,7 +124,7 @@ class MetaAbstractModelInheritedCases(
 
         reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
 
-        instance = audit_model()
+        instance = note_model()
         instance.id = 1
 
         model_instance.id = 1
@@ -104,13 +149,13 @@ class MetaAbstractModelInheritedCases(
 
 
 
-    def test_method_get_url_kwargs(self, mocker, model_instance, audit_model):
+    def test_method_get_url_kwargs(self, mocker, model_instance, note_model):
         """Test Class Method
         
         Ensure method `get_url_kwargs` returns the correct value.
         """
 
-        instance = audit_model()
+        instance = note_model()
         instance.id = 1
 
         model_instance.id = 1
@@ -125,6 +170,24 @@ class MetaAbstractModelInheritedCases(
             'pk': model_instance.id,
         }
 
+
+    def test_method_centurionnotes_clean_fields_no_errors(self, mocker, model_instance, note_model, organization_one):
+        """Test Class Method
+
+        Ensure method `core.models.centurion_notes.NoteMetaModel.clean_fields()` throws no errors
+        when called.
+        """
+
+        clean_fields = mocker.patch('core.models.centurion_notes.CenturionModelNote.clean_fields', return_value = None)
+
+        instance = note_model()
+        instance.id = 1
+        instance.organization = organization_one
+
+        model_instance.id = 1
+        model_instance.model = instance
+
+        model_instance.clean_fields()
 
 
 
@@ -158,3 +221,18 @@ class MetaAbstractModelPyTest(
         is an abstract model this test is not required.
         """
         pass
+
+
+    def test_method_clean_fields_default_attributes(self, model_instance):
+        """Test Class Method
+        
+        Ensure method `clean_fields`  has the defined default attributes.
+        """
+
+        sig = inspect.signature(model_instance.clean_fields)
+
+        exclude = sig.parameters['exclude'].default
+
+        assert(
+            exclude == None
+        )

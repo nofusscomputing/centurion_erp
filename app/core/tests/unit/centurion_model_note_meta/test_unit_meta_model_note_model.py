@@ -79,7 +79,7 @@ class ModelNotesMetaModelTestCases(
     """
 
     @pytest.fixture( scope = 'class' )
-    def audit_model(self, request):
+    def note_model(self, request):
 
         return request.cls.note_model_class
 
@@ -90,7 +90,7 @@ class ModelNotesMetaModelTestCases(
         return request.cls.model_class
 
 
-    @pytest.mark.skip( reason = 'ToDo: Figure out how to dynomagic add audit_model instance' )
+    @pytest.mark.skip( reason = 'ToDo: Figure out how to dynomagic add note_model instance' )
     def test_model_creation(self, model, user):
         pass
 

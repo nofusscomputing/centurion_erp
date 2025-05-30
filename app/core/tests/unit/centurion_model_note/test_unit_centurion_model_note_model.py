@@ -113,6 +113,7 @@ class CenturionNoteModelTestCases(
         })
 
 
+
     @pytest.mark.xfail( reason = 'Model does not require method' )
     def test_method_value_not_default___str__(self, model, model_instance ):
         """Test Method
