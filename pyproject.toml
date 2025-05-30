@@ -1072,6 +1072,7 @@ markers = [
     "meta_models: Selects Meta models",
     "model_gitgroup: Selects tests for model `git group`",
     "models: Selects all models tests.",
+    "note_models: Selects all centurion model note models",
     "tenancy_models: Selects Tenancy models.",
     "unit: Selects all Unit Tests.",
 ]
