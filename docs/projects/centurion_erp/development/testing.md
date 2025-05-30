@@ -35,7 +35,11 @@ example file system structure showing the layout of the tests directory for a mo
 │   ├── functional
 │   │   ├── __init__.py
 │   │   └── <model name>
-│   │       └── test_<type>_<model name>_<component name>.py
+│           ├── test_functional_<model name>_api_fields.py
+│           ├── test_functional_<model name>_api_permission.py
+│           ├── test_functional_<model name>_api_metadata.py
+│           ├── test_functional_<model name>_model.py
+│   │       └── test_functional_<model name>_serializer.py
 │   ├── __init__.py
 │   ├── integration
 │   │   ├── __init__.py
@@ -48,14 +52,9 @@ example file system structure showing the layout of the tests directory for a mo
 │   └── unit
 │       ├── __init__.py
 │       └── <model name>
-│           ├── test_<type>_<model name>.py
-│           ├── test_<type>_<model name>__api.py
-│           ├── test_<type>_<model name>_history.py
-│           ├── test_<type>_<model name>_history_permission.py
-│           ├── test_<type>_<model name>_notes.py
-│           ├── test_<type>_<model name>_permission_api.py
-│           ├── test_<type>_<model name>_serializer.py
-│           └── test_<type>_<model name>_viewsets.py
+│           ├── test_unit_<model name>_model.py
+│           ├── test_unit_<model name>_serializer.py
+│           └── test_unit_<model name>_viewset.py
 
 ```
 
