@@ -69,7 +69,7 @@ if apps.models_ready:
 
             NotesMetaModel = type(
                 notes_meta_name,
-                ( import_string("core.models.centurion_notes.NoteAuditMetaModel"), ),
+                ( import_string("core.models.centurion_notes.NoteMetaModel"), ),
                 {
                     '__module__': module_path,
                     '__qualname__': notes_meta_name,
