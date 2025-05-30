@@ -20,6 +20,8 @@ class CenturionModelNote(
 
     _audit_enabled = False
 
+    _notes_enabled = False
+
 
     @property
     def url_model_name(self):
@@ -93,7 +95,7 @@ class CenturionModelNote(
 
 
 
-class NoteAuditMetaModel(
+class NoteMetaModel(
     CenturionModelNote,
     CenturionSubModel,
 ):
