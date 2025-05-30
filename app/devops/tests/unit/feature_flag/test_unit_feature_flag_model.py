@@ -1,67 +1,116 @@
-from django.test import TestCase
+import pytest
 
-from access.models.tenant import Tenant as Organization
+from django.db import models
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from devops.models.feature_flag import FeatureFlag
-
-from itam.models.software import Software
 
 
-
-class Model(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_feature_flag
+class FeatureFlagModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = FeatureFlag
+
+    @pytest.fixture( scope = 'class', autouse = True )
+    def software_setup(self, request, django_db_blocker, organization_one):
+
+        from itam.models.software import Software
+
+        with django_db_blocker.unblock():
+
+            software = Software.objects.create(
+                organization = organization_one,
+                name = 'software test'
+            )
+
+        request.cls.kwargs_create_item.update({
+            'software': software
+        })
+
+        yield
+
+        with django_db_blocker.unblock():
+
+            software.delete()
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
 
-        1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a device
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
-        """
-
-        self.organization = Organization.objects.create(name='test_org')
-
-
-        self.kwargs_item_create = {
-            'name': 'one',
-            'software': Software.objects.create(
-                organization = self.organization,
-                name = 'soft',
-            ),
-            'description': 'desc',
-            'enabled': True
+    kwargs_create_item = {
+            'software': None,
+            'name': 'a name',
+            'description': ' a description',
+            'enabled': True,
         }
 
-        super().setUpTestData()
+
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'is_global': {
+                'type': type(None),
+                'value': None,
+            },
+            'model_tag': {
+                'type': str,
+                'value': 'feature_flag'
+            },
+        }
+
+
+    parameterized_model_fields = {
+        'software': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': False,
+            'unique': False,
+        },
+        'name': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'length': 50,
+            'null': False,
+            'unique': False,
+        },
+        'description': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.TextField,
+            'null': True,
+            'unique': False,
+        },
+        'enabled': {
+            'blank': False,
+            'default': False,
+            'field_type': models.BooleanField,
+            'null': False,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
 
 
 
-    def test_attribute_type_app_namespace(self):
-        """Attribute Type
-
-        app_namespace is of type str
-        """
-
-        assert type(self.model.app_namespace) is str
+class FeatureFlagModelInheritedCases(
+    FeatureFlagModelTestCases,
+):
+    pass
 
 
-    def test_attribute_value_app_namespace(self):
-        """Attribute Type
 
-        app_namespace has been set, override this test case with the value
-        of attribute `app_namespace`
-        """
-
-        assert self.model.app_namespace == 'devops'
+class FeatureFlagModelPyTest(
+    FeatureFlagModelTestCases,
+):
+    pass
