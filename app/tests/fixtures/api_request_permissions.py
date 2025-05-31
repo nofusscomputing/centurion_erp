@@ -1,10 +1,7 @@
-import django
+import datetime
 import pytest
 
 from settings.models.app_settings import AppSettings
-
-
-User = django.contrib.auth.get_user_model()
 
 
 
@@ -12,6 +9,9 @@ User = django.contrib.auth.get_user_model()
 def api_request_permissions( django_db_blocker,
     model_contenttype,
     model_permission,
+    model_team,
+    model_teamuser,
+    model_user,
     model,
     organization_one,
     organization_two,
@@ -41,18 +41,18 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        add_team = Team.objects.create(
+        add_team = model_team.objects.create(
             team_name = 'add_team' + str(random_str),
             organization = organization_one,
         )
 
         add_team.permissions.set([add_permissions])
 
-        add_user = User.objects.create_user(
+        add_user = model_user.objects.create_user(
             username="test_user_add" + str(random_str), password="password"
         )
 
-        TeamUsers.objects.create(
+        model_teamuser.objects.create(
             team = add_team,
             user = add_user
         )
@@ -67,18 +67,18 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        change_team = Team.objects.create(
+        change_team = model_team.objects.create(
             team_name = 'change_team' + str(random_str),
             organization = organization_one,
         )
 
         change_team.permissions.set([change_permissions])
 
-        change_user = User.objects.create_user(
+        change_user = model_user.objects.create_user(
             username="test_user_change" + str(random_str), password="password"
         )
 
-        TeamUsers.objects.create(
+        model_teamuser.objects.create(
             team = change_team,
             user = change_user
         )
@@ -93,17 +93,17 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        delete_team = Team.objects.create(
+        delete_team = model_team.objects.create(
             team_name = 'delete_team' + str(random_str),
             organization = organization_one,
         )
 
         delete_team.permissions.set([delete_permissions])
 
-        delete_user = User.objects.create_user(
+        delete_user = model_user.objects.create_user(
             username="test_user_delete" + str(random_str), password="password"
         )
-        TeamUsers.objects.create(
+        model_teamuser.objects.create(
             team = delete_team,
             user = delete_user
         )
@@ -118,30 +118,30 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        view_team = Team.objects.create(
+        view_team = model_team.objects.create(
             team_name = 'view_team' + str(random_str),
             organization = organization_one,
         )
 
         view_team.permissions.set([view_permissions])
 
-        view_user = User.objects.create_user(
+        view_user = model_user.objects.create_user(
             username="test_user_view" + str(random_str), password="password"
         )
 
-        TeamUsers.objects.create(
+        model_teamuser.objects.create(
             team = view_team,
             user = view_user
         )
 
 
 
-        different_organization_user = User.objects.create_user(
+        different_organization_user = model_user.objects.create_user(
             username="test_diff_org_user" + str(random_str), password="password"
         )
 
 
-        different_organization_team = Team.objects.create(
+        different_organization_team = model_team.objects.create(
             team_name = 'diff_org_team' + str(random_str),
             organization = organization_two,
         )
@@ -153,10 +153,16 @@ def api_request_permissions( django_db_blocker,
             delete_permissions,
         ])
 
-        TeamUsers.objects.create(
+        model_teamuser.objects.create(
             team = different_organization_team,
             user = different_organization_user
         )
+
+
+        no_permission_user = model_user.objects.create_user(
+            username="nil_permissions" + str(random_str), password="password"
+        )
+
 
         yield {
             'app_settings': app_settings,
@@ -167,10 +173,11 @@ def api_request_permissions( django_db_blocker,
             },
             'user': {
                 'add': add_user,
+                'anon': None,
                 'change': change_user,
                 'delete': delete_user,
                 'different_tenancy': different_organization_user,
-                'no_permissions': '',
+                'no_permissions': no_permission_user,
                 'view': view_user,
             }
 

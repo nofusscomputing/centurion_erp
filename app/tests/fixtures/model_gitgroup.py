@@ -1,7 +1,10 @@
 import pytest
 
 from devops.models.git_group import GitGroup
-
+from devops.serializers.git_group import (
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 @pytest.fixture( scope = 'class')
@@ -11,10 +14,16 @@ def model_gitgroup(request):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_gitgroup(kwargs_centurionmodel):
+def serializer_gitgroup():
 
-    # kwargs = kwargs_centurionmodel.copy()
-    # del kwargs['model_notes']
+    yield {
+        'model': ModelSerializer,
+        'view': ViewSerializer,
+    }
+
+
+@pytest.fixture( scope = 'class')
+def kwargs_gitgroup(kwargs_centurionmodel):
 
     kwargs = {
         **kwargs_centurionmodel.copy(),

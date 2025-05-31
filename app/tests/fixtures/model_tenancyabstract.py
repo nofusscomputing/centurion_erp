@@ -11,8 +11,10 @@ def model_tenancyabstract(request):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_tenancyabstract():
+def kwargs_tenancyabstract(organization_one):
 
-    kwargs = {}
+    kwargs = {
+        'organization': organization_one
+    }
 
     yield kwargs.copy()
