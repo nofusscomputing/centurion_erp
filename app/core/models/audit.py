@@ -258,12 +258,12 @@ class AuditMetaModel(
 
 
 
-    def get_url_kwargs(self):
+    def get_url_kwargs(self, many = False):
 
         kwargs = {}
 
         kwargs.update({
-            **super().get_url_kwargs(),
+            **super().get_url_kwargs( many = many ),
             'model_name': str(self._meta.model_name).replace('audithistory', ''),
         })
 

@@ -199,7 +199,7 @@ class CenturionModel(
 
 
 
-    def get_url( self, relative: bool = False, api_version: int = 2, request: any = None ) -> str:
+    def get_url( self, relative: bool = False, api_version: int = 2, many = False, request: any = None ) -> str:
         """Return the models API URL
 
         Args:
@@ -228,10 +228,17 @@ class CenturionModel(
 
             url_basename += '_sub'
 
-        url_basename += '-detail'
+
+        if many:
+
+            url_basename += '-list'
+
+        else:
+
+            url_basename += '-detail'
 
 
-        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs() )
+        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs( many = many ) )
 
         if not relative:
 
@@ -242,7 +249,7 @@ class CenturionModel(
 
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
         """Get URL Kwargs
 
         Fecth the kwargs required for building a models URL using the reverse
@@ -256,7 +263,10 @@ class CenturionModel(
             dict: Kwargs required for reverse function to build a models URL.
         """
 
-        return { 'pk': self.id }
+        if many:
+            return {}
+        else:
+            return { 'pk': self.id }
 
 
 
@@ -308,12 +318,12 @@ class CenturionSubModel(
         abstract = True
 
 
-    def get_url_kwargs(self):
+    def get_url_kwargs(self, many = False):
 
         kwargs = {}
 
         kwargs.update({
-            **super().get_url_kwargs(),
+            **super().get_url_kwargs( many = many ),
             'app_label': self._meta.app_label,
             'model_name': str(self._meta.model_name),
             'model_id': self.model.id,
