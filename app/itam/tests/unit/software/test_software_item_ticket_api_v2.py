@@ -60,7 +60,7 @@ class SoftwareItemTicketAPI(
 
         self.url_view_kwargs = {
             'item_class': self.item_class,
-            'item_id': self.item.id,
+            'item_id': self.linked_item.id,
             'pk': self.item.id,
         }
 

@@ -11,17 +11,37 @@ def model_featureflag(request):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_featureflag(kwargs_centurionmodel):
+def kwargs_featureflag(django_db_blocker, kwargs_centurionmodel, model_software, kwargs_software, model_softwareenablefeatureflag):
 
-    # kwargs = kwargs_centurionmodel.copy()
-    # del kwargs['model_notes']
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'software': None,
-        'name': 'a name',
-        'description': ' a description',
-        'enabled': True,
-    }
+    with django_db_blocker.unblock():
 
-    yield kwargs.copy()
+        kwargs = kwargs_software
+
+        kwargs.update({'name': 'ff_enable_software'})
+
+        software = model_software.objects.create(
+            **kwargs
+        )
+
+        enable_feature_flag = model_softwareenablefeatureflag.objects.create(
+            organization = kwargs_centurionmodel['organization'],
+            software = software,
+            enabled = True
+        )
+
+        kwargs = {
+            **kwargs_centurionmodel.copy(),
+            'software': software,
+            'name': 'a name',
+            'description': ' a description',
+            'enabled': True,
+        }
+
+        yield kwargs.copy()
+
+        enable_feature_flag.delete()
+        try:
+            software.delete()
+        except:
+            pass
