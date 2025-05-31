@@ -277,17 +277,24 @@ The following Unit test suites exists for models:
 
 - Functional Tests
 
-
     - model `core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model.CenturionAbstractModelInheritedCases`
 
     - API Fields Render `api.tests.functional.test_functional_api_fields.APIFieldsInheritedCases`
 
-    - API Permissions `api.tests.functional.test_functional_api_permissions.<permission type>InheriredCases`
-
-        Generally Test Cases from class `APIPermissionsInheritedCases` will be used as it covers the standard Django Permissions, `add`, `change`, `delete` and `view`.
-
 !!! info
     If you add a feature you will have to [write the test cases](./testing.md) for that feature if they are not covered by existing test cases.
+
+Each model has the following Test Suites auto-magic created:
+
+- API Permissions checks `api.tests.functional.test_functional_meta_permissions_api`
+
+    _Checks the CRUD permissions against the models API endpoints_
+
+- Audit History Model checks, `core.tests.unit.centurion_audit_meta.test_unit_meta_audit_history_model`
+
+    _Confirms the model has a [`AuditHistory`](./api/models/audit_history.md) model and other checks as required for an `AuditHistory` model._
+
+These auto-magic tests require no input and will be created on a model inheriting from [`CenturionModel`](./api/models/centurion.md) and run every time the tests are run.
 
 
 ## Knowledge Base Article linking
