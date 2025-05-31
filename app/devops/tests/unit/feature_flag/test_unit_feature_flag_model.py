@@ -8,43 +8,10 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_feature_flag
+@pytest.mark.model_featureflag
 class FeatureFlagModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
-
-
-    @pytest.fixture( scope = 'class', autouse = True )
-    def software_setup(self, request, django_db_blocker, organization_one):
-
-        from itam.models.software import Software
-
-        with django_db_blocker.unblock():
-
-            software = Software.objects.create(
-                organization = organization_one,
-                name = 'software test'
-            )
-
-        request.cls.kwargs_create_item.update({
-            'software': software
-        })
-
-        yield
-
-        with django_db_blocker.unblock():
-
-            software.delete()
-
-
-
-    kwargs_create_item = {
-            'software': None,
-            'name': 'a name',
-            'description': ' a description',
-            'enabled': True,
-        }
-
 
 
     @property

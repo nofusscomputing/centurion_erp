@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import models
+
 
 @pytest.fixture(scope = 'class')
 def kwargs_api_create(django_db_blocker, model_kwargs):

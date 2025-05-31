@@ -62,6 +62,15 @@ from .model_permission import (
     model_permission,
 )
 
+from .model_software import (
+    kwargs_software,
+    model_software,
+)
+
+from .model_softwareenablefeatureflag import (
+    model_softwareenablefeatureflag,
+)
+
 from .model_team import (
     model_team,
 )

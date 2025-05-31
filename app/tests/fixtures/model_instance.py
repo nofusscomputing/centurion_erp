@@ -79,7 +79,10 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
 
             else:
 
-                model_obj.delete()
+                try:
+                    model_obj.delete()
+                except:
+                    pass
 
 
     if 'mockmodel' in apps.all_models['core']:
