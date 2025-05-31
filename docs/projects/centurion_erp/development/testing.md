@@ -10,12 +10,6 @@ Unit and functional tests are written to aid in application stability and to ass
 
 We use PyTest as the testing framework. As such, All available features of pytest are available. We have slightly deviated from the standard naming convention wherein test class must be suffixed with `PyTest`. Please [see below](#writing-tests) for more details.
 
-!!! note
-    As of release v1.3, the UI has moved to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui) with the current Django UI feature locked and depreciated.
-
-!!! note
-    These docs are currently undergoing a rewrite as how we write and expect tests to be written has changed.
-
 
 ## Directory Structure
 
@@ -149,9 +143,43 @@ Fixtures are used to setup the test and to pass objects to test should they requ
 
 There may also be a requirement that you add additional fixtures, they are:
 
-- `model` This fixture should be defined in `conftest.py` in the test suite files directory. _Only required if the model is required to be worked with._
+- Global Model Fixtures
 
-    ``` py filename="conftest.py"
+    Locatation for the global fixtures is `app/tests/fixtures/`. Each model is to have a global fixture file added with name `model_<model name>` within this file the following fixtures are to be created:
+
+    ``` py title="tests/fixtures/model_centurionmodel.py"
+    import pytest
+
+    from core.models.centurion import CenturionModel
+
+
+
+    @pytest.fixture( scope = 'class')
+    def model_centurionmodel():
+
+        yield CenturionModel
+
+
+    @pytest.fixture( scope = 'class')
+    def kwargs_centurionmodel(kwargs_tenancyabstract):
+
+        kwargs = {
+            **kwargs_tenancyabstract,
+            'model_notes': 'model notes txt',
+            'created': '2025-05-23T00:00',
+        }
+
+        yield kwargs.copy()
+
+    ```
+
+    - `model` is to return the model class un-instantiated
+
+    - `kwargs` the Kwargs required to create the model.
+
+- `model` and `model_kwargs` These fixtures should be defined in `conftest.py` in the test suite files directory. _Only required if the model is required to be worked with._
+
+    ``` py title="conftest.py"
 
     import pytest
 
@@ -162,11 +190,18 @@ There may also be a requirement that you add additional fixtures, they are:
     @pytest.fixture( scope = 'class')
     def model(request):
 
-        request.cls.model = RequestTicket
+        yield RequestTicket
 
-        yield request.cls.model
+    
+    @pytest.fixture( scope = 'class')
+    def model_kwargs(request, kwargs_<model_name>):
 
-        del request.cls.model    # Don't forget to clean-up any objects created.
+        request.cls.kwargs_create_item = kwargs_<model_name>.copy()
+
+        yield kwargs_<model_name>.copy()
+
+        del request.cls.kwargs_create_item
+
 
     ```
 
