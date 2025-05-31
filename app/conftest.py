@@ -1,4 +1,5 @@
 import datetime
+from typing import Any
 import django
 import pytest
 import os
@@ -7,6 +8,7 @@ import sys
 
 from django.core.management import call_command
 from django.conf import settings
+from django.db import models
 from django.test import (
     TestCase
 )
@@ -769,7 +771,3 @@ def user(django_db_blocker, model_user, kwargs_user):
     with django_db_blocker.unblock():
 
         user.delete()
-
-
-
-
