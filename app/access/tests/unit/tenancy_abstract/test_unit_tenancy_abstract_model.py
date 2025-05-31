@@ -15,10 +15,6 @@ class TenancyAbstractModelTestCases(
 ):
 
 
-
-    kwargs_create_item = {}
-
-
     parameterized_class_attributes = {
         'context': {
             'type': dict,
@@ -42,7 +38,7 @@ class TenancyAbstractModelTestCases(
 
 
     @pytest.fixture( scope = 'class', autouse = True)
-    def setup_organization(cls, request, model, organization_one):
+    def setup_organization(cls, request, model, organization_one, model_kwargs):
 
         request.cls.organization = organization_one
         

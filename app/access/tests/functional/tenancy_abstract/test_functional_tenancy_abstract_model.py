@@ -11,13 +11,8 @@ class TenancyAbstractModelTestCases(
 
 
 
-    kwargs_create_item = {
-        'organization': 'set by fixture - setup_organization'
-    }
-
-
     @pytest.fixture( scope = 'class', autouse = True)
-    def setup_organization(cls, request, model, organization_one):
+    def setup_organization(cls, request, model, organization_one, model_kwargs):
 
         request.cls.organization = organization_one
         

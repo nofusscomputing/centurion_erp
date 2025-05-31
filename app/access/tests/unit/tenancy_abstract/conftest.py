@@ -1,10 +1,18 @@
 import pytest
 
-from access.models.tenancy_abstract import TenancyAbstractModel
-
 
 
 @pytest.fixture( scope = 'class')
-def model(request):
+def model(model_tenancyabstract):
 
-    yield TenancyAbstractModel
+    yield model_tenancyabstract
+
+
+@pytest.fixture( scope = 'class')
+def model_kwargs(request, kwargs_tenancyabstract):
+
+    request.cls.kwargs_create_item = kwargs_tenancyabstract.copy()
+
+    yield kwargs_tenancyabstract.copy()
+
+    del request.cls.kwargs_create_item

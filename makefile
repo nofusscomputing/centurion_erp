@@ -6,10 +6,12 @@ ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
 
 .PHONY: clean prepare docs ansible-lint lint test
 
-
-prepare:
+prepare-git-submodule:
 	git submodule update --init;
 	git submodule foreach git submodule update --init;
+
+
+prepare-python: prepare-git-submodule
 	python3 -m venv ${PATH_VENV};
 	${ACTIVATE_VENV};
 	pip install -r website-template/gitlab-ci/mkdocs/requirements.txt;
@@ -17,13 +19,15 @@ prepare:
 	pip install -r gitlab-ci/mkdocs/requirements.txt;
 	pip install -r requirements.txt;
 	pip install -r requirements_test.txt;
+
+prepare-docs: prepare-git-submodule
 	npm install markdownlint-cli2;
 	npm install markdownlint-cli2-formatter-junit;
 	cp -f "website-template/.markdownlint.json" ".markdownlint.json";
 	cp -f "gitlab-ci/lint/.markdownlint-cli2.jsonc" ".markdownlint-cli2.jsonc";
 
 
-markdown-mkdocs-lint:
+markdown-mkdocs-lint: prepare-docs
 	PATH=${PATH}:node_modules/.bin markdownlint-cli2 docs/*.md docs/**/*.md docs/**/**/*.md docs/**/**/**/*.md docs/**/**/**/**/**/*.md !docs/pull_request_template.md !CHANGELOG.md !gitlab-ci !website-template || true
 
 

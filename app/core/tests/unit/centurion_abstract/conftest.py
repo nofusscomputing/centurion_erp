@@ -1,14 +1,19 @@
 import pytest
 
-from core.models.centurion import CenturionModel
-
 
 
 @pytest.fixture( scope = 'class')
-def model(request):
+def model(model_centurionmodel):
 
-    request.cls.model = CenturionModel
+    yield model_centurionmodel
 
-    yield request.cls.model
 
-    del request.cls.model
+@pytest.fixture( scope = 'class', autouse = True)
+def model_kwargs(request, kwargs_centurionmodel):
+
+    request.cls.kwargs_create_item = kwargs_centurionmodel.copy()
+
+    yield kwargs_centurionmodel.copy()
+
+    if hasattr(request.cls, 'kwargs_create_item'):
+        del request.cls.kwargs_create_item

@@ -22,14 +22,6 @@ class CenturionAbstractModelTestCases(
 ):
 
 
-
-    kwargs_create_item = {
-            'model_notes': 'model notes txt',
-            'created': '2025-05-23T00:00',
-        }
-
-
-
     @property
     def parameterized_class_attributes(self):
         

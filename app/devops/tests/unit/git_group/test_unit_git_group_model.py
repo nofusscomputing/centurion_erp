@@ -7,26 +7,12 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
     CenturionAbstractModelInheritedCases
 )
 
-from devops.models.git_group import GitGroup
-
 
 
 @pytest.mark.model_gitgroup
 class GitGroupModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
-
-
-
-    kwargs_create_item = {
-            'parent_group': None,
-            'provider': GitGroup.GitProvider.GITHUB,
-            'provider_pk': 1,
-            'name': 'a name',
-            'path': 'a_path',
-            'description': 'a random bit of text.'
-        }
-
 
 
     @property

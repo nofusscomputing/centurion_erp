@@ -16,25 +16,15 @@ class CenturionAuditModelTestCases(
 ):
 
 
-    kwargs_create_item = {
-            'before': {},
-            'after': {
-                'after_key': 'after_value'
-            },
-            'action': CenturionAudit.Actions.ADD,
-            'user': 'fixture sets value',
-            'content_type': 'fixture sets value',
-        }
-
 
     @pytest.fixture( scope = 'class', autouse = True )
-    def setup_vars(self, content_type, django_db_blocker, user, model):
+    def setup_vars(self, model_contenttype, django_db_blocker, model):
 
         with django_db_blocker.unblock():
 
             try:
 
-                content_type = content_type.objects.get(
+                content_type = model_contenttype.objects.get(
                     app_label = model._meta.app_label,
                     model = model._meta.model_name,
                 )
@@ -42,14 +32,13 @@ class CenturionAuditModelTestCases(
             except content_type.DoesNotExist:
                 # Enable Abstract models to be tested
 
-                content_type = content_type.objects.get(
+                content_type = model_contenttype.objects.get(
                     pk = 1,
                 )
 
 
         self.kwargs_create_item.update({
             'content_type': content_type,
-            'user': user,
         })
 
 

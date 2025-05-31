@@ -14,12 +14,6 @@ class CenturionAbstractModelTestCases(
 ):
 
 
-    kwargs_create_item = {
-            'model_notes': 'model notes txt',
-            'created': '2025-05-23T00:00',
-        }
-
-
 
     def test_model_has_history_model(self, model):
         """Audit History Table check
@@ -46,7 +40,7 @@ class CenturionAbstractModelTestCases(
 
 
 
-    def test_model_create_has_history_entry(self, content_type, created_model, model):
+    def test_model_create_has_history_entry(self, model_contenttype, created_model, model):
         """Model Created
 
         Ensure that the model when created, added a `create` Audit History
@@ -66,7 +60,7 @@ class CenturionAbstractModelTestCases(
 
         entry = history_model.objects.get(
             model = created_model,
-            content_type = content_type.objects.get(
+            content_type = model_contenttype.objects.get(
                 app_label = created_model._meta.app_label,
                 model = created_model._meta.model_name
             )

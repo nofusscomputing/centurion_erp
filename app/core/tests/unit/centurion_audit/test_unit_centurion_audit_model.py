@@ -1,14 +1,14 @@
 import inspect
 import pytest
 
-from django.apps import apps
+# from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import (
     ValidationError
 )
 from django.db import models
 
-from core.models.audit import CenturionAudit
+# from core.models.audit import CenturionAudit
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractModelInheritedCases
@@ -19,17 +19,6 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 class CenturionAuditModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
-
-
-    kwargs_create_item = {
-            'before': {},
-            'after': {
-                'after_key': 'after_value'
-            },
-            'action': CenturionAudit.Actions.ADD,
-            'user': 'fixture sets value',
-            'content_type': 'fixture sets value',
-        }
 
 
     parameterized_class_attributes = {

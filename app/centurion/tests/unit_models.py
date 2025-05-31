@@ -98,7 +98,7 @@ class ModelTestCases(
 
 
     @pytest.fixture( scope = 'class', autouse = True)
-    def setup_class(cls, request, model):
+    def setup_class(cls, request, model, model_kwargs):
 
         pass
 
