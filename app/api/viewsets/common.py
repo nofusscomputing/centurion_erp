@@ -4,10 +4,10 @@ import logging
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets, pagination
-from rest_framework_json_api.metadata import JSONAPIMetadata
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework_json_api.metadata import JSONAPIMetadata
 
 from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import OrganizationPermissionMixin
@@ -44,38 +44,40 @@ class Create(
 
             response = super().create(request = request, *args, **kwargs)
 
-            # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
+            if str(response.status_code).startswith('2'):
 
-            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+                # Always return using the ViewSerializer
+                serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
-            if response.data['id'] is not None:
+                view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-                serializer = view_serializer(
-                    self.get_queryset().get( pk = int(response.data['id']) ),
-                    context = {
-                        'request': request,
-                        'view': self,
-                    },
+                if response.data['id'] is not None:
+
+                    serializer = view_serializer(
+                        self.get_queryset().get( pk = int(response.data['id']) ),
+                        context = {
+                            'request': request,
+                            'view': self,
+                        },
+                    )
+
+                    serializer_data = serializer.data
+
+                else:
+
+
+                    serializer_data = {}
+
+
+                # Mimic ALL details from DRF response except serializer
+                response = Response(
+                    data = serializer_data,
+                    status = response.status_code,
+                    template_name = response.template_name,
+                    headers = response.headers,
+                    exception = response.exception,
+                    content_type = response.content_type,
                 )
-
-                serializer_data = serializer.data
-
-            else:
-
-
-                serializer_data = {}
-
-
-            # Mimic ALL details from DRF response except serializer
-            response = Response(
-                data = serializer_data,
-                status = response.status_code,
-                template_name = response.template_name,
-                headers = response.headers,
-                exception = response.exception,
-                content_type = response.content_type,
-            )
 
         except Exception as e:
 
@@ -290,28 +292,29 @@ class Update(
 
             response = super().partial_update(request = request, *args, **kwargs)
 
-            # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
+            if str(response.status_code).startswith('2'):
+                # Always return using the ViewSerializer
+                serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
-            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+                view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-            serializer = view_serializer(
-                self.queryset.get( pk = int(self.kwargs['pk']) ),
-                context = {
-                    'request': request,
-                    'view': self,
-                },
-            )
+                serializer = view_serializer(
+                    self.queryset.get( pk = int(self.kwargs['pk']) ),
+                    context = {
+                        'request': request,
+                        'view': self,
+                    },
+                )
 
-            # Mimic ALL details from DRF response except serializer
-            response = Response(
-                data = serializer.data,
-                status = response.status_code,
-                template_name = response.template_name,
-                headers = response.headers,
-                exception = response.exception,
-                content_type = response.content_type,
-            )
+                # Mimic ALL details from DRF response except serializer
+                response = Response(
+                    data = serializer.data,
+                    status = response.status_code,
+                    template_name = response.template_name,
+                    headers = response.headers,
+                    exception = response.exception,
+                    content_type = response.content_type,
+                )
 
         except Exception as e:
 
@@ -359,28 +362,30 @@ class Update(
 
             response = super().update(request = request, *args, **kwargs)
 
-            # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
+            if str(response.status_code).startswith('2'):
 
-            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+                # Always return using the ViewSerializer
+                serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
-            serializer = view_serializer(
-                self.queryset.get( pk = int(self.kwargs['pk']) ),
-                context = {
-                    'request': request,
-                    'view': self,
-                },
-            )
+                view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-            # Mimic ALL details from DRF response except serializer
-            response = Response(
-                data = serializer.data,
-                status = response.status_code,
-                template_name = response.template_name,
-                headers = response.headers,
-                exception = response.exception,
-                content_type = response.content_type,
-            )
+                serializer = view_serializer(
+                    self.queryset.get( pk = int(self.kwargs['pk']) ),
+                    context = {
+                        'request': request,
+                        'view': self,
+                    },
+                )
+
+                # Mimic ALL details from DRF response except serializer
+                response = Response(
+                    data = serializer.data,
+                    status = response.status_code,
+                    template_name = response.template_name,
+                    headers = response.headers,
+                    exception = response.exception,
+                    content_type = response.content_type,
+                )
 
         except Exception as e:
 
