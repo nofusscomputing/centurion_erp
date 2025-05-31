@@ -1,10 +1,19 @@
 import pytest
 
-from core.models.centurion_notes import NoteMetaModel
-
 
 
 @pytest.fixture( scope = 'class')
-def model(request):
+def model(model_centurionmodelnotemeta):
 
-    yield NoteMetaModel
+    yield model_centurionmodelnotemeta
+
+
+@pytest.fixture( scope = 'class', autouse = True)
+def model_kwargs(request, kwargs_centurionmodelnotemeta):
+
+    request.cls.kwargs_create_item = kwargs_centurionmodelnotemeta.copy()
+
+    yield kwargs_centurionmodelnotemeta.copy()
+
+    if hasattr(request.cls, 'kwargs_create_item'):
+        del request.cls.kwargs_create_item

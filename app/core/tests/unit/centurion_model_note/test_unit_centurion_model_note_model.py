@@ -15,13 +15,6 @@ class CenturionNoteModelTestCases(
 ):
 
 
-    kwargs_create_item = {
-            'body': 'a random note',
-            'created_by': 'fixture sets value',
-            'content_type': 'fixture sets value',
-        }
-
-
     parameterized_class_attributes = {
         '_audit_enabled': {
             'value': False,
