@@ -156,7 +156,7 @@ class CommonModelSerializer(CommonBaseSerializer):
                     kwargs = item.get_url_kwargs_notes()
                 )
 
-        elif hasattr(self.Meta.model, '_notes_enabled'):
+        elif getattr(self.Meta.model, '_notes_enabled', False):
 
             get_url['notes'] = reverse(
                 "v2:_api_centurionmodelnote_sub-list",
