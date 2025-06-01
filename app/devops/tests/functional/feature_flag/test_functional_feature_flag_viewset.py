@@ -31,7 +31,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = 'devops:_api_v2_feature_flag'
+    url_name = 'devops:_api_featureflag'
 
     change_data = {'name': 'device'}
 
@@ -164,6 +164,8 @@ class ViewSetBase:
             enabled = True
         )
 
+        self.model.context['user'] = self.view_user
+
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
             name = 'global_item',
@@ -184,6 +186,8 @@ class ViewSetBase:
             name = 'two',
             software = software,
         )
+
+        self.model.context['user'] = None
 
 
         self.url_view_kwargs = {'pk': self.item.id}
@@ -233,26 +237,6 @@ class ViewSetBase:
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-class ManufacturerPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-
-
-class ManufacturerViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
 
 
 
