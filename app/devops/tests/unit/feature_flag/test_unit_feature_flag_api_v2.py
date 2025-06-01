@@ -40,6 +40,10 @@ class API(
         self.organization = Organization.objects.create(name='test_org')
 
 
+        self.view_user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.model.context['user'] = self.view_user
+
         self.item = self.model.objects.create(
             organization = self.organization,
             name = 'one',
@@ -51,6 +55,8 @@ class API(
             model_notes = 'text',
             enabled = True
         )
+
+        self.model.context['user'] = None
 
         self.url_view_kwargs = {'pk': self.item.id}
 
@@ -69,14 +75,13 @@ class API(
 
         view_team.permissions.set([view_permissions])
 
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
         TeamUsers.objects.create(
             team = view_team,
             user = self.view_user
         )
 
         client = Client()
-        url = reverse('v2:devops:_api_v2_feature_flag-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:devops:_api_featureflag-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
