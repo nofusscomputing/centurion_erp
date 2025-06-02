@@ -1,32 +1,33 @@
 import logging
 import os
 
-from pathlib import Path
-
 from django.conf import settings
+
+from celery import Celery, signals
+
+from pathlib import Path
 
 from prometheus_client import multiprocess, start_http_server, REGISTRY
 
-
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
-
-access_logfile = '-'
-access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" "%({x-forwarded-for}i)s"'
-
-bind = 'unix:/run/gunicorn.sock'
-
-forwarded_allow_ips = "*"
-forwarder_headers = "X-REAL-IP,X-FORWARDED-FOR,X-FORWARDED-PROTO"
-
 logger = logging.getLogger(__name__)
 
-preload_app = False
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'centurion.settings')
 
-workers = 10
+worker = Celery('app')
+
+worker.config_from_object(f'django.conf:settings', namespace='CELERY')
+
+worker.autodiscover_tasks()
 
 
-def when_ready(_):
+@worker.task(bind=True, ignore_result=True)
+def debug_task(self):
+    print(f'Request: {self!r}')
+
+
+
+@signals.worker_ready.connect()
+def setup_prometheus(**kwargs):
 
     if not getattr(settings, 'METRICS_ENABLED', False):
         return
@@ -67,6 +68,7 @@ def when_ready(_):
 def _setup_multiproc_folder():
 
     coordination_dir = Path(os.environ["PROMETHEUS_MULTIPROC_DIR"])
+
     coordination_dir.mkdir(parents=True, exist_ok=True)
 
     for filepath in coordination_dir.glob("*.db"):
@@ -74,8 +76,3 @@ def _setup_multiproc_folder():
         filepath.unlink()
 
     return coordination_dir
-
-
-def child_exit(_, worker):
-
-    multiprocess.mark_process_dead(worker.pid)
