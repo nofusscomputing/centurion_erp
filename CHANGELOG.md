@@ -1,3 +1,9 @@
+## 1.17.1 (2025-06-02)
+
+### Fixes
+
+- **base**: Add python metrics to prometheus exporter
+
 ## 1.17.0 (2025-05-16)
 
 ### feat
