@@ -29,7 +29,7 @@ class KnowledgeBaseAPI(
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_knowledge_base'
+    url_name = '_api_knowledgebase'
 
     @classmethod
     def setUpTestData(self):
