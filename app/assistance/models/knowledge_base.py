@@ -3,15 +3,18 @@ from django.db import models
 
 from access.fields import *
 from access.models.team import Team
-from access.models.tenancy import TenancyObject
 
 from assistance.models.knowledge_base_category import KnowledgeBaseCategory
+
+from core.models.centurion import CenturionModel
 
 User = django.contrib.auth.get_user_model()
 
 
 
-class KnowledgeBase(TenancyObject):
+class KnowledgeBase(
+    CenturionModel
+):
 
 
     class Meta:
@@ -26,15 +29,6 @@ class KnowledgeBase(TenancyObject):
 
 
     model_notes = None
-
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of this KB article',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
 
 
     title = models.CharField(
@@ -215,17 +209,3 @@ class KnowledgeBase(TenancyObject):
     def __str__(self):
 
         return self.title
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from assistance.models.knowledge_base_history import KnowledgeBaseHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = KnowledgeBaseHistory,
-        )
-
-
-        return history
