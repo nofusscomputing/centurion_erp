@@ -3,13 +3,16 @@ from django.db import models
 
 from access.fields import *
 from access.models.team import Team
-from access.models.tenancy import TenancyObject
+
+from core.models.centurion import CenturionModel
 
 User = django.contrib.auth.get_user_model()
 
 
 
-class KnowledgeBaseCategory(TenancyObject):
+class KnowledgeBaseCategory(
+    CenturionModel
+):
 
 
     class Meta:
@@ -62,9 +65,6 @@ class KnowledgeBaseCategory(TenancyObject):
     )
 
 
-    created = AutoCreatedField()
-
-
     modified = AutoLastModifiedField()
 
 
@@ -108,17 +108,3 @@ class KnowledgeBaseCategory(TenancyObject):
     def __str__(self):
 
         return self.name
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from assistance.models.knowledge_base_category_history import KnowledgeBaseCategoryHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = KnowledgeBaseCategoryHistory,
-        )
-
-
-        return history
