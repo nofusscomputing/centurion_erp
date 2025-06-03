@@ -18,6 +18,18 @@ def centurion_model_migrate(sender, **kwargs):
 
     models: list[ dict ] = [
         {
+            'app_label': 'assistance',
+            'model_name': 'KnowledgeBase',
+            'history_model_name': 'KnowledgeBaseHistory',
+            'notes_model_name': 'KnowledgeBaseNotes'
+        },
+        {
+            'app_label': 'assistance',
+            'model_name': 'KnowledgeBaseCategory',
+            'history_model_name': 'KnowledgeBaseCategoryHistory',
+            'notes_model_name': 'KnowledgeCategoryBaseNotes'
+        },
+        {
             'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
