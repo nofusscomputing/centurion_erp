@@ -37,9 +37,5 @@ router.register(
     prefix = 'git_group', viewset = git_group.ViewSet,
     feature_flag = '2025-00001', basename = '_api_gitgroup'
 )
-router.register(
-    prefix = 'git_group/(?P<model_id>[0-9]+)/notes', viewset = git_group_notes.ViewSet,
-    feature_flag = '2025-00001', basename = '_api_v2_git_group_note'
-)
 
 urlpatterns = router.urls
