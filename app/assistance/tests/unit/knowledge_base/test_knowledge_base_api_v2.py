@@ -14,7 +14,8 @@ from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APITenancyObject
 
-from assistance.models.knowledge_base import KnowledgeBase, KnowledgeBaseCategory
+from assistance.models.knowledge_base import KnowledgeBase
+from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
 User = django.contrib.auth.get_user_model()
 

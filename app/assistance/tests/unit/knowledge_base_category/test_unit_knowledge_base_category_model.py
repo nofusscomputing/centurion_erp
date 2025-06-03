@@ -4,7 +4,7 @@ from centurion.tests.unit.test_unit_models import (
 
 from django.test import TestCase
 
-from assistance.models.knowledge_base import KnowledgeBaseCategory
+from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
 
 

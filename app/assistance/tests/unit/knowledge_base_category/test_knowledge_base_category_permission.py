@@ -16,7 +16,7 @@ from access.models.team_user import TeamUsers
 
 from centurion.tests.abstract.model_permissions import ModelPermissions
 
-from assistance.models.knowledge_base import KnowledgeBaseCategory
+from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
 User = django.contrib.auth.get_user_model()
 

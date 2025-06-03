@@ -13,7 +13,7 @@ from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from assistance.models.knowledge_base import KnowledgeBaseCategory
+from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
 from settings.models.app_settings import AppSettings
 
