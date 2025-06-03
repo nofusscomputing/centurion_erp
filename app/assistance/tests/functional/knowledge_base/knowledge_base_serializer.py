@@ -26,7 +26,7 @@ class KnowledgeBaseValidationAPI(
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_knowledge_base'
+    url_name = '_api_knowledgebase'
 
     @classmethod
     def setUpTestData(self):
