@@ -3,7 +3,6 @@ from centurion_feature_flag.urls.routers import DefaultRouter
 from devops.viewsets import (
     feature_flag,
     git_group,
-    git_group_notes,
     git_repository,
     github_repository_notes,
     gitlab_repository_notes
