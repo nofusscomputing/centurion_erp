@@ -2,6 +2,7 @@ import datetime
 import pytest
 
 from django.apps import apps
+from django.db import models
 
 
 
@@ -49,9 +50,37 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
 
             else:
 
-                kwargs = model_kwargs.copy()
+                new_kwargs = model_kwargs.copy()
 
-                kwargs.update( kwargs_create )
+                new_kwargs.update( kwargs_create )
+
+
+                kwargs = {}
+
+                many_field = {}
+
+                for field, value in new_kwargs.items():
+
+                    if isinstance(getattr(model, field).field, models.ManyToManyField):
+
+                        if field in many_field:
+
+                            many_field[field] += [ value ]
+
+                        else:
+
+                            many_field.update({
+                                field: [
+                                    value
+                                ]
+                            })
+
+                        continue
+
+                    kwargs.update({
+                        field: value
+                    })
+
 
                 if random_field:
 
@@ -64,6 +93,14 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
                 obj = model.objects.create(
                     **kwargs
                 )
+
+
+            for field, values in many_field.items():
+
+                for value in values:
+
+                    getattr(obj, field).add( value )
+
 
             model_objs += [ obj ]
 
