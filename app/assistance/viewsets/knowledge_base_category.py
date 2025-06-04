@@ -65,7 +65,6 @@ class ViewSet( ModelViewSet ):
         'parent_category',
         'target_user',
         'target_team',
-        'is_global',
     ]
 
     search_fields = [

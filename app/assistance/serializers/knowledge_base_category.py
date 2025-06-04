@@ -11,7 +11,7 @@ from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
 
-from assistance.models.knowledge_base import KnowledgeBaseCategory
+from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
 
 
@@ -100,7 +100,6 @@ class KnowledgeBaseCategoryModelSerializer(
             'parent_category',
             'target_user',
             'target_team',
-            'is_global',
             'created',
             'modified',
             '_urls',

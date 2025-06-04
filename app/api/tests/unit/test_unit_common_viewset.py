@@ -811,7 +811,7 @@ class ModelViewSetBaseCases(
 
         self.organization = Organization.objects.create(name='test_org')
 
-        self.view_user = User.objects.create_user(username="test_view_user", password="password", is_superuser=True)
+        self.view_user = User.objects.create_user(username="test_view_user1278", password="password", is_superuser=True)
 
 
         @classmethod

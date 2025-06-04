@@ -1,11 +1,14 @@
 import pytest
+import sys
+
+from importlib import reload
 
 from access.models.tenancy_abstract import TenancyAbstractModel
 
-
-
 @pytest.fixture( scope = 'class')
-def model_tenancyabstract(request):
+def model_tenancyabstract():
+
+    reload( sys.modules[TenancyAbstractModel.__module__] )
 
     yield TenancyAbstractModel
 

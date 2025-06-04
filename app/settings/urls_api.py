@@ -1,6 +1,5 @@
 from assistance.viewsets import (
     knowledge_base_category as knowledge_base_category_v2,
-    knowledge_base_category_notes,
 )
 
 from api.viewsets import (
@@ -110,12 +109,7 @@ router.register(
 router.register(
     prefix = 'knowledge_base_category',
     viewset = knowledge_base_category_v2.ViewSet,
-    basename = '_api_v2_knowledge_base_category'
-)
-router.register(
-    prefix = 'knowledge_base_category/(?P<model_id>[0-9]+)/notes',
-    viewset = knowledge_base_category_notes.ViewSet,
-    basename = '_api_v2_knowledge_base_category_note'
+    basename = '_api_knowledgebasecategory'
 )
 router.register(
     prefix = 'manufacturer', viewset = manufacturer_v2.ViewSet,

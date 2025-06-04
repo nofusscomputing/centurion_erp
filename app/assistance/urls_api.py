@@ -1,7 +1,6 @@
 from assistance.viewsets import (
     index as assistance_index_v2,
     knowledge_base as knowledge_base_v2,
-    knowledge_base_notes,
     model_knowledge_base_article,
     request as request_ticket_v2,
 )
@@ -21,14 +20,11 @@ router.register(
 )
 router.register(
     prefix = 'knowledge_base', viewset = knowledge_base_v2.ViewSet,
-    basename = '_api_v2_knowledge_base'
+    basename = '_api_knowledgebase'
 )
 router.register(
-    prefix = 'knowledge_base/(?P<model_id>[0-9]+)/notes', viewset = knowledge_base_notes.ViewSet,
-    basename = '_api_v2_knowledge_base_note'
-)
-router.register(
-    prefix = '(?P<model>.+)/(?P<model_pk>[0-9]+)/knowledge_base', viewset = model_knowledge_base_article.ViewSet,
+    prefix = '(?P<model>.+)/(?P<model_pk>[0-9]+)/knowledge_base',
+    viewset = model_knowledge_base_article.ViewSet,
     basename = '_api_v2_model_kb'
 )
 router.register(

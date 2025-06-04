@@ -58,6 +58,16 @@ from .model_instance import (
     model_instance
 )
 
+from .model_knowledgebase import (
+    kwargs_knowledgebase,
+    model_knowledgebase,
+)
+
+from .model_knowledgebasecategory import (
+    kwargs_knowledgebasecategory,
+    model_knowledgebasecategory,
+)
+
 from .model_permission import (
     model_permission,
 )

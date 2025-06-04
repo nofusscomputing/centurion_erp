@@ -36,7 +36,7 @@ class ModelTestCases:
 
             with django_db_blocker.unblock():
 
-                default_val = None
+                default_val = model.context['user']
 
                 model.context['user'] = user
 

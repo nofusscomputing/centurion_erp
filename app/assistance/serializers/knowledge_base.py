@@ -69,7 +69,7 @@ class KnowledgeBaseModelSerializer(
 
         get_url.update({
             'category': reverse(
-                'v2:_api_v2_knowledge_base_category-list',
+                'v2:_api_knowledgebasecategory-list',
                 request=self.context['view'].request,
             ),
             'organization': reverse(
@@ -107,6 +107,7 @@ class KnowledgeBaseModelSerializer(
             'organization',
             'category',
             'display_name',
+            'model_notes',
             'title',
             'summary',
             'content',
@@ -117,7 +118,6 @@ class KnowledgeBaseModelSerializer(
             'responsible_user',
             'responsible_teams',
             'public',
-            'is_global',
             'created',
             'modified',
             '_urls',
