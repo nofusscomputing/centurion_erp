@@ -14,6 +14,8 @@ class KnowledgeBaseCategory(
     CenturionModel
 ):
 
+    model_tag = 'kb_category'
+
 
     class Meta:
 
@@ -29,7 +31,6 @@ class KnowledgeBaseCategory(
     parent_category = models.ForeignKey(
         'self',
         blank = True,
-        default = None,
         help_text = 'Category this category belongs to',
         null = True,
         on_delete = models.SET_NULL,
@@ -48,7 +49,6 @@ class KnowledgeBaseCategory(
     target_team = models.ManyToManyField(
         Team,
         blank = True,
-        default = None,
         help_text = 'Team(s) to grant access to the article',
         verbose_name = 'Target Team(s)',
     )
@@ -57,7 +57,6 @@ class KnowledgeBaseCategory(
     target_user = models.ForeignKey(
         User,
         blank = True,
-        default = None,
         help_text = 'User(s) to grant access to the article',
         null = True,
         on_delete = models.SET_NULL,

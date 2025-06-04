@@ -1073,6 +1073,8 @@ markers = [
     "meta_models: Selects Meta models",
     "model_featureflag: Feature Flag Model",
     "model_gitgroup: Selects tests for model `git group`",
+    "model_knowledge_base: Selects Knowledge base tests.",
+    "model_knowledge_base_category: Selects Knowledge base category tests.",
     "models: Selects all models tests.",
     "note_models: Selects all centurion model note models",
     "permissions: selects all permission related tests.",
