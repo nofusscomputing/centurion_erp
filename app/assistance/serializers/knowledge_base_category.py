@@ -100,7 +100,6 @@ class KnowledgeBaseCategoryModelSerializer(
             'parent_category',
             'target_user',
             'target_team',
-            'is_global',
             'created',
             'modified',
             '_urls',
