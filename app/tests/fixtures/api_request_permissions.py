@@ -126,7 +126,7 @@ def api_request_permissions( django_db_blocker,
         view_team.permissions.set([view_permissions])
 
         view_user = model_user.objects.create_user(
-            username="test_user_view" + str(random_str), password="password"
+            username="api_r_perm_user_view" + str(random_str), password="password"
         )
 
         model_teamuser.objects.create(

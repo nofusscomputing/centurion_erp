@@ -241,10 +241,6 @@ class CenturionAbstractModelInheritedCases(
 
     def test_model_creation(self, model, user):
 
-        default_val = model.context['user']
-
-        model.context['user'] = user
-
         kwargs = {}
 
         many_field = {}
@@ -272,9 +268,15 @@ class CenturionAbstractModelInheritedCases(
             })
 
 
+        default_val = model.context['user']
+
+        model.context['user'] = user
+
         model_object = model.objects.create(
             **kwargs
         )
+
+        model.context['user'] = default_val
 
         for field, values in many_field.items():
 
@@ -282,8 +284,6 @@ class CenturionAbstractModelInheritedCases(
 
                 getattr(model_object, field).add( value )
 
-
-        model.context['user'] = default_val
 
         assert type(model_object.id) is int
 

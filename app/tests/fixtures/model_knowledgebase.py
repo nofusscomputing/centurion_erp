@@ -39,6 +39,7 @@ def kwargs_knowledgebase(django_db_blocker,
             name = 'kb cat for kb art' + random_str
         )
 
+        category.context['user'] = default_context_user
         model_knowledgebasecategory.context['user'] = default_context_user
 
         kwargs = {
@@ -57,7 +58,9 @@ def kwargs_knowledgebase(django_db_blocker,
             'modified': '2024-06-03T23:00:00Z',
         }
 
-        yield kwargs.copy()
+    yield kwargs.copy()
+
+    with django_db_blocker.unblock():
 
         team.delete()
 
