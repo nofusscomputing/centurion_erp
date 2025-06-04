@@ -107,6 +107,7 @@ class KnowledgeBaseModelSerializer(
             'organization',
             'category',
             'display_name',
+            'model_notes',
             'title',
             'summary',
             'content',
