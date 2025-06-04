@@ -5,7 +5,7 @@ from django.db import models
 
 from centurion.tests.unit_models import ModelTestCases
 
-from access.models import tenancy_abstract
+from access.models.tenancy_abstract import TenancyAbstractModel
 
 
 
@@ -62,7 +62,7 @@ class TenancyAbstractModelTestCases(
         Ensure this model inherits from `TenancyAbstractModel`
         """
 
-        assert issubclass(model, tenancy_abstract.TenancyAbstractModel)
+        assert issubclass(model, TenancyAbstractModel)
 
 
 
