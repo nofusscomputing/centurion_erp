@@ -32,6 +32,8 @@ def kwargs_knowledgebasecategory(django_db_blocker, kwargs_centurionmodel, model
             'modified': '2024-06-03T23:00:00Z',
         }
 
-        yield kwargs.copy()
+    yield kwargs.copy()
+
+    with django_db_blocker.unblock():
 
         user.delete()

@@ -34,9 +34,6 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
 
             obj = None
 
-            if user:
-                model.context['user'] = user
-
 
             if model._meta.abstract:
 
@@ -90,9 +87,18 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
                         random_field: str( random_field ) + '_' + random_str
                     })
 
+
+            model_context_user_default = model.context['user']
+
+            if user:
+                model.context['user'] = user
+
+
                 obj = model.objects.create(
                     **kwargs
                 )
+
+                model.context['user'] = model_context_user_default
 
 
             for field, values in many_field.items():
@@ -106,17 +112,23 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
 
             return obj
 
-        yield instance
+    yield instance
+
+    with django_db_blocker.unblock():
 
         for model_obj in model_objs:
 
             if model_obj._meta.abstract:
+
+                model_obj.context['user'] = None
 
                 del model_obj
 
             else:
 
                 try:
+                    model_obj.context['user'] = None
+
                     model_obj.delete()
                 except:
                     pass

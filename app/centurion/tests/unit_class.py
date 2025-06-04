@@ -76,8 +76,8 @@ class ClassTestCases:
 
         if type(getattr(test_class, param_field_name)) is property:
 
-            assert getattr(test_class, param_field_name).fget(test_class) == param_value
+            assert getattr(test_class, param_field_name).fget(test_class) == param_value, getattr(test_class, param_field_name).fget(test_class)
 
         else:
 
-            assert getattr(test_class, param_field_name) == param_value
+            assert getattr(test_class, param_field_name) == param_value, getattr(test_class, param_field_name)
