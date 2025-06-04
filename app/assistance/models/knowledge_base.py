@@ -16,6 +16,8 @@ class KnowledgeBase(
     CenturionModel
 ):
 
+    model_tag = 'kb'
+
 
     class Meta:
 
@@ -26,9 +28,6 @@ class KnowledgeBase(
         verbose_name = "Knowledge Base"
 
         verbose_name_plural = "Knowledge Base Articles"
-
-
-    model_notes = None
 
 
     title = models.CharField(
@@ -42,7 +41,6 @@ class KnowledgeBase(
 
     summary = models.TextField(
         blank = True,
-        default = None,
         help_text = 'Short Summary of the article',
         null = True,
         verbose_name = 'Summary',
@@ -51,7 +49,6 @@ class KnowledgeBase(
 
     content = models.TextField(
         blank = True,
-        default = None,
         help_text = 'Content of the article. Markdown is supported',
         null = True,
         verbose_name = 'Article Content',
@@ -61,11 +58,10 @@ class KnowledgeBase(
     category = models.ForeignKey(
         KnowledgeBaseCategory,
         blank = False,
-        default = None,
         help_text = 'Article Category',
         max_length = 50,
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         unique = False,
         verbose_name = 'Category',
     )
@@ -73,7 +69,6 @@ class KnowledgeBase(
 
     release_date = models.DateTimeField(
         blank = True,
-        default = None,
         help_text = 'Date the article will be published',
         null = True,
         verbose_name = 'Publish Date',
@@ -82,7 +77,6 @@ class KnowledgeBase(
 
     expiry_date = models.DateTimeField(
         blank = True,
-        default = None,
         help_text = 'Date the article will be removed from published articles',
         null = True,
         verbose_name = 'End Date',
@@ -92,7 +86,6 @@ class KnowledgeBase(
     target_team = models.ManyToManyField(
         Team,
         blank = True,
-        default = None,
         help_text = 'Team(s) to grant access to the article',
         verbose_name = 'Target Team(s)',
     )
@@ -101,10 +94,9 @@ class KnowledgeBase(
     target_user = models.ForeignKey(
         User,
         blank = True,
-        default = None,
         help_text = 'User(s) to grant access to the article',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Target Users(s)',
     )
 
@@ -112,10 +104,9 @@ class KnowledgeBase(
     responsible_user = models.ForeignKey(
         User,
         blank = False,
-        default = None,
         help_text = 'User(s) whom is considered the articles owner.',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         related_name = 'responsible_user',
         verbose_name = 'Responsible User',
     )
@@ -124,7 +115,6 @@ class KnowledgeBase(
     responsible_teams = models.ManyToManyField(
         Team,
         blank = True,
-        default = None,
         help_text = 'Team(s) whom is considered the articles owner.',
         related_name = 'responsible_teams',
         verbose_name = 'Responsible Team(s)',
@@ -137,9 +127,6 @@ class KnowledgeBase(
         help_text = 'Is this article to be made available publically',
         verbose_name = 'Public Article',
     )
-
-
-    created = AutoCreatedField()
 
 
     modified = AutoLastModifiedField()
