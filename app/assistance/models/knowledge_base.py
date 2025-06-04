@@ -163,7 +163,6 @@ class KnowledgeBase(
                         'category',
                         'responsible_user',
                         'responsible_teams',
-                        'is_global',
                         'created',
                         'modified',
                     ],

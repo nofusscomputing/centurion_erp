@@ -99,7 +99,6 @@ class KnowledgeBaseCategory(
     table_fields: list = [
         'name',
         'parent_category',
-        'is_global',
         'organization',
     ]
 
