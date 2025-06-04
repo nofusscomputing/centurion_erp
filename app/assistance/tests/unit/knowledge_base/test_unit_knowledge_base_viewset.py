@@ -15,7 +15,7 @@ class KnowledgeBaseViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_knowledge_base'
+    route_name = 'v2:_api_knowledgebase'
 
 
     @classmethod
