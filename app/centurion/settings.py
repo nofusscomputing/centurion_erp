@@ -398,7 +398,7 @@ if API_ENABLED:
         'TEST_REQUEST_DEFAULT_FORMAT': 'json',
         'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
         'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
-        'DEFAULT_VERSION': 'v1',
+        'DEFAULT_VERSION': 'v2',
         'ALLOWED_VERSIONS': [
             'v1',
             'v2'
@@ -409,7 +409,7 @@ if API_ENABLED:
         'TITLE': 'Centurion ERP API',
         'DESCRIPTION': """This UI exists to server the purpose of being the API documentation.
 
-Centurion ERP's API is versioned, with [v1 Depreciated](/api/swagger) and [v2 as the current](/api/v2/docs).
+Centurion ERP's API is versioned, with v2 as the current.
 
 For CRUD actions `Add`, `update` and `replace` the serializer that returns is the Models `View` serializer.
 
