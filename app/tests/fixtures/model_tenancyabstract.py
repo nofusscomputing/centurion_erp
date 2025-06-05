@@ -7,17 +7,7 @@ def model_tenancyabstract():
 
     the_model = TenancyAbstractModel
 
-    the_model.context = {
-        'logger': None,
-        'user': None,
-    }
-
     yield the_model
-
-    the_model.context = {
-        'logger': None,
-        'user': None,
-    }
 
 
 
