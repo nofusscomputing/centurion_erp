@@ -1,4 +1,3 @@
-import inspect
 import pytest
 
 from django.db import models
@@ -41,7 +40,7 @@ class TenancyAbstractModelTestCases(
     def setup_organization(cls, request, model, organization_one, model_kwargs):
 
         request.cls.organization = organization_one
-        
+
         if request.cls.kwargs_create_item:
 
             request.cls.kwargs_create_item.update({
@@ -113,4 +112,3 @@ class TenancyAbstractModelPyTest(
 
 
         assert model_instance.get_tenant() == test_value
-
