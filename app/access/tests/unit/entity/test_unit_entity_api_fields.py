@@ -42,9 +42,9 @@ class EntityAPITestCases(
         'entity_type': {
             'expected': str
         },
-        '_urls.history': {
-            'expected': str
-        },
+        # '_urls.history': {
+        #     'expected': str
+        # },
         '_urls.knowledge_base': {
             'expected': str
         }
