@@ -61,13 +61,13 @@ class TenantModelSerializer(
                     'model_pk': item.pk
                 }
             ),
-            'notes': reverse(
-                "v2:_api_v2_organization_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': item.pk
-                }
-            ),
+            # 'notes': reverse(
+            #     "v2:_api_v2_organization_note-list",
+            #     request=self._context['view'].request,
+            #     kwargs={
+            #         'model_id': item.pk
+            #     }
+            # ),
             'teams': reverse("v2:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
         }
 
