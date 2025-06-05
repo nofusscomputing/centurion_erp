@@ -34,7 +34,7 @@ class ClassTestCases:
 
     def test_class_attribute_exists(self,
         test_class,
-        parameterized, param_key_class_attributes, param_field_name, param_value
+        parameterized, param_key_class_attributes, param_field_name, param_type
     ):
         """Test Class Attributes
 
