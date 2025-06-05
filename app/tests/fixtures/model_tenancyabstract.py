@@ -5,17 +5,19 @@ from access.models.tenancy_abstract import TenancyAbstractModel
 @pytest.fixture( scope = 'class')
 def model_tenancyabstract():
 
-    def clean_model():
-        the_model = TenancyAbstractModel
+    the_model = TenancyAbstractModel
 
-        the_model.context = {
-            'logger': None,
-            'user': None,
-        }
+    the_model.context = {
+        'logger': None,
+        'user': None,
+    }
 
-        return the_model
+    yield the_model
 
-    yield clean_model()
+    the_model.context = {
+        'logger': None,
+        'user': None,
+    }
 
 
 

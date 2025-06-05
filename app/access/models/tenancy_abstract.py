@@ -79,6 +79,16 @@ class TenancyAbstractModel(
         ValidationError: User failed to supply organization
     """
 
+    def __init____init__(self, *args, **kwargs):
+
+        self.context: dict = {
+            'logger': None,
+            'user': None,
+        }
+
+        super().__init__(*args, **kwargs)
+
+
     context: dict = {
         'logger': None,
         'user': None,
