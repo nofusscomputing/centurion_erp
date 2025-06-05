@@ -4,12 +4,10 @@ from itim.viewsets import (
     index as itim_v2,
     change,
     cluster as cluster_v2,
-    cluster_notes,
     incident,
     problem,
     service as service_v2,
     service_cluster,
-    service_notes,
 )
 
 
@@ -37,10 +35,6 @@ router.register(
     basename = '_api_v2_service_cluster'
 )
 router.register(
-    prefix = 'cluster/(?P<model_id>[0-9]+)/notes', viewset = cluster_notes.ViewSet,
-    basename = '_api_v2_cluster_note'
-)
-router.register(
     prefix = 'ticket/incident', viewset = incident.ViewSet,
     basename = '_api_v2_ticket_incident'
 )
@@ -51,10 +45,6 @@ router.register(
 router.register(
     prefix = 'service', viewset = service_v2.ViewSet,
     basename = '_api_v2_service'
-)
-router.register(
-    prefix = 'service/(?P<model_id>[0-9]+)/notes', viewset = service_notes.ViewSet,
-    basename = '_api_v2_service_note'
 )
 
 
