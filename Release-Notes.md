@@ -1,3 +1,12 @@
+## Version 1.18.0
+
+- Removed Django UI
+
+    [UI](https://github.com/nofusscomputing/centurion_erp) must be deployed seperatly.
+
+- Removed API v1
+
+
 ## Version 1.17.0
 
 - Added setting for log files.
