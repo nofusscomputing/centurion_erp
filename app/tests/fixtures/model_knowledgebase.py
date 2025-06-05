@@ -31,16 +31,10 @@ def kwargs_knowledgebase(django_db_blocker,
             password = 'apassword'
         )
 
-        default_context_user = model_knowledgebasecategory.context['user']
-        model_knowledgebasecategory.context['user'] = user
-
         category = model_knowledgebasecategory.objects.create(
             organization = kwargs_centurionmodel['organization'],
             name = 'kb cat for kb art' + random_str
         )
-
-        category.context['user'] = default_context_user
-        model_knowledgebasecategory.context['user'] = default_context_user
 
         kwargs = {
             **kwargs_centurionmodel.copy(),

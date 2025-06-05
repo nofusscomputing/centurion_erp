@@ -15,12 +15,10 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
     with django_db_blocker.unblock():
 
 
-        def instance( user = None, random_field:str = '', kwargs_create: dict = {} ):
+        def instance( random_field:str = '', kwargs_create: dict = {} ):
             """Create a model instance
 
             Args:
-                user (User, optional): The User to create and add to model.context['user'].
-                    Defaults to None.
                 random_field (str, optional): The unique field that needs to be randomized.
                     Defaults to ''.
                 kwargs_create (dict, optional): object create kwargs. overwrites default.
@@ -88,18 +86,9 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
                     })
 
 
-            model_context_user_default = model.context['user']
-
-            if user:
-                model.context['user'] = user
-
-
                 obj = model.objects.create(
                     **kwargs
                 )
-
-                model.context['user'] = model_context_user_default
-
 
             for field, values in many_field.items():
 
@@ -120,15 +109,11 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
 
             if model_obj._meta.abstract:
 
-                model_obj.context['user'] = None
-
                 del model_obj
 
             else:
 
                 try:
-                    model_obj.context['user'] = None
-
                     model_obj.delete()
                 except:
                     pass
