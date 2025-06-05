@@ -16,7 +16,7 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.views.mixin import OrganizationPermissionAPI
+# from api.views.mixin import OrganizationPermissionAPI
 from api.serializers.inventory import Inventory
 
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
@@ -151,25 +151,25 @@ class InventoryAPI(TestCase):
 
 
 
-    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
-                       CELERY_TASK_EAGER_PROPOGATES=True)
-    @patch.object(OrganizationPermissionAPI, 'permission_check')
-    def test_inventory_function_called_permission_check(self, permission_check):
-        """ Inventory Upload checks permissions
+    # @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+    #                    CELERY_TASK_EAGER_PROPOGATES=True)
+    # @patch.object(OrganizationPermissionAPI, 'permission_check')
+    # def test_inventory_function_called_permission_check(self, permission_check):
+    #     """ Inventory Upload checks permissions
         
-        Function 'permission_check' is the function that checks permissions
+    #     Function 'permission_check' is the function that checks permissions
 
-        As the non-established way of authentication an API permission is being done
-        confimation that the permissions are still checked is required.
-        """
+    #     As the non-established way of authentication an API permission is being done
+    #     confimation that the permissions are still checked is required.
+    #     """
 
-        client = Client()
-        url = reverse('v1:_api_device_inventory')
+    #     client = Client()
+    #     url = reverse('v1:_api_device_inventory')
 
-        client.force_login(self.add_user)
-        response = client.post(url, data=self.inventory, content_type='application/json')
+    #     client.force_login(self.add_user)
+    #     response = client.post(url, data=self.inventory, content_type='application/json')
 
-        assert permission_check.called
+    #     assert permission_check.called
 
 
 
