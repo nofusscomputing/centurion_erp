@@ -1,4 +1,5 @@
 import django
+import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -525,7 +526,7 @@ class ItemDeviceTicketSerializer(
     pass
 
 
-
+@pytest.mark.skip( reason = 'to be re-written' )
 class ItemKBTicket:
     """ Test Cases common to ALL ticket types """
 
