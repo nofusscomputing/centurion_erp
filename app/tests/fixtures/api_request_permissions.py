@@ -183,17 +183,21 @@ def api_request_permissions( django_db_blocker,
 
         }
 
-        add_team.delete()
-        add_user.delete()
+        #
+        # Commented out as meta class tests fail due to fixture being cleaned before test is 
+        # completed.
+        #
+        # add_team.delete()
+        # add_user.delete()
 
-        change_team.delete()
-        change_user.delete()
+        # change_team.delete()
+        # change_user.delete()
 
-        delete_team.delete()
-        delete_user.delete()
+        # delete_team.delete()
+        # delete_user.delete()
 
-        view_team.delete()
-        view_user.delete()
+        # view_team.delete()
+        # view_user.delete()
 
-        different_organization_team.delete()
-        different_organization_user.delete()
+        # different_organization_team.delete()
+        # different_organization_user.delete()
