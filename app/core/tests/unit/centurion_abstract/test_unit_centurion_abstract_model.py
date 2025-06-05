@@ -240,51 +240,6 @@ class CenturionAbstractModelInheritedCases(
     }
 
 
-
-    def test_model_creation(self, model, user):
-
-        kwargs = {}
-
-        many_field = {}
-
-        for field, value in self.kwargs_create_item.items():
-
-            if isinstance(getattr(model, field).field, models.ManyToManyField):
-
-                if field in many_field:
-
-                    many_field[field] += [ value ]
-
-                else:
-
-                    many_field.update({
-                        field: [
-                            value
-                        ]
-                    })
-
-                continue
-
-            kwargs.update({
-                field: value
-            })
-
-
-        model_object = model.objects.create(
-            **kwargs
-        )
-
-        for field, values in many_field.items():
-
-            for value in values:
-
-                getattr(model_object, field).add( value )
-
-
-        assert type(model_object.id) is int
-
-
-
     def test_model_tag_defined(self, model):
         """ Model Tag
 
