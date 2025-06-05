@@ -4,14 +4,12 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 
 from core import exceptions as centurion_exception
-from core.forms.validate_ticket import TicketValidation
 from core.models.ticket.ticket import Ticket
 
 
 
 class TicketSerializer(
     serializers.ModelSerializer,
-    TicketValidation,
 ):
 
     url = serializers.SerializerMethodField('get_url_ticket')
