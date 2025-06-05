@@ -19,7 +19,6 @@ from centurion.viewsets.base import (
 from core.viewsets import (
     audit_history,
     centurion_model_notes,
-    history as history_v2,
 )
 
 app_name = "API"
@@ -82,14 +81,6 @@ router.register(
     viewset = centurion_model_notes.ViewSet,
     basename = '_api_centurionmodelnote_sub'
 )
-
-
-router.register(
-    prefix = '(?P<app_label>[a-z_]+)/(?P<model_name>.+)/(?P<model_id>[0-9]+)/history',
-    viewset = history_v2.ViewSet,
-    basename = '_api_v2_model_history'
-)
-
 
 
 urlpatterns = [

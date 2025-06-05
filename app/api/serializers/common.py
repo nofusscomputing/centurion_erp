@@ -103,21 +103,21 @@ class CommonModelSerializer(CommonBaseSerializer):
                     }
                 )
 
-            elif(
-                history_app_label is not None
-                and history_model_name is not None
-                and not hasattr(self.Meta.model, '_audit_enabled')
-            ):
+            # elif(
+            #     history_app_label is not None
+            #     and history_model_name is not None
+            #     and not hasattr(self.Meta.model, '_audit_enabled')
+            # ):
 
-                get_url['history'] = reverse(
-                    "v2:_api_v2_model_history-list",
-                    request = self._context['view'].request,
-                    kwargs = {
-                        'app_label': history_app_label,
-                        'model_name': history_model_name,
-                        'model_id': item.pk
-                    }
-                )
+            #     get_url['history'] = reverse(
+            #         "v2:_api_v2_model_history-list",
+            #         request = self._context['view'].request,
+            #         kwargs = {
+            #             'app_label': history_app_label,
+            #             'model_name': history_model_name,
+            #             'model_id': item.pk
+            #         }
+            #     )
 
 
         obj = getattr(item, 'get_url_kwargs_notes', None)
