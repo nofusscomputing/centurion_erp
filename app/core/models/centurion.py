@@ -99,7 +99,7 @@ class CenturionModel(
         if keep_parents is None:
             keep_parents = self._is_submodel
 
-        if self._audit_enabled:
+        if self._audit_enabled and self.id:
 
             self._after = {}
 
