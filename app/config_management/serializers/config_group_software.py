@@ -61,7 +61,7 @@ class ConfigGroupSoftwareModelSerializer(
 
         get_url = super().get_url( item = item )
 
-        del get_url['history']
+        # del get_url['history']
         del get_url['knowledge_base']
 
         get_url.update({
