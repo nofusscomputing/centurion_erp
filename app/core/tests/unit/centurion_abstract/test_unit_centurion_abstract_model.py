@@ -38,13 +38,6 @@ class CenturionAbstractModelTestCases(
                 'type': bool,
                 'value': True,
             },
-            'context': {
-                'type': dict,
-                'value': {
-                    'logger': None,
-                    'user': None,
-                }
-            },
             'model_tag': {
                 'type': str,
             },
@@ -277,15 +270,9 @@ class CenturionAbstractModelInheritedCases(
             })
 
 
-        default_val = model.context['user']
-
-        model.context['user'] = user
-
         model_object = model.objects.create(
             **kwargs
         )
-
-        model.context['user'] = default_val
 
         for field, values in many_field.items():
 

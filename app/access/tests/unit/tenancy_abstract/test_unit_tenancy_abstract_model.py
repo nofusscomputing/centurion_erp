@@ -18,10 +18,10 @@ class TenancyAbstractModelTestCases(
     parameterized_class_attributes = {
         'context': {
             'type': dict,
-            'value': {
-                'logger': None,
-                'user': None,
-            }
+            # 'value': {
+            #     'logger': None,
+            #     'user': None,
+            # }
         }
     }
 

@@ -164,8 +164,6 @@ class ViewSetBase:
             enabled = True
         )
 
-        self.model.context['user'] = self.view_user
-
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
             name = 'global_item',
@@ -186,8 +184,6 @@ class ViewSetBase:
             name = 'two',
             software = software,
         )
-
-        self.model.context['user'] = None
 
 
         self.url_view_kwargs = {'pk': self.item.id}
