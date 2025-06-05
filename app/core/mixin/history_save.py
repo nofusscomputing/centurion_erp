@@ -1,7 +1,7 @@
-from django.contrib.auth.models import ContentType
+# from django.contrib.auth.models import ContentType
 from django.db import models
 
-from core.middleware.get_request import get_request
+# from core.middleware.get_request import get_request
 
 
 
@@ -38,213 +38,215 @@ class SaveHistory(models.Model):
             None (None): history_model was not specified
         """
 
-        if history_model is None:
+        return True
 
-            return False
+        # if history_model is None:
 
+        #     return False
 
-        remove_keys = [
-            '_django_version',
-            '_prefetched_objects_cache',
-            '_state',
-            'created',
-            'modified'
-        ]
 
+        # remove_keys = [
+        #     '_django_version',
+        #     '_prefetched_objects_cache',
+        #     '_state',
+        #     'created',
+        #     'modified'
+        # ]
 
-        from core.models.model_history import ModelHistory
 
-        clean = {}
-        for entry in before:
+        # from core.models.model_history import ModelHistory
 
-            if type(before[entry]) == type(int()):
+        # clean = {}
+        # for entry in before:
 
-                value = int(before[entry])
+        #     if type(before[entry]) == type(int()):
 
-            elif type(before[entry]) == type(bool()):
+        #         value = int(before[entry])
 
-                value = bool(before[entry])
+        #     elif type(before[entry]) == type(bool()):
 
-            elif (
-                    "{" in str(after.get(entry, '')) 
-                        and
-                    "}" in str(after.get(entry, ''))
-                ) or (
-                    "[" in str(after.get(entry, ''))
-                        and
-                    "]" in str(after.get(entry, ''))
-                ):
+        #         value = bool(before[entry])
 
-                value = str(after.get(entry, '')).replace("'", '\"')
+        #     elif (
+        #             "{" in str(after.get(entry, '')) 
+        #                 and
+        #             "}" in str(after.get(entry, ''))
+        #         ) or (
+        #             "[" in str(after.get(entry, ''))
+        #                 and
+        #             "]" in str(after.get(entry, ''))
+        #         ):
 
-            else:
+        #         value = str(after.get(entry, '')).replace("'", '\"')
 
-                value = str(before[entry])
+        #     else:
 
+        #         value = str(before[entry])
 
-            if entry not in remove_keys:
-                clean[entry] = value
 
-        before_json = clean
+        #     if entry not in remove_keys:
+        #         clean[entry] = value
 
-        clean = {}
-        for entry in after:
+        # before_json = clean
 
-            if type(after.get(entry, '')) == type(int()):
+        # clean = {}
+        # for entry in after:
 
-                value = int(after.get(entry, ''))
+        #     if type(after.get(entry, '')) == type(int()):
 
-            elif type(after.get(entry, '')) == type(bool()):
+        #         value = int(after.get(entry, ''))
 
-                value = bool(after.get(entry, ''))
+        #     elif type(after.get(entry, '')) == type(bool()):
 
-            elif (
-                    "{" in str(after.get(entry, '')) 
-                        and
-                    "}" in str(after.get(entry, ''))
-                ) or (
-                    "[" in str(after.get(entry, ''))
-                        and
-                    "]" in str(after.get(entry, ''))
-                ):
+        #         value = bool(after.get(entry, ''))
 
-                value = str(after.get(entry, '')).replace("'", '\"')
+        #     elif (
+        #             "{" in str(after.get(entry, '')) 
+        #                 and
+        #             "}" in str(after.get(entry, ''))
+        #         ) or (
+        #             "[" in str(after.get(entry, ''))
+        #                 and
+        #             "]" in str(after.get(entry, ''))
+        #         ):
 
-            else:
+        #         value = str(after.get(entry, '')).replace("'", '\"')
 
-                value = str(after.get(entry, ''))
+        #     else:
 
+        #         value = str(after.get(entry, ''))
 
-            if entry not in remove_keys and str(before) != '{}':
 
-                if after.get(entry, '') != before[entry]:
-                    clean[entry] = value
+        #     if entry not in remove_keys and str(before) != '{}':
 
-            elif entry not in remove_keys:
+        #         if after.get(entry, '') != before[entry]:
+        #             clean[entry] = value
 
-                clean[entry] = value
+        #     elif entry not in remove_keys:
 
+        #         clean[entry] = value
 
-        after_json = clean
 
-        audit_model = self
-        parent_model = None
+        # after_json = clean
 
-        if getattr(self, 'parent_object', None):
+        # audit_model = self
+        # parent_model = None
 
-            parent_model = self.parent_object
+        # if getattr(self, 'parent_object', None):
 
+        #     parent_model = self.parent_object
 
-        action = ModelHistory.Actions.UPDATE
 
-        if not before:
+        # action = ModelHistory.Actions.UPDATE
 
-            action = ModelHistory.Actions.ADD
+        # if not before:
 
-        elif not after_json:
+        #     action = ModelHistory.Actions.ADD
 
-            action = ModelHistory.Actions.DELETE
-            after_json = None
+        # elif not after_json:
 
+        #     action = ModelHistory.Actions.DELETE
+        #     after_json = None
 
-        current_user = None
-        if get_request() is not None:
 
-            current_user = get_request().user
+        # current_user = None
+        # if get_request() is not None:
 
-            if current_user.is_anonymous:
-                current_user = None
+        #     current_user = get_request().user
 
+        #     if current_user.is_anonymous:
+        #         current_user = None
 
-        organization = getattr(self, 'organization', None)
 
-        if self._meta.model_name == 'tenant':
+        # organization = getattr(self, 'organization', None)
 
-            organization = self
+        # if self._meta.model_name == 'tenant':
 
+        #     organization = self
 
-        if before_json != after_json:
 
-            if parent_model is not None:
+        # if before_json != after_json:
 
-                entry = history_model.objects.create(
-                    organization = organization,
-                    before = before_json,
-                    after = after_json,
-                    action = action,
-                    user = current_user,
-                    content_type = ContentType.objects.get(
-                        app_label= parent_model._meta.app_label,
-                        model = parent_model._meta.model_name
-                    ),
-                    model = parent_model,
-                    child_model = audit_model,
-                )
+        #     if parent_model is not None:
 
-                return True
+        #         entry = history_model.objects.create(
+        #             organization = organization,
+        #             before = before_json,
+        #             after = after_json,
+        #             action = action,
+        #             user = current_user,
+        #             content_type = ContentType.objects.get(
+        #                 app_label= parent_model._meta.app_label,
+        #                 model = parent_model._meta.model_name
+        #             ),
+        #             model = parent_model,
+        #             child_model = audit_model,
+        #         )
 
-            else:
+        #         return True
 
-                entry = history_model.objects.create(
-                    organization = organization,
-                    before = before_json,
-                    after = after_json,
-                    action = action,
-                    user = current_user,
-                    content_type = ContentType.objects.get(
-                        app_label= audit_model._meta.app_label,
-                        model = audit_model._meta.model_name
-                    ),
-                    model = audit_model,
-                )
+        #     else:
 
-                return True
+        #         entry = history_model.objects.create(
+        #             organization = organization,
+        #             before = before_json,
+        #             after = after_json,
+        #             action = action,
+        #             user = current_user,
+        #             content_type = ContentType.objects.get(
+        #                 app_label= audit_model._meta.app_label,
+        #                 model = audit_model._meta.model_name
+        #             ),
+        #             model = audit_model,
+        #         )
 
+        #         return True
 
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        """ OverRides save for keeping model history.
 
-        Not a Full-Override as this is just to add to existing.
+    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    #     """ OverRides save for keeping model history.
 
-        Before to fetch from DB to ensure the changed value is the actual changed value and the after
-        is the data that was saved to the DB.
-        """
+    #     Not a Full-Override as this is just to add to existing.
 
-        if self.save_model_history:
+    #     Before to fetch from DB to ensure the changed value is the actual changed value and the after
+    #     is the data that was saved to the DB.
+    #     """
 
-            before = {}
+    #     if self.save_model_history:
 
-            try:
-                before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
-            except Exception:
-                pass
+    #         before = {}
 
-        # Process the save
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+    #         try:
+    #             before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+    #         except Exception:
+    #             pass
 
-        if self.save_model_history:
+    #     # Process the save
+    #     super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
-            after = self.__dict__.copy()
+    #     if self.save_model_history:
 
-            self.save_history(before, after)
+    #         after = self.__dict__.copy()
 
+    #         self.save_history(before, after)
 
-    def delete(self, using=None, keep_parents=False):
 
-        before = {}
+    # def delete(self, using=None, keep_parents=False):
 
-        try:
-            before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
-        except Exception:
-            pass
+    #     before = {}
 
+    #     try:
+    #         before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+    #     except Exception:
+    #         pass
 
-        if self.save_model_history:
 
-            after = {}
+    #     if self.save_model_history:
 
-            self.save_history(before, after)
+    #         after = {}
 
-        # Process the delete
-        super().delete(using=using, keep_parents=keep_parents)
+    #         self.save_history(before, after)
+
+    #     # Process the delete
+    #     super().delete(using=using, keep_parents=keep_parents)
