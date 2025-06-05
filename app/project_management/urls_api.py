@@ -4,8 +4,6 @@ from project_management.viewsets import (
     index as project_management_v2,
     project as project_v2,
     project_milestone as project_milestone_v2,
-    project_milestone_notes,
-    project_notes,
     project_task,
 )
 
@@ -29,16 +27,6 @@ router.register(
     prefix = 'project/(?P<project_id>[0-9]+)/milestone',
     viewset = project_milestone_v2.ViewSet,
     basename = '_api_v2_project_milestone'
-)
-router.register(
-    prefix = 'project/(?P<project_id>[0-9]+)/milestone/(?P<model_id>[0-9]+)/notes',
-    viewset = project_milestone_notes.ViewSet,
-    basename = '_api_v2_project_milestone_note'
-)
-router.register(
-    prefix = 'project/(?P<model_id>[0-9]+)/notes',
-    viewset = project_notes.ViewSet,
-    basename = '_api_v2_project_note'
 )
 router.register(
     prefix = 'project/(?P<project_id>[0-9]+)/project_task',

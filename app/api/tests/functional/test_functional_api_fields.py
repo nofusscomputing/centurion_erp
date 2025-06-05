@@ -54,9 +54,9 @@ class APIFieldsTestCases:
             '_urls._self': {
                 'expected': str
             },
-            '_urls.notes': {
-                'expected': str
-            },
+            # '_urls.notes': {
+            #     'expected': str
+            # },
         }
 
         api_fields_model = {

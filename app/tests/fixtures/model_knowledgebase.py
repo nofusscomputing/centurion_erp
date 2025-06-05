@@ -64,6 +64,10 @@ def kwargs_knowledgebase(django_db_blocker,
 
         team.delete()
 
-        user.delete()
+        try:
+
+            user.delete()
+        except:
+            pass
 
         category.delete()

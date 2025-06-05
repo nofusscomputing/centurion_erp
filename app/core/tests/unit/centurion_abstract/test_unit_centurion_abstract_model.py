@@ -107,6 +107,8 @@ class CenturionAbstractModelTestCases(
 
         model_instance.objects = MockManager()
 
+        mocker.patch('django.db.models.base.Model.delete', return_value = None)
+
         delete = mocker.patch('core.models.centurion.CenturionModel.delete', return_value = None)
 
         model_instance.delete()
@@ -149,8 +151,15 @@ class CenturionAbstractModelTestCases(
             def get(*args, **kwargs):
                 return model_instance
 
-        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
+            # def get_queryset(self):
+            #     return model_instance
 
+
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
+        # mocker.patch('access.models.tenancy_abstract.TenancyManager', new_callable=MockManager)
+        # mocker.patch('access.models.tenancy.TenancyManager', new_callable=MockManager)
+
+    
         super_delete = mocker.patch('django.db.models.base.Model.delete', return_value = None)
 
         mocker.patch('core.models.centurion.CenturionModel.get_audit_values', return_value = {'key': 'value'})

@@ -4,8 +4,6 @@ from devops.viewsets import (
     feature_flag,
     git_group,
     git_repository,
-    github_repository_notes,
-    gitlab_repository_notes
 )
 
 
@@ -22,16 +20,6 @@ router.register(
     prefix = r'git_repository(?:/(?P<git_provider>gitlab|github))?',
     viewset = git_repository.ViewSet,
     feature_flag = '2025-00001', basename = '_api_v2_git_repository'
-)
-router.register(
-    prefix = 'git_repository/github/(?P<model_id>[0-9]+)/notes',
-    viewset = github_repository_notes.ViewSet,
-    feature_flag = '2025-00001', basename = '_api_v2_github_repository_note'
-)
-router.register(
-    prefix = 'git_repository/gitlab/(?P<model_id>[0-9]+)/notes',
-    viewset = gitlab_repository_notes.ViewSet,
-    feature_flag = '2025-00001', basename = '_api_v2_gitlab_repository_note'
 )
 router.register(
     prefix = 'git_group', viewset = git_group.ViewSet,

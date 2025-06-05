@@ -103,21 +103,21 @@ class CommonModelSerializer(CommonBaseSerializer):
                     }
                 )
 
-            elif(
-                history_app_label is not None
-                and history_model_name is not None
-                and not hasattr(self.Meta.model, '_audit_enabled')
-            ):
+            # elif(
+            #     history_app_label is not None
+            #     and history_model_name is not None
+            #     and not hasattr(self.Meta.model, '_audit_enabled')
+            # ):
 
-                get_url['history'] = reverse(
-                    "v2:_api_v2_model_history-list",
-                    request = self._context['view'].request,
-                    kwargs = {
-                        'app_label': history_app_label,
-                        'model_name': history_model_name,
-                        'model_id': item.pk
-                    }
-                )
+            #     get_url['history'] = reverse(
+            #         "v2:_api_v2_model_history-list",
+            #         request = self._context['view'].request,
+            #         kwargs = {
+            #             'app_label': history_app_label,
+            #             'model_name': history_model_name,
+            #             'model_id': item.pk
+            #         }
+            #     )
 
 
         obj = getattr(item, 'get_url_kwargs_notes', None)
@@ -126,37 +126,37 @@ class CommonModelSerializer(CommonBaseSerializer):
 
             obj = obj()
 
-        if(
-            not str(item._meta.model_name).lower().endswith('notes')
-            and obj is not FeatureNotUsed
-            and not hasattr(self.Meta.model, '_notes_enabled')
-        ):
+        # if(
+        #     not str(item._meta.model_name).lower().endswith('notes')
+        #     and obj is not FeatureNotUsed
+        #     and not hasattr(self.Meta.model, '_notes_enabled')
+        # ):
 
-            app_namespace = ''
+        #     app_namespace = ''
 
-            if getattr(item, 'app_namespace', None):
+        #     if getattr(item, 'app_namespace', None):
 
-                app_namespace = str(item.app_namespace) + ':'
+        #         app_namespace = str(item.app_namespace) + ':'
 
-            note_basename = app_namespace + '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
+        #     note_basename = app_namespace + '_api_v2_' + str(item._meta.verbose_name).lower().replace(' ', '_') + '_note'
 
-            if getattr(item, 'note_basename', None):
+        #     if getattr(item, 'note_basename', None):
 
-                note_basename = app_namespace + item.note_basename
+        #         note_basename = app_namespace + item.note_basename
 
-            if getattr(self.Meta, 'note_basename', None):
+        #     if getattr(self.Meta, 'note_basename', None):
 
-                note_basename = self.Meta.note_basename
+        #         note_basename = self.Meta.note_basename
 
-            if getattr(item, 'get_url_kwargs_notes', None):
+        #     if getattr(item, 'get_url_kwargs_notes', None):
 
-                get_url['notes'] = reverse(
-                    "v2:" + note_basename + "-list",
-                    request = self._context['view'].request,
-                    kwargs = item.get_url_kwargs_notes()
-                )
+        #         get_url['notes'] = reverse(
+        #             "v2:" + note_basename + "-list",
+        #             request = self._context['view'].request,
+        #             kwargs = item.get_url_kwargs_notes()
+        #         )
 
-        elif getattr(self.Meta.model, '_notes_enabled', False):
+        if getattr(self.Meta.model, '_notes_enabled', False):
 
             get_url['notes'] = reverse(
                 "v2:_api_centurionmodelnote_sub-list",

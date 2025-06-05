@@ -97,19 +97,19 @@ class ManufacturerAPI(
 
 
 
-    def test_api_field_exists_url_history(self):
-        """ Test for existance of API Field
+    # def test_api_field_exists_url_history(self):
+    #     """ Test for existance of API Field
 
-        _urls.history field must exist
-        """
+    #     _urls.history field must exist
+    #     """
 
-        assert 'history' in self.api_data['_urls']
+    #     assert 'history' in self.api_data['_urls']
 
 
-    def test_api_field_type_url_history(self):
-        """ Test for type for API Field
+    # def test_api_field_type_url_history(self):
+    #     """ Test for type for API Field
 
-        _urls.history field must be str
-        """
+    #     _urls.history field must be str
+    #     """
 
-        assert type(self.api_data['_urls']['history']) is str
+    #     assert type(self.api_data['_urls']['history']) is str

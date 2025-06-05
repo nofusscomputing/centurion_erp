@@ -67,7 +67,28 @@ class ModelTestCases(
     @pytest.fixture( scope = 'class')
     def test_class(cls, model):
 
-        yield model
+        if model._meta.abstract:
+
+            class MockModel(model):
+                class Meta:
+                    app_label = 'core'
+                    verbose_name = 'mock instance'
+                    managed = False
+
+            instance = MockModel()
+
+        else:
+
+            instance = model()
+
+        yield instance
+
+        del instance
+
+        if 'mockmodel' in apps.all_models['core']:
+
+            del apps.all_models['core']['mockmodel']
+
 
 
     @pytest.fixture( scope = 'function', autouse = True)

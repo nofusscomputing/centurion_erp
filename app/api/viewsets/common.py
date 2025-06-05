@@ -42,6 +42,11 @@ class Create(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().create(request = request, *args, **kwargs)
 
             if str(response.status_code).startswith('2'):
@@ -129,6 +134,11 @@ class Destroy(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().destroy(request = request, *args, **kwargs)
 
         except Exception as e:
@@ -181,6 +191,11 @@ class List(
         response = None
 
         try:
+
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
 
             response = super().list(request = request, *args, **kwargs)
 
@@ -238,6 +253,11 @@ class Retrieve(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().retrieve(request = request, *args, **kwargs)
 
         except Exception as e:
@@ -289,6 +309,11 @@ class Update(
         response = None
 
         try:
+
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
 
             response = super().partial_update(request = request, *args, **kwargs)
 
@@ -359,6 +384,11 @@ class Update(
         response = None
 
         try:
+
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
 
             response = super().update(request = request, *args, **kwargs)
 
