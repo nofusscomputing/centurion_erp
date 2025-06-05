@@ -9,18 +9,13 @@ from devops.viewsets import (
 from itam.viewsets import (
     index as itam_index_v2,
     device as device_v2,
-    device_notes,
     device_software as device_software_v2,
     device_operating_system,
     inventory,
     operating_system as operating_system_v2,
-    operating_system_notes,
     operating_system_version as operating_system_version_v2,
-    operating_system_version_notes,
     software as software_v2,
-    software_notes,
     software_version as software_version_v2,
-    software_version_notes,
 )
 
 from itim.viewsets import (
@@ -59,10 +54,6 @@ router.register(
     basename = '_api_v2_service_device'
 )
 router.register(
-    prefix = 'device/(?P<model_id>[0-9]+)/notes', viewset = device_notes.ViewSet,
-    basename = '_api_v2_device_note'
-)
-router.register(
     prefix = 'inventory', viewset = inventory.ViewSet,
     basename = '_api_v2_inventory'
 )
@@ -76,19 +67,9 @@ router.register(
     basename = '_api_v2_operating_system_installs'
 )
 router.register(
-    prefix = 'operating_system/(?P<model_id>[0-9]+)/notes',
-    viewset = operating_system_notes.ViewSet,
-    basename = '_api_v2_operating_system_note'
-)
-router.register(
     prefix = 'operating_system/(?P<operating_system_id>[0-9]+)/version',
     viewset = operating_system_version_v2.ViewSet,
     basename = '_api_v2_operating_system_version'
-)
-router.register(
-    prefix = 'operating_system/(?P<operating_system_id>[0-9]+)/version/(?P<model_id>[0-9]+)/notes',
-    viewset = operating_system_version_notes.ViewSet,
-    basename = '_api_v2_operating_system_version_note'
 )
 router.register(
     prefix = 'software', viewset = software_v2.ViewSet,
@@ -99,17 +80,8 @@ router.register(
     basename = '_api_v2_software_installs'
 )
 router.register(
-    prefix = 'software/(?P<model_id>[0-9]+)/notes', viewset = software_notes.ViewSet,
-    basename = '_api_v2_software_note'
-)
-router.register(
     prefix = 'software/(?P<software_id>[0-9]+)/version', viewset = software_version_v2.ViewSet,
     basename = '_api_v2_software_version'
-)
-router.register(
-    prefix = 'software/(?P<software_id>[0-9]+)/version/(?P<model_id>[0-9]+)/notes',
-    viewset = software_version_notes.ViewSet,
-    basename = '_api_v2_software_version_note'
 )
 router.register(
     prefix = 'software/(?P<software_id>[0-9]+)/feature_flag',
