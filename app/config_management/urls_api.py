@@ -3,7 +3,6 @@ from centurion_feature_flag.urls.routers import DefaultRouter
 from config_management.viewsets import (
     index as config_management_v2,
     config_group as config_group_v2,
-    config_group_notes,
     config_group_software as config_group_software_v2
 )
 
@@ -25,10 +24,6 @@ router.register(
 router.register(
     prefix = 'group/(?P<parent_group>[0-9]+)/child_group', viewset = config_group_v2.ViewSet,
     basename = '_api_v2_config_group_child'
-)
-router.register(
-    prefix = 'group/(?P<model_id>[0-9]+)/notes', viewset = config_group_notes.ViewSet,
-    basename = '_api_v2_config_group_note'
 )
 router.register(
     prefix = 'group/(?P<config_group_id>[0-9]+)/software',
