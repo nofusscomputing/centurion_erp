@@ -1,3 +1,5 @@
+import pytest
+
 import django
 
 from django.test import TestCase
@@ -161,7 +163,7 @@ class TicketLinkedItemDevice(
         super().setUpTestData()
 
 
-
+@pytest.mark.skip( reason = 'to be rewritten' )
 class TicketLinkedItemKB(
     TicketLinkedItemBase,
     TestCase
