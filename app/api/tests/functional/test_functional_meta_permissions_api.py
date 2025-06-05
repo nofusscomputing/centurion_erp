@@ -143,6 +143,8 @@ for centurion_model in get_models(
         cls_name,
         (APIPermissionsTestCases,),
         {
+            '__module__': 'api.tests.functional.test_functional_meta_permissions_api',
+            '__qualname__': cls_name,
             'model': make_fixture_with_args(
                 arg_names = ['model_' + str(centurion_model._meta.model_name) ],
                 func = model,

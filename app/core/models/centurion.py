@@ -286,7 +286,7 @@ class CenturionModel(
             validate_constraints = True
         )
 
-        if self._audit_enabled:
+        if self._audit_enabled and self.context['user']:
 
             self._after = self.get_audit_values()
 
