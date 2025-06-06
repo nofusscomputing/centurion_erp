@@ -87,6 +87,18 @@ class TeamUsers(
         return self.team.organization
 
 
+    def get_url_kwargs(self, many = False) -> dict:
+
+        kwargs = super().get_url_kwargs()
+
+        kwargs.update({
+            'organization_id': self.team.organization.id,
+            'team_id': self.team.id
+        })
+
+        return kwargs
+
+
     def save(self, *args, **kwargs):
         """ Save Team
 
