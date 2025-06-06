@@ -19,7 +19,7 @@ router.register(
 )
 router.register(
     prefix = 'group', viewset = config_group_v2.ViewSet,
-    basename = '_api_v2_config_group'
+    basename = '_api_configgroups'
 )
 router.register(
     prefix = 'group/(?P<parent_group>[0-9]+)/child_group', viewset = config_group_v2.ViewSet,

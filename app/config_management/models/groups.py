@@ -1,46 +1,24 @@
 import re
 
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
-from django.forms import ValidationError
 
-from rest_framework.reverse import reverse
-
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from centurion.helpers.merge_software import merge_software
 
-from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
+from core.models.centurion import CenturionModel
 
 from itam.models.device import Device, DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
 
 
 
-class GroupsCommonFields(TenancyObject, models.Model):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of this Group',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
-
-
-
-class ConfigGroups(GroupsCommonFields, SaveHistory):
+class ConfigGroups(
+    CenturionModel,
+):
 
 
     class Meta:
@@ -68,7 +46,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             for invalid_key in ConfigGroups.reserved_config_keys:
 
                 if invalid_key in value.keys():
-                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+
+                    raise ValidationError(
+                        message = f'json key "{invalid_key}" is a reserved configuration key'
+                    )
 
 
     parent = models.ForeignKey(
@@ -106,6 +87,8 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         help_text = 'Hosts that are part of this group',
         verbose_name = 'Hosts'
     )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: dict = [
@@ -213,6 +196,36 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
     ]
 
 
+
+    def clean_fields(self, exclude = None):
+
+        if self.config:
+
+            self.config = self.config_keys_ansible_variable(self.config)
+
+        if self.parent:
+            self.organization = ConfigGroups.objects.get(id=self.parent.id).organization
+
+        if self.pk:
+
+            obj = ConfigGroups.objects.get(
+                id = self.id,
+            )
+
+            # Prevent organization change. ToDo: add feature so that config can change organizations
+            self.organization = obj.organization
+
+        if self.parent is not None:
+
+            if self.pk == self.parent.pk:
+
+                raise ValidationError('Can not set self as parent')
+
+
+        super().clean_fields(exclude = exclude)
+
+
+
     def config_keys_ansible_variable(self, value: dict):
 
         clean_value = {}
@@ -253,21 +266,6 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
         return count
 
-
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_config_group-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_config_group-detail", kwargs={'pk': self.id})
-
-
-    # @property
-    # def parent_object(self):
-    #     """ Fetch the parent object """
-        
-    #     return self.parent
 
 
     def render_config(self):
@@ -323,32 +321,6 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
 
 
-    def save(self, *args, **kwargs):
-
-        if self.config:
-
-            self.config = self.config_keys_ansible_variable(self.config)
-
-        if self.parent:
-            self.organization = ConfigGroups.objects.get(id=self.parent.id).organization
-
-        if self.pk:
-
-            obj = ConfigGroups.objects.get(
-                id = self.id,
-            )
-
-            # Prevent organization change. ToDo: add feature so that config can change organizations
-            self.organization = obj.organization
-
-        if self.parent is not None:
-
-            if self.pk == self.parent.pk:
-
-                raise ValidationError('Can not set self as parent')
-
-        super().save(*args, **kwargs)
-
 
     def __str__(self):
 
@@ -359,29 +331,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return self.name
 
 
-    def save_history(self, before: dict, after: dict) -> bool:
 
-        from config_management.models.config_groups_history import ConfigGroupsHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ConfigGroupsHistory,
-        )
-
-
-        return history
-
-
-
-@receiver(post_delete, sender=ConfigGroups, dispatch_uid='config_group_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
-
-    deleted_model.send(sender='config_group_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.CONFIG_GROUP)
-
-
-
-class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
 
 
     def validate_host_no_parent_group(self):
