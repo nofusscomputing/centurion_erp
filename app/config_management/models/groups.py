@@ -233,7 +233,7 @@ class ConfigGroups(
         for key, value in value.items():
 
             key: str = str(key).lower()
-            
+
             key = re.sub('\s|\.|\-', '_', key) # make an '_' char
 
             if type(value) is dict:
@@ -289,7 +289,7 @@ class ConfigGroups(
         for software in softwares:
 
             if software.action:
-            
+
                 if int(software.action) == 1:
 
                     state = 'present'
@@ -309,7 +309,8 @@ class ConfigGroups(
 
                 software_actions['software'] = software_actions['software'] + [ software_action ]
 
-        if len(software_actions['software']) > 0: # don't add empty software as it prevents parent software from being added
+        if len(software_actions['software']) > 0:
+            # don't add empty software as it prevents parent software from being added
 
             if 'software' not in config.keys():
 
@@ -332,6 +333,9 @@ class ConfigGroups(
 
 
 
+class ConfigGroupHosts(
+    CenturionModel,
+):
 
 
     def validate_host_no_parent_group(self):
@@ -342,7 +346,10 @@ class ConfigGroups(
         """
 
         if False:
-            raise ValidationError(f'host {self} is already a member of this chain as it;s a member of group ""')
+            raise ValidationError(
+                message = f'host {self} ' \
+                    'is already a member of this chain as it;s a member of group ""'
+            )
 
 
     host = models.ForeignKey(
@@ -365,29 +372,13 @@ class ConfigGroups(
         verbose_name = 'Group',
     )
 
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+    modified = AutoLastModifiedField()
 
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.group
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from config_management.models.config_groups_hosts_history import ConfigGroupHostsHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ConfigGroupHostsHistory,
-        )
-
-
-        return history
 
 
 
