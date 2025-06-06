@@ -1,15 +1,18 @@
 from django.db import models
 
-from itam.models.device_common import DeviceCommonFieldsName
+from access.fields import AutoLastModifiedField
 
-from core.mixin.history_save import SaveHistory
+from core.models.centurion import CenturionModel
+
 from core.models.manufacturer import Manufacturer
 
 from settings.models.app_settings import AppSettings
 
 
 
-class DeviceModel(DeviceCommonFieldsName, SaveHistory):
+class DeviceModel(
+    CenturionModel
+):
 
 
     class Meta:
@@ -24,6 +27,14 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
         verbose_name_plural = 'Device Models'
 
 
+    name = models.CharField(
+        blank = False,
+        help_text = 'The items name',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
     manufacturer = models.ForeignKey(
         Manufacturer,
         blank= True,
@@ -33,6 +44,8 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
         on_delete=models.SET_DEFAULT,
         verbose_name = 'Manufacturer'
     )
+
+    modified = AutoLastModifiedField()
 
     page_layout: dict = [
         {
@@ -88,7 +101,6 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
         if app_settings.device_model_is_global:
 
             self.organization = app_settings.global_organization
-            self.is_global = app_settings.device_model_is_global
 
 
     def __str__(self):
@@ -98,16 +110,3 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
             return self.manufacturer.name + ' ' + self.name
 
         return self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_model_history import DeviceModelHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceModelHistory
-        )
-
-
-        return history
