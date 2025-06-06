@@ -391,7 +391,9 @@ class ConfigGroups(
 
 
 
-class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
+class ConfigGroupSoftware(
+    CenturionModel,
+):
     """ A way to configure software to install/remove per config group """
 
     class Meta:
@@ -447,6 +449,8 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
         verbose_name = 'Verrsion',
     )
 
+    modified = AutoLastModifiedField()
+
     # This model is not intended to be viewable on it's own page
     # as it's a sub model for config groups
     page_layout: dict = []
@@ -460,35 +464,8 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     ]
 
 
-    def get_url_kwargs(self) -> dict:
-
-        return {
-            'config_group_id': self.config_group.id,
-            'pk': self.id
-        }
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
-
-
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.config_group
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from config_management.models.config_groups_software_history import ConfigGroupSoftwareHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ConfigGroupSoftwareHistory,
-        )
-
-
-        return history
