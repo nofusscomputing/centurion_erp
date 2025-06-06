@@ -30,7 +30,9 @@ from settings.models.app_settings import AppSettings
 
 
 
-class DeviceType(DeviceCommonFieldsName, SaveHistory):
+class DeviceType(
+    CenturionModel
+):
 
 
     class Meta:
@@ -107,25 +109,11 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
         if app_settings.device_type_is_global:
 
             self.organization = app_settings.global_organization
-            self.is_global = app_settings.device_type_is_global
 
 
     def __str__(self):
 
         return self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_type_history import DeviceTypeHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceTypeHistory,
-        )
-
-
-        return history
 
 
 
