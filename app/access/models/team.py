@@ -94,6 +94,17 @@ class Team(
 
 
 
+    def get_url_kwargs(self, many = False) -> dict:
+
+        kwargs = super().get_url_kwargs()
+
+        kwargs.update({
+            'organization_id': self.organization.id
+        })
+
+        return kwargs
+
+
     def permission_list(self) -> list:
 
         permission_list = []
