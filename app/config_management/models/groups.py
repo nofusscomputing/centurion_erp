@@ -454,6 +454,16 @@ class ConfigGroupSoftware(
     ]
 
 
+    def get_url_kwargs(self, many = False) -> dict:
+        
+        kwargs = super().get_url_kwargs(many = many)
+
+        kwargs.update({
+            'config_group_id': self.config_group.id
+        })
+        return kwargs
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
