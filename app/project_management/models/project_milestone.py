@@ -78,7 +78,6 @@ class ProjectMilestone(ProjectCommonFieldsName):
                     ],
                     "right": [
                         'description',
-                        'is_global',
                     ]
                 }
             ]

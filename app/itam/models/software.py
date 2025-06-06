@@ -67,7 +67,6 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
                     "left": [
                         'organization',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -110,7 +109,6 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
         if app_settings.software_categories_is_global:
 
             self.organization = app_settings.global_organization
-            self.is_global = app_settings.software_categories_is_global
 
 
     def __str__(self):
@@ -192,7 +190,6 @@ class Software(SoftwareCommonFields, SaveHistory):
                         'publisher',
                         'name',
                         'category',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -287,7 +284,6 @@ class Software(SoftwareCommonFields, SaveHistory):
         if app_settings.software_is_global:
 
             self.organization = app_settings.global_organization
-            self.is_global = app_settings.software_is_global
 
 
     def get_url( self, request = None ) -> str:
@@ -376,7 +372,6 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
                     "right": [
                         'model_notes',
                         'is_virtual',
-                        'is_global',
                     ]
                 },
             ]

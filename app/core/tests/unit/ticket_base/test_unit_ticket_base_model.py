@@ -49,12 +49,6 @@ class TicketBaseModelTestCases(
             'field_type': None,
             'field_parameter_verbose_name_type': None
         },
-        "is_global": {
-            'field_type': None,
-            'field_parameter_default_exists': None,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': None
-        },
         "external_system": {
             'field_type': models.fields.IntegerField,
             'field_parameter_default_exists': True,

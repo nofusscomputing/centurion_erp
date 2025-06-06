@@ -63,7 +63,6 @@ class PortModelSerializer(
             'number',
             'description',
             'protocol',
-            'is_global',
             'created',
             'modified',
             '_urls',

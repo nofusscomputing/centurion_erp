@@ -48,12 +48,6 @@ class TicketCommentBaseModelTestCases(
 
 
     parameterized_fields: dict = {
-        "is_global": {
-            'field_type': None,
-            'field_parameter_default_exists': None,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': None
-        },
         "model_notes": {
             'field_type': None,
             'field_parameter_default_exists': None,

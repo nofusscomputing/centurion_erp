@@ -94,7 +94,6 @@ class TeamModelSerializer(
             'model_notes',
             'permissions',
             'organization',
-            'is_global',
             'created',
             'modified',
             '_urls',

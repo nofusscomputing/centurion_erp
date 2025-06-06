@@ -58,7 +58,6 @@ class DeviceModel(
                         'organization',
                         'manufacturer',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',

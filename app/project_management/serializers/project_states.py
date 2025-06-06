@@ -63,7 +63,6 @@ class ProjectStateModelSerializer(
             'model_notes',
             'runbook',
             'is_completed',
-            'is_global',
             'created',
             'modified',
             '_urls',

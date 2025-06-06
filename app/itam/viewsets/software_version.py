@@ -112,7 +112,6 @@ class ViewSet( ModelViewSet ):
     """ Software """
 
     filterset_fields = [
-        'is_global',
         'organization',
         'software',
     ]

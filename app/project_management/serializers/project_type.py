@@ -68,7 +68,6 @@ class ProjectTypeModelSerializer(
             'name',
             'model_notes',
             'runbook',
-            'is_global',
             'created',
             'modified',
             '_urls',

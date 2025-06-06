@@ -67,7 +67,6 @@ class ProjectMilestoneModelSerializer(
             'start_date',
             'finish_date',
             'project',
-            'is_global',
             'created',
             'modified',
             '_urls',
