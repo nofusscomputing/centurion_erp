@@ -1,38 +1,16 @@
-import django
-
 from django.db import models
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
-from core.mixin.history_save import SaveHistory
+from core.models.centurion import CenturionModel
 
 from settings.models.app_settings import AppSettings
 
-User = django.contrib.auth.get_user_model()
 
 
-
-class ManufacturerCommonFields(models.Model):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of manufacturer',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
-
-
-
-class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
+class Manufacturer(
+    CenturionModel,
+):
 
 
     class Meta:
@@ -54,8 +32,8 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
         verbose_name = 'Name'
     )
 
+    modified = AutoLastModifiedField()
 
-    slug = AutoSlugField()
 
     page_layout: dict = [
         {
@@ -110,23 +88,8 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
         if app_settings.manufacturer_is_global:
 
             self.organization = app_settings.global_organization
-            self.is_global = app_settings.manufacturer_is_global
 
 
     def __str__(self):
 
         return self.name
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from core.models.manufacturer_history import ManufacturerHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ManufacturerHistory
-        )
-
-
-        return history
