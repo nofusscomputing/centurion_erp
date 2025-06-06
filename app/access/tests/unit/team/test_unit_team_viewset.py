@@ -16,7 +16,7 @@ class TeamViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'API:_api_v2_organization_team'
+    route_name = 'API:_api_team'
 
 
     @classmethod

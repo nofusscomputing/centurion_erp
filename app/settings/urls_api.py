@@ -17,8 +17,8 @@ from core.viewsets import (
 )
 
 from itam.viewsets import (
-    device_model as device_model_v2,
-    device_type as device_type_v2,
+    device_model,
+    device_type,
     software_category as software_category_v2,
 )
 
@@ -64,12 +64,12 @@ router.register(
     basename = '_api_v2_cluster_type'
 )
 router.register(
-    prefix = 'device_model', viewset = device_model_v2.ViewSet,
-    basename = '_api_v2_device_model'
+    prefix = 'device_model', viewset = device_model.ViewSet,
+    basename = '_api_devicemodel'
 )
 router.register(
-    prefix = 'device_type', viewset = device_type_v2.ViewSet,
-    basename = '_api_v2_device_type'
+    prefix = 'device_type', viewset = device_type.ViewSet,
+    basename = '_api_devicetype'
 )
 router.register(
     prefix = 'external_link', viewset = external_link_v2.ViewSet,

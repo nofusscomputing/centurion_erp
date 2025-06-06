@@ -70,7 +70,6 @@ class ClusterType(TenancyObject):
                     "left": [
                         'organization',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -236,7 +235,6 @@ class Cluster(TenancyObject):
                         'parent_cluster',
                         'cluster_type',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',

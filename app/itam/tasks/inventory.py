@@ -156,14 +156,12 @@ def process_inventory(self, data, organization: int):
 
             operating_system = OperatingSystem.objects.filter(
                 name = data.validated_data['os']['name'],
-                is_global = True
             )
 
             if operating_system.exists():
 
                 operating_system = OperatingSystem.objects.get(
                     name = data.validated_data['os']['name'],
-                    is_global = True
                 )
 
 
@@ -198,7 +196,6 @@ def process_inventory(self, data, organization: int):
                 operating_system = OperatingSystem.objects.create(
                     name = data.validated_data['os']['name'],
                     organization = organization,
-                    is_global = True
                 )
 
 
@@ -223,7 +220,6 @@ def process_inventory(self, data, organization: int):
 
                 operating_system_version = OperatingSystemVersion.objects.create(
                     organization = organization,
-                    is_global = True,
                     name = data.validated_data['os']['version_major'],
                     operating_system = operating_system,
                 )
@@ -314,7 +310,6 @@ def process_inventory(self, data, organization: int):
 
                     software_category = SoftwareCategory.objects.create(
                         organization = software_category_organization,
-                        is_global = True,
                         name = inventory['category'],
                     )
 
@@ -336,7 +331,6 @@ def process_inventory(self, data, organization: int):
 
                         software = Software.objects.create(
                             organization = software_organization,
-                            is_global = True,
                             name = inventory['name'],
                             category = software_category,
                         )
@@ -368,7 +362,6 @@ def process_inventory(self, data, organization: int):
 
                             software_version = SoftwareVersion.objects.create(
                                 organization = organization,
-                                is_global = True,
                                 name = semver,
                                 software = software,
                             )
@@ -389,7 +382,6 @@ def process_inventory(self, data, organization: int):
 
                                 device_software = DeviceSoftware.objects.create(
                                     organization = organization,
-                                    is_global = True,
                                     installedversion = software_version,
                                     software = software,
                                     device = device,

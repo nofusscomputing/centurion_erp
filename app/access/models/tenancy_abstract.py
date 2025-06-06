@@ -37,7 +37,7 @@ class TenancyManager(
 
 
         has_tenant_field = False
-        if hasattr(self.model, 'organization'):
+        if getattr(self.model, 'organization', None) is not None:
             has_tenant_field = True
 
 

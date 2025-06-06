@@ -1,46 +1,24 @@
 import re
 
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
-from django.forms import ValidationError
 
-from rest_framework.reverse import reverse
-
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from centurion.helpers.merge_software import merge_software
 
-from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
+from core.models.centurion import CenturionModel
 
 from itam.models.device import Device, DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
 
 
 
-class GroupsCommonFields(TenancyObject, models.Model):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of this Group',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
-
-
-
-class ConfigGroups(GroupsCommonFields, SaveHistory):
+class ConfigGroups(
+    CenturionModel,
+):
 
 
     class Meta:
@@ -68,7 +46,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             for invalid_key in ConfigGroups.reserved_config_keys:
 
                 if invalid_key in value.keys():
-                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+
+                    raise ValidationError(
+                        message = f'json key "{invalid_key}" is a reserved configuration key'
+                    )
 
 
     parent = models.ForeignKey(
@@ -107,6 +88,8 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         verbose_name = 'Hosts'
     )
 
+    modified = AutoLastModifiedField()
+
 
     page_layout: dict = [
         {
@@ -118,7 +101,6 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
                     "left": [
                         'organization',
                         'name',
-                        'is_global'
                     ],
                     "right": [
                         'model_notes',
@@ -213,6 +195,36 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
     ]
 
 
+
+    def clean_fields(self, exclude = None):
+
+        if self.config:
+
+            self.config = self.config_keys_ansible_variable(self.config)
+
+        if self.parent:
+            self.organization = ConfigGroups.objects.get(id=self.parent.id).organization
+
+        if self.pk:
+
+            obj = ConfigGroups.objects.get(
+                id = self.id,
+            )
+
+            # Prevent organization change. ToDo: add feature so that config can change organizations
+            self.organization = obj.organization
+
+        if self.parent is not None:
+
+            if self.pk == self.parent.pk:
+
+                raise ValidationError('Can not set self as parent')
+
+
+        super().clean_fields(exclude = exclude)
+
+
+
     def config_keys_ansible_variable(self, value: dict):
 
         clean_value = {}
@@ -220,7 +232,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         for key, value in value.items():
 
             key: str = str(key).lower()
-            
+
             key = re.sub('\s|\.|\-', '_', key) # make an '_' char
 
             if type(value) is dict:
@@ -254,21 +266,6 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return count
 
 
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_config_group-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_config_group-detail", kwargs={'pk': self.id})
-
-
-    # @property
-    # def parent_object(self):
-    #     """ Fetch the parent object """
-        
-    #     return self.parent
-
 
     def render_config(self):
 
@@ -291,7 +288,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         for software in softwares:
 
             if software.action:
-            
+
                 if int(software.action) == 1:
 
                     state = 'present'
@@ -311,7 +308,8 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
                 software_actions['software'] = software_actions['software'] + [ software_action ]
 
-        if len(software_actions['software']) > 0: # don't add empty software as it prevents parent software from being added
+        if len(software_actions['software']) > 0:
+            # don't add empty software as it prevents parent software from being added
 
             if 'software' not in config.keys():
 
@@ -323,32 +321,6 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
 
 
-    def save(self, *args, **kwargs):
-
-        if self.config:
-
-            self.config = self.config_keys_ansible_variable(self.config)
-
-        if self.parent:
-            self.organization = ConfigGroups.objects.get(id=self.parent.id).organization
-
-        if self.pk:
-
-            obj = ConfigGroups.objects.get(
-                id = self.id,
-            )
-
-            # Prevent organization change. ToDo: add feature so that config can change organizations
-            self.organization = obj.organization
-
-        if self.parent is not None:
-
-            if self.pk == self.parent.pk:
-
-                raise ValidationError('Can not set self as parent')
-
-        super().save(*args, **kwargs)
-
 
     def __str__(self):
 
@@ -359,29 +331,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return self.name
 
 
-    def save_history(self, before: dict, after: dict) -> bool:
 
-        from config_management.models.config_groups_history import ConfigGroupsHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ConfigGroupsHistory,
-        )
-
-
-        return history
-
-
-
-@receiver(post_delete, sender=ConfigGroups, dispatch_uid='config_group_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
-
-    deleted_model.send(sender='config_group_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.CONFIG_GROUP)
-
-
-
-class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
+class ConfigGroupHosts(
+    CenturionModel,
+):
 
 
     def validate_host_no_parent_group(self):
@@ -392,7 +345,10 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
         """
 
         if False:
-            raise ValidationError(f'host {self} is already a member of this chain as it;s a member of group ""')
+            raise ValidationError(
+                message = f'host {self} ' \
+                    'is already a member of this chain as it;s a member of group ""'
+            )
 
 
     host = models.ForeignKey(
@@ -415,33 +371,19 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
         verbose_name = 'Group',
     )
 
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+    modified = AutoLastModifiedField()
 
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.group
 
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from config_management.models.config_groups_hosts_history import ConfigGroupHostsHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ConfigGroupHostsHistory,
-        )
 
 
-        return history
-
-
-
-class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
+class ConfigGroupSoftware(
+    CenturionModel,
+):
     """ A way to configure software to install/remove per config group """
 
     class Meta:
@@ -497,6 +439,8 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
         verbose_name = 'Verrsion',
     )
 
+    modified = AutoLastModifiedField()
+
     # This model is not intended to be viewable on it's own page
     # as it's a sub model for config groups
     page_layout: dict = []
@@ -510,35 +454,18 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     ]
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
+        
+        kwargs = super().get_url_kwargs(many = many)
 
-        return {
-            'config_group_id': self.config_group.id,
-            'pk': self.id
-        }
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        kwargs.update({
+            'config_group_id': self.config_group.id
+        })
+        return kwargs
 
 
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.config_group
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from config_management.models.config_groups_software_history import ConfigGroupSoftwareHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ConfigGroupSoftwareHistory,
-        )
-
-
-        return history

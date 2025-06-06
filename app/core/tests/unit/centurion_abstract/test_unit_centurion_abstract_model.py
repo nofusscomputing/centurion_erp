@@ -38,13 +38,6 @@ class CenturionAbstractModelTestCases(
                 'type': bool,
                 'value': True,
             },
-            'context': {
-                'type': dict,
-                'value': {
-                    'logger': None,
-                    'user': None,
-                }
-            },
             'model_tag': {
                 'type': str,
             },
@@ -245,57 +238,6 @@ class CenturionAbstractModelInheritedCases(
             'type': list,
         }
     }
-
-
-
-    def test_model_creation(self, model, user):
-
-        kwargs = {}
-
-        many_field = {}
-
-        for field, value in self.kwargs_create_item.items():
-
-            if isinstance(getattr(model, field).field, models.ManyToManyField):
-
-                if field in many_field:
-
-                    many_field[field] += [ value ]
-
-                else:
-
-                    many_field.update({
-                        field: [
-                            value
-                        ]
-                    })
-
-                continue
-
-            kwargs.update({
-                field: value
-            })
-
-
-        default_val = model.context['user']
-
-        model.context['user'] = user
-
-        model_object = model.objects.create(
-            **kwargs
-        )
-
-        model.context['user'] = default_val
-
-        for field, values in many_field.items():
-
-            for value in values:
-
-                getattr(model_object, field).add( value )
-
-
-        assert type(model_object.id) is int
-
 
 
     def test_model_tag_defined(self, model):
@@ -875,7 +817,7 @@ class CenturionAbstractModelPyTest(
 
 
 
-    def test_method_save_audit_enabled_sets__after_create_model(self, mocker, model_instance):
+    def test_method_save_audit_enabled_sets__after_create_model(self, mocker, model_user, model_instance):
         """Test Class Method
         
         Ensure method `save` sets attribute `self._after` to the value of the
@@ -892,6 +834,16 @@ class CenturionAbstractModelPyTest(
         model_instance._audit_enabled = True
 
         mocker.patch('django.db.models.base.Model.save', return_value = None)
+
+        user = model_user.objects.create(
+            username = 'centurion_abstract',
+            password = 'password'
+        )
+
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.context', return_value = {
+            'user': user,
+            'logger': None
+        })
 
         mocker.patch('core.models.centurion.CenturionModel.full_clean', return_value = None)
 
@@ -907,7 +859,7 @@ class CenturionAbstractModelPyTest(
 
 
 
-    def test_method_save_audit_enabled_sets__before_create_model(self, mocker, model_instance):
+    def test_method_save_audit_enabled_sets__before_create_model(self, mocker, model_user, model_instance):
         """Test Class Method
         
         Ensure method `save` sets attribute `self._before` with an empty dict for new model
@@ -922,6 +874,16 @@ class CenturionAbstractModelPyTest(
 
         model_instance._audit_enabled = True
 
+        user = model_user.objects.create(
+            username = 'centurion_abstract',
+            password = 'password'
+        )
+
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.context', return_value = {
+            'user': user,
+            'logger': None
+        })
+
         mocker.patch('django.db.models.base.Model.save', return_value = None)
 
         mocker.patch('core.models.centurion.CenturionModel.full_clean', return_value = None)
@@ -934,7 +896,7 @@ class CenturionAbstractModelPyTest(
 
 
 
-    def test_method_save_audit_enabled_sets__after_update_model(self, mocker, model_instance):
+    def test_method_save_audit_enabled_sets__after_update_model(self, mocker, model_user, model_instance):
         """Test Class Method
         
         Ensure method `save` sets attribute `self._after` to the value of the
@@ -950,6 +912,16 @@ class CenturionAbstractModelPyTest(
 
             def get(self, *args, **kwargs):
                 return self.MockObj()
+
+        user = model_user.objects.create(
+            username = 'centurion_abstract',
+            password = 'password'
+        )
+
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.context', return_value = {
+            'user': user,
+            'logger': None
+        })
 
         mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
@@ -973,7 +945,7 @@ class CenturionAbstractModelPyTest(
 
 
 
-    def test_method_save_audit_enabled_sets__before_update_model(self, mocker, model_instance):
+    def test_method_save_audit_enabled_sets__before_update_model(self, mocker, model_user, model_instance):
         """Test Class Method
         
         Ensure method `save` sets attribute `self._before` to field values
@@ -993,6 +965,16 @@ class CenturionAbstractModelPyTest(
 
             def get(self, *args, **kwargs):
                 return self.MockObj()
+
+        user = model_user.objects.create(
+            username = 'centurion_abstract',
+            password = 'password'
+        )
+
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.context', return_value = {
+            'user': user,
+            'logger': None
+        })
 
         mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
@@ -1094,7 +1076,7 @@ class CenturionAbstractModelPyTest(
 
 
 
-    def test_method_save_audit_enabled_calls_get_audit_values_create_model(self, mocker, model_instance):
+    def test_method_save_audit_enabled_calls_get_audit_values_create_model(self, mocker, model_user, model_instance):
         """Test Class Method
         
         Ensure method `save` calls `self.get_audit_values()` with the defined attributes.
@@ -1108,6 +1090,16 @@ class CenturionAbstractModelPyTest(
         model_instance.objects = MockManager()
 
         model_instance._audit_enabled = True
+
+        user = model_user.objects.create(
+            username = 'centurion_abstract',
+            password = 'password'
+        )
+
+        mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.context', return_value = {
+            'user': user,
+            'logger': None
+        })
 
         mocker.patch('django.db.models.base.Model.save', return_value = None)
 

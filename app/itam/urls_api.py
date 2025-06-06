@@ -8,7 +8,7 @@ from devops.viewsets import (
 
 from itam.viewsets import (
     index as itam_index_v2,
-    device as device_v2,
+    device,
     device_software as device_software_v2,
     device_operating_system,
     inventory,
@@ -38,8 +38,8 @@ router.register(
     feature_flag = '2025-00007', basename = '_api_v2_itam_asset'
 )
 router.register(
-    prefix = 'device', viewset = device_v2.ViewSet,
-    basename = '_api_v2_device'
+    prefix = 'device', viewset = device.ViewSet,
+    basename = '_api_device'
 )
 router.register(
     prefix = 'device/(?P<device_id>[0-9]+)/operating_system',

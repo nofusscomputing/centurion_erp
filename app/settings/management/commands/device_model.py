@@ -20,7 +20,7 @@ class Command(BaseCommand):
         
         if kwargs['global']:
 
-            softwares = DeviceModel.objects.filter(is_global = False)
+            softwares = DeviceModel.objects.filter()
 
             self.stdout.write('Running global')
 
@@ -45,8 +45,6 @@ class Command(BaseCommand):
 
             softwares = DeviceModel.objects.filter(
                 ~Q(organization = app_settings.global_organization)
-                |
-                Q(is_global = False)
                 &
                 Q(organization=app_settings.global_organization),
             )

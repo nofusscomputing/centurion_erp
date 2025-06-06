@@ -159,9 +159,11 @@ class CenturionModel(
 
         for field in self._meta.fields:
 
-            clean_data.update({
-                field.name: getattr(self, field.name)
-            })
+            if hasattr(self, field.name):
+
+                clean_data.update({
+                    field.name: getattr(self, field.name)
+                })
 
 
         return clean_data
@@ -286,7 +288,7 @@ class CenturionModel(
             validate_constraints = True
         )
 
-        if self._audit_enabled:
+        if self._audit_enabled and self.context['user']:
 
             self._after = self.get_audit_values()
 

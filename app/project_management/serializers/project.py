@@ -103,7 +103,6 @@ class ProjectModelSerializer(
             'manager_team',
             'team_members',
             'is_deleted',
-            'is_global',
             'created',
             'modified',
             '_urls',

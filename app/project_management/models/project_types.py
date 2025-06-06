@@ -69,7 +69,6 @@ class ProjectType(ProjectTypeCommonFields):
                         'organization',
                         'name'
                         'runbook',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes'

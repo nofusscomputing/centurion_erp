@@ -60,7 +60,6 @@ class TicketCommentCategoryModelSerializer(
             'parent',
             'name',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

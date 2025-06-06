@@ -36,23 +36,11 @@ class ModelTestCases:
 
             with django_db_blocker.unblock():
 
-                default_val = model.context['user']
-
-                model.context['user'] = user
-
                 model_object = model.objects.create(
                     **request.cls.kwargs_create_item
                 )
 
-                model.context['user'] = default_val
-
-                model_object.context['user'] = user
-
                 yield model_object
-
-                model_object.context['user'] = default_val
-
-                model_object.delete()
 
 
 

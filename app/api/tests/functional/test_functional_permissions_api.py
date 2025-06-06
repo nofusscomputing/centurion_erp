@@ -394,35 +394,30 @@ class APIPermissionsInheritedCases(
     def prepare(self, request, api_request_permissions, model_instance):
 
         request.cls.change_item = model_instance(
-            user = api_request_permissions['user']['change'],
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['user']
             }
         )
 
         request.cls.delete_item = model_instance(
-            user = api_request_permissions['user']['delete'],
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['user']
             }
         )
 
         request.cls.diff_tenancy_item = model_instance(
-            user = api_request_permissions['user']['different_tenancy'],
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['different']
             }
         )
 
         request.cls.global_item = model_instance(
-            user = api_request_permissions['user']['view'],
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['global']
             }
         )
 
         request.cls.view_item = model_instance(
-            user = api_request_permissions['user']['view'],
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['user']
             }

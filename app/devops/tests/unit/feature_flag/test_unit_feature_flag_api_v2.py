@@ -42,8 +42,6 @@ class API(
 
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
 
-        self.model.context['user'] = self.view_user
-
         self.item = self.model.objects.create(
             organization = self.organization,
             name = 'one',
@@ -55,8 +53,6 @@ class API(
             model_notes = 'text',
             enabled = True
         )
-
-        self.model.context['user'] = None
 
         self.url_view_kwargs = {'pk': self.item.id}
 

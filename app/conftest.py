@@ -270,6 +270,14 @@ def pytest_generate_tests(metafunc):
                     ids = ids,
                 )
 
+            else:
+
+                pytest.mark.xfail(
+                    reason = 'No Parameters for parameterized test'
+                )(
+                    getattr(metafunc.cls, metafunc.definition.name)
+                )
+
 
 
 @pytest.fixture( scope = 'class')

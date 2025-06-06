@@ -62,7 +62,6 @@ class ViewSet( ModelViewSet ):
     filterset_fields = [
         'organization',
         'parent',
-        'is_global',
     ]
 
     search_fields = [

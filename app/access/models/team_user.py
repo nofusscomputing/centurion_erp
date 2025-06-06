@@ -4,24 +4,26 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import Group
 
-from rest_framework.reverse import reverse
-
 from access.fields import (
-    AutoCreatedField,
     AutoLastModifiedField
 )
 
 from access.models.tenant import Tenant
 from access.models.team import Team
 
-from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
+from core.models.centurion import CenturionModel
 
 User = django.contrib.auth.get_user_model()
 
 
 
-class TeamUsers(SaveHistory):
+class TeamUsers(
+    CenturionModel
+):
+
+    _audit_enabled = False
+
+    organization = None    # Dont add organization field
 
     class Meta:
 
@@ -30,15 +32,6 @@ class TeamUsers(SaveHistory):
         verbose_name = "Team User"
 
         verbose_name_plural = "Team Users"
-
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of this Team User',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
 
     team = models.ForeignKey(
         Team,
@@ -66,8 +59,6 @@ class TeamUsers(SaveHistory):
         verbose_name='manager',
     )
 
-    created = AutoCreatedField()
-
     modified = AutoLastModifiedField()
 
     page_layout: list = []
@@ -76,11 +67,6 @@ class TeamUsers(SaveHistory):
         'user',
         'manager'
     ]
-
-    history_app_label: str = None
-    history_model_name: str = None
-    kb_model_name: str = None
-    note_basename: str = None
 
 
     def delete(self, using=None, keep_parents=False):
@@ -103,27 +89,16 @@ class TeamUsers(SaveHistory):
         return self.team.organization
 
 
-    def get_url( self, request = None ) -> str:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        url_kwargs: dict = {
+        kwargs = super().get_url_kwargs()
+
+        kwargs.update({
             'organization_id': self.team.organization.id,
-            'team_id': self.team.id,
-            'pk': self.id
-        }
+            'team_id': self.team.id
+        })
 
-        print(f'url kwargs are: {url_kwargs}')
-
-
-        if request:
-
-            return reverse(f"v2:_api_v2_organization_team_user-detail", request=request, kwargs = url_kwargs )
-
-        return reverse(f"v2:_api_v2_organization_team_user-detail", kwargs = url_kwargs )
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        return kwargs
 
 
     def save(self, *args, **kwargs):

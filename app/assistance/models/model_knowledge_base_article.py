@@ -114,7 +114,7 @@ class ModelKnowledgeBaseArticle(TenancyObject):
         blank = False,
         choices = all_models,
         help_text = 'Model type to link to article article',
-        max_length = 50,
+        max_length = 80,
         null = False,
         unique = False,
         verbose_name = 'Model Type',

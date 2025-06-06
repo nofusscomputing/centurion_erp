@@ -109,7 +109,6 @@ class ExternalLink(TenancyObject):
                         'button_text',
                         'template',
                         'colour',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',

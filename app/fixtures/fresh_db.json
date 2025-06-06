@@ -3,8 +3,8 @@
   "model": "settings.appsettings",
   "pk": 1,
   "fields": {
-    "created": "2025-06-04T00:29:30.479Z",
-    "modified": "2025-06-04T00:29:30Z",
+    "created": "2025-06-06T04:28:05.497Z",
+    "modified": "2025-06-06T04:28:05Z",
     "owner_organization": null,
     "device_model_is_global": false,
     "device_type_is_global": false,

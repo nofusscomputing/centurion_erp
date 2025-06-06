@@ -17,17 +17,6 @@ class RoleModelTestCases(
     kwargs_item_create: dict = None
 
 
-    def test_field_exist_is_global(self):
-        """Test model field not used
-
-        object must not be settable as a global object
-
-        Attribute `is_global` must be defined as None
-        """
-
-        assert self.model.is_global is None
-
-
 
 class RoleModelTest(
     RoleModelTestCases,

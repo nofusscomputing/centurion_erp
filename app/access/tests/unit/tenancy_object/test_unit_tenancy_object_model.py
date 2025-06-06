@@ -188,24 +188,6 @@ class TenancyObjectTestCases(
 
 
 
-    def test_field_exist_is_global(self):
-        """Model Field Exists
-
-        is_global must exist
-        """
-
-        assert hasattr(self.model, 'is_global')
-
-
-    # def test_field_type_is_global(self):
-    #     """Model Field Type
-
-    #     is_global is of type str
-    #     """
-
-    #     assert type(self.model.is_global) is django_models.BooleanField
-
-
 
     def test_field_exist_model_notes(self):
         """Model Field Exists

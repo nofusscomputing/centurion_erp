@@ -1,32 +1,16 @@
 from django.db import models
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from assistance.models.knowledge_base import KnowledgeBase
 
-
-
-class TicketCommentCategoryCommonFields(TenancyObject):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Category ID Number',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'Number',
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
+from core.models.centurion import CenturionModel
 
 
 
-class TicketCommentCategory(TicketCommentCategoryCommonFields):
+class TicketCommentCategory(
+    CenturionModel,
+):
 
 
     class Meta:
@@ -97,6 +81,8 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
         verbose_name = 'Task Comment',
     )
 
+    modified = AutoLastModifiedField()
+
 
     page_layout: dict = [
         {
@@ -137,16 +123,3 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
     def __str__(self):
 
         return self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from core.models.ticket.ticket_comment_category_history import TicketCommentCategoryHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = TicketCommentCategoryHistory
-        )
-
-
-        return history

@@ -91,7 +91,6 @@ class Port(TenancyObject):
                         'organization',
                         'display_name',
                         'description',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',

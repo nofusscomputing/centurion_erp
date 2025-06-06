@@ -62,7 +62,6 @@ class DeviceModelModelSerializer(
             'manufacturer',
             'name',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',
