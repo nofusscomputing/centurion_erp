@@ -159,9 +159,11 @@ class CenturionModel(
 
         for field in self._meta.fields:
 
-            clean_data.update({
-                field.name: getattr(self, field.name)
-            })
+            if hasattr(self, field.name):
+
+                clean_data.update({
+                    field.name: getattr(self, field.name)
+                })
 
 
         return clean_data
