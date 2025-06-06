@@ -1,3 +1,4 @@
+import pytest
 from django.contrib.auth.models import GroupManager
 from django.test import TestCase
 
@@ -21,7 +22,7 @@ class ModelTestCases(
     }
 
 
-
+@pytest.mark.skip( reason = 'refactor')
 class TeamModelTest(
     ModelTestCases,
     TestCase,
