@@ -90,7 +90,6 @@ class ConfigGroupSoftwareModelSerializer(
             'software',
             'action',
             'version',
-            'is_global',
             'created',
             'modified',
             '_urls',

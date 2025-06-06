@@ -58,7 +58,6 @@ class ClusterTypeModelSerializer(
             'name',
             'model_notes',
             'config',
-            'is_global',
             'created',
             'modified',
             '_urls',

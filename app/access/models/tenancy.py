@@ -82,27 +82,6 @@ class TenancyManager(models.Manager):
 
                 if len(user_organizations) > 0 and not user.is_superuser:
 
-                    # if getattr(self.model, 'is_global', False) is True:
-
-                    #     if has_tenant_field:
-
-                    #         return super().get_queryset().select_related('organization').filter(
-                    #             models.Q(organization__in=user_organizations)
-                    #             # |
-                    #             # models.Q(is_global = True)
-                    #         )
-
-                    #     else:
-
-                    #         return super().get_queryset().filter(
-                    #             models.Q(organization__in=user_organizations)
-                    #             # |
-                    #             # models.Q(is_global = True)
-                    #         )
-
-
-                    # else:
-
                     if has_tenant_field:
 
                         return super().get_queryset().select_related('organization').filter(

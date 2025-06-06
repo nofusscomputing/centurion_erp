@@ -113,7 +113,6 @@ class ViewSet( ModelViewSet ):
     """ Operating Systems """
 
     filterset_fields = [
-        'is_global',
         'organization',
     ]
 

@@ -66,7 +66,6 @@ class OperatingSystemVersionModelSerializer(
             'name',
             'operating_system',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

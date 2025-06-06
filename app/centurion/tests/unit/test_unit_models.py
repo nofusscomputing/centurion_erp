@@ -416,12 +416,6 @@ class ModelFieldsTestCasesReWrite:
                 'field_type': fields.TextField,
                 'field_parameter_verbose_name_type': str
             },
-            "is_global": {
-                'field_type': fields.BooleanField,
-                'field_parameter_default_exists': True,
-                'field_parameter_default_value': False,
-                'field_parameter_verbose_name_type': str
-            }
         }
 
 

@@ -29,12 +29,6 @@ class AssetBaseModelTestCases(
 
 
     parameterized_fields: dict = {
-        "is_global": {
-            'field_type': None,
-            'field_parameter_default_exists': None,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': None
-        },
         "asset_number": {
             'field_type': models.fields.CharField,
             'field_parameter_default_exists': False,

@@ -68,7 +68,6 @@ class DeviceType(
                     "left": [
                         'organization',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -297,7 +296,6 @@ class Device(
                     "right": [
                         'model_notes',
                         'is_virtual',
-                        'is_global',
                     ]
                 },
                 {
@@ -406,7 +404,6 @@ class Device(
             if obj.exists():
 
                 obj.update(
-                    is_global = False,
                     organization = self.organization,
                 )
 
@@ -690,18 +687,6 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         return self.device
 
 
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-        ):
-
-        self.is_global = False
-
-        super().save(
-            force_insert=False, force_update=False, using=None, update_fields=None
-        )
-
-
-
     def save_history(self, before: dict, after: dict) -> bool:
 
         from itam.models.device_software_history import DeviceSoftwareHistory
@@ -812,16 +797,6 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         
         return self.device
 
-
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-        ):
-
-        self.is_global = False
-
-        super().save(
-            force_insert=False, force_update=False, using=None, update_fields=None
-        )
 
     def save_history(self, before: dict, after: dict) -> bool:
 

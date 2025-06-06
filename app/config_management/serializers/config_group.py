@@ -126,7 +126,6 @@ class ConfigGroupModelSerializer(
             'config',
             'hosts',
             'rendered_config',
-            'is_global',
             'created',
             'modified',
             '_urls',

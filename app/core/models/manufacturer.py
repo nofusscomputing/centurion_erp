@@ -45,7 +45,6 @@ class Manufacturer(
                     "left": [
                         'organization',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',

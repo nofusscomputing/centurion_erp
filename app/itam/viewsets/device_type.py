@@ -60,7 +60,6 @@ class ViewSet( ModelViewSet ):
     """ Device Type """
 
     filterset_fields = [
-        'is_global',
         'organization',
     ]
 

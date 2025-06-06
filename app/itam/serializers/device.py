@@ -118,7 +118,6 @@ class DeviceModelSerializer(
             'model_notes',
             'serial_number',
             'uuid',
-            'is_global',
             'is_virtual',
             'device_model',
             'config',
