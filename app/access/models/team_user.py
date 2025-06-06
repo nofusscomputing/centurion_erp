@@ -21,6 +21,8 @@ class TeamUsers(
     CenturionModel
 ):
 
+    _audit_enabled = False
+
     organization = None    # Dont add organization field
 
     class Meta:
