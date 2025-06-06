@@ -69,7 +69,7 @@ class KnowledgeBaseCategoryModelSerializer(
                 request=self.context['view'].request,
             ),
             'team': reverse(
-                'v2:_api_v2_organization_team-list',
+                'v2:_api_team-list',
                 request=self.context['view'].request,
                 kwargs={
                     'organization_id': item.organization.id,

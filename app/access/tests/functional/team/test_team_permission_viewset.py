@@ -30,7 +30,7 @@ class ViewSetBase:
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_organization_team'
+    url_name = '_api_team'
 
     change_data = {'name': 'device'}
 
