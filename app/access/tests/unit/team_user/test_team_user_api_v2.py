@@ -27,7 +27,7 @@ class TeamUserAPI(
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_organization_team_user'
+    url_name = '_api_teamuser'
 
     @classmethod
     def setUpTestData(self):
