@@ -1,20 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import Group
 
-from rest_framework.reverse import reverse
-
 from access.fields import (
-    AutoCreatedField,
     AutoLastModifiedField
 )
 
-from access.models.tenant import Tenant
-from access.models.tenancy import TenancyObject
-
-from core import exceptions as centurion_exceptions
+from core.models.centurion import CenturionModel
 
 
-class Team(Group, TenancyObject):
+
+class Team(
+    Group,
+    CenturionModel,
+):
+
 
     class Meta:
 
@@ -25,27 +24,6 @@ class Team(Group, TenancyObject):
         verbose_name_plural = "Teams"
 
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        if self.organization_id:
-
-            self.name = self.organization.name.lower().replace(' ', '_') + '_' + self.team_name.lower().replace(' ', '_')
-
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-
-    def validatate_organization_exists(self):
-        """Ensure that the user did provide an organization
-
-        Raises:
-            ValidationError: User failed to supply organization.
-        """
-
-        if not self:
-            raise centurion_exceptions.ValidationError('You must provide an organization')
-
-
-
     team_name = models.CharField(
         blank = False,
         help_text = 'Name to give this team',
@@ -53,18 +31,6 @@ class Team(Group, TenancyObject):
         unique = False,
         verbose_name = 'Name',
     )
-
-    organization = models.ForeignKey(
-        Tenant,
-        blank = False,
-        help_text = 'Tenant this belongs to',
-        null = False,
-        on_delete = models.CASCADE,
-        validators = [validatate_organization_exists],
-        verbose_name = 'Tenant'
-    )
-
-    created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
@@ -116,47 +82,16 @@ class Team(Group, TenancyObject):
     ]
 
 
-    def get_url( self, request = None ) -> str:
 
-        if request:
+    def clean_fields(self, exclude = None):
 
-            return reverse(f"v2:_api_v2_organization_team-detail", request=request, kwargs = self.get_url_kwargs() )
+        if self.organization_id:
 
-        return reverse(f"v2:_api_v2_organization_team-detail", kwargs = self.get_url_kwargs() )
-
-
-    def get_url_kwargs(self) -> dict:
-        """Fetch the URL kwargs
-
-        Returns:
-            dict: kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'organization_id': self.organization.id,
-            'pk': self.id
-        }
+            self.name = self.organization.name.lower().replace(' ', '_') + '_' + self.team_name.lower().replace(' ', '_')
 
 
-    def get_url_kwargs_notes(self) -> dict:
-        """Fetch the URL kwargs for model notes
+        super().clean_fields(exclude = exclude)
 
-        Returns:
-            dict: notes kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'organization_id': self.organization.id,
-            'model_id': self.id
-        }
- 
-
-
-    # @property
-    # def parent_object(self):
-    #     """ Fetch the parent object """
-        
-    #     return self.organization
 
 
     def permission_list(self) -> list:
@@ -175,17 +110,3 @@ class Team(Group, TenancyObject):
 
     def __str__(self):
         return self.organization.name + ', ' + self.team_name
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from access.models.team_history import TeamHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = TeamHistory
-        )
-
-
-        return history

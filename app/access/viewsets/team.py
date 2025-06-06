@@ -3,6 +3,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 from access.models.tenant import Tenant as Organization
 # THis import only exists so that the migrations can be created
 from access.models.team_history import TeamHistory    # pylint: disable=W0611:unused-import
+from access.models.team_notes import TeamNotes    # pylint: disable=W0611:unused-import
 from access.serializers.teams import (    # pylint: disable=W0611:unused-import
     Team,
     TeamModelSerializer,
