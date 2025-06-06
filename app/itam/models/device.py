@@ -10,13 +10,15 @@ from django.forms import ValidationError
 
 from rest_framework import serializers
 
-from access.fields import *
+from access.fields import AutoLastModifiedField
 
 from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
+from core.models.centurion import CenturionModel
+
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
@@ -41,6 +43,16 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
         verbose_name_plural = 'Device Types'
 
+
+    name = models.CharField(
+        blank = False,
+        help_text = 'The items name',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
+    modified = AutoLastModifiedField()
 
     page_layout: dict = [
         {
@@ -131,6 +143,16 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         verbose_name_plural = 'Devices'
 
+
+    name = models.CharField(
+        blank = False,
+        help_text = 'The items name',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
+    modified = AutoLastModifiedField()
 
     reserved_config_keys: list = [
         'software'
@@ -633,6 +655,8 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         verbose_name = 'Date Installed'
     )
 
+    modified = AutoLastModifiedField()
+
 
     page_layout: list = []
 
@@ -764,6 +788,8 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         null = True,
         verbose_name = 'Install Date',
     )
+
+    modified = AutoLastModifiedField()
 
     page_layout: list = [
         {
