@@ -82,7 +82,7 @@ router.register(
 )
 router.register(
     prefix = 'manufacturer', viewset = manufacturer_v2.ViewSet,
-    basename = '_api_v2_manufacturer'
+    basename = '_api_manufacturer'
 )
 router.register(
     prefix = 'port', viewset = port_v2.ViewSet,

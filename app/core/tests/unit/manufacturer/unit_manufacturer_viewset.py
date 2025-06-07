@@ -15,7 +15,7 @@ class ManufacturerViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_manufacturer'
+    route_name = 'v2:_api_manufacturer'
 
 
     @classmethod
