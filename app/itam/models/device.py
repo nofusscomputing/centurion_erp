@@ -9,6 +9,7 @@ from django.core.exceptions import (
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.utils.timezone import now
 
 from rest_framework import serializers
 

@@ -39,8 +39,38 @@ from .model_centurionsubmodel import (
     model_centurionsubmodel,
 )
 
+from .model_configgroup import (
+    kwargs_configgroups,
+    model_configgroups,
+)
+
+from .model_configgrouphost import (
+    kwargs_configgrouphosts,
+    model_configgrouphosts,
+)
+
+from .model_configgroupsoftware import (
+    kwargs_configgroupsoftware,
+    model_configgroupsoftware,
+)
+
 from .model_contenttype import (
     model_contenttype,
+)
+
+from .model_device import (
+    kwargs_device,
+    model_device,
+)
+
+from .model_devicemodel import (
+    kwargs_devicemodel,
+    model_devicemodel,
+)
+
+from .model_devicetype import (
+    kwargs_devicetype,
+    model_devicetype,
 )
 
 from .model_featureflag import (
@@ -68,6 +98,15 @@ from .model_knowledgebasecategory import (
     model_knowledgebasecategory,
 )
 
+from .model_kwarg_data import (
+    model_kwarg_data
+)
+
+from .model_manufacturer import (
+    kwargs_manufacturer,
+    model_manufacturer,
+)
+
 from .model_permission import (
     model_permission,
 )
@@ -82,16 +121,27 @@ from .model_softwareenablefeatureflag import (
 )
 
 from .model_team import (
+    kwargs_team,
     model_team,
 )
 
 from .model_teamuser import (
-    model_teamuser,
+    model_teamusers,
 )
 
 from .model_tenancyabstract import (
     kwargs_tenancyabstract,
     model_tenancyabstract,
+)
+
+from .model_ticketcategory import (
+    kwargs_ticketcategory,
+    model_ticketcategory,
+)
+
+from .model_ticketcommentcategory import (
+    kwargs_ticketcommentcategory,
+    model_ticketcommentcategory,
 )
 
 from .model_user import (

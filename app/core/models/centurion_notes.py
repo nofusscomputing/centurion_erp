@@ -94,6 +94,18 @@ class CenturionModelNote(
     table_fields: list = []
 
 
+    def clean_fields(self, exclude = None):
+
+        if not self.created_by:
+
+            raise ValidationError(
+                code = 'no_user_supplied',
+                message = 'No user was supplied for this model note.'
+            )
+
+        super().clean_fields(exclude = exclude)
+
+
 
 class NoteMetaModel(
     CenturionModelNote,
@@ -105,19 +117,6 @@ class NoteMetaModel(
     class Meta:
         abstract = True
         proxy = False
-
-
-
-    def clean(self):
-
-        if not self.created_by:
-
-            raise ValidationError(
-                code = 'no_user_supplied',
-                message = 'No user was supplied for this model note.'
-            )
-
-        super().clean()
 
 
     def clean_fields(self, exclude = None):
@@ -132,11 +131,11 @@ class NoteMetaModel(
 
         self.organization = self.model.organization
 
-        if not self.id:
+        if not self.id and self.created_by is None:
 
             self.created_by = self.context['user']
 
-        else:
+        elif self.id:
 
             self.modified_by = self.context['user']
 

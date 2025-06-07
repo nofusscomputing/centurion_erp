@@ -87,7 +87,7 @@ class ModelSerializer(
 
             url_dict.update({
             'ticketcategory': reverse(
-                'v2:_api_v2_ticket_category-list',
+                'v2:_api_ticketcategory-list',
                 request=self._context['view'].request,
                 kwargs={},
             ) + '?' + ticket_type + '=true',

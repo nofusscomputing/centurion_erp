@@ -44,10 +44,10 @@ router.register(
 router.register(
     prefix = 'device/(?P<device_id>[0-9]+)/operating_system',
     viewset = device_operating_system.ViewSet,
-    basename = '_api_v2_device_operating_system')
+    basename = '_api_device_operating_system')
 router.register(
     prefix = 'device/(?P<device_id>[0-9]+)/software', viewset = device_software_v2.ViewSet,
-    basename = '_api_v2_device_software'
+    basename = '_api_devicesoftware'
 )
 router.register(
     prefix = 'device/(?P<device_id>[0-9]+)/service', viewset = service_device_v2.ViewSet,

@@ -92,29 +92,48 @@ class ModelTestCases(
 
 
     @pytest.fixture( scope = 'function', autouse = True)
-    def model_instance(cls, request, model):
+    def model_instance(cls, model_kwarg_data, model, model_kwargs):
+
+        class MockModel(model):
+            class Meta:
+                app_label = 'core'
+                verbose_name = 'mock instance'
+                managed = False
+
+        if 'mockmodel' in apps.all_models['core']:
+
+            del apps.all_models['core']['mockmodel']
 
         if model._meta.abstract:
-
-            class MockModel(model):
-                class Meta:
-                    app_label = 'core'
-                    verbose_name = 'mock instance'
-                    managed = False
 
             instance = MockModel()
 
         else:
 
-            instance = model()
+            instance = model_kwarg_data(
+                model = model,
+                model_kwargs = model_kwargs,
+                create_instance = True,
+            )
+
+            instance = instance['instance']
+
 
         yield instance
-
-        del instance
 
         if 'mockmodel' in apps.all_models['core']:
 
             del apps.all_models['core']['mockmodel']
+
+        if type(instance) is dict:
+
+            instance['instance'].delete()
+
+        elif instance.id and type(instance) is not MockModel:
+
+            instance.delete()
+
+        del instance
 
 
 

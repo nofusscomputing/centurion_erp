@@ -2,6 +2,7 @@ import pytest
 
 from django.apps import apps
 from django.conf import settings
+from django.db import models
 
 from core.models.centurion_notes import CenturionModelNote
 from core.tests.unit.centurion_model_note_meta.test_unit_centurion_model_note_meta_model import (
@@ -82,6 +83,68 @@ class ModelNotesMetaModelTestCases(
     def note_model(self, request):
 
         return request.cls.note_model_class
+
+
+    @pytest.fixture( scope = 'class', autouse = True)
+    def model_kwargs(self, django_db_blocker,
+        request, note_model, kwargs_centurionmodelnotemeta
+    ):
+
+        model_kwargs = kwargs_centurionmodelnotemeta.copy()
+
+        with django_db_blocker.unblock():
+            
+            note_model_kwargs = request.getfixturevalue('kwargs_' + note_model._meta.model_name)
+
+            kwargs = {}
+
+            many_field = {}
+
+            for field, value in note_model_kwargs.items():
+
+                if isinstance(getattr(note_model, field).field, models.ManyToManyField):
+
+                    if field in many_field:
+
+                        many_field[field] += [ value ]
+
+                    else:
+
+                        many_field.update({
+                            field: [
+                                value
+                            ]
+                        })
+
+                    continue
+
+                kwargs.update({
+                    field: value
+                })
+
+
+            model = note_model.objects.create(
+                **kwargs
+            )
+
+
+            for field, values in many_field.items():
+
+                for value in values:
+
+                    getattr(model, field).add( value )
+
+
+        model_kwargs.update({
+            'model': model
+        })
+        request.cls.kwargs_create_item = model_kwargs
+
+        yield model_kwargs
+
+        with django_db_blocker.unblock():
+
+            model.delete()
 
 
     @pytest.fixture( scope = 'class' )

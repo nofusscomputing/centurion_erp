@@ -20,6 +20,7 @@ class ConfigGroups(
     CenturionModel,
 ):
 
+    model_tag = 'config_group'
 
     class Meta:
 
@@ -55,10 +56,9 @@ class ConfigGroups(
     parent = models.ForeignKey(
         'self',
         blank= True,
-        default = None,
         help_text = 'Parent of this Group',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Parent Group'
     )
 
@@ -74,7 +74,6 @@ class ConfigGroups(
 
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Configuration for this Group',
         null = True,
         validators=[ validate_config_keys_not_reserved ],
@@ -336,6 +335,8 @@ class ConfigGroupHosts(
     CenturionModel,
 ):
 
+    _notes_enabled = False
+
 
     def validate_host_no_parent_group(self):
         """ Ensure that the host is not within any parent group
@@ -353,9 +354,9 @@ class ConfigGroupHosts(
 
     host = models.ForeignKey(
         Device,
-        blank= False,
+        blank = False,
         help_text = 'Host that will be apart of this config group',
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         null = False,
         validators = [ validate_host_no_parent_group ],
         verbose_name = 'Host',
@@ -366,12 +367,13 @@ class ConfigGroupHosts(
         ConfigGroups,
         blank= False,
         help_text = 'Group that this host is part of',
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         null = False,
         verbose_name = 'Group',
     )
 
     modified = AutoLastModifiedField()
+
 
     @property
     def parent_object(self):
@@ -380,11 +382,17 @@ class ConfigGroupHosts(
         return self.group
 
 
+    page_layout: list = []
+    table_fields: list = []
+
+
 
 class ConfigGroupSoftware(
     CenturionModel,
 ):
     """ A way to configure software to install/remove per config group """
+
+    _notes_enabled = False
 
     class Meta:
 
@@ -400,42 +408,38 @@ class ConfigGroupSoftware(
 
     config_group = models.ForeignKey(
         ConfigGroups,
-        blank= False,
-        default = None,
+        blank = False,
         help_text = 'Config group this softwre will be linked to',
         null = False,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Config Group'
     )
 
 
     software = models.ForeignKey(
         Software,
-        blank= False,
-        default = None,
+        blank = False,
         help_text = 'Software to add to this config Group',
         null = False,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Software'
     )
 
 
     action = models.IntegerField(
         blank = True,
-        choices=DeviceSoftware.Actions,
-        default=None,
+        choices = DeviceSoftware.Actions,
         help_text = 'ACtion to perform with this software',
-        null=True,
+        null = True,
         verbose_name = 'Action'
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Software Version for this config group',
         null = True,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Verrsion',
     )
 
@@ -443,7 +447,7 @@ class ConfigGroupSoftware(
 
     # This model is not intended to be viewable on it's own page
     # as it's a sub model for config groups
-    page_layout: dict = []
+    page_layout: list = []
 
 
     table_fields: list = [

@@ -1,68 +1,151 @@
-from django.test import TestCase
+import pytest
 
-from access.models.tenant import Tenant as Organization
+from django.db import models
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
-
-from itam.models.device import DeviceSoftware
-from itam.models.software import Software
 
 
+# class Old:
 
-class ConfigGroupSoftwareModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+#     model = ConfigGroupSoftware
+
+
+#     @classmethod
+#     def setUpTestData(self):
+#         """ Setup Test
+
+#         """
+
+#         self.organization = Organization.objects.create(name='test_org')
+
+
+#         self.parent_item = ConfigGroups.objects.create(
+#             organization = self.organization,
+#             name = 'group_one'
+#         )
+
+#         self.software_item = Software.objects.create(
+#             organization = self.organization,
+#             name = 'softwareone',
+#         )
+
+#         self.kwargs_item_create = {
+#             'software': self.software_item,
+#             'config_group': self.parent_item,
+#             'action': DeviceSoftware.Actions.INSTALL
+#         }
+
+#         super().setUpTestData()
+
+
+
+#     def test_model_has_property_parent_object(self):
+#         """ Check if model contains 'parent_object'
+        
+#             This is a required property for all models that have a parent
+#         """
+
+#         assert hasattr(self.model, 'parent_object')
+
+
+#     def test_model_property_parent_object_returns_object(self):
+#         """ Check if model contains 'parent_object'
+        
+#             This is a required property for all models that have a parent
+#         """
+
+#         assert self.item.parent_object == self.parent_item
+
+
+
+@pytest.mark.model_configgroupsoftware
+class ConfigGroupSoftwareModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = ConfigGroupSoftware
 
+    @property
+    def parameterized_class_attributes(self):
 
-    @classmethod
-    def setUpTestData(self):
-        """ Setup Test
-
-        """
-
-        self.organization = Organization.objects.create(name='test_org')
-
-
-        self.parent_item = ConfigGroups.objects.create(
-            organization = self.organization,
-            name = 'group_one'
-        )
-
-        self.software_item = Software.objects.create(
-            organization = self.organization,
-            name = 'softwareone',
-        )
-
-        self.kwargs_item_create = {
-            'software': self.software_item,
-            'config_group': self.parent_item,
-            'action': DeviceSoftware.Actions.INSTALL
+        return {
+            'model_tag': {
+                'type': models.NOT_PROVIDED,
+                'value': models.NOT_PROVIDED,
+            },
         }
 
-        super().setUpTestData()
+
+    parameterized_model_fields = {
+        'config_group': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': False,
+            'unique': False,
+        },
+        'software': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': False,
+            'unique': False,
+        },
+        'action': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.IntegerField,
+            'null': True,
+            'unique': False,
+        },
+        'version': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
 
 
+    @pytest.mark.xfail( reason = 'not required for this model' )
+    def test_method_value_not_default___str__(self):
+        pass
 
-    def test_model_has_property_parent_object(self):
-        """ Check if model contains 'parent_object'
+    @pytest.mark.xfail( reason = 'not required for this model' )
+    def test_model_tag_defined(self):
+        pass
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, model_kwargs, settings):
+        """Test Class Method
         
-            This is a required property for all models that have a parent
+        Ensure method `get_url_kwargs` returns the correct value.
         """
 
-        assert hasattr(self.model, 'parent_object')
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == { 'config_group_id': model_kwargs['config_group'].id, 'pk': model_instance.id }
 
 
-    def test_model_property_parent_object_returns_object(self):
-        """ Check if model contains 'parent_object'
-        
-            This is a required property for all models that have a parent
-        """
 
-        assert self.item.parent_object == self.parent_item
+class ConfigGroupSoftwareModelInheritedCases(
+    ConfigGroupSoftwareModelTestCases,
+):
+    pass
+
+
+
+class ConfigGroupSoftwareModelPyTest(
+    ConfigGroupSoftwareModelTestCases,
+):
+    pass

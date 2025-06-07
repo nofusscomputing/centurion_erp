@@ -68,7 +68,7 @@ class TenantModelSerializer(
             #         'model_id': item.pk
             #     }
             # ),
-            'teams': reverse("v2:_api_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
+            'teams': reverse("v2:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
         }
 
     model_notes = centurion_field.MarkdownField( required = False )

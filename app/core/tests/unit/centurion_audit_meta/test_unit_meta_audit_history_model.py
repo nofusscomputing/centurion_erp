@@ -2,6 +2,7 @@ import pytest
 
 from django.apps import apps
 from django.conf import settings
+from django.db import models
 
 from core.models.audit import CenturionAudit
 from core.tests.unit.centurion_audit_meta.test_unit_centurion_audit_meta_model import (
@@ -81,13 +82,76 @@ class AuditHistoryMetaModelTestCases(
     @pytest.fixture( scope = 'class' )
     def audit_model(self, request):
 
-        return request.cls.audit_model_class
+        yield request.cls.audit_model_class
+
+
+    @pytest.fixture( scope = 'class', autouse = True)
+    def model_kwargs(self, django_db_blocker,
+        request, audit_model, kwargs_centurionauditmeta
+    ):
+
+        model_kwargs = kwargs_centurionauditmeta.copy()
+
+        with django_db_blocker.unblock():
+            
+            audit_model_kwargs = request.getfixturevalue('kwargs_' + audit_model._meta.model_name)
+
+            kwargs = {}
+
+            many_field = {}
+
+            for field, value in audit_model_kwargs.items():
+
+                if isinstance(getattr(audit_model, field).field, models.ManyToManyField):
+
+                    if field in many_field:
+
+                        many_field[field] += [ value ]
+
+                    else:
+
+                        many_field.update({
+                            field: [
+                                value
+                            ]
+                        })
+
+                    continue
+
+                kwargs.update({
+                    field: value
+                })
+
+
+            model = audit_model.objects.create(
+                **kwargs
+            )
+
+
+            for field, values in many_field.items():
+
+                for value in values:
+
+                    getattr(model, field).add( value )
+
+
+        model_kwargs.update({
+            'model': model
+        })
+        request.cls.kwargs_create_item = model_kwargs
+
+        yield model_kwargs
+
+        with django_db_blocker.unblock():
+
+            model.delete()
+
 
 
     @pytest.fixture( scope = 'class' )
     def model(self, request):
 
-        return request.cls.model_class
+        yield request.cls.model_class
 
     
     @pytest.mark.skip( reason = 'ToDo: Figure out how to dynomagic add audit_model instance' )
@@ -109,7 +173,7 @@ for model in get_models():
 
     globals()[cls_name] = type(
         cls_name, 
-        (AuditHistoryMetaModelTestCases,), 
+        (AuditHistoryMetaModelTestCases,),
         {
             'audit_model_class': apps.get_model(
                 app_label = model._meta.app_label,

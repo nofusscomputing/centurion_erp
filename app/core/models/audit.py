@@ -62,6 +62,8 @@ class CenturionAudit(
         verbose_name = 'Content Model'
     )
 
+    model = None    # is overridden with the model field in child-model
+
     before = models.JSONField(
         blank = True,
         help_text = 'Value before Change',

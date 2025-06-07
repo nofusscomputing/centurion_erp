@@ -26,7 +26,7 @@ class DeviceSoftwareBaseSerializer(serializers.ModelSerializer):
 
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_device_software-detail", format="html"
+        view_name="v2:_api_devicesoftware-detail", format="html"
     )
 
 

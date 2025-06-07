@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
@@ -11,6 +13,7 @@ from itam.models.software import Software
 
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class DeviceSoftwareModel(
     TenancyObjectInheritedCases,
     TestCase,

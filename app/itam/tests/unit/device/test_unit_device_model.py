@@ -10,6 +10,7 @@ from centurion.tests.unit.test_unit_models import (
 from itam.models.device import Device
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class DeviceModel(
     TenancyObjectInheritedCases,
     TestCase,

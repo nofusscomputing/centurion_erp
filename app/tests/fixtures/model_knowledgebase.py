@@ -23,7 +23,7 @@ def kwargs_knowledgebase(django_db_blocker,
 
         team = model_team.objects.create(
             organization = kwargs_centurionmodel['organization'],
-            name = 'kb tgt team' + random_str
+            team_name = 'kb tgt team' + random_str
         )
 
         user = model_user.objects.create(
