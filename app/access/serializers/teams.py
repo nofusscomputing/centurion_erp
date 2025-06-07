@@ -65,7 +65,7 @@ class TeamModelSerializer(
 
         get_url.update({
             'users': reverse(
-                'v2:_api_teamuser-list',
+                'v2:_api_v2_organization_team_user-list',
                 request=self.context['view'].request,
                 kwargs={
                     'organization_id': item.organization.id,

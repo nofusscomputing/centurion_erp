@@ -122,7 +122,7 @@ from .model_team import (
 )
 
 from .model_teamuser import (
-    model_teamuser,
+    model_teamusers,
 )
 
 from .model_tenancyabstract import (

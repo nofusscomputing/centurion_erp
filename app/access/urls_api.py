@@ -8,7 +8,7 @@ from access.viewsets import (
     organization as organization_v2,
     role,
     team,
-    team_user,
+    team_user as team_user_v2
 )
 
 entity_type_names = ''
@@ -76,8 +76,8 @@ router.register(
 
 router.register(
     prefix = 'access/tenant/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user',
-    viewset = team_user.ViewSet,
-    basename = '_api_teamuser'
+    viewset = team_user_v2.ViewSet,
+    basename = '_api_v2_organization_team_user'
 )
 
 router.register(
