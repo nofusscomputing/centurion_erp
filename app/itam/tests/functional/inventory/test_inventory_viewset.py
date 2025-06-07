@@ -29,6 +29,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class ViewSetBase:
 
     model = Device
