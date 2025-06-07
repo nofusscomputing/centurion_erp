@@ -63,6 +63,16 @@ from .model_device import (
     model_device,
 )
 
+from .model_devicemodel import (
+    kwargs_devicemodel,
+    model_devicemodel,
+)
+
+from .model_devicetype import (
+    kwargs_devicetype,
+    model_devicetype,
+)
+
 from .model_featureflag import (
     kwargs_featureflag,
     model_featureflag,
@@ -88,6 +98,11 @@ from .model_knowledgebasecategory import (
     model_knowledgebasecategory,
 )
 
+from .model_manufacturer import (
+    kwargs_manufacturer,
+    model_manufacturer,
+)
+
 from .model_permission import (
     model_permission,
 )
@@ -102,6 +117,7 @@ from .model_softwareenablefeatureflag import (
 )
 
 from .model_team import (
+    kwargs_team,
     model_team,
 )
 
@@ -112,6 +128,16 @@ from .model_teamuser import (
 from .model_tenancyabstract import (
     kwargs_tenancyabstract,
     model_tenancyabstract,
+)
+
+from .model_ticketcategory import (
+    kwargs_ticketcategory,
+    model_ticketcategory,
+)
+
+from .model_ticketcommentcategory import (
+    kwargs_ticketcommentcategory,
+    model_ticketcommentcategory,
 )
 
 from .model_user import (
