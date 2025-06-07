@@ -20,6 +20,7 @@ class ConfigGroups(
     CenturionModel,
 ):
 
+    model_tag = 'config_group'
 
     class Meta:
 
@@ -55,10 +56,9 @@ class ConfigGroups(
     parent = models.ForeignKey(
         'self',
         blank= True,
-        default = None,
         help_text = 'Parent of this Group',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Parent Group'
     )
 
@@ -74,7 +74,6 @@ class ConfigGroups(
 
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Configuration for this Group',
         null = True,
         validators=[ validate_config_keys_not_reserved ],
