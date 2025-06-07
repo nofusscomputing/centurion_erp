@@ -23,6 +23,8 @@ class TeamUsers(
 
     _audit_enabled = False
 
+    _notes_enabled = False
+
     organization = None    # Dont add organization field
 
     class Meta:
