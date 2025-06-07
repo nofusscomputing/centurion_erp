@@ -1,3 +1,4 @@
+import datetime
 import pytest
 
 from django.test import Client
@@ -391,34 +392,45 @@ class APIPermissionsInheritedCases(
 
 
     @pytest.fixture( scope = 'class', autouse = True)
-    def prepare(self, request, api_request_permissions, model_instance):
+    def prepare(self, request, api_request_permissions, model, model_instance):
+
+        random_field = ''
+
+        if hasattr(model, 'name'):
+
+            random_field = 'name'
 
         request.cls.change_item = model_instance(
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['user']
-            }
+            },
+            random_field = random_field
         )
 
         request.cls.delete_item = model_instance(
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['user']
-            }
+            },
+            random_field = random_field
         )
 
         request.cls.diff_tenancy_item = model_instance(
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['different']
-            }
+            },
+            random_field = random_field
         )
 
         request.cls.global_item = model_instance(
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['global']
-            }
+            },
+            random_field = random_field
         )
 
         request.cls.view_item = model_instance(
             kwargs_create = {
                 'organization': api_request_permissions['tenancy']['user']
-            }
+            },
+            random_field = random_field
         )
