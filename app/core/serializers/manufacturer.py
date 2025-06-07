@@ -17,7 +17,7 @@ class ManufacturerBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_manufacturer-detail", format="html"
+        view_name="v2:_api_manufacturer-detail", format="html"
     )
 
 
