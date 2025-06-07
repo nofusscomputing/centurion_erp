@@ -58,6 +58,8 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
                     create_instance = True,
                 )
 
+                obj = obj['instance']
+
 
 
             model_objs += [ obj ]

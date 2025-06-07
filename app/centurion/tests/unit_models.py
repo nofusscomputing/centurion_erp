@@ -116,8 +116,10 @@ class ModelTestCases(
                 create_instance = True,
             )
 
+            instance = instance['instance']
 
-        yield instance['instance']
+
+        yield instance
 
         if 'mockmodel' in apps.all_models['core']:
 
