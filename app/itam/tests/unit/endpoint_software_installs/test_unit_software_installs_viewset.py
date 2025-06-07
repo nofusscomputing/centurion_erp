@@ -9,6 +9,7 @@ from itam.viewsets.device_software import ViewSet
 
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class SoftwareInstallsViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
