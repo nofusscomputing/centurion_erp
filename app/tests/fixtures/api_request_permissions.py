@@ -10,7 +10,7 @@ def api_request_permissions( django_db_blocker,
     model_contenttype,
     model_permission,
     model_team,
-    model_teamuser,
+    model_teamusers,
     model_user,
     model,
     organization_one,
@@ -52,7 +52,7 @@ def api_request_permissions( django_db_blocker,
             username="test_user_add" + str(random_str), password="password"
         )
 
-        model_teamuser.objects.create(
+        model_teamusers.objects.create(
             team = add_team,
             user = add_user
         )
@@ -78,7 +78,7 @@ def api_request_permissions( django_db_blocker,
             username="test_user_change" + str(random_str), password="password"
         )
 
-        model_teamuser.objects.create(
+        model_teamusers.objects.create(
             team = change_team,
             user = change_user
         )
@@ -103,7 +103,7 @@ def api_request_permissions( django_db_blocker,
         delete_user = model_user.objects.create_user(
             username="test_user_delete" + str(random_str), password="password"
         )
-        model_teamuser.objects.create(
+        model_teamusers.objects.create(
             team = delete_team,
             user = delete_user
         )
@@ -129,7 +129,7 @@ def api_request_permissions( django_db_blocker,
             username="api_r_perm_user_view" + str(random_str), password="password"
         )
 
-        model_teamuser.objects.create(
+        model_teamusers.objects.create(
             team = view_team,
             user = view_user
         )
@@ -153,7 +153,7 @@ def api_request_permissions( django_db_blocker,
             delete_permissions,
         ])
 
-        model_teamuser.objects.create(
+        model_teamusers.objects.create(
             team = different_organization_team,
             user = different_organization_user
         )
