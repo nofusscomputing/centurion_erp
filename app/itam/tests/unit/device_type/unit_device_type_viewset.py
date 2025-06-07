@@ -15,7 +15,7 @@ class DeviceTYpeViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_device_type'
+    route_name = 'v2:_api_devicetype'
 
 
     @classmethod

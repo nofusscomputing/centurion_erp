@@ -111,7 +111,7 @@ class Index(IndexViewset):
                 "celery_log": reverse('v2:_api_v2_celery_log-list', request=request),
                 "cluster_type": reverse('v2:_api_v2_cluster_type-list', request=request),
                 "device_model": reverse('v2:_api_devicemodel-list', request=request),
-                "device_type": reverse('v2:_api_v2_device_type-list', request=request),
+                "device_type": reverse('v2:_api_devicetype-list', request=request),
                 "external_link": reverse('v2:_api_v2_external_link-list', request=request),
                 "knowledge_base_category": reverse('v2:_api_knowledgebasecategory-list', request=request),
                 "manufacturer": reverse('v2:_api_manufacturer-list', request=request),
