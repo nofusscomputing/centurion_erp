@@ -98,6 +98,10 @@ from .model_knowledgebasecategory import (
     model_knowledgebasecategory,
 )
 
+from .model_kwarg_data import (
+    model_kwarg_data
+)
+
 from .model_manufacturer import (
     kwargs_manufacturer,
     model_manufacturer,
