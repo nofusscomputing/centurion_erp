@@ -5,13 +5,13 @@ from config_management.models.groups import ConfigGroupHosts
 
 
 @pytest.fixture( scope = 'class')
-def model_configgrouphost():
+def model_configgrouphosts():
 
     yield ConfigGroupHosts
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_configgrouphost(django_db_blocker,
+def kwargs_configgrouphosts(django_db_blocker,
     kwargs_device, model_device,
     kwargs_centurionmodel, model_configgroup, kwargs_configgroup,
 ):

@@ -40,13 +40,13 @@ from .model_centurionsubmodel import (
 )
 
 from .model_configgroup import (
-    kwargs_configgroup,
-    model_configgroup,
+    kwargs_configgroups,
+    model_configgroups,
 )
 
 from .model_configgrouphost import (
-    kwargs_configgrouphost,
-    model_configgrouphost,
+    kwargs_configgrouphosts,
+    model_configgrouphosts,
 )
 
 from .model_configgroupsoftware import (
