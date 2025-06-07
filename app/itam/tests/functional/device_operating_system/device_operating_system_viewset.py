@@ -26,7 +26,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_device_operating_system'
+    url_name = '_api_device_operating_system'
 
     change_data = {'name': '1.1'}
 
