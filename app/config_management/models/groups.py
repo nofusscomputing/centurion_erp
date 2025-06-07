@@ -372,11 +372,16 @@ class ConfigGroupHosts(
 
     modified = AutoLastModifiedField()
 
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
 
         return self.group
+
+
+    page_layout: list = []
+    table_fields: list = []
 
 
 

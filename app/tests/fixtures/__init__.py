@@ -39,8 +39,23 @@ from .model_centurionsubmodel import (
     model_centurionsubmodel,
 )
 
+from .model_configgroup import (
+    kwargs_configgroup,
+    model_configgroup,
+)
+
+from .model_configgrouphost import (
+    kwargs_configgrouphost,
+    model_configgrouphost,
+)
+
 from .model_contenttype import (
     model_contenttype,
+)
+
+from .model_device import (
+    kwargs_device,
+    model_device,
 )
 
 from .model_featureflag import (
