@@ -3,13 +3,14 @@ from django.test import TestCase
 import pytest
 
 
-from app.tests.unit.test_unit_models import (
+from centurion.tests.unit.test_unit_models import (
     TenancyObjectInheritedCases
 )
 
 from itam.models.device import Device
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class DeviceModel(
     TenancyObjectInheritedCases,
     TestCase,

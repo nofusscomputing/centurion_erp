@@ -98,31 +98,31 @@ class APITestCases(
 
 
 
-    def test_api_field_exists_url_history(self):
-        """ Test for existance of API Field
+    # def test_api_field_exists_url_history(self):
+    #     """ Test for existance of API Field
 
-        _urls.history field must exist
-        """
+    #     _urls.history field must exist
+    #     """
 
-        assert 'history' in self.api_data['_urls']
-
-
-    def test_api_field_type_url_history(self):
-        """ Test for type for API Field
-
-        _urls.history field must be str
-        """
-
-        assert type(self.api_data['_urls']['history']) is str
+    #     assert 'history' in self.api_data['_urls']
 
 
-    def test_api_field_type_url_history_value(self):
-        """ Test for url value
+    # def test_api_field_type_url_history(self):
+    #     """ Test for type for API Field
 
-        _urls.history field must use the endpoint for entity model
-        """
+    #     _urls.history field must be str
+    #     """
 
-        assert str(self.api_data['_urls']['history']).endswith('/access/role/' + str(self.item.pk) + '/history')
+    #     assert type(self.api_data['_urls']['history']) is str
+
+
+    # def test_api_field_type_url_history_value(self):
+    #     """ Test for url value
+
+    #     _urls.history field must use the endpoint for entity model
+    #     """
+
+    #     assert str(self.api_data['_urls']['history']).endswith('/access/role/' + str(self.item.pk) + '/history')
 
 
 

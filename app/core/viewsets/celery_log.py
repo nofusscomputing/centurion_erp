@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from core.serializers.celery_log import (
+from core.serializers.celery_log import (    # pylint: disable=W0611:unused-import
     TaskResult,
     TaskResultModelSerializer,
     TaskResultViewSerializer

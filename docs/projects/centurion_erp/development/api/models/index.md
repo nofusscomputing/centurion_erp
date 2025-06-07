@@ -8,13 +8,13 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Models within Centurion ERP:
 
-- core
+- Abstract
 
-    - [Ticket](./ticket.md)
+    - [Centurion Base](./centurion.md)
 
-- itam
+    - [Centurion Sub-Model](./centurion_sub.md)
 
-    - [Device](./itam_device.md)
+    - [Tenancy](./tenancy.md)
 
 
 ## Helpers

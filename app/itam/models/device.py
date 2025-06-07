@@ -3,22 +3,25 @@ import re
 
 from datetime import timedelta
 
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.forms import ValidationError
+from django.utils.timezone import now
 
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
-from app.helpers.merge_software import merge_software
+from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 from core.lib.feature_not_used import FeatureNotUsed
 from core.mixin.history_save import SaveHistory
+from core.models.centurion import CenturionModel
+
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
@@ -30,7 +33,9 @@ from settings.models.app_settings import AppSettings
 
 
 
-class DeviceType(DeviceCommonFieldsName, SaveHistory):
+class DeviceType(
+    CenturionModel,
+):
 
 
     class Meta:
@@ -44,6 +49,16 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
         verbose_name_plural = 'Device Types'
 
 
+    name = models.CharField(
+        blank = False,
+        help_text = 'The items name',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
+    modified = AutoLastModifiedField()
+
     page_layout: dict = [
         {
             "name": "Details",
@@ -54,7 +69,6 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
                     "left": [
                         'organization',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -97,29 +111,17 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
         if app_settings.device_type_is_global:
 
             self.organization = app_settings.global_organization
-            self.is_global = app_settings.device_type_is_global
 
 
     def __str__(self):
 
         return self.name
 
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_type_history import DeviceTypeHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceTypeHistory,
-        )
 
 
-        return history
-
-
-
-class Device(DeviceCommonFieldsName, SaveHistory):
+class Device(
+    CenturionModel,
+):
 
 
     class Meta:
@@ -134,6 +136,16 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         verbose_name_plural = 'Devices'
 
 
+    name = models.CharField(
+        blank = False,
+        help_text = 'The items name',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
+    modified = AutoLastModifiedField()
+
     reserved_config_keys: list = [
         'software'
     ]
@@ -147,7 +159,9 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             for invalid_key in Device.reserved_config_keys:
 
                 if invalid_key in value.keys():
-                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+                    raise ValidationError(
+                        message = f'json key "{invalid_key}" is a reserved configuration key'
+                    )
 
 
     def validate_uuid_format(self):
@@ -156,8 +170,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         if not re.match(pattern, str(self)):
 
-            raise serializers.ValidationError(
-                f'UUID must be formated to match regex {str(pattern)}',
+            raise ValidationError(
+                message = f'UUID must be formated to match regex {str(pattern)}',
                 code = 'invalid_uuid'
             )
 
@@ -168,9 +182,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         if not re.match(pattern, str(self).lower()):
 
-            raise serializers.ValidationError(
-                '''[RFC1035 2.3.1] A hostname must start with a letter, end with a letter or digit,
-                and have as interior characters only letters, digits, and hyphen.''',
+            raise ValidationError(
+                message = '[RFC1035 2.3.1] A hostname must start with a letter,' \
+                    'end with a letter or digit, and have as interior characters only letters,' \
+                        ' digits, and hyphen.',
                 code = 'invalid_hostname'
             )
 
@@ -192,7 +207,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = True,
         unique = True,
         verbose_name = 'Serial Number',
-        
+
     )
 
     uuid = models.CharField(
@@ -224,7 +239,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         on_delete=models.SET_DEFAULT,
         verbose_name = 'Type'
     )
-
 
     config = models.JSONField(
         blank = True,
@@ -283,7 +297,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                     "right": [
                         'model_notes',
                         'is_virtual',
-                        'is_global',
                     ]
                 },
                 {
@@ -354,6 +367,16 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     ]
 
 
+    def clean_fields(self, exclude = None):
+
+        if self.uuid is not None:
+
+            self.uuid = str(self.uuid).lower()
+
+
+        super().clean_fields(exclude = exclude)
+
+
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
         ):
@@ -362,10 +385,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         After saving the device update the related items so that they are a part
         of the same organization as the device.
         """
-
-        if self.uuid is not None:
-
-            self.uuid = str(self.uuid).lower()
 
 
         super().save(
@@ -386,7 +405,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             if obj.exists():
 
                 obj.update(
-                    is_global = False,
                     organization = self.organization,
                 )
 
@@ -395,22 +413,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         ConfigGroupHosts.objects.filter(
             host = self.id,
         ).delete()
-
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_history import DeviceHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceHistory
-        )
-
-
-        return history
-
 
 
     def __str__(self):
@@ -551,13 +553,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
 
 
-@receiver(post_delete, sender=Device, dispatch_uid='device_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
-
-    deleted_model.send(sender='device_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.DEVICE)
-
-
-
 
 class DeviceSoftware(DeviceCommonFields, SaveHistory):
     """ A way for the device owner to configure software to install/remove """
@@ -635,6 +630,8 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         verbose_name = 'Date Installed'
     )
 
+    modified = AutoLastModifiedField()
+
 
     page_layout: list = []
 
@@ -689,18 +686,6 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         """ Fetch the parent object """
         
         return self.device
-
-
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-        ):
-
-        self.is_global = False
-
-        super().save(
-            force_insert=False, force_update=False, using=None, update_fields=None
-        )
-
 
 
     def save_history(self, before: dict, after: dict) -> bool:
@@ -767,6 +752,8 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         verbose_name = 'Install Date',
     )
 
+    modified = AutoLastModifiedField()
+
     page_layout: list = [
         {
             "name": "Details",
@@ -811,16 +798,6 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         
         return self.device
 
-
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-        ):
-
-        self.is_global = False
-
-        super().save(
-            force_insert=False, force_update=False, using=None, update_fields=None
-        )
 
     def save_history(self, before: dict, after: dict) -> bool:
 

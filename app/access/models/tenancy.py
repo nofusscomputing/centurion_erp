@@ -1,4 +1,3 @@
-import django
 import logging
 
 from django.db import models
@@ -52,6 +51,10 @@ class TenancyManager(models.Manager):
 
         user_organizations: list(str()) = []
 
+        has_tenant_field = False
+        if getattr(self.model, 'organization', None) is not None:
+            has_tenant_field = True
+
 
         if request:
 
@@ -70,22 +73,19 @@ class TenancyManager(models.Manager):
 
                     if team.organization.id not in user_organizations:
 
-                        if not user_organizations:
+                        # if not user_organizations:
 
-                            self.user_organizations = []
+                        #     self.user_organizations = []
 
                         user_organizations += [ team.organization.id ]
 
 
-                # if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:
                 if len(user_organizations) > 0 and not user.is_superuser:
 
-                    if getattr(self.model, 'is_global', False) is True:
+                    if has_tenant_field:
 
-                        return super().get_queryset().filter(
+                        return super().get_queryset().select_related('organization').filter(
                             models.Q(organization__in=user_organizations)
-                            |
-                            models.Q(is_global = True)
                         )
 
                     else:
@@ -93,6 +93,11 @@ class TenancyManager(models.Manager):
                         return super().get_queryset().filter(
                             models.Q(organization__in=user_organizations)
                         )
+
+
+        if has_tenant_field:
+            return super().get_queryset().select_related('organization')
+
 
         return super().get_queryset()
 
@@ -229,7 +234,7 @@ class TenancyObject(SaveHistory):
 
         if self.app_namespace:
 
-            app_namespace = self.app_namespace + ':'
+            app_namespace = self.app_namespace
 
         return str(app_namespace)
 
@@ -248,12 +253,17 @@ class TenancyObject(SaveHistory):
 
         model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
 
+        namespace = f'v2'
+
+        if self.get_app_namespace():
+            namespace = namespace + ':' + self.get_app_namespace()
+
 
         if request:
 
-            return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
+            return reverse(f"{namespace}:_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
 
-        return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
+        return reverse(f"{namespace}:_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
 
 
     def get_url_kwargs(self) -> dict:

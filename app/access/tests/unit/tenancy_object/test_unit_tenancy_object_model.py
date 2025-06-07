@@ -188,24 +188,6 @@ class TenancyObjectTestCases(
 
 
 
-    def test_field_exist_is_global(self):
-        """Model Field Exists
-
-        is_global must exist
-        """
-
-        assert hasattr(self.model, 'is_global')
-
-
-    # def test_field_type_is_global(self):
-    #     """Model Field Type
-
-    #     is_global is of type str
-    #     """
-
-    #     assert type(self.model.is_global) is django_models.BooleanField
-
-
 
     def test_field_exist_model_notes(self):
         """Model Field Exists
@@ -617,7 +599,7 @@ class TenancyObjectInheritedCases(
     """Test Cases for models that inherit from
 
     **Note:** dont use these test cases use 
-    `app.tests.unit.test_unit_models.TenancyObjectInheritedCases` instead
+    `centurion.tests.unit.test_unit_models.TenancyObjectInheritedCases` instead
     
     access.models.tenancy.TenancyObject"""
 

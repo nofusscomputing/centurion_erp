@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
 from access.serializers.organization import TenantBaseSerializer
@@ -62,7 +61,7 @@ class ConfigGroupSoftwareModelSerializer(
 
         get_url = super().get_url( item = item )
 
-        del get_url['history']
+        # del get_url['history']
         del get_url['knowledge_base']
 
         get_url.update({
@@ -91,7 +90,6 @@ class ConfigGroupSoftwareModelSerializer(
             'software',
             'action',
             'version',
-            'is_global',
             'created',
             'modified',
             '_urls',

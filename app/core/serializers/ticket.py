@@ -8,7 +8,7 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from core import exceptions as centurion_exception
 from core import fields as centurion_field
@@ -87,7 +87,7 @@ class ModelSerializer(
 
             url_dict.update({
             'ticketcategory': reverse(
-                'v2:_api_v2_ticket_category-list',
+                'v2:_api_ticketcategory-list',
                 request=self._context['view'].request,
                 kwargs={},
             ) + '?' + ticket_type + '=true',

@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from itim.models.cluster_history import ClusterHistory    # pylint: disable=W0611:unused-import
-from itim.serializers.cluster import (
+from itim.serializers.cluster import (    # pylint: disable=W0611:unused-import
     Cluster,
     ClusterModelSerializer,
     ClusterViewSerializer

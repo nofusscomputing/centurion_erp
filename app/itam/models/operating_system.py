@@ -85,7 +85,6 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
                         'organization',
                         'publisher',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -242,7 +241,6 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
                     ],
                     "right": [
                         'model_notes',
-                        'is_global',
                     ]
                 },
             ]

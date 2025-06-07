@@ -1,10 +1,8 @@
 import django
 
-from django.contrib.auth.models import Group
 from django.db import models
 
 from access.models.tenant import Tenant as Organization
-from access.models.team import Team
 
 User = django.contrib.auth.get_user_model()
 

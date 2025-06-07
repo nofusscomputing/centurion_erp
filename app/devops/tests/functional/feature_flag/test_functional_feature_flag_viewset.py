@@ -31,7 +31,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = 'devops:_api_v2_feature_flag'
+    url_name = 'devops:_api_featureflag'
 
     change_data = {'name': 'device'}
 
@@ -233,26 +233,6 @@ class ViewSetBase:
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-class ManufacturerPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-
-
-class ManufacturerViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
 
 
 

@@ -4,7 +4,6 @@ from access.models.entity import Entity
 
 from core.models.model_history import ModelHistory
 
-from devops.models.feature_flag import FeatureFlag
 
 
 

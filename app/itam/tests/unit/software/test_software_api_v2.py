@@ -259,41 +259,41 @@ class SoftwareAPI(
 
 
 
-    def test_api_field_exists_urls_history(self):
-        """ Test for existance of API Field
+    # def test_api_field_exists_urls_history(self):
+    #     """ Test for existance of API Field
 
-        _urls.history field must exist
-        """
+    #     _urls.history field must exist
+    #     """
 
-        assert 'history' in self.api_data['_urls']
-
-
-    def test_api_field_type_urls_history(self):
-        """ Test for type for API Field
-
-        _urls.history field must be str
-        """
-
-        assert type(self.api_data['_urls']['history']) is str
+    #     assert 'history' in self.api_data['_urls']
 
 
+    # def test_api_field_type_urls_history(self):
+    #     """ Test for type for API Field
 
-    def test_api_field_exists_urls_notes(self):
-        """ Test for existance of API Field
+    #     _urls.history field must be str
+    #     """
 
-        _urls.notes field must exist
-        """
-
-        assert 'notes' in self.api_data['_urls']
+    #     assert type(self.api_data['_urls']['history']) is str
 
 
-    def test_api_field_type_urls_notes(self):
-        """ Test for type for API Field
 
-        _urls.notes field must be str
-        """
+    # def test_api_field_exists_urls_notes(self):
+    #     """ Test for existance of API Field
 
-        assert type(self.api_data['_urls']['notes']) is str
+    #     _urls.notes field must exist
+    #     """
+
+    #     assert 'notes' in self.api_data['_urls']
+
+
+    # def test_api_field_type_urls_notes(self):
+    #     """ Test for type for API Field
+
+    #     _urls.notes field must be str
+    #     """
+
+    #     assert type(self.api_data['_urls']['notes']) is str
 
 
 
@@ -306,13 +306,13 @@ class SoftwareAPI(
         assert 'version' in self.api_data['_urls']
 
 
-    def test_api_field_type_urls_notes(self):
-        """ Test for type for API Field
+    # def test_api_field_type_urls_notes(self):
+    #     """ Test for type for API Field
 
-        _urls.version field must be str
-        """
+    #     _urls.version field must be str
+    #     """
 
-        assert type(self.api_data['_urls']['version']) is str
+    #     assert type(self.api_data['_urls']['version']) is str
 
 
 

@@ -98,7 +98,6 @@ class ClusterModelSerializer(
             'rendered_config',
             'nodes',
             'devices',
-            'is_global',
             'created',
             'modified',
             '_urls',

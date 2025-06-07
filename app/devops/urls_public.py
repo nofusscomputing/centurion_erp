@@ -1,4 +1,4 @@
-from rest_framework.routers import DefaultRouter, SimpleRouter
+from rest_framework.routers import SimpleRouter
 
 from devops.viewsets import (
     feature_flag_endpoints,

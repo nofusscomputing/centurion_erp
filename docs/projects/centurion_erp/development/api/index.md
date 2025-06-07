@@ -13,5 +13,3 @@ This section contains the application API documentation to assist in application
 - [Models](./models/index.md)
 
 - [Serializers](./serializer/index.md)
-
-- [Unit Testing](./tests/index.md)

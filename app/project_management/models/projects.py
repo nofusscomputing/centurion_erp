@@ -3,7 +3,6 @@ from django.db import models
 
 from access.models.team import Team
 
-from core.mixin.history_save import SaveHistory
 from core.models.ticket.ticket_enum_values import TicketValues
 
 from .project_common import ProjectCommonFieldsName

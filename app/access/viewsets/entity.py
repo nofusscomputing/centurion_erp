@@ -221,7 +221,6 @@ class ViewSet( SubModelViewSet ):
 
     filterset_fields = [
         'organization',
-        'is_global'
     ]
 
     model_kwarg = 'entity_model'

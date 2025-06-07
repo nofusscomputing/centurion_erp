@@ -211,7 +211,7 @@ The views that we use are:
 
     Display a model
 
-Common test cases are available for views. These test cases can be found within the API docs under [model view test cases](./api/tests/model_views.md).
+Common test cases are available for views. These test cases can be found within the API docs under model view test cases.
 
 
 ### Requirements - Depreciated
@@ -229,26 +229,6 @@ All views are to meet the following requirements:
     - `model` for which data [model](./models.md) to use.
 
 - Add and change views to use a form class
-
-
-### Tests
-
-The following unit test cases exist for views:
-
-- [AddView](./api/tests/model_views.md#add-view)
-
-- [ChangeView](./api/tests/model_views.md#change-view)
-
-- [DeleteView](./api/tests/model_views.md#delete-view)
-
-- [Display View](./api/tests/model_views.md#display-view)
-
-- [IndexView](./api/tests/model_views.md#index-view)
-
-- [AllViews](./api/tests/model_views.md#all-views)
-
-!!! tip
-    The `AllViews` test class is an aggregation of all views. This class is the recommended test class to include if the model uses all available views.
 
 
 ### Docs to clean up
