@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import models
+
 
 
 @pytest.mark.unit
@@ -23,6 +25,8 @@ class ClassTestCases:
     }
     ```
 
+    **Note:** if the field does not exist, for the sub dict use `django.db.models.NOT_PROVIDED`
+
     """
 
 
@@ -41,6 +45,10 @@ class ClassTestCases:
         Ensure that field `param_field_name` exists within the model
         """
 
+        if param_type == models.NOT_PROVIDED:
+
+            pytest.xfail( reason = 'Class does not have attribute')
+
         assert hasattr(test_class, param_field_name)
 
 
@@ -53,6 +61,11 @@ class ClassTestCases:
 
         Ensure that field `param_field_name` has a type of `param_type`
         """
+
+        if param_type == models.NOT_PROVIDED:
+
+            pytest.xfail( reason = 'Class does not have attribute')
+
 
         if type(getattr(test_class, param_field_name)) is property:
 
@@ -72,6 +85,10 @@ class ClassTestCases:
 
         Ensure that field `param_field_name`has a value of `param_value`
         """
+
+        if param_value == models.NOT_PROVIDED:
+
+            pytest.xfail( reason = 'Class does not have attribute')
 
 
         if type(getattr(test_class, param_field_name)) is property:
