@@ -43,6 +43,12 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
 
                 obj = MockModel()
 
+
+                if 'mockmodel' in apps.all_models['core']:
+
+                    del apps.all_models['core']['mockmodel']
+
+
             else:
 
                 new_kwargs = model_kwargs.copy()
