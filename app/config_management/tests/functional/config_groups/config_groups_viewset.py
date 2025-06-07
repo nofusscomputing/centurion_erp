@@ -32,7 +32,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_config_group'
+    url_name = '_api_configgroups'
 
     change_data = {'name': 'device'}
 
