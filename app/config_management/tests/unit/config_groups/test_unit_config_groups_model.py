@@ -1,21 +1,16 @@
 import pytest
 
-from django.test import TestCase
+from django.db import models
 
-from access.models.tenant import Tenant as Organization
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from config_management.models.groups import ConfigGroups
 
 
+class Old:
 
-class ConfigGroupsModel(
-    TenancyObjectInheritedCases,
-    TestCase,
-):
     kwargs_item_create = {
         'name': 'one',
         'config': dict({"key": "one", "existing": "dont_over_write"})
@@ -43,8 +38,6 @@ class ConfigGroupsModel(
             config = dict({"key": "two"}),
             parent = self.item
         )
-
-
 
     def test_config_groups_count_child_groups(self):
         """ Test function count_children """
@@ -91,3 +84,74 @@ class ConfigGroupsModel(
         """ All config keys must be valid ansible variables """
         pass
 
+
+
+@pytest.mark.model_config_group
+class ConfigGroupModelTestCases(
+    CenturionAbstractModelInheritedCases
+):
+
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'config_group'
+            },
+        }
+
+
+    parameterized_model_fields = {
+        'parent': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'name': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.TextField,
+            'max_length': 50,
+            'null': True,
+            'unique': False,
+        },
+        'config': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.JSONField,
+            'null': True,
+            'unique': False,
+        },
+        'hosts': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ManyToManyField,
+            'null': True,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
+
+
+
+class ConfigGroupModelInheritedCases(
+    ConfigGroupModelTestCases,
+):
+    pass
+
+
+
+class ConfigGroupModelPyTest(
+    ConfigGroupModelTestCases,
+):
+    pass

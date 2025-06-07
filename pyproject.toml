@@ -1071,6 +1071,7 @@ markers = [
     "centurion_models: Selects Centurion models",
     "functional: Selects all Functional tests.",
     "meta_models: Selects Meta models",
+    "model_config_group: Selects Config Group tests.",
     "model_featureflag: Feature Flag Model",
     "model_gitgroup: Selects tests for model `git group`",
     "model_knowledge_base: Selects Knowledge base tests.",
