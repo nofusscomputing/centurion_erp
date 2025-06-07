@@ -5,13 +5,13 @@ from config_management.models.groups import ConfigGroups
 
 
 @pytest.fixture( scope = 'class')
-def model_configgroup():
+def model_configgroups():
 
     yield ConfigGroups
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_configgroup(django_db_blocker,
+def kwargs_configgroups(django_db_blocker,
     kwargs_centurionmodel
 ):
 
