@@ -352,9 +352,9 @@ class ConfigGroupHosts(
 
     host = models.ForeignKey(
         Device,
-        blank= False,
+        blank = False,
         help_text = 'Host that will be apart of this config group',
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         null = False,
         validators = [ validate_host_no_parent_group ],
         verbose_name = 'Host',
@@ -365,7 +365,7 @@ class ConfigGroupHosts(
         ConfigGroups,
         blank= False,
         help_text = 'Group that this host is part of',
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         null = False,
         verbose_name = 'Group',
     )
