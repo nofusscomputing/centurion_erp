@@ -191,7 +191,6 @@ class CenturionAbstractModelTestCases(
         Ensure method `get_url_kwargs` returns the correct value.
         """
 
-        model_instance.id = 1
 
         url = model_instance.get_url_kwargs()
 
