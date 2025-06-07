@@ -1,24 +1,24 @@
 import datetime
 import pytest
 
-from itam.models.device import Device
+from core.models.ticket.ticket_category import TicketCategory
 
 
 
 @pytest.fixture( scope = 'class')
-def model_device():
+def model_ticketcategory():
 
-    yield Device
+    yield TicketCategory
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_device(kwargs_centurionmodel):
+def kwargs_ticketcategory(kwargs_centurionmodel):
 
     random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
 
     kwargs = {
         **kwargs_centurionmodel.copy(),
-        'name': 'dev' + str(random_str).replace(
+        'name': 'tc' + str(random_str).replace(
             ' ', '').replace(':', '').replace('+', '').replace('.', ''),
     }
 

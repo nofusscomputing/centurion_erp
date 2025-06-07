@@ -13,7 +13,7 @@ def model_configgrouphosts():
 @pytest.fixture( scope = 'class')
 def kwargs_configgrouphosts(django_db_blocker,
     kwargs_device, model_device,
-    kwargs_centurionmodel, model_configgroup, kwargs_configgroup,
+    kwargs_centurionmodel, model_configgroups, kwargs_configgroups,
 ):
 
 
@@ -25,20 +25,21 @@ def kwargs_configgrouphosts(django_db_blocker,
 
         host_kwargs = kwargs_device.copy()
         host_kwargs.update({
-            'name': 'cgh' + str(random_str).replace(' ', '').replace(':', '').replace('+', '').replace('.', ''),
+            'name': 'cgh' + str(random_str).replace(
+                ' ', '').replace(':', '').replace('+', '').replace('.', ''),
             'organization': centurion_kwargs['organization']
         })
 
         host = model_device.objects.create( **host_kwargs )
 
 
-        group_kwargs = kwargs_configgroup.copy()
+        group_kwargs = kwargs_configgroups.copy()
         group_kwargs.update({
             'name': 'cgg' + random_str,
             'organization': centurion_kwargs['organization']
         })
 
-        group = model_configgroup.objects.create( **group_kwargs )
+        group = model_configgroups.objects.create( **group_kwargs )
 
         kwargs = {
             **centurion_kwargs,
