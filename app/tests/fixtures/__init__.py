@@ -49,6 +49,11 @@ from .model_configgrouphost import (
     model_configgrouphost,
 )
 
+from .model_configgroupsoftware import (
+    kwargs_configgroupsoftware,
+    model_configgroupsoftware,
+)
+
 from .model_contenttype import (
     model_contenttype,
 )
