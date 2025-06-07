@@ -31,15 +31,15 @@ def kwargs_centurionmodelnote(django_db_blocker,
             **user_kwargs,
         )
 
-    kwargs = {
-        **kwargs,
-        'body': 'a random note',
-        'created_by': user,
-        'content_type': model_contenttype.objects.get(
-            app_label = user._meta.app_label,
-            model = user._meta.model_name,
-        ),
-    }
+        kwargs = {
+            **kwargs,
+            'body': 'a random note',
+            'created_by': user,
+            'content_type': model_contenttype.objects.get(
+                app_label = user._meta.app_label,
+                model = user._meta.model_name,
+            ),
+        }
 
     yield kwargs.copy()
 
