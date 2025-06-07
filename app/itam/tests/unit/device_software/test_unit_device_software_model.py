@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
