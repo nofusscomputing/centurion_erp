@@ -78,7 +78,7 @@ class ConfigGroupModelSerializer(
                 request = self.context['view'].request,
             ),
             'group_software': reverse(
-                'v2:_api_v2_config_group_software-list',
+                'v2:_api_configgroupsoftware-list',
                 request=self.context['view'].request,
                 kwargs = {
                     'config_group_id': item.pk
