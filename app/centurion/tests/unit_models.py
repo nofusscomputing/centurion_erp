@@ -92,7 +92,7 @@ class ModelTestCases(
 
 
     @pytest.fixture( scope = 'function', autouse = True)
-    def model_instance(cls, request, model):
+    def model_instance(cls, request, model, model_kwargs):
 
         if model._meta.abstract:
 
@@ -106,9 +106,13 @@ class ModelTestCases(
 
         else:
 
-            instance = model()
+            instance = model.objects.create( **model_kwargs )
 
         yield instance
+
+        if instance.id:
+
+            instance.delete()
 
         del instance
 
