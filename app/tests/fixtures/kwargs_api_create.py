@@ -1,4 +1,5 @@
 import pytest
+import json
 
 from django.db import models
 
@@ -18,6 +19,9 @@ def kwargs_api_create(django_db_blocker, model_kwargs):
 
             if isinstance(value, models.Model):
                 value = value.id
+
+            elif isinstance(value, dict):
+                value = json.dumps(value)
 
             kwargs.update({
                 field: value
