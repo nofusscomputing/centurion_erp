@@ -15,7 +15,7 @@ class ConfigGroupsViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_config_group'
+    route_name = 'v2:_api_configgroups'
 
 
     @classmethod
