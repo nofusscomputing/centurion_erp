@@ -62,7 +62,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_config_group_software
+@pytest.mark.model_configgroupsoftware
 class ConfigGroupSoftwareModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
