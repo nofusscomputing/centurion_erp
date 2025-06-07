@@ -193,9 +193,14 @@ class CenturionAuditModelPyTest(
         not have attribute `_before` populated
         """
 
+        default = model_instance.before
+        model_instance.before = None
+
         with pytest.raises(ValidationError) as e:
 
             model_instance.get_model_history( model = model_instance )
+
+        model_instance.before = default
 
         assert e.value.code == 'model_missing_before_data'
 
@@ -208,6 +213,9 @@ class CenturionAuditModelPyTest(
         not have attribute `_after` populated
         """
 
+        default = model_instance.after
+        model_instance.after = None
+
         with pytest.raises(ValidationError) as e:
 
             model_instance._before = {'key': 'value'}
@@ -215,6 +223,8 @@ class CenturionAuditModelPyTest(
             model_instance.get_model_history( model = model_instance )
 
         del model_instance._before
+
+        model_instance.after = default
 
         assert e.value.code == 'model_missing_after_data'
 
@@ -227,6 +237,13 @@ class CenturionAuditModelPyTest(
         `_after` and `_before` attributes are te same
         """
 
+        default_a = model_instance.after
+        model_instance.after = None
+
+        default_b = model_instance.before
+        model_instance.before = None
+
+
         with pytest.raises(ValidationError) as e:
 
             model_instance._after = {'key': 'value'}
@@ -236,6 +253,9 @@ class CenturionAuditModelPyTest(
 
         del model_instance._after
         del model_instance._before
+
+        model_instance.after = default_a
+        model_instance.before = default_b
 
         assert e.value.code == 'before_and_after_same'
 
@@ -250,6 +270,10 @@ class CenturionAuditModelPyTest(
         test_value = {'key_1': 'value_1'}
         model_instance._after = {'key': 'value', **test_value}
         model_instance._before = {'key': 'value'}
+
+
+        model_instance.after = None
+
 
         model_instance.get_model_history( model = model_instance )
 
@@ -269,6 +293,10 @@ class CenturionAuditModelPyTest(
         test_value = { 'key': 'value' }
         model_instance._after = { **test_value, 'key_1': 'value_1' }
         model_instance._before = { **test_value }
+
+
+        model_instance.before = None
+
 
         model_instance.get_model_history( model = model_instance )
 
