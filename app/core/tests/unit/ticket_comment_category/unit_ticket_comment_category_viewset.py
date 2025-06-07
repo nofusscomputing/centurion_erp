@@ -15,7 +15,7 @@ class TicketCommentCategoryViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_ticket_comment_category'
+    route_name = 'v2:_api_ticketcommentcategory'
 
 
     @classmethod

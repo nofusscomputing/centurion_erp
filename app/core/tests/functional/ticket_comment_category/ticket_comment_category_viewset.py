@@ -32,7 +32,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_ticket_comment_category'
+    url_name = '_api_ticketcommentcategory'
 
     change_data = {'name': 'device'}
 
