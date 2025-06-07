@@ -103,7 +103,7 @@ router.register(
 )
 router.register(
     prefix = 'ticket_category',
-    viewset = ticket_category.ViewSet, basename = '_api_v2_ticket_category'
+    viewset = ticket_category.ViewSet, basename = '_api_ticketcategory'
 )
 router.register(
     prefix = 'ticket_comment_category',
