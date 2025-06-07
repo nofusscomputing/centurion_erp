@@ -1,22 +1,15 @@
-from django.test import TestCase
+import pytest
 
-from access.models.tenant import Tenant as Organization
+from django.db import models
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
-
-from itam.models.device import DeviceSoftware
-from itam.models.software import Software
 
 
-
-class ConfigGroupSoftwareModel(
-    TenancyObjectInheritedCases,
-    TestCase,
-):
+class Old:
 
     model = ConfigGroupSoftware
 
@@ -66,3 +59,69 @@ class ConfigGroupSoftwareModel(
         """
 
         assert self.item.parent_object == self.parent_item
+
+
+
+@pytest.mark.model_config_group_software
+class ConfigGroupSoftwareModelTestCases(
+    CenturionAbstractModelInheritedCases
+):
+
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {}
+
+
+    parameterized_model_fields = {
+        'config_group': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': False,
+            'unique': False,
+        },
+        'software': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': False,
+            'unique': False,
+        },
+        'action': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.IntegerField,
+            'null': True,
+            'unique': False,
+        },
+        'version': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
+
+
+
+class ConfigGroupSoftwareModelInheritedCases(
+    ConfigGroupSoftwareModelTestCases,
+):
+    pass
+
+
+
+class ConfigGroupSoftwareModelPyTest(
+    ConfigGroupSoftwareModelTestCases,
+):
+    pass

@@ -399,42 +399,38 @@ class ConfigGroupSoftware(
 
     config_group = models.ForeignKey(
         ConfigGroups,
-        blank= False,
-        default = None,
+        blank = False,
         help_text = 'Config group this softwre will be linked to',
         null = False,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Config Group'
     )
 
 
     software = models.ForeignKey(
         Software,
-        blank= False,
-        default = None,
+        blank = False,
         help_text = 'Software to add to this config Group',
         null = False,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Software'
     )
 
 
     action = models.IntegerField(
         blank = True,
-        choices=DeviceSoftware.Actions,
-        default=None,
+        choices = DeviceSoftware.Actions,
         help_text = 'ACtion to perform with this software',
-        null=True,
+        null = True,
         verbose_name = 'Action'
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Software Version for this config group',
         null = True,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Verrsion',
     )
 
