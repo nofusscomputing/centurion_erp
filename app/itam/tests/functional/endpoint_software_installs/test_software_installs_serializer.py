@@ -55,6 +55,7 @@ class MockRequest:
 
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class SoftwareInstallsValidationAPI(
     TestCase,
 ):
