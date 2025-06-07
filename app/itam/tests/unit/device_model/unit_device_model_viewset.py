@@ -15,7 +15,7 @@ class DeviceModelViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_device_model'
+    route_name = 'v2:_api_devicemodel'
 
 
     @classmethod
