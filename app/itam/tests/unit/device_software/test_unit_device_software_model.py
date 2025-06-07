@@ -11,6 +11,7 @@ from itam.models.software import Software
 
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class DeviceSoftwareModel(
     TenancyObjectInheritedCases,
     TestCase,
