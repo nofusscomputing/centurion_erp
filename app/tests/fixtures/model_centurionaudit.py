@@ -12,7 +12,7 @@ def model_centurionaudit():
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_centurionaudit(django_db_blocker, 
+def kwargs_centurionaudit(django_db_blocker,
     kwargs_centurionmodel, model_contenttype,
     kwargs_user, model_user
 ):

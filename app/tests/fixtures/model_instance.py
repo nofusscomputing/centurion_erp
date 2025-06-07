@@ -85,10 +85,11 @@ def model_instance(django_db_blocker, model_user, model, model_kwargs):
 
                 if random_field:
 
-                    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+                    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc)).replace(
+                        ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
                     kwargs.update({
-                        random_field: str( random_field ) + '_' + random_str
+                        random_field: str( random_field ) + '' + random_str
                     })
 
 
