@@ -443,7 +443,7 @@ class ConfigGroupSoftware(
 
     # This model is not intended to be viewable on it's own page
     # as it's a sub model for config groups
-    page_layout: dict = []
+    page_layout: list = []
 
 
     table_fields: list = [
