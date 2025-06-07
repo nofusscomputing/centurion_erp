@@ -12,7 +12,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 @pytest.mark.model_config_group_hosts
-class ConfigGroupSoftwareModelTestCases(
+class ConfigGroupHostModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
 
@@ -20,7 +20,12 @@ class ConfigGroupSoftwareModelTestCases(
     @property
     def parameterized_class_attributes(self):
 
-        return {}
+        return {
+            'model_tag': {
+                'type': models.NOT_PROVIDED,
+                'value': models.NOT_PROVIDED,
+            },
+        }
 
 
     parameterized_model_fields = {
@@ -48,15 +53,24 @@ class ConfigGroupSoftwareModelTestCases(
     }
 
 
+    @pytest.mark.xfail( reason = 'not required for this model' )
+    def test_method_value_not_default___str__(self):
+        pass
 
-class ConfigGroupSoftwareModelInheritedCases(
-    ConfigGroupSoftwareModelTestCases,
+    @pytest.mark.xfail( reason = 'not required for this model' )
+    def test_model_tag_defined(self):
+        pass
+
+
+
+class ConfigGroupHostModelInheritedCases(
+    ConfigGroupHostModelTestCases,
 ):
     pass
 
 
 
-class ConfigGroupSoftwareModelPyTest(
-    ConfigGroupSoftwareModelTestCases,
+class ConfigGroupHostModelPyTest(
+    ConfigGroupHostModelTestCases,
 ):
     pass
