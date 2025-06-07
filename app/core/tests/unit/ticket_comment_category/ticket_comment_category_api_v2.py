@@ -68,7 +68,7 @@ class TicketCategoryAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_ticket_comment_category-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_ticketcommentcategory-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

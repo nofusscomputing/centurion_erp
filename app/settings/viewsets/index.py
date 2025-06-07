@@ -120,7 +120,7 @@ class Index(IndexViewset):
                 "project_type": reverse('v2:_api_v2_project_type-list', request=request),
                 "software_category": reverse('v2:_api_v2_software_category-list', request=request),
                 "ticket_category": reverse('v2:_api_ticketcategory-list', request=request),
-                "ticket_comment_category": reverse('v2:_api_v2_ticket_comment_category-list', request=request),
+                "ticket_comment_category": reverse('v2:_api_ticketcommentcategory-list', request=request),
                 "user_settings": reverse(
                     'v2:_api_v2_user_settings-detail',
                     request=request,

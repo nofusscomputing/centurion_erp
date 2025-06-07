@@ -17,7 +17,7 @@ class TicketCommentCategoryBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_ticket_comment_category-detail", format="html"
+        view_name="v2:_api_ticketcommentcategory-detail", format="html"
     )
 
 
