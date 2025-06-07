@@ -12,7 +12,10 @@ def model_centurionaudit():
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_centurionaudit(django_db_blocker, kwargs_centurionmodel, kwargs_user, model_user):
+def kwargs_centurionaudit(django_db_blocker, 
+    kwargs_centurionmodel, model_contenttype,
+    kwargs_user, model_user
+):
 
     kwargs = kwargs_centurionmodel.copy()
     del kwargs['model_notes']
@@ -39,7 +42,10 @@ def kwargs_centurionaudit(django_db_blocker, kwargs_centurionmodel, kwargs_user,
             },
             'action': CenturionAudit.Actions.ADD,
             'user': user,
-            'content_type': 'fixture sets value',
+            'content_type': model_contenttype.objects.get(
+                app_label = user._meta.app_label,
+                model = user._meta.model_name,
+            ),
         }
 
     yield kwargs.copy()
