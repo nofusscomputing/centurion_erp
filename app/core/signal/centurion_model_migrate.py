@@ -48,6 +48,12 @@ def centurion_model_migrate(sender, **kwargs):
             'notes_model_name': None
         },
         {
+            'app_label': 'config_management',
+            'model_name': 'ConfigGroups',
+            'history_model_name': 'ConfigGroupsHistory',
+            'notes_model_name': 'ConfigGroupNotes'
+        },
+        {
             'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
