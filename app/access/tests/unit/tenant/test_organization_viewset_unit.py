@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,7 @@ from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class OrganizationViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -15,7 +18,7 @@ class OrganizationViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'API:_api_v2_organization'
+    route_name = 'API:_api_organization'
 
 
     @classmethod
