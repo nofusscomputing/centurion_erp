@@ -9,6 +9,10 @@ from .kwargs_api_create import (
     kwargs_api_create
 )
 
+from .mixin_centurion import (
+    mixin_centurion,
+)
+
 from .model_centurionaudit import (
     kwargs_centurionaudit,
     model_centurionaudit,

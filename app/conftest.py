@@ -279,6 +279,15 @@ def pytest_generate_tests(metafunc):
                 )
 
 
+        else:
+
+            pytest.mark.xfail(
+                reason = 'No Parameters for parameterized test'
+            )(
+                getattr(metafunc.cls, metafunc.definition.name)
+            )
+
+
 
 @pytest.fixture( scope = 'class')
 def create_model(request, django_db_blocker):

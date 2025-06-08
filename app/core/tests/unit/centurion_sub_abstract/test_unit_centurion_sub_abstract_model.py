@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import models
+
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractModelTestCases,
     CenturionAbstractModelInheritedCases,
@@ -94,6 +96,14 @@ class CenturionSubAbstractModelPyTest(
     def parameterized_class_attributes(self):
         
         return {
+            'page_layout': {
+                'type': models.NOT_PROVIDED,
+                'value': models.NOT_PROVIDED,
+            },
+            'table_fields': {
+                'type': models.NOT_PROVIDED,
+                'value': models.NOT_PROVIDED,
+            },
             'model_tag': {
                 'type': type(None),
                 'value': None,
