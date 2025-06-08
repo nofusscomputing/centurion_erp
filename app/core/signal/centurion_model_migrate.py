@@ -42,6 +42,12 @@ def centurion_model_migrate(sender, **kwargs):
             'notes_model_name': None
         },
         {
+            'app_label': 'config_management',
+            'model_name': 'ConfigGroupSoftware',
+            'history_model_name': 'ConfigGroupSoftwareHistory',
+            'notes_model_name': None
+        },
+        {
             'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
@@ -103,10 +109,14 @@ def centurion_model_migrate(sender, **kwargs):
 
                         try:
 
+                            entry_model = entry.model
+                            if hasattr(entry, 'child_model'):
+                                entry_model = entry.child_model
+
                             migrated_history = audit_history.objects.create(
                                 organization = entry.organization,
                                 content_type = entry.content_type,
-                                model = entry.model,
+                                model = entry_model,
                                 before = entry.before,
                                 after = entry.after,
                                 action = entry.action,
@@ -124,7 +134,7 @@ def centurion_model_migrate(sender, **kwargs):
                             print(f'        Removed {history_model_name}={id} from database.')
 
                         except Exception as e:
-                            print(f"Exception {e.__class__.__name__} occured:\n\s\s\s\s{e}")
+                            print(f"Exception {e.__class__.__name__} occured:"+"\n    "+f'{e}')
 
 
                 except LookupError as e:
