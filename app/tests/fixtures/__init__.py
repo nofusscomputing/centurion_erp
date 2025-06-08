@@ -136,6 +136,7 @@ from .model_teamuser import (
 from .model_tenant import (
     kwargs_tenant,
     model_tenant,
+    serializer_tenant,
 )
 
 from .model_tenancyabstract import (
