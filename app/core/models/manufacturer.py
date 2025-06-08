@@ -12,6 +12,8 @@ class Manufacturer(
     CenturionModel,
 ):
 
+    model_tag = 'manufacturer'
+
 
     class Meta:
 
