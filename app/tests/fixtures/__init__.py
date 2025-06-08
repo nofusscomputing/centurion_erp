@@ -133,6 +133,11 @@ from .model_teamuser import (
     model_teamusers,
 )
 
+from .model_tenant import (
+    kwargs_tenant,
+    model_tenant,
+)
+
 from .model_tenancyabstract import (
     kwargs_tenancyabstract,
     model_tenancyabstract,
