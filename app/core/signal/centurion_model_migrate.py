@@ -4,7 +4,7 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
-from core.models.centurion import CenturionModel
+from core.mixins.centurion import Centurion
 
 
 @receiver(post_migrate, dispatch_uid="centurion_model_migrate")
@@ -17,6 +17,12 @@ def centurion_model_migrate(sender, **kwargs):
     print('\n\nCenturion Model Migration Signal.....\n')
 
     models: list[ dict ] = [
+        {
+            'app_label': 'access',
+            'model_name': 'Tenant',
+            'history_model_name': 'OrganizationHistory',
+            'notes_model_name': 'OrganizationNotes'
+        },
         {
             'app_label': 'assistance',
             'model_name': 'KnowledgeBase',
@@ -57,7 +63,7 @@ def centurion_model_migrate(sender, **kwargs):
         )
 
         if(
-            not issubclass(model, CenturionModel)
+            not issubclass(model, Centurion)
         ):
             print(f'Skipping model {model_name} as it is not a CenturionModel.')
             continue
