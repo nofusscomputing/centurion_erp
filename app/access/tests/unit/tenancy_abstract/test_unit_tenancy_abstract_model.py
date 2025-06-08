@@ -7,7 +7,7 @@ from centurion.tests.unit_models import ModelTestCases
 from access.models.tenancy_abstract import TenancyAbstractModel
 
 
-
+@pytest.mark.unit
 @pytest.mark.tenancy_models
 class TenancyAbstractModelTestCases(
     ModelTestCases
@@ -81,6 +81,7 @@ class TenancyAbstractModelInheritedCases(
 
 
 
+@pytest.mark.module_access
 class TenancyAbstractModelPyTest(
     TenancyAbstractModelTestCases,
 ):

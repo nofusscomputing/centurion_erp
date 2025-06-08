@@ -7,7 +7,7 @@ from api.tests.functional.test_functional_permissions_api import (
     APIPermissionsInheritedCases
 )
 
-from core.models.centurion import CenturionModel
+from core.mixins.centurion import Centurion
 
 
 
@@ -111,13 +111,14 @@ exclude_model_from_test = [
     'ConfigGroupHosts',    # No API Endpoint
 ]
 
+
 class APIPermissionsTestCases(
     APIPermissionsInheritedCases
 ):
     """API Permission Test Cases
 
-    This test suite is dynamically created for `CenturionModel` sub-classes.
-    Each `CenturionModel` must ensure their model fixture exists in
+    This test suite is dynamically created for `Centurion` sub-classes.
+    Each `Centurion` must ensure their model fixture exists in
     `tests/fixtures/model_<model_name>` with fixtures `model_<model_name>` and
     `kwargs_<model_name>` defined.
     """
@@ -134,8 +135,8 @@ for centurion_model in get_models(
 ):
 
     if(
-        not issubclass(centurion_model, CenturionModel)
-        or centurion_model == CenturionModel
+        not issubclass(centurion_model, Centurion)
+        or centurion_model == Centurion
         or centurion_model._meta.object_name in exclude_model_from_test
     ):
         continue
@@ -167,5 +168,6 @@ for centurion_model in get_models(
 
     model_mark = f'model_{model_name}'
     dynamic_class = pytest.mark.__getattr__(model_mark)(dynamic_class)
+    dynamic_class = pytest.mark.__getattr__('module_'+centurion_model._meta.app_label)(dynamic_class)
 
     globals()[cls_name] = dynamic_class

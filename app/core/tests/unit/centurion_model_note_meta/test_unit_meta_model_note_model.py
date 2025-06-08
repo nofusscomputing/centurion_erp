@@ -170,7 +170,7 @@ for model in get_models():
 
     cls_name: str = f"{model._meta.object_name}MetaModelPyTest"
 
-    globals()[cls_name] = type(
+    dynamic_class = type(
         cls_name, 
         (ModelNotesMetaModelTestCases,), 
         {
@@ -181,3 +181,8 @@ for model in get_models():
             'model_class': model
         }
     )
+
+    dynamic_class = pytest.mark.__getattr__('model_' + model._meta.model_name)(dynamic_class)
+    dynamic_class = pytest.mark.__getattr__('module_' + model._meta.app_label)(dynamic_class)
+
+    globals()[cls_name] = dynamic_class
