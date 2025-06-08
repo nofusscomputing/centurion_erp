@@ -2,16 +2,12 @@ import pytest
 
 from django.db import models
 
-
-from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
-)
 from core.tests.unit.mixin_centurion.test_unit_centurion_mixin import (
     CenturionMixnInheritedCases,
 )
 
 
-
+@pytest.mark.module_access
 @pytest.mark.model_tenant
 class TenantModelTestCases(
     CenturionMixnInheritedCases
