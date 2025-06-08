@@ -11,7 +11,7 @@ from access.fields import (
     AutoSlugField
 )
 
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 
 User = django.contrib.auth.get_user_model()
 

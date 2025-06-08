@@ -19,7 +19,7 @@ from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 from core.models.centurion import CenturionModel
 
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
