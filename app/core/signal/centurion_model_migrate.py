@@ -36,6 +36,12 @@ def centurion_model_migrate(sender, **kwargs):
             'notes_model_name': 'KnowledgeCategoryBaseNotes'
         },
         {
+            'app_label': 'config_management',
+            'model_name': 'ConfigGroupHosts',
+            'history_model_name': 'ConfigGroupHostsHistory',
+            'notes_model_name': None
+        },
+        {
             'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
