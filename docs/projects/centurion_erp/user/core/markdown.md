@@ -87,8 +87,8 @@ A Model link is a reference to an item within the database. Supported model link
 | group| `$-<id>` |
 | it_asset | `$it_asset-<id>` |
 | knowledgebase| `$kb-<id>` |
-| knowledgebasecategory| `$-<id>` |
-| manufacturer| `$-<id>` |
+| knowledgebasecategory| `$kb_category-<id>` |
+| manufacturer| `$manufacturer-<id>` |
 | modelnotes| `$-<id>` |
 | operatingsystem| `$operating_system-<id>` |
 | operatingsystemversion| `$-<id>` |
