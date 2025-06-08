@@ -20,7 +20,7 @@ class TenantBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_organization-detail", format="html"
+        view_name="v2:_api_organization-detail", format="html"
     )
 
     class Meta:
@@ -68,7 +68,7 @@ class TenantModelSerializer(
             #         'model_id': item.pk
             #     }
             # ),
-            'teams': reverse("v2:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
+            'teams': reverse("v2:_api_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
         }
 
     model_notes = centurion_field.MarkdownField( required = False )
