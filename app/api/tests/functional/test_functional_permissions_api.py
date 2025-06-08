@@ -29,7 +29,7 @@ class APIPermissionAddInheritedCases:
         ids=[test_name for test_name, user, expected in permission_no_add]
     )
     def test_permission_no_add(
-        self, kwargs_api_create, model, api_request_permissions, test_name, user, expected
+        self, model_kwargs, kwargs_api_create, model, api_request_permissions, test_name, user, expected
     ):
         """ Check correct permission for add
 
@@ -42,8 +42,10 @@ class APIPermissionAddInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
+        the_model = model(**model_kwargs)
+
         response = client.post(
-            path = model().get_url( many = True ),
+            path = the_model.get_url( many = True ),
             data = kwargs_api_create
         )
 
@@ -51,7 +53,7 @@ class APIPermissionAddInheritedCases:
 
 
 
-    def test_permission_add(self, model, api_request_permissions, kwargs_api_create):
+    def test_permission_add(self, model, api_request_permissions, model_kwargs, kwargs_api_create):
         """ Check correct permission for add 
 
         Attempt to add as user with permission
@@ -61,8 +63,10 @@ class APIPermissionAddInheritedCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
+        the_model = model(**model_kwargs)
+
         response = client.post(
-            path = model().get_url( many = True ),
+            path = the_model.get_url( many = True ),
             data = kwargs_api_create
         )
 
@@ -263,7 +267,7 @@ class APIPermissionViewInheritedCases:
 
 
 
-    def test_returned_results_only_user_orgs(self, model, api_request_permissions):
+    def test_returned_results_only_user_orgs(self, model, model_kwargs, api_request_permissions):
         """Returned results check
 
         Ensure that a query to the viewset endpoint does not return
@@ -284,8 +288,10 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
+        the_model = model(**model_kwargs)
+
         response = client.get(
-            path = model().get_url( many = True )
+            path = the_model.get_url( many = True )
         )
 
         contains_different_org: bool = False
@@ -306,7 +312,7 @@ class APIPermissionViewInheritedCases:
 
 
     def test_returned_data_from_user_and_global_organizations_only(
-        self, model, api_request_permissions
+        self, model, model_kwargs, api_request_permissions
     ):
         """Check items returned
 
@@ -326,8 +332,10 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
+        the_model = model(**model_kwargs)
+
         response = client.get(
-            path = model().get_url( many = True )
+            path = the_model.get_url( many = True )
         )
 
         assert len(response.data['results']) >= 2    # fail if only one item extist.
