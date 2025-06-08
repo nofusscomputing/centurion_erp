@@ -16,6 +16,10 @@ class Tenant(
     Centurion,
 ):
 
+    @property
+    def organization(self):
+        return self
+
     model_tag = 'tenant'
 
     class Meta:
