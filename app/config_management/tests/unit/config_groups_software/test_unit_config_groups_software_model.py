@@ -145,6 +145,7 @@ class ConfigGroupSoftwareModelInheritedCases(
 
 
 
+@pytest.mark.module_config_management
 class ConfigGroupSoftwareModelPyTest(
     ConfigGroupSoftwareModelTestCases,
 ):

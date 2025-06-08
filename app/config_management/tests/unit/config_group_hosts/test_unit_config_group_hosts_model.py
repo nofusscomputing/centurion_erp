@@ -70,6 +70,8 @@ class ConfigGroupHostModelInheritedCases(
 
 
 
+@pytest.mark.module_config_management
+@pytest.mark.configgrouphosts
 class ConfigGroupHostModelPyTest(
     ConfigGroupHostModelTestCases,
 ):
