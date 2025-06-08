@@ -7,22 +7,14 @@ from centurion.tests.unit_models import ModelTestCases
 from access.models.tenancy_abstract import TenancyAbstractModel
 
 
-
+@pytest.mark.unit
 @pytest.mark.tenancy_models
 class TenancyAbstractModelTestCases(
     ModelTestCases
 ):
 
 
-    parameterized_class_attributes = {
-        'context': {
-            'type': dict,
-            # 'value': {
-            #     'logger': None,
-            #     'user': None,
-            # }
-        }
-    }
+    parameterized_class_attributes = {}
 
 
     parameterized_model_fields = {
@@ -89,6 +81,7 @@ class TenancyAbstractModelInheritedCases(
 
 
 
+@pytest.mark.module_access
 class TenancyAbstractModelPyTest(
     TenancyAbstractModelTestCases,
 ):

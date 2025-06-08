@@ -79,38 +79,6 @@ class TenancyAbstractModel(
         ValidationError: User failed to supply organization
     """
 
-    def __init____init__(self, *args, **kwargs):
-
-        self.context: dict = {
-            'logger': None,
-            'user': None,
-        }
-
-        super().__init__(*args, **kwargs)
-
-
-    context: dict = {
-        'logger': None,
-        'user': None,
-    }
-    """ Model Context
-
-    Generally model usage will be from an API serializer, Admin Site or
-    a management command. These sources are to pass through and set this
-    context. The keys are:
-
-    !!! warning
-        Failing to specify the user will prevent the tenancy manager from
-        being multi-tenant. As such, the results retured will not be
-        restricted to the users tenancy
-
-    returns:
-        logger (logging.Logger): Instance of a logger for logging.
-        user (User): The user that is logged into the system
-
-    Context for actions within the model.
-    """
-
     objects = TenancyManagerDepreciated()
     """ ~~Multi-Tenant Manager~~
 

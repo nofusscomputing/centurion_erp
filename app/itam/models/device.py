@@ -7,11 +7,7 @@ from django.core.exceptions import (
     ValidationError
 )
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 from django.utils.timezone import now
-
-from rest_framework import serializers
 
 from access.fields import AutoLastModifiedField
 
@@ -19,12 +15,10 @@ from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 from core.models.centurion import CenturionModel
 
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
-
-from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
+from itam.models.device_common import DeviceCommonFields
 from itam.models.device_models import DeviceModel
 from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
@@ -123,6 +117,11 @@ class Device(
     CenturionModel,
 ):
 
+    model_tag = 'device'
+
+    reserved_config_keys: list = [
+        'software'
+    ]
 
     class Meta:
 
@@ -134,46 +133,6 @@ class Device(
         verbose_name = 'Device'
 
         verbose_name_plural = 'Devices'
-
-
-    name = models.CharField(
-        blank = False,
-        help_text = 'The items name',
-        max_length = 50,
-        unique = True,
-        verbose_name = 'Name'
-    )
-
-    modified = AutoLastModifiedField()
-
-    reserved_config_keys: list = [
-        'software'
-    ]
-
-    def validate_config_keys_not_reserved(self):
-
-        if self:
-
-            value: dict = self
-
-            for invalid_key in Device.reserved_config_keys:
-
-                if invalid_key in value.keys():
-                    raise ValidationError(
-                        message = f'json key "{invalid_key}" is a reserved configuration key'
-                    )
-
-
-    def validate_uuid_format(self):
-
-        pattern = r'[0-9|a-f|A-F]{8}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{12}'
-
-        if not re.match(pattern, str(self)):
-
-            raise ValidationError(
-                message = f'UUID must be formated to match regex {str(pattern)}',
-                code = 'invalid_uuid'
-            )
 
 
     def validate_hostname_format(self):
@@ -189,7 +148,6 @@ class Device(
                 code = 'invalid_hostname'
             )
 
-
     name = models.CharField(
         blank = False,
         help_text = 'Hostname of this device',
@@ -201,7 +159,6 @@ class Device(
 
     serial_number = models.CharField(
         blank = True,
-        default = None,
         help_text = 'Serial number of the device.',
         max_length = 50,
         null = True,
@@ -210,7 +167,19 @@ class Device(
 
     )
 
-    uuid = models.CharField(
+
+    def validate_uuid_format(self):
+
+        pattern = r'[0-9|a-f|A-F]{8}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{12}'
+
+        if not re.match(pattern, str(self)):
+
+            raise ValidationError(
+                message = f'UUID must be formated to match regex {str(pattern)}',
+                code = 'invalid_uuid'
+            )
+
+    uuid = models.UUIDField(
         blank = True,
         help_text = 'System GUID/UUID.',
         max_length = 50,
@@ -222,27 +191,38 @@ class Device(
 
     device_model = models.ForeignKey(
         DeviceModel,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Model of the device.',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Model'
     )
 
     device_type = models.ForeignKey(
         DeviceType,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Type of device.',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Type'
     )
 
+
+    def validate_config_keys_not_reserved(self):
+
+        if self:
+
+            value: dict = self
+
+            for invalid_key in Device.reserved_config_keys:
+
+                if invalid_key in value.keys():
+                    raise ValidationError(
+                        message = f'json key "{invalid_key}" is a reserved configuration key'
+                    )
+
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Configuration for this device',
         null = True,
         validators=[ validate_config_keys_not_reserved ],
@@ -263,6 +243,8 @@ class Device(
         null = False,
         verbose_name = 'Is Virtual',
     )
+
+    modified = AutoLastModifiedField()
 
     table_fields: list = [
         'status_icon',

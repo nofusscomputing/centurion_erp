@@ -5,7 +5,7 @@ from centurion_feature_flag.urls.routers import DefaultRouter
 from access.viewsets import (
     entity,
     index as access_v2,
-    organization as organization_v2,
+    organization,
     role,
     team as team_v2,
     team_user as team_user_v2
@@ -54,8 +54,8 @@ router.register(
 # )
 
 router.register(
-    prefix = 'tenant', viewset = organization_v2.ViewSet,
-    basename = '_api_v2_organization'
+    prefix = 'tenant', viewset = organization.ViewSet,
+    basename = '_api_tenant'
 )
 
 # router.register(

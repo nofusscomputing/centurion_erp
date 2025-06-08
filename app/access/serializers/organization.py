@@ -20,7 +20,7 @@ class TenantBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_organization-detail", format="html"
+        view_name="v2:_api_tenant-detail", format="html"
     )
 
     class Meta:

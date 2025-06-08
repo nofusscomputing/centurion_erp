@@ -85,7 +85,7 @@ class ConfigGroupModelSerializer(
                 }
             ),
             'organization': reverse(
-                'v2:_api_v2_organization-list',
+                'v2:_api_tenant-list',
                 request=self.context['view'].request,
             ),
             'parent': reverse(

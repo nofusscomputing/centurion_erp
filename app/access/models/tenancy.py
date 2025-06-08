@@ -8,7 +8,7 @@ from access.models.tenant import Tenant
 
 from core import exceptions as centurion_exceptions
 from core.middleware.get_request import get_request
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 
 
 

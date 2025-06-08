@@ -24,7 +24,7 @@ class Index(IndexViewset):
     def list(self, request, pk=None):
 
         response = {
-                "organization": reverse('v2:_api_v2_organization-list', request=request),
+                "organization": reverse('v2:_api_tenant-list', request=request),
             }
 
         if self.request.feature_flag['2025-00002']:
