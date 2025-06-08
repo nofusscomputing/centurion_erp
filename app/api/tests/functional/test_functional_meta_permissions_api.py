@@ -107,6 +107,9 @@ def model_kwargs(self, request, kwargs__model_name):
         del request.cls.kwargs_create_item
 
 
+exclude_model_from_test = [
+    'ConfigGroupHosts',    # No API Endpoint
+]
 
 class APIPermissionsTestCases(
     APIPermissionsInheritedCases
@@ -133,6 +136,7 @@ for centurion_model in get_models(
     if(
         not issubclass(centurion_model, CenturionModel)
         or centurion_model == CenturionModel
+        or centurion_model._meta.object_name in exclude_model_from_test
     ):
         continue
 
