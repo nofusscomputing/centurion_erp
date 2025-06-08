@@ -3,37 +3,37 @@ import django
 from django.conf import settings
 from django.db import models
 
-from rest_framework.reverse import reverse
-
 from access.fields import (
     AutoCreatedField,
     AutoLastModifiedField,
-    AutoSlugField
 )
 
-from core.mixins.history_save import SaveHistory
+from core.mixins.centurion import Centurion
 
 User = django.contrib.auth.get_user_model()
 
-class Tenant(SaveHistory):
+class Tenant(
+    Centurion,
+):
+
+    model_tag = 'tenant'
 
     class Meta:
+
         verbose_name = "Tenant"
+
         verbose_name_plural = "Tenants"
-        ordering = ['name']
 
-    def save(self, *args, **kwargs):
+        ordering = [
+            'name'
+        ]
 
-        if self.slug == '_':
-            self.slug = self.name.lower().replace(' ', '_')
-
-        super().save(*args, **kwargs)
 
     id = models.AutoField(
-        blank=False,
+        blank = False,
         help_text = 'ID of this item',
-        primary_key=True,
-        unique=True,
+        primary_key = True,
+        unique = True,
         verbose_name = 'ID'
     )
 
@@ -47,37 +47,38 @@ class Tenant(SaveHistory):
 
     manager = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        blank = False,
+        blank = True,
         help_text = 'Manager for this Tenancy',
         null = True,
-        on_delete=models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Manager'
     )
 
     model_notes = models.TextField(
         blank = True,
-        default = None,
         help_text = 'Tid bits of information',
-        null= True,
+        null = True,
         verbose_name = 'Notes',
     )
 
-    slug = AutoSlugField()
 
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
 
-    def get_organization(self):
-        return self
-
     def __int__(self):
 
         return self.id
 
+
     def __str__(self):
         return self.name
+
+
+    def get_organization(self):
+        return self
+
 
     table_fields: list = [
         'nbsp',
@@ -132,29 +133,6 @@ class Tenant(SaveHistory):
             "sections": []
         }
     ]
-
-
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_organization-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_organization-detail", kwargs={'pk': self.id})
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from access.models.organization_history import OrganizationHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = OrganizationHistory
-        )
-
-
-        return history
 
 
 

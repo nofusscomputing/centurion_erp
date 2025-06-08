@@ -14,6 +14,14 @@ from rest_framework.reverse import reverse
 
 # THis import only exists so that the migrations can be created
 from access.models.entity_history import EntityHistory    # pylint: disable=W0611:unused-import
+from access.models import (    # pylint: disable=W0611:unused-import
+    contact,
+    company_base,
+    person,
+    role,
+
+)
+
 from access.models.entity import (
     Entity,
 )
