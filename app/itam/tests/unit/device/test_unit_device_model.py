@@ -1,22 +1,98 @@
-from django.test import TestCase
-
 import pytest
 
+from django.db import models
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itam.models.device import Device
 
 
-@pytest.mark.skip( reason = 'to be refactored' )
-class DeviceModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_gitgroup
+class DeviceModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = Device
+
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'device'
+            },
+        }
+
+
+    parameterized_model_fields = {
+        'name': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.IntegerField,
+            'length': 50,
+            'null': False,
+            'unique': True,
+        },
+        'serial_number': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'null': True,
+            'unique': True,
+        },
+        'uuid': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'length': 50,
+            'null': True,
+            'unique': True,
+        },
+        'device_model': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'device_type': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'config': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.JSONField,
+            'null': True,
+            'unique': False,
+        },
+        'inventorydate': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': True,
+            'unique': False,
+        },
+        'is_virtual': {
+            'blank': True,
+            'default': False,
+            'field_type': models.BooleanField,
+            'null': False,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
 
 
     @pytest.mark.skip(reason="to be written")
@@ -29,36 +105,15 @@ class DeviceModel(
         pass
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_device_software_action(user):
-        """Ensure only software that is from the same organization or is global can be added to the device
-        """
-        pass
+
+class DeviceModelInheritedCases(
+    DeviceModelTestCases,
+):
+    pass
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_device_not_global(user):
-        """Devices are not global items.
 
-            Ensure that a device can't be set to be global.
-        """
-        pass
-
-
-    @pytest.mark.skip(reason="to be written")
-    def test_device_operating_system_version_only_one(user):
-        """model deviceoperatingsystem must only contain one value per device
-        """
-        pass
-
-
-    @pytest.mark.skip(reason="to be written")
-    def test_device_device_model_same_organization(user):
-        """ Can only add a device model from same organization """
-        pass
-
-
-    @pytest.mark.skip(reason="to be written")
-    def test_device_device_model_global(user):
-        """ Can add a device model that is set is_global=true """
-        pass
+class DeviceModelPyTest(
+    DeviceModelTestCases,
+):
+    pass

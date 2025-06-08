@@ -39,7 +39,10 @@ def model_kwarg_data():
 
                 continue
 
-            elif getattr(model, field).field.unique:
+            elif(
+                getattr(model, field).field.unique
+                and not isinstance(getattr(model, field).field, models.UUIDField)
+            ):
 
                 value = 'a' + random_str
 
