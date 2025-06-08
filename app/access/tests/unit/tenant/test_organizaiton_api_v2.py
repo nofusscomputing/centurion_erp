@@ -31,7 +31,7 @@ class OrganizationAPI(
 
     app_namespace = 'v2'
     
-    url_name = '_api_organization'
+    url_name = '_api_tenant'
 
     @classmethod
     def setUpTestData(self):

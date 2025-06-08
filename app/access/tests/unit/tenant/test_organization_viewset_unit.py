@@ -18,7 +18,7 @@ class OrganizationViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'API:_api_organization'
+    route_name = 'API:_api_tenant'
 
 
     @classmethod

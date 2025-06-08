@@ -55,7 +55,7 @@ router.register(
 
 router.register(
     prefix = 'tenant', viewset = organization.ViewSet,
-    basename = '_api_organization'
+    basename = '_api_tenant'
 )
 
 # router.register(
