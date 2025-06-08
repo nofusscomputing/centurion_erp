@@ -7,7 +7,7 @@ from rest_framework.reverse import reverse
 from access.fields import *
 from access.models.tenancy import Tenant, TenancyObject
 
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
