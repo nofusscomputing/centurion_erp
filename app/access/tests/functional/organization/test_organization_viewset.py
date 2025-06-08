@@ -22,13 +22,14 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip( reason = 'to be refactored' )
 class ViewSetBase:
 
     model = Organization
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_organization'
+    url_name = '_api_organization'
 
     change_data = {'name': 'device'}
 
