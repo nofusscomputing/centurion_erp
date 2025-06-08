@@ -1085,6 +1085,7 @@ markers = [
     "model_knowledgebasecategory: Selects Knowledge base category tests.",
     "model_manufacturer: Select all manufacturer tests.",
     "models: Selects all models tests.",
+    "model_tenant: Select all Tentant model tests.",
     "model_ticketcategory: Select all Ticket Categeory tests.",
     "model_ticketcommentcategory: select all ticket comment category tests.",
     "note_models: Selects all centurion model note models",

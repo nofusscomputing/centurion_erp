@@ -545,7 +545,7 @@ def organization_one(django_db_blocker):
         random_str = datetime.datetime.now(tz=datetime.timezone.utc)
 
         item = Tenant.objects.create(
-            name = 'org one from global' + str(random_str)
+            name = 'org one global' + str(random_str)
         )
 
     yield item
@@ -569,7 +569,7 @@ def organization_two(django_db_blocker):
         random_str = datetime.datetime.now(tz=datetime.timezone.utc)
 
         item = Tenant.objects.create(
-            name = 'org two from global' + str(random_str)
+            name = 'org two global' + str(random_str)
         )
 
     yield item
@@ -590,7 +590,7 @@ def organization_three(django_db_blocker):
         random_str = datetime.datetime.now(tz=datetime.timezone.utc)
 
         item = Tenant.objects.create(
-            name = 'org three from global' + str(random_str)
+            name = 'org three global' + str(random_str)
         )
 
     yield item
