@@ -66,7 +66,7 @@ class Checkin(
         """
 
         url = reverse(
-            'v2:public:devops:_public_api_v2_feature_flag-list',
+            'v2:public:devops:_api_checkin-list',
             kwargs={
                 'organization_id': self.organization.id,
                 'software_id': self.software.id,
@@ -97,7 +97,7 @@ class Checkin(
         """
 
         url = reverse(
-            'v2:public:devops:_public_api_v2_feature_flag-list',
+            'v2:public:devops:_api_checkin-list',
             kwargs={
                 'organization_id': self.organization.id,
                 'software_id': self.software.id,
