@@ -43,6 +43,11 @@ from .model_centurionsubmodel import (
     model_centurionsubmodel,
 )
 
+from .model_checkin import (
+    kwargs_checkin,
+    model_checkin,
+)
+
 from .model_configgroup import (
     kwargs_configgroups,
     model_configgroups,

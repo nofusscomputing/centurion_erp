@@ -23,6 +23,9 @@ def model_kwarg_data():
 
         for field, value in model_kwargs.items():
 
+            if not hasattr(getattr(model, field), 'field'):
+                continue
+
             if isinstance(getattr(model, field).field, models.ManyToManyField):
 
                 if field in many_field:
