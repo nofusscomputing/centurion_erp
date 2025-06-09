@@ -5,9 +5,11 @@ from devops.models.git_repository.base import GitRepository
 
 
 class GitHubRepository(
-    GitRepository
+    GitRepository,
 ):
     """GitHub Repository"""
+
+    _is_submodel = True
 
     class Meta(GitRepository.Meta):
 
@@ -126,26 +128,3 @@ class GitHubRepository(
     #     'created',
     # ]
 
-    def get_url_kwargs_notes(self) -> dict:
-        """Fetch the URL kwargs for model notes
-
-        Returns:
-            dict: notes kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'model_id': self.id
-        }
- 
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from devops.models.git_repository.github_history import GitHubHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = GitHubHistory
-        )
-
-
-        return history
