@@ -91,6 +91,12 @@ def centurion_model_migrate(sender, **kwargs):
         },
         {
             'app_label': 'devops',
+            'model_name': 'GitRepository',
+            'history_model_name': None,
+            'notes_model_name': None
+        },
+        {
+            'app_label': 'devops',
             'model_name': 'GitHubRepository',
             'history_model_name': None,
             'notes_model_name': None
@@ -189,12 +195,12 @@ def centurion_model_migrate(sender, **kwargs):
 
         if getattr(model, '_notes_enabled', False):
 
-
-            if notes_model_name is None:
-
-                raise LookupError('No notes model to migrate')
-
             try:
+
+                if notes_model_name is None:
+
+                    raise LookupError('No notes model to migrate')
+
 
                 original_notes = apps.get_model(
                     app_label = app_label,
