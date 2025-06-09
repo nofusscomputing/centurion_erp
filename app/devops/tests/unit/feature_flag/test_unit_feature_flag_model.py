@@ -18,10 +18,6 @@ class FeatureFlagModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
-            'is_global': {
-                'type': type(None),
-                'value': None,
-            },
             'model_tag': {
                 'type': str,
                 'value': 'feature_flag'
@@ -77,6 +73,7 @@ class FeatureFlagModelInheritedCases(
 
 
 
+@pytest.mark.module_devops
 class FeatureFlagModelPyTest(
     FeatureFlagModelTestCases,
 ):
