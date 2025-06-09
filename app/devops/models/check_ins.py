@@ -1,17 +1,22 @@
 from django.db import models
 
-from access.fields import AutoCreatedField
-from access.models.tenancy import TenancyObject
+from core.models.centurion import CenturionModel
 
 from itam.models.software import Software
 
 
 
 class CheckIn(
-    TenancyObject
+    CenturionModel
 ):
 
-    save_model_history: bool = False
+    _audit_enabled = False
+
+    _notes_enabled = False
+
+    app_namespace = 'devops'
+
+    documentation = ''
 
     class Meta:
 
@@ -25,14 +30,6 @@ class CheckIn(
 
         verbose_name_plural = 'Deployment Check Ins'
 
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Primary key of the entry',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
 
     software = models.ForeignKey(
         Software,
@@ -69,19 +66,12 @@ class CheckIn(
         verbose_name = 'Feature'
     )
 
-    created = AutoCreatedField()
-
-    is_global = None      # Field not requied.
     model_notes = None    # Field not required.
 
 
     def __str__(self) -> str:
 
         return self.feature + '.' + self.deployment_id
-
-    app_namespace = 'devops'
-
-    documentation = ''
 
     page_layout: dict = []
 
