@@ -60,6 +60,12 @@ def centurion_model_migrate(sender, **kwargs):
             'notes_model_name': 'ManufacturerNotes'
         },
         {
+            'app_label': 'core',
+            'model_name': 'TicketCategory',
+            'history_model_name': 'TicketCategoryHistory',
+            'notes_model_name': 'TicketCategoryNotes'
+        },
+        {
             'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
@@ -146,7 +152,7 @@ def centurion_model_migrate(sender, **kwargs):
                             print(f'        Removed {history_model_name}={id} from database.')
 
                         except Exception as e:
-                            print(f"Exception {e.__class__.__name__} occured:"+"\n    "+f'{e}')
+                            print(f"        Exception {e.__class__.__name__} occured:"+"\n            "+f'{e}')
 
 
                 except LookupError as e:
