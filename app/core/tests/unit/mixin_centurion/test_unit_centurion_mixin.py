@@ -252,6 +252,19 @@ class CenturionMixnInheritedCases(
 
 
 
+    def test_method_get_url_kwargs_returns_dict(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the kwargs as a dict.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert type(model_instance.get_url_kwargs()) is dict, model_instance.get_url_kwargs()
+
+
+
 class CenturionMixnPyTest(
     CenturionMixnTestCases,
 ):
