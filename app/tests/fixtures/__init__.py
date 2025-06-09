@@ -88,6 +88,12 @@ from .model_gitgroup import (
     serializer_gitgroup,
 )
 
+from .model_gitrepository import (
+    kwargs_gitrepository,
+    model_gitrepository,
+    serializer_gitrepository,
+)
+
 from .model_instance import (
     model_instance
 )
