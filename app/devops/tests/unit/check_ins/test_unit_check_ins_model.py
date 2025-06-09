@@ -28,6 +28,10 @@ class CheckInModelTestCases(
                 'type': models.NOT_PROVIDED,
                 'value': models.NOT_PROVIDED
             },
+            'app_namespace': {
+                'type': str,
+                'value': 'public:devops'
+            },
         }
 
 
