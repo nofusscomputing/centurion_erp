@@ -112,6 +112,10 @@ def centurion_model_migrate(sender, **kwargs):
 
             try:
 
+                if history_model_name is None:
+
+                    raise LookupError('No history model to migrate')
+
                 original_history = apps.get_model(
                     app_label = app_label,
                     model_name = history_model_name
@@ -172,6 +176,11 @@ def centurion_model_migrate(sender, **kwargs):
         print(f"    Model Notes is enabled={getattr(model, '_notes_enabled', False)}.")
 
         if getattr(model, '_notes_enabled', False):
+
+
+            if notes_model_name is None:
+
+                raise LookupError('No notes model to migrate')
 
             try:
 

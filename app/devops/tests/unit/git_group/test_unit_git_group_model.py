@@ -19,10 +19,6 @@ class GitGroupModelTestCases(
     def parameterized_class_attributes(self):
         
         return {
-            'is_global': {
-                'type': type(None),
-                'value': None,
-            },
             'model_tag': {
                 'type': str,
                 'value': 'git_group'
@@ -94,6 +90,7 @@ class GitGroupModelInheritedCases(
 
 
 
+@pytest.mark.module_devops
 class GitGroupModelPyTest(
     GitGroupModelTestCases,
 ):
