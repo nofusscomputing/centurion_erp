@@ -88,6 +88,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'GitGroup',
             'history_model_name': 'GitGroupHistory',
             'notes_model_name': 'GitGroupNotes'
+        },
+        {
+            'app_label': 'devops',
+            'model_name': 'GitHubRepository',
+            'history_model_name': None,
+            'notes_model_name': None
         }
     ]
 
