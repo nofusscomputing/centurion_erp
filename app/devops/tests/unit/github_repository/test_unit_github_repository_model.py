@@ -12,7 +12,7 @@ from devops.tests.unit.git_repository.test_unit_git_repository_model import (
 
 
 
-@pytest.mark.model_gitrepository
+@pytest.mark.model_githubrepository
 class GitHubRepositoryBaseModelTestCases(
     CenturionSubAbstractModelInheritedCases,
     GitRepositoryBaseModelInheritedCases,
