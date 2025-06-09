@@ -1,6 +1,6 @@
 # pylint: disable=W0611:unused-import
 
-from app.tests.fixtures.model_centurionsubmodel import model_centurionsubmodel
+
 from .api_request_permissions import (
     api_request_permissions,
 )
@@ -36,11 +36,6 @@ from .model_centurionmodelnote import (
 from .model_centurionmodelnotemeta import (
     kwargs_centurionmodelnotemeta,
     model_centurionmodelnotemeta,
-)
-
-from .model_centurionsubmodel import (
-    kwargs_centurionsubmodel,
-    model_centurionsubmodel,
 )
 
 from .model_checkin import (

@@ -262,10 +262,28 @@ class Centurion(
             dict: Kwargs required for reverse function to build a models URL.
         """
 
+        kwargs = {}
+
+        if self._is_submodel:
+
+            kwargs.update({
+                # **super().get_url_kwargs( many = many ),
+                # 'app_label': self._meta.app_label,    # this has been removed as the app_namespace can cover
+                'model_name': str(self._meta.model_name),
+                # 'model_id': self.model.id,    # Unknown why this was added as sub-model id's match the model
+            })
+
         if many:
-            return {}
+
+            return kwargs
+
         else:
-            return { 'pk': self.id }
+
+            kwargs.update({
+                'pk': self.id
+            })
+
+            return kwargs
 
 
 
