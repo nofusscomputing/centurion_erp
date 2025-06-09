@@ -66,6 +66,12 @@ def centurion_model_migrate(sender, **kwargs):
             'notes_model_name': 'TicketCategoryNotes'
         },
         {
+            'app_label': 'core',
+            'model_name': 'TicketCommentCategory',
+            'history_model_name': 'TicketCommentCategoryHistory',
+            'notes_model_name': 'TicketCommentCategoryNotes'
+        },
+        {
             'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
