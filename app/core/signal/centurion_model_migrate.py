@@ -73,6 +73,12 @@ def centurion_model_migrate(sender, **kwargs):
         },
         {
             'app_label': 'devops',
+            'model_name': 'CheckIn',
+            'history_model_name': None,
+            'notes_model_name': None
+        },
+        {
+            'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
             'notes_model_name': 'FeatureFlagNotes'
