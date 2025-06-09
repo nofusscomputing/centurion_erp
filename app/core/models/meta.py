@@ -30,6 +30,12 @@ if apps.models_ready:
                 continue
 
 
+            related_name = 'audit_history'
+            if model._is_submodel:
+
+                related_name = '+'
+
+
             AuditMetaModel = type(
                 audit_meta_name,
                 ( import_string("core.models.audit.AuditMetaModel"), ),
@@ -50,7 +56,7 @@ if apps.models_ready:
                         help_text = 'Model this history belongs to',
                         null = False,
                         on_delete = models.CASCADE,
-                        related_name = 'audit_history',
+                        related_name = related_name,
                         verbose_name = 'Model',
                     )
                 }

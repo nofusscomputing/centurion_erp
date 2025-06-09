@@ -19,7 +19,7 @@ class ViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:public:devops:_public_api_v2_feature_flag'
+    route_name = 'v2:public:devops:_api_checkin'
 
 
     @classmethod

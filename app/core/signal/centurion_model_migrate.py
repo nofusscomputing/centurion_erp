@@ -4,7 +4,7 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
-from core.models.centurion import CenturionModel
+from core.mixins.centurion import Centurion
 
 
 @receiver(post_migrate, dispatch_uid="centurion_model_migrate")
@@ -18,6 +18,12 @@ def centurion_model_migrate(sender, **kwargs):
 
     models: list[ dict ] = [
         {
+            'app_label': 'access',
+            'model_name': 'Tenant',
+            'history_model_name': 'OrganizationHistory',
+            'notes_model_name': 'OrganizationNotes'
+        },
+        {
             'app_label': 'assistance',
             'model_name': 'KnowledgeBase',
             'history_model_name': 'KnowledgeBaseHistory',
@@ -30,6 +36,48 @@ def centurion_model_migrate(sender, **kwargs):
             'notes_model_name': 'KnowledgeCategoryBaseNotes'
         },
         {
+            'app_label': 'config_management',
+            'model_name': 'ConfigGroupHosts',
+            'history_model_name': 'ConfigGroupHostsHistory',
+            'notes_model_name': None
+        },
+        {
+            'app_label': 'config_management',
+            'model_name': 'ConfigGroupSoftware',
+            'history_model_name': 'ConfigGroupSoftwareHistory',
+            'notes_model_name': None
+        },
+        {
+            'app_label': 'config_management',
+            'model_name': 'ConfigGroups',
+            'history_model_name': 'ConfigGroupsHistory',
+            'notes_model_name': 'ConfigGroupNotes'
+        },
+        {
+            'app_label': 'core',
+            'model_name': 'Manufacturer',
+            'history_model_name': 'ManufacturerHistory',
+            'notes_model_name': 'ManufacturerNotes'
+        },
+        {
+            'app_label': 'core',
+            'model_name': 'TicketCategory',
+            'history_model_name': 'TicketCategoryHistory',
+            'notes_model_name': 'TicketCategoryNotes'
+        },
+        {
+            'app_label': 'core',
+            'model_name': 'TicketCommentCategory',
+            'history_model_name': 'TicketCommentCategoryHistory',
+            'notes_model_name': 'TicketCommentCategoryNotes'
+        },
+        {
+            'app_label': 'devops',
+            'model_name': 'CheckIn',
+            'history_model_name': None,
+            'notes_model_name': None
+        },
+        {
             'app_label': 'devops',
             'model_name': 'FeatureFlag',
             'history_model_name': 'FeatureFlagHistory',
@@ -40,6 +88,18 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'GitGroup',
             'history_model_name': 'GitGroupHistory',
             'notes_model_name': 'GitGroupNotes'
+        },
+        {
+            'app_label': 'devops',
+            'model_name': 'GitRepository',
+            'history_model_name': None,
+            'notes_model_name': None
+        },
+        {
+            'app_label': 'devops',
+            'model_name': 'GitHubRepository',
+            'history_model_name': None,
+            'notes_model_name': None
         }
     ]
 
@@ -57,7 +117,7 @@ def centurion_model_migrate(sender, **kwargs):
         )
 
         if(
-            not issubclass(model, CenturionModel)
+            not issubclass(model, Centurion)
         ):
             print(f'Skipping model {model_name} as it is not a CenturionModel.')
             continue
@@ -69,6 +129,10 @@ def centurion_model_migrate(sender, **kwargs):
 
 
             try:
+
+                if history_model_name is None:
+
+                    raise LookupError('No history model to migrate')
 
                 original_history = apps.get_model(
                     app_label = app_label,
@@ -91,10 +155,14 @@ def centurion_model_migrate(sender, **kwargs):
 
                         try:
 
+                            entry_model = entry.model
+                            if hasattr(entry, 'child_model'):
+                                entry_model = entry.child_model
+
                             migrated_history = audit_history.objects.create(
                                 organization = entry.organization,
                                 content_type = entry.content_type,
-                                model = entry.model,
+                                model = entry_model,
                                 before = entry.before,
                                 after = entry.after,
                                 action = entry.action,
@@ -112,7 +180,7 @@ def centurion_model_migrate(sender, **kwargs):
                             print(f'        Removed {history_model_name}={id} from database.')
 
                         except Exception as e:
-                            print(f"Exception {e.__class__.__name__} occured:\n\s\s\s\s{e}")
+                            print(f"        Exception {e.__class__.__name__} occured:"+"\n            "+f'{e}')
 
 
                 except LookupError as e:
@@ -128,6 +196,11 @@ def centurion_model_migrate(sender, **kwargs):
         if getattr(model, '_notes_enabled', False):
 
             try:
+
+                if notes_model_name is None:
+
+                    raise LookupError('No notes model to migrate')
+
 
                 original_notes = apps.get_model(
                     app_label = app_label,

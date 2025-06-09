@@ -17,9 +17,14 @@ router.register(
     basename = '_api_featureflag'
 )
 router.register(
-    prefix = r'git_repository(?:/(?P<git_provider>gitlab|github))?',
+    prefix = r'git_repository(?:/(?P<model_name>gitlab|github))?',
     viewset = git_repository.ViewSet,
-    feature_flag = '2025-00001', basename = '_api_v2_git_repository'
+    feature_flag = '2025-00001', basename = '_api_gitrepository'
+)
+router.register(
+    prefix = r'(?P<model_name>githubrepository|gitlabrepository)',
+    viewset = git_repository.ViewSet,
+    feature_flag = '2025-00001', basename = '_api_gitrepository_sub'
 )
 router.register(
     prefix = 'git_group', viewset = git_group.ViewSet,

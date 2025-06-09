@@ -1,6 +1,6 @@
 # pylint: disable=W0611:unused-import
 
-from app.tests.fixtures.model_centurionsubmodel import model_centurionsubmodel
+
 from .api_request_permissions import (
     api_request_permissions,
 )
@@ -38,9 +38,9 @@ from .model_centurionmodelnotemeta import (
     model_centurionmodelnotemeta,
 )
 
-from .model_centurionsubmodel import (
-    kwargs_centurionsubmodel,
-    model_centurionsubmodel,
+from .model_checkin import (
+    kwargs_checkin,
+    model_checkin,
 )
 
 from .model_configgroup import (
@@ -86,6 +86,18 @@ from .model_gitgroup import (
     kwargs_gitgroup,
     model_gitgroup,
     serializer_gitgroup,
+)
+
+from .model_githubrepository import (
+    kwargs_githubrepository,
+    model_githubrepository,
+    serializer_githubrepository,
+)
+
+from .model_gitrepository import (
+    kwargs_gitrepository,
+    model_gitrepository,
+    serializer_gitrepository,
 )
 
 from .model_instance import (
@@ -136,6 +148,7 @@ from .model_teamuser import (
 from .model_tenant import (
     kwargs_tenant,
     model_tenant,
+    serializer_tenant,
 )
 
 from .model_tenancyabstract import (

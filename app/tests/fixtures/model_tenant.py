@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from access.models.tenant import Tenant
+from access.serializers.organization import (
+    TenantBaseSerializer,
+    TenantModelSerializer,
+    TenantViewSerializer
+)
 
 
 @pytest.fixture( scope = 'class')
@@ -32,3 +37,13 @@ def kwargs_tenant( django_db_blocker, model_user ):
     with django_db_blocker.unblock():
 
         user.delete()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_tenant():
+
+    yield {
+        'base': TenantBaseSerializer,
+        'model': TenantModelSerializer,
+        'view': TenantViewSerializer
+    }

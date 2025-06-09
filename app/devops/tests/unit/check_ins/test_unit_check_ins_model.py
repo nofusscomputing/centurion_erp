@@ -1,94 +1,99 @@
-from django.test import TestCase
+import pytest
 
-from access.models.tenant import Tenant as Organization
+from django.db import models
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from devops.models.check_ins import CheckIn
-
-from itam.models.software import Software
 
 
-
-class Model(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_checkins
+class CheckInModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = CheckIn
 
-    should_model_history_be_saved: bool = False
+    @property
+    def parameterized_class_attributes(self):
 
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a device
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
-        """
-
-        self.organization = Organization.objects.create(name='test_org')
-
-
-        self.kwargs_item_create = {
-            'software': Software.objects.create(
-                organization = self.organization,
-                name = 'soft',
-            ),
-            'version': '1.0',
-            'deployment_id': 'desc',
-            'feature': 'feature_flag',
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': models.NOT_PROVIDED,
+                'value': models.NOT_PROVIDED
+            },
+            'app_namespace': {
+                'type': str,
+                'value': 'public:devops'
+            },
         }
 
-        super().setUpTestData()
+
+    parameterized_model_fields = {
+        'model_notes': {
+            'blank': models.fields.NOT_PROVIDED,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.fields.NOT_PROVIDED,
+            'null': models.fields.NOT_PROVIDED,
+            'unique': models.fields.NOT_PROVIDED,
+        },
+        'software': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': False,
+            'unique': False,
+        },
+        'version': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.TextField,
+            'length': 80,
+            'null': True,
+            'unique': False,
+        },
+        'deployment_id': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'length': 30,
+            'null': False,
+            'unique': False,
+        },
+        'feature': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.TextField,
+            'null': False,
+            'unique': False,
+        }
+    }
 
 
 
-    def test_attribute_not_empty_get_url(self):
-        """Test field `<model>` is not empty
+class CheckInModelInheritedCases(
+    CheckInModelTestCases,
+):
+    pass
 
-        This test case is a duplicate of a test with the smae name. As this
-        model does not require this attribute, this test is N/A.
 
-        Attribute `get_url` must contain values
+
+@pytest.mark.module_devops
+class CheckInModelPyTest(
+    CheckInModelTestCases,
+):
+
+    @pytest.mark.xfail( reason = 'model does not need tag' )
+    def test_model_tag_defined(self, model):
+        """ Model Tag
+
+        Ensure that the model has a tag defined.
         """
 
-        pass
-
-
-    def test_attribute_type_get_url(self):
-        """Test field `<model>`type
-
-        This test case is a duplicate of a test with the smae name. As this
-        model does not require this attribute, this test is N/A.
-
-        Attribute `get_url` must be str
-        """
-
-        pass
-
-
-
-    def test_attribute_type_app_namespace(self):
-        """Attribute Type
-
-        app_namespace is of type str
-        """
-
-        assert type(self.model.app_namespace) is str
-
-
-    def test_attribute_value_app_namespace(self):
-        """Attribute Type
-
-        app_namespace has been set, override this test case with the value
-        of attribute `app_namespace`
-        """
-
-        assert self.model.app_namespace == 'devops'
+        assert model.model_tag is not None
