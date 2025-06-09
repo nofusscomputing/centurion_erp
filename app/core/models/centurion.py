@@ -49,31 +49,3 @@ class CenturionModel(
         if value is None:
 
             raise ValidationError(code = 'field_value_not_none', message = 'Value can not be none.')
-
-
-
-class CenturionSubModel(
-    CenturionModel
-):
-
-    _is_submodel: bool = True
-    """This model a sub-model"""
-
-
-    class Meta:
-
-        abstract = True
-
-
-    def get_url_kwargs(self, many = False):
-
-        kwargs = {}
-
-        kwargs.update({
-            **super().get_url_kwargs( many = many ),
-            'app_label': self._meta.app_label,
-            'model_name': str(self._meta.model_name),
-            'model_id': self.model.id,
-        })
-
-        return kwargs

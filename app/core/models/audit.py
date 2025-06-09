@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 
 from core.models.centurion import (
     CenturionModel,
-    CenturionSubModel,
 )
 
 
@@ -240,8 +239,9 @@ class CenturionAudit(
 
 class AuditMetaModel(
     CenturionAudit,
-    CenturionSubModel,
 ):
+
+    _is_submodel = True
 
     model_notes = None
 
@@ -280,7 +280,9 @@ class AuditMetaModel(
 
         kwargs.update({
             **super().get_url_kwargs( many = many ),
+            'app_label': self._meta.app_label,
             'model_name': str(self._meta.model_name).replace('audithistory', ''),
+            'model_id': self.model.id,
         })
 
         return kwargs

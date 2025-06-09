@@ -242,6 +242,16 @@ class CenturionMixnInheritedCases(
 
 
 
+    def test_method_get_url_returns_str(self, mocker, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_url` returns the url as str
+        """
+
+        assert type(model_instance.get_url()) is str, model_instance.get_url()
+
+
+
 class CenturionMixnPyTest(
     CenturionMixnTestCases,
 ):

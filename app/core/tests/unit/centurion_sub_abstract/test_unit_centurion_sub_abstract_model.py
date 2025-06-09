@@ -2,25 +2,24 @@ import pytest
 
 from django.db import models
 
-from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelTestCases,
-    CenturionAbstractModelInheritedCases,
-)
-
+from centurion.tests.unit_models import ModelTestCases
 
 
 @pytest.mark.models
 @pytest.mark.unit
 class CenturionSubAbstractModelTestCases(
-    CenturionAbstractModelTestCases
+    ModelTestCases
 ):
 
 
-    parameterized_class_attributes = {
-        '_is_submodel': {
-            'value': True,
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_is_submodel': {
+                'value': True,
+            }
         }
-    }
 
 
     def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
@@ -37,7 +36,15 @@ class CenturionSubAbstractModelTestCases(
 
         model_instance.model = model_instance
 
-        url_basename = f'v2:_api_{model_instance._meta.model_name}_sub-detail'
+        app_namespace = ''
+        if model_instance.app_namespace:
+            app_namespace = model_instance.app_namespace + ':'
+
+        url_model_name = model_instance._meta.model_name
+        if model_instance.url_model_name:
+            url_model_name = model_instance.url_model_name
+
+        url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
 
         url = model_instance.get_url( relative = True)
 
@@ -45,9 +52,9 @@ class CenturionSubAbstractModelTestCases(
             url_basename,
             None,
             {
-                'app_label': model_instance._meta.app_label,
+                # 'app_label': model_instance._meta.app_label,
                 'model_name': model_instance._meta.model_name,
-                'model_id': model_instance.model.id,
+                # 'model_id': model_instance.model.id,
                 'pk': model_instance.id,
             },
             None,
@@ -68,9 +75,9 @@ class CenturionSubAbstractModelTestCases(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'app_label': model_instance._meta.app_label,
+            # 'app_label': model_instance._meta.app_label,
             'model_name': model_instance._meta.model_name,
-            'model_id': model_instance.model.id,
+            # 'model_id': model_instance.model.id,
             'pk': model_instance.id,
         }
 
@@ -81,50 +88,6 @@ class CenturionSubAbstractModelTestCases(
 
 class CenturionSubAbstractModelInheritedCases(
     CenturionSubAbstractModelTestCases,
-    CenturionAbstractModelInheritedCases,
 ):
 
     pass
-
-
-
-class CenturionSubAbstractModelPyTest(
-    CenturionSubAbstractModelTestCases,
-):
-
-    @property
-    def parameterized_class_attributes(self):
-        
-        return {
-            'page_layout': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
-            },
-            'table_fields': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
-            },
-            'model_tag': {
-                'type': type(None),
-                'value': None,
-            },
-            'url_model_name': {
-                'type': type(None),
-                'value': None,
-            }
-        }
-
-
-    @pytest.mark.xfail( reason = 'This model is an abstract model')
-    def test_model_tag_defined(self, model):
-        """ Model Tag
-
-        Ensure that the model has a tag defined.
-        """
-
-        assert model.model_tag is not None
-
-
-    def test_model_is_abstract(self, model):
-
-        assert model._meta.abstract
