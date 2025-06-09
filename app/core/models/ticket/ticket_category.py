@@ -12,6 +12,8 @@ class TicketCategory(
     CenturionModel,
 ):
 
+    model_tag = 'ticket_category'
+
 
     class Meta:
 
@@ -27,10 +29,10 @@ class TicketCategory(
 
     parent = models.ForeignKey(
         'self',
-        blank= True,
+        blank = True,
         help_text = 'The Parent Category',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Parent Category',
     )
 
@@ -43,10 +45,10 @@ class TicketCategory(
 
     runbook = models.ForeignKey(
         KnowledgeBase,
-        blank= True,
+        blank = True,
         help_text = 'The runbook for this category',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Runbook',
     )
 
