@@ -14,7 +14,7 @@ class CheckIn(
 
     _notes_enabled = False
 
-    app_namespace = 'devops'
+    app_namespace = 'public:devops'
 
     documentation = ''
 
