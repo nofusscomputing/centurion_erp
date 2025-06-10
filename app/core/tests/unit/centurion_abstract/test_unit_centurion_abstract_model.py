@@ -124,6 +124,7 @@ class CenturionAbstractModelPyTest(
 
         assert model._meta.abstract
 
-    @pytest.mark.xfail( reason = 'model is an abstract' )
+
     def test_model_tag_defined(self, model):
-        pass
+
+        pytest.xfail( reason = 'model is an abstract' )
