@@ -83,3 +83,34 @@ class CheckIn(
         'organization',
         'created',
     ]
+
+
+
+    def get_url(
+        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+    ) -> str:
+        """ Fetch the Models URL.
+
+        Note: this model does not have a details page as its a list only view.
+        Hence the `many = True`
+        """
+
+        return super().get_url(
+            relative = relative,
+            api_version = api_version,
+            many = True,
+            request = request
+        )
+
+
+
+    def get_url_kwargs(self, many = False) -> dict:
+
+        kwargs = {}
+
+        kwargs.update({
+            'organization_id': self.organization.id,
+            'software_id': self.software.id
+        })
+
+        return kwargs
