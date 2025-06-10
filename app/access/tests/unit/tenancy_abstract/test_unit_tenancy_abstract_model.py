@@ -14,10 +14,16 @@ class TenancyAbstractModelTestCases(
 ):
 
 
-    parameterized_class_attributes = {}
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {}
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'organization': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,

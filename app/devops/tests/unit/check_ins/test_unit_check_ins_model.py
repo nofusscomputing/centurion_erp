@@ -35,7 +35,10 @@ class CheckInModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'model_notes': {
             'blank': models.fields.NOT_PROVIDED,
             'default': models.fields.NOT_PROVIDED,

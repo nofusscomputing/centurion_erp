@@ -23,7 +23,10 @@ class ModelTestCases(
 
     ``` py
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         '<model field name>': {
             'blank': ,
             'default': ,
