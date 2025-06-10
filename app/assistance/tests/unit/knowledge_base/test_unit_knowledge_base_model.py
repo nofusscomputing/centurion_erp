@@ -9,7 +9,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_knowledge_base
+@pytest.mark.model_knowledgebase
 class KnowledgeBaseModelTestCases(
     CenturionAbstractModelInheritedCases
 ):

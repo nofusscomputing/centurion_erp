@@ -8,7 +8,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_checkins
+@pytest.mark.model_checkin
 class CheckInModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
