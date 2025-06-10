@@ -182,7 +182,7 @@ for model in get_models():
         }
     )
 
-    dynamic_class = pytest.mark.__getattr__('model_' + model._meta.model_name)(dynamic_class)
+    dynamic_class = pytest.mark.__getattr__('model_' + str(model._meta.model_name).replace('centurionmodelnote', ''))(dynamic_class)
     dynamic_class = pytest.mark.__getattr__('module_' + model._meta.app_label)(dynamic_class)
 
     globals()[cls_name] = dynamic_class
