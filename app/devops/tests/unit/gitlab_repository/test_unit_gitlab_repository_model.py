@@ -18,7 +18,10 @@ class GitLabRepositoryBaseModelTestCases(
     GitRepositoryBaseModelInheritedCases,
 ):
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'visibility': {
             'blank': False,
             'default': models.NOT_PROVIDED,

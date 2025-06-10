@@ -26,7 +26,10 @@ class KnowledgeBaseCategoryModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'parent_category': {
             'blank': True,
             'default': models.fields.NOT_PROVIDED,

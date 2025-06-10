@@ -79,7 +79,10 @@ class ConfigGroupSoftwareModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'config_group': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,

@@ -26,7 +26,10 @@ class KnowledgeBaseModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'title': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,

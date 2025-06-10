@@ -103,7 +103,10 @@ class ConfigGroupModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'parent': {
             'blank': True,
             'default': models.fields.NOT_PROVIDED,

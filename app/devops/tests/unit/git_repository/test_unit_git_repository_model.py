@@ -30,7 +30,10 @@ class GitRepositoryBaseModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'provider': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,

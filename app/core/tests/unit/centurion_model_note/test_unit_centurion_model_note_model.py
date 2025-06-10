@@ -14,7 +14,10 @@ class CenturionNoteModelTestCases(
 ):
 
 
-    parameterized_class_attributes = {
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {
         '_audit_enabled': {
             'value': False,
         },
@@ -32,7 +35,10 @@ class CenturionNoteModelTestCases(
     }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'body': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
