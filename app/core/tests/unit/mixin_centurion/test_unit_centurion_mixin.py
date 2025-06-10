@@ -242,21 +242,27 @@ class CenturionMixnInheritedCases(
 
 
 
-    def test_method_get_url_returns_str(self, mocker, model_instance):
+    def test_method_get_url_returns_str(self, model, model_instance):
         """Test Class Method
         
         Ensure method `get_url` returns the url as str
         """
 
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
         assert type(model_instance.get_url()) is str, model_instance.get_url()
 
 
 
-    def test_method_get_url_kwargs_returns_dict(self, mocker, model_instance, settings):
+    def test_method_get_url_kwargs_returns_dict(self, model, model_instance, settings):
         """Test Class Method
         
         Ensure method `get_url_kwargs` returns the kwargs as a dict.
         """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
 
         url = model_instance.get_url_kwargs()
