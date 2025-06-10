@@ -97,3 +97,18 @@ class CheckInModelPyTest(
         """
 
         assert model.model_tag is not None
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'organization_id': model_instance.organization.id,
+            'software_id': model_instance.software.id
+        }

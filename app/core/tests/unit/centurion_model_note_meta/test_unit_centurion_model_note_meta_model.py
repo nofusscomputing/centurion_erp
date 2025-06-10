@@ -195,7 +195,26 @@ class MetaAbstractModelInheritedCases(
 class MetaAbstractModelPyTest(
     MetaAbstractModelTestCases,
 ):
-    # pass
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        model_instance.id = 1
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'app_label': model_instance._meta.app_label,
+            'model_name': model_instance._meta.model_name,
+            'model_id': model_instance.model.id,
+            'pk': model_instance.id,
+        }
+
 
     @pytest.mark.xfail( reason = 'This model is an abstract model')
     def test_model_tag_defined(self, model):
