@@ -97,7 +97,6 @@ class MetaAbstractModelInheritedCases(
         instance = audit_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url_basename = f'v2:_api_centurionaudit_sub-detail'
@@ -128,7 +127,6 @@ class MetaAbstractModelInheritedCases(
         instance = audit_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url = model_instance.get_url_kwargs()
@@ -241,7 +239,6 @@ class MetaAbstractModelPyTest(
         Ensure method `get_url_kwargs` returns the correct value.
         """
 
-        model_instance.id = 1
         model_instance.model = model_instance
 
         url = model_instance.get_url_kwargs()

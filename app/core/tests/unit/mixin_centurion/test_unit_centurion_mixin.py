@@ -120,15 +120,6 @@ class CenturionMixnTestCases(
             def get(*args, **kwargs):
                 return model_instance
 
-            # def get_queryset(self):
-            #     return model_instance
-
-
-        # mocker.patch(
-        #     'access.models.tenancy_abstract.TenancyAbstractModel.objects',
-        #     new_callable=MockManager
-        # )
-
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
@@ -155,13 +146,6 @@ class CenturionMixnTestCases(
         Ensure method `get_history_model_name` returns the value of the models
         audit name `<Model Class name>AuditHistory`
         """
-
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # model_instance.objects = MockManager()
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -359,14 +343,6 @@ class CenturionMixnPyTest(
         is enabled.
         """
 
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # model_instance.objects = MockManager()
-        # mocker.patch('core.mixins.centurion.Centurion.objects', new_callable=MockManager)
-
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
@@ -409,13 +385,6 @@ class CenturionMixnPyTest(
         when model is not a sub-model
         """
 
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
-
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
@@ -439,13 +408,6 @@ class CenturionMixnPyTest(
         Ensure method `delete` calls `super().delete` with correct parameters
         when model is not a sub-model
         """
-
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -473,13 +435,6 @@ class CenturionMixnPyTest(
         In the alternate, if `model.get_audit_values = False` method
         `self.get_audit_values()` must not be called.
         """
-
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -666,14 +621,6 @@ class CenturionMixnPyTest(
 
             setattr(model_instance, field, value)
 
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-
-        # mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
-
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
@@ -698,8 +645,6 @@ class CenturionMixnPyTest(
 
         model_instance.objects = MockManager()
 
-        model_instance.id = 1
-
         for field in self.kwargs_create_item:
 
             setattr(model_instance, field, self.kwargs_create_item[field])
@@ -711,7 +656,8 @@ class CenturionMixnPyTest(
             **self.kwargs_create_item,
         }    # Correct Values Returned
 
-        assert len(method_values) == len(model_instance._meta.fields)    # Fail-Safe to ensure test writer fills all fields
+        assert len(method_values) == len(model_instance._meta.fields)
+        # Fail-Safe to ensure test writer fills all fields
 
 
 
@@ -787,7 +733,6 @@ class CenturionMixnPyTest(
 
         reverse = mocker.patch('rest_framework.reverse._reverse', return_value = 'None')
 
-        model_instance.id = 1
         url_basename = f'v2:_api_{model_instance._meta.model_name}-detail'
 
         url = model_instance.get_url()
@@ -810,8 +755,6 @@ class CenturionMixnPyTest(
 
         test_value = settings.SITE_URL + site_path
 
-        model_instance.id = 1
-
         url = model_instance.get_url( relative = False)
 
         assert url == test_value
@@ -827,8 +770,6 @@ class CenturionMixnPyTest(
         site_path = '/module/page/1'
 
         reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
-
-        model_instance.id = 1
 
         url = model_instance.get_url( relative = True)
 
@@ -846,7 +787,6 @@ class CenturionMixnPyTest(
 
         reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
 
-        model_instance.id = 1
         model_instance.url_model_name = 'testmodel'
 
         url_basename = f'v2:_api_testmodel-detail'
@@ -866,13 +806,6 @@ class CenturionMixnPyTest(
         `self.get_audit_values()`.
         """
 
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # model_instance.objects = MockManager()
-
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
@@ -885,11 +818,6 @@ class CenturionMixnPyTest(
             username = 'centurion_abstract',
             password = 'password'
         )
-
-        # mocker.patch('core.mixins.centurion.Centurion.context', return_value = {
-        #     'user': user,
-        #     'logger': None
-        # })
 
         model_instance.context['user'] = user
 
@@ -913,13 +841,6 @@ class CenturionMixnPyTest(
         Ensure method `save` sets attribute `self._before` with an empty dict for new model
         """
 
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # model_instance.objects = MockManager()
-
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
@@ -930,11 +851,6 @@ class CenturionMixnPyTest(
             username = 'centurion_abstract',
             password = 'password'
         )
-
-        # mocker.patch('core.mixins.centurion.Centurion.context', return_value = {
-        #     'user': user,
-        #     'logger': None
-        # })
 
         model_instance.context['user'] = user
 
@@ -957,35 +873,16 @@ class CenturionMixnPyTest(
         `self.get_audit_values()`.
         """
 
-        # class MockManager:
-
-        #     class MockObj:
-
-        #         def get_audit_values(self):
-        #             return {}
-
-        #     def get(self, *args, **kwargs):
-        #         return self.MockObj()
-
         user = model_user.objects.create(
             username = 'centurion_abstract',
             password = 'password'
         )
 
-        # mocker.patch('core.mixins.centurion.Centurion.context', return_value = {
-        #     'user': user,
-        #     'logger': None
-        # })
-
         model_instance.context['user'] = user
-
-        # mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
-
-        model_instance.id = 1
 
         model_instance._audit_enabled = True
 
@@ -1016,29 +913,12 @@ class CenturionMixnPyTest(
             'id': 1
         }
 
-        # class MockManager:
-
-        #     class MockObj:
-
-        #         def get_audit_values(self):
-        #             return test_value
-
-        #     def get(self, *args, **kwargs):
-        #         return self.MockObj()
-
         user = model_user.objects.create(
             username = 'centurion_abstract',
             password = 'password'
         )
 
-        # mocker.patch('core.mixins.centurion.Centurion.context', return_value = {
-        #     'user': user,
-        #     'logger': None
-        # })
-
         model_instance.context['user'] = user
-
-        # mocker.patch('access.models.tenancy_abstract.TenancyAbstractModel.objects', new_callable=MockManager)
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -1051,8 +931,6 @@ class CenturionMixnPyTest(
         mocker.patch('django.db.models.base.Model.save', return_value = None)
 
         mocker.patch('core.mixins.centurion.Centurion.full_clean', return_value = None)
-
-        # mocker.patch('core.mixins.centurion.Centurion.get_audit_values', return_value = None)
 
         model_instance.save()
 
@@ -1148,13 +1026,6 @@ class CenturionMixnPyTest(
         Ensure method `save` calls `self.get_audit_values()` with the defined attributes.
         """
 
-        # class MockManager:
-
-        #     def get(*args, **kwargs):
-        #         return model_instance
-
-        # model_instance.objects = MockManager()
-
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
@@ -1165,11 +1036,6 @@ class CenturionMixnPyTest(
             username = 'centurion_abstract',
             password = 'password'
         )
-
-        # mocker.patch('core.mixins.centurion.Centurion.context', return_value = {
-        #     'user': user,
-        #     'logger': None
-        # })
 
         model_instance.context['user'] = user
 

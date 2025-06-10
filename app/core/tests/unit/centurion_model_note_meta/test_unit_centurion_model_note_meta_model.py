@@ -52,7 +52,6 @@ class MetaAbstractModelTestCases(
         model_instance.objects = MockManager()
         model_instance.model = None
 
-        # clean_fields = mocker.patch('core.models.centurion_notes.NoteMetaModel.clean_fields', return_value = None)
         with pytest.raises( ValidationError ) as e:
 
             model_instance.clean_fields()
@@ -127,7 +126,6 @@ class MetaAbstractModelInheritedCases(
         instance = note_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url_basename = f'v2:_api_centurionmodelnote_sub-detail'
@@ -158,7 +156,6 @@ class MetaAbstractModelInheritedCases(
         instance = note_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url = model_instance.get_url_kwargs()
@@ -185,7 +182,6 @@ class MetaAbstractModelInheritedCases(
         if type(note_model.organization) is not property:
             instance.organization = organization_one
 
-        model_instance.id = 1
         model_instance.model = instance
 
         model_instance.clean_fields()
@@ -203,7 +199,6 @@ class MetaAbstractModelPyTest(
         Ensure method `get_url_kwargs` returns the correct value.
         """
 
-        model_instance.id = 1
         model_instance.model = model_instance
 
         url = model_instance.get_url_kwargs()
