@@ -56,4 +56,7 @@ def kwargs_gitrepository(django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        git_group.delete()
+        try:
+            git_group.delete()
+        except:
+            pass

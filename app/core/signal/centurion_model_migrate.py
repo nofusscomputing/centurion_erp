@@ -98,8 +98,14 @@ def centurion_model_migrate(sender, **kwargs):
         {
             'app_label': 'devops',
             'model_name': 'GitHubRepository',
-            'history_model_name': None,
-            'notes_model_name': None
+            'history_model_name': 'GitHubHistory',
+            'notes_model_name': 'GitHubRepositoryNotes'
+        },
+        {
+            'app_label': 'devops',
+            'model_name': 'GitLabRepository',
+            'history_model_name': 'GitlabHistory',
+            'notes_model_name': 'GitLabRepositoryNotes'
         }
     ]
 

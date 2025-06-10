@@ -16,8 +16,8 @@ from core.tests.unit.centurion_model_note.test_unit_centurion_model_note_model i
 
 @pytest.mark.meta_models
 class MetaAbstractModelTestCases(
-    CenturionNoteModelInheritedCases,
     CenturionSubAbstractModelInheritedCases,
+    CenturionNoteModelInheritedCases,
 ):
 
 
@@ -52,7 +52,6 @@ class MetaAbstractModelTestCases(
         model_instance.objects = MockManager()
         model_instance.model = None
 
-        # clean_fields = mocker.patch('core.models.centurion_notes.NoteMetaModel.clean_fields', return_value = None)
         with pytest.raises( ValidationError ) as e:
 
             model_instance.clean_fields()
@@ -99,7 +98,7 @@ class MetaAbstractModelTestCases(
 class MetaAbstractModelInheritedCases(
     MetaAbstractModelTestCases,
 ):
-    pass
+    # pass
 
 
     @pytest.mark.xfail( reason = 'This model does not require a tag')
@@ -127,7 +126,6 @@ class MetaAbstractModelInheritedCases(
         instance = note_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url_basename = f'v2:_api_centurionmodelnote_sub-detail'
@@ -158,7 +156,6 @@ class MetaAbstractModelInheritedCases(
         instance = note_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url = model_instance.get_url_kwargs()
@@ -185,7 +182,6 @@ class MetaAbstractModelInheritedCases(
         if type(note_model.organization) is not property:
             instance.organization = organization_one
 
-        model_instance.id = 1
         model_instance.model = instance
 
         model_instance.clean_fields()
@@ -195,7 +191,25 @@ class MetaAbstractModelInheritedCases(
 class MetaAbstractModelPyTest(
     MetaAbstractModelTestCases,
 ):
-    pass
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'app_label': model_instance._meta.app_label,
+            'model_name': model_instance._meta.model_name,
+            'model_id': model_instance.model.id,
+            'pk': model_instance.id,
+        }
+
 
     @pytest.mark.xfail( reason = 'This model is an abstract model')
     def test_model_tag_defined(self, model):

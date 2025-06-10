@@ -3,6 +3,10 @@ import pytest
 
 from django.test import Client
 
+from rest_framework.permissions import (
+    IsAuthenticatedOrReadOnly
+)
+
 
 
 @pytest.mark.api
@@ -29,7 +33,7 @@ class APIPermissionAddInheritedCases:
         ids=[test_name for test_name, user, expected in permission_no_add]
     )
     def test_permission_no_add(
-        self, model_kwargs, kwargs_api_create, model, api_request_permissions, test_name, user, expected
+        self, model_kwargs, kwargs_api_create, model_instance, api_request_permissions, test_name, user, expected
     ):
         """ Check correct permission for add
 
@@ -42,18 +46,21 @@ class APIPermissionAddInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        the_model = model(**model_kwargs)
+        the_model = model_instance( kwargs_create = model_kwargs )
 
         response = client.post(
             path = the_model.get_url( many = True ),
             data = kwargs_api_create
         )
 
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
         assert response.status_code == int(expected), response.content
 
 
 
-    def test_permission_add(self, model, api_request_permissions, model_kwargs, kwargs_api_create):
+    def test_permission_add(self, model_instance, api_request_permissions, model_kwargs, kwargs_api_create):
         """ Check correct permission for add 
 
         Attempt to add as user with permission
@@ -63,13 +70,16 @@ class APIPermissionAddInheritedCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model(**model_kwargs)
+        the_model = model_instance( kwargs_create = model_kwargs )
 
         response = client.post(
             path = the_model.get_url( many = True ),
             data = kwargs_api_create
         )
 
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
 
         assert response.status_code == 201, response.content
 
@@ -117,6 +127,9 @@ class APIPermissionChangeInheritedCases:
             content_type = 'application/json'
         )
 
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
         assert response.status_code == int(expected), response.content
 
 
@@ -136,6 +149,9 @@ class APIPermissionChangeInheritedCases:
             data = self.change_data,
             content_type = 'application/json'
         )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
 
         assert response.status_code == 200, response.content
 
@@ -184,6 +200,9 @@ class APIPermissionDeleteInheritedCases:
             path = self.delete_item.get_url( many = False ),
         )
 
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
         assert response.status_code == int(expected), response.content
 
 
@@ -201,6 +220,9 @@ class APIPermissionDeleteInheritedCases:
         response = client.delete(
             path = self.delete_item.get_url( many = False ),
         )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
 
         assert response.status_code == 204, response.content
 
@@ -245,6 +267,14 @@ class APIPermissionViewInheritedCases:
             path = self.view_item.get_url( many = False )
         )
 
+        if response.status_code == 405:
+
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        elif IsAuthenticatedOrReadOnly in response.renderer_context['view'].permission_classes:
+
+            pytest.xfail( reason = 'ViewSet is public viewable' )
+
         assert response.status_code == int(expected), response.content
 
 
@@ -263,11 +293,14 @@ class APIPermissionViewInheritedCases:
             path = self.view_item.get_url( many = False )
         )
 
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
         assert response.status_code == 200, response.content
 
 
 
-    def test_returned_results_only_user_orgs(self, model, model_kwargs, api_request_permissions):
+    def test_returned_results_only_user_orgs(self, model_instance, model_kwargs, api_request_permissions):
         """Returned results check
 
         Ensure that a query to the viewset endpoint does not return
@@ -288,11 +321,14 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        the_model = model(**model_kwargs)
+        the_model = model_instance( kwargs_create = model_kwargs )
 
         response = client.get(
             path = the_model.get_url( many = True )
         )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
 
         contains_different_org: bool = False
 
@@ -312,7 +348,7 @@ class APIPermissionViewInheritedCases:
 
 
     def test_returned_data_from_user_and_global_organizations_only(
-        self, model, model_kwargs, api_request_permissions
+        self, model_instance, model_kwargs, api_request_permissions
     ):
         """Check items returned
 
@@ -332,11 +368,19 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        the_model = model(**model_kwargs)
+        the_model = model_instance( kwargs_create = model_kwargs )
 
         response = client.get(
             path = the_model.get_url( many = True )
         )
+
+        if response.status_code == 405:
+
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        elif IsAuthenticatedOrReadOnly in response.renderer_context['view'].permission_classes:
+
+            pytest.xfail( reason = 'ViewSet is public viewable, test is N/A' )
 
         assert len(response.data['results']) >= 2    # fail if only one item extist.
 

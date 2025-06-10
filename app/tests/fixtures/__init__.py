@@ -94,6 +94,12 @@ from .model_githubrepository import (
     serializer_githubrepository,
 )
 
+from .model_gitlabrepository import (
+    kwargs_gitlabrepository,
+    model_gitlabrepository,
+    serializer_gitlabrepository,
+)
+
 from .model_gitrepository import (
     kwargs_gitrepository,
     model_gitrepository,

@@ -8,7 +8,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_checkins
+@pytest.mark.model_checkin
 class CheckInModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
@@ -35,7 +35,10 @@ class CheckInModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'model_notes': {
             'blank': models.fields.NOT_PROVIDED,
             'default': models.fields.NOT_PROVIDED,
@@ -97,3 +100,18 @@ class CheckInModelPyTest(
         """
 
         assert model.model_tag is not None
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'organization_id': model_instance.organization.id,
+            'software_id': model_instance.software.id
+        }

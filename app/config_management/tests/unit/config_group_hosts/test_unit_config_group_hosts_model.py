@@ -25,10 +25,16 @@ class ConfigGroupHostModelTestCases(
                 'type': models.NOT_PROVIDED,
                 'value': models.NOT_PROVIDED,
             },
+            '_notes_enabled': {
+                'value': False,
+            },
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'host': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
@@ -71,8 +77,11 @@ class ConfigGroupHostModelInheritedCases(
 
 
 @pytest.mark.module_config_management
-@pytest.mark.configgrouphosts
 class ConfigGroupHostModelPyTest(
     ConfigGroupHostModelTestCases,
 ):
-    pass
+
+
+    def test_method_get_url_returns_str(self, mocker, model_instance):
+        
+        pytest.xfail( reason = 'This model has no endpoint' )

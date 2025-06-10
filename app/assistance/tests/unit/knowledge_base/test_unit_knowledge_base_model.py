@@ -9,7 +9,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_knowledge_base
+@pytest.mark.model_knowledgebase
 class KnowledgeBaseModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
@@ -26,7 +26,10 @@ class KnowledgeBaseModelTestCases(
         }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'title': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,

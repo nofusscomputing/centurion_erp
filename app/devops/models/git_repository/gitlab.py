@@ -11,6 +11,8 @@ class GitLabRepository(
 
     _is_submodel = True
 
+    documentation = ''
+
 
     class Meta(GitRepository.Meta):
 
@@ -34,8 +36,6 @@ class GitLabRepository(
         verbose_name = 'Visibility',
     )
 
-
-    documentation = ''
 
     page_layout: dict = [
         {

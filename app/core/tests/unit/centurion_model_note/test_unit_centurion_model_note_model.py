@@ -14,7 +14,10 @@ class CenturionNoteModelTestCases(
 ):
 
 
-    parameterized_class_attributes = {
+    @property
+    def parameterized_class_attributes(self):
+        
+        return {
         '_audit_enabled': {
             'value': False,
         },
@@ -32,7 +35,10 @@ class CenturionNoteModelTestCases(
     }
 
 
-    parameterized_model_fields = {
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
         'body': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
@@ -147,3 +153,12 @@ class CenturionNoteModelPyTest(
         """
 
         assert model.model_tag is not None
+
+
+    def test_method_get_url_returns_str(self, model, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_url` returns the url as str
+        """
+
+        pytest.xfail( reason = 'Test not required as model does not have direct endpoint.' )

@@ -32,7 +32,6 @@ class CenturionSubAbstractModelTestCases(
 
         reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
 
-        model_instance.id = 1
 
         model_instance.model = model_instance
 
@@ -69,7 +68,6 @@ class CenturionSubAbstractModelTestCases(
         Ensure method `get_url_kwargs` returns the correct value.
         """
 
-        model_instance.id = 1
         model_instance.model = model_instance
 
         url = model_instance.get_url_kwargs()

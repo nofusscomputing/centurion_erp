@@ -13,8 +13,8 @@ from core.tests.unit.centurion_audit.test_unit_centurion_audit_model import (
 
 @pytest.mark.meta_models
 class MetaAbstractModelTestCases(
-    CenturionAuditModelInheritedCases,
     CenturionSubAbstractModelInheritedCases,
+    CenturionAuditModelInheritedCases,
 ):
 
 
@@ -97,7 +97,6 @@ class MetaAbstractModelInheritedCases(
         instance = audit_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url_basename = f'v2:_api_centurionaudit_sub-detail'
@@ -128,7 +127,6 @@ class MetaAbstractModelInheritedCases(
         instance = audit_model()
         instance.id = 1
 
-        model_instance.id = 1
         model_instance.model = instance
 
         url = model_instance.get_url_kwargs()
@@ -232,3 +230,22 @@ class MetaAbstractModelPyTest(
 
 
         assert e.value.code == 'no_model_supplied'
+
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'app_label': model_instance._meta.app_label,
+            'model_name': model_instance._meta.model_name,
+            'model_id': model_instance.model.id,
+            'pk': model_instance.id,
+        }
