@@ -25,6 +25,9 @@ class ConfigGroupHostModelTestCases(
                 'type': models.NOT_PROVIDED,
                 'value': models.NOT_PROVIDED,
             },
+            '_notes_enabled': {
+                'value': False,
+            },
         }
 
 
@@ -71,8 +74,11 @@ class ConfigGroupHostModelInheritedCases(
 
 
 @pytest.mark.module_config_management
-@pytest.mark.configgrouphosts
 class ConfigGroupHostModelPyTest(
     ConfigGroupHostModelTestCases,
 ):
-    pass
+
+
+    def test_method_get_url_returns_str(self, mocker, model_instance):
+        
+        pytest.xfail( reason = 'This model has no endpoint' )
