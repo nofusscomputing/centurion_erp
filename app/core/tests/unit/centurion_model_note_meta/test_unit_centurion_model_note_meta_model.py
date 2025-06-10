@@ -16,8 +16,8 @@ from core.tests.unit.centurion_model_note.test_unit_centurion_model_note_model i
 
 @pytest.mark.meta_models
 class MetaAbstractModelTestCases(
-    CenturionNoteModelInheritedCases,
     CenturionSubAbstractModelInheritedCases,
+    CenturionNoteModelInheritedCases,
 ):
 
 
@@ -99,7 +99,7 @@ class MetaAbstractModelTestCases(
 class MetaAbstractModelInheritedCases(
     MetaAbstractModelTestCases,
 ):
-    pass
+    # pass
 
 
     @pytest.mark.xfail( reason = 'This model does not require a tag')
@@ -195,7 +195,7 @@ class MetaAbstractModelInheritedCases(
 class MetaAbstractModelPyTest(
     MetaAbstractModelTestCases,
 ):
-    pass
+    # pass
 
     @pytest.mark.xfail( reason = 'This model is an abstract model')
     def test_model_tag_defined(self, model):
