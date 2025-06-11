@@ -86,7 +86,7 @@ router.register(
 router.register(
     prefix = 'software/(?P<software_id>[0-9]+)/feature_flag',
     viewset = software_enable_feature_flag.ViewSet,
-    basename = '_api_v2_feature_flag_software'
+    basename = '_api_softwareenablefeatureflag'
 )
 
 
