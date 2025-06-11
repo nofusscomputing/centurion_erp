@@ -59,7 +59,7 @@ router.register(
 )
 router.register(
     prefix = 'operating_system', viewset = operating_system_v2.ViewSet,
-    basename = '_api_v2_operating_system'
+    basename = '_api_operatingsystem'
 )
 router.register(
     prefix = 'operating_system/(?P<operating_system_id>[0-9]+)/installs',

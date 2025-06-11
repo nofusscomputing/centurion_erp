@@ -132,7 +132,7 @@ class ViewSet( ModelViewSet ):
     def get_back_url(self) -> str:
 
 
-        return reverse('v2:_api_v2_operating_system-detail',
+        return reverse('v2:_api_operatingsystem-detail',
             request = self.request,
             kwargs = {
                 'pk': self.kwargs['operating_system_id']

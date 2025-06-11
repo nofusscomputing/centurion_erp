@@ -79,7 +79,7 @@ class OperatingSystemAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_operating_system-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_operatingsystem-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
