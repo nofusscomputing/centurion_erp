@@ -45,6 +45,8 @@ def model_kwarg_data():
             elif(
                 getattr(model, field).field.unique
                 and not isinstance(getattr(model, field).field, models.UUIDField)
+                and not isinstance(getattr(model, field).field, models.ForeignKey)
+
             ):
 
                 value = 'a' + random_str
