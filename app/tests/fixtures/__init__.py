@@ -140,6 +140,7 @@ from .model_software import (
 
 from .model_softwareenablefeatureflag import (
     model_softwareenablefeatureflag,
+    kwargs_softwareenablefeatureflag,
 )
 
 from .model_team import (
