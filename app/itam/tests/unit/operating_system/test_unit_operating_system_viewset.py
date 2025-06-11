@@ -8,6 +8,8 @@ from itam.viewsets.operating_system import ViewSet
 
 
 
+@pytest.mark.model_operatingsystem
+@pytest.mark.module_itam
 class OperatingSystemViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
