@@ -106,6 +106,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'GitLabRepository',
             'history_model_name': 'GitlabHistory',
             'notes_model_name': 'GitLabRepositoryNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'Device',
+            'history_model_name': 'DeviceHistory',
+            'notes_model_name': 'DeviceNotes'
         }
     ]
 
