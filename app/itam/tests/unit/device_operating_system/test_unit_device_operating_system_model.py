@@ -9,8 +9,8 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_devicesoftware
-class DeviceSoftwareModelTestCases(
+@pytest.mark.model_deviceoperatingsystem
+class DeviceOperatingSystemModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
 
@@ -48,37 +48,24 @@ class DeviceSoftwareModelTestCases(
                 'default': models.fields.NOT_PROVIDED,
                 'field_type': models.ForeignKey,
                 'null': False,
-                'unique': False,
+                'unique': True,
             },
-            'software': {
+            'operating_system_version': {
                 'blank': False,
                 'default': models.fields.NOT_PROVIDED,
                 'field_type': models.ForeignKey,
                 'null': False,
                 'unique': False,
             },
-            'action': {
-                'blank': True,
+            'version': {
+                'blank': False,
                 'default': models.fields.NOT_PROVIDED,
                 'field_type': models.CharField,
-                'null': True,
+                'length': 15,
+                'null': False,
                 'unique': False,
             },
-            'version': {
-                'blank': True,
-                'default': models.fields.NOT_PROVIDED,
-                'field_type': models.ForeignKey,
-                'null': True,
-                'unique': False,
-            },
-            'installedversion': {
-                'blank': True,
-                'default': models.fields.NOT_PROVIDED,
-                'field_type': models.ForeignKey,
-                'null': True,
-                'unique': False,
-            },
-            'installed': {
+            'installdate': {
                 'blank': True,
                 'default': models.fields.NOT_PROVIDED,
                 'field_type': models.DateTimeField,
@@ -96,16 +83,15 @@ class DeviceSoftwareModelTestCases(
 
 
 
-class DeviceSoftwareModelInheritedCases(
-    DeviceSoftwareModelTestCases,
+class DeviceOperatingSystemModelInheritedCases(
+    DeviceOperatingSystemModelTestCases,
 ):
     pass
 
 
-
 @pytest.mark.module_itam
-class DeviceSoftwareModelPyTest(
-    DeviceSoftwareModelTestCases,
+class DeviceOperatingSystemModelPyTest(
+    DeviceOperatingSystemModelTestCases,
 ):
 
     def test_method_get_url_kwargs(self, mocker, model_instance, model_kwargs):

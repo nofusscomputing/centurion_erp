@@ -14,6 +14,8 @@ class DeviceModel(
     CenturionModel
 ):
 
+    model_tag = 'device_model'
+
 
     class Meta:
 
@@ -37,11 +39,10 @@ class DeviceModel(
 
     manufacturer = models.ForeignKey(
         Manufacturer,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Manufacturer this model is from',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Manufacturer'
     )
 

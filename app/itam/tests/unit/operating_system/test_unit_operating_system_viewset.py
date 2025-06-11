@@ -1,3 +1,4 @@
+import pytest
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +9,8 @@ from itam.viewsets.operating_system import ViewSet
 
 
 
+@pytest.mark.model_operatingsystem
+@pytest.mark.module_itam
 class OperatingSystemViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -15,7 +18,7 @@ class OperatingSystemViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_operating_system'
+    route_name = 'v2:_api_operatingsystem'
 
 
     @classmethod

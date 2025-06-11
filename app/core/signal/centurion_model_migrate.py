@@ -106,6 +106,30 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'GitLabRepository',
             'history_model_name': 'GitlabHistory',
             'notes_model_name': 'GitLabRepositoryNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'Device',
+            'history_model_name': 'DeviceHistory',
+            'notes_model_name': 'DeviceNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'DeviceModel',
+            'history_model_name': 'DeviceModelHistory',
+            'notes_model_name': 'DeviceModelNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'DeviceType',
+            'history_model_name': 'DeviceTypeHistory',
+            'notes_model_name': 'DeviceTypeNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'OperatingSystem',
+            'history_model_name': 'OperatingSystemHistory',
+            'notes_model_name': 'OperatingSystemNotes'
         }
     ]
 
@@ -186,7 +210,9 @@ def centurion_model_migrate(sender, **kwargs):
                             print(f'        Removed {history_model_name}={id} from database.')
 
                         except Exception as e:
-                            print(f"        Exception {e.__class__.__name__} occured:"+"\n            "+f'{e}')
+                            print(
+                                f"        Exception {e.__class__.__name__} occured:"+"\n" \
+                                    "            "+f'{e}')
 
 
                 except LookupError as e:

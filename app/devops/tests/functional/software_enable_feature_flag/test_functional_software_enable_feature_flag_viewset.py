@@ -33,7 +33,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_feature_flag_software'
+    url_name = '_api_softwareenablefeatureflag'
 
     change_data = {'enabled': False}
 

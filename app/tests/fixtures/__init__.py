@@ -72,6 +72,16 @@ from .model_devicemodel import (
     model_devicemodel,
 )
 
+from .model_deviceoperatingsystem import (
+    kwargs_deviceoperatingsystem,
+    model_deviceoperatingsystem,
+)
+
+from .model_devicesoftware import (
+    kwargs_devicesoftware,
+    model_devicesoftware,
+)
+
 from .model_devicetype import (
     kwargs_devicetype,
     model_devicetype,
@@ -129,6 +139,16 @@ from .model_manufacturer import (
     model_manufacturer,
 )
 
+from .model_operatingsystem import (
+    kwargs_operatingsystem,
+    model_operatingsystem,
+)
+
+from .model_operatingsystemversion import (
+    kwargs_operatingsystemversion,
+    model_operatingsystemversion,
+)
+
 from .model_permission import (
     model_permission,
 )
@@ -140,6 +160,12 @@ from .model_software import (
 
 from .model_softwareenablefeatureflag import (
     model_softwareenablefeatureflag,
+    kwargs_softwareenablefeatureflag,
+)
+
+from .model_softwareversion import (
+    kwargs_softwareversion,
+    model_softwareversion,
 )
 
 from .model_team import (

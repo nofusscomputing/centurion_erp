@@ -9,7 +9,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
-@pytest.mark.model_gitgroup
+@pytest.mark.model_device
 class DeviceModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
@@ -115,7 +115,7 @@ class DeviceModelInheritedCases(
     pass
 
 
-
+@pytest.mark.module_itam
 class DeviceModelPyTest(
     DeviceModelTestCases,
 ):

@@ -15,11 +15,12 @@ def model_manufacturer():
 def kwargs_manufacturer(kwargs_centurionmodel):
 
     random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    random_str = str(random_str).replace(
+            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
     kwargs = {
         **kwargs_centurionmodel.copy(),
-        'name': 'man' + str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', ''),
+        'name': 'man' + random_str,
     }
 
     yield kwargs.copy()

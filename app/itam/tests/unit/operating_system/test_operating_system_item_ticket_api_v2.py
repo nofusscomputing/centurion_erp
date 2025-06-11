@@ -1,3 +1,4 @@
+import pytest
 
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -10,6 +11,8 @@ from itam.models.operating_system import OperatingSystem
 
 
 
+@pytest.mark.model_operatingsystem
+@pytest.mark.module_itam
 class OperatingSystemItemTicketAPI(
     ItemTicketAPI,
     TestCase,

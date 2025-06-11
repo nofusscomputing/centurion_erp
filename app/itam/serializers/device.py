@@ -62,7 +62,7 @@ class DeviceModelSerializer(
             'device_model': reverse("v2:_api_devicemodel-list", request=self._context['view'].request),
             'device_type': reverse("v2:_api_devicetype-list", request=self._context['view'].request),
             'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
-            'operating_system': reverse("v2:_api_device_operating_system-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'operating_system': reverse("v2:_api_deviceoperatingsystem-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'service': reverse("v2:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'software': reverse("v2:_api_devicesoftware-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'tickets': reverse(

@@ -58,7 +58,7 @@ class SoftwareModelSerializer(
         get_url.update({
             'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?software=true',
             'feature_flagging': reverse(
-                "v2:_api_v2_feature_flag_software-list",
+                "v2:_api_softwareenablefeatureflag-list",
                 kwargs={'software_id': item.pk},
                 request=self._context['view'].request
             ) + '',

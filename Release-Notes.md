@@ -1,5 +1,15 @@
 ## Version 1.18.0
 
+- Added new model for History
+
+    !!! info
+        Migration of the old history tables to the new history tables occurs as part of post migration. As such the time it will take to migrate the history is dependent upon how many history entries per model. This should be planned for when upgrading to this version. if for some reason the migration is interrupted, you can safely restart it again by running the migrate command.
+
+- Added new model for notes
+
+    !!! info
+        Migration of the old notes tables to the new note tables occurs as part of post migration. As such the time it will take to migrate the history is dependent upon how many history entries per model. This should be planned for when upgrading to this version. if for some reason the migration is interrupted, you can safely restart it again by running the migrate command.
+
 - Removed Django UI
 
     [UI](https://github.com/nofusscomputing/centurion_erp) must be deployed seperatly.

@@ -44,7 +44,7 @@ router.register(
 router.register(
     prefix = 'device/(?P<device_id>[0-9]+)/operating_system',
     viewset = device_operating_system.ViewSet,
-    basename = '_api_device_operating_system')
+    basename = '_api_deviceoperatingsystem')
 router.register(
     prefix = 'device/(?P<device_id>[0-9]+)/software', viewset = device_software_v2.ViewSet,
     basename = '_api_devicesoftware'
@@ -59,7 +59,7 @@ router.register(
 )
 router.register(
     prefix = 'operating_system', viewset = operating_system_v2.ViewSet,
-    basename = '_api_v2_operating_system'
+    basename = '_api_operatingsystem'
 )
 router.register(
     prefix = 'operating_system/(?P<operating_system_id>[0-9]+)/installs',
@@ -86,7 +86,7 @@ router.register(
 router.register(
     prefix = 'software/(?P<software_id>[0-9]+)/feature_flag',
     viewset = software_enable_feature_flag.ViewSet,
-    basename = '_api_v2_feature_flag_software'
+    basename = '_api_softwareenablefeatureflag'
 )
 
 

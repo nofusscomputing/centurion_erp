@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -19,6 +18,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_devicetype
+@pytest.mark.module_itam
 class DeviceTypeAPI(
     TestCase,
     APITenancyObject
