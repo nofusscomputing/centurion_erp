@@ -4,12 +4,9 @@ from datetime import datetime
 
 from django.db import models
 
-from rest_framework.reverse import reverse
+from access.fields import AutoLastModifiedField
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
-
-from core.lib.feature_not_used import FeatureNotUsed
+from core.models.centurion import CenturionModel
 
 from devops.models.check_ins import CheckIn
 
@@ -18,10 +15,14 @@ from itam.models.software import Software
 
 
 class SoftwareEnableFeatureFlag(
-    TenancyObject
+    CenturionModel
 ):
 
-    save_model_history: bool = False
+    _audit_enabled = False
+
+    _notes_enabled = False
+
+    documentation = ''
 
 
     class Meta:
@@ -41,14 +42,6 @@ class SoftwareEnableFeatureFlag(
         verbose_name_plural = 'Software Feature Flaggings'
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Primary key of the entry',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     software = models.ForeignKey(
         Software,
         blank = False,
@@ -66,11 +59,7 @@ class SoftwareEnableFeatureFlag(
         verbose_name = 'Enabled'
     )
 
-    created = AutoCreatedField()
-
     modified = AutoLastModifiedField()
-
-    is_global = None    # Field not requied.
 
     model_notes = None
 
@@ -84,8 +73,6 @@ class SoftwareEnableFeatureFlag(
             enabled = 'Enabled'
 
         return str(enabled)
-
-    documentation = ''
 
     page_layout: dict = []
 
@@ -130,24 +117,11 @@ class SoftwareEnableFeatureFlag(
         return len(unique_deployment)
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        return {
+        kwargs = super().get_url_kwargs( many = many )
+        kwargs.update({
             'software_id': self.software.pk,
-            'pk': self.pk
-        }
+        })
 
-    
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_feature_flag_software-detail", request=request, kwargs = self.get_url_kwargs() )
-
-        return reverse(f"v2:" + self.get_app_namespace() + f"_api_v2_feature_flag_software-detail", kwargs = self.get_url_kwargs() )
-
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        return kwargs
