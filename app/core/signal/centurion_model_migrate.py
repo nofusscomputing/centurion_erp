@@ -124,6 +124,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'DeviceType',
             'history_model_name': 'DeviceTypeHistory',
             'notes_model_name': 'DeviceTypeNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'OperatingSystem',
+            'history_model_name': 'OperatingSystemHistory',
+            'notes_model_name': 'OperatingSystemNotes'
         }
     ]
 
