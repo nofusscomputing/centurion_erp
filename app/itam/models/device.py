@@ -685,8 +685,13 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         return history
 
 
-class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
+class DeviceOperatingSystem(
+    CenturionModel,
+):
 
+    _audit_enabled = False
+
+    _notes_enabled = False
 
     class Meta:
 
@@ -698,6 +703,7 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
         verbose_name_plural = 'Device Operating Systems'
 
+    model_notes = None
 
     device = models.OneToOneField(
         Device,
@@ -714,9 +720,9 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         blank = False,
         help_text = 'Operating system version',
         null = False,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Operating System/Version',
-        
+
     )
 
     version = models.CharField(
@@ -729,7 +735,6 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
     installdate = models.DateTimeField(
         blank = True,
-        default = None,
         help_text = 'Date and time detected as installed',
         null = True,
         verbose_name = 'Install Date',
@@ -762,35 +767,19 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
     ]
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        return {
+        kwargs = super().get_url_kwargs( many = many )
+
+        kwargs.update({
             'device_id': self.device.id,
-            'pk': self.pk
-        }
+        })
 
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        return kwargs
 
 
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.device
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_operating_system_history import DeviceOperatingSystemHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceOperatingSystemHistory,
-        )
-
-
-        return history
