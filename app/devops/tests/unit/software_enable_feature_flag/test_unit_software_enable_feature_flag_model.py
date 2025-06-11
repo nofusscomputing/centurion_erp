@@ -1,46 +1,104 @@
-from django.test import TestCase
+import pytest
 
-from access.models.tenant import Tenant as Organization
- 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from django.db import models
+
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
-
-from itam.models.software import Software
 
 
-
-class Model(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_softwareenablefeatureflag
+class SoftwareEnableFeatureFlagModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = SoftwareEnableFeatureFlag
 
-    should_model_history_be_saved: bool = False
+    @property
+    def parameterized_class_attributes(self):
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a device
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
-        """
-
-        self.organization = Organization.objects.create(name='test_org')
-
-        self.kwargs_item_create = {
-            'organization': self.organization,
-            'software': Software.objects.create(
-                organization = self.organization,
-                name = 'soft',
-            ),
-            'enabled': True
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': models.NOT_PROVIDED,
+                'value': models.NOT_PROVIDED
+            },
         }
 
-        super().setUpTestData()
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+        'model_notes': {
+            'blank': models.fields.NOT_PROVIDED,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.fields.NOT_PROVIDED,
+            'null': models.fields.NOT_PROVIDED,
+            'unique': models.fields.NOT_PROVIDED,
+        },
+        'software': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': False,
+            'unique': False,
+        },
+        'enabled': {
+            'blank': False,
+            'default': False,
+            'field_type': models.IntegerField,
+            'null': False,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
+
+
+
+class SoftwareEnableFeatureFlagModelInheritedCases(
+    SoftwareEnableFeatureFlagModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_devops
+class SoftwareEnableFeatureFlagModelPyTest(
+    SoftwareEnableFeatureFlagModelTestCases,
+):
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, model_kwargs):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'software_id': model_kwargs['software'].id,
+            'pk': model_instance.id
+        }
+
+
+    def test_model_tag_defined(self, model):
+        """ Model Tag
+
+        Ensure that the model has a tag defined.
+        """
+
+        pytest.xfail( reason = 'model does not require' )
