@@ -15,7 +15,7 @@ class OperatingSystemViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_operating_system'
+    route_name = 'v2:_api_operatingsystem'
 
 
     @classmethod
