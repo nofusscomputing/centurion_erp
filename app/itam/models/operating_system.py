@@ -1,15 +1,11 @@
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
-from rest_framework.reverse import reverse
-
-from access.fields import *
+from access.fields import AutoLastModifiedField, AutoCreatedField, AutoSlugField
 from access.models.tenancy import TenancyObject
 
 from core.mixins.history_save import SaveHistory
+from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 
 
@@ -28,7 +24,7 @@ class OperatingSystemCommonFields(TenancyObject, models.Model):
 
     created = AutoCreatedField()
 
-    modified = AutoLastModifiedField()
+    # modified = AutoLastModifiedField()
 
 
 
@@ -37,20 +33,23 @@ class OperatingSystemFieldsName(OperatingSystemCommonFields):
     class Meta:
         abstract = True
 
-    name = models.CharField(
-        blank = False,
-        help_text = 'Name of this item',
-        max_length = 50,
-        unique = True,
-        verbose_name = 'Name'
-    )
+    # name = models.CharField(
+    #     blank = False,
+    #     help_text = 'Name of this item',
+    #     max_length = 50,
+    #     unique = True,
+    #     verbose_name = 'Name'
+    # )
 
     slug = AutoSlugField()
 
 
 
-class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
+class OperatingSystem(
+    CenturionModel
+):
 
+    model_tag = 'operating_system'
 
     class Meta:
 
@@ -66,12 +65,21 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
     publisher = models.ForeignKey(
         Manufacturer,
         blank = True,
-        default = None,
         help_text = 'Who publishes this Operating System',
         null = True,
-        on_delete = models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Publisher'
     )
+
+    name = models.CharField(
+        blank = False,
+        help_text = 'Name of this item',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: dict = [
@@ -161,42 +169,20 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
     ]
 
 
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_operating_system-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_operating_system-detail", kwargs={'pk': self.id})
-
-
     def __str__(self):
 
         return self.name
 
-    def save_history(self, before: dict, after: dict) -> bool:
 
-        from itam.models.operating_system_history import OperatingSystemHistory
+    def get_organization(self):
 
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = OperatingSystemHistory,
-        )
-
-
-        return history
+        return self.organization
 
 
 
-@receiver(post_delete, sender=OperatingSystem, dispatch_uid='operating_system_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
-
-    deleted_model.send(sender='operating_system_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM)
-
-
-
-class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
+class OperatingSystemVersion(
+    OperatingSystemCommonFields, SaveHistory
+):
 
 
     class Meta:
@@ -224,6 +210,9 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         unique = False,
         verbose_name = 'Major Version',
     )
+
+    modified = AutoLastModifiedField()
+
 
     page_layout: list = [
         {
