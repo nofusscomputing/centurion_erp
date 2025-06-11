@@ -31,6 +31,7 @@ class DeviceType(
     CenturionModel,
 ):
 
+    model_tag = 'device_type'
 
     class Meta:
 
