@@ -20,10 +20,10 @@ class DeviceOperatingSystemModelTestCases(
 
         return {
             '_audit_enabled': {
-                'value': models.fields.NOT_PROVIDED
+                'value': False
             },
             '_notes_enabled': {
-                'value': models.fields.NOT_PROVIDED
+                'value': False
             },
             'model_tag': {
                 'type': models.fields.NOT_PROVIDED,

@@ -77,6 +77,11 @@ from .model_deviceoperatingsystem import (
     model_deviceoperatingsystem,
 )
 
+from .model_devicesoftware import (
+    kwargs_devicesoftware,
+    model_devicesoftware,
+)
+
 from .model_devicetype import (
     kwargs_devicetype,
     model_devicetype,
@@ -156,6 +161,11 @@ from .model_software import (
 from .model_softwareenablefeatureflag import (
     model_softwareenablefeatureflag,
     kwargs_softwareenablefeatureflag,
+)
+
+from .model_softwareversion import (
+    kwargs_softwareversion,
+    model_softwareversion,
 )
 
 from .model_team import (

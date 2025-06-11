@@ -1,68 +1,141 @@
 import pytest
 
-from django.test import TestCase
+from django.db import models
 
-from access.models.tenant import Tenant as Organization
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itam.models.device import Device, DeviceSoftware
-from itam.models.software import Software
 
 
-
-@pytest.mark.skip( reason = 'to be refactored' )
-class DeviceSoftwareModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_devicesoftware
+class DeviceSoftwareModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = DeviceSoftware
 
+    @property
+    def parameterized_class_attributes(self):
 
-    @classmethod
-    def setUpTestData(self):
-        """ Setup Test
-
-        """
-
-        self.organization = Organization.objects.create(name='test_org')
-
-
-        self.parent_item = Device.objects.create(
-            organization = self.organization,
-            name = 'device_name'
-        )
-
-        self.software_item = Software.objects.create(
-            organization = self.organization,
-            name = 'software_name',
-        )
-
-        self.kwargs_item_create = {
-            'software': self.software_item,
-            'device': self.parent_item,
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': models.fields.NOT_PROVIDED,
+                'value': models.fields.NOT_PROVIDED
+            },
         }
 
-        super().setUpTestData()
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            'model_notes': {
+                'blank': models.fields.NOT_PROVIDED,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.NOT_PROVIDED,
+                'null': models.fields.NOT_PROVIDED,
+                'unique': models.fields.NOT_PROVIDED,
+            },
+            'device': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': False,
+                'unique': False,
+            },
+            'software': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': False,
+                'unique': False,
+            },
+            'action': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'null': True,
+                'unique': False,
+            },
+            'version': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            'installedversion': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            'installed': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': True,
+                'unique': False,
+            },
+            'modified': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': False,
+                'unique': False,
+            },
+        }
 
 
 
-    def test_model_has_property_parent_object(self):
-        """ Check if model contains 'parent_object'
+class DeviceSoftwareModelInheritedCases(
+    DeviceSoftwareModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_itam
+class DeviceSoftwareModelPyTest(
+    DeviceSoftwareModelTestCases,
+):
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, model_kwargs):
+        """Test Class Method
         
-            This is a required property for all models that have a parent
+        Ensure method `get_url_kwargs` returns the correct value.
         """
 
-        assert hasattr(self.model, 'parent_object')
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'device_id': model_kwargs['device'].id,
+            'pk': model_instance.id
+        }
 
 
-    def test_model_property_parent_object_returns_object(self):
-        """ Check if model contains 'parent_object'
-        
-            This is a required property for all models that have a parent
+    def test_model_tag_defined(self, model):
+        """ Model Tag
+
+        Ensure that the model has a tag defined.
         """
 
-        assert self.item.parent_object == self.parent_item
+        pytest.xfail( reason = 'model does not require' )
+
+
+    def test_method_value_not_default___str__(self, model, model_instance ):
+        """Test Method
+
+        Ensure method `__str__` does not return the default value.
+        """
+
+        pytest.xfail( reason = 'model does not require' )

@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -9,6 +11,8 @@ from itam.viewsets.device_software import ViewSet
 
 
 
+@pytest.mark.model_devicesoftware
+@pytest.mark.module_itam
 class DeviceSoftwareViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
