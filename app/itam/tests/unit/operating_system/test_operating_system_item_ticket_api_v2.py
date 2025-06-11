@@ -10,6 +10,8 @@ from itam.models.operating_system import OperatingSystem
 
 
 
+@pytest.mark.model_operatingsystem
+@pytest.mark.module_itam
 class OperatingSystemItemTicketAPI(
     ItemTicketAPI,
     TestCase,
