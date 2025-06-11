@@ -14,11 +14,8 @@ from access.fields import AutoLastModifiedField
 from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
-from core.lib.feature_not_used import FeatureNotUsed
-from core.mixins.history_save import SaveHistory
 from core.models.centurion import CenturionModel
 
-from itam.models.device_common import DeviceCommonFields
 from itam.models.device_models import DeviceModel
 from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
@@ -537,8 +534,15 @@ class Device(
 
 
 
-class DeviceSoftware(DeviceCommonFields, SaveHistory):
+class DeviceSoftware(
+    CenturionModel,
+):
     """ A way for the device owner to configure software to install/remove """
+
+    _audit_enabled = False
+
+    _notes_enabled = False
+
 
     class Meta:
         ordering = [
@@ -559,37 +563,35 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
     device = models.ForeignKey(
         Device,
-        blank= False,
+        blank = False,
         help_text = 'Device this software is on',
-        on_delete=models.CASCADE,
+        on_delete = models.CASCADE,
         null = False,
         verbose_name = 'Device'
     )
 
     software = models.ForeignKey(
         Software,
-        blank= False,
+        blank = False,
         help_text = 'Software Name',
         null = False,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Software'
     )
 
     action = models.IntegerField(
         blank = True,
-        choices=Actions,
-        default=None,
+        choices = Actions,
         help_text = 'Action to perform',
-        null=True,
+        null = True,
         verbose_name = 'Action',
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Version to install',
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         null = True,
         verbose_name = 'Desired Version'
     )
@@ -597,11 +599,10 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
     installedversion = models.ForeignKey(
         SoftwareVersion,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Version that is installed',
         null = True,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         related_name = 'installedversion',
         verbose_name = 'Installed Version'
     )
@@ -651,38 +652,23 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         )
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        return {
+        kwargs = super().get_url_kwargs( many = many )
+
+        kwargs.update({
             'device_id': self.device.id,
-            'pk': self.id
-        }
+        })
 
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        return kwargs
 
 
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.device
 
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_software_history import DeviceSoftwareHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceSoftwareHistory,
-        )
-
-
-        return history
 
 
 class DeviceOperatingSystem(
