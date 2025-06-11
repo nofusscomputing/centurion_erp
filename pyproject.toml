@@ -1087,6 +1087,7 @@ markers = [
     "model_knowledgebase: Selects Knowledge base tests.",
     "model_knowledgebasecategory: Selects Knowledge base category tests.",
     "model_manufacturer: Select all manufacturer tests.",
+    "model_softwareenablefeatureflag: Selects tests for model Software Enabled Feature Flag.",
     "model_ticketcategory: Select all ticket category tests.",
     "model_ticketcommentcategory: Select all ticket comment category tests.",
     "models: Selects all models tests.",
