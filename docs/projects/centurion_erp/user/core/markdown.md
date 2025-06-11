@@ -77,7 +77,7 @@ A Model link is a reference to an item within the database. Supported model link
 | clustertype| `$-<id>` |
 | config groups| `$config_group-<id>` |
 | device| `$device-<id>` |
-| devicemodel| `$-<id>` |
+| devicemodel| `$device_model-<id>` |
 | devicetype| `$-<id>` |
 | entity | `$entity-<id>` |
 | externallink| `$-<id>` |
