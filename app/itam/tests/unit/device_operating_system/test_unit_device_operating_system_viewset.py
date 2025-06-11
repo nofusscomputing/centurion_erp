@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -9,6 +11,8 @@ from itam.viewsets.device_operating_system import ViewSet
 
 
 
+@pytest.mark.model_deviceoperatingsystem
+@pytest.mark.module_itam
 class DeviceOperatingSystemViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -16,7 +20,7 @@ class DeviceOperatingSystemViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_device_operating_system'
+    route_name = 'v2:_api_deviceoperatingsystem'
 
 
     @classmethod

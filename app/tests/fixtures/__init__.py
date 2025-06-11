@@ -72,6 +72,11 @@ from .model_devicemodel import (
     model_devicemodel,
 )
 
+from .model_deviceoperatingsystem import (
+    kwargs_deviceoperatingsystem,
+    model_deviceoperatingsystem,
+)
+
 from .model_devicetype import (
     kwargs_devicetype,
     model_devicetype,
@@ -127,6 +132,16 @@ from .model_kwarg_data import (
 from .model_manufacturer import (
     kwargs_manufacturer,
     model_manufacturer,
+)
+
+from .model_operatingsystem import (
+    kwargs_operatingsystem,
+    model_operatingsystem,
+)
+
+from .model_operatingsystemversion import (
+    kwargs_operatingsystemversion,
+    model_operatingsystemversion,
 )
 
 from .model_permission import (
