@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -23,6 +22,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_software
+@pytest.mark.module_itam
 class SoftwareAPI(
     TestCase,
     APITenancyObject
@@ -85,7 +86,7 @@ class SoftwareAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_software-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_software-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
