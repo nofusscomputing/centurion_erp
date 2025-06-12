@@ -158,6 +158,11 @@ from .model_software import (
     model_software,
 )
 
+from .model_softwarecategory import (
+    kwargs_softwarecategory,
+    model_softwarecategory,
+)
+
 from .model_softwareenablefeatureflag import (
     model_softwareenablefeatureflag,
     kwargs_softwareenablefeatureflag,
