@@ -1,14 +1,11 @@
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
 from access.fields import *
-from access.models.tenancy import Tenant, TenancyObject
+from access.models.tenancy import TenancyObject
 
 from core.mixins.history_save import SaveHistory
 from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from settings.models.app_settings import AppSettings
 
@@ -33,8 +30,10 @@ class SoftwareCommonFields(TenancyObject, models.Model):
 
 
 class SoftwareCategory(
-    SoftwareCommonFields, SaveHistory
+    CenturionModel,
 ):
+
+    model_tag = 'software_category'
 
 
     class Meta:
@@ -104,6 +103,11 @@ class SoftwareCategory(
     ]
 
 
+    def __str__(self):
+
+        return self.name
+
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
@@ -113,27 +117,9 @@ class SoftwareCategory(
             self.organization = app_settings.global_organization
 
 
-    def __str__(self):
-
-        return self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.software_category_history import SoftwareCategoryHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = SoftwareCategoryHistory,
-        )
-
-
-        return history
-
-
 
 class Software(
-    CenturionModel
+    CenturionModel,
 ):
 
     model_tag = 'software'
