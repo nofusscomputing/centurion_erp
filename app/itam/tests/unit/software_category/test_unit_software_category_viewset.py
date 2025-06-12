@@ -15,7 +15,7 @@ class SoftwareCategoryViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_software_category'
+    route_name = 'v2:_api_softwarecategory'
 
 
     @classmethod
