@@ -1,31 +1,11 @@
 from django.db import models
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
-from core.mixins.history_save import SaveHistory
 from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
 
 from settings.models.app_settings import AppSettings
-
-
-class SoftwareCommonFields(TenancyObject, models.Model):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Id of this item',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    slug = AutoSlugField()
-
-    created = AutoCreatedField()
 
 
 
@@ -285,8 +265,10 @@ class Software(
 
 
 class SoftwareVersion(
-    SoftwareCommonFields, SaveHistory
+    CenturionModel
 ):
+
+    model_tag = 'software_version'
 
 
     class Meta:
@@ -320,8 +302,6 @@ class SoftwareVersion(
     modified = AutoLastModifiedField()
 
 
-    # model does not have it's own page
-    # as it's a secondary model. 
     page_layout: list = [
         {
             "name": "Details",
@@ -379,49 +359,17 @@ class SoftwareVersion(
     ]
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        return {
+        kwargs = super().get_url_kwargs( many = many)
+
+        kwargs.update({
             'software_id': self.software.id,
-            'pk': self.id
-        }
+        })
 
-    def get_url_kwargs_notes(self) -> dict:
-        """Fetch the URL kwargs for model notes
-
-        Returns:
-            dict: notes kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'software_id': self.software.id,
-            'model_id': self.id
-        }
-
-
-    # @property
-    # def parent_object(self):
-    #     """ Fetch the parent object """
-        
-    #     return self.software
+        return kwargs
 
 
     def __str__(self):
 
         return self.software.name + ' ' + self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.software_version_history import SoftwareVersionHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = SoftwareVersionHistory,
-        )
-
-
-        return history
-
-
-
