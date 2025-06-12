@@ -1,47 +1,9 @@
 from django.db import models
 
-from access.fields import AutoLastModifiedField, AutoCreatedField, AutoSlugField
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
-from core.mixins.history_save import SaveHistory
 from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
-
-
-
-class OperatingSystemCommonFields(TenancyObject, models.Model):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of this item',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    created = AutoCreatedField()
-
-    # modified = AutoLastModifiedField()
-
-
-
-class OperatingSystemFieldsName(OperatingSystemCommonFields):
-
-    class Meta:
-        abstract = True
-
-    # name = models.CharField(
-    #     blank = False,
-    #     help_text = 'Name of this item',
-    #     max_length = 50,
-    #     unique = True,
-    #     verbose_name = 'Name'
-    # )
-
-    slug = AutoSlugField()
 
 
 
@@ -181,8 +143,10 @@ class OperatingSystem(
 
 
 class OperatingSystemVersion(
-    OperatingSystemCommonFields, SaveHistory
+    CenturionModel
 ):
+
+    model_tag = 'operating_system_version'
 
 
     class Meta:
@@ -199,7 +163,7 @@ class OperatingSystemVersion(
     operating_system = models.ForeignKey(
         OperatingSystem,
         help_text = 'Operating system this version applies to',
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Operating System'
     )
 
@@ -261,48 +225,17 @@ class OperatingSystemVersion(
     ]
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False ) -> dict:
 
-        return {
+        kwargs = super().get_url_kwargs( many = many )
+
+        kwargs.update({
             'operating_system_id': self.operating_system.id,
-            'pk': self.id
-        }
+        })
 
-
-    def get_url_kwargs_notes(self) -> dict:
-        """Fetch the URL kwargs for model notes
-
-        Returns:
-            dict: notes kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'operating_system_id': self.operating_system.id,
-            'model_id': self.id
-        }
-
-
-    # @property
-    # def parent_object(self):
-    #     """ Fetch the parent object """
-        
-    #     return self.operating_system
+        return kwargs
 
 
     def __str__(self):
 
         return self.operating_system.name + ' ' + self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.operating_system_version_history import OperatingSystemVersionHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = OperatingSystemVersionHistory,
-        )
-
-
-        return history
-
