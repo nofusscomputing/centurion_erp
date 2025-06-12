@@ -20,6 +20,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_operatingsystemversion
+@pytest.mark.module_itam
 class OperatingSystemVersionAPI(
     TestCase,
     APITenancyObject
