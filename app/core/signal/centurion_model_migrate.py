@@ -136,6 +136,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'OperatingSystemVersion',
             'history_model_name': 'OperatingSystemVersionHistory',
             'notes_model_name': 'OperatingSystemVersionNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'Software',
+            'history_model_name': 'SoftwareHistory',
+            'notes_model_name': 'SoftwareNotes'
         }
     ]
 
