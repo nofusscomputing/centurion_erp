@@ -16,7 +16,7 @@ class SoftwareVersionViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_software_version'
+    route_name = 'v2:_api_softwareversion'
 
 
     @classmethod
