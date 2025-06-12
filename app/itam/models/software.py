@@ -2,12 +2,11 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
-from rest_framework.reverse import reverse
-
 from access.fields import *
 from access.models.tenancy import Tenant, TenancyObject
 
 from core.mixins.history_save import SaveHistory
+from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
@@ -27,23 +26,15 @@ class SoftwareCommonFields(TenancyObject, models.Model):
         verbose_name = 'ID'
     )
 
-    name = models.CharField(
-        blank = False,
-        help_text = 'Name of this item',
-        max_length = 50,
-        unique = True,
-        verbose_name = 'Name'
-    )
-
     slug = AutoSlugField()
 
     created = AutoCreatedField()
 
-    modified = AutoLastModifiedField()
 
 
-
-class SoftwareCategory(SoftwareCommonFields, SaveHistory):
+class SoftwareCategory(
+    SoftwareCommonFields, SaveHistory
+):
 
 
     class Meta:
@@ -55,6 +46,17 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
         verbose_name = 'Software Category'
 
         verbose_name_plural = 'Software Categories'
+
+
+    name = models.CharField(
+        blank = False,
+        help_text = 'Name of this item',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: dict = [
@@ -130,7 +132,11 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
 
 
-class Software(SoftwareCommonFields, SaveHistory):
+class Software(
+    CenturionModel
+):
+
+    model_tag = 'software'
 
 
     class Meta:
@@ -145,37 +151,34 @@ class Software(SoftwareCommonFields, SaveHistory):
         verbose_name_plural = 'Softwares'
 
 
-    organization = models.ForeignKey(
-        Tenant,
-        blank = False,
-        help_text = 'Tenant this belongs to',
-        null = False,
-        on_delete = models.CASCADE,
-        related_name = 'software',
-        validators = [ TenancyObject.validatate_organization_exists ],
-        verbose_name = 'Tenant',
-    )
-
     publisher = models.ForeignKey(
         Manufacturer,
         blank= True,
-        default = None,
         help_text = 'Who publishes this software',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Publisher',
+    )
+
+    name = models.CharField(
+        blank = False,
+        help_text = 'Name of this item',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
     )
 
     category = models.ForeignKey(
         SoftwareCategory,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Category of this Softwarae',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Category'
 
     )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: dict = [
@@ -277,6 +280,11 @@ class Software(SoftwareCommonFields, SaveHistory):
     ]
 
 
+    def __str__(self):
+
+        return self.name
+
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
@@ -286,43 +294,13 @@ class Software(SoftwareCommonFields, SaveHistory):
             self.organization = app_settings.global_organization
 
 
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_software-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_software-detail", kwargs={'pk': self.id})
+    def get_organization(self):
+        return self.organization
 
 
-    def __str__(self):
-
-        return self.name
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.software_history import SoftwareHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = SoftwareHistory,
-        )
-
-
-        return history
-
-
-
-@receiver(post_delete, sender=Software, dispatch_uid='software_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
-
-    deleted_model.send(sender='software_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.SOFTWARE)
-
-
-
-class SoftwareVersion(SoftwareCommonFields, SaveHistory):
+class SoftwareVersion(
+    SoftwareCommonFields, SaveHistory
+):
 
 
     class Meta:
@@ -341,7 +319,7 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         blank = False,
         help_text = 'Software this version applies',
         null = False,
-        on_delete=models.CASCADE,
+        on_delete = models.CASCADE,
         verbose_name = 'Software',
     )
 
@@ -352,6 +330,9 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         unique = False,
         verbose_name = 'Name'
     )
+
+    modified = AutoLastModifiedField()
+
 
     # model does not have it's own page
     # as it's a secondary model. 
