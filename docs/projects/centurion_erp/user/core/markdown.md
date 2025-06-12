@@ -91,7 +91,7 @@ A Model link is a reference to an item within the database. Supported model link
 | manufacturer| `$manufacturer-<id>` |
 | modelnotes| `$-<id>` |
 | operatingsystem| `$operating_system-<id>` |
-| operatingsystemversion| `$-<id>` |
+| operatingsystemversion| `$operating_system_version-<id>` |
 | organization| `$organization-<id>` |
 | port| `$-<id>` |
 | project| `$-<id>` |

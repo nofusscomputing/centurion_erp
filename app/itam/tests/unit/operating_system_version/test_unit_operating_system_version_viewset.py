@@ -16,7 +16,7 @@ class DeviceSoftwareViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_operating_system_version'
+    route_name = 'v2:_api_operatingsystemversion'
 
 
     @classmethod
