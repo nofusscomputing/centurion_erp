@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -21,6 +20,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_operatingsystemversion
+@pytest.mark.module_itam
 class OperatingSystemVersionAPI(
     TestCase,
     APITenancyObject
@@ -77,7 +78,7 @@ class OperatingSystemVersionAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_operating_system_version-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_operatingsystemversion-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

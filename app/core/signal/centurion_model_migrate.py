@@ -130,6 +130,30 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'OperatingSystem',
             'history_model_name': 'OperatingSystemHistory',
             'notes_model_name': 'OperatingSystemNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'OperatingSystemVersion',
+            'history_model_name': 'OperatingSystemVersionHistory',
+            'notes_model_name': 'OperatingSystemVersionNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'Software',
+            'history_model_name': 'SoftwareHistory',
+            'notes_model_name': 'SoftwareNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'SoftwareCategory',
+            'history_model_name': 'SoftwareCategoryHistory',
+            'notes_model_name': 'SoftwareCategoryNotes'
+        },
+        {
+            'app_label': 'itam',
+            'model_name': 'SoftwareVersion',
+            'history_model_name': 'SoftwareVersionHistory',
+            'notes_model_name': 'SoftwareVersionNotes'
         }
     ]
 

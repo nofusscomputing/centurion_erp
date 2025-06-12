@@ -1092,6 +1092,7 @@ markers = [
     "model_operatingsystem: Select tests for model Operating System",
     "model_operatingsystemversion: Select tests for model Operating System Version",
     "model_software: Selects tests for model Software.",
+    "model_softwarecateory: Selects tests for model Software Category.",
     "model_softwareenablefeatureflag: Selects tests for model Software Enabled Feature Flag.",
     "model_softwareversion: Selects tests for model Software Version.",
     "model_ticketcategory: Select all ticket category tests.",
@@ -1116,6 +1117,7 @@ markers = [
     "module_setings: Selects all tests from module settings.",
     "note_models: Selects all centurion model note models",
     "permissions: selects all permission related tests.",
+    "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
     "unit: Selects all Unit Tests.",
 ]

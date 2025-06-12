@@ -28,6 +28,6 @@ class Index(IndexViewset):
                 "device": reverse('v2:_api_device-list', request=request),
                 "inventory": reverse('v2:_api_v2_inventory-list', request=request),
                 "operating_system": reverse('v2:_api_operatingsystem-list', request=request),
-                "software": reverse('v2:_api_v2_software-list', request=request)
+                "software": reverse('v2:_api_software-list', request=request)
             }
         )

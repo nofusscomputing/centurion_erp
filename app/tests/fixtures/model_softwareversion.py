@@ -18,8 +18,15 @@ def kwargs_softwareversion(django_db_blocker,
 ):
 
     random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    random_str = str(random_str).replace(
+            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
     with django_db_blocker.unblock():
+
+        kwargs = kwargs_software
+        kwargs.update({
+            'name': 'sv_' + random_str
+        })
 
         software = model_software.objects.create( **kwargs_software )
 

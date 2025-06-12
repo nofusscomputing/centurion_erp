@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from itam.models.device import DeviceSoftware
 
 
@@ -46,6 +48,9 @@ def kwargs_devicesoftware(django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        device.delete()
+        try:
+            device.delete()
+        except ObjectDoesNotExist:
+            pass
 
         softwareversion.delete()

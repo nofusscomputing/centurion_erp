@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from itam.models.device import DeviceOperatingSystem
 
 
@@ -24,12 +26,22 @@ def kwargs_deviceoperatingsystem(django_db_blocker,
 
     with django_db_blocker.unblock():
 
+        kwargs = kwargs_device.copy()
+        kwargs.update({
+            'name': 'dos' + random_str
+        })
+
         device = model_device.objects.create(
-            **kwargs_device.copy()
+            **kwargs
         )
 
+        kwargs = kwargs_operatingsystemversion.copy()
+        kwargs.update({
+            'name': 'dos' + random_str
+        })
+
         operating_system_version = model_operatingsystemversion.objects.create(
-            **kwargs_operatingsystemversion.copy()
+            **kwargs
         )
 
     kwargs = {
@@ -44,6 +56,9 @@ def kwargs_deviceoperatingsystem(django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        device.delete()
+        try:
+            device.delete()
+        except ObjectDoesNotExist:
+            pass
 
         operating_system_version.delete()

@@ -99,7 +99,7 @@ router.register(
 )
 router.register(
     prefix = 'software_category', viewset = software_category_v2.ViewSet,
-    basename = '_api_v2_software_category'
+    basename = '_api_softwarecategory'
 )
 router.register(
     prefix = 'ticket_category',
