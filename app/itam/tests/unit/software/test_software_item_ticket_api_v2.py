@@ -1,4 +1,4 @@
-
+import pytest
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
@@ -10,6 +10,8 @@ from itam.models.software import Software
 
 
 
+@pytest.mark.model_software
+@pytest.mark.module_itam
 class SoftwareItemTicketAPI(
     ItemTicketAPI,
     TestCase,
