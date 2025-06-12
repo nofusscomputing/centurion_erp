@@ -73,7 +73,7 @@ router.register(
 )
 router.register(
     prefix = 'software', viewset = software_v2.ViewSet,
-    basename = '_api_v2_software'
+    basename = '_api_software'
 )
 router.register(
     prefix = 'software/(?P<software_id>[0-9]+)/installs', viewset = device_software_v2.ViewSet,
