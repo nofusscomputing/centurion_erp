@@ -67,7 +67,7 @@ class OperatingSystemModelSerializer(
                     'item_id': item.pk
                     }
             ),
-            'version': reverse("v2:_api_v2_operating_system_version-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
+            'version': reverse("v2:_api_operatingsystemversion-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
         })
 
         return get_url
