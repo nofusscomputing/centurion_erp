@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -15,10 +14,6 @@ from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APITenancyObject
 
-# from itam.models.device import Device
-
-# from itim.models.clusters import Cluster, ClusterType
-
 from project_management.models.projects import Project, ProjectState, ProjectType
 
 from settings.models.user_settings import UserSettings
@@ -27,6 +22,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_project
+@pytest.mark.module_project_management
 class ProjectAPI(
     TestCase,
     APITenancyObject
