@@ -19,7 +19,7 @@ class ClusterViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_cluster'
+    route_name = 'v2:_api_cluster'
 
 
     @classmethod

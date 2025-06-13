@@ -28,7 +28,7 @@ router.register(
 )
 router.register(
     prefix = 'cluster', viewset = cluster_v2.ViewSet,
-    basename = '_api_v2_cluster'
+    basename = '_api_cluster'
 )
 router.register(
     prefix = 'cluster/(?P<cluster_id>[0-9]+)/service', viewset = service_cluster.ViewSet,
