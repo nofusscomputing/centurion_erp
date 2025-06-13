@@ -168,6 +168,11 @@ from .model_port import (
     model_port,
 )
 
+from .model_service import (
+    kwargs_service,
+    model_service,
+)
+
 from .model_software import (
     kwargs_software,
     model_software,

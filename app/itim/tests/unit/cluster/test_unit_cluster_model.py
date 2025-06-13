@@ -47,7 +47,7 @@ class ClusterModelTestCases(
         'name': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
+            'field_type': models.CharField,
             'length': 50,
             'null': False,
             'unique': False,
