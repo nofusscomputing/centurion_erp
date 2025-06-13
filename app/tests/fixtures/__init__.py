@@ -163,6 +163,11 @@ from .model_permission import (
     model_permission,
 )
 
+from .model_port import (
+    kwargs_port,
+    model_port,
+)
+
 from .model_software import (
     kwargs_software,
     model_software,
