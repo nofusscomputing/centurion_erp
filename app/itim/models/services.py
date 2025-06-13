@@ -10,13 +10,18 @@ from rest_framework.reverse import reverse
 from access.fields import *
 from access.models.tenancy import TenancyObject
 
+from core.models.centurion import CenturionModel
 from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device import Device
 
 
 
-class Port(TenancyObject):
+class Port(
+    CenturionModel
+):
+
+    model_tag = 'port'
 
 
     class Meta:
@@ -35,20 +40,12 @@ class Port(TenancyObject):
         TCP = 'TCP', 'TCP'
         UDP = 'UDP', 'UDP'
 
+
     def validation_port_number(number: int):
 
         if number < 1 or number > 65535:
 
             raise ValidationError('A Valid port number is between 1-65535')
-
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID of this port',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
 
     number = models.IntegerField(
         blank = False,
@@ -60,7 +57,6 @@ class Port(TenancyObject):
 
     description = models.CharField(
         blank = True,
-        default = None,
         help_text = 'Short description of port',
         max_length = 80,
         null = True,
@@ -74,8 +70,6 @@ class Port(TenancyObject):
         max_length = 3,
         verbose_name = 'Protocol',
     )
-
-    created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
@@ -139,20 +133,6 @@ class Port(TenancyObject):
     def __str__(self):
 
         return str(self.protocol) + '/' + str(self.number)
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itim.models.port_history import PortHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = PortHistory,
-        )
-
-
-        return history
 
 
 
