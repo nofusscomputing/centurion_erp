@@ -17,7 +17,7 @@ class PortBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_port-detail", format="html"
+        view_name="v2:_api_port-detail", format="html"
     )
 
     name = serializers.SerializerMethodField('get_display_name')

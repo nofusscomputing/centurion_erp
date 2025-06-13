@@ -19,7 +19,7 @@ class PortViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_port'
+    route_name = 'v2:_api_port'
 
 
     @classmethod
