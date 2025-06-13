@@ -48,6 +48,11 @@ from .model_cluster import (
     model_cluster,
 )
 
+from .model_clustertype import (
+    kwargs_clustertype,
+    model_clustertype,
+)
+
 from .model_configgroup import (
     kwargs_configgroups,
     model_configgroups,
