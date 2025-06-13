@@ -6,7 +6,7 @@ from itim.viewsets import (
     cluster as cluster_v2,
     incident,
     problem,
-    service as service_v2,
+    service as service,
     service_cluster,
 )
 
@@ -43,8 +43,8 @@ router.register(
     basename = '_api_v2_ticket_problem'
 )
 router.register(
-    prefix = 'service', viewset = service_v2.ViewSet,
-    basename = '_api_v2_service'
+    prefix = 'service', viewset = service.ViewSet,
+    basename = '_api_service'
 )
 
 
