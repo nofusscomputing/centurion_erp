@@ -86,15 +86,9 @@ nav:
 
         - projects/centurion_erp/development/api/models/centurion.md
 
-        - projects/centurion_erp/development/api/models/centurion_sub.md
-
         - projects/centurion_erp/development/api/models/tenancy.md
 
         - Depreciated:
-
-          - projects/centurion_erp/development/api/admin_model_form.md
-
-          - projects/centurion_erp/development/api/model_form.md
 
           - projects/centurion_erp/development/api/token_authentication.md
 
@@ -102,15 +96,11 @@ nav:
 
             - projects/centurion_erp/development/api/models/index.md
 
-            - projects/centurion_erp/development/api/models/core_history_save.md
-
             - projects/centurion_erp/development/api/models/external_links.md
 
             - projects/centurion_erp/development/api/models/itam_device.md
 
             - projects/centurion_erp/development/api/models/ticket.md
-
-          - projects/centurion_erp/development/api/common_views.md
 
           - Serializers:
 
@@ -121,8 +111,6 @@ nav:
       - projects/centurion_erp/development/accounting/asset.md
       
       - projects/centurion_erp/development/fields.md
-
-      - projects/centurion_erp/development/forms.md
 
       - projects/centurion_erp/development/models.md
 

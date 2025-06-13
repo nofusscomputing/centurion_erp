@@ -11,4 +11,4 @@ Model Notes is a core feature that is intended to be used so that users can plac
 
 ## Adding Model Notes to a Model
 
-By default there is nothing that you need to do to add Model Notes to a model. By virtue of inheriting from [`core.models.centurion.CenturionModel`](../api/models/centurion.md) or [`core.models.centurion.CenturionSubModel`](../api/models/centurion_sub.md) the model will have model notes setup automagically. This wizardry of the machine creates all of the necessary components that the moment you run the migrations the model has a fully functioning model notes system.
+By default there is nothing that you need to do to add Model Notes to a model. By virtue of inheriting from [`core.models.centurion.CenturionModel`](../api/models/centurion.md) or `core.models.centurion.CenturionSubModel` the model will have model notes setup automagically. This wizardry of the machine creates all of the necessary components that the moment you run the migrations the model has a fully functioning model notes system.

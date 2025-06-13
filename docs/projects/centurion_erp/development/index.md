@@ -20,8 +20,6 @@ Centurion ERP is a Django Application. We have added a lot of little tid bits th
 
 - [Fields](./fields.md)
 
-- ~~[Forms](./forms.md)~~ _Scheduled for removal_
-
 - [Models](./models.md)
 
     - [Entity](./core/entity.md)
@@ -31,8 +29,6 @@ Centurion ERP is a Django Application. We have added a lot of little tid bits th
 - [Templates](./templates.md)
 
 - [Testing](./testing.md)
-
-- ~~[Views](./views.md)~~ _Scheduled for removal_
 
 
 ## Icons
