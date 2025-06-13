@@ -102,6 +102,9 @@ class ModelNotesMetaModelTestCases(
 
             for field, value in note_model_kwargs.items():
 
+                if not hasattr(getattr(note_model, field), 'field'):
+                    continue
+
                 if isinstance(getattr(note_model, field).field, models.ManyToManyField):
 
                     if field in many_field:
