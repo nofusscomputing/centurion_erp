@@ -21,7 +21,7 @@ router.register(
 )
 router.register(
     prefix = 'project', viewset = project_v2.ViewSet,
-    basename = '_api_v2_project'
+    basename = '_api_project'
 )
 router.register(
     prefix = 'project/(?P<project_id>[0-9]+)/milestone',
