@@ -1,17 +1,17 @@
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError, ValidationError
+from rest_framework.exceptions import ValidationError
 
 
 from access.serializers.organization import TenantBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
 
-from assistance.models.knowledge_base import KnowledgeBaseCategory
+from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
 
 
@@ -65,7 +65,7 @@ class KnowledgeBaseCategoryModelSerializer(
 
         get_url.update({
             'organization': reverse(
-                'v2:_api_v2_organization-list',
+                'v2:_api_tenant-list',
                 request=self.context['view'].request,
             ),
             'team': reverse(
@@ -100,7 +100,6 @@ class KnowledgeBaseCategoryModelSerializer(
             'parent_category',
             'target_user',
             'target_team',
-            'is_global',
             'created',
             'modified',
             '_urls',

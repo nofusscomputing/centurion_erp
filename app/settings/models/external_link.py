@@ -1,5 +1,3 @@
-from django.template import Template
-
 from access.fields import *
 from access.models.tenancy import TenancyObject
 
@@ -111,7 +109,6 @@ class ExternalLink(TenancyObject):
                         'button_text',
                         'template',
                         'colour',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',

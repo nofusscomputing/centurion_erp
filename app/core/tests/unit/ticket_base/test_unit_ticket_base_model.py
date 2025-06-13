@@ -8,7 +8,7 @@ from django.test import TestCase
 
 from access.models.entity import Entity
 
-from app.tests.unit.test_unit_models import (
+from centurion.tests.unit.test_unit_models import (
     PyTestTenancyObjectInheritedCases,
 )
 
@@ -47,12 +47,6 @@ class TicketBaseModelTestCases(
     parameterized_fields: dict = {
         "model_notes": {
             'field_type': None,
-            'field_parameter_verbose_name_type': None
-        },
-        "is_global": {
-            'field_type': None,
-            'field_parameter_default_exists': None,
-            'field_parameter_default_value': None,
             'field_parameter_verbose_name_type': None
         },
         "external_system": {

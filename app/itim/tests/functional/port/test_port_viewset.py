@@ -24,7 +24,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_port'
+    url_name = '_api_port'
 
     change_data = {'number': 21}
 

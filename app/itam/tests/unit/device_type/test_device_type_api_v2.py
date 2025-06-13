@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -19,6 +18,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_devicetype
+@pytest.mark.module_itam
 class DeviceTypeAPI(
     TestCase,
     APITenancyObject
@@ -68,7 +69,7 @@ class DeviceTypeAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_device_type-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_devicetype-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

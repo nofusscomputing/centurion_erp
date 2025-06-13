@@ -1,5 +1,3 @@
-import json
-
 from django.db.models import Q
 
 from kombu.exceptions import OperationalError

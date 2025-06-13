@@ -2,14 +2,13 @@ from datetime import datetime
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from api.viewsets.common import PublicReadOnlyViewSet
+
 from devops.models.check_ins import CheckIn
 from devops.serializers.public_feature_flag import (
     FeatureFlag,
     ViewSerializer,
 )
-
-from api.viewsets.common import PublicReadOnlyViewSet
-
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
 from core import exceptions as centurion_exceptions
@@ -49,7 +48,8 @@ class ViewSet(PublicReadOnlyViewSet):
 
     model = FeatureFlag
 
-    view_description: str = 'This endpoint provides the below JSON document for software feature flagging'
+    view_description: str = 'This endpoint provides the below ' \
+        'JSON document for software feature flagging'
 
     view_name: str = 'Available Feature Flags'
 
@@ -105,11 +105,15 @@ class ViewSet(PublicReadOnlyViewSet):
                     check_date = self.request.headers['if-modified-since']
 
                 else:
-                    
-                    check_date = datetime.strptime(self.request.headers['if-modified-since'], '%a, %d %b %Y %H:%M:%S %z')
+
+                    check_date = datetime.strptime(
+                        self.request.headers['if-modified-since'], '%a, %d %b %Y %H:%M:%S %z'
+                    )
 
 
-                if last_modified.replace(microsecond=0).timestamp() <= check_date.replace(microsecond=0).timestamp():
+                if last_modified.replace(
+                        microsecond=0
+                    ).timestamp() <= check_date.replace(microsecond=0).timestamp():
 
                     raise centurion_exceptions.NotModified()
 
@@ -142,7 +146,9 @@ class ViewSet(PublicReadOnlyViewSet):
             and self.last_modified
         ):
 
-            response.headers['Last-Modified'] = self.last_modified.strftime('%a, %d %b %Y %H:%M:%S %z')
+            response.headers['Last-Modified'] = self.last_modified.strftime(
+                '%a, %d %b %Y %H:%M:%S %z'
+            )
 
         if(
             response.status_code == 200

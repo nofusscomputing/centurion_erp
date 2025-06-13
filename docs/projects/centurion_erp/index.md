@@ -47,7 +47,7 @@ Centurion ERP contains the following modules:
 
     - [Application wide settings](./user/settings/app_settings.md)
 
-    - History
+    - [Audit History](./user/core/audit_history.md)
 
     - [Markdown](./user/core/markdown.md)
 

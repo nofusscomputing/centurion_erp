@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 from devops.models.git_repository.github_history import GitHubHistory    # pylint: disable=W0611:unused-import
 from devops.models.git_repository.gitlab_history import GitlabHistory    # pylint: disable=W0611:unused-import
 from devops.models.git_group import GitGroup
-from devops.serializers.git_repository.base import (
+from devops.serializers.git_repository.base import (    # pylint: disable=W0611:unused-import
     GitRepository,
     ModelSerializer,
     ViewSerializer,
@@ -203,7 +203,7 @@ class ViewSet(ModelViewSet):
     def get_back_url(self) -> str:
 
 
-        return reverse('v2:devops:_api_v2_git_repository-list', request = self.request )
+        return reverse('v2:devops:_api_gitrepository-list', request = self.request )
 
 
     def get_page_layout(self):

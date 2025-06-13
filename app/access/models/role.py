@@ -130,6 +130,37 @@ class Role(
     ]
 
 
+    _permissions: list[ Permission ] = None
+
+    _permissions_int: list[ int ] = None
+
+    def get_permissions(self, as_int_list = False ):
+
+        if self._permissions is None:
+
+            permissions = []
+            permissions_int = []
+
+            for permission in self.permissions:    # pylint: disable=E1133:not-an-iterable
+
+                if permission in _permissions:
+                    continue
+
+                permissions += [ permission ]
+                permissions_int += [ permission.id ]
+
+            self._permissions = permissions
+            self._permissions_int = permissions_int
+
+        if as_int_list:
+            return self._permissions_int
+
+        return self._permissions_int
+
+
+
+
+
     def save_history(self, before: dict, after: dict) -> bool:
 
         from access.models.role_history import RoleHistory

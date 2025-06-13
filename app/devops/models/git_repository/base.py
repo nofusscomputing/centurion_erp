@@ -1,25 +1,30 @@
 from django.db import models
 
-from rest_framework.reverse import reverse
-
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from core import exceptions as centurion_exceptions
-from core.lib.feature_not_used import FeatureNotUsed
+from core.models.centurion import CenturionModel
 
 from devops.models.git_group import GitGroup
 
 
 
 class GitRepository(
-    TenancyObject
+    CenturionModel
 ):
     """Base Model for Git Repositories
     
     To Add a Git Repository, Create a new model ensuring it inherits from this
     model.
     """
+
+    app_namespace = 'devops'
+
+    documentation = ''
+
+    model_tag = 'git_repository'
+
+    url_model_name = 'gitrepository'
 
 
     class Meta:
@@ -51,16 +56,6 @@ class GitRepository(
                 code = 'path_contains_separator'
             )
 
-    is_global = None
-
-    id = models.AutoField(
-        blank = False,
-        help_text = 'Primary key of the entry',
-        primary_key = True,
-        unique = True,
-        verbose_name = 'ID'
-    )
-
     provider = models.IntegerField(
         blank = False,
         choices = GitGroup.GitProvider,
@@ -76,6 +71,21 @@ class GitRepository(
         unique = False,
         verbose_name = 'Provider ID'
     )
+
+
+    @property
+    def provider_badge(self):
+
+        from core.classes.badge import Badge
+
+        text: str = self.get_provider_display()
+
+        return Badge(
+            icon_name = f'{text.lower()}',
+            icon_style = f'badge-icon-action-{text.lower()}',
+            text = text,
+        )
+
 
     git_group = models.ForeignKey(
         GitGroup,
@@ -113,45 +123,9 @@ class GitRepository(
         verbose_name = 'Description'
     )
 
-    created = AutoCreatedField()
-
     modified = AutoLastModifiedField()
 
-
-    def __str__(self) -> str:
-
-        return str(self.git_group) + '/' + self.path
-
-
-    @property
-    def provider_badge(self):
-
-        from core.classes.badge import Badge
-
-        text: str = self.get_provider_display()
-
-        return Badge(
-            icon_name = f'{text.lower()}',
-            icon_style = f'badge-icon-action-{text.lower()}',
-            text = text,
-        )
-
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        self.organization = self.git_group.organization
-
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-
-    app_namespace = 'devops'
-
-    documentation = ''
-
-    def get_page_layout(self):
-
-        return self.page_layout
-
+    page_layout = []
 
     table_fields: list = [
         'name',
@@ -162,49 +136,40 @@ class GitRepository(
     ]
 
 
-    def get_url(self, request):
+    def __str__(self) -> str:
 
-        if request:
-
-            return reverse(
-                f"v2:" + self.get_app_namespace() + f"_api_v2_git_repository-detail",
-                request=request,
-                kwargs = self.get_url_kwargs()
-            )
-
-        return reverse(
-            f"v2:" + self.get_app_namespace() + f"_api_v2_git_repository-detail",
-            kwargs = self.get_url_kwargs()
-        )
+        return str(self.git_group) + '/' + self.path
 
 
-    def get_url_kwargs(self) -> dict:
 
-        url_kwargs = super().get_url_kwargs()
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
-        provider = ''
+        self.organization = self.git_group.organization
 
-        if self.provider == GitGroup.GitProvider.GITHUB:
-
-            provider = 'github'
-
-        elif self.provider == GitGroup.GitProvider.GITLAB:
-
-            provider = 'gitlab'
-
-        url_kwargs.update({
-            'git_provider': provider
-        })
-
-        return url_kwargs
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
-    def get_url_kwargs_notes(self) -> dict:
-        """Fetch the URL kwargs for model notes
+    # def get_page_layout(self):
 
-        This feature is disabled in the base, however should be enabled in the
-        child model.
-        """
+    #     return self.page_layout
 
-        return FeatureNotUsed
- 
+
+    # def get_url_kwargs(self, many = False) -> dict:
+
+    #     url_kwargs = super().get_url_kwargs()
+
+    #     provider = ''
+
+    #     if self.provider == GitGroup.GitProvider.GITHUB:
+
+    #         provider = 'github'
+
+    #     elif self.provider == GitGroup.GitProvider.GITLAB:
+
+    #         provider = 'gitlab'
+
+    #     url_kwargs.update({
+    #         'git_provider': provider
+    #     })
+
+    #     return url_kwargs

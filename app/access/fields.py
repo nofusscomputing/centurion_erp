@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
-from django.template.defaultfilters import slugify
+
+
 
 class AutoCreatedField(models.DateTimeField):
     """
@@ -50,7 +51,7 @@ class AutoLastModifiedField(AutoCreatedField):
 
     def pre_save(self, model_instance, add):
 
-        value = now()
+        value = now().replace(microsecond=0)
 
         setattr(model_instance, self.attname, value)
 

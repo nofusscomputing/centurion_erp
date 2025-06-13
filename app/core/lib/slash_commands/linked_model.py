@@ -45,7 +45,7 @@ For this command to process the following conditions must be met:
         
         - `__str__` function within `core.models.ticket.ticket_linked_item.TicketLinkedItem`
 
-        - `get_item` function within `app.core.serializar.ticket_linked_item.TicketLinkedItemViewSerializer`
+        - `get_item` function within `centurion.core.serializar.ticket_linked_item.TicketLinkedItemViewSerializer`
 
         Args:
             match (re.Match): Named group matches

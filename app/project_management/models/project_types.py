@@ -1,7 +1,6 @@
 from django.db import models
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.team import Team
 from access.models.tenancy import TenancyObject
 
 from assistance.models.knowledge_base import KnowledgeBase
@@ -70,7 +69,6 @@ class ProjectType(ProjectTypeCommonFields):
                         'organization',
                         'name'
                         'runbook',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes'

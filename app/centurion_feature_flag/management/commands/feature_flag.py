@@ -2,7 +2,7 @@ import subprocess
 
 from django.core.management.base import BaseCommand
 
-from app import settings
+from centurion import settings
 
 from centurion_feature_flag.lib.feature_flag import CenturionFeatureFlagging
 

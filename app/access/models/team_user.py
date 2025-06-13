@@ -15,7 +15,7 @@ from access.models.tenant import Tenant
 from access.models.team import Team
 
 from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 
 User = django.contrib.auth.get_user_model()
 

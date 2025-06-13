@@ -1,11 +1,8 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-
-from itam.serializers.device import DeviceBaseSerializer
 
 from itim.models.clusters import ClusterType
 
@@ -20,7 +17,7 @@ class ClusterTypeBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_cluster_type-detail", format="html"
+        view_name="v2:_api_clustertype-detail", format="html"
     )
 
     class Meta:
@@ -61,7 +58,6 @@ class ClusterTypeModelSerializer(
             'name',
             'model_notes',
             'config',
-            'is_global',
             'created',
             'modified',
             '_urls',

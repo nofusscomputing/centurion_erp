@@ -2,7 +2,8 @@ from django.db import models
 
 from access.fields import AutoCreatedField
 
-from .projects import Project, ProjectCommonFieldsName, SaveHistory
+from .projects import Project
+from .project_common import ProjectCommonFieldsName
 
 
 
@@ -78,7 +79,6 @@ class ProjectMilestone(ProjectCommonFieldsName):
                     ],
                     "right": [
                         'description',
-                        'is_global',
                     ]
                 }
             ]

@@ -22,7 +22,7 @@ class BaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:devops:_api_v2_git_group-detail", format="html"
+        view_name="v2:devops:_api_gitgroup-detail", format="html"
     )
 
 

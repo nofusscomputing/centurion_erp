@@ -6,7 +6,7 @@ from access.fields import *
 from access.models.tenant import Tenant
 
 from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 
 
 

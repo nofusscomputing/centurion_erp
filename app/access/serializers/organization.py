@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from access.models.tenant import Tenant
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from core import fields as centurion_field
 
@@ -20,7 +20,7 @@ class TenantBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_organization-detail", format="html"
+        view_name="v2:_api_tenant-detail", format="html"
     )
 
     class Meta:
@@ -61,13 +61,13 @@ class TenantModelSerializer(
                     'model_pk': item.pk
                 }
             ),
-            'notes': reverse(
-                "v2:_api_v2_organization_note-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_id': item.pk
-                }
-            ),
+            # 'notes': reverse(
+            #     "v2:_api_v2_organization_note-list",
+            #     request=self._context['view'].request,
+            #     kwargs={
+            #         'model_id': item.pk
+            #     }
+            # ),
             'teams': reverse("v2:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
         }
 

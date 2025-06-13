@@ -1,10 +1,5 @@
 import django
 
-from django.contrib.auth.middleware import (
-    AuthenticationMiddleware,
-    SimpleLazyObject,
-    partial,
-)
 from django.contrib.auth.models import Group
 from django.utils.deprecation import MiddlewareMixin
 
