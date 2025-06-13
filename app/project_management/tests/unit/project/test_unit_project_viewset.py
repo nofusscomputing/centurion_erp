@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from project_management.viewsets.project import ViewSet
 
 
 
+@pytest.mark.model_project
+@pytest.mark.module_project_management
 class ProjectViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

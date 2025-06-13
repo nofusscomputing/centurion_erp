@@ -1094,6 +1094,7 @@ markers = [
     "model_operatingsystem: Select tests for model Operating System",
     "model_operatingsystemversion: Select tests for model Operating System Version",
     "model_port: Selects tests for model port",
+    "model_project: Selects tests for model Project",
     "model_software: Selects tests for model Software.",
     "model_softwarecateory: Selects tests for model Software Category.",
     "model_softwareenablefeatureflag: Selects tests for model Software Enabled Feature Flag.",
