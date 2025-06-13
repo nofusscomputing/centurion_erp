@@ -1076,6 +1076,8 @@ markers = [
     "model_configgroups: Selects Config Group tests.",
     "model_configgrouphosts: Selects Config Group Hosts tests.",
     "model_configgroupsoftware: Selects Config Group Software tests.",
+    "model_cluster: Selects Cluster tests.",
+    "model_clustertype: Selects Cluster Type tests.",
     "model_device: Select all Device tests",
     "model_devicemodel: Select all device model tests.",
     "model_deviceoperatingsystem: Select tests for model Device Operating System",
