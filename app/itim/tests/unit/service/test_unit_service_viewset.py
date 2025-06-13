@@ -19,7 +19,7 @@ class ServiceViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_service'
+    route_name = 'v2:_api_service'
 
 
     @classmethod
