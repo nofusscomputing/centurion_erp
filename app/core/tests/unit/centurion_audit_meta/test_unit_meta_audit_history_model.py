@@ -102,6 +102,9 @@ class AuditHistoryMetaModelTestCases(
 
             for field, value in audit_model_kwargs.items():
 
+                if not hasattr(getattr(audit_model, field), 'field'):
+                    continue
+
                 if isinstance(getattr(audit_model, field).field, models.ManyToManyField):
 
                     if field in many_field:
