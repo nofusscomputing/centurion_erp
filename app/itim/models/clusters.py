@@ -1,7 +1,6 @@
 from django.db import models
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from core.models.centurion import CenturionModel
 
@@ -9,7 +8,11 @@ from itam.models.device import Device
 
 
 
-class ClusterType(TenancyObject):
+class ClusterType(
+    CenturionModel
+):
+
+    model_tag = 'cluster_type'
 
 
     class Meta:
@@ -23,14 +26,6 @@ class ClusterType(TenancyObject):
         verbose_name_plural = "Cluster Types"
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID for this cluster type',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     name = models.CharField(
         blank = False,
         help_text = 'Name of the Cluster Type',
@@ -39,19 +34,12 @@ class ClusterType(TenancyObject):
         verbose_name = 'Name',
     )
 
-    slug = AutoSlugField()
-
-
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Cluster Type Configuration that is applied to all clusters of this type',
         null = True,
         verbose_name = 'Configuration',
     )
-
-
-    created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
@@ -120,19 +108,6 @@ class ClusterType(TenancyObject):
     def __str__(self):
 
         return self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itim.models.cluster_type_history import ClusterTypeHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ClusterTypeHistory,
-        )
-
-
-        return history
 
 
 
