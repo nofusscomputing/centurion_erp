@@ -74,7 +74,7 @@ A Model link is a reference to an item within the database. Supported model link
 |:---|:---:|
 | [asset](../accounting/asset.md) | `$asset-<id>` |
 | cluster| `$cluster-<id>` |
-| clustertype| `$-<id>` |
+| clustertype| `$cluster_type-<id>` |
 | config groups| `$config_group-<id>` |
 | device| `$device-<id>` |
 | devicemodel| `$device_model-<id>` |
@@ -93,8 +93,8 @@ A Model link is a reference to an item within the database. Supported model link
 | operatingsystem| `$operating_system-<id>` |
 | operatingsystemversion| `$operating_system_version-<id>` |
 | organization| `$organization-<id>` |
-| port| `$-<id>` |
-| project| `$-<id>` |
+| port| `$port-<id>` |
+| project| `$project-<id>` |
 | projectmilestone| `$-<id>` |
 | projectstate| `$project_state-<id>` |
 | projecttask| `$-<id>` |

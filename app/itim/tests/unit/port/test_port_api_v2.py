@@ -1,5 +1,4 @@
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
@@ -18,6 +17,8 @@ from itim.models.services import Port
 
 
 
+@pytest.mark.model_port
+@pytest.mark.module_itim
 class PortAPI(
     TestCase,
     APITenancyObject
@@ -68,7 +69,7 @@ class PortAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_port-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_port-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

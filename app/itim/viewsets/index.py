@@ -26,9 +26,9 @@ class Index(IndexViewset):
         return Response(
             {
                 "change": reverse('v2:_api_v2_ticket_change-list', request=request),
-                "cluster": reverse('v2:_api_v2_cluster-list', request=request),
+                "cluster": reverse('v2:_api_cluster-list', request=request),
                 "incident": reverse('v2:_api_v2_ticket_incident-list', request=request),
                 "problem": reverse('v2:_api_v2_ticket_problem-list', request=request),
-                "service": reverse('v2:_api_v2_service-list', request=request),
+                "service": reverse('v2:_api_service-list', request=request),
             }
         )

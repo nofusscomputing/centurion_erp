@@ -80,7 +80,7 @@ class ModelSerializer(
         if item.project:
 
             url_dict.update({
-                'project': reverse("v2:_api_v2_project-list", request=self._context['view'].request, kwargs={}),
+                'project': reverse("v2:_api_project-list", request=self._context['view'].request, kwargs={}),
             })
 
         if item.category:

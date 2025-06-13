@@ -66,4 +66,12 @@ class SoftwareVersionModelInheritedCases(
 class SoftwareVersionModelPyTest(
     SoftwareVersionModelTestCases,
 ):
-    pass
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        assert model_instance.get_url_kwargs() == { 'pk': model_instance.id, 'software_id': model_instance.software.id }
+

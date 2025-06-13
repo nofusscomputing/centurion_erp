@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from itim.viewsets.service import ViewSet
 
 
 
+@pytest.mark.model_service
+@pytest.mark.module_itim
 class ServiceViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -15,7 +19,7 @@ class ServiceViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_service'
+    route_name = 'v2:_api_service'
 
 
     @classmethod

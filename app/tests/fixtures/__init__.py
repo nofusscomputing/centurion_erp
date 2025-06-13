@@ -43,6 +43,16 @@ from .model_checkin import (
     model_checkin,
 )
 
+from .model_cluster import (
+    kwargs_cluster,
+    model_cluster,
+)
+
+from .model_clustertype import (
+    kwargs_clustertype,
+    model_clustertype,
+)
+
 from .model_configgroup import (
     kwargs_configgroups,
     model_configgroups,
@@ -151,6 +161,21 @@ from .model_operatingsystemversion import (
 
 from .model_permission import (
     model_permission,
+)
+
+from .model_port import (
+    kwargs_port,
+    model_port,
+)
+
+from .model_project import (
+    kwargs_project,
+    model_project,
+)
+
+from .model_service import (
+    kwargs_service,
+    model_service,
 )
 
 from .model_software import (

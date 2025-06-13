@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from itim.viewsets.cluster_type import ViewSet
 
 
 
+@pytest.mark.model_clustertype
+@pytest.mark.module_itim
 class ClusterTypesViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -15,7 +19,7 @@ class ClusterTypesViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_cluster_type'
+    route_name = 'v2:_api_clustertype'
 
 
     @classmethod

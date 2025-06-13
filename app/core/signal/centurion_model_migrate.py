@@ -154,6 +154,36 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'SoftwareVersion',
             'history_model_name': 'SoftwareVersionHistory',
             'notes_model_name': 'SoftwareVersionNotes'
+        },
+        {
+            'app_label': 'itim',
+            'model_name': 'Cluster',
+            'history_model_name': 'ClusterHistory',
+            'notes_model_name': 'ClusterNotes'
+        },
+        {
+            'app_label': 'itim',
+            'model_name': 'ClusterType',
+            'history_model_name': 'ClusterTypeHistory',
+            'notes_model_name': 'ClusterTypeNotes'
+        },
+        {
+            'app_label': 'itim',
+            'model_name': 'Port',
+            'history_model_name': 'PortHistory',
+            'notes_model_name': 'PortNotes'
+        },
+        {
+            'app_label': 'itim',
+            'model_name': 'Service',
+            'history_model_name': 'ServiceHistory',
+            'notes_model_name': 'ServiceNotes'
+        },
+        {
+            'app_label': 'project_management',
+            'model_name': 'Project',
+            'history_model_name': 'ProjectHistory',
+            'notes_model_name': 'ProjectNotes'
         }
     ]
 
@@ -201,7 +231,7 @@ def centurion_model_migrate(sender, **kwargs):
                         model_name = model.get_history_model_name( model )
                     )
 
-                    history = original_history.objects.all()
+                    history = original_history.objects.filter().exclude( user = None )
 
                     print(f'        Found {len(history)} history entries to migrate.')
 

@@ -21,7 +21,7 @@ class ClusterBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_cluster-detail",
+        view_name="v2:_api_cluster-detail",
     )
 
     class Meta:

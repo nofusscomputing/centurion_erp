@@ -22,7 +22,7 @@ class ServiceBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_service-detail", format="html"
+        view_name="v2:_api_service-detail", format="html"
     )
 
     class Meta:

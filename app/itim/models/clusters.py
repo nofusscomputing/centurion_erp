@@ -1,19 +1,18 @@
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
-from rest_framework.reverse import reverse
+from access.fields import AutoLastModifiedField
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
-
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
+from core.models.centurion import CenturionModel
 
 from itam.models.device import Device
 
 
 
-class ClusterType(TenancyObject):
+class ClusterType(
+    CenturionModel
+):
+
+    model_tag = 'cluster_type'
 
 
     class Meta:
@@ -27,14 +26,6 @@ class ClusterType(TenancyObject):
         verbose_name_plural = "Cluster Types"
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID for this cluster type',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     name = models.CharField(
         blank = False,
         help_text = 'Name of the Cluster Type',
@@ -43,19 +34,12 @@ class ClusterType(TenancyObject):
         verbose_name = 'Name',
     )
 
-    slug = AutoSlugField()
-
-
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Cluster Type Configuration that is applied to all clusters of this type',
         null = True,
         verbose_name = 'Configuration',
     )
-
-
-    created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
@@ -125,22 +109,13 @@ class ClusterType(TenancyObject):
 
         return self.name
 
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itim.models.cluster_type_history import ClusterTypeHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ClusterTypeHistory,
-        )
 
 
-        return history
+class Cluster(
+    CenturionModel
+):
 
-
-
-class Cluster(TenancyObject):
+    model_tag = 'cluster'
 
 
     class Meta:
@@ -154,31 +129,21 @@ class Cluster(TenancyObject):
         verbose_name_plural = "Clusters"
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID for this cluster',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     parent_cluster = models.ForeignKey(
         'self',
         blank = True,
-        default = None,
         help_text = 'Parent Cluster for this cluster',
         null = True,
-        on_delete = models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Parent Cluster',
     )
 
     cluster_type = models.ForeignKey(
         ClusterType,
         blank = True,
-        default = None,
         help_text = 'Type of Cluster',
         null = True,
-        on_delete = models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Cluster Type',
     )
 
@@ -190,11 +155,8 @@ class Cluster(TenancyObject):
         verbose_name = 'Name',
     )
 
-    slug = AutoSlugField()
-
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Cluster Configuration',
         null = True,
         verbose_name = 'Configuration',
@@ -203,7 +165,6 @@ class Cluster(TenancyObject):
     nodes = models.ManyToManyField(
         Device,
         blank = True,
-        default = None,
         help_text = 'Hosts for resource consumption that the cluster is deployed upon',
         related_name = 'cluster_node',
         verbose_name = 'Nodes',
@@ -212,13 +173,10 @@ class Cluster(TenancyObject):
     devices = models.ManyToManyField(
         Device,
         blank = True,
-        default = None,
         help_text = 'Devices that are deployed upon the cluster.',
         related_name = 'cluster_device',
         verbose_name = 'Devices',
     )
-
-    created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
@@ -316,13 +274,8 @@ class Cluster(TenancyObject):
     ]
 
 
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_cluster-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_cluster-detail", kwargs={'pk': self.id})
+    def get_organization(self):
+        return self.organization
 
 
     @property
@@ -362,24 +315,3 @@ class Cluster(TenancyObject):
     def __str__(self):
 
         return self.name
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itim.models.cluster_history import ClusterHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ClusterHistory,
-        )
-
-
-        return history
-
-
-
-@receiver(post_delete, sender=Cluster, dispatch_uid='cluster_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
-
-    deleted_model.send(sender='cluster_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.CLUSTER)

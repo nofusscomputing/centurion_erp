@@ -12,14 +12,10 @@ Models within Centurion ERP:
 
     - [Centurion Base](./centurion.md)
 
-    - [Centurion Sub-Model](./centurion_sub.md)
-
     - [Tenancy](./tenancy.md)
 
 
 ## Helpers
-
-- [History Save](./core_history_save.md)
 
 - Organization Permission Checking
 

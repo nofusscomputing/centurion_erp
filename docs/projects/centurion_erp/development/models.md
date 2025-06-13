@@ -20,7 +20,7 @@ When designing or even implementing a model do consider that what is defined wit
 
 When creating models they must meet the following requirements:
 
-- inherits from [`core.models.centurion.CenturionModel`](./api/models/centurion.md) or if a submodel [`core.models.centurion.CenturionSubModel`](./api/models/centurion_sub.md) and its base model.
+- inherits from [`core.models.centurion.CenturionModel`](./api/models/centurion.md) or if a submodel `core.models.centurion.CenturionSubModel` and its base model.
 
 - class has  the folloing objects defined:
 

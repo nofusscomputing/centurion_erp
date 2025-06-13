@@ -1,5 +1,4 @@
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
@@ -20,6 +19,8 @@ from itim.models.clusters import Cluster, ClusterType
 
 
 
+@pytest.mark.model_cluster
+@pytest.mark.module_itim
 class ClusterAPI(
     TestCase,
     APITenancyObject
@@ -97,7 +98,7 @@ class ClusterAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_cluster-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_cluster-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

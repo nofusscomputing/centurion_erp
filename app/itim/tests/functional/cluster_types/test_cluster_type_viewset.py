@@ -24,7 +24,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
 
-    url_name = '_api_v2_cluster_type'
+    url_name = '_api_clustertype'
 
     change_data = {'name': 'device-change'}
 
