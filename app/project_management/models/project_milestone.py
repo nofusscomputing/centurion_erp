@@ -2,7 +2,8 @@ from django.db import models
 
 from access.fields import AutoCreatedField
 
-from .projects import Project, ProjectCommonFieldsName
+from .projects import Project
+from .project_common import ProjectCommonFieldsName
 
 
 
