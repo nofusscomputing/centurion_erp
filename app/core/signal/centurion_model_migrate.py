@@ -160,6 +160,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'Cluster',
             'history_model_name': 'ClusterHistory',
             'notes_model_name': 'ClusterNotes'
+        },
+        {
+            'app_label': 'itim',
+            'model_name': 'ClusterType',
+            'history_model_name': 'ClusterTypeHistory',
+            'notes_model_name': 'ClusterTypeNotes'
         }
     ]
 
