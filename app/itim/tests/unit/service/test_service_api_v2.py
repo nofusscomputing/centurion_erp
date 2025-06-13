@@ -1,5 +1,4 @@
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
@@ -21,6 +20,8 @@ from itim.models.services import Service, Port
 
 
 
+@pytest.mark.model_service
+@pytest.mark.module_itim
 class ServiceAPI(
     TestCase,
     APITenancyObject
