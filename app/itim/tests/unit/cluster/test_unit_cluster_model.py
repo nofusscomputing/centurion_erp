@@ -83,16 +83,6 @@ class ClusterModelTestCases(
     }
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_cluster_move_organization(user):
-        """Move Organization test
-
-        When a cluster moves organization, clustersoftware and clustersoftware table data
-        must also move organizations
-        """
-        pass
-
-
 
 class ClusterModelInheritedCases(
     ClusterModelTestCases,
