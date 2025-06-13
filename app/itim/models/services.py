@@ -1,17 +1,11 @@
 import re
 
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 from django.forms import ValidationError
 
-from rest_framework.reverse import reverse
-
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from core.models.centurion import CenturionModel
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device import Device
 
@@ -136,7 +130,11 @@ class Port(
 
 
 
-class Service(TenancyObject):
+class Service(
+    CenturionModel
+):
+
+    model_tag = 'service'
 
 
     class Meta:
@@ -161,15 +159,6 @@ class Service(TenancyObject):
 
             raise ValidationError('config key must only contain [a-z_].')
 
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Id for this Service',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     is_template = models.BooleanField(
         blank = False,
         default = False,
@@ -180,10 +169,9 @@ class Service(TenancyObject):
     template = models.ForeignKey(
         'self',
         blank = True,
-        default = None,
         help_text = 'Template this service uses',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Template Name',
     )
 
@@ -198,27 +186,24 @@ class Service(TenancyObject):
     device = models.ForeignKey(
         Device,
         blank = True,
-        default = None,
         help_text = 'Device the service is assigned to',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Device',
     )
 
     cluster = models.ForeignKey(
         'Cluster',
         blank = True,
-        default = None,
         help_text = 'Cluster the service is assigned to',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         unique = False,
         verbose_name = 'Cluster',
     )
 
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Cluster Configuration',
         null = True,
         verbose_name = 'Configuration',
@@ -244,14 +229,11 @@ class Service(TenancyObject):
     dependent_service = models.ManyToManyField(
         'self',
         blank = True,
-        default = None,
         help_text = 'Services that this service depends upon',
         related_name = 'dependentservice',
         symmetrical = False,
         verbose_name = 'Dependent Services',
     )
-
-    created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
@@ -356,13 +338,16 @@ class Service(TenancyObject):
     ]
 
 
-    def get_url( self, request = None ) -> str:
+    def __str__(self):
 
-        if request:
+        return self.name
 
-            return reverse("v2:_api_v2_service-detail", request=request, kwargs={'pk': self.id})
 
-        return reverse("v2:_api_v2_service-detail", kwargs={'pk': self.id})
+    def clean(self):
+
+        if self.config_key_variable:
+
+            self.config_key_variable = self.config_key_variable.lower()
 
 
     @property
@@ -385,36 +370,5 @@ class Service(TenancyObject):
         return config
 
 
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        if self.config_key_variable:
-
-            self.config_key_variable = self.config_key_variable.lower()
-
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itim.models.service_history import ServiceHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ServiceHistory,
-        )
-
-
-        return history
-
-    def __str__(self):
-
-        return self.name
-
-
-
-@receiver(post_delete, sender=Service, dispatch_uid='service_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
-
-    deleted_model.send(sender='service_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.SERVICE)
+    def get_organization(self):
+        return self.organization
