@@ -61,7 +61,7 @@ router.register(
 )
 router.register(
     prefix = 'cluster_type', viewset = cluster_type_v2.ViewSet,
-    basename = '_api_v2_cluster_type'
+    basename = '_api_clustertype'
 )
 router.register(
     prefix = 'device_model', viewset = device_model.ViewSet,

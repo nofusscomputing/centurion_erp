@@ -17,7 +17,7 @@ class ClusterTypeBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_cluster_type-detail", format="html"
+        view_name="v2:_api_clustertype-detail", format="html"
     )
 
     class Meta:
