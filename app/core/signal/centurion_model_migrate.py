@@ -178,6 +178,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'Service',
             'history_model_name': 'ServiceHistory',
             'notes_model_name': 'ServiceNotes'
+        },
+        {
+            'app_label': 'project_management',
+            'model_name': 'Project',
+            'history_model_name': 'ProjectHistory',
+            'notes_model_name': 'ProjectNotes'
         }
     ]
 
