@@ -172,6 +172,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'Port',
             'history_model_name': 'PortHistory',
             'notes_model_name': 'PortNotes'
+        },
+        {
+            'app_label': 'itim',
+            'model_name': 'Service',
+            'history_model_name': 'ServiceHistory',
+            'notes_model_name': 'ServiceNotes'
         }
     ]
 
