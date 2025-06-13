@@ -43,6 +43,11 @@ from .model_checkin import (
     model_checkin,
 )
 
+from .model_cluster import (
+    kwargs_cluster,
+    model_cluster,
+)
+
 from .model_configgroup import (
     kwargs_configgroups,
     model_configgroups,
