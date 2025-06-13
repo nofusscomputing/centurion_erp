@@ -86,7 +86,7 @@ router.register(
 )
 router.register(
     prefix = 'port', viewset = port_v2.ViewSet,
-    basename = '_api_v2_port'
+    basename = '_api_port'
 )
 router.register(
     prefix = 'project_state',
