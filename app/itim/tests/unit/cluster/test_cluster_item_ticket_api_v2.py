@@ -1,3 +1,4 @@
+import pytest
 
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -10,6 +11,8 @@ from itim.models.clusters import Cluster
 
 
 
+@pytest.mark.model_cluster
+@pytest.mark.module_itim
 class ClusterItemTicketAPI(
     ItemTicketAPI,
     TestCase,

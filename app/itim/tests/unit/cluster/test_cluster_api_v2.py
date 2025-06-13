@@ -1,5 +1,4 @@
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
@@ -20,6 +19,8 @@ from itim.models.clusters import Cluster, ClusterType
 
 
 
+@pytest.mark.model_cluster
+@pytest.mark.module_itim
 class ClusterAPI(
     TestCase,
     APITenancyObject

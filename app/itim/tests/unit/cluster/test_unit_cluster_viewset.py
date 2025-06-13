@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from itim.viewsets.cluster import ViewSet
 
 
 
+@pytest.mark.model_cluster
+@pytest.mark.module_itim
 class ClusterViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -29,7 +33,7 @@ class ClusterViewsetList(
 
 
         client = Client()
-        
+
         url = reverse(
             self.route_name + '-list',
             kwargs = self.kwargs
