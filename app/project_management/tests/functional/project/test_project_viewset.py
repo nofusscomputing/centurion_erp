@@ -28,7 +28,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_project'
+    url_name = '_api_project'
 
     change_data = {'name': 'device-change'}
 

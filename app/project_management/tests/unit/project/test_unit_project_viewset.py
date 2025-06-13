@@ -19,7 +19,7 @@ class ProjectViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_project'
+    route_name = 'v2:_api_project'
 
 
     @classmethod
@@ -34,7 +34,7 @@ class ProjectViewsetList(
 
 
         client = Client()
-        
+
         url = reverse(
             self.route_name + '-list',
             kwargs = self.kwargs
