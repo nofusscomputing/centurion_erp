@@ -117,7 +117,7 @@ class Index(IndexViewset):
                 "manufacturer": reverse('v2:_api_manufacturer-list', request=request),
                 "port": reverse('v2:_api_port-list', request=request),
                 "project_state": reverse('v2:_api_projectstate-list', request=request),
-                "project_type": reverse('v2:_api_v2_project_type-list', request=request),
+                "project_type": reverse('v2:_api_projecttype-list', request=request),
                 "software_category": reverse('v2:_api_softwarecategory-list', request=request),
                 "ticket_category": reverse('v2:_api_ticketcategory-list', request=request),
                 "ticket_comment_category": reverse('v2:_api_ticketcommentcategory-list', request=request),
