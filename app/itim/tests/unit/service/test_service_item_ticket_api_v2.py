@@ -10,7 +10,7 @@ from core.models.ticket.ticket_linked_items import TicketLinkedItem
 from itim.models.services import Service
 
 
-
+@pytest.mark.skip( reason = 'this ticket model is depreciated' )
 @pytest.mark.model_service
 @pytest.mark.module_itim
 class ServiceItemTicketAPI(
