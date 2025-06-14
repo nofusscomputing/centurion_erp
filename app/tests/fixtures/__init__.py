@@ -183,6 +183,11 @@ from .model_projectstate import (
     model_projectstate,
 )
 
+from .model_projecttype import (
+    kwargs_projecttype,
+    model_projecttype,
+)
+
 from .model_service import (
     kwargs_service,
     model_service,
