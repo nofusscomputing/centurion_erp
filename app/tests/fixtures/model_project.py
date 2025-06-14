@@ -18,8 +18,11 @@ def kwargs_project(kwargs_centurionmodel):
     random_str = str(random_str).replace(
             ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
+    kwargs = kwargs_centurionmodel.copy()
+    del kwargs['model_notes']
+
     kwargs = {
-        **kwargs_centurionmodel.copy(),
+        **kwargs,
         'name': 'project_' + random_str,
         'priority': Project.Priority.LOW,
     }
