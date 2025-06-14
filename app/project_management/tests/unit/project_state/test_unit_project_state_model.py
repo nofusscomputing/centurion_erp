@@ -1,15 +1,78 @@
-from django.test import TestCase
+import pytest
 
-from centurion.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from django.db import models
+
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from project_management.models.project_states import ProjectState
 
 
-class ProjectStateModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_projectstate
+class ProjectStateModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = ProjectState
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'project_state'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            'name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 100,
+                'null': False,
+                'unique': True,
+            },
+            'runbook': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            'is_completed': {
+                'blank': False,
+                'default': False,
+                'field_type': models.BooleanField,
+                'null': False,
+                'unique': False,
+            },
+            'modified': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': False,
+                'unique': False,
+            },
+        }
+
+
+
+class ProjectStateModelInheritedCases(
+    ProjectStateModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_project_management
+class ProjectStateModelPyTest(
+    ProjectStateModelTestCases,
+):
+
+    pass
