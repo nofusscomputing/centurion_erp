@@ -184,6 +184,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'Project',
             'history_model_name': 'ProjectHistory',
             'notes_model_name': 'ProjectNotes'
+        },
+        {
+            'app_label': 'project_management',
+            'model_name': 'ProjectMilestone',
+            'history_model_name': 'ProjectMilestoneHistory',
+            'notes_model_name': 'ProjectMilestoneNotes'
         }
     ]
 
