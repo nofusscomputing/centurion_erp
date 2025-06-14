@@ -20,7 +20,7 @@ class ProjectMilestoneViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_project_milestone'
+    route_name = 'v2:_api_projectmilestone'
 
 
     @classmethod
