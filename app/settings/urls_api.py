@@ -28,8 +28,8 @@ from itim.viewsets import (
 )
 
 from project_management.viewsets import (
-    project_state as project_state_v2,
-    project_type as project_type_v2,
+    project_state,
+    project_type,
 )
 
 from settings.viewsets import (
@@ -90,11 +90,11 @@ router.register(
 )
 router.register(
     prefix = 'project_state',
-    viewset = project_state_v2.ViewSet,
-    basename = '_api_v2_project_state'
+    viewset = project_state.ViewSet,
+    basename = '_api_projectstate'
 )
 router.register(
-    prefix = 'project_type', viewset = project_type_v2.ViewSet,
+    prefix = 'project_type', viewset = project_type.ViewSet,
     basename = '_api_v2_project_type'
 )
 router.register(
