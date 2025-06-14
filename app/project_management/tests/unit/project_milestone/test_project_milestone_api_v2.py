@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -23,6 +22,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_projectmilestone
+@pytest.mark.module_project_management
 class ProjectMilestoneAPI(
     TestCase,
     APITenancyObject
