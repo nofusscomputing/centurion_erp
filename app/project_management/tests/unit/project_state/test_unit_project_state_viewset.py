@@ -19,7 +19,7 @@ class ProjectStateViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_project_state'
+    route_name = 'v2:_api_projectstate'
 
 
     @classmethod
