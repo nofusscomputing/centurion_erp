@@ -1,30 +1,26 @@
 import datetime
 import pytest
 
-from project_management.models.projects import Project
+from project_management.models.project_types import ProjectType
 
 
 
 @pytest.fixture( scope = 'class')
-def model_project():
+def model_projecttype():
 
-    yield Project
+    yield ProjectType
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_project(kwargs_centurionmodel):
+def kwargs_projecttype(kwargs_centurionmodel):
 
     random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
     random_str = str(random_str).replace(
             ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
-    kwargs = kwargs_centurionmodel.copy()
-    del kwargs['model_notes']
-
     kwargs = {
-        **kwargs,
-        'name': 'project_' + random_str,
-        'priority': Project.Priority.LOW,
+        **kwargs_centurionmodel.copy(),
+        'name': 'projecttype_' + random_str,
     }
 
     yield kwargs.copy()
