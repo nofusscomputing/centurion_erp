@@ -95,7 +95,7 @@ router.register(
 )
 router.register(
     prefix = 'project_type', viewset = project_type.ViewSet,
-    basename = '_api_v2_project_type'
+    basename = '_api_projecttype'
 )
 router.register(
     prefix = 'software_category', viewset = software_category_v2.ViewSet,
