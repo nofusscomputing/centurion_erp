@@ -1,3 +1,4 @@
+import pytest
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +9,8 @@ from settings.viewsets.app_settings import ViewSet
 
 
 
+@pytest.mark.model_appsettings
+@pytest.mark.module_settings
 class AppSettingsViewsetList(
     ModelRetrieveUpdateViewSetInheritedCases,
     TestCase,
