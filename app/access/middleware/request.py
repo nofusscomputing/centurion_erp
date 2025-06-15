@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.utils.deprecation import MiddlewareMixin
 
 
-from access.models.tenant import Tenant as Organization
+from access.models.tenant import Tenant
 from access.models.team import Team
 
 
@@ -40,8 +40,8 @@ class Tenancy:
     _app_settings: AppSettings = None
 
 
-    _user_organizations: list([Organization]) = None
-    """Cached User Organizations"""
+    _user_organizations: list([Tenant]) = None
+    """Cached User Tenants"""
 
     _user_teams: list([Team]) = None
     """Cached User Teams"""
@@ -90,7 +90,7 @@ class Tenancy:
 
 
 
-    def is_member(self, organization: Organization) -> bool:
+    def is_member(self, organization: Tenant) -> bool:
         """Returns true if the current user is a member of the organization
 
         iterates over the user_organizations list and returns true if the user is a member
@@ -113,11 +113,11 @@ class Tenancy:
 
 
 
-    def has_organization_permission(self, organization: Organization, permissions_required: str) -> bool:
+    def has_organization_permission(self, organization: Tenant, permissions_required: str) -> bool:
         """ Check if user has permission within organization.
 
         Args:
-            organization (int): Organization to check.
+            organization (int): Tenant to check.
             permissions_required (list): if doing object level permissions, pass in required permission.
 
         Returns:
@@ -126,9 +126,9 @@ class Tenancy:
 
         has_permission: bool = False
 
-        if type(organization) is not Organization:
+        if type(organization) is not Tenant:
 
-            raise TypeError('Organization must be of type Organization')
+            raise TypeError('Tenant must be of type Tenant')
 
 
         if type(permissions_required) is not str:
