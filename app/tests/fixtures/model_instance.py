@@ -4,6 +4,8 @@ import pytest
 from django.apps import apps
 from django.db import models
 
+from access.models.tenant import Tenant
+
 
 
 model_objs: list = []
@@ -31,6 +33,32 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
             global model_objs
 
             obj = None
+            org = None
+
+            kwargs = model_kwargs
+
+            if kwargs_create:
+
+                if(
+                    'organization' in kwargs_create
+                    and type(model) is not Tenant
+                ):
+
+                    org = kwargs_create['organization']
+
+                elif(
+                    'organization' in kwargs_create
+                    and type(model) is  Tenant
+                ):
+
+                    # org = kwargs_create['organization']
+
+                    del kwargs_create['organization']
+
+                kwargs.update(
+                    **kwargs_create
+                )
+
 
 
             if model._meta.abstract:
@@ -52,17 +80,25 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
             else:
 
 
-                obj = model_kwarg_data(
-                    model = model,
-                    model_kwargs = model_kwargs,
-                    create_instance = True,
-                )
+                if(
+                    model is not Tenant
+                    and org is not None
+                ):
 
-                obj = obj['instance']
+                    obj = model_kwarg_data(
+                        model = model,
+                        model_kwargs = kwargs,
+                        create_instance = True,
+                    )
 
+                    obj = obj['instance']
 
+                    model_objs += [ obj ]
 
-            model_objs += [ obj ]
+                else:
+
+                    obj = org
+
 
             return obj
 

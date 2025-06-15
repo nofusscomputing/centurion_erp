@@ -11,6 +11,7 @@ from itim.models.clusters import Cluster
 
 
 
+@pytest.mark.skip( reason = 'this ticket model is depreciated' )
 @pytest.mark.model_cluster
 @pytest.mark.module_itim
 class ClusterItemTicketAPI(

@@ -11,6 +11,7 @@ from itam.models.operating_system import OperatingSystem
 
 
 
+@pytest.mark.skip( reason = 'this ticket model is depreciated' )
 @pytest.mark.model_operatingsystem
 @pytest.mark.module_itam
 class OperatingSystemItemTicketAPI(

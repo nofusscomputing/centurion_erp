@@ -173,6 +173,21 @@ from .model_project import (
     model_project,
 )
 
+from .model_projectmilestone import (
+    kwargs_projectmilestone,
+    model_projectmilestone,
+)
+
+from .model_projectstate import (
+    kwargs_projectstate,
+    model_projectstate,
+)
+
+from .model_projecttype import (
+    kwargs_projecttype,
+    model_projecttype,
+)
+
 from .model_service import (
     kwargs_service,
     model_service,

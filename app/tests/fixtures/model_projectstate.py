@@ -1,18 +1,18 @@
 import datetime
 import pytest
 
-from project_management.models.projects import Project
+from project_management.models.project_states import ProjectState
 
 
 
 @pytest.fixture( scope = 'class')
-def model_project():
+def model_projectstate():
 
-    yield Project
+    yield ProjectState
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_project(kwargs_centurionmodel):
+def kwargs_projectstate(kwargs_centurionmodel):
 
     random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
     random_str = str(random_str).replace(
@@ -23,8 +23,7 @@ def kwargs_project(kwargs_centurionmodel):
 
     kwargs = {
         **kwargs,
-        'name': 'project_' + random_str,
-        'priority': Project.Priority.LOW,
+        'name': 'projectstate_' + random_str,
     }
 
     yield kwargs.copy()
