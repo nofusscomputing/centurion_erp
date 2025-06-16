@@ -208,6 +208,12 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'AppSettings',
             'history_model_name': 'AppSettingsHistory',
             'notes_model_name': None
+        },
+        {
+            'app_label': 'settings',
+            'model_name': 'ExternalLink',
+            'history_model_name': 'ExternalLinkHistory',
+            'notes_model_name': 'ExternalLinkNotes'
         }
     ]
 
