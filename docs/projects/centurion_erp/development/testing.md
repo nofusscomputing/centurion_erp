@@ -232,6 +232,26 @@ Due to how pytest and pytest-django works, there is no method available for clas
     <!-- markdownlint-restore -->
 
 
+### API Permissions Tests
+
+API Permissions tests are automagically created when `pytest collect` runs. Normally there will be nothing that needs to be done for this test suite. However if you find there is a requirement for adding additional API Permission Test Cases add an additional tests file. This file must be placed in path `<app name>/tests/functional/additional_<model name>_permissions_api.py`. The contents of this file is as follows:
+
+``` py
+
+
+
+class AdditionalTestCases:    # You must use this class name
+
+    def test_my_test_case(self, fixture_name):
+
+        # your test case logic.
+
+
+```
+
+Once this file is detected during `collect` the test cases in class `AdditionalTestCases`, will be included in the API Permission Test Suit for the model in question.
+
+
 ## Parameterizing Tests
 
 To be able to paramertize any test case, the test must be setup to use PyTest. Within the test class the test data is required to be stored in a dictionary prefixed with string `paramaterized_<data_name>`. Variable `<data_name>` is the data key that you will specify within the test method.

@@ -2,6 +2,7 @@ import pytest
 
 from django.apps import apps
 from django.conf import settings
+from django.utils.module_loading import import_string
 
 from api.tests.functional.test_functional_permissions_api import (
     APIPermissionsInheritedCases
@@ -144,9 +145,22 @@ for centurion_model in get_models(
     model_name = centurion_model._meta.model_name
     cls_name: str = f"{centurion_model._meta.object_name}APIPermissionsPyTest"
 
+    inc_classes = (APIPermissionsTestCases,)
+    try:
+
+        additional_testcases = import_string(
+            centurion_model._meta.app_label + '.tests.functional.additional_' +
+            centurion_model._meta.model_name + '_permissions_api.AdditionalTestCases'
+        )
+
+        inc_classes += (additional_testcases,)
+
+    except Exception as ex:
+        additional_testcases = None
+
     dynamic_class = type(
         cls_name,
-        (APIPermissionsTestCases,),
+        inc_classes,
         {
             '__module__': 'api.tests.functional.test_functional_meta_permissions_api',
             '__qualname__': cls_name,
