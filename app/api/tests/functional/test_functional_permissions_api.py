@@ -334,6 +334,9 @@ class APIPermissionViewInheritedCases:
 
         for item in response.data['results']:
 
+            if 'organization' not in item:
+                pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
+
             if(
                 int(item['organization']['id']) not in viewable_organizations
                 and
@@ -386,6 +389,9 @@ class APIPermissionViewInheritedCases:
 
 
         for row in response.data['results']:
+
+            if 'organization' not in row:
+                pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
             if row['organization']['id'] not in viewable_organizations:
 
