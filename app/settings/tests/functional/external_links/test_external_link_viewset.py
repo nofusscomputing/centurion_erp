@@ -138,12 +138,14 @@ class ViewSetBase:
 
         self.item = self.model.objects.create(
             organization = self.organization,
-            name = 'one'
+            name = 'one',
+            template = 'aa'
         )
 
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
-            name = 'two'
+            name = 'aa',
+            template = 'aa'
         )
 
 
