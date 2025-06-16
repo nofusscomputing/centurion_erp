@@ -576,7 +576,10 @@ def organization_two(django_db_blocker):
 
     with django_db_blocker.unblock():
 
-        item.delete()
+        try:
+            item.delete()
+        except:
+            pass
 
 
 
@@ -597,7 +600,10 @@ def organization_three(django_db_blocker):
 
     with django_db_blocker.unblock():
 
-        item.delete()
+        try:
+            item.delete()
+        except:
+            pass
 
 
 
