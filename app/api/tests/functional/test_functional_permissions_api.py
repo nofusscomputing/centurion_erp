@@ -1,6 +1,7 @@
 import datetime
 import pytest
 
+from django.urls.exceptions import NoReverseMatch
 from django.test import Client
 
 from rest_framework.permissions import (
@@ -33,7 +34,8 @@ class APIPermissionAddInheritedCases:
         ids=[test_name for test_name, user, expected in permission_no_add]
     )
     def test_permission_no_add(
-        self, model_kwargs, kwargs_api_create, model_instance, api_request_permissions, test_name, user, expected
+        self, model_kwargs, kwargs_api_create, model_instance,
+        api_request_permissions, test_name, user, expected
     ):
         """ Check correct permission for add
 
@@ -48,10 +50,26 @@ class APIPermissionAddInheritedCases:
 
         the_model = model_instance( kwargs_create = model_kwargs )
 
-        response = client.post(
-            path = the_model.get_url( many = True ),
-            data = kwargs_api_create
-        )
+        try:
+
+            response = client.post(
+                path = the_model.get_url( many = True ),
+                data = kwargs_api_create
+            )
+
+        except NoReverseMatch:
+
+            # Cater for models that use viewset `-list` but `-detail`
+            try:
+
+                response = client.get(
+                    path = the_model.get_url( many = False ),
+                    data = kwargs_api_create
+                )
+
+            except NoReverseMatch:
+
+                pass
 
         if response.status_code == 405:
             pytest.xfail( reason = 'ViewSet does not have this request method.' )
@@ -60,7 +78,9 @@ class APIPermissionAddInheritedCases:
 
 
 
-    def test_permission_add(self, model_instance, api_request_permissions, model_kwargs, kwargs_api_create):
+    def test_permission_add(self, model_instance, api_request_permissions,
+        model_kwargs, kwargs_api_create
+    ):
         """ Check correct permission for add 
 
         Attempt to add as user with permission
@@ -72,10 +92,26 @@ class APIPermissionAddInheritedCases:
 
         the_model = model_instance( kwargs_create = model_kwargs )
 
-        response = client.post(
-            path = the_model.get_url( many = True ),
-            data = kwargs_api_create
-        )
+        try:
+
+            response = client.post(
+                path = the_model.get_url( many = True ),
+                data = kwargs_api_create
+            )
+
+        except NoReverseMatch:
+
+            # Cater for models that use viewset `-list` but `-detail`
+            try:
+
+                response = client.post(
+                    path = the_model.get_url( many = False ),
+                    data = kwargs_api_create
+                )
+
+            except NoReverseMatch:
+
+                pass
 
 
         if response.status_code == 405:
