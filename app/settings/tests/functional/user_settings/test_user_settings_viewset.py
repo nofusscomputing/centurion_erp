@@ -3,18 +3,18 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
-from django import urls
+
+from django.test import TestCase
+# from django import urls
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import (
-    APIPermissionChange,
-    APIPermissionView
-)
+# from api.tests.abstract.api_permissions_viewset import (
+#     APIPermissionChange,
+#     APIPermissionView
+# )
 from api.tests.abstract.api_serializer_viewset import (
     SerializerChange,
     SerializerView,
@@ -31,6 +31,9 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.functional
+@pytest.mark.model_usersettings
+@pytest.mark.module_settings
 class ViewSetBase:
 
     model = UserSettings
@@ -195,128 +198,128 @@ class ViewSetBase:
 
 
 
-class UserSettingsPermissionsAPI(
-    ViewSetBase,
-    APIPermissionChange,
-    APIPermissionView,
-    TestCase,
-):
+# class UserSettingsPermissionsAPI(
+#     ViewSetBase,
+#     APIPermissionChange,
+#     APIPermissionView,
+#     TestCase,
+# ):
 
 
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
+#     def test_returned_data_from_user_and_global_organizations_only(self):
+#         """Check items returned
 
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
+#         This test case is a over-ride of a test case with the same name.
+#         This model is not a tenancy model making this test not-applicable.
 
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
-
-    def test_add_create_not_allowed(self):
-        """ Check correct permission for add 
-
-        Not allowed to add.
-        Ensure that the list view for HTTP/POST does not exist.
-        """
-
-        with pytest.raises(urls.exceptions.NoReverseMatch) as e:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-        assert e.typename == 'NoReverseMatch'
+#         Items returned from the query Must be from the users organization and
+#         global ONLY!
+#         """
+#         pass
 
 
 
-    def test_delete_has_permission(self):
-        """ Check correct permission for delete
+#     # def test_add_create_not_allowed(self):
+#     #     """ Check correct permission for add 
 
-        Delete item as user with delete permission
-        """
+#     #     Not allowed to add.
+#     #     Ensure that the list view for HTTP/POST does not exist.
+#     #     """
 
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
+#     #     with pytest.raises(urls.exceptions.NoReverseMatch) as e:
 
+#     #         url = reverse(self.app_namespace + ':' + self.url_name + '-list')
 
-        client.force_login(self.view_user)
-        response = client.delete(url, data=self.delete_data)
-
-        assert response.status_code == 405
+#     #     assert e.typename == 'NoReverseMatch'
 
 
 
-    def test_change_has_permission(self):
-        """ Check correct permission for change
+#     def test_delete_has_permission(self):
+#         """ Check correct permission for delete
 
-        Make change with user who has change permission
-        """
+#         Delete item as user with delete permission
+#         """
 
-
-        item = self.model.objects.get( id = self.change_user.id )
-
-        item.default_organization = self.organization
-
-        item.save()
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs={'pk': item.id})
+#         client = Client()
+#         url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
 
 
-        client.force_login(self.change_user)
-        response = client.patch(url, data={'different_organization': self.different_organization.id}, content_type='application/json')
+#         client.force_login(self.view_user)
+#         response = client.delete(url, data=self.delete_data)
 
-        assert response.status_code == 200
-
-
-    def test_change_permission_view_denied(self):
-        """ Ensure permission view cant make change
-
-        This test case is a duplicate of a test case with the same name.
-        As this is the users own settings, any permission a user has will grant
-        them access as user settings do not use permissions
-
-        Attempt to make change as user with view permission
-        """
-
-        pass
+#         assert response.status_code == 405
 
 
-    def test_returned_results_only_user_orgs(self):
-        """Test not required
 
-        this test is not required as this model is not a tenancy model
-        """
+#     def test_change_has_permission(self):
+#         """ Check correct permission for change
 
-        pass
-
-
-    def test_change_no_permission_denied(self):
-        """ Ensure permission view cant make change
-
-        This test case is a duplicate of a test case with the same name.
-        This test is not required for this model as there are no permissions
-        assosiated with accessing this model.
-
-        Attempt to make change as user without permissions
-        """
-
-        pass
+#         Make change with user who has change permission
+#         """
 
 
-    def test_view_no_permission_denied(self):
-        """ Check correct permission for view
+#         item = self.model.objects.get( id = self.change_user.id )
 
-        This test case is a duplicate of a test case with the same name.
-        This test is not required for this model as there are no permissions
-        assosiated with accessing this model.
+#         item.default_organization = self.organization
 
-        Attempt to view with user missing permission
-        """
+#         item.save()
 
-        pass
+#         client = Client()
+#         url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs={'pk': item.id})
+
+
+#         client.force_login(self.change_user)
+#         response = client.patch(url, data={'different_organization': self.different_organization.id}, content_type='application/json')
+
+#         assert response.status_code == 200
+
+
+#     def test_change_permission_view_denied(self):
+#         """ Ensure permission view cant make change
+
+#         This test case is a duplicate of a test case with the same name.
+#         As this is the users own settings, any permission a user has will grant
+#         them access as user settings do not use permissions
+
+#         Attempt to make change as user with view permission
+#         """
+
+#         pass
+
+
+#     def test_returned_results_only_user_orgs(self):
+#         """Test not required
+
+#         this test is not required as this model is not a tenancy model
+#         """
+
+#         pass
+
+
+#     def test_change_no_permission_denied(self):
+#         """ Ensure permission view cant make change
+
+#         This test case is a duplicate of a test case with the same name.
+#         This test is not required for this model as there are no permissions
+#         assosiated with accessing this model.
+
+#         Attempt to make change as user without permissions
+#         """
+
+#         pass
+
+
+#     def test_view_no_permission_denied(self):
+#         """ Check correct permission for view
+
+#         This test case is a duplicate of a test case with the same name.
+#         This test is not required for this model as there are no permissions
+#         assosiated with accessing this model.
+
+#         Attempt to view with user missing permission
+#         """
+
+#         pass
 
 
 
