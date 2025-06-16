@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -15,13 +14,14 @@ from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APICommonFields
 
-from settings.models.app_settings import AppSettings
 from settings.models.user_settings import UserSettings
 
 User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_usersettings
+@pytest.mark.module_settings
 class UserSettingsAPI(
     TestCase,
     APICommonFields

@@ -257,3 +257,8 @@ from .model_user import (
     kwargs_user,
     model_user,
 )
+
+from .model_usersettings import (
+    kwargs_usersettings,
+    model_usersettings,
+)
