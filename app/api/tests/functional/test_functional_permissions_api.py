@@ -307,6 +307,10 @@ class APIPermissionViewInheritedCases:
         items that are not part of the users organizations.
         """
 
+        if getattr(model_instance, 'organization', None) is None:
+            pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
+
+
         client = Client()
 
         viewable_organizations = [
@@ -358,6 +362,9 @@ class APIPermissionViewInheritedCases:
         Items returned from the query Must be from the users organization and
         global ONLY!
         """
+
+        if getattr(model_instance, 'organization', None) is None:
+            pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
         client = Client()
 
