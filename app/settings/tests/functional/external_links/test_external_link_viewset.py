@@ -29,7 +29,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_external_link'
+    url_name = '_api_externallink'
 
     change_data = {'name': 'device'}
 

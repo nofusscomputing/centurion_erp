@@ -82,7 +82,7 @@ class ExternalLinkAPI(
         self.url_view_kwargs = {'pk': self.item.id}
 
         client = Client()
-        url = reverse('v2:_api_v2_external_link-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_externallink-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

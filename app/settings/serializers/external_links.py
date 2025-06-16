@@ -17,7 +17,7 @@ class ExternalLinkBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_external_link-detail", format="html"
+        view_name="v2:_api_externallink-detail", format="html"
     )
 
     class Meta:
