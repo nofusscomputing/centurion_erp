@@ -18,6 +18,36 @@ omit = [
     "*wsgi*",
     "*admin.py",
     "*urls.py",
+    ##############################################
+    # Depreciated Code Scheduled to be removed
+    ##############################################
+    #
+    # Organization rename to Tenant
+    #
+    "app/access/models/organization.py",
+    #
+    # Old History Model
+    #
+    "app/core/models/model_history.py",
+    "/models/*_history.py",
+    #
+    # Old Notes model
+    #
+    "app/core/models/notes.py",
+    "/models/*_notes.py",
+    #
+    # Old Ticketing Model
+    #
+    "app/core/models/ticket/*",
+    "app/core/signal/ticket_linked_item_delete.py",
+    "app/core/serializers/ticket_depreciated.py",
+    "app/core/viewsets/ticket_depreciated.py",
+    # "app/core/serializers/ticket_related.py",
+    # "app/core/serializers/ticket_linked_item.py",
+    "app/core/viewsets/related_ticket.py",
+    "app/core/viewsets/ticket_linked_item.py",
+    "app/core/viewsets/ticket_comment_depreciated.py",
+    
 ]
 
 
