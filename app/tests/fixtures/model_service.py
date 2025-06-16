@@ -12,11 +12,23 @@ def model_service():
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_service(kwargs_centurionmodel):
+def kwargs_service(django_db_blocker,
+    kwargs_centurionmodel,
+    kwargs_device, model_device
+):
 
     random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
     random_str = str(random_str).replace(
             ' ', '').replace(':', '').replace('+', '').replace('.', '')
+
+    with django_db_blocker.unblock():
+
+        kwargs = kwargs_device.copy()
+        kwargs.update({
+            'name': 'svc' + random_str
+        })
+
+        device = model_device.objects.create( **kwargs )
 
     kwargs = {
         **kwargs_centurionmodel.copy(),
@@ -24,3 +36,7 @@ def kwargs_service(kwargs_centurionmodel):
     }
 
     yield kwargs.copy()
+
+    with django_db_blocker.unblock():
+
+        device.delete()
