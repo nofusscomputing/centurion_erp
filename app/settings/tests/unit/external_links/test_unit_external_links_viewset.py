@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from settings.viewsets.external_link import ViewSet
 
 
 
+@pytest.mark.model_externallink
+@pytest.mark.module_settings
 class ExternalLinksViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
