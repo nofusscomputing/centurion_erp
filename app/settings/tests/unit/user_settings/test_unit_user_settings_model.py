@@ -1,6 +1,8 @@
 import pytest
 
 from django.db import models
+from django.urls import reverse
+from django.urls.exceptions import NoReverseMatch
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
@@ -12,7 +14,7 @@ from settings.models.user_settings import UserSettings
 
 
 @pytest.mark.model_usersettings
-class AppSettingsModelTestCases(
+class UserSettingsModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
 
@@ -91,17 +93,29 @@ class AppSettingsModelTestCases(
         }
 
 
+    def test_add_create_not_allowed(self, model):
+        """ Check correct permission for add 
 
-class AppSettingsModelInheritedCases(
-    AppSettingsModelTestCases,
+        Not allowed to add.
+        Ensure that the list view for HTTP/POST does not exist.
+        """
+
+        with pytest.raises( NoReverseMatch ) as e:
+
+            reverse('v2:' + model._meta.model_name + '-list')
+
+
+
+class UserSettingsModelInheritedCases(
+    UserSettingsModelTestCases,
 ):
     pass
 
 
 
 @pytest.mark.module_settings
-class AppSettingsModelPyTest(
-    AppSettingsModelTestCases,
+class UserSettingsModelPyTest(
+    UserSettingsModelTestCases,
 ):
 
     def test_model_tag_defined(self, model):
