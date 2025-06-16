@@ -18,7 +18,7 @@ class AppSettingsViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_app_settings'
+    route_name = 'v2:_api_appsettings'
 
 
     @classmethod

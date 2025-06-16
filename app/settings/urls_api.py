@@ -33,7 +33,7 @@ from project_management.viewsets import (
 )
 
 from settings.viewsets import (
-    app_settings as app_settings_v2,
+    app_settings,
     external_link as external_link_v2,
     index as settings_index_v2,
     user_settings as user_settings_v2
@@ -52,8 +52,8 @@ router.register(
     basename = '_api_v2_settings_home'
 )
 router.register(
-    prefix = 'app_settings', viewset = app_settings_v2.ViewSet,
-    basename = '_api_v2_app_settings'
+    prefix = 'app_settings', viewset = app_settings.ViewSet,
+    basename = '_api_appsettings'
 )
 router.register(
     prefix = 'celery_log', viewset = celery_log_v2.ViewSet,

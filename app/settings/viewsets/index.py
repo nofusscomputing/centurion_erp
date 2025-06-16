@@ -107,7 +107,7 @@ class Index(IndexViewset):
 
         return Response(
             {
-                "app_settings": reverse('v2:_api_v2_app_settings-detail', request=request, kwargs={'pk': 1}),
+                "app_settings": reverse('v2:_api_appsettings-detail', request=request, kwargs={'pk': 1}),
                 "celery_log": reverse('v2:_api_v2_celery_log-list', request=request),
                 "cluster_type": reverse('v2:_api_clustertype-list', request=request),
                 "device_model": reverse('v2:_api_devicemodel-list', request=request),
