@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -22,6 +21,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_appsettings
+@pytest.mark.module_settings
 class AppSettingsAPI(
     TestCase,
     APICommonFields
@@ -80,7 +81,7 @@ class AppSettingsAPI(
         self.url_view_kwargs = {'pk': self.item.id}
 
         client = Client()
-        url = reverse('v2:_api_v2_app_settings-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_appsettings-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

@@ -110,6 +110,12 @@ class OrganizationPermissionMixin(
 
             raise centurion_exceptions.NotAuthenticated()
 
+
+        if request.method not in view.allowed_methods:
+
+            raise centurion_exceptions.MethodNotAllowed(method = request.method)
+
+
         try:
 
             if (
@@ -153,12 +159,7 @@ class OrganizationPermissionMixin(
                 has_permission_required: bool = permission_required in user_permissions
 
 
-            if request.method not in view.allowed_methods:
-
-                raise centurion_exceptions.MethodNotAllowed(method = request.method)
-
-
-            elif not has_permission_required and not request.user.is_superuser:
+            if not has_permission_required and not request.user.is_superuser:
 
                 raise centurion_exceptions.PermissionDenied()
 

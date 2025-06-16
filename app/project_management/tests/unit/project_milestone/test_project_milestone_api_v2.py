@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -23,6 +22,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_projectmilestone
+@pytest.mark.module_project_management
 class ProjectMilestoneAPI(
     TestCase,
     APITenancyObject
@@ -90,7 +91,7 @@ class ProjectMilestoneAPI(
         self.url_view_kwargs = {'project_id': project.id, 'pk': self.item.id}
 
         client = Client()
-        url = reverse('v2:_api_v2_project_milestone-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_projectmilestone-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

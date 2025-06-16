@@ -1,3 +1,5 @@
+import pytest
+
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
@@ -7,6 +9,7 @@ from itim.viewsets.index import Index
 
 
 
+@pytest.mark.module_settings
 class SettingsViewset(
     IndexViewsetInheritedCases,
     TestCase,

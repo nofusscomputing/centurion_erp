@@ -184,6 +184,36 @@ def centurion_model_migrate(sender, **kwargs):
             'model_name': 'Project',
             'history_model_name': 'ProjectHistory',
             'notes_model_name': 'ProjectNotes'
+        },
+        {
+            'app_label': 'project_management',
+            'model_name': 'ProjectMilestone',
+            'history_model_name': 'ProjectMilestoneHistory',
+            'notes_model_name': 'ProjectMilestoneNotes'
+        },
+        {
+            'app_label': 'project_management',
+            'model_name': 'ProjectState',
+            'history_model_name': 'ProjectStateHistory',
+            'notes_model_name': 'ProjectStateNotes'
+        },
+        {
+            'app_label': 'project_management',
+            'model_name': 'ProjectType',
+            'history_model_name': 'ProjectTypeHistory',
+            'notes_model_name': 'ProjectTypeNotes'
+        },
+        {
+            'app_label': 'settings',
+            'model_name': 'AppSettings',
+            'history_model_name': 'AppSettingsHistory',
+            'notes_model_name': None
+        },
+        {
+            'app_label': 'settings',
+            'model_name': 'ExternalLink',
+            'history_model_name': 'ExternalLinkHistory',
+            'notes_model_name': 'ExternalLinkNotes'
         }
     ]
 

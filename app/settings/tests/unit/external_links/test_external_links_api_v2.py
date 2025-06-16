@@ -1,13 +1,11 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from rest_framework.relations import Hyperlink
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
@@ -22,6 +20,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_externallink
+@pytest.mark.module_settings
 class ExternalLinkAPI(
     TestCase,
     APITenancyObject
@@ -82,7 +82,7 @@ class ExternalLinkAPI(
         self.url_view_kwargs = {'pk': self.item.id}
 
         client = Client()
-        url = reverse('v2:_api_v2_external_link-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_externallink-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

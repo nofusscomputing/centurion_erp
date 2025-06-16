@@ -55,7 +55,7 @@ class ClusterModelSerializer(
         get_url = super().get_url( item = item )
 
         get_url.update({
-            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?cluster=true',
+            'external_links': reverse("v2:_api_externallink-list", request=self._context['view'].request) + '?cluster=true',
             'service': reverse("v2:_api_v2_service_cluster-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
             'tickets': reverse(
                 "v2:_api_v2_item_tickets-list",

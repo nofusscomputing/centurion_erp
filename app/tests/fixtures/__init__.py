@@ -13,6 +13,11 @@ from .mixin_centurion import (
     mixin_centurion,
 )
 
+from .model_appsettings import (
+    kwargs_appsettings,
+    model_appsettings,
+)
+
 from .model_centurionaudit import (
     kwargs_centurionaudit,
     model_centurionaudit,
@@ -97,6 +102,11 @@ from .model_devicetype import (
     model_devicetype,
 )
 
+from .model_externallink import (
+    kwargs_externallink,
+    model_externallink,
+)
+
 from .model_featureflag import (
     kwargs_featureflag,
     model_featureflag,
@@ -173,6 +183,21 @@ from .model_project import (
     model_project,
 )
 
+from .model_projectmilestone import (
+    kwargs_projectmilestone,
+    model_projectmilestone,
+)
+
+from .model_projectstate import (
+    kwargs_projectstate,
+    model_projectstate,
+)
+
+from .model_projecttype import (
+    kwargs_projecttype,
+    model_projecttype,
+)
+
 from .model_service import (
     kwargs_service,
     model_service,
@@ -231,4 +256,9 @@ from .model_ticketcommentcategory import (
 from .model_user import (
     kwargs_user,
     model_user,
+)
+
+from .model_usersettings import (
+    kwargs_usersettings,
+    model_usersettings,
 )

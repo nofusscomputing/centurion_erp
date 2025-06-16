@@ -43,7 +43,7 @@ class TenancyManager(
 
         if user:
 
-            tencies = user.get_tenancies(int_list = True)
+            tenancies = user.get_tenancies(int_list = True)
 
             if len(tenancies) > 0 and not request.user.is_superuser:
 
@@ -53,9 +53,7 @@ class TenancyManager(
                     )
 
 
-                return super().get_queryset().select_related('organization').filter(
-                    models.Q(organization__in = tenancies)
-                )
+                return super().get_queryset().filter()
 
 
         if has_tenant_field:

@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema_serializer
 
 from access.serializers.organization import (TenantBaseSerializer)
 
-from centurion.models.meta import TeamCenturionModelNote    # pylint: disable=E0401:import-error disable=E0611:no-name-in-module
+from centurion.models.meta import ExternalLinkCenturionModelNote    # pylint: disable=E0401:import-error disable=E0611:no-name-in-module
 
 from core.serializers.centurionmodelnote import (    # pylint: disable=W0611:unused-import
     BaseSerializer,
@@ -14,7 +14,7 @@ from core.serializers.centurionmodelnote import (    # pylint: disable=W0611:unu
 
 
 
-@extend_schema_serializer(component_name = 'TeamModelNoteModelSerializer')
+@extend_schema_serializer(component_name = 'ExternalLinkModelNoteModelSerializer')
 class ModelSerializer(
     BaseModelModelSerializer,
 ):
@@ -31,7 +31,7 @@ class ModelSerializer(
 
     class Meta:
 
-        model = TeamCenturionModelNote
+        model = ExternalLinkCenturionModelNote
 
         fields =  [
              'id',
@@ -78,7 +78,7 @@ class ModelSerializer(
         return is_valid
 
 
-@extend_schema_serializer(component_name = 'TeamModelNoteViewSerializer')
+@extend_schema_serializer(component_name = 'ExternalLinkModelNoteViewSerializer')
 class ViewSerializer(
     ModelSerializer,
     BaseModelViewSerializer,

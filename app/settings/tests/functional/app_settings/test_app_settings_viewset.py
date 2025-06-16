@@ -36,7 +36,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_app_settings'
+    url_name = '_api_appsettings'
 
     change_data = {'device_model_is_global': True}
 

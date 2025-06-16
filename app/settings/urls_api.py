@@ -28,15 +28,15 @@ from itim.viewsets import (
 )
 
 from project_management.viewsets import (
-    project_state as project_state_v2,
-    project_type as project_type_v2,
+    project_state,
+    project_type,
 )
 
 from settings.viewsets import (
-    app_settings as app_settings_v2,
-    external_link as external_link_v2,
+    app_settings,
+    external_link,
     index as settings_index_v2,
-    user_settings as user_settings_v2
+    user_settings
 )
 
 
@@ -52,8 +52,8 @@ router.register(
     basename = '_api_v2_settings_home'
 )
 router.register(
-    prefix = 'app_settings', viewset = app_settings_v2.ViewSet,
-    basename = '_api_v2_app_settings'
+    prefix = 'app_settings', viewset = app_settings.ViewSet,
+    basename = '_api_appsettings'
 )
 router.register(
     prefix = 'celery_log', viewset = celery_log_v2.ViewSet,
@@ -72,8 +72,8 @@ router.register(
     basename = '_api_devicetype'
 )
 router.register(
-    prefix = 'external_link', viewset = external_link_v2.ViewSet,
-    basename = '_api_v2_external_link'
+    prefix = 'external_link', viewset = external_link.ViewSet,
+    basename = '_api_externallink'
 )
 router.register(
     prefix = 'knowledge_base_category',
@@ -90,12 +90,12 @@ router.register(
 )
 router.register(
     prefix = 'project_state',
-    viewset = project_state_v2.ViewSet,
-    basename = '_api_v2_project_state'
+    viewset = project_state.ViewSet,
+    basename = '_api_projectstate'
 )
 router.register(
-    prefix = 'project_type', viewset = project_type_v2.ViewSet,
-    basename = '_api_v2_project_type'
+    prefix = 'project_type', viewset = project_type.ViewSet,
+    basename = '_api_projecttype'
 )
 router.register(
     prefix = 'software_category', viewset = software_category_v2.ViewSet,
@@ -111,12 +111,12 @@ router.register(
     basename = '_api_ticketcommentcategory'
 )
 router.register(
-    prefix = 'user_settings', viewset = user_settings_v2.ViewSet,
-    basename = '_api_v2_user_settings'
+    prefix = 'user_settings', viewset = user_settings.ViewSet,
+    basename = '_api_usersettings'
 )
 router.register(
     prefix = 'user_(?P<model_id>[0-9]+)/token', viewset = auth_token.ViewSet,
-    basename = '_api_v2_user_settings_token'
+    basename = '_api_usersettings_token'
 )
 
 

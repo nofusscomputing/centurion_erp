@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema_serializer
 
 from api.serializers import common
 
-from centurion.models.meta import TeamUsersAuditHistory # pylint: disable=E0401:import-error disable=E0611:no-name-in-module
+from centurion.models.meta import ProjectMilestoneAuditHistory # pylint: disable=E0401:import-error disable=E0611:no-name-in-module
 
 from core.serializers.centurionaudit import (
     BaseSerializer,
@@ -14,7 +14,7 @@ from core.serializers.centurionaudit import (
 
 
 
-@extend_schema_serializer(component_name = 'TeamUsersAuditHistoryModelSerializer')
+@extend_schema_serializer(component_name = 'ProjectMilestoneAuditHistoryModelSerializer')
 class ModelSerializer(
     common.CommonModelSerializer,
     BaseSerializer
@@ -27,7 +27,7 @@ class ModelSerializer(
 
     class Meta:
 
-        model = TeamUsersAuditHistory
+        model = ProjectMilestoneAuditHistory
 
         fields = [
             'id',
@@ -47,7 +47,7 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'TeamUsersAuditHistoryViewSerializer')
+@extend_schema_serializer(component_name = 'ProjectMilestoneAuditHistoryViewSerializer')
 class ViewSerializer(
     ModelSerializer,
     AuditHistoryViewSerializer,
