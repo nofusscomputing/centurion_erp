@@ -90,9 +90,11 @@ class TenancyManager(models.Manager):
 
                     else:
 
-                        return super().get_queryset().filter(
-                            models.Q(organization__in=user_organizations)
-                        )
+                        # return super().get_queryset().filter(
+                        #     models.Q(organization__in=user_organizations)
+                        # )
+
+                        return super().get_queryset().filter()
 
 
         if has_tenant_field:
