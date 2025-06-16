@@ -23,9 +23,9 @@ class RequestTenancy(MiddlewareMixin):
 
     def process_request(self, request):
 
-        request.app_settings = AppSettings.objects.select_related('global_organization').get(
+        request.app_settings = AppSettings.objects.select_related('global_organization').filter(
             owner_organization = None
-        )
+        )[0]
 
         request.tenancy = Tenancy(user = request.user, app_settings = request.app_settings)
 
