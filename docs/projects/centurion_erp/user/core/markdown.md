@@ -80,7 +80,7 @@ A Model link is a reference to an item within the database. Supported model link
 | devicemodel| `$device_model-<id>` |
 | devicetype| `$device_type-<id>` |
 | entity | `$entity-<id>` |
-| externallink| `$-<id>` |
+| externallink| `$external_link-<id>` |
 | featureflag| `$feature_flag-<id>` |
 | gitrepository| `$git_repository-<id>` |
 | gitgroup| `$git_group-<id>` |
