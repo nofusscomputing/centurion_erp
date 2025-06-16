@@ -34,7 +34,7 @@ from project_management.viewsets import (
 
 from settings.viewsets import (
     app_settings,
-    external_link as external_link_v2,
+    external_link,
     index as settings_index_v2,
     user_settings as user_settings_v2
 )
@@ -72,8 +72,8 @@ router.register(
     basename = '_api_devicetype'
 )
 router.register(
-    prefix = 'external_link', viewset = external_link_v2.ViewSet,
-    basename = '_api_v2_external_link'
+    prefix = 'external_link', viewset = external_link.ViewSet,
+    basename = '_api_externallink'
 )
 router.register(
     prefix = 'knowledge_base_category',

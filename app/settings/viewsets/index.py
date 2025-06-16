@@ -112,7 +112,7 @@ class Index(IndexViewset):
                 "cluster_type": reverse('v2:_api_clustertype-list', request=request),
                 "device_model": reverse('v2:_api_devicemodel-list', request=request),
                 "device_type": reverse('v2:_api_devicetype-list', request=request),
-                "external_link": reverse('v2:_api_v2_external_link-list', request=request),
+                "external_link": reverse('v2:_api_externallink-list', request=request),
                 "knowledge_base_category": reverse('v2:_api_knowledgebasecategory-list', request=request),
                 "manufacturer": reverse('v2:_api_manufacturer-list', request=request),
                 "port": reverse('v2:_api_port-list', request=request),

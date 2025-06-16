@@ -1084,6 +1084,7 @@ markers = [
     "model_deviceoperatingsystem: Select tests for model Device Operating System",
     "model_devicesoftware: Select tests for model Device Software.",
     "model_devicetype: Select all device type tests.",
+    "model_externallink: Select tests for model External Link.",
     "model_featureflag: Feature Flag Model",
     "model_gitgroup: Selects tests for model `git group`",
     "model_githubrepository: Selects tests for model `github repository`",
