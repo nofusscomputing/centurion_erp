@@ -20,8 +20,7 @@ class AppSettingsModelTestCases(
 
         return {
             'model_tag': {
-                'type': models.fields.NOT_PROVIDED,
-                'value': models.fields.NOT_PROVIDED
+                'value': 'external_link'
             },
         }
 
@@ -113,10 +112,4 @@ class AppSettingsModelPyTest(
     AppSettingsModelTestCases,
 ):
 
-        def test_model_tag_defined(self, model):
-            """ Model Tag
-
-            Ensure that the model has a tag defined.
-            """
-
-            pytest.xfail( reason = 'Model does not require tag' )
+    pass

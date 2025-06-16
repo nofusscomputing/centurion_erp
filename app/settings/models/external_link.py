@@ -10,6 +10,8 @@ class ExternalLink(
     CenturionModel
 ):
 
+    model_tag = 'external_link'
+
 
     class Meta:
 
