@@ -36,7 +36,7 @@ from settings.viewsets import (
     app_settings,
     external_link,
     index as settings_index_v2,
-    user_settings as user_settings_v2
+    user_settings
 )
 
 
@@ -111,12 +111,12 @@ router.register(
     basename = '_api_ticketcommentcategory'
 )
 router.register(
-    prefix = 'user_settings', viewset = user_settings_v2.ViewSet,
-    basename = '_api_v2_user_settings'
+    prefix = 'user_settings', viewset = user_settings.ViewSet,
+    basename = '_api_usersettings'
 )
 router.register(
     prefix = 'user_(?P<model_id>[0-9]+)/token', viewset = auth_token.ViewSet,
-    basename = '_api_v2_user_settings_token'
+    basename = '_api_usersettings_token'
 )
 
 

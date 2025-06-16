@@ -122,7 +122,7 @@ class Index(IndexViewset):
                 "ticket_category": reverse('v2:_api_ticketcategory-list', request=request),
                 "ticket_comment_category": reverse('v2:_api_ticketcommentcategory-list', request=request),
                 "user_settings": reverse(
-                    'v2:_api_v2_user_settings-detail',
+                    'v2:_api_usersettings-detail',
                     request=request,
                     kwargs={
                         'pk': request.user.id 

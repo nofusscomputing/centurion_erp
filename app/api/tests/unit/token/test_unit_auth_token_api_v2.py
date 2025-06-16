@@ -74,7 +74,7 @@ class API(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_user_settings_token-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_usersettings_token-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
