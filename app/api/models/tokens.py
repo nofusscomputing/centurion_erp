@@ -153,9 +153,9 @@ class AuthToken(models.Model):
 
         if request:
 
-            return reverse(f"v2:_api_v2_user_settings_token-detail", request=request, kwargs = self.get_url_kwargs() )
+            return reverse(f"v2:_api_usersettings_token-detail", request=request, kwargs = self.get_url_kwargs() )
 
-        return reverse(f"v2:_api_v2_user_settings_token-detail", kwargs = self.get_url_kwargs() )
+        return reverse(f"v2:_api_usersettings_token-detail", kwargs = self.get_url_kwargs() )
 
 
     def get_url_kwargs(self) -> dict:
