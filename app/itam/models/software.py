@@ -1,6 +1,7 @@
 from django.db import models
 
 from access.fields import AutoLastModifiedField
+from access.models.tenant import Tenant
 
 from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
@@ -116,6 +117,19 @@ class Software(
 
         verbose_name_plural = 'Softwares'
 
+
+    organization = models.ForeignKey(
+        Tenant,
+        blank = False,
+        help_text = 'Tenant this belongs to',
+        null = False,
+        on_delete = models.CASCADE,
+        related_name = 'software',
+        validators = [
+            CenturionModel.validatate_organization_exists
+        ],
+        verbose_name = 'Tenant'
+    )
 
     publisher = models.ForeignKey(
         Manufacturer,
