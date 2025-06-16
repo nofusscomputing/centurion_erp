@@ -6,7 +6,7 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-This model enables the end user to define external links to be rendered alongside other models display pages. 
+This model enables the end user to define external links to be rendered alongside other models display pages.
 
 
 ## External Links
