@@ -63,7 +63,7 @@ class AppSettingsAPI(
 
         view_team.permissions.set([view_permissions])
 
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
+        self.view_user = User.objects.create_user(username="test_user_view", password="password", is_superuser = True)
 
         user_settings = UserSettings.objects.get(user =  self.view_user)
         
