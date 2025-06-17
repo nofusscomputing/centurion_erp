@@ -11,7 +11,7 @@ from access.models.tenant import Tenant
 model_objs: list = []
 
 
-@pytest.fixture( scope = 'class')
+@pytest.fixture( scope = 'function')
 def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
 
     with django_db_blocker.unblock():
