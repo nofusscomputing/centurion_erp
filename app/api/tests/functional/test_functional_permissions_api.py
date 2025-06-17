@@ -42,6 +42,15 @@ class APIPermissionAddInheritedCases:
         Attempt to add as user with no permissions
         """
 
+        if hasattr(self, 'exclude_permission_no_add'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_add'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
+
+
         client = Client()
 
         if user != 'anon':
@@ -151,6 +160,14 @@ class APIPermissionChangeInheritedCases:
         Attempt to make change as user without permissions
         """
 
+        if hasattr(self, 'exclude_permission_no_change'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_change'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
+
         client = Client()
 
         if user != 'anon':
@@ -226,6 +243,14 @@ class APIPermissionDeleteInheritedCases:
         Attempt to delete as user with no permissons
         """
 
+        if hasattr(self, 'exclude_permission_no_delete'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_delete'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
+
         client = Client()
 
         if user != 'anon':
@@ -292,6 +317,14 @@ class APIPermissionViewInheritedCases:
 
         Attempt to view with user missing permission
         """
+
+        if hasattr(self, 'exclude_permission_no_view'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_view'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
 
         client = Client()
 
@@ -457,38 +490,38 @@ class APIPermissionsInheritedCases(
     """ Test Suite for all API Permission test cases """
 
 
-    permission_no_add: list = []
+    # # permission_no_add: list = []
 
-    permission_no_change: list = []
+    # permission_no_change: list = []
 
-    permission_no_delete: list = []
+    # permission_no_delete: list = []
 
-    permission_no_view: list = []
-
-
-    @classmethod
-    def setup_class(self):
+    # permission_no_view: list = []
 
 
-        self.permission_no_add = [
-            *super().permission_no_add,
-            *self.permission_no_add,
-        ]
+    # @classmethod
+    # def setup_class(self):
 
-        self.permission_no_change = [
-            *super().permission_no_change,
-            *self.permission_no_change,
-        ]
 
-        self.permission_no_delete = [
-            *super().permission_no_delete,
-            *self.permission_no_delete,
-        ]
+    #     # self.permission_no_add = [
+    #     #     *super().permission_no_add,
+    #     #     *self.permission_no_add,
+    #     # ]
 
-        self.permission_no_view = [
-            *super().permission_no_view,
-            *self.permission_no_view,
-        ]
+    #     self.permission_no_change = [
+    #         *super().permission_no_change,
+    #         *self.permission_no_change,
+    #     ]
+
+    #     self.permission_no_delete = [
+    #         *super().permission_no_delete,
+    #         *self.permission_no_delete,
+    #     ]
+
+    #     self.permission_no_view = [
+    #         *super().permission_no_view,
+    #         *self.permission_no_view,
+    #     ]
 
 
 
