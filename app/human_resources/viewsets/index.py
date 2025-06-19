@@ -24,7 +24,7 @@ class Index(IndexViewset):
     def list(self, request, pk=None):
 
         response = {
-                "employee": reverse( 'v2:_api_v2_entity_sub-list', request=request, kwargs = { 'entity_model': 'employee' } ),
+                "employee": reverse( 'v2:_api_entity_sub-list', request=request, kwargs = { 'entity_model': 'employee' } ),
             }
 
         return Response(response)

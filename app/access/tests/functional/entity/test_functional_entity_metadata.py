@@ -223,7 +223,7 @@ class EntityMetadataInheritedCases(
 
     kwargs_create_item_diff_org: dict = {}
 
-    url_name = '_api_v2_entity_sub'
+    url_name = '_api_entity_sub'
 
 
     @classmethod
@@ -257,4 +257,4 @@ class EntityMetadataTest(
 
 ):
 
-    url_name = '_api_v2_entity'
+    url_name = '_api_entity'
