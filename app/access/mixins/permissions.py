@@ -2,9 +2,10 @@ import traceback
 
 from rest_framework.permissions import DjangoObjectPermissions
 
-from access.models.tenancy import Tenant, TenancyObject
+from access.models.tenancy import Tenant
 
 from core import exceptions as centurion_exceptions
+from core.mixins.centurion import Centurion
 
 
 
@@ -57,11 +58,11 @@ class OrganizationPermissionMixin(
 
             if hasattr(view, 'model'):
 
-                self._is_tenancy_model = issubclass(view.model, TenancyObject)
+                self._is_tenancy_model = issubclass(view.model, Centurion)
 
                 if view.get_parent_model():
 
-                    self._is_tenancy_model = issubclass(view.get_parent_model(), TenancyObject)
+                    self._is_tenancy_model = issubclass(view.get_parent_model(), Centurion)
 
         return self._is_tenancy_model
 

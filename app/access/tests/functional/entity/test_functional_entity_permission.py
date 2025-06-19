@@ -24,7 +24,7 @@ class EntityPermissionsAPITestCases(
 
     url_kwargs: dict = {}
 
-    url_name = '_api_v2_entity'
+    url_name = '_api_entity'
 
     url_view_kwargs: dict = {}
 
@@ -53,7 +53,7 @@ class EntityPermissionsAPIInheritedCases(
 
     kwargs_create_item_diff_org: dict = None
 
-    url_name = '_api_v2_entity_sub'
+    url_name = '_api_entity_sub'
 
 
     @pytest.fixture(scope='class')

@@ -40,12 +40,12 @@ router.register(
 
 router.register(
     prefix=f'entity/(?P<entity_model>[{entity_type_names}]+)?', viewset = entity.ViewSet,
-    feature_flag = '2025-00002', basename = '_api_v2_entity_sub'
+    feature_flag = '2025-00002', basename = '_api_entity_sub'
 )
 
 router.register(
     prefix = 'entity', viewset = entity.NoDocsViewSet,
-    feature_flag = '2025-00002', basename = '_api_v2_entity'
+    feature_flag = '2025-00002', basename = '_api_entity'
 )
 
 # router.register(

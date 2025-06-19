@@ -12,8 +12,6 @@ from drf_spectacular.utils import (
 
 from rest_framework.reverse import reverse
 
-# THis import only exists so that the migrations can be created
-from access.models.entity_history import EntityHistory    # pylint: disable=W0611:unused-import
 from access.models import (    # pylint: disable=W0611:unused-import
     contact,
     company_base,
@@ -249,7 +247,7 @@ class ViewSet( SubModelViewSet ):
         ):
 
             self.back_url = reverse(
-                viewname = '_api_v2_entity_sub-list',
+                viewname = '_api_entity_sub-list',
                 request = self.request,
                 kwargs = {
                     'entity_model': self.kwargs[self.model_kwarg],

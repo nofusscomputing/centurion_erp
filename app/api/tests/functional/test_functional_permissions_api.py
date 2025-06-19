@@ -42,6 +42,15 @@ class APIPermissionAddInheritedCases:
         Attempt to add as user with no permissions
         """
 
+        if hasattr(self, 'exclude_permission_no_add'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_add'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
+
+
         client = Client()
 
         if user != 'anon':
@@ -145,20 +154,34 @@ class APIPermissionChangeInheritedCases:
         argvalues = permission_no_change,
         ids=[test_name for test_name, user, expected in permission_no_change]
     )
-    def test_permission_no_change(self, api_request_permissions, test_name, user, expected):
+    def test_permission_no_change(self, model_instance, api_request_permissions, test_name, user, expected):
         """ Ensure permission view cant make change
 
         Attempt to make change as user without permissions
         """
 
+        if hasattr(self, 'exclude_permission_no_change'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_change'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
+
         client = Client()
+
+        change_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            },
+        )
 
         if user != 'anon':
 
             client.force_login( api_request_permissions['user'][user] )
 
         response = client.patch(
-            path = self.change_item.get_url( many = False ),
+            path = change_item.get_url( many = False ),
             data = self.change_data,
             content_type = 'application/json'
         )
@@ -170,7 +193,7 @@ class APIPermissionChangeInheritedCases:
 
 
 
-    def test_permission_change(self, api_request_permissions):
+    def test_permission_change(self, model_instance, api_request_permissions):
         """ Check correct permission for change
 
         Make change with user who has change permission
@@ -180,8 +203,14 @@ class APIPermissionChangeInheritedCases:
 
         client.force_login( api_request_permissions['user']['change'] )
 
+        change_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            },
+        )
+
         response = client.patch(
-            path = self.change_item.get_url( many = False ),
+            path = change_item.get_url( many = False ),
             data = self.change_data,
             content_type = 'application/json'
         )
@@ -220,11 +249,19 @@ class APIPermissionDeleteInheritedCases:
         argvalues = permission_no_delete,
         ids=[test_name for test_name, user, expected in permission_no_delete]
     )
-    def test_permission_no_delete(self, api_request_permissions, test_name, user, expected):
+    def test_permission_no_delete(self, model_instance, api_request_permissions, test_name, user, expected):
         """ Check correct permission for delete
 
         Attempt to delete as user with no permissons
         """
+
+        if hasattr(self, 'exclude_permission_no_delete'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_delete'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
 
         client = Client()
 
@@ -232,8 +269,14 @@ class APIPermissionDeleteInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
+        delete_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            }
+        )
+
         response = client.delete(
-            path = self.delete_item.get_url( many = False ),
+            path = delete_item.get_url( many = False ),
         )
 
         if response.status_code == 405:
@@ -243,7 +286,7 @@ class APIPermissionDeleteInheritedCases:
 
 
 
-    def test_permission_delete(self, api_request_permissions):
+    def test_permission_delete(self, model_instance, api_request_permissions):
         """ Check correct permission for delete
 
         Delete item as user with delete permission
@@ -253,8 +296,14 @@ class APIPermissionDeleteInheritedCases:
 
         client.force_login( api_request_permissions['user']['delete'] )
 
+        delete_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            }
+        )
+
         response = client.delete(
-            path = self.delete_item.get_url( many = False ),
+            path = delete_item.get_url( many = False ),
         )
 
         if response.status_code == 405:
@@ -287,11 +336,19 @@ class APIPermissionViewInheritedCases:
         argvalues = permission_no_view,
         ids=[test_name for test_name, user, expected in permission_no_view]
     )
-    def test_permission_no_view(self, api_request_permissions, test_name, user, expected):
+    def test_permission_no_view(self, model_instance, api_request_permissions, test_name, user, expected):
         """ Check correct permission for view
 
         Attempt to view with user missing permission
         """
+
+        if hasattr(self, 'exclude_permission_no_view'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_view'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
 
         client = Client()
 
@@ -299,8 +356,14 @@ class APIPermissionViewInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
+        view_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            }
+        )
+
         response = client.get(
-            path = self.view_item.get_url( many = False )
+            path = view_item.get_url( many = False )
         )
 
         if response.status_code == 405:
@@ -315,7 +378,7 @@ class APIPermissionViewInheritedCases:
 
 
 
-    def test_permission_view(self, api_request_permissions):
+    def test_permission_view(self, model_instance, api_request_permissions):
         """ Check correct permission for view
 
         Attempt to view as user with view permission
@@ -325,8 +388,14 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
+        view_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            }
+        )
+
         response = client.get(
-            path = self.view_item.get_url( many = False )
+            path = view_item.get_url( many = False )
         )
 
         if response.status_code == 405:
@@ -343,7 +412,7 @@ class APIPermissionViewInheritedCases:
         items that are not part of the users organizations.
         """
 
-        if getattr(model_instance, 'organization', None) is None:
+        if model_kwargs.get('organization', None) is None:
             pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
 
@@ -360,6 +429,18 @@ class APIPermissionViewInheritedCases:
 
 
         client.force_login( api_request_permissions['user']['view'] )
+
+        model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['different']
+            }
+        )
+
+        model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['global']
+            }
+        )
 
         the_model = model_instance( kwargs_create = model_kwargs )
 
@@ -399,7 +480,7 @@ class APIPermissionViewInheritedCases:
         global ONLY!
         """
 
-        if getattr(model_instance, 'organization', None) is None:
+        if model_kwargs.get('organization', None) is None:
             pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
         client = Client()
@@ -410,6 +491,19 @@ class APIPermissionViewInheritedCases:
             api_request_permissions['tenancy']['user'].id,
             api_request_permissions['tenancy']['global'].id
         ]
+
+
+        model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['different']
+            }
+        )
+
+        model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['global']
+            }
+        )
 
 
         client.force_login( api_request_permissions['user']['view'] )
@@ -455,83 +549,4 @@ class APIPermissionsInheritedCases(
     APIPermissionViewInheritedCases
 ):
     """ Test Suite for all API Permission test cases """
-
-
-    permission_no_add: list = []
-
-    permission_no_change: list = []
-
-    permission_no_delete: list = []
-
-    permission_no_view: list = []
-
-
-    @classmethod
-    def setup_class(self):
-
-
-        self.permission_no_add = [
-            *super().permission_no_add,
-            *self.permission_no_add,
-        ]
-
-        self.permission_no_change = [
-            *super().permission_no_change,
-            *self.permission_no_change,
-        ]
-
-        self.permission_no_delete = [
-            *super().permission_no_delete,
-            *self.permission_no_delete,
-        ]
-
-        self.permission_no_view = [
-            *super().permission_no_view,
-            *self.permission_no_view,
-        ]
-
-
-
-    @pytest.fixture( scope = 'class', autouse = True)
-    def prepare(self, request, api_request_permissions, model, model_instance):
-
-        random_field = ''
-
-        if hasattr(model, 'name'):
-
-            random_field = 'name'
-
-        request.cls.change_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            },
-            random_field = random_field
-        )
-
-        request.cls.delete_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            },
-            random_field = random_field
-        )
-
-        request.cls.diff_tenancy_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['different']
-            },
-            random_field = random_field
-        )
-
-        request.cls.global_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['global']
-            },
-            random_field = random_field
-        )
-
-        request.cls.view_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            },
-            random_field = random_field
-        )
+    pass

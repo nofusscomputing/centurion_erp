@@ -58,6 +58,11 @@ from .model_clustertype import (
     model_clustertype,
 )
 
+from .model_company import (
+    kwargs_company,
+    model_company,
+)
+
 from .model_configgroup import (
     kwargs_configgroups,
     model_configgroups,
@@ -71,6 +76,11 @@ from .model_configgrouphost import (
 from .model_configgroupsoftware import (
     kwargs_configgroupsoftware,
     model_configgroupsoftware,
+)
+
+from .model_contact import (
+    kwargs_contact,
+    model_contact,
 )
 
 from .model_contenttype import (
@@ -100,6 +110,16 @@ from .model_devicesoftware import (
 from .model_devicetype import (
     kwargs_devicetype,
     model_devicetype,
+)
+
+from .model_employee import (
+    kwargs_employee,
+    model_employee,
+)
+
+from .model_entity import (
+    kwargs_entity,
+    model_entity,
 )
 
 from .model_externallink import (
@@ -171,6 +191,11 @@ from .model_operatingsystemversion import (
 
 from .model_permission import (
     model_permission,
+)
+
+from .model_person import (
+    kwargs_person,
+    model_person,
 )
 
 from .model_port import (

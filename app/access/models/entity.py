@@ -1,15 +1,22 @@
 from django.db import models
 
-from rest_framework.reverse import reverse
+from access.fields import AutoLastModifiedField
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
+from core.models.centurion import CenturionModel
 
 
 
 class Entity(
-    TenancyObject
+    CenturionModel
 ):
+
+    model_tag = 'entity'
+
+    documentation = ''
+
+    kb_model_name = 'entity'
+
+    url_model_name = 'entity'
 
 
     class Meta:
@@ -27,15 +34,6 @@ class Entity(
         verbose_name_plural = 'Entities'
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Primary key of the entry',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-
     entity_type = models.CharField(
         blank = False,
         help_text = 'Type this entity is',
@@ -44,14 +42,12 @@ class Entity(
         verbose_name = 'Entity Type'
     )
 
-    created = AutoCreatedField()
-
     modified = AutoLastModifiedField()
 
 
 
     def __str__(self) -> str:
-        
+
         related_model = self.get_related_model()
 
         if related_model is None:
@@ -62,21 +58,7 @@ class Entity(
         return str( related_model )
 
 
-
-    # app_namespace = 'access'
-
-    history_app_label = 'access'
-
-    history_model_name = 'entity'
-
-    kb_model_name = 'entity'
-
-    note_basename = '_api_v2_entity_note'
-
-    documentation = ''
-
     page_layout: dict = []
-
 
     table_fields: list = [
         'organization',
@@ -85,6 +67,21 @@ class Entity(
         'created',
         'modified',
     ]
+
+
+
+    def clean(self):
+
+        related_model = self.get_related_model()
+
+        if related_model is None:
+
+            related_model = self
+
+        if self.entity_type != str(related_model._meta.verbose_name).lower().replace(' ', '_'):
+
+            self.entity_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
+
 
 
     def get_related_field_name(self) -> str:
@@ -99,7 +96,7 @@ class Entity(
 
             if getattr(self, related_object.name, None):
 
-                if( 
+                if(
                     not str(related_object.name).endswith('history')
                     and not str(related_object.name).endswith('notes')
                 ):
@@ -144,11 +141,11 @@ class Entity(
         return related_model
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
         model = self.get_related_model()
 
-        if len(self._meta.parents) == 0 and model is None:
+        if (len(self._meta.parents) == 0 and model is None) or not many:
 
             return {
                 'pk': self.id
@@ -162,85 +159,4 @@ class Entity(
             'entity_model': str(model._meta.verbose_name).lower().replace(' ', '_'),
         }
 
-        if model.pk:
-
-            kwargs.update({
-                'pk': model.id
-            })
-
         return kwargs
-
-
-
-    def get_url( self, request = None ) -> str:
-        """Fetch the models URL
-
-        If URL kwargs are required to generate the URL, define a `get_url_kwargs` that returns them.
-
-        Args:
-            request (object, optional): The request object that was made by the end user. Defaults to None.
-
-        Returns:
-            str: Canonical URL of the model if the `request` object was provided. Otherwise the relative URL. 
-        """
-
-        model = None
-
-        if getattr(self, 'get_related_model', None):
-
-            model = self.get_related_model()
-
-
-        
-        if model is None:
-
-            model = self
-
-
-        sub_entity = ''
-        if model._meta.model_name != 'entity':
-
-            sub_entity = '_sub'
-
-
-        kwargs = self.get_url_kwargs()
-
-        view = 'list'
-        if 'pk' in kwargs:
-
-            view = 'detail'
-
-        if request:
-
-            return reverse(f"v2:" + model.get_app_namespace() + f"_api_v2_entity" + sub_entity + "-" + view, request=request, kwargs = kwargs )
-
-        return reverse(f"v2:" + model.get_app_namespace() + f"_api_v2_entity" + sub_entity + "-" + view, kwargs = kwargs )
-
-
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        related_model = self.get_related_model()
-
-        if related_model is None:
-
-            related_model = self
-
-        if self.entity_type != str(related_model._meta.verbose_name).lower().replace(' ', '_'):
-
-            self.entity_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
-
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from access.models.entity_history import EntityHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = EntityHistory
-        )
-
-        return history
