@@ -8,6 +8,10 @@ class Employee(
     Contact
 ):
 
+    documentation = ''
+
+    _is_submodel = True
+
 
     class Meta:
 
@@ -34,12 +38,6 @@ class Employee(
     def __str__(self) -> str:
 
         return self.f_name + ' ' + self.l_name
-
-    documentation = ''
-
-    history_app_label = 'human_resources'
-
-    history_model_name = 'employee'
 
     page_layout: list = [
         {
