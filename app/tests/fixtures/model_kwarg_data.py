@@ -1,5 +1,4 @@
 import datetime
-import json
 import pytest
 
 from django.db import models
@@ -13,8 +12,6 @@ def model_kwarg_data():
         random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
         random_str = str(random_str).replace(
             ' ', '').replace(':', '').replace('+', '').replace('.', '').replace('-', '')
-
-        # data = {}
 
 
         kwargs = {}
@@ -50,6 +47,16 @@ def model_kwarg_data():
             ):
 
                 value = 'a' + random_str
+
+                if isinstance(getattr(model, field).field, models.IntegerField):
+
+                    value = str(random_str)[( len(random_str) - 13 ):]
+
+                elif isinstance(getattr(model, field).field, models.EmailField):
+
+
+                    value = str(random_str) + '@instance.tld'
+
 
             kwargs.update({
                 field: value
