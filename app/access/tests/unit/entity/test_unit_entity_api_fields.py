@@ -8,6 +8,7 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
+@pytest.mark.model_entity
 class EntityAPITestCases(
     APIFieldsInheritedCases,
 ):
@@ -71,6 +72,7 @@ class EntityAPIInheritedCases(
 
 
 
+@pytest.mark.module_access
 class EntityAPIPyTest(
     EntityAPITestCases,
 ):

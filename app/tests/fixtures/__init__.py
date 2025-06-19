@@ -102,6 +102,11 @@ from .model_devicetype import (
     model_devicetype,
 )
 
+from .model_entity import (
+    kwargs_entity,
+    model_entity,
+)
+
 from .model_externallink import (
     kwargs_externallink,
     model_externallink,

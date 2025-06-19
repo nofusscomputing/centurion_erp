@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -12,6 +14,7 @@ from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 
 
+@pytest.mark.model_entity
 class ViewsetTestCases(
     ModelViewSetInheritedCases,
 ):
@@ -70,6 +73,7 @@ class EntityViewsetInheritedCases(
 
 
 
+@pytest.mark.module_access
 class EntityViewsetTest(
     ViewsetTestCases,
     TestCase,
