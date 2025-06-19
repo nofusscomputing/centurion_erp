@@ -1,9 +1,12 @@
+import pytest
+
 from access.tests.unit.person.test_unit_person_api_fields import (
     PersonAPIInheritedCases
 )
 
 
 
+@pytest.mark.model_contact
 class ContactAPITestCases(
     PersonAPIInheritedCases,
 ):
@@ -33,6 +36,7 @@ class ContactAPIInheritedCases(
 
 
 
+@pytest.mark.module_access
 class ContactAPIPyTest(
     ContactAPITestCases,
 ):
