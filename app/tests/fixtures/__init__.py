@@ -112,6 +112,11 @@ from .model_devicetype import (
     model_devicetype,
 )
 
+from .model_employee import (
+    kwargs_employee,
+    model_employee,
+)
+
 from .model_entity import (
     kwargs_entity,
     model_entity,

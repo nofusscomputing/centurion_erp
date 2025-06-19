@@ -10,13 +10,10 @@ from human_resources.models.employee import Employee
 
 
 
+@pytest.mark.model_employee
 class EmployeeModelTestCases(
     ContactModelInheritedCases,
 ):
-
-    kwargs_create_item: dict = {
-        'employee_number': 12345,
-    }
 
     sub_model_type = 'employee'
     """Sub Model Type
@@ -24,50 +21,42 @@ class EmployeeModelTestCases(
     sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
     """
 
+    @property
+    def parameterized_class_attributes(self):
 
-    parameterized_fields: dict = {
-        "employee_number": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
+        return {
+            '_is_submodel': {
+                'value': True
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'entity'
+            }
         }
-    }
+
+
+    @property
+    def parameterized_fields(self):
+
+        return {
+            'employee_number': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.IntegerField,
+                'null': False,
+                'unique': True,
+            },
+        }
 
 
 
-    def test_class_inherits_employee(self):
+    def test_class_inherits_employee(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, Employee)
-
-
-    def test_attribute_value_history_app_label(self):
-        """Attribute Type
-
-        history_app_label has been set, override this test case with the value
-        of attribute `history_app_label`
-        """
-
-        assert self.model.history_app_label == 'human_resources'
-
-
-    def test_attribute_value_history_model_name(self):
-        """Attribute Type
-
-        history_model_name has been set, override this test case with the value
-        of attribute `history_model_name`
-        """
-
-        assert self.model.history_model_name == 'employee'
-
-
-
-    def test_function_value_get_url(self):
-
-        assert self.item.get_url() == '/api/v2/access/entity/employee/' + str(self.item.id)
+        assert issubclass(model, Employee)
 
 
 
@@ -78,28 +67,20 @@ class EmployeeModelInheritedCases(
 
     Test Cases for Ticket models that inherit from model Entity
     """
-
-    kwargs_create_item: dict = {}
-
-    model = None
-
-    sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
+    pass
 
 
 
+@pytest.mark.module_human_resources
 class EmployeeModelPyTest(
     EmployeeModelTestCases,
 ):
 
 
-    def test_function_value_get_related_model(self):
+    def test_function_value_get_related_model(self, model_instance):
         """Function test
 
         Confirm function `get_related_model` is None for base model
         """
 
-        assert self.item.get_related_model() is None
+        assert model_instance.get_related_model() is None
