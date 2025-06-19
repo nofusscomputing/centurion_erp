@@ -1104,6 +1104,7 @@ markers = [
     "mixin: Selects all mixin test cases.",
     "mixin_centurion: Selects all centurion mixin test cases.",
     "model_appsettings: Selects tests for model app settings.",
+    "model_company: Selects test for model Company.",
     "model_configgroups: Selects Config Group tests.",
     "model_configgrouphosts: Selects Config Group Hosts tests.",
     "model_configgroupsoftware: Selects Config Group Software tests.",
