@@ -94,6 +94,7 @@ A Model link is a reference to an item within the database. Supported model link
 | operatingsystem| `$operating_system-<id>` |
 | operatingsystemversion| `$operating_system_version-<id>` |
 | organization| `$organization-<id>` |
+| person | `$entity-<id>` |
 | port| `$port-<id>` |
 | project| `$project-<id>` |
 | projectmilestone| `$project_milestone-<id>` |
