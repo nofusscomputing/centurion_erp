@@ -78,6 +78,11 @@ from .model_configgroupsoftware import (
     model_configgroupsoftware,
 )
 
+from .model_contact import (
+    kwargs_contact,
+    model_contact,
+)
+
 from .model_contenttype import (
     model_contenttype,
 )
@@ -181,6 +186,11 @@ from .model_operatingsystemversion import (
 
 from .model_permission import (
     model_permission,
+)
+
+from .model_person import (
+    kwargs_person,
+    model_person,
 )
 
 from .model_port import (
