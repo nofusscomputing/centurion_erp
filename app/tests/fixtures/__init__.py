@@ -58,6 +58,11 @@ from .model_clustertype import (
     model_clustertype,
 )
 
+from .model_company import (
+    kwargs_company,
+    model_company,
+)
+
 from .model_configgroup import (
     kwargs_configgroups,
     model_configgroups,
