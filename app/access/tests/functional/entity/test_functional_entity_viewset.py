@@ -230,7 +230,7 @@ class EntityViewSetInheritedCases(
 
     model = None
 
-    url_name = '_api_v2_entity_sub'
+    url_name = '_api_entity_sub'
 
 
     @classmethod
@@ -263,4 +263,4 @@ class EntityViewSetTest(
     TestCase,
 ):
 
-    url_name = '_api_v2_entity'
+    url_name = '_api_entity'

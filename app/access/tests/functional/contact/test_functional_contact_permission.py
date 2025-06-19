@@ -34,7 +34,7 @@ class ContactPermissionsAPIInheritedCases(
 
     kwargs_create_item_diff_org: dict = None
 
-    # url_name = '_api_v2_entity_sub'
+    # url_name = '_api_entity_sub'
 
 
     # @pytest.fixture(scope='class')

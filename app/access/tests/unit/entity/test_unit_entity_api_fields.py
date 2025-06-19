@@ -55,7 +55,7 @@ class EntityAPITestCases(
         'entity_type': 'entity',
     }
 
-    url_ns_name = '_api_v2_entity'
+    url_ns_name = '_api_entity'
     """Url namespace (optional, if not required) and url name"""
 
 
@@ -68,7 +68,7 @@ class EntityAPIInheritedCases(
 
     model = None
 
-    url_ns_name = '_api_v2_entity_sub'
+    url_ns_name = '_api_entity_sub'
 
 
 
