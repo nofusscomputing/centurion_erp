@@ -66,7 +66,7 @@ class EntityViewsetInheritedCases(
     def setUpTestData(self):
 
         self.kwargs = {
-            'entity_model': self.model._meta.model_name
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()
