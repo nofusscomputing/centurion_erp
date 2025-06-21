@@ -69,7 +69,7 @@ class MockRequest:
 
     user: User = None
 
-    def __init__(self, user: User, organization: Organization, viewset):
+    def __init__(self, user: User, organization: Organization, viewset, model = None):
 
         self.user = user
 
@@ -77,11 +77,15 @@ class MockRequest:
 
             viewset = viewset()
 
+        if model is None:
+
+            model = viewset.model
+
         view_permission = Permission.objects.get(
-            codename = 'view_' + viewset.model._meta.model_name,
+            codename = 'view_' + model._meta.model_name,
             content_type = ContentType.objects.get(
-                app_label = viewset.model._meta.app_label,
-                model = viewset.model._meta.model_name,
+                app_label = model._meta.app_label,
+                model = model._meta.model_name,
             )
         )
 
@@ -927,6 +931,12 @@ class ModelViewSetBaseCases(
         """
 
         view_set = self.viewset()
+        view_set.request = MockRequest(
+            user = self.view_user,
+            model = getattr(self, 'model',None),
+            viewset = self.viewset,
+            organization = self.organization
+        )
 
         assert view_set.model is not None
 
@@ -982,8 +992,9 @@ class ModelViewSetBaseCases(
 
         view_set.request = MockRequest(
             user = self.view_user,
+            model = getattr(self, 'model',None),
             organization = self.organization,
-            viewset = self.viewset
+            viewset = self.viewset,
         )
 
         view_set.request.headers = {}
@@ -1014,8 +1025,9 @@ class ModelViewSetBaseCases(
 
         view_set.request = MockRequest(
             user = self.view_user,
+            model = getattr(self, 'model',None),
             organization = self.organization,
-            viewset = self.viewset
+            viewset = self.viewset,
         )
 
         view_set.request.headers = {}

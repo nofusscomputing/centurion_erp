@@ -4,7 +4,7 @@ from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-
+from access.models.entity import Entity
 from access.viewsets.entity import (
     NoDocsViewSet,
     ViewSet,
@@ -20,6 +20,8 @@ class ViewsetTestCases(
 ):
 
     kwargs = None
+
+    model = Entity
 
     viewset = None
 
