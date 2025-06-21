@@ -1,18 +1,9 @@
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
-
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, PolymorphicProxySerializer
 
-from rest_framework import generics, viewsets
-from rest_framework.response import Response
-
-from access.mixin import OrganizationMixin
-
-from api.views.mixin import OrganizationPermissionAPI
 from api.viewsets.common import ModelViewSet
 
 from core import exceptions as centurion_exceptions
-from core.serializers.ticket_comment_depreciated import (
+from core.serializers.ticket_comment_depreciated import (    # pylint: disable=W0611:unused-import
     Ticket,
     TicketComment,
     TicketCommentImportModelSerializer,
@@ -34,8 +25,6 @@ from core.serializers.ticket_comment_depreciated import (
     TicketCommentChangeModelSerializer,
     TicketCommentViewSerializer
 )
-
-from settings.models.user_settings import UserSettings
 
 
 

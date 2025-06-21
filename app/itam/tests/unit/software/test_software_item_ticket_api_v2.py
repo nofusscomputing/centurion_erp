@@ -1,4 +1,4 @@
-
+import pytest
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
@@ -10,6 +10,8 @@ from itam.models.software import Software
 
 
 
+@pytest.mark.model_software
+@pytest.mark.module_itam
 class SoftwareItemTicketAPI(
     ItemTicketAPI,
     TestCase,
@@ -60,7 +62,7 @@ class SoftwareItemTicketAPI(
 
         self.url_view_kwargs = {
             'item_class': self.item_class,
-            'item_id': self.item.id,
+            'item_id': self.linked_item.id,
             'pk': self.item.id,
         }
 

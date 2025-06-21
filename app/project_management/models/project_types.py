@@ -1,33 +1,18 @@
 from django.db import models
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.team import Team
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from assistance.models.knowledge_base import KnowledgeBase
 
-
-
-class ProjectTypeCommonFields(TenancyObject):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Type ID Number',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'Number',
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
+from core.models.centurion import CenturionModel
 
 
 
-class ProjectType(ProjectTypeCommonFields):
+class ProjectType(
+    CenturionModel
+):
+
+    model_tag = 'project_type'
 
 
     class Meta:
@@ -51,12 +36,14 @@ class ProjectType(ProjectTypeCommonFields):
 
     runbook = models.ForeignKey(
         KnowledgeBase,
-        blank= True,
+        blank = True,
         help_text = 'The runbook for this project type',
         null = True,
         on_delete = models.SET_NULL,
         verbose_name = 'Runbook',
     )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: dict = [
@@ -70,7 +57,6 @@ class ProjectType(ProjectTypeCommonFields):
                         'organization',
                         'name'
                         'runbook',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes'
@@ -109,16 +95,3 @@ class ProjectType(ProjectTypeCommonFields):
     def __str__(self):
 
         return self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from project_management.models.project_type_history import ProjectTypeHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ProjectTypeHistory,
-        )
-
-
-        return history

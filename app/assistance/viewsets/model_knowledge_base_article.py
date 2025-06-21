@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from assistance.serializers.model_knowledge_base_article import (
+from assistance.serializers.model_knowledge_base_article import (    # pylint: disable=W0611:unused-import
     all_models,
     ModelKnowledgeBaseArticle,
     ModelKnowledgeBaseArticleModelSerializer,

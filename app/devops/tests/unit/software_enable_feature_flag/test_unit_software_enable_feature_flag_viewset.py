@@ -17,7 +17,7 @@ class ViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_feature_flag_software'
+    route_name = 'v2:_api_softwareenablefeatureflag'
 
 
     @classmethod

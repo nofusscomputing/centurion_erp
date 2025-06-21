@@ -47,7 +47,6 @@ class ModelSerializer(
             'email',
             'directory',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

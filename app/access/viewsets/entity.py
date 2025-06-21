@@ -12,13 +12,21 @@ from drf_spectacular.utils import (
 
 from rest_framework.reverse import reverse
 
-# THis import only exists so that the migrations can be created
-from access.models.entity_history import EntityHistory    # pylint: disable=W0611:unused-import
+from access.models import (    # pylint: disable=W0611:unused-import
+    contact,
+    company_base,
+    person,
+    role,
+
+)
+
 from access.models.entity import (
     Entity,
 )
 
-from api.viewsets.common import SubModelViewSet
+from api.viewsets.common import (
+    SubModelViewSet_ReWrite,
+)
 
 
 
@@ -57,7 +65,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -98,7 +106,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -122,7 +130,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -154,7 +162,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -187,7 +195,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -215,16 +223,17 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         }
     ),
 )
-class ViewSet( SubModelViewSet ):
+class ViewSet(
+    SubModelViewSet_ReWrite
+):
 
     base_model = Entity
 
     filterset_fields = [
         'organization',
-        'is_global'
     ]
 
-    model_kwarg = 'entity_model'
+    model_kwarg = 'model_name'
 
     search_fields = [
         'model_notes',
@@ -242,10 +251,10 @@ class ViewSet( SubModelViewSet ):
         ):
 
             self.back_url = reverse(
-                viewname = '_api_v2_entity_sub-list',
+                viewname = '_api_entity_sub-list',
                 request = self.request,
                 kwargs = {
-                    'entity_model': self.kwargs[self.model_kwarg],
+                    'model_name': self.kwargs[self.model_kwarg],
                 }
             )
 

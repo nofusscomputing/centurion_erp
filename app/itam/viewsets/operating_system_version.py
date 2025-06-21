@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 # THis import only exists so that the migrations can be created
 from itam.models.operating_system_version_history import OperatingSystemVersionHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.operating_system_version import (
+from itam.serializers.operating_system_version import (    # pylint: disable=W0611:unused-import
     OperatingSystem,
     OperatingSystemVersion,
     OperatingSystemVersionModelSerializer,
@@ -113,7 +113,6 @@ class ViewSet( ModelViewSet ):
     """ Operating Systems """
 
     filterset_fields = [
-        'is_global',
         'organization',
     ]
 
@@ -133,7 +132,7 @@ class ViewSet( ModelViewSet ):
     def get_back_url(self) -> str:
 
 
-        return reverse('v2:_api_v2_operating_system-detail',
+        return reverse('v2:_api_operatingsystem-detail',
             request = self.request,
             kwargs = {
                 'pk': self.kwargs['operating_system_id']

@@ -4,7 +4,7 @@ from rest_framework.relations import Hyperlink
 
 from access.models.entity import Entity
 
-from api.tests.unit.test_unit_api_fields import (
+from api.tests.functional.test_functional_api_fields import (
     APIFieldsInheritedCases,
     DoesNotExist,
 )

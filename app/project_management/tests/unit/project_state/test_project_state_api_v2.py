@@ -1,13 +1,10 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
-
-from rest_framework.relations import Hyperlink
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
@@ -15,7 +12,7 @@ from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APITenancyObject
 
-from assistance.models.knowledge_base import KnowledgeBase
+from assistance.models.knowledge_base import KnowledgeBase, KnowledgeBaseCategory
 
 from project_management.models.projects import ProjectState
 
@@ -25,6 +22,9 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_projectstate
+@pytest.mark.module_project_management
+# @pytest.mark.skip( reason = 'to be re-written' )
 class ProjectStateAPI(
     TestCase,
     APITenancyObject
@@ -44,9 +44,17 @@ class ProjectStateAPI(
         self.organization = Organization.objects.create(name='test_org')
 
 
+        self.view_user = User.objects.create_user(username="test_user_view", password="password")
+
         kb = KnowledgeBase.objects.create(
             organization = self.organization,
-            title = 'kb article'
+            title = 'kb article',
+            category = KnowledgeBaseCategory.objects.create(
+                organization = self.organization,
+                name = 'kb_cat'
+            ),
+            responsible_user = self.view_user,
+            target_user = self.view_user,
         )
 
         self.item = ProjectState.objects.create(
@@ -71,8 +79,6 @@ class ProjectStateAPI(
         )
 
         view_team.permissions.set([view_permissions])
-
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
 
         user_settings = UserSettings.objects.get(user =  self.view_user)
         
@@ -111,7 +117,7 @@ class ProjectStateAPI(
         self.url_view_kwargs = {'pk': self.item.id}
 
         client = Client()
-        url = reverse('v2:_api_v2_project_state-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_projectstate-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

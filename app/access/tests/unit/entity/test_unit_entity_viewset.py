@@ -1,8 +1,10 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-
+from access.models.entity import Entity
 from access.viewsets.entity import (
     NoDocsViewSet,
     ViewSet,
@@ -12,11 +14,14 @@ from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 
 
+@pytest.mark.model_entity
 class ViewsetTestCases(
     ModelViewSetInheritedCases,
 ):
 
     kwargs = None
+
+    model = Entity
 
     viewset = None
 
@@ -54,7 +59,7 @@ class EntityViewsetInheritedCases(
     model: str = None
     """name of the model to test"""
 
-    route_name = 'API:_api_v2_entity_sub'
+    route_name = 'API:_api_entity_sub'
 
     viewset = ViewSet
 
@@ -63,13 +68,14 @@ class EntityViewsetInheritedCases(
     def setUpTestData(self):
 
         self.kwargs = {
-            'entity_model': self.model._meta.model_name
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()
 
 
 
+@pytest.mark.module_access
 class EntityViewsetTest(
     ViewsetTestCases,
     TestCase,
@@ -77,6 +83,6 @@ class EntityViewsetTest(
 
     kwargs = {}
 
-    route_name = 'API:_api_v2_entity'
+    route_name = 'API:_api_entity'
 
     viewset = NoDocsViewSet

@@ -2,7 +2,7 @@ import pytest
 
 from accounting.models.asset_base import AssetBase
 
-from api.tests.unit.test_unit_api_fields import (
+from api.tests.functional.test_functional_api_fields import (
     APIFieldsInheritedCases,
 )
 

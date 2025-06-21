@@ -1,14 +1,18 @@
 import pytest
 
-from access.models.contact import Contact
-
 
 
 @pytest.fixture( scope = 'class')
-def model(request):
+def model(model_contact):
 
-    request.cls.model = Contact
+    yield model_contact
 
-    yield request.cls.model
+@pytest.fixture( scope = 'class')
+def model_kwargs(request, kwargs_contact):
 
-    del request.cls.model
+    request.cls.kwargs_create_item = kwargs_contact.copy()
+
+    yield kwargs_contact.copy()
+
+    if hasattr(request.cls, 'kwargs_create_item'):
+        del request.cls.kwargs_create_item

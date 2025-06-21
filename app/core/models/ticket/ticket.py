@@ -18,7 +18,7 @@ from core import exceptions as centurion_exceptions
 from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
 from core.middleware.get_request import get_request
-from core.models.ticket.ticket_category import TicketCategory, KnowledgeBase
+from core.models.ticket.ticket_category import TicketCategory
 
 from project_management.models.project_milestone import Project, ProjectMilestone
 
@@ -1528,12 +1528,6 @@ class RelatedTickets(TenancyObject):
 
         return FeatureNotUsed
 
-
-    def __str__(self):
-
-        # return '#' + str( self.id )
-
-        return '#'
 
 
     @property

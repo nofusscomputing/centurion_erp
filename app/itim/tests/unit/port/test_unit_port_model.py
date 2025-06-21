@@ -1,31 +1,77 @@
 import pytest
 
-from django.test import TestCase
+from django.db import models
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itim.models.services import Port
 
 
-
-class PortModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_port
+class PortModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    kwargs_item_create = {
-        'number': 1,
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'port'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+        'number': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.IntegerField,
+            'null': False,
+            'unique': False,
+        },
+        'description': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'length': 80,
+            'null': True,
+            'unique': False,
+        },
+        'protocol': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'null': False,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
     }
 
-    model = Port
 
 
-    @pytest.mark.skip(reason = 'to be written')
-    def test_field_entry_invalid_port_to_high(self):
-        """Test Model Field
+class PortModelInheritedCases(
+    PortModelTestCases,
+):
+    pass
 
-        Ensure that a validation error is thrown and that is displays to the user
-        """
-        pass
+
+
+@pytest.mark.module_itim
+class PortModelPyTest(
+    PortModelTestCases,
+):
+    pass

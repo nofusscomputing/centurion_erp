@@ -21,7 +21,7 @@ class SoftwareBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_software-detail", format="html"
+        view_name="v2:_api_software-detail", format="html"
     )
 
     class Meta:
@@ -56,17 +56,17 @@ class SoftwareModelSerializer(
         get_url = super().get_url( item = item )
 
         get_url.update({
-            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?software=true',
+            'external_links': reverse("v2:_api_externallink-list", request=self._context['view'].request) + '?software=true',
             'feature_flagging': reverse(
-                "v2:_api_v2_feature_flag_software-list",
+                "v2:_api_softwareenablefeatureflag-list",
                 kwargs={'software_id': item.pk},
                 request=self._context['view'].request
             ) + '',
             'installations': reverse("v2:_api_v2_software_installs-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
-            'publisher': reverse("v2:_api_v2_manufacturer-list", request=self._context['view'].request),
+            'publisher': reverse("v2:_api_manufacturer-list", request=self._context['view'].request),
             'services': 'ToDo',
             'version': reverse(
-                "v2:_api_v2_software_version-list",
+                "v2:_api_softwareversion-list",
                 request=self._context['view'].request,
                 kwargs={
                     'software_id': item.pk
@@ -105,7 +105,6 @@ class SoftwareModelSerializer(
             'name',
             'category',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

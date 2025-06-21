@@ -6,8 +6,6 @@ from rest_framework.reverse import reverse
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.tenancy import TenancyObject
 
-from core.lib.feature_not_used import FeatureNotUsed
-
 
 
 class AssetBase(
@@ -257,7 +255,6 @@ class AssetBase(
                 ):
 
                     return related_object.name
-                    break
 
 
         return ''

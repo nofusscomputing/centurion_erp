@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -9,6 +11,8 @@ from project_management.viewsets.project_milestone import ViewSet
 
 
 
+@pytest.mark.model_projectmilestone
+@pytest.mark.module_project_management
 class ProjectMilestoneViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -16,7 +20,7 @@ class ProjectMilestoneViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_project_milestone'
+    route_name = 'v2:_api_projectmilestone'
 
 
     @classmethod

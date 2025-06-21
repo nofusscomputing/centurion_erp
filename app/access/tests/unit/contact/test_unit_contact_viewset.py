@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from access.models.contact import Contact
@@ -7,6 +9,7 @@ from access.tests.unit.person.test_unit_person_viewset import (
 
 
 
+@pytest.mark.model_contact
 class ViewsetTestCases(
     PersonViewsetInheritedCases,
 ):
@@ -28,6 +31,7 @@ class ContactViewsetInheritedCases(
 
 
 
+@pytest.mark.module_access
 class ContactViewsetTest(
     ViewsetTestCases,
     TestCase,

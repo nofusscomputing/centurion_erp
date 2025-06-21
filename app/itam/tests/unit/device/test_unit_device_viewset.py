@@ -16,7 +16,7 @@ class DeviceViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_device'
+    route_name = 'v2:_api_device'
 
     @classmethod
     def setUpTestData(self):

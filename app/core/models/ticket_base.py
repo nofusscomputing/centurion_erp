@@ -780,7 +780,6 @@ class TicketBase(
                 ):
 
                     return related_object.name
-                    break
 
 
         return ''
