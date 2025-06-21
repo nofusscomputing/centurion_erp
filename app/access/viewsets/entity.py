@@ -65,7 +65,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -106,7 +106,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -130,7 +130,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -162,7 +162,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -195,7 +195,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -233,7 +233,7 @@ class ViewSet(
         'organization',
     ]
 
-    model_kwarg = 'entity_model'
+    model_kwarg = 'model_name'
 
     search_fields = [
         'model_notes',
@@ -254,7 +254,7 @@ class ViewSet(
                 viewname = '_api_entity_sub-list',
                 request = self.request,
                 kwargs = {
-                    'entity_model': self.kwargs[self.model_kwarg],
+                    'model_name': self.kwargs[self.model_kwarg],
                 }
             )
 

@@ -30,7 +30,7 @@ class Index(IndexViewset):
         if self.request.feature_flag['2025-00002']:
             
             response.update({
-                "directory": reverse( 'v2:_api_entity_sub-list', request=request, kwargs = { 'entity_model': 'contact' } ),
+                "directory": reverse( 'v2:_api_entity_sub-list', request=request, kwargs = { 'model_name': 'contact' } ),
                 "entities": reverse( 'v2:_api_entity-list', request=request ),
             })
 

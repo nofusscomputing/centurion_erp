@@ -56,7 +56,7 @@ class APITestCases(
         # if self.model._meta.model_name != 'entity':
 
         #     self.url_view_kwargs.update({
-        #         'entity_model': self.item.entity_type,
+        #         'model_name': self.item.entity_type,
         #     })
 
 
