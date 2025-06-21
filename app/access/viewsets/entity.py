@@ -24,7 +24,9 @@ from access.models.entity import (
     Entity,
 )
 
-from api.viewsets.common import SubModelViewSet
+from api.viewsets.common import (
+    SubModelViewSet_ReWrite,
+)
 
 
 
@@ -221,7 +223,9 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         }
     ),
 )
-class ViewSet( SubModelViewSet ):
+class ViewSet(
+    SubModelViewSet_ReWrite
+):
 
     base_model = Entity
 
