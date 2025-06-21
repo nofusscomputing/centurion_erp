@@ -20,7 +20,7 @@ def kwargs_employee( kwargs_contact ):
 
     kwargs = {
         **kwargs_contact.copy(),
-        'employee_number':  random_str
+        'employee_number':  int(str(random_str)[( len(random_str) - 13 ):])
     }
 
     yield kwargs.copy()

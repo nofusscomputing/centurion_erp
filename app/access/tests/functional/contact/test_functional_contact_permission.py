@@ -41,11 +41,11 @@ class ContactPermissionsAPIInheritedCases(
     # def inherited_var_setup(self, request):
 
     #     request.cls.url_kwargs.update({
-    #         'entity_model': self.model._meta.sub_model_type
+    #         'model_name': self.model._meta.sub_model_type
     #     })
 
     #     request.cls.url_view_kwargs.update({
-    #         'entity_model': self.model._meta.sub_model_type
+    #         'model_name': self.model._meta.sub_model_type
     #     })
 
 

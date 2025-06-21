@@ -106,6 +106,7 @@ class APIFieldsTestCases:
     ):
 
         request.cls.url_view_kwargs = {}
+        request.cls.model = model
 
         with django_db_blocker.unblock():
 
@@ -140,11 +141,15 @@ class APIFieldsTestCases:
                 })
 
 
-            if 'model_notes' in self.model().fields:
+            if hasattr(request.cls.model(), 'model_notes'):
 
-                request.cls.kwargs_create_item.update({
-                    'model_notes': 'notes',
-                })
+                for field in request.cls.model()._meta.fields:
+
+                    if field.attname == 'model_notes':
+
+                        request.cls.kwargs_create_item.update({
+                            'model_notes': 'notes',
+                        })
 
 
             view_permissions = Permission.objects.get(

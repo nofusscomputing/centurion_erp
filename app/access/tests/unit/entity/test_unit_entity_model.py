@@ -93,6 +93,22 @@ class EntityModelTestCases(
         assert model.kb_model_name == 'entity'
 
 
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'model_name': model_instance._meta.model_name,
+            'pk': model_instance.id
+        }
+
+
+
 
 class EntityModelInheritedCases(
     EntityModelTestCases,
@@ -113,3 +129,16 @@ class EntityModelPyTest(
         """
 
         assert model_instance.get_related_model() is None
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'pk': model_instance.id
+        }

@@ -24,7 +24,7 @@ class EntityAPITestCases(
         if model != self.base_model:
         
             request.cls.url_view_kwargs.update({
-                'entity_model': model._meta.sub_model_type,
+                'model_name': model._meta.sub_model_type,
             })
 
 

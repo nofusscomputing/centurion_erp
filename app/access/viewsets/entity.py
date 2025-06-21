@@ -24,7 +24,9 @@ from access.models.entity import (
     Entity,
 )
 
-from api.viewsets.common import SubModelViewSet
+from api.viewsets.common import (
+    SubModelViewSet_ReWrite,
+)
 
 
 
@@ -63,7 +65,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -104,7 +106,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -128,7 +130,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -160,7 +162,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -193,7 +195,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters = [
             OpenApiParameter(
-                name = 'entity_model',
+                name = 'model_name',
                 description = 'Enter the entity type. This is the name of the Entity sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -221,7 +223,9 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         }
     ),
 )
-class ViewSet( SubModelViewSet ):
+class ViewSet(
+    SubModelViewSet_ReWrite
+):
 
     base_model = Entity
 
@@ -229,7 +233,7 @@ class ViewSet( SubModelViewSet ):
         'organization',
     ]
 
-    model_kwarg = 'entity_model'
+    model_kwarg = 'model_name'
 
     search_fields = [
         'model_notes',
@@ -250,7 +254,7 @@ class ViewSet( SubModelViewSet ):
                 viewname = '_api_entity_sub-list',
                 request = self.request,
                 kwargs = {
-                    'entity_model': self.kwargs[self.model_kwarg],
+                    'model_name': self.kwargs[self.model_kwarg],
                 }
             )
 
