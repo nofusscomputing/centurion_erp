@@ -70,7 +70,7 @@ class Entity(
 
 
 
-    def clean(self):
+    def clean_fields(self, exclude = None ):
 
         related_model = self.get_related_model()
 
@@ -81,6 +81,8 @@ class Entity(
         if self.entity_type != str(related_model._meta.verbose_name).lower().replace(' ', '_'):
 
             self.entity_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
+
+        super().clean_fields( exclude = exclude )
 
 
 
