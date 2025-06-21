@@ -141,24 +141,3 @@ class Entity(
 
 
         return related_model
-
-
-    def get_url_kwargs(self, many = False) -> dict:
-
-        model = self.get_related_model()
-
-        if (len(self._meta.parents) == 0 and model is None) or not many:
-
-            return {
-                'pk': self.id
-            }
-
-        if model is None:
-
-            model = self
-
-        kwargs = {
-            'entity_model': str(model._meta.verbose_name).lower().replace(' ', '_'),
-        }
-
-        return kwargs
