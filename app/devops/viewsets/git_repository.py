@@ -28,7 +28,9 @@ from devops.serializers.git_repository.gitlab import (
     ViewSerializer as GitLabViewSerializer,
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common import (
+    SubModelViewSet_ReWrite,
+)
 
 
 
@@ -181,7 +183,9 @@ from api.viewsets.common import ModelViewSet
         }
     ),
 )
-class ViewSet(ModelViewSet):
+class ViewSet(
+    SubModelViewSet_ReWrite
+):
     """fdgdfgdf"""
 
     filterset_fields = [
@@ -195,7 +199,9 @@ class ViewSet(ModelViewSet):
         'provider_id',
     ]
 
-    model = GitRepository
+    base_model = GitRepository
+
+    model_kwarg = 'model_name'
 
     view_description: str = 'GIT Repositories'
 
@@ -214,7 +220,7 @@ class ViewSet(ModelViewSet):
 
                 if self.kwargs.get('pk', None):
 
-                    model = getattr(self.queryset[0], self.kwargs['git_provider'] + 'repository')
+                    model = getattr(self.queryset[0], self.kwargs['model_name'] + 'repository')
 
                     self.page_layout = model.get_page_layout()
 
@@ -228,13 +234,13 @@ class ViewSet(ModelViewSet):
             return self.queryset
 
         
-        if self.kwargs.get('git_provider', '') == 'github':
+        if self.kwargs.get('model_name', '') == 'githubrepository':
 
             self.queryset = GitHubRepository.objects.select_related(
                 'git_group',
                 ).all()
 
-        elif self.kwargs.get('git_provider', '') == 'gitlab':
+        elif self.kwargs.get('model_name', '') == 'gitlabrepository':
 
             self.queryset = GitLabRepository.objects.select_related(
                 'git_group',
@@ -271,11 +277,11 @@ class ViewSet(ModelViewSet):
 
         prefix: str = ''
 
-        if self.kwargs.get('git_provider', '') == 'github':
+        if self.kwargs.get('model_name', '') == 'github':
 
             prefix = 'GitHub'
 
-        elif self.kwargs.get('git_provider', '') == 'gitlab':
+        elif self.kwargs.get('model_name', '') == 'gitlab':
 
             prefix = 'GitLab'
 
