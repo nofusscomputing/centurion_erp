@@ -1,4 +1,4 @@
-from django.shortcuts import Http404, HttpResponse #, redirect, render
+from django.shortcuts import Http404
 from django.views.generic import View
 
 

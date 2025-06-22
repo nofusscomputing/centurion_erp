@@ -50,7 +50,7 @@ class Index(
 
             ref = str(item.organization.name) + '_' + str(item.software.name)
             endpoints[ref] = reverse(
-                    'v2:public:devops:_public_api_v2_feature_flag-list',
+                    'v2:public:devops:_api_checkin-list',
                     request=request,
                     kwargs = {
                         'organization_id': int(item.software.id),

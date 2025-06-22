@@ -1,9 +1,12 @@
+import pytest
+
 from access.tests.unit.entity.test_unit_entity_api_fields import (
     EntityAPIInheritedCases
 )
 
 
 
+@pytest.mark.model_person
 class PersonAPITestCases(
     EntityAPIInheritedCases,
 ):
@@ -43,6 +46,7 @@ class PersonAPIInheritedCases(
 
 
 
+@pytest.mark.module_access
 class PersonAPIPyTest(
     PersonAPITestCases,
 ):

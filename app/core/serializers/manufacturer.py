@@ -1,9 +1,6 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
-
-from app.serializers.user import UserBaseSerializer
 
 from api.serializers import common
 
@@ -20,7 +17,7 @@ class ManufacturerBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_manufacturer-detail", format="html"
+        view_name="v2:_api_manufacturer-detail", format="html"
     )
 
 
@@ -62,7 +59,6 @@ class ManufacturerModelSerializer(
             'display_name',
             'name',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

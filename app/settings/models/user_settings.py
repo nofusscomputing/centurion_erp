@@ -1,17 +1,14 @@
-import django
 import zoneinfo
-
-from rest_framework.reverse import reverse
 
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from access.fields import *
+from access.fields import AutoLastModifiedField
 from access.models.tenant import Tenant
 
-from core.lib.feature_not_used import FeatureNotUsed
+from core.models.centurion import CenturionModel
 
 sorted_timezones = sorted(zoneinfo.available_timezones())
 
@@ -20,32 +17,16 @@ TIMEZONES = tuple(zip(
     sorted_timezones
 ))
 
-User = django.contrib.auth.get_user_model()
 
 
+class UserSettings(
+    CenturionModel,
+):
 
-class UserSettingsCommonFields(models.Model):
+    _audit_enabled = False
 
-    class Meta:
-        abstract = True
+    _notes_enabled = False
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID for this user Setting',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    slug = None
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
-
-
-
-class UserSettings(UserSettingsCommonFields):
 
     class Meta:
 
@@ -58,21 +39,24 @@ class UserSettings(UserSettingsCommonFields):
         verbose_name_plural = 'User Settings'
 
 
+    model_notes = False
+
+    organization = None
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank = False,
+        help_text = 'User this Setting belongs to',
+        on_delete = models.CASCADE,
+        related_name='user_settings',
+        verbose_name = 'User'
+    )
+
     class BrowserMode(models.IntegerChoices):
 
         AUTO  = 1, 'Auto'
         DARK  = 2, 'Dark'
         LIGHT = 3, 'Light'
-
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        blank= False,
-        help_text = 'User this Setting belongs to',
-        on_delete=models.CASCADE,
-        related_name='user_settings',
-        verbose_name = 'User'
-    )
 
     browser_mode = models.IntegerField(
         blank = False,
@@ -80,25 +64,26 @@ class UserSettings(UserSettingsCommonFields):
         default = BrowserMode.AUTO,
         help_text = "Set your web browser's mode",
         verbose_name = 'Browser Mode',
-    ) 
+    )
 
     default_organization = models.ForeignKey(
         Tenant,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Users default Tenant',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.SET_NULL,
         verbose_name = 'Default Tenant'
     )
 
     timezone = models.CharField(
-        default='UTC',
-        choices=TIMEZONES,
+        default = 'UTC',
+        choices = TIMEZONES,
         help_text = 'What Timezone do you wish to have times displayed in',
-        max_length=32,
+        max_length = 32,
         verbose_name = 'Your Timezone',
     )
+
+    modified = AutoLastModifiedField()
 
     page_layout: list = [
         {
@@ -122,40 +107,7 @@ class UserSettings(UserSettingsCommonFields):
         },
     ]
 
-
-    def get_organization(self):
-
-        return self.default_organization
-
-
-
-    def get_url( self, request = None ) -> str:
-
-        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
-
-
-        if request:
-
-            return reverse(f"v2:_api_v2_user_settings-detail", request=request, kwargs = { 'pk': self.pk } )
-
-        return reverse(f"v2:_api_v2_user_settings-detail", kwargs = { 'pk': self.pk } )
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
-
-
-
-    @receiver(post_save, sender=User)
-    def new_user_callback(sender, **kwargs):
-        settings = UserSettings.objects.filter(user=kwargs['instance'])
-
-        if not settings.exists():
-
-            UserSettings.objects.create(user=kwargs['instance'])
-
-            # settings = UserSettings.objects.filter(user=context.user)
+    table_fields = []
 
 
     def is_owner(self, user: int) -> bool:
@@ -165,3 +117,19 @@ class UserSettings(UserSettingsCommonFields):
             return True
 
         return False
+
+
+    def get_organization(self):
+
+        return self.default_organization
+
+
+    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+    def new_user_callback(sender, **kwargs):
+        settings = UserSettings.objects.filter(user=kwargs['instance'])
+
+        if not settings.exists():
+
+            UserSettings.objects.create(user=kwargs['instance'])
+
+            # settings = UserSettings.objects.filter(user=context.user)

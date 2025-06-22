@@ -8,6 +8,10 @@ class Contact(
     Person
 ):
 
+    documentation = ''
+
+    _is_submodel = True
+
 
     class Meta:
 
@@ -41,10 +45,6 @@ class Contact(
     def __str__(self) -> str:
 
         return self.f_name + ' ' + self.l_name
-
-    documentation = ''
-
-    history_model_name = 'contact'
 
     page_layout: list = [
         {

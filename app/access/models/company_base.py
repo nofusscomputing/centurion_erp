@@ -12,6 +12,10 @@ class Company(
 # references in code to `organization` witch clashes with the intended name of
 # this model.
 
+    _is_submodel = True
+
+    documentation = ''
+
 
     class Meta:
 
@@ -39,10 +43,6 @@ class Company(
 
         return self.name
 
-
-    documentation = ''
-
-    history_model_name = 'company'
 
     page_layout: dict = [
         {
@@ -95,8 +95,3 @@ class Company(
         'organization',
         'created',
     ]
-
-
-    def clean(self):
-
-        super().clean()

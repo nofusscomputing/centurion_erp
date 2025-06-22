@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from project_management.viewsets.project import ViewSet
 
 
 
+@pytest.mark.model_project
+@pytest.mark.module_project_management
 class ProjectViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -15,7 +19,7 @@ class ProjectViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_project'
+    route_name = 'v2:_api_project'
 
 
     @classmethod
@@ -30,7 +34,7 @@ class ProjectViewsetList(
 
 
         client = Client()
-        
+
         url = reverse(
             self.route_name + '-list',
             kwargs = self.kwargs

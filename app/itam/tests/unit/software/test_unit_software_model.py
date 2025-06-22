@@ -1,43 +1,76 @@
 import pytest
 
-from django.test import TestCase
+from django.db import models
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itam.models.software import Software
 
 
-
-class SoftwareModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_software
+class SoftwareModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = Software
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'value': 'software'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            'publisher': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            'name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 50,
+                'null': False,
+                'unique': True,
+            },
+            'category': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            'modified': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': False,
+                'unique': False,
+            },
+        }
 
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_software_must_have_organization(self):
-        """ Software must have organization set """
-        pass
+class SoftwareModelInheritedCases(
+    SoftwareModelTestCases,
+):
+    pass
 
-    @pytest.mark.skip(reason="to be written")
-    def test_software_update_is_global_no_change(self):
-        """Once software is set to global it can't be changed.
 
-            global status can't be changed as non-global items may reference the item.
-        """
 
-        pass
-
-    @pytest.mark.skip(reason="to be written")
-    def test_software_prevent_delete_if_used(self):
-        """Any software in use by a software must not be deleted.
-
-            i.e. A software has an action set for the software.
-        """
-
-        pass
+@pytest.mark.module_itam
+class SoftwareModelPyTest(
+    SoftwareModelTestCases,
+):
+    pass

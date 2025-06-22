@@ -9,7 +9,7 @@ from api.serializers import common
 from access.functions.permissions import permission_queryset
 from access.serializers.organization import TenantBaseSerializer
 
-from app.serializers.permission import Permission, PermissionBaseSerializer
+from centurion.serializers.permission import PermissionBaseSerializer
 
 from core import fields as centurion_field
 
@@ -94,7 +94,6 @@ class TeamModelSerializer(
             'model_notes',
             'permissions',
             'organization',
-            'is_global',
             'created',
             'modified',
             '_urls',

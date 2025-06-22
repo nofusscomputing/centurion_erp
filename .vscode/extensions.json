@@ -8,5 +8,6 @@
         "qwtel.sqlite-viewer",
         "jebbs.markdown-extended",
         "william-voyek.vscode-nginx",
+        "detachhead.basedpyright",
     ]
 }

@@ -1,5 +1,3 @@
-import datetime
-
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
@@ -176,6 +174,9 @@ class ModelSerializer(
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
+
+        if 'context' not in kwargs:
+            return
 
         if getattr(kwargs['context'].get('view'), 'action', '') in ['create', 'partial_update', 'update']:
 

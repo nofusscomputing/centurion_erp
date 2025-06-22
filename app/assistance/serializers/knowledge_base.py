@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 from access.serializers.organization import TenantBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
 
@@ -69,11 +69,11 @@ class KnowledgeBaseModelSerializer(
 
         get_url.update({
             'category': reverse(
-                'v2:_api_v2_knowledge_base_category-list',
+                'v2:_api_knowledgebasecategory-list',
                 request=self.context['view'].request,
             ),
             'organization': reverse(
-                'v2:_api_v2_organization-list',
+                'v2:_api_tenant-list',
                 request=self.context['view'].request,
             ),
             'team': reverse(
@@ -107,6 +107,7 @@ class KnowledgeBaseModelSerializer(
             'organization',
             'category',
             'display_name',
+            'model_notes',
             'title',
             'summary',
             'content',
@@ -117,7 +118,6 @@ class KnowledgeBaseModelSerializer(
             'responsible_user',
             'responsible_teams',
             'public',
-            'is_global',
             'created',
             'modified',
             '_urls',

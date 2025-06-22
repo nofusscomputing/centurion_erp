@@ -230,7 +230,7 @@ class EntityViewSetInheritedCases(
 
     model = None
 
-    url_name = '_api_v2_entity_sub'
+    url_name = '_api_entity_sub'
 
 
     @classmethod
@@ -247,11 +247,11 @@ class EntityViewSetInheritedCases(
         }
 
         self.url_kwargs = {
-            'entity_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.sub_model_type
         }
 
         self.url_view_kwargs = {
-            'entity_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.sub_model_type
         }
 
         super().setUpTestData()
@@ -263,4 +263,4 @@ class EntityViewSetTest(
     TestCase,
 ):
 
-    url_name = '_api_v2_entity'
+    url_name = '_api_entity'

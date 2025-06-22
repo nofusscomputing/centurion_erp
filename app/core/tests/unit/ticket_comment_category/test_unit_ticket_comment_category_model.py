@@ -1,15 +1,105 @@
-from django.test import TestCase
+import pytest
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from django.db import models
+
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
 
-class TicketCommentCategoryModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_ticketcommentcategory
+class TicketCommentCategoryModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = TicketCommentCategory
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'ticket_comment_category'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
+        'parent': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'name': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'max_length': 50,
+            'null': False,
+            'unique': False,
+        },
+        'runbook': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'comment': {
+            'blank': False,
+            'default': True,
+            'field_type': models.BooleanField,
+            'null': False,
+            'unique': False,
+        },
+        'notification': {
+            'blank': False,
+            'default': True,
+            'field_type': models.BooleanField,
+            'null': False,
+            'unique': False,
+        },
+        'solution': {
+            'blank': False,
+            'default': True,
+            'field_type': models.BooleanField,
+            'null': False,
+            'unique': False,
+        },
+        'task': {
+            'blank': False,
+            'default': True,
+            'field_type': models.BooleanField,
+            'null': False,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
+
+
+
+class TicketCommentCategoryModelInheritedCases(
+    TicketCommentCategoryModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_core
+class TicketCommentCategoryModelPyTest(
+    TicketCommentCategoryModelTestCases,
+):
+    pass

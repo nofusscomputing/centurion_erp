@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from itam.viewsets.software import ViewSet
 
 
 
+@pytest.mark.model_software
+@pytest.mark.module_itam
 class SoftwareViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -15,7 +19,7 @@ class SoftwareViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_software'
+    route_name = 'v2:_api_software'
 
 
     @classmethod

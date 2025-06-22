@@ -1,33 +1,18 @@
 from django.db import models
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.team import Team
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from assistance.models.knowledge_base import KnowledgeBase
 
-
-
-class TicketCategoryCommonFields(TenancyObject):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Category ID Number',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'Number',
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
+from core.models.centurion import CenturionModel
 
 
 
-class TicketCategory(TicketCategoryCommonFields):
+class TicketCategory(
+    CenturionModel,
+):
+
+    model_tag = 'ticket_category'
 
 
     class Meta:
@@ -44,10 +29,10 @@ class TicketCategory(TicketCategoryCommonFields):
 
     parent = models.ForeignKey(
         'self',
-        blank= True,
+        blank = True,
         help_text = 'The Parent Category',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Parent Category',
     )
 
@@ -60,10 +45,10 @@ class TicketCategory(TicketCategoryCommonFields):
 
     runbook = models.ForeignKey(
         KnowledgeBase,
-        blank= True,
+        blank = True,
         help_text = 'The runbook for this category',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Runbook',
     )
 
@@ -106,6 +91,8 @@ class TicketCategory(TicketCategoryCommonFields):
         null = False,
         verbose_name = 'Request Tickets',
     )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: dict = [
@@ -170,17 +157,3 @@ class TicketCategory(TicketCategoryCommonFields):
     def __str__(self):
 
         return self.recusive_name
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from core.models.ticket.ticket_category_history import TicketCategoryHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = TicketCategoryHistory
-        )
-
-
-        return history

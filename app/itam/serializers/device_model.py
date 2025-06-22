@@ -1,5 +1,3 @@
-from rest_framework.reverse import reverse
-
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
@@ -22,7 +20,7 @@ class DeviceModelBaseSerializer(serializers.ModelSerializer):
 
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_device_model-detail", format="html"
+        view_name="v2:_api_devicemodel-detail", format="html"
     )
 
     class Meta:
@@ -64,7 +62,6 @@ class DeviceModelModelSerializer(
             'manufacturer',
             'name',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

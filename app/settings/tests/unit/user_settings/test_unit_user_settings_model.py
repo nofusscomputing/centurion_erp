@@ -1,168 +1,135 @@
-import django
 import pytest
-import unittest
-import requests
 
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission
-from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import TestCase, Client
+from django.db import models
+from django.urls import reverse
+from django.urls.exceptions import NoReverseMatch
 
-from access.models.tenant import Tenant as Organization
-from access.models.team import Team
-from access.models.team_user import TeamUsers
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
+)
 
 from settings.models.user_settings import UserSettings
 
-User = django.contrib.auth.get_user_model()
 
 
-
-class UserSettings(TestCase):
-
-
-    model = UserSettings
-
-    model_name = 'usersettings'
-    app_label = 'settings'
+@pytest.mark.model_usersettings
+class UserSettingsModelTestCases(
+    CenturionAbstractModelInheritedCases
+):
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
+    @property
+    def parameterized_class_attributes(self):
 
-        1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a device
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': models.fields.NOT_PROVIDED,
+                'value': models.fields.NOT_PROVIDED
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            'model_notes': {
+                'blank': models.fields.NOT_PROVIDED,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'null': models.fields.NOT_PROVIDED,
+                'unique': models.fields.NOT_PROVIDED,
+            },
+            'organization': {
+                'blank': models.fields.NOT_PROVIDED,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'null': models.fields.NOT_PROVIDED,
+                'unique': models.fields.NOT_PROVIDED,
+            },
+            'user': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': False,
+                'unique': False,
+            },
+            'browser_mode': {
+                'blank': False,
+                'default': UserSettings.BrowserMode.AUTO,
+                'field_type': models.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+            'default_organization': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            'timezone': {
+                'blank': False,
+                'default': 'UTC',
+                'field_type': models.CharField,
+                'length': 32,
+                'null': False,
+                'unique': False,
+            },
+            'modified': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': False,
+                'unique': False,
+            },
+        }
+
+
+    def test_add_create_not_allowed(self, model):
+        """ Check correct permission for add 
+
+        Not allowed to add.
+        Ensure that the list view for HTTP/POST does not exist.
         """
 
-        organization = Organization.objects.create(name='test_org')
+        with pytest.raises( NoReverseMatch ) as e:
 
-        self.organization = organization
-
-        different_organization = Organization.objects.create(name='test_different_organization')
-
-        self.different_organization = different_organization
-
-
-        view_permissions = Permission.objects.get(
-                codename = 'view_' + self.model_name,
-                content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
-                )
-            )
-
-        view_team = Team.objects.create(
-            team_name = 'view_team',
-            organization = organization,
-        )
-
-        view_team.permissions.set([view_permissions])
-
-
-        self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
-
-
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
-        teamuser = TeamUsers.objects.create(
-            team = view_team,
-            user = self.view_user
-        )
-
-
-        self.different_organization_user = User.objects.create_user(username="test_different_organization_user", password="password")
-
-
-        different_organization_team = Team.objects.create(
-            team_name = 'different_organization_team',
-            organization = different_organization,
-        )
-
-        different_organization_team.permissions.set([
-            view_permissions,
-        ])
-
-        TeamUsers.objects.create(
-            team = different_organization_team,
-            user = self.different_organization_user
-        )
-
-
-        self.item = self.model.objects.get(
-            user=self.view_user,
-        )
+            reverse('v2:' + model._meta.model_name + '-list')
 
 
 
+class UserSettingsModelInheritedCases(
+    UserSettingsModelTestCases,
+):
+    pass
 
-    def test_user_settings_exist(self):
-        """ User Settings must exist for user
 
-        User settings a created if they dont exist on attempting to access
+
+@pytest.mark.module_settings
+class UserSettingsModelPyTest(
+    UserSettingsModelTestCases,
+):
+
+    def test_model_tag_defined(self, model):
+        """ Model Tag
+
+        Ensure that the model has a tag defined.
         """
 
-        assert self.item
+        pytest.xfail( reason = 'Model does not require tag' )
 
+    def test_method_value_not_default___str__(self, model, model_instance ):
+        """Test Method
 
-    def test_user_settings_organization_is_none(self):
-        """ User Settings value 'organization' is none
-
-        When row is created the organization must not be set
+        Ensure method `__str__` does not return the default value.
         """
 
-        assert self.item.default_organization_id is None
-
-
-    def test_user_settings_organization_edit_correct(self):
-        """ User Settings value 'organization' is none
-
-        When row is created the organization must not be set
-        """
-
-        self.item.default_organization_id = self.different_organization.id
-
-        self.item.save()
-
-        assert self.item.default_organization_id == self.different_organization.id
-
-
-    # @pytest.mark.skip(reason="to be written")
-    def test_user_settings_on_delete_of_user_settings_removed(self):
-        """ On Delete of a user their settings are removed """
-        
-        test_user = User.objects.create_user(username="test_user_single_use", password="password")
-
-        assert self.model.objects.get(
-            user=test_user,
-        )
-
-        test_user.delete()
-
-
-        settings = self.model.objects.filter(
-            user_id=test_user.id,
-        )
-
-        assert settings.exists() == False
-
-
-    @pytest.mark.skip(reason="to be written")
-    def test_user_settings_on_delete_organization_default_organization(self):
-        """ On Delete of an organization, users default organization set to null """
-        pass
-
-
-    @pytest.mark.skip(reason="to be written")
-    def test_user_settings_on_delete_organization_user_settings_not_deleted(self):
-        """ On Delete of an organization, users settings are not deleted """
-        pass
-
-
-    def test_user_settings_browser_mode(self):
-        """User Settings value 'browser_mode' exists"""
-
-        assert self.item.browser_mode
+        pytest.xfail( reason = 'Model does not require this function' )
