@@ -227,43 +227,6 @@ class ViewSet(
         return self.page_layout
 
 
-    def get_queryset(self):
-
-        if self.queryset is not None:
-
-            return self.queryset
-
-        
-        if self.kwargs.get('model_name', '') == 'githubrepository':
-
-            self.queryset = GitHubRepository.objects.select_related(
-                'git_group',
-                ).all()
-
-        elif self.kwargs.get('model_name', '') == 'gitlabrepository':
-
-            self.queryset = GitLabRepository.objects.select_related(
-                'git_group',
-                ).all()
-
-        else:
-
-            self.queryset = self.model.objects.select_related(
-                'git_group',
-                'githubrepository',
-                'gitlabrepository',
-                ).all()
-
-        if 'pk' in self.kwargs:
-
-            if self.kwargs['pk']:
-
-                self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
-
-
-        return self.queryset
-
-    
     def get_return_url(self) -> str:
 
         if 'pk' in self.kwargs:
