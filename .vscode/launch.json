@@ -63,6 +63,17 @@
             "program": "${workspaceFolder}/app/manage.py"
         },
         {
+            "name": "Make Migrations",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "makemigrations"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/app/manage.py"
+        },
+        {
             "name": "Migrate",
             "type": "debugpy",
             "request": "launch",
