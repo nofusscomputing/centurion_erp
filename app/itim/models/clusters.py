@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_delete
@@ -354,6 +356,10 @@ class Cluster(TenancyObject):
 
 
         if self.config:
+
+            if isinstance(self.config, str):
+                self.config = json.loads(self.config)
+                self.save()
 
             rendered_config.update(
                 self.config
