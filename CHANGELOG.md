@@ -1,3 +1,13 @@
+## 1.18.0 (2025-07-03)
+
+### feat
+
+- **python**: upgrade django 5.1.9 -> 5.1.10
+
+### Fixes
+
+- **itim**: Correct config that is in the incorrect format
+
 ## 1.17.1 (2025-06-02)
 
 ### Fixes
