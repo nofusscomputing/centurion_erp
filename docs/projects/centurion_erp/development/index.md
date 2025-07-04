@@ -20,17 +20,15 @@ Centurion ERP is a Django Application. We have added a lot of little tid bits th
 
 - [Fields](./fields.md)
 
-- [Forms](./forms.md)
-
 - [Models](./models.md)
 
     - [Entity](./core/entity.md)
 
+- [Serializers](./serializers.md)
+
 - [Templates](./templates.md)
 
 - [Testing](./testing.md)
-
-- [Views](./views.md)
 
 
 ## Icons

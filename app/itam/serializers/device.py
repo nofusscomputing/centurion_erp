@@ -1,16 +1,13 @@
 import json
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
-
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-from api.viewsets.common import ModelViewSet
 
-from core.fields.icon import Icon, IconField
+from core.fields.icon import IconField
 
 from itam.models.device import Device
 from itam.serializers.device_model import DeviceModelBaseSerializer
@@ -28,7 +25,7 @@ class DeviceBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_device-detail", format="html"
+        view_name="v2:_api_device-detail", format="html"
     )
 
     class Meta:
@@ -62,12 +59,12 @@ class DeviceModelSerializer(
 
         get_url.update({
 
-            'device_model': reverse("v2:_api_v2_device_model-list", request=self._context['view'].request),
-            'device_type': reverse("v2:_api_v2_device_type-list", request=self._context['view'].request),
-            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
-            'operating_system': reverse("v2:_api_v2_device_operating_system-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'device_model': reverse("v2:_api_devicemodel-list", request=self._context['view'].request),
+            'device_type': reverse("v2:_api_devicetype-list", request=self._context['view'].request),
+            'external_links': reverse("v2:_api_externallink-list", request=self._context['view'].request) + '?devices=true',
+            'operating_system': reverse("v2:_api_deviceoperatingsystem-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'service': reverse("v2:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
-            'software': reverse("v2:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'software': reverse("v2:_api_devicesoftware-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'tickets': reverse(
                 "v2:_api_v2_item_tickets-list",
                 request=self._context['view'].request,
@@ -121,7 +118,6 @@ class DeviceModelSerializer(
             'model_notes',
             'serial_number',
             'uuid',
-            'is_global',
             'is_virtual',
             'device_model',
             'config',

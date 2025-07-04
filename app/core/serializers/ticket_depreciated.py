@@ -4,7 +4,7 @@ from rest_framework import serializers
 from access.serializers.organization import TenantBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
 from api.serializers.common import OrganizationField
@@ -14,7 +14,7 @@ from core import exceptions as centurion_exception
 from core import fields as centurion_field
 from core.models.ticket.ticket import Ticket
 
-from core.fields.badge import Badge, BadgeField
+from core.fields.badge import BadgeField
 from core.serializers.ticket_category import TicketCategoryBaseSerializer
 
 from project_management.serializers.project import ProjectBaseSerializer
@@ -79,14 +79,14 @@ class TicketModelSerializer(
         if item.project:
 
             url_dict.update({
-                'project': reverse("v2:_api_v2_project-list", request=self._context['view'].request, kwargs={}),
+                'project': reverse("v2:_api_project-list", request=self._context['view'].request, kwargs={}),
             })
 
         if item.category:
 
             url_dict.update({
             'ticketcategory': reverse(
-                'v2:_api_v2_ticket_category-list',
+                'v2:_api_ticketcategory-list',
                 request=self._context['view'].request,
                 kwargs={},
             ) + '?' + ticket_type + '=true',
@@ -232,11 +232,10 @@ class TicketModelSerializer(
                 if self.instance.project is None:
 
                     raise centurion_exception.ValidationError(
-                        details = 'Milestones require a project',
+                        detail = 'Milestones require a project',
                         code = 'milestone_requires_project',
                     )
 
-                    return False
 
                 if self.instance.project.id == self.instance.milestone.project.id:
 

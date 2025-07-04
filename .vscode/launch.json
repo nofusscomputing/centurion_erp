@@ -29,7 +29,7 @@
                 "3",
                 "--bind",
                 "0.0.0.0:8002",
-                "app.wsgi:application",
+                "centurion.wsgi:application",
             ],
             "django": true,
             "autoStartBrowser": false,
@@ -45,6 +45,29 @@
             "args": [
                 "feature_flag",
                 // "0.0.0.0:8002"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/app/manage.py"
+        },
+        {
+            "name": "Centurion Model (Management Command)",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "models",
+                // "0.0.0.0:8002"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/app/manage.py"
+        },
+        {
+            "name": "Make Migrations",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "makemigrations"
             ],
             "django": true,
             "autoStartBrowser": false,

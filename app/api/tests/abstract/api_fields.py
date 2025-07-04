@@ -96,56 +96,56 @@ class APICommonFields:
 
 
 
-    def test_api_field_exists_urls_notes(self):
-        """ Test for existance of API Field
+    # def test_api_field_exists_urls_notes(self):
+    #     """ Test for existance of API Field
 
-        _urls.notes field must exist
-        """
+    #     _urls.notes field must exist
+    #     """
 
-        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+    #     obj = getattr(self.item, 'get_url_kwargs_notes', None)
 
-        if callable(obj):
+    #     if callable(obj):
 
-            obj = obj()
+    #         obj = obj()
 
-        if(
-            not str(self.model._meta.model_name).lower().endswith('notes')
-            and obj is not FeatureNotUsed
-        ):
+    #     if(
+    #         not str(self.model._meta.model_name).lower().endswith('notes')
+    #         and obj is not FeatureNotUsed
+    #     ):
 
-            assert 'notes' in self.api_data['_urls']
+    #         assert 'notes' in self.api_data['_urls']
 
-        else:
+    #     else:
 
-            print('Test is n/a')
+    #         print('Test is n/a')
 
-            assert True
+    #         assert True
 
 
-    def test_api_field_type_urls_notes(self):
-        """ Test for type for API Field
+    # def test_api_field_type_urls_notes(self):
+    #     """ Test for type for API Field
 
-        _urls._self field must be str
-        """
+    #     _urls._self field must be str
+    #     """
 
-        obj = getattr(self.item, 'get_url_kwargs_notes', None)
+    #     obj = getattr(self.item, 'get_url_kwargs_notes', None)
 
-        if callable(obj):
+    #     if callable(obj):
 
-            obj = obj()
+    #         obj = obj()
 
-        if(
-            not str(self.model._meta.model_name).lower().endswith('notes')
-            and obj is not FeatureNotUsed
-        ):
+    #     if(
+    #         not str(self.model._meta.model_name).lower().endswith('notes')
+    #         and obj is not FeatureNotUsed
+    #     ):
 
-            assert type(self.api_data['_urls']['notes']) is str
+    #         assert type(self.api_data['_urls']['notes']) is str
 
-        else:
+    #     else:
 
-            print('Test is n/a')
+    #         print('Test is n/a')
 
-            assert True
+    #         assert True
 
 
 

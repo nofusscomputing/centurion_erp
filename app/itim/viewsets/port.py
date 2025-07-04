@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from itim.models.port_history import PortHistory    # pylint: disable=W0611:unused-import
-from itim.serializers.port import (
+from itim.serializers.port import (    # pylint: disable=W0611:unused-import
     Port,
     PortModelSerializer,
     PortViewSerializer

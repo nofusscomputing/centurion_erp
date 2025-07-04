@@ -9,7 +9,7 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from app.serializers.permission import PermissionBaseSerializer
+from centurion.serializers.permission import PermissionBaseSerializer
 
 
 

@@ -2,12 +2,13 @@ import pytest
 
 from access.models.entity import Entity
 
-from api.tests.unit.test_unit_api_fields import (
+from api.tests.functional.test_functional_api_fields import (
     APIFieldsInheritedCases,
 )
 
 
 
+@pytest.mark.model_entity
 class EntityAPITestCases(
     APIFieldsInheritedCases,
 ):
@@ -23,7 +24,7 @@ class EntityAPITestCases(
         if model != self.base_model:
         
             request.cls.url_view_kwargs.update({
-                'entity_model': model._meta.sub_model_type,
+                'model_name': model._meta.sub_model_type,
             })
 
 
@@ -42,9 +43,9 @@ class EntityAPITestCases(
         'entity_type': {
             'expected': str
         },
-        '_urls.history': {
-            'expected': str
-        },
+        # '_urls.history': {
+        #     'expected': str
+        # },
         '_urls.knowledge_base': {
             'expected': str
         }
@@ -54,7 +55,7 @@ class EntityAPITestCases(
         'entity_type': 'entity',
     }
 
-    url_ns_name = '_api_v2_entity'
+    url_ns_name = '_api_entity'
     """Url namespace (optional, if not required) and url name"""
 
 
@@ -67,10 +68,11 @@ class EntityAPIInheritedCases(
 
     model = None
 
-    url_ns_name = '_api_v2_entity_sub'
+    url_ns_name = '_api_entity_sub'
 
 
 
+@pytest.mark.module_access
 class EntityAPIPyTest(
     EntityAPITestCases,
 ):

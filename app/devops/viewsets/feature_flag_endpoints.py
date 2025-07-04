@@ -50,7 +50,7 @@ class Index(
                 endpoints[str(item.organization.name)] = {}
 
             endpoints[str(item.organization.name)][str(item.software.name)] = reverse(
-                    'v2:public:devops:_public_api_v2_feature_flag-list',
+                    'v2:public:devops:_api_checkin-list',
                     request=request,
                     kwargs = {
                         'organization_id': int(item.organization.id),

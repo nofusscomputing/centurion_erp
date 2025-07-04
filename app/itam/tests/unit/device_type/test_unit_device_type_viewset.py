@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,8 @@ from itam.viewsets.device_type import ViewSet
 
 
 
+@pytest.mark.model_devicetype
+@pytest.mark.module_itam
 class DeviceTYpeViewsetList(
     ModelViewSetInheritedCases,
     TestCase,
@@ -15,7 +19,7 @@ class DeviceTYpeViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_v2_device_type'
+    route_name = 'v2:_api_devicetype'
 
 
     @classmethod
@@ -30,7 +34,7 @@ class DeviceTYpeViewsetList(
 
 
         client = Client()
-        
+
         url = reverse(
             self.route_name + '-list',
             kwargs = self.kwargs

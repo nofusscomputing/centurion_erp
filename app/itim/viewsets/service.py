@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from itim.models.service_history import ServiceHistory    # pylint: disable=W0611:unused-import
-from itim.serializers.service import (
+from itim.serializers.service import (    # pylint: disable=W0611:unused-import
     Service,
     ServiceModelSerializer,
     ServiceViewSerializer

@@ -1,14 +1,18 @@
 import pytest
 
-from human_resources.models.employee import Employee
-
 
 
 @pytest.fixture( scope = 'class')
-def model(request):
+def model(model_employee):
 
-    request.cls.model = Employee
+    yield model_employee
 
-    yield request.cls.model
+@pytest.fixture( scope = 'class')
+def model_kwargs(request, kwargs_employee):
 
-    del request.cls.model
+    request.cls.kwargs_create_item = kwargs_employee.copy()
+
+    yield kwargs_employee.copy()
+
+    if hasattr(request.cls, 'kwargs_create_item'):
+        del request.cls.kwargs_create_item

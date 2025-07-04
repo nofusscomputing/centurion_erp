@@ -1,5 +1,4 @@
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
@@ -21,6 +20,8 @@ from itim.models.services import Service, Port
 
 
 
+@pytest.mark.model_service
+@pytest.mark.module_itim
 class ServiceAPI(
     TestCase,
     APITenancyObject
@@ -110,7 +111,7 @@ class ServiceAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_service-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_service-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
@@ -119,7 +120,7 @@ class ServiceAPI(
         self.api_data = response.data
 
 
-        url = reverse('v2:_api_v2_service-detail', kwargs={'pk': self.item_two.id})
+        url = reverse('v2:_api_service-detail', kwargs={'pk': self.item_two.id})
 
         client.force_login(self.view_user)
         response = client.get(url)

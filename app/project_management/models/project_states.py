@@ -1,33 +1,18 @@
 from django.db import models
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.team import Team
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
 
 from assistance.models.knowledge_base import KnowledgeBase
 
-
-
-class ProjectStateCommonFields(TenancyObject):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'State ID Number',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'Number',
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
+from core.models.centurion import CenturionModel
 
 
 
-class ProjectState(ProjectStateCommonFields):
+class ProjectState(
+    CenturionModel
+):
+
+    model_tag = 'project_state'
 
 
     class Meta:
@@ -51,10 +36,10 @@ class ProjectState(ProjectStateCommonFields):
 
     runbook = models.ForeignKey(
         KnowledgeBase,
-        blank= True,
+        blank = True,
         help_text = 'The runbook for this project state',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Runbook',
     )
 
@@ -66,6 +51,8 @@ class ProjectState(ProjectStateCommonFields):
         null = False,
         verbose_name = 'State Completed',
     )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: dict = [
@@ -79,7 +66,6 @@ class ProjectState(ProjectStateCommonFields):
                         'organization',
                         'name',
                         'runbook',
-                        'is_global',
                         'is_completed',
                     ],
                     "right": [
@@ -119,16 +105,3 @@ class ProjectState(ProjectStateCommonFields):
     def __str__(self):
 
         return self.name
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from project_management.models.project_state_history import ProjectStateHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ProjectStateHistory,
-        )
-
-
-        return history

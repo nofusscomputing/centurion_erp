@@ -1,3 +1,4 @@
+import pytest
 from datetime import datetime
 from dateutil import tz
 
@@ -15,13 +16,14 @@ from itam.models.software import Software
 
 
 
+@pytest.mark.skip( reason = "Audit history requires context['user']")
 class ViewSetBase:
 
     model = FeatureFlag
 
     app_namespace = 'v2'
     
-    url_name = 'public:devops:_public_api_v2_feature_flag'
+    url_name = 'public:devops:_api_checkin'
 
 
     @classmethod

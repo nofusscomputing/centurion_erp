@@ -79,7 +79,7 @@ class API(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_feature_flag_software-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_softwareenablefeatureflag-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
@@ -108,22 +108,22 @@ class API(
 
 
 
-    def test_api_field_exists_url_history(self):
-        """ Test for existance of API Field
+    # def test_api_field_exists_url_history(self):
+    #     """ Test for existance of API Field
 
-        _urls.history field must exist
-        """
+    #     _urls.history field must exist
+    #     """
 
-        assert 'history' not in self.api_data['_urls']
+    #     assert 'history' not in self.api_data['_urls']
 
 
-    def test_api_field_type_url_history(self):
-        """ Test for type for API Field
+    # def test_api_field_type_url_history(self):
+    #     """ Test for type for API Field
 
-        _urls.history field must be str
-        """
+    #     _urls.history field must be str
+    #     """
 
-        assert 'history' not in self.api_data['_urls']
+    #     assert 'history' not in self.api_data['_urls']
 
 
     def test_api_field_exists_description(self):

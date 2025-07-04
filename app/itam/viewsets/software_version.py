@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 # THis import only exists so that the migrations can be created
 from itam.models.software_version_history import SoftwareVersionHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.software_version import (
+from itam.serializers.software_version import (    # pylint: disable=W0611:unused-import
     Software,
     SoftwareVersion,
     SoftwareVersionModelSerializer,
@@ -112,7 +112,6 @@ class ViewSet( ModelViewSet ):
     """ Software """
 
     filterset_fields = [
-        'is_global',
         'organization',
         'software',
     ]
@@ -133,7 +132,7 @@ class ViewSet( ModelViewSet ):
     def get_back_url(self) -> str:
 
 
-        return reverse('v2:_api_v2_software-detail',
+        return reverse('v2:_api_software-detail',
             request = self.request,
             kwargs = {
                 'pk': self.kwargs['software_id']
@@ -157,7 +156,7 @@ class ViewSet( ModelViewSet ):
     def get_return_url(self) -> str:
 
 
-        return reverse('v2:_api_v2_software-detail',
+        return reverse('v2:_api_software-detail',
             request = self.request,
             kwargs = {
                 'pk': self.kwargs['software_id']

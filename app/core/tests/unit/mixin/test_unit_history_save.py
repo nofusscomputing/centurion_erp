@@ -2,7 +2,7 @@ from django.apps import apps
 from django.db import models
 from django.test import TestCase
 
-from core.mixin.history_save import SaveHistory
+from core.mixins.history_save import SaveHistory
 
 
 

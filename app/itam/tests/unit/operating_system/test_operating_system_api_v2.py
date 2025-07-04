@@ -23,6 +23,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_operatingsystem
+@pytest.mark.module_itam
 class OperatingSystemAPI(
     TestCase,
     APITenancyObject
@@ -79,7 +81,7 @@ class OperatingSystemAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_operating_system-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_operatingsystem-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

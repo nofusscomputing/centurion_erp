@@ -6,10 +6,12 @@ ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
 
 .PHONY: clean prepare docs ansible-lint lint test
 
-
-prepare:
+prepare-git-submodule:
 	git submodule update --init;
 	git submodule foreach git submodule update --init;
+
+
+prepare-python: prepare-git-submodule
 	python3 -m venv ${PATH_VENV};
 	${ACTIVATE_VENV};
 	pip install -r website-template/gitlab-ci/mkdocs/requirements.txt;
@@ -17,13 +19,15 @@ prepare:
 	pip install -r gitlab-ci/mkdocs/requirements.txt;
 	pip install -r requirements.txt;
 	pip install -r requirements_test.txt;
+
+prepare-docs: prepare-git-submodule
 	npm install markdownlint-cli2;
 	npm install markdownlint-cli2-formatter-junit;
 	cp -f "website-template/.markdownlint.json" ".markdownlint.json";
 	cp -f "gitlab-ci/lint/.markdownlint-cli2.jsonc" ".markdownlint-cli2.jsonc";
 
 
-markdown-mkdocs-lint:
+markdown-mkdocs-lint: prepare-docs
 	PATH=${PATH}:node_modules/.bin markdownlint-cli2 docs/*.md docs/**/*.md docs/**/**/*.md docs/**/**/**/*.md docs/**/**/**/**/**/*.md !docs/pull_request_template.md !CHANGELOG.md !gitlab-ci !website-template || true
 
 
@@ -33,6 +37,30 @@ docs-lint: markdown-mkdocs-lint
 docs: docs-lint
 	${ACTIVATE_VENV}
 	mkdocs build --clean
+
+
+fixtures:
+	${ACTIVATE_VENV}
+	mv app/db.sqlite3 app/db.sqlite3-current
+	if [ ! -f app/db.sqlite3-current ]; then echo "failed to save current db"; exit 1; fi;
+	python app/manage.py migrate;
+	python app/manage.py dumpdata \
+		--natural-foreign \
+		--natural-primary \
+		--exclude=contenttypes \
+		--exclude=auth.permission \
+		--indent 2 > app/fixtures/fresh_db.json;
+	sqlite3 app/db.sqlite3 .dump | \
+		grep -a -v 'INSERT INTO django_migrations' | \
+		grep -a -v 'INSERT INTO django_content_type' | \
+		grep -a -v 'INSERT INTO auth_permission' | \
+		grep -a -v 'INSERT INTO settings_appsettings' | \
+		grep -a -v 'CREATE UNIQUE INDEX' | \
+		grep -a -v 'CREATE INDEX' \
+		> app/fixtures/fresh_db.sql;
+	rm -f app/db.sqlite3
+	if [ ! -f app/db.sqlite3 ]; then cp app/db.sqlite3-current app/db.sqlite3; fi;
+	if [ -f app/db.sqlite3 ]; then rm -f app/db.sqlite3-current; fi;
 
 
 

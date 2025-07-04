@@ -1,16 +1,62 @@
-from django.test import TestCase
+import pytest
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from django.db import models
+
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itam.models.software import SoftwareCategory
 
 
-
-class SoftwareCategoryModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_softwarecategory
+class SoftwareCategoryModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = SoftwareCategory
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'value': 'software_category'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            'name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 50,
+                'null': False,
+                'unique': True,
+            },
+            'modified': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': False,
+                'unique': False,
+            },
+        }
+
+
+
+class SoftwareCategoryModelInheritedCases(
+    SoftwareCategoryModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_itam
+class SoftwareCategoryModelPyTest(
+    SoftwareCategoryModelTestCases,
+):
+    pass
