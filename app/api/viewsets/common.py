@@ -428,7 +428,7 @@ class CommonViewSet(
 
                 return e
 
-        return None
+        raise ValueError('20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug.')
 
 
 
