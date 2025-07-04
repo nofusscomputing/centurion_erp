@@ -101,10 +101,14 @@ class APIPermissionAddInheritedCases:
 
         the_model = model_instance( kwargs_create = model_kwargs )
 
+        url = the_model.get_url( many = True )
+
+        # the_model.delete()
+
         try:
 
             response = client.post(
-                path = the_model.get_url( many = True ),
+                path = url,
                 data = kwargs_api_create
             )
 
@@ -450,6 +454,13 @@ class APIPermissionViewInheritedCases:
 
         if response.status_code == 405:
             pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        elif IsAuthenticatedOrReadOnly in response.renderer_context['view'].permission_classes:
+
+            pytest.xfail( reason = 'ViewSet is public viewable, test is N/A' )
+
+
+        assert response.status_code == 200
 
         contains_different_org: bool = False
 

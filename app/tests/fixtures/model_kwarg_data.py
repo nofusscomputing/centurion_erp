@@ -1,4 +1,5 @@
 import datetime
+from django.core.exceptions import ValidationError
 import pytest
 
 from django.db import models
@@ -66,9 +67,21 @@ def model_kwarg_data():
 
         if create_instance:
 
-            instance =model.objects.create(
-                **kwargs
-            )
+            try:
+
+                instance =model.objects.create(
+                    **kwargs
+                )
+
+            except ValidationError as e:
+
+                if '__all__' in e.error_dict:
+
+                    if 'unique' in e.error_dict['__all__'][0].code:
+
+                        instance = model.objects.get(
+                            **kwargs
+                        )
 
 
             for field, values in many_field.items():

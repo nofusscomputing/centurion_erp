@@ -1,5 +1,7 @@
+import django
 import importlib
 import logging
+import rest_framework
 
 from django.utils.safestring import mark_safe
 
@@ -59,7 +61,7 @@ class Create(
                 if response.data['id'] is not None:
 
                     serializer = view_serializer(
-                        self.get_queryset().get( pk = int(response.data['id']) ),
+                        response.data.serializer.instance,
                         context = {
                             'request': request,
                             'view': self,
@@ -88,21 +90,12 @@ class Create(
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -145,21 +138,12 @@ class Destroy(
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -203,21 +187,12 @@ class List(
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -264,21 +239,12 @@ class Retrieve(
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -324,7 +290,7 @@ class Update(
                 view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
                 serializer = view_serializer(
-                    self.queryset.get( pk = int(self.kwargs['pk']) ),
+                    response.data.serializer.instance,
                     context = {
                         'request': request,
                         'view': self,
@@ -345,21 +311,12 @@ class Update(
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -400,7 +357,7 @@ class Update(
                 view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
                 serializer = view_serializer(
-                    self.queryset.get( pk = int(self.kwargs['pk']) ),
+                    response.data.serializer.instance,
                     context = {
                         'request': request,
                         'view': self,
@@ -421,21 +378,12 @@ class Update(
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -453,6 +401,51 @@ class CommonViewSet(
         OrganizationMixin (class): Contains the Authorization checks.
         viewsets (class): Django Rest Framework base class.
     """
+
+
+    def _django_to_api_exception( self, exc ):
+        """Convert Django exception to DRF Exception
+
+        Args:
+            exc (Django.core.exceptions.*): Django exception to convert
+
+        Raises:
+            rest_framework.exceptions.ValidationError: Exception to return
+
+        Returns:
+            None: Exception not converted
+        """
+
+        rtn_exception = None
+
+        if isinstance(exc, django.core.exceptions.ObjectDoesNotExist):
+
+            exc = rest_framework.exceptions.NotFound(exc.args)
+
+        elif isinstance(exc, django.core.exceptions.PermissionDenied):
+
+
+            exc = rest_framework.exceptions.PermissionDenied(exc.error_dict)
+
+        elif isinstance(exc, django.core.exceptions.ValidationError):
+
+
+            exc = rest_framework.exceptions.ValidationError(exc.error_dict)
+
+        else:
+
+            exc = ValueError('20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug.')
+
+        try:
+
+            raise exc
+
+        except Exception as e:
+
+            return e
+
+
+
 
     @property
     def allowed_methods(self):
