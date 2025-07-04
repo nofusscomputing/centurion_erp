@@ -29,7 +29,7 @@ class AdditionalTestCases:
         Ensure that a query to the viewset endpoint does not return
         items that are not part of the users organizations.
         """
-        
+
         pytest.xfail( reason = 'model is not org based' )
 
 

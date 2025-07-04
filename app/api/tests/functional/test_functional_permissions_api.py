@@ -101,10 +101,14 @@ class APIPermissionAddInheritedCases:
 
         the_model = model_instance( kwargs_create = model_kwargs )
 
+        url = the_model.get_url( many = True )
+
+        the_model.delete()
+
         try:
 
             response = client.post(
-                path = the_model.get_url( many = True ),
+                path = url,
                 data = kwargs_api_create
             )
 
