@@ -451,6 +451,13 @@ class APIPermissionViewInheritedCases:
         if response.status_code == 405:
             pytest.xfail( reason = 'ViewSet does not have this request method.' )
 
+        elif IsAuthenticatedOrReadOnly in response.renderer_context['view'].permission_classes:
+
+            pytest.xfail( reason = 'ViewSet is public viewable, test is N/A' )
+
+
+        assert response.status_code == 200
+
         contains_different_org: bool = False
 
         for item in response.data['results']:
