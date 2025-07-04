@@ -103,7 +103,7 @@ class APIPermissionAddInheritedCases:
 
         url = the_model.get_url( many = True )
 
-        the_model.delete()
+        # the_model.delete()
 
         try:
 
