@@ -108,7 +108,14 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
 
         for model_obj in model_objs:
 
-            if model_obj._meta.abstract:
+            is_abstract = False
+
+            if hasattr(model_obj, '_meta'):
+
+                is_abstract = model_obj._meta.abstract
+
+
+            if is_abstract:
 
                 del model_obj
 
