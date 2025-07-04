@@ -100,7 +100,7 @@ class Create(
             else:
 
                 response = Response(
-                    data = e.detail,
+                    data = str(e.get_full_details()['message']),
                     status = e.status_code
                 )
 
@@ -157,7 +157,7 @@ class Destroy(
             else:
 
                 response = Response(
-                    data = e.detail,
+                    data = str(e.get_full_details()['message']),
                     status = e.status_code
                 )
 
@@ -215,7 +215,7 @@ class List(
             else:
 
                 response = Response(
-                    data = e.detail,
+                    data = str(e.get_full_details()['message']),
                     status = e.status_code
                 )
 
@@ -276,7 +276,7 @@ class Retrieve(
             else:
 
                 response = Response(
-                    data = e.detail,
+                    data = str(e.get_full_details()['message']),
                     status = e.status_code
                 )
 
@@ -357,7 +357,7 @@ class Update(
             else:
 
                 response = Response(
-                    data = e.detail,
+                    data = str(e.get_full_details()['message']),
                     status = e.status_code
                 )
 
@@ -433,7 +433,7 @@ class Update(
             else:
 
                 response = Response(
-                    data = e.detail,
+                    data = str(e.get_full_details()['message']),
                     status = e.status_code
                 )
 
