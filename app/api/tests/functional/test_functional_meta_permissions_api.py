@@ -153,7 +153,7 @@ for centurion_model in get_models(
             centurion_model._meta.model_name + '_permissions_api.AdditionalTestCases'
         )
 
-        inc_classes += (additional_testcases,)
+        inc_classes = (additional_testcases, *inc_classes)
 
     except Exception as ex:
         additional_testcases = None
