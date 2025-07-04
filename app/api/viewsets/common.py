@@ -61,7 +61,7 @@ class Create(
                 if response.data['id'] is not None:
 
                     serializer = view_serializer(
-                        self.get_queryset().get( pk = int(response.data['id']) ),
+                        response.data.serializer.instance,
                         context = {
                             'request': request,
                             'view': self,
@@ -290,7 +290,7 @@ class Update(
                 view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
                 serializer = view_serializer(
-                    self.queryset.get( pk = int(self.kwargs['pk']) ),
+                    response.data.serializer.instance,
                     context = {
                         'request': request,
                         'view': self,
@@ -357,7 +357,7 @@ class Update(
                 view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
                 serializer = view_serializer(
-                    self.queryset.get( pk = int(self.kwargs['pk']) ),
+                    response.data.serializer.instance,
                     context = {
                         'request': request,
                         'view': self,
