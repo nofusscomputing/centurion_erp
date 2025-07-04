@@ -418,17 +418,31 @@ class CommonViewSet(
 
         rtn_exception = None
 
-        if isinstance(exc, django.core.exceptions.ValidationError):
+        if isinstance(exc, django.core.exceptions.ObjectDoesNotExist):
 
-            try:
+            exc = rest_framework.exceptions.NotFound(exc.args)
 
-                raise rest_framework.exceptions.ValidationError(exc.error_dict)
+        elif isinstance(exc, django.core.exceptions.PermissionDenied):
 
-            except Exception as e:
 
-                return e
+            exc = rest_framework.exceptions.PermissionDenied(exc.error_dict)
 
-        raise ValueError('20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug.')
+        elif isinstance(exc, django.core.exceptions.ValidationError):
+
+
+            exc = rest_framework.exceptions.ValidationError(exc.error_dict)
+
+        else:
+
+            exc = ValueError('20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug.')
+
+        try:
+
+            raise exc
+
+        except Exception as e:
+
+            return e
 
 
 
