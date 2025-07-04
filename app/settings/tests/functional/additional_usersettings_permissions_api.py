@@ -1,5 +1,7 @@
 import pytest
 
+from django.test import Client
+
 
 
 class AdditionalTestCases:
@@ -22,6 +24,8 @@ class AdditionalTestCases:
             },
         )
 
+        change_item.id = api_request_permissions['user']['change'].id
+
         response = client.patch(
             path = change_item.get_url( many = False ),
             data = self.change_data,
@@ -34,6 +38,33 @@ class AdditionalTestCases:
         assert response.status_code == 200, response.content
 
 
+
+    def test_permission_view(self, model_instance, api_request_permissions):
+        """ Check correct permission for view
+
+        Attempt to view as user with view permission
+        """
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['view'] )
+
+        view_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            }
+        )
+
+        view_item.id = api_request_permissions['user']['view'].id
+
+        response = client.get(
+            path = view_item.get_url( many = False )
+        )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == 200, response.content
 
 
 
