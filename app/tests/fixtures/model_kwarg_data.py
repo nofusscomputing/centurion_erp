@@ -26,9 +26,27 @@ def model_kwarg_data():
 
             if isinstance(getattr(model, field).field, models.ManyToManyField):
 
+                if isinstance(value, list):
+
+                    value_list = []
+
+                    for list_value in value:
+
+                        if isinstance(list_value, models.Model):
+                            value_list += [ list_value.id ]
+
+                    value = value_list
+
+
                 if field in many_field:
 
                     many_field[field] += [ value ]
+
+                elif isinstance(value, list):
+
+                    many_field.update({
+                        field: value
+                    })
 
                 else:
 

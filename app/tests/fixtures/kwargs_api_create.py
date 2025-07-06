@@ -20,8 +20,21 @@ def kwargs_api_create(django_db_blocker, model_kwargs):
             if isinstance(value, models.Model):
                 value = value.id
 
-            elif isinstance(value, dict):
-                value = json.dumps(value)
+            elif isinstance(value, list):
+
+                value_list = []
+
+                for list_value in value:
+
+                    if isinstance(list_value, models.Model):
+
+                        value_list += [ list_value.id ]
+
+                    else:
+
+                        value_list += [ list_value ]
+
+                value = value_list
 
             kwargs.update({
                 field: value
