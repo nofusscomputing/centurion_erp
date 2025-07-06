@@ -10,7 +10,9 @@ class ViewSetTestCases(
     AssetBaseViewSetInheritedCases
 ):
 
-    add_data: dict = {}
+    add_data: dict = {
+        'asset_number': '1354'
+    }
 
     kwargs_create_item: dict = {}
 
