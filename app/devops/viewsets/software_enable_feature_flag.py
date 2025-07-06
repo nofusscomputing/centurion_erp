@@ -17,6 +17,10 @@ from itam.models.software import Software
         summary = 'Enable Feature Flagging for Software',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
         }

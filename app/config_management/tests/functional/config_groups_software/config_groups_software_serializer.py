@@ -118,7 +118,7 @@ class ConfigGroupSoftwareValidationAPI(
 
             serializer.is_valid(raise_exception = True)
 
-        assert err.value.get_codes()['software'][0] == 'software_exists'
+        assert err.value.get_codes()['software'][0] == 'unique_software_exists'
 
 
 

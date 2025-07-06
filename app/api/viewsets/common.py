@@ -41,6 +41,7 @@ class Create(
         """
 
         response = None
+        instance = None
 
         try:
 
@@ -49,42 +50,77 @@ class Create(
                 self.model.context['user'] = self.request.user
                 self.model.context['logging'] = self.get_log()
 
-            response = super().create(request = request, *args, **kwargs)
+            try:
 
-            if str(response.status_code).startswith('2'):
+                response = super().create(request = request, *args, **kwargs)
 
-                # Always return using the ViewSerializer
-                serializer_module = importlib.import_module(self.get_serializer_class().__module__)
+            except Exception as e:
 
-                view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+                if not isinstance(e, APIException):
 
-                if response.data['id'] is not None:
+                    e = self._django_to_api_exception(e)
 
-                    serializer = view_serializer(
-                        response.data.serializer.instance,
-                        context = {
-                            'request': request,
-                            'view': self,
-                        },
-                    )
+                if not isinstance(e, rest_framework.exceptions.ValidationError):
 
-                    serializer_data = serializer.data
+                    raise e
 
-                else:
+                is_unique = False
+                for field, code in e.get_codes().items():
+
+                    if 'unique' in code[0]:
+                        is_unique = True
 
 
-                    serializer_data = {}
+                if not is_unique:
+                    raise e
 
 
-                # Mimic ALL details from DRF response except serializer
-                response = Response(
-                    data = serializer_data,
-                    status = response.status_code,
-                    template_name = response.template_name,
-                    headers = response.headers,
-                    exception = response.exception,
-                    content_type = response.content_type,
-                )
+                instance = self.model.objects.get( organization = request.data['organization'])
+
+            # Always return using the ViewSerializer
+            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
+
+            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+
+            if(
+                # response.data['id'] is not None
+                response is not None
+                and instance is None
+            ):
+
+                instance = response.data.serializer.instance
+
+
+            serializer = view_serializer(
+                instance,
+                context = {
+                    'request': request,
+                    'view': self,
+                },
+            )
+
+            serializer_data = serializer.data
+
+            if response is None:
+
+                headers = self.get_success_headers(serializer.data)
+                status_code = rest_framework.status.HTTP_200_OK
+
+            else:
+
+                headers = response.headers
+                status_code = response.status_code
+
+
+            # Mimic ALL details from DRF response except serializer
+            response = Response(
+                data = serializer_data,
+                status = status_code,
+                # template_name = response.template_name,
+                headers = headers,
+                # exception = response.exception,
+                # content_type = response.content_type,
+            )
 
         except Exception as e:
 

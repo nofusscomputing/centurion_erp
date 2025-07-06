@@ -22,6 +22,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a GIT Group',
         description='Create',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ViewSerializer
+            ),
             201: OpenApiResponse(
                 description='Created. Will be serialized with the serializer matching the provider.',
                 response = ViewSerializer

@@ -18,7 +18,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create an orgnaization',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=OrganizationViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TenantViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TenantViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

@@ -19,6 +19,10 @@ from project_management.serializers.project import (    # pylint: disable=W0611:
         summary = 'Create a cluster',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ProjectViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ProjectViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

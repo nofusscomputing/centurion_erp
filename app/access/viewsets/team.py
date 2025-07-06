@@ -25,9 +25,12 @@ from api.viewsets.common import ModelViewSet
                 location = 'path',
                 type = int
             ),
-        ], 
+        ],
         responses = {
-            200: OpenApiResponse(description='Allready exists', response=TeamViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TeamViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TeamViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

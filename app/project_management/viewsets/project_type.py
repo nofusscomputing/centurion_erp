@@ -17,6 +17,10 @@ from project_management.serializers.project_type import (    # pylint: disable=W
         summary = 'Create a project type',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ProjectTypeViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ProjectTypeViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

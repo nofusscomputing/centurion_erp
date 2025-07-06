@@ -27,6 +27,10 @@ from itam.serializers.device_operating_system import (    # pylint: disable=W061
             ),
         ],
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = DeviceOperatingSystemViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=DeviceOperatingSystemModelSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

@@ -17,6 +17,10 @@ from project_management.serializers.project_states import (    # pylint: disable
         summary = 'Create a project state',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ProjectStateViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ProjectStateViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

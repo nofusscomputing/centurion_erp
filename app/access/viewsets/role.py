@@ -17,6 +17,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a Role',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
         }

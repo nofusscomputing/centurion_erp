@@ -155,7 +155,7 @@ class ConfigGroupSoftwareModelSerializer(
                         detail = {
                             'software': 'This software is already assigned to this group'
                         },
-                        code = 'software_exists'
+                        code = 'unique_software_exists'
                     )
 
             except self.Meta.model.DoesNotExist as exc:

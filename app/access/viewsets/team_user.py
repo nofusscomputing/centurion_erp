@@ -29,7 +29,10 @@ from api.viewsets.common import ModelViewSet
             ),
         ],
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=TeamUserViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TeamUserViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TeamUserViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

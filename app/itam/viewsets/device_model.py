@@ -17,6 +17,10 @@ from itam.serializers.device_model import (    # pylint: disable=W0611:unused-im
         summary = 'Create a device model',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = DeviceModelViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=DeviceModelViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),
