@@ -290,6 +290,11 @@ class OrganizationPermissionMixin(
                     view.model.__name__ == 'AuthToken'
                     and request._user.id == int(view.kwargs.get('model_id', 0))
                 )
+                or (    # org=None is the application wide settings.
+                    view.model.__name__ == 'AppSettings'
+                    and request.user.is_superuser
+                    and obj.organization is None
+                )
             ):
 
                 return True

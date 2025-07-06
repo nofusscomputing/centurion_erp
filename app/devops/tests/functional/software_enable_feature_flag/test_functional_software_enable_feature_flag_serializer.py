@@ -106,7 +106,7 @@ class ValidationAPI(
 
         del valid_data['organization']
 
-        with pytest.raises(ValidationError) as err:
+        with pytest.raises(django.core.exceptions.ValidationError) as err:
 
             serializer = ModelSerializer(
                 context = {
@@ -119,4 +119,4 @@ class ValidationAPI(
             serializer.is_valid(raise_exception = True)
             serializer.save()
 
-        assert err.value.get_codes()['organization'] == 'required'
+        assert err.value.args[0]['organization'][0].code == 'null'

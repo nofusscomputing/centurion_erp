@@ -109,7 +109,8 @@ class APIPermissionAddInheritedCases:
 
             response = client.post(
                 path = url,
-                data = kwargs_api_create
+                data = kwargs_api_create,
+                content_type = 'application/json'
             )
 
         except NoReverseMatch:

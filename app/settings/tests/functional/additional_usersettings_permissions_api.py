@@ -8,6 +8,16 @@ class AdditionalTestCases:
 
 
 
+    def test_permission_add(self):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        pytest.xfail( reason = 'Model does not support adding' )
+
+
+
     def test_permission_change(self, model_instance, api_request_permissions):
         """ Check correct permission for change
 
@@ -68,14 +78,13 @@ class AdditionalTestCases:
 
 
 
-
     def test_returned_results_only_user_orgs(self):
         """Returned results check
 
         Ensure that a query to the viewset endpoint does not return
         items that are not part of the users organizations.
         """
-        
+
         pytest.xfail( reason = 'model is not org based' )
 
 

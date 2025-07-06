@@ -15,7 +15,10 @@ from config_management.serializers.config_group_software import (    # pylint: d
         summary = 'Create a config group software',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=ConfigGroupSoftwareViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ConfigGroupSoftwareViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ConfigGroupSoftwareViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

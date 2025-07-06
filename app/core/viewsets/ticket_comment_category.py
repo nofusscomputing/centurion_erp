@@ -18,6 +18,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a ticket comment category',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TicketCommentCategoryViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TicketCommentCategoryViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
         }

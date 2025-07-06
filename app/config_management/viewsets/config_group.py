@@ -15,7 +15,10 @@ from config_management.serializers.config_group import (    # pylint: disable=W0
         summary = 'Create a config group',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=ConfigGroupViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ConfigGroupViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ConfigGroupViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

@@ -15,7 +15,10 @@ from assistance.serializers.knowledge_base import (    # pylint: disable=W0611:u
         summary = 'Create a knowledge base article',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=KnowledgeBaseViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = KnowledgeBaseViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=KnowledgeBaseViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

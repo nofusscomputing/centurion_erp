@@ -20,6 +20,10 @@ from settings.serializers.external_links import (    # pylint: disable=W0611:unu
         is found within the database, it will not re-create it. The device will be returned within the message body.
         """,
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ExternalLinkViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ExternalLinkViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

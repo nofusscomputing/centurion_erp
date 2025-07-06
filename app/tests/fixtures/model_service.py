@@ -38,13 +38,16 @@ def kwargs_service(django_db_blocker,
         'name': 'service_' + random_str,
         'device': device,
         'config_key_variable': 'svc',
-        'port': port,
+        'port': [ port ],
     }
 
     yield kwargs.copy()
 
     with django_db_blocker.unblock():
 
-        device.delete()
+        try:
+            device.delete()
+        except:
+            pass
 
         port.delete()

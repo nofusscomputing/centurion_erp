@@ -17,6 +17,10 @@ from itam.serializers.device_type import (    # pylint: disable=W0611:unused-imp
         summary = 'Create a device type',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = DeviceTypeViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=DeviceTypeViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

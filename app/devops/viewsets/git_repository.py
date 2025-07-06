@@ -60,6 +60,18 @@ from api.viewsets.common import (
             many = False,
         ),
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response=PolymorphicProxySerializer(
+                    component_name = 'Git Provider',
+                    serializers=[
+                        GitHubViewSerializer,
+                        GitLabViewSerializer,
+                    ],
+                    resource_type_field_name=None,
+                    many = False,
+                ),
+            ),
             201: OpenApiResponse(
                 description='Created. Will be serialized with the serializer matching the provider.',
                 response=PolymorphicProxySerializer(

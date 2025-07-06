@@ -24,6 +24,10 @@ from project_management.serializers.project_milestone import (    # pylint: disa
             ),
         ],
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ProjectMilestoneViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ProjectMilestoneViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

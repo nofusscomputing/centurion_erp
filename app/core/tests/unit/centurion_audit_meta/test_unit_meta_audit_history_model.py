@@ -111,6 +111,17 @@ class AuditHistoryMetaModelTestCases(
 
                         many_field[field] += [ value ]
 
+                    elif isinstance(value, list):
+
+                        value_list = []
+
+                        for list_value in value:
+
+                            value_list += [ list_value ]
+
+
+                        value = value_list
+
                     else:
 
                         many_field.update({

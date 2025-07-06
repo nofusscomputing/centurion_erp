@@ -17,6 +17,10 @@ from itim.serializers.cluster_type import (    # pylint: disable=W0611:unused-im
         summary = 'Create a cluster type',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ClusterTypeViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ClusterTypeViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

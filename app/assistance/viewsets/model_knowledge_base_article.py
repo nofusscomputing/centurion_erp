@@ -20,6 +20,10 @@ from django.apps import apps
         summary = 'Create a knowledge base article',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ModelKnowledgeBaseArticleViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ModelKnowledgeBaseArticleViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
         }

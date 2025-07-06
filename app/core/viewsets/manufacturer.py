@@ -18,7 +18,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a manufacturer',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=ConfigGroupViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ManufacturerViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ManufacturerViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

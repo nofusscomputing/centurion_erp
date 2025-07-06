@@ -16,6 +16,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a software category',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = SoftwareCategoryViewSerializer
+            ),
             201: OpenApiResponse(description='Software created', response=SoftwareCategoryViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),
