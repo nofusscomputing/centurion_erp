@@ -23,6 +23,16 @@ class AdditionalTestCases:
     ]
 
 
+    def test_permission_add(self):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        pytest.xfail( reason = 'Model does not support adding' )
+
+
+
     def test_returned_results_only_user_orgs(self):
         """Returned results check
 
