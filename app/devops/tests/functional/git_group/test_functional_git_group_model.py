@@ -28,6 +28,16 @@ class GitGroupModelTestCases(
         }
 
 
+    @pytest.mark.skip( reason = 'test must be as part of serializer and viewset tests, not model' )
+    def test_model_create_has_history_entry(self, model_contenttype, created_model, model):
+        """Model Created
+
+        Ensure that the model when created, added a `create` Audit History
+        entry.
+        """
+
+        pass
+
 
     def test_model_create_with_parent_sets_tenancy(self, created_model, model):
         """Model Created
