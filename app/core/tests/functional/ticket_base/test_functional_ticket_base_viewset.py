@@ -97,7 +97,7 @@ class ViewSetBase:
 
             self.add_data.update({
                 'organization': self.organization.id,
-                'opened_by': self.view_user
+                'opened_by': self.view_user.id
             })
 
 

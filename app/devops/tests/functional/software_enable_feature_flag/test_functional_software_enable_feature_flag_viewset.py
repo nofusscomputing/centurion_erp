@@ -214,7 +214,7 @@ class ViewSetBase:
         self.add_data = {
             'enabled': True,
             'organization': self.add_organization.id,
-            'software': self.software_add,
+            'software': self.software_add.id,
         }
 
 
