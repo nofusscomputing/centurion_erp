@@ -56,7 +56,7 @@ class AssetBaseAPITestCases(
         'serial_number': '65756756756',
     }
 
-    url_ns_name = 'accounting:_api_v2_asset'
+    url_ns_name = 'accounting:_api_asset'
     """Url namespace (optional, if not required) and url name"""
 
 
@@ -69,7 +69,7 @@ class AssetBaseAPIInheritedCases(
 
     model = None
 
-    url_ns_name = 'accounting:_api_v2_asset_sub'
+    url_ns_name = 'accounting:_api_asset_sub'
 
 
 

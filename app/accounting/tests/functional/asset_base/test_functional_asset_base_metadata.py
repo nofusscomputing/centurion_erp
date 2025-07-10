@@ -237,7 +237,7 @@ class AssetBaseMetadataInheritedCases(
 
     kwargs_create_item_diff_org: dict = {}
 
-    url_name = 'accounting:_api_v2_asset_sub'
+    url_name = 'accounting:_api_asset_sub'
 
 
     @classmethod
@@ -272,4 +272,4 @@ class AssetBaseMetadataTest(
 
 ):
 
-    url_name = 'accounting:_api_v2_asset'
+    url_name = 'accounting:_api_asset'

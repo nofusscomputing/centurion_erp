@@ -37,7 +37,7 @@ class PermissionsAPITestCases(
 
     url_kwargs: dict = {}
 
-    url_name = 'accounting:_api_v2_asset'
+    url_name = 'accounting:_api_asset'
 
     url_view_kwargs: dict = {}
 
@@ -66,7 +66,7 @@ class AssetBasePermissionsAPIInheritedCases(
 
     kwargs_create_item_diff_org: dict = None
 
-    url_name = 'accounting:_api_v2_asset_sub'
+    url_name = 'accounting:_api_asset_sub'
 
 
     @pytest.fixture(scope='class')

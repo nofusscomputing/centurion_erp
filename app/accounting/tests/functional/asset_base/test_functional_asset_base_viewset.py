@@ -240,7 +240,7 @@ class AssetBaseViewSetInheritedCases(
 
     model = None
 
-    url_name = 'accounting:_api_v2_asset_sub'
+    url_name = 'accounting:_api_asset_sub'
 
 
     @classmethod
@@ -274,4 +274,4 @@ class AssetBaseViewSetTest(
     TestCase,
 ):
 
-    url_name = 'accounting:_api_v2_asset'
+    url_name = 'accounting:_api_asset'

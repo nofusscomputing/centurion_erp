@@ -88,7 +88,7 @@ class AssetBaseViewsetInheritedCases(
     model: str = None
     """name of the model to test"""
 
-    route_name = 'v2:accounting:_api_v2_asset_sub'
+    route_name = 'v2:accounting:_api_asset_sub'
 
 
 
@@ -100,6 +100,6 @@ class AssetBaseViewsetTest(
 
     kwargs = {}
 
-    route_name = 'v2:accounting:_api_v2_asset'
+    route_name = 'v2:accounting:_api_asset'
 
     viewset = NoDocsViewSet
