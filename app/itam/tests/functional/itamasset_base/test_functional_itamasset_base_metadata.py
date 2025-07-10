@@ -25,7 +25,7 @@ class MetadataTestCases(
 
     url_view_kwargs: dict = {}
 
-    url_name = '_api_v2_itam_asset'
+    url_name = '_api_itamassetbase'
 
 
 

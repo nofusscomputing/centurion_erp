@@ -31,7 +31,7 @@ class ViewSetTestCases(
         'asset_model': 'it_asset',
     }
 
-    url_name = '_api_v2_itam_asset'
+    url_name = '_api_itamassetbase'
 
 
 

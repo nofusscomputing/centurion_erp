@@ -373,7 +373,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
 
     def get_nav_items(self, request) -> dict:
-        
+
         nav = {
             'access': {
                 "display_name": "Access",
@@ -638,7 +638,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         'view_itamassetbase': {
                             "display_name": "IT Assets",
                             "name": "itasset",
-                            "link": "/itam/it_asset"
+                            "link": "/itam/itamassetbase"
                         },
                         **nav['itam']['pages']
                     }
