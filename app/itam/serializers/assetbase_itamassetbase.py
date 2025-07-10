@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema_serializer
 
 from access.serializers.organization import TenantBaseSerializer
 
-from accounting.serializers.asset import (
+from accounting.serializers.assetbase import (
     BaseSerializer,
     ModelSerializer as AssetBaseModelSerializer, 
     ViewSerializer as AssetBaseViewSerializer,
