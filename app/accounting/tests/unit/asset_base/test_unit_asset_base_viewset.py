@@ -13,6 +13,10 @@ from accounting.viewsets.asset import (
 
 from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCases
 
+from centurion.tests.abstract.mock_view import MockRequest
+
+from settings.models.app_settings import AppSettings
+
 
 
 @pytest.mark.model_assetbase
@@ -46,7 +50,7 @@ class AssetBaseViewsetTestCases(
         if self.model is not AssetBase:
 
             self.kwargs = {
-                'asset_model': self.model._meta.sub_model_type
+                'model_name': self.model._meta.sub_model_type
             }
 
             self.viewset.kwargs = self.kwargs
@@ -63,6 +67,8 @@ class AssetBaseViewsetTestCases(
 
         self.http_options_response_list = client.options(url)
 
+        a = 'a'
+
 
 
     def test_view_attr_value_model_kwarg(self):
@@ -73,7 +79,30 @@ class AssetBaseViewsetTestCases(
 
         view_set = self.viewset()
 
-        assert view_set.model_kwarg == 'asset_model'
+        assert view_set.model_kwarg == 'model_name'
+
+
+
+    def test_view_attr_model_value(self):
+        """Attribute Test
+
+        Attribute `model` must return the correct sub-model
+        """
+
+        view_set = self.viewset()
+
+
+        app_settings = AppSettings.objects.select_related('global_organization').get(
+            owner_organization = None
+        )
+
+
+        view_set.request = MockRequest(
+            user = self.view_user,
+            app_settings = app_settings,
+        )
+
+        assert view_set.model == self.model
 
 
 
