@@ -6,6 +6,7 @@ from api.tests.functional.test_functional_api_permissions import (
 
 
 
+@pytest.mark.model_assetbase
 class PermissionsAPITestCases(
     APIPermissionsInheritedCases,
 ):
@@ -94,6 +95,8 @@ class AssetBasePermissionsAPIInheritedCases(
         pass
 
 
+
+@pytest.mark.module_accounting
 class AssetBasePermissionsAPIPyTest(
     PermissionsAPITestCases,
 ):

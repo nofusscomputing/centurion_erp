@@ -1,4 +1,6 @@
 import django
+import pytest
+
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
@@ -15,6 +17,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_assetbase
 class MetadataTestCases(
     MetadataAttributesFunctional,
 ):
@@ -262,6 +265,7 @@ class AssetBaseMetadataInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class AssetBaseMetadataTest(
     MetadataTestCases,
     TestCase,

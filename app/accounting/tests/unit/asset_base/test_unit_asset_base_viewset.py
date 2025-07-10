@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -13,6 +15,7 @@ from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCase
 
 
 
+@pytest.mark.model_assetbase
 class AssetBaseViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
@@ -50,7 +53,7 @@ class AssetBaseViewsetTestCases(
 
 
         client = Client()
-        
+
         url = reverse(
             self.route_name + '-list',
             kwargs = self.kwargs
@@ -89,6 +92,7 @@ class AssetBaseViewsetInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class AssetBaseViewsetTest(
     AssetBaseViewsetTestCases,
     TestCase,

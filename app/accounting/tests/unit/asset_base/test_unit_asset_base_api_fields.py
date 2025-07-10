@@ -8,6 +8,7 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
+@pytest.mark.model_assetbase
 class AssetBaseAPITestCases(
     APIFieldsInheritedCases,
 ):
@@ -21,7 +22,7 @@ class AssetBaseAPITestCases(
     ):
 
         if model != self.base_model:
-        
+
             request.cls.url_view_kwargs.update({
                 'asset_model': model._meta.sub_model_type,
             })
@@ -72,6 +73,7 @@ class AssetBaseAPIInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class AssetBaseAPIPyTest(
     AssetBaseAPITestCases,
 ):
