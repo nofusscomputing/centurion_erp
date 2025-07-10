@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -22,6 +24,7 @@ from itam.models.itam_asset_base import ITAMAssetBase
 
 
 
+@pytest.mark.model_itamassetbase
 class ITAMAssetBaseViewsetTestCases(
     AssetBaseViewsetInheritedCases,
 ):
@@ -45,6 +48,7 @@ class ITAMAssetBaseViewsetInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class ITAMAssetBaseViewsetTest(
     ITAMAssetBaseViewsetTestCases,
     TestCase,

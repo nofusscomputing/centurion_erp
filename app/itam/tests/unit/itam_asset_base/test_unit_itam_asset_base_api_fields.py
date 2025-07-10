@@ -1,9 +1,12 @@
+import pytest
+
 from accounting.tests.unit.asset_base.test_unit_asset_base_api_fields import (
     AssetBaseAPIInheritedCases
 )
 
 
 
+@pytest.mark.model_itamassetbase
 class ITAMAssetBaseAPITestCases(
     AssetBaseAPIInheritedCases,
 ):
@@ -29,6 +32,7 @@ class ITAMAssetBaseAPIInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class ITAMAssetBaseAPIPyTest(
     ITAMAssetBaseAPITestCases,
 ):

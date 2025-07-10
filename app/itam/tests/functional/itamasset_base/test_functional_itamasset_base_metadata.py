@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from accounting.tests.functional.asset_base.test_functional_asset_base_metadata import AssetBaseMetadataInheritedCases
@@ -6,6 +8,7 @@ from itam.models.itam_asset_base import ITAMAssetBase
 
 
 
+@pytest.mark.model_itamassetbase
 class MetadataTestCases(
     AssetBaseMetadataInheritedCases,
 ):
@@ -38,6 +41,7 @@ class ITAMAssetBaseMetadataInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class ITAMAssetBaseMetadataTest(
     MetadataTestCases,
     TestCase,

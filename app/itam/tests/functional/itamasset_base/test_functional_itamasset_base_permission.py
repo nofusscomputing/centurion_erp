@@ -1,7 +1,10 @@
+import pytest
+
 from accounting.tests.functional.asset_base.test_functional_asset_base_permission import AssetBasePermissionsAPIInheritedCases
 
 
 
+@pytest.mark.model_itamassetbase
 class PermissionsAPITestCases(
     AssetBasePermissionsAPIInheritedCases,
 ):
@@ -40,6 +43,7 @@ class ITAMAssetBasePermissionsAPIInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class ITAMAssetBasePermissionsAPIPyTest(
     PermissionsAPITestCases,
 ):

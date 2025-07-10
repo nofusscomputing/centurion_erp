@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from accounting.tests.functional.asset_base.test_functional_asset_base_viewset import AssetBaseViewSetInheritedCases
@@ -6,6 +8,7 @@ from itam.models.itam_asset_base import ITAMAssetBase
 
 
 
+@pytest.mark.model_itamassetbase
 class ViewSetTestCases(
     AssetBaseViewSetInheritedCases
 ):
@@ -42,6 +45,7 @@ class ITAMAssetBaseViewSetInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class ITAMAssetBaseViewSetTest(
     ViewSetTestCases,
     TestCase,

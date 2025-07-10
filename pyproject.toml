@@ -1125,6 +1125,7 @@ markers = [
     "model_githubrepository: Selects tests for model `github repository`",
     "model_gitlabrepository: Selects tests for model `gitlab repository`",
     "model_gitrepository: Selects tests for model `git repository`",
+    "model_itamassetbase: Selects tests for model ITAM Asset Base.",
     "model_knowledgebase: Selects Knowledge base tests.",
     "model_knowledgebasecategory: Selects Knowledge base category tests.",
     "model_manufacturer: Select all manufacturer tests.",

@@ -18,6 +18,11 @@ from .model_appsettings import (
     model_appsettings,
 )
 
+from .model_assetbase import (
+    kwargs_assetbase,
+    model_assetbase,
+)
+
 from .model_centurionaudit import (
     kwargs_centurionaudit,
     model_centurionaudit,
@@ -158,6 +163,11 @@ from .model_gitrepository import (
 
 from .model_instance import (
     model_instance
+)
+
+from .model_itamassetbase import (
+    kwargs_itamassetbase,
+    model_itamassetbase,
 )
 
 from .model_knowledgebase import (
