@@ -18,7 +18,7 @@ def model(request):
 @pytest.fixture(scope='function')
 def create_serializer():
 
-    from accounting.serializers.asset import ModelSerializer
+    from accounting.serializers.assetbase import ModelSerializer
 
 
     yield ModelSerializer
