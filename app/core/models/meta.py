@@ -8,7 +8,8 @@ from django.utils.module_loading import import_string
 # Note: Only included so that it can be picked up.
 # in future when model referenced, this include statement may be repoved.
 from access.models.company_base import Company    # pylint: disable=W0611:unused-import
-
+from access.models.role import Role   # pylint: disable=W0611:unused-import
+## EoF Include block
 
 
 module_path = f'centurion.models.meta'

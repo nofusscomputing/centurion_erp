@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS "devops_git_group_history" ("modelhistory_ptr_id" int
 CREATE TABLE IF NOT EXISTS "devops_github_repository_notes" ("modelnotes_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_model_notes" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "devops_githubrepository" ("gitrepository_ptr_id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "devops_gitlab_repository_notes" ("modelnotes_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_model_notes" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "devops_gitlabrepository" ("gitrepository_ptr_id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "devops_git_group_notes" ("modelnotes_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_model_notes" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "devops_gitgroup" ("id") DEFERRABLE INITIALLY DEFERRED);
-CREATE TABLE IF NOT EXISTS "access_organization_history" ("modelhistory_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_model_history" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "access_organization_notes" ("modelnotes_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_model_notes" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED);
+CREATE TABLE IF NOT EXISTS "access_organization_history" ("modelhistory_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_model_history" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "access_company" ("entity_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "access_entity" ("id") DEFERRABLE INITIALLY DEFERRED, "name" varchar(80) NOT NULL);
 CREATE TABLE IF NOT EXISTS "access_person" ("entity_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "access_entity" ("id") DEFERRABLE INITIALLY DEFERRED, "f_name" varchar(64) NOT NULL, "l_name" varchar(64) NOT NULL, "dob" date NULL, "m_name" varchar(100) NULL);
 CREATE TABLE IF NOT EXISTS "core_ticketcommentaction" ("ticketcommentbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_ticketcommentbase" ("id") DEFERRABLE INITIALLY DEFERRED);
@@ -137,6 +137,8 @@ CREATE TABLE IF NOT EXISTS "access_person_centurionmodelnote" ("centurionmodelno
 CREATE TABLE IF NOT EXISTS "access_company_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "access_company" ("entity_ptr_id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "access_company_centurionmodelnote" ("centurionmodelnote_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_centurionmodelnote" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "access_company" ("entity_ptr_id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "access_role" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(30) NOT NULL, "created" datetime NOT NULL, "modified" datetime NOT NULL, "organization_id" integer NOT NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED, "model_notes" text NULL);
+CREATE TABLE IF NOT EXISTS "access_role_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "access_role" ("id") DEFERRABLE INITIALLY DEFERRED);
+CREATE TABLE IF NOT EXISTS "access_role_centurionmodelnote" ("centurionmodelnote_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_centurionmodelnote" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "access_role" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "accounting_assetbase" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "asset_number" varchar(30) NULL UNIQUE, "serial_number" varchar(30) NULL UNIQUE, "asset_type" varchar(30) NOT NULL, "created" datetime NOT NULL, "modified" datetime NOT NULL, "organization_id" integer NOT NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED, "model_notes" text NULL);
 CREATE TABLE IF NOT EXISTS "accounting_assetbase_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "accounting_assetbase" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "accounting_assetbase_centurionmodelnote" ("centurionmodelnote_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_centurionmodelnote" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "accounting_assetbase" ("id") DEFERRABLE INITIALLY DEFERRED);
@@ -237,9 +239,9 @@ CREATE TABLE IF NOT EXISTS "social_auth_nonce" ("id" integer NOT NULL PRIMARY KE
 CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "provider" varchar(32) NOT NULL, "uid" varchar(255) NOT NULL, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "created" datetime NOT NULL, "modified" datetime NOT NULL, "extra_data" text NOT NULL CHECK ((JSON_VALID("extra_data") OR "extra_data" IS NULL)));
 CREATE TABLE IF NOT EXISTS "social_auth_partial" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(32) NOT NULL, "next_step" smallint unsigned NOT NULL CHECK ("next_step" >= 0), "backend" varchar(32) NOT NULL, "timestamp" datetime NOT NULL, "data" text NOT NULL CHECK ((JSON_VALID("data") OR "data" IS NULL)));
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('django_migrations',226);
-INSERT INTO sqlite_sequence VALUES('django_content_type',216);
-INSERT INTO sqlite_sequence VALUES('auth_permission',909);
+INSERT INTO sqlite_sequence VALUES('django_migrations',227);
+INSERT INTO sqlite_sequence VALUES('django_content_type',218);
+INSERT INTO sqlite_sequence VALUES('auth_permission',917);
 INSERT INTO sqlite_sequence VALUES('auth_group',0);
 INSERT INTO sqlite_sequence VALUES('auth_user',0);
 INSERT INTO sqlite_sequence VALUES('core_notes',0);
