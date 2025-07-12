@@ -1,14 +1,19 @@
 from django.contrib.auth.models import Permission
 from django.db import models
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
+
+from core.models.centurion import CenturionModel
 
 
 
 class Role(
-    TenancyObject
+    CenturionModel
 ):
+
+    documentation = ''
+
+    model_tag = 'role'
 
 
     class Meta:
@@ -28,14 +33,6 @@ class Role(
         verbose_name_plural = 'Roles'
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Primary key of the entry',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     name = models.CharField(
         blank = False,
         help_text = 'Name of this role',
@@ -53,20 +50,14 @@ class Role(
         verbose_name = 'Permissions'
     )
 
-    created = AutoCreatedField()
-
     modified = AutoLastModifiedField()
-
-    is_global = None
 
 
 
     def __str__(self) -> str:
-        
+
         return str( self.organization ) + ' / ' + self.name
 
-
-    documentation = ''
 
     page_layout: dict = [
         {
@@ -156,19 +147,3 @@ class Role(
             return self._permissions_int
 
         return self._permissions_int
-
-
-
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from access.models.role_history import RoleHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = RoleHistory
-        )
-
-        return history
