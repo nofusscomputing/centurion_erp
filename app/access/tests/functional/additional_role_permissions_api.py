@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client
 
 
@@ -27,3 +29,16 @@ class AdditionalTestCases:
         )
 
         assert response.status_code == 200, response.content
+
+
+
+    def test_returned_data_from_user_and_global_organizations_only(
+        self
+    ):
+        """Check items returned
+
+        Items returned from the query Must be from the users organization and
+        global ONLY!
+        """
+
+        pytest.mark.xfail( reason = 'model is not for global use' )
