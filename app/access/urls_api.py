@@ -82,12 +82,7 @@ router.register(
 
 router.register(
     prefix = 'role', viewset = role.ViewSet,
-    feature_flag = '2025-00003', basename = '_api_v2_role'
+    feature_flag = '2025-00003', basename = '_api_role'
 )
-
-# router.register(
-#     prefix = 'role/(?P<model_id>[0-9]+)/notes', viewset = role_notes.ViewSet,
-#     feature_flag = '2025-00003', basename = '_api_v2_role_note'
-# )
 
 urlpatterns = router.urls

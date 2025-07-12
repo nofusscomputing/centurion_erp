@@ -242,7 +242,7 @@ class RolePermissionsAPITest(
 
     url_view_kwargs: dict = {}
 
-    url_name = '_api_v2_role'
+    url_name = '_api_role'
 
 
 
@@ -264,7 +264,7 @@ class RoleViewSetTest(
 
     url_view_kwargs: dict = {}
 
-    url_name = '_api_v2_role'
+    url_name = '_api_role'
 
 
 
@@ -287,4 +287,4 @@ class RoleMetadataTest(
 
     url_view_kwargs: dict = {}
 
-    url_name = '_api_v2_role'
+    url_name = '_api_role'

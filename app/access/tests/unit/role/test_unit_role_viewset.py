@@ -55,6 +55,6 @@ class RoleViewsetTest(
 
     kwargs = {}
 
-    route_name = 'v2:_api_v2_role'
+    route_name = 'v2:_api_role'
 
     viewset = ViewSet

@@ -166,7 +166,7 @@ class RoleAPITest(
 
     model = Role
 
-    url_ns_name = '_api_v2_role'
+    url_ns_name = '_api_role'
 
 
     @classmethod
