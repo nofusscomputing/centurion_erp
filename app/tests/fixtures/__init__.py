@@ -233,6 +233,11 @@ from .model_projecttype import (
     model_projecttype,
 )
 
+from .model_role import (
+    kwargs_role,
+    model_role,
+)
+
 from .model_service import (
     kwargs_service,
     model_service,

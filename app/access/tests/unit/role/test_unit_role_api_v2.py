@@ -1,3 +1,4 @@
+import pytest
 import django
 
 from django.contrib.auth.models import Permission
@@ -18,6 +19,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_role
 class APITestCases(
     APITenancyObject,
 ):
@@ -48,7 +50,7 @@ class APITestCases(
             **self.kwargs_item_create
         )
 
-        
+
         self.url_view_kwargs = {
             'pk': self.item.id
         }
@@ -154,6 +156,7 @@ class APITestCases(
 
 
 
+@pytest.mark.module_role
 class RoleAPITest(
     APITestCases,
     TestCase,

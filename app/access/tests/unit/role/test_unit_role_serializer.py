@@ -20,6 +20,8 @@ import pytest
 ###############################################################################
 
 
+@pytest.mark.model_role
+@pytest.mark.module_role
 @pytest.mark.skip( reason = 'figure out how to isolate so entirety of unit tests can run without this test failing' )
 # @pytest.mark.forked
 # @pytest.mark.django_db

@@ -1,4 +1,6 @@
 import django
+import pytest
+
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import Client, TestCase
@@ -20,6 +22,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_role
+@pytest.mark.module_role
 class ViewSetBase:
 
     add_data: dict = None
