@@ -56,7 +56,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset type. This is the name of the asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -97,7 +97,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset type. This is the name of the asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -121,7 +121,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset model. This is the name of the asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -153,7 +153,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset model. This is the name of the Asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,

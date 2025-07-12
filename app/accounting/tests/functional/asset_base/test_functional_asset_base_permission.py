@@ -73,11 +73,11 @@ class AssetBasePermissionsAPIInheritedCases(
     def inherited_var_setup(self, request):
 
         request.cls.url_kwargs.update({
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         })
 
         request.cls.url_view_kwargs.update({
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         })
 
 

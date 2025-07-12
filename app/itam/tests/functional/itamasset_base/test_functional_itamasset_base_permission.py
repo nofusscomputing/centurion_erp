@@ -20,13 +20,13 @@ class PermissionsAPITestCases(
     kwargs_create_item_diff_org: dict = {}
 
     url_kwargs: dict = {
-        'asset_model': 'it_asset',
+        'model_name': 'itamassetbase',
     }
 
     url_name = '_api_itamassetbase'
 
     url_view_kwargs: dict = {
-        'asset_model': 'it_asset',
+        'model_name': 'itamassetbase',
     }
 
 

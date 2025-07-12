@@ -19,6 +19,7 @@ def kwargs_itamassetbase( kwargs_assetbase, model_itamassetbase ):
     kwargs = {
         **kwargs_assetbase.copy(),
         # 'asset_type': (model_itamassetbase._meta.sub_model_type, model_itamassetbase._meta.verbose_name),
+        'itam_type': "it_asset"
     }
 
     yield kwargs.copy()

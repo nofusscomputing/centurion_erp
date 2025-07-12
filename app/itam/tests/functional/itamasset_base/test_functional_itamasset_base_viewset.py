@@ -24,11 +24,11 @@ class ViewSetTestCases(
     model = ITAMAssetBase
 
     url_kwargs: dict = {
-        'asset_model': 'it_asset',
+        'model_name': 'itamassetbase',
     }
 
     url_view_kwargs: dict = {
-        'asset_model': 'it_asset',
+        'model_name': 'itamassetbase',
     }
 
     url_name = '_api_itamassetbase'

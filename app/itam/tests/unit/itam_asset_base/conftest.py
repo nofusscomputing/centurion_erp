@@ -16,4 +16,7 @@ def model_kwargs(request, kwargs_itamassetbase):
     yield kwargs_itamassetbase.copy()
 
     if hasattr(request.cls, 'kwargs_create_item'):
-        del request.cls.kwargs_create_item
+        try:
+            del request.cls.kwargs_create_item
+        except:
+            pass

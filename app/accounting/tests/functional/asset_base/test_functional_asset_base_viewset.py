@@ -257,11 +257,11 @@ class AssetBaseViewSetInheritedCases(
         }
 
         self.url_kwargs = {
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         self.url_view_kwargs = {
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()
