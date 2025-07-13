@@ -1,5 +1,5 @@
 import datetime
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 import pytest
 
 from django.db import models
@@ -97,9 +97,22 @@ def model_kwarg_data():
 
                     if 'unique' in e.error_dict['__all__'][0].code:
 
-                        instance = model.objects.get(
-                            **kwargs
-                        )
+                        try:
+
+                            instance = model.objects.get(
+                                **kwargs
+                            )
+
+                        except ObjectDoesNotExist as e:
+
+                            if 'modified' in kwargs:
+
+                                no_modified_in_kwargs = kwargs.copy()
+                                del no_modified_in_kwargs['modified']
+
+                            instance = model.objects.get(
+                                **no_modified_in_kwargs
+                            )
 
 
             for field, values in many_field.items():
