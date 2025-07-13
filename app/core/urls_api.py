@@ -49,7 +49,7 @@ router.register(
 
 router.register(
     prefix=f'ticket/(?P<ticket_model>[{ticket_type_names}]+)', viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_v2_ticket_sub'
+    feature_flag = '2025-00006', basename = '_api_ticket_sub'
 )
 router.register(
     prefix = 'ticket', viewset = ticket.NoDocsViewSet,

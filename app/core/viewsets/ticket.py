@@ -257,7 +257,7 @@ class ViewSet( SubModelViewSet ):
         ):
 
             self.back_url = reverse(
-                viewname = '_api_v2_ticket_sub-list',
+                viewname = '_api_ticket_sub-list',
                 request = self.request,
                 kwargs = {
                     'ticket_model': self.kwargs[self.model_kwarg],

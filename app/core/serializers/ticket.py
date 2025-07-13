@@ -73,7 +73,7 @@ class ModelSerializer(
 
         url_dict: dict = {
             '_self': item.get_url( request = self._context['view'].request ),
-            'comments': reverse('v2:_api_v2_ticket_comment_base-list', request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            'comments': reverse('v2:_api_ticket_comment_base-list', request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
             'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
         }
 

@@ -241,7 +241,7 @@ class TicketBaseMetadataInheritedCases(
 
     kwargs_create_item_diff_org: dict = {}
 
-    url_name = '_api_v2_ticket_sub'
+    url_name = '_api_ticket_sub'
 
 
     @classmethod

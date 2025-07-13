@@ -86,7 +86,7 @@ class TicketBaseViewsetInheritedCases(
     model: str = None
     """name of the model to test"""
 
-    route_name = 'v2:_api_v2_ticket_sub'
+    route_name = 'v2:_api_ticket_sub'
 
 
 

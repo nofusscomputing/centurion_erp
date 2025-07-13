@@ -410,7 +410,7 @@ class TicketBaseAPIInheritedCases(
 
     model = None
 
-    url_ns_name = '_api_v2_ticket_sub'
+    url_ns_name = '_api_ticket_sub'
 
 
 
