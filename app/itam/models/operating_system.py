@@ -136,11 +136,6 @@ class OperatingSystem(
         return self.name
 
 
-    def get_organization(self):
-
-        return self.organization
-
-
 
 class OperatingSystemVersion(
     CenturionModel

@@ -368,7 +368,3 @@ class Service(
             config.update(self.config)
 
         return config
-
-
-    def get_organization(self):
-        return self.organization

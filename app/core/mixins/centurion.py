@@ -196,6 +196,12 @@ class Centurion(
 
 
 
+    def get_organization(self):
+        """Return the objects organization"""
+        return self.organization
+
+
+
     def get_url(
         self, relative: bool = False, api_version: int = 2, many = False, request: any = None
     ) -> str:

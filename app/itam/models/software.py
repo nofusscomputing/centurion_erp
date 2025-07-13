@@ -274,9 +274,6 @@ class Software(
             self.organization = app_settings.global_organization
 
 
-    def get_organization(self):
-        return self.organization
-
 
 class SoftwareVersion(
     CenturionModel
