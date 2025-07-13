@@ -1,14 +1,22 @@
 import pytest
 
-from accounting.models.asset_base import AssetBase
-
 
 
 @pytest.fixture( scope = 'class')
-def model(request):
+def model(model_assetbase):
 
-    request.cls.model = AssetBase
+    yield model_assetbase
 
-    yield request.cls.model
 
-    del request.cls.model
+@pytest.fixture( scope = 'class', autouse = True)
+def model_kwargs(request, kwargs_assetbase):
+
+    request.cls.kwargs_create_item = kwargs_assetbase.copy()
+
+    yield kwargs_assetbase.copy()
+
+    if hasattr(request.cls, 'kwargs_create_item'):
+        try:
+            del request.cls.kwargs_create_item
+        except:
+            pass

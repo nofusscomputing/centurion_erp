@@ -8,6 +8,7 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
+@pytest.mark.model_assetbase
 class AssetBaseAPITestCases(
     APIFieldsInheritedCases,
 ):
@@ -21,9 +22,9 @@ class AssetBaseAPITestCases(
     ):
 
         if model != self.base_model:
-        
+
             request.cls.url_view_kwargs.update({
-                'asset_model': model._meta.sub_model_type,
+                'model_name': model._meta.model_name,
             })
 
 
@@ -55,7 +56,7 @@ class AssetBaseAPITestCases(
         'serial_number': '65756756756',
     }
 
-    url_ns_name = 'accounting:_api_v2_asset'
+    url_ns_name = 'accounting:_api_asset'
     """Url namespace (optional, if not required) and url name"""
 
 
@@ -68,10 +69,11 @@ class AssetBaseAPIInheritedCases(
 
     model = None
 
-    url_ns_name = 'accounting:_api_v2_asset_sub'
+    url_ns_name = 'accounting:_api_asset_sub'
 
 
 
+@pytest.mark.module_accounting
 class AssetBaseAPIPyTest(
     AssetBaseAPITestCases,
 ):

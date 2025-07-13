@@ -1,7 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-# THis import only exists so that the migrations can be created
-from access.models.role_history import RoleHistory    # pylint: disable=W0611:unused-import
 from access.serializers.role import (
     Role,
     ModelSerializer,

@@ -18,7 +18,7 @@ def model(request):
 @pytest.fixture(scope='function')
 def create_serializer():
 
-    from itam.serializers.asset_it_asset import ModelSerializer
+    from itam.serializers.assetbase_itamassetbase import ModelSerializer
 
 
     yield ModelSerializer

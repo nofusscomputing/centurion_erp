@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 
 from accounting.models.asset_base import AssetBase
 
-from api.viewsets.common import SubModelViewSet
+from api.viewsets.common import SubModelViewSet_ReWrite
 
 
 
@@ -25,7 +25,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
         if issubclass(model, AssetBase):
 
-            serializer_name = 'asset'
+            serializer_name = 'assetbase'
 
             if(
                 model._meta.model_name == 'assetbase'
@@ -34,7 +34,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 continue
 
 
-            serializer_name += '_' + model._meta.sub_model_type
+            serializer_name += '_' + model._meta.model_name
 
             serializer_module = importlib.import_module(
                 model._meta.app_label + '.serializers.' + str(
@@ -56,7 +56,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset type. This is the name of the asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -97,7 +97,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset type. This is the name of the asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -121,7 +121,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset model. This is the name of the asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -153,7 +153,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'asset_model',
+                name = 'model_name',
                 description = 'Enter the asset model. This is the name of the Asset sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -214,7 +214,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         }
     ),
 )
-class ViewSet( SubModelViewSet ):
+class ViewSet( SubModelViewSet_ReWrite ):
 
     _has_purge: bool = False
     """User Permission
@@ -232,7 +232,7 @@ class ViewSet( SubModelViewSet ):
         # 'is_deleted'
     ]
 
-    model_kwarg = 'asset_model'
+    model_kwarg = 'model_name'
 
     search_fields = [
         'asset_number',

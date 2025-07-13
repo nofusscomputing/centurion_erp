@@ -1,3 +1,4 @@
+import pytest
 
 from accounting.tests.functional.asset_base.test_functional_asset_base_serializer import AssetBaseSerializerInheritedCases
 
@@ -25,6 +26,7 @@ class MockView:
 
 
 
+@pytest.mark.model_itamassetbase
 class ITAMAssetBaseSerializerTestCases(
     AssetBaseSerializerInheritedCases
 ):
@@ -54,6 +56,7 @@ class ITAMAssetBaseSerializerInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class ITAMAssetBaseSerializerPyTest(
     ITAMAssetBaseSerializerTestCases,
 ):

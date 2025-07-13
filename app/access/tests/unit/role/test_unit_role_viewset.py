@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -9,6 +11,7 @@ from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 
 
+@pytest.mark.model_role
 class ViewsetTestCases(
     ModelViewSetInheritedCases,
 ):
@@ -44,6 +47,7 @@ class ViewsetTestCases(
 
 
 
+@pytest.mark.module_role
 class RoleViewsetTest(
     ViewsetTestCases,
     TestCase,
@@ -51,6 +55,6 @@ class RoleViewsetTest(
 
     kwargs = {}
 
-    route_name = 'v2:_api_v2_role'
+    route_name = 'v2:_api_role'
 
     viewset = ViewSet

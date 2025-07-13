@@ -169,7 +169,7 @@ class APIFieldsTestCases:
 
             view_team.permissions.set([view_permissions])
 
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view" + str(random_str), password="password")
+            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view" + str(random_str), password="password", is_superuser = True)
 
             team_user = TeamUsers.objects.create(
                 team = view_team,

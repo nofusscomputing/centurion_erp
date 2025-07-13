@@ -10,6 +10,8 @@ from access.serializers.role import Role, ModelSerializer
 
 
 
+@pytest.mark.model_role
+@pytest.mark.module_role
 class ValidationSerializer(
     TestCase,
 ):

@@ -6,6 +6,7 @@ from api.tests.functional.test_functional_api_permissions import (
 
 
 
+@pytest.mark.model_assetbase
 class PermissionsAPITestCases(
     APIPermissionsInheritedCases,
 ):
@@ -36,7 +37,7 @@ class PermissionsAPITestCases(
 
     url_kwargs: dict = {}
 
-    url_name = 'accounting:_api_v2_asset'
+    url_name = 'accounting:_api_asset'
 
     url_view_kwargs: dict = {}
 
@@ -65,18 +66,18 @@ class AssetBasePermissionsAPIInheritedCases(
 
     kwargs_create_item_diff_org: dict = None
 
-    url_name = 'accounting:_api_v2_asset_sub'
+    url_name = 'accounting:_api_asset_sub'
 
 
     @pytest.fixture(scope='class')
     def inherited_var_setup(self, request):
 
         request.cls.url_kwargs.update({
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         })
 
         request.cls.url_view_kwargs.update({
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         })
 
 
@@ -94,6 +95,8 @@ class AssetBasePermissionsAPIInheritedCases(
         pass
 
 
+
+@pytest.mark.module_accounting
 class AssetBasePermissionsAPIPyTest(
     PermissionsAPITestCases,
 ):

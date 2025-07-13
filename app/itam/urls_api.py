@@ -34,8 +34,8 @@ router.register(
     basename = '_api_v2_itam_home'
 )
 router.register(
-    prefix = '(?P<asset_model>[it_asset]+)', viewset = asset.ViewSet,
-    feature_flag = '2025-00007', basename = '_api_v2_itam_asset'
+    prefix = '(?P<model_name>[itamassetbase]+)', viewset = asset.ViewSet,
+    feature_flag = '2025-00007', basename = '_api_itamassetbase'
 )
 router.register(
     prefix = 'device', viewset = device.ViewSet,
