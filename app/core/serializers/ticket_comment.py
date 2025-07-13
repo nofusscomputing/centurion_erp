@@ -92,7 +92,7 @@ class ModelSerializer(
 
                 urls.update({
                     'threads': reverse(
-                        'API:_api_v2_ticket_comment_base_sub_thread-list',
+                        'API:_api_ticket_comment_base_sub_thread-list',
                         request = self._context['view'].request,
                         kwargs={
                             'ticket_id': ticket_id,

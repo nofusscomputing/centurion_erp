@@ -168,7 +168,7 @@ class TicketCommentBaseAPITestCases(
                 **valid_data
             )
 
-        url_ns_name = '_api_v2_ticket_comment_base_sub_thread'
+        url_ns_name = '_api_ticket_comment_base_sub_thread'
 
         request.cls.url_two = reverse(
             'v2:' + url_ns_name + '-detail',
@@ -353,7 +353,7 @@ class TicketCommentBaseAPITestCases(
 
 
 
-    url_ns_name = '_api_v2_ticket_comment_base'
+    url_ns_name = '_api_ticket_comment_base'
     """Url namespace (optional, if not required) and url name"""
 
 
@@ -366,7 +366,7 @@ class TicketCommentBaseAPIInheritedCases(
 
     model = None
 
-    url_ns_name = '_api_v2_ticket_comment_base_sub'
+    url_ns_name = '_api_ticket_comment_base_sub'
 
 
 
