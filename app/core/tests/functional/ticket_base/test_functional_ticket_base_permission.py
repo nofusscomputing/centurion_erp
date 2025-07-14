@@ -6,6 +6,7 @@ from api.tests.functional.test_functional_api_permissions import (
 
 
 
+@pytest.mark.model_ticketbase
 class PermissionsAPITestCases(
     APIPermissionsInheritedCases,
 ):
@@ -124,7 +125,7 @@ class TicketBasePermissionsAPIInheritedCases(
 
         pass
 
-
+@pytest.mark.module_core
 class TicketBasePermissionsAPIPyTest(
     PermissionsAPITestCases,
 ):

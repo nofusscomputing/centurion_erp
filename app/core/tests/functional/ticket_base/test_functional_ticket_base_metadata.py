@@ -1,3 +1,4 @@
+import pytest
 import django
 
 from django.contrib.auth.models import Permission
@@ -16,6 +17,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_ticketbase
 class MetadataTestCases(
     MetadataAttributesFunctional,
 ):
@@ -268,7 +270,7 @@ class TicketBaseMetadataInheritedCases(
         super().setUpTestData()
 
 
-
+@pytest.mark.module_core
 class TicketBaseMetadataTest(
     MetadataTestCases,
     TestCase,

@@ -15,6 +15,7 @@ from project_management.models.project_milestone import Project, ProjectMileston
 
 
 
+@pytest.mark.model_ticketbase
 class APITestCases(
     APIFieldsInheritedCases,
 ):
@@ -413,7 +414,7 @@ class TicketBaseAPIInheritedCases(
     url_ns_name = '_api_ticket_sub'
 
 
-
+@pytest.mark.module_core
 class TicketBaseAPIPyTest(
     APITestCases,
 ):

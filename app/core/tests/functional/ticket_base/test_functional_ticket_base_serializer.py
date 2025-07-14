@@ -19,6 +19,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_ticketbase
 class TicketBaseSerializerTestCases:
 
 
@@ -1087,7 +1088,7 @@ class TicketBaseSerializerInheritedCases(
     """Valid data used by serializer to create object"""
 
 
-
+@pytest.mark.module_core
 class TicketBaseSerializerPyTest(
     TicketBaseSerializerTestCases,
 ):
