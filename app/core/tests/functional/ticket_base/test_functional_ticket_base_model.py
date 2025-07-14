@@ -4,6 +4,7 @@ from core.tests.functional.slash_commands.test_slash_command_related import Slas
 
 
 
+@pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
     SlashCommandsTicketInheritedTestCases
 ):
@@ -45,7 +46,7 @@ class TicketBaseModelInheritedTestCases(
     pass
 
 
-
+@pytest.mark.module_core
 class TicketBaseModelPyTest(
     TicketBaseModelTestCases
 ):

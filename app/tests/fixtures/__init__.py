@@ -263,6 +263,16 @@ from .model_softwareversion import (
     model_softwareversion,
 )
 
+from .model_ticketbase import (
+    kwargs_ticketbase,
+    model_ticketbase,
+)
+
+from .model_ticketcommentbase import (
+    kwargs_ticketcommentbase,
+    model_ticketcommentbase,
+)
+
 from .model_team import (
     kwargs_team,
     model_team,

@@ -7,11 +7,11 @@ from rest_framework.reverse import reverse
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.entity import Entity
-from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exception
 from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
+from core.models.centurion import CenturionModel
 from core.models.ticket_base import TicketBase
 from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
@@ -19,9 +19,15 @@ from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
 class TicketCommentBase(
     SlashCommands,
-    TenancyObject
+    CenturionModel,
 ):
 
+
+    _audit_enabled = False
+
+    _notes_enabled = False
+
+    model_notes = None
 
     save_model_history: bool = False
 
@@ -63,16 +69,6 @@ class TicketCommentBase(
 
     model_notes = None
 
-    is_global = None
-
-
-    id = models.AutoField(
-        blank = False,
-        help_text = 'Comment ID Number',
-        primary_key = True,
-        unique = True,
-        verbose_name = 'Number',
-    )
 
     parent = models.ForeignKey(
         'self',
@@ -257,13 +253,6 @@ class TicketCommentBase(
 
     def clean(self):
 
-        try:
-            self.organization
-
-        except:
-            self.organization = self.ticket.organization
-
-
         if not self.is_template:
 
             if self.is_closed and self.date_closed is None:
@@ -279,6 +268,19 @@ class TicketCommentBase(
                     },
                     code = 'comment_type_wrong_endpoint'
                 )
+
+
+
+    def clean_fields(self, exclude=None):
+
+        try:
+            self.organization
+
+        except:
+            self.organization = self.ticket.organization
+
+
+        return super().clean_fields(exclude)
 
 
 
@@ -347,11 +349,11 @@ class TicketCommentBase(
 
         if self.parent:
 
-            url_name = '_api_v2_ticket_comment_base_sub_thread'
+            url_name = '_api_ticket_comment_base_sub_thread'
 
         else:
 
-            url_name = '_api_v2_ticket_comment_base_sub'
+            url_name = '_api_ticket_comment_base_sub'
 
 
         if request:

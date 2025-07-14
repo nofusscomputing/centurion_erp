@@ -49,7 +49,7 @@ router.register(
 
 router.register(
     prefix=f'ticket/(?P<ticket_model>[{ticket_type_names}]+)', viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_v2_ticket_sub'
+    feature_flag = '2025-00006', basename = '_api_ticket_sub'
 )
 router.register(
     prefix = 'ticket', viewset = ticket.NoDocsViewSet,
@@ -57,12 +57,12 @@ router.register(
 )
 router.register(
     prefix = 'ticket/(?P<ticket_id>[0-9]+)/comment', viewset = ticket_comment.NoDocsViewSet,
-    feature_flag = '2025-00006', basename = '_api_v2_ticket_comment_base'
+    feature_flag = '2025-00006', basename = '_api_ticket_comment_base'
 )
 router.register(
     prefix = 'ticket/(?P<ticket_id>[0-9]+)/comment/(?P<parent_id>[0-9]+)/threads',
     viewset = ticket_comment.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_v2_ticket_comment_base_thread'
+    feature_flag = '2025-00006', basename = '_api_ticket_comment_base_thread'
 )
 router.register(
     prefix = 'ticket/(?P<ticket_id>[0-9]+)/comments', viewset = ticket_comment_depreciated.ViewSet,
@@ -84,13 +84,13 @@ router.register(
 router.register(
     prefix=f'ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names}]+)',
     viewset = ticket_comment.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_v2_ticket_comment_base_sub'
+    feature_flag = '2025-00006', basename = '_api_ticket_comment_base_sub'
 )
 router.register(
     prefix=f'ticket/(?P<ticket_id>[0-9]+)/(?P<ticket_comment_model>[{ticket_comment_names} \
         ]+)/(?P<parent_id>[0-9]+)/threads',
     viewset = ticket_comment.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_v2_ticket_comment_base_sub_thread'
+    feature_flag = '2025-00006', basename = '_api_ticket_comment_base_sub_thread'
 )
 router.register(
     prefix = '(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket',

@@ -1,3 +1,4 @@
+import pytest
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -13,6 +14,7 @@ from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCase
 
 
 
+@pytest.mark.model_ticketbase
 class ViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
@@ -86,10 +88,10 @@ class TicketBaseViewsetInheritedCases(
     model: str = None
     """name of the model to test"""
 
-    route_name = 'v2:_api_v2_ticket_sub'
+    route_name = 'v2:_api_ticket_sub'
 
 
-
+@pytest.mark.module_core
 class TicketBaseViewsetTest(
     ViewsetTestCases,
     TestCase,

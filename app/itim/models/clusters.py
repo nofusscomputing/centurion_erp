@@ -276,10 +276,6 @@ class Cluster(
     ]
 
 
-    def get_organization(self):
-        return self.organization
-
-
     @property
     def rendered_config(self):
 
