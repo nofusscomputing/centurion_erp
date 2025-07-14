@@ -47,6 +47,8 @@ class TicketBase(
 
     model_notes = None
 
+    model_tag = 'ticket'
+
     save_model_history: bool = False
 
     class Ticket_ExternalSystem(models.IntegerChoices): # <null|github|gitlab>
@@ -150,7 +152,6 @@ class TicketBase(
     external_system = models.IntegerField(
         blank = True,
         choices = Ticket_ExternalSystem,
-        default = None,
         help_text = 'External system this item derives',
         null = True,
         verbose_name = 'External System',
@@ -158,7 +159,6 @@ class TicketBase(
 
     external_ref = models.IntegerField(
         blank = True,
-        default = None,
         help_text = 'External System reference',
         null = True,
         verbose_name = 'Reference Number',
@@ -903,12 +903,14 @@ class TicketBase(
         ]
         changed_fields: list = []
 
+        fields = [ value.name for value in self._meta.fields ]
+
         for field, value in self._before.items():
 
             if (
                 self._before[field] != self._after[field]
                 and field not in excluded_fields
-                and field in self.fields
+                and field in fields
             ):
 
                 changed_fields = changed_fields + [ field ]
@@ -1102,13 +1104,13 @@ class TicketBase(
 
                     comment_user = None
 
-                comment = TicketCommentAction.objects.create(
-                    organization = self.organization,
-                    ticket = self,
-                    comment_type = TicketCommentAction._meta.sub_model_type,
-                    body = comment_text,
-                    # user = user
-                )
+                # comment = TicketCommentAction.objects.create(
+                #     organization = self.organization,
+                #     ticket = self,
+                #     comment_type = TicketCommentAction._meta.sub_model_type,
+                #     body = comment_text,
+                #     # user = user
+                # )
 
                 # comment.save()
                 a = 'b'
