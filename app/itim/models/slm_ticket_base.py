@@ -12,6 +12,8 @@ class SLMTicket(
     Base Ticket Type for tickets that require Servie Level Management.
     """
 
+    _is_submodel = True
+
 
     class Meta:
 
