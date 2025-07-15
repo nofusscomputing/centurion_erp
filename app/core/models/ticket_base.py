@@ -6,14 +6,11 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
-from rest_framework.reverse import reverse
-
 from access.fields import AutoLastModifiedField
 from access.models.entity import Entity
 
 from core import exceptions as centurion_exceptions
 from core.classes.badge import Badge
-from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
 from core.middleware.get_request import get_request
 from core.models.centurion import CenturionModel
@@ -50,6 +47,8 @@ class TicketBase(
     model_tag = 'ticket'
 
     save_model_history: bool = False
+
+    url_model_name = 'ticket'
 
     class Ticket_ExternalSystem(models.IntegerChoices): # <null|github|gitlab>
         GITHUB   = TicketValues.ExternalSystem._GITHUB_INT, TicketValues.ExternalSystem._GITHUB_VALUE
@@ -830,61 +829,6 @@ class TicketBase(
 
 
         return related_model
-
-
-
-
-    def get_url( self, request = None ) -> str:
-
-        ticket_type = self.ticket_type
-
-        kwargs = self.get_url_kwargs()
-
-        if ticket_type == 'project_task':
-
-            kwargs.update({
-                'project_id': self.project.id
-            })
-
-
-        if request:
-
-            return reverse(f"v2:_api_ticket_sub-detail", request=request, kwargs = kwargs )
-
-        return reverse(f"v2:_api_ticket_sub-detail", kwargs = kwargs )
-
-
-    def get_url_kwargs(self) -> dict:
-
-        model = self.get_related_model()
-
-        # if len(self._meta.parents) == 0 and model is None:
-
-        #     return {
-        #         'pk': self.id
-        #     }
-
-        if model is None:
-
-            model = self
-
-        kwargs = {
-            'ticket_model': self.ticket_type,
-        }
-
-        if model.pk:
-
-            kwargs.update({
-                'pk': model.id
-            })
-
-        return kwargs
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
-
 
 
     def create_action_comment(self) -> None:
