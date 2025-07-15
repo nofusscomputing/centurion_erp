@@ -1140,6 +1140,7 @@ markers = [
     "model_role: Selects tests for model Role.",
     "model_service: Selects tests for model Service.",
     "model_software: Selects tests for model Software.",
+    "model_slmticket: Selects tests for model SLMTicket.",
     "model_softwarecategory: Selects tests for model Software Category.",
     "model_softwareenablefeatureflag: Selects tests for model Software Enabled Feature Flag.",
     "model_softwareversion: Selects tests for model Software Version.",

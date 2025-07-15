@@ -1,6 +1,5 @@
 import datetime
 import pytest
-import django
 
 from django.db import models
 from django.db.models.query import QuerySet
@@ -723,7 +722,7 @@ class TicketBaseModelTestCases(
         assert type(ticket.get_related_field_name()) is str
 
 
-    def test_function_get_related_field_name_value(self, model):
+    def test_function_get_related_field_name_value(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_field_name` returns a string that is
@@ -731,7 +730,7 @@ class TicketBaseModelTestCases(
         """
 
         ticket = model.objects.get(
-            pk = self.item.pk
+            pk = ticket.pk
         )
 
         assert(
@@ -740,7 +739,7 @@ class TicketBaseModelTestCases(
         )
 
 
-    def test_function_get_related_model_type(self, model):
+    def test_function_get_related_model_type(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_model` returns a value that
@@ -748,7 +747,7 @@ class TicketBaseModelTestCases(
         """
 
         ticket = model.objects.get(
-            pk = self.item.pk
+            pk = ticket.pk
         )
 
         assert type(ticket.get_related_model()) is model

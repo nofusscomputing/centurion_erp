@@ -1,9 +1,12 @@
+import pytest
+
 from core.tests.unit.ticket_base.test_unit_ticket_base_api_fields import (
     TicketBaseAPIInheritedCases,
 )
 
 
 
+@pytest.mark.model_slmticket
 class TicketSLMAPITestCases(
     TicketBaseAPIInheritedCases,
 ):
@@ -24,6 +27,7 @@ class TicketSLMAPITestCases(
 
 
 
+@pytest.mark.module_itim
 class TicketSLMAPIInheritedCases(
     TicketSLMAPITestCases,
 ):

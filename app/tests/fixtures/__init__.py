@@ -243,6 +243,11 @@ from .model_service import (
     model_service,
 )
 
+from .model_slmticket import (
+    kwargs_slmticket,
+    model_slmticket,
+)
+
 from .model_software import (
     kwargs_software,
     model_software,
