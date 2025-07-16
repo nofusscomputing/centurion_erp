@@ -1,4 +1,3 @@
-import datetime
 import pytest
 
 from itim.models.slm_ticket_base import SLMTicket
