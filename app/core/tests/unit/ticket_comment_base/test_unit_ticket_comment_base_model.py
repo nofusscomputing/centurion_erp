@@ -1,264 +1,172 @@
-import datetime
-import django
+
 import pytest
 
 from django.db import models
 
 from rest_framework.exceptions import ValidationError
 
-from access.models.person import Person
 
-from centurion.tests.unit.test_unit_models import (
-    PyTestTenancyObjectInheritedCases,
+from core.models.ticket_comment_base import TicketCommentBase, TicketBase
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from core.models.ticket_comment_base import TicketBase, TicketCommentBase, TicketCommentCategory
-
-User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.model_ticketcommentbase
 class TicketCommentBaseModelTestCases(
-    PyTestTenancyObjectInheritedCases,
+    CenturionAbstractModelInheritedCases
 ):
 
-    base_model = TicketCommentBase
 
-    sub_model_type = 'comment'
-    """Sub Model Type
-    
-    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
-    """
+    @property
+    def parameterized_class_attributes(self):
 
-    kwargs_create_item: dict = {
-        'parent': None,
-        'ticket': '',
-        'external_ref': 0,
-        'external_system': TicketBase.Ticket_ExternalSystem.CUSTOM_1,
-        'comment_type': sub_model_type,
-        'category': '',
-        'body': 'asdasdas',
-        'private': False,
-        'template': None,
-        'source': TicketBase.TicketSource.HELPDESK,
-        'user': '',
-        'is_closed': True,
-        'date_closed': '2025-05-08T17:10Z',
-    }
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': None,
+                'value': None
+            },
+            # 'url_model_name': {
+            #     'type': str,
+            #     'value': 'ticket'
+            # },
+        }
 
 
-    parameterized_fields: dict = {
-        "model_notes": {
-            'field_type': None,
-            'field_parameter_default_exists': None,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': None
-        },
-        "parent": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "ticket": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "external_ref": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "external_system": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "comment_type": {
-            'field_type': models.fields.CharField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "category": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "body": {
-            'field_type': models.fields.TextField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "private": {
-            'field_type': models.fields.BooleanField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "duration": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': 0,
-            'field_parameter_verbose_name_type': str,
-        },
-        "estimation": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': 0,
-            'field_parameter_verbose_name_type': str,
-        },
-        "template": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': True,
-            'field_parameter_verbose_name_type': str,
-        },
-        "source": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': TicketBase.TicketSource.HELPDESK,
-            'field_parameter_verbose_name_type': str,
-        },
-        "user": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': str,
-        },
-        "is_closed": {
-            'field_type': models.fields.BooleanField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "date_closed": {
-            'field_type': models.fields.DateTimeField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-    }
+    @property
+    def parameterized_model_fields(self):
 
-
-    @pytest.fixture( scope = 'class')
-    def setup_model(self,
-        request,
-        model,
-        django_db_blocker,
-        organization_one,
-        organization_two
-    ):
-
-        request.cls.model = model
-
-        with django_db_blocker.unblock():
-
-            random_str = datetime.datetime.now(tz=datetime.timezone.utc)
-
-            request.cls.organization = organization_one
-
-            request.cls.different_organization = organization_two
-
-            kwargs_create_item = {}
-
-            for base in reversed(request.cls.__mro__):
-
-                if hasattr(base, 'kwargs_create_item'):
-
-                    if base.kwargs_create_item is None:
-
-                        continue
-
-                    kwargs_create_item.update(**base.kwargs_create_item)
-
-
-            if len(kwargs_create_item) > 0:
-
-                request.cls.kwargs_create_item = kwargs_create_item
-
-
-            request.cls.view_user = User.objects.create_user(username="ticket_comment_user_"+ str(random_str), password="password")
-
-            comment_category = TicketCommentCategory.objects.create(
-                organization = request.cls.organization,
-                name = 'test cat comment'+ str(random_str)
-            )
-
-            ticket = TicketBase.objects.create(
-                organization = request.cls.organization,
-                title = 'tester comment ticket'+ str(random_str),
-                description = 'aa',
-                opened_by = request.cls.view_user,
-            )
-
-            user = Person.objects.create(
-                organization = request.cls.organization,
-                f_name = 'ip'+ str(random_str),
-                l_name = 'funny'                
-            )
-
-            request.cls.kwargs_create_item.update({
-                'category': comment_category,
-                'ticket': ticket,
-                'user': user,
-            })
-
-
-            if 'organization' not in request.cls.kwargs_create_item:
-
-                request.cls.kwargs_create_item.update({
-                    'organization': request.cls.organization
-                })
-
-        yield
-
-        with django_db_blocker.unblock():
-
-            del request.cls.kwargs_create_item
-
-            comment_category.delete()
-
-            for comment in ticket.ticketcommentbase_set.all():
-
-                comment.delete()
-
-            ticket.delete()
-
-            user.delete()
-
-            request.cls.view_user.delete()
+        return {
+            "model_notes": {
+                'blank': models.fields.NOT_PROVIDED,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.NOT_PROVIDED,
+                'null': models.fields.NOT_PROVIDED,
+                'unique': models.fields.NOT_PROVIDED,
+            },
+            "parent": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "ticket": {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': False,
+                'unique': False,
+            },
+            "external_ref": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.IntegerField,
+                'null': True,
+                'unique': False,
+            },
+            "external_system": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.IntegerField,
+                'null': True,
+                'unique': False,
+            },
+            "comment_type": {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.CharField,
+                'null': False,
+                'unique': False,
+            },
+            "category": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "body": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.TextField,
+                'null': True,
+                'unique': False,
+            },
+            "private": {
+                'blank': False,
+                'default': False,
+                'field_type': models.fields.BooleanField,
+                'null': False,
+                'unique': False,
+            },
+            "duration": {
+                'blank': False,
+                'default': 0,
+                'field_type': models.fields.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+            "estimation": {
+                'blank': False,
+                'default': 0,
+                'field_type': models.fields.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+            "template": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "source": {
+                'blank': False,
+                'default': TicketBase.TicketSource.HELPDESK,
+                'field_type': models.fields.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+            "user": {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "is_closed": {
+                'blank': False,
+                'default': False,
+                'field_type': models.fields.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+            "date_closed": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.DateTimeField,
+                'null': True,
+                'unique': False,
+            }
+        }
 
 
 
-    @pytest.fixture( scope = 'class', autouse = True)
-    def class_setup(self,
-        setup_model,
-        create_model,
-    ):
+    def test_class_inherits_TicketCommentBase(self, model):
+        """ Class inheritence
 
-        pass
+        TenancyObject must inherit SaveHistory
+        """
 
-
-
-    @pytest.fixture
-    def ticket(self, request, django_db_blocker):
-
-        with django_db_blocker.unblock():
-
-            ticket = TicketBase.objects.create(
-                organization = request.cls.organization,
-                title = 'per function_ticket',
-                opened_by = request.cls.view_user,
-            )
-
-        yield ticket
-
-
-        with django_db_blocker.unblock():
-
-            for comment in ticket.ticketcommentbase_set.all():
-
-                comment.delete()
-
-            ticket.delete()
+        assert issubclass(model, TicketCommentBase)
 
 
     def test_create_validation_exception_no_organization(self):
@@ -273,43 +181,43 @@ class TicketCommentBaseModelTestCases(
         pass
 
 
-    def test_class_inherits_ticketcommentbase(self):
+    def test_class_inherits_ticketcommentbase(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, TicketCommentBase)
+        assert issubclass(model, TicketCommentBase)
 
 
-    def test_attribute_meta_exists_permissions(self):
+    def test_attribute_meta_exists_permissions(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.permissions` exists
         """
 
-        assert hasattr(self.model._meta, 'permissions')
+        assert hasattr(model._meta, 'permissions')
 
 
-    def test_attribute_meta_not_none_permissions(self):
+    def test_attribute_meta_not_none_permissions(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.permissions` does not have a value of none
         """
 
-        assert self.model._meta.permissions is not None
+        assert model._meta.permissions is not None
 
 
-    def test_attribute_meta_type_permissions(self):
+    def test_attribute_meta_type_permissions(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.permissions` value is of type list
         """
 
-        assert type(self.model._meta.permissions) is list
+        assert type(model._meta.permissions) is list
 
 
-    def test_attribute_value_permissions_has_import(self):
+    def test_attribute_value_permissions_has_import(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.permissions` value contains permission
@@ -318,9 +226,9 @@ class TicketCommentBaseModelTestCases(
 
         permission_found = False
 
-        for permission, description in self.model._meta.permissions:
+        for permission, description in model._meta.permissions:
 
-            if permission == 'import_' + self.model._meta.model_name:
+            if permission == 'import_' + model._meta.model_name:
 
                 permission_found = True
                 break
@@ -328,7 +236,7 @@ class TicketCommentBaseModelTestCases(
         assert permission_found
 
 
-    def test_attribute_value_permissions_has_triage(self):
+    def test_attribute_value_permissions_has_triage(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.permissions` value contains permission
@@ -337,9 +245,9 @@ class TicketCommentBaseModelTestCases(
 
         permission_found = False
 
-        for permission, description in self.model._meta.permissions:
+        for permission, description in model._meta.permissions:
 
-            if permission == 'triage_' + self.model._meta.model_name:
+            if permission == 'triage_' + model._meta.model_name:
 
                 permission_found = True
                 break
@@ -347,7 +255,7 @@ class TicketCommentBaseModelTestCases(
         assert permission_found
 
 
-    def test_attribute_value_permissions_has_purge(self):
+    def test_attribute_value_permissions_has_purge(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.permissions` value contains permission
@@ -356,9 +264,9 @@ class TicketCommentBaseModelTestCases(
 
         permission_found = False
 
-        for permission, description in self.model._meta.permissions:
+        for permission, description in model._meta.permissions:
 
-            if permission == 'purge_' + self.model._meta.model_name:
+            if permission == 'purge_' + model._meta.model_name:
 
                 permission_found = True
                 break
@@ -366,83 +274,86 @@ class TicketCommentBaseModelTestCases(
         assert permission_found
 
 
-    def test_attribute_meta_type_sub_model_type(self):
+    def test_attribute_meta_type_sub_model_type(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.sub_model_type` value is of type str
         """
 
-        assert type(self.model._meta.sub_model_type) is str
+        assert type(model._meta.sub_model_type) is str
 
 
-    def test_attribute_meta_value_sub_model_type(self):
+    def test_attribute_meta_value_sub_model_type(self, model):
         """Attribute Check
 
         Ensure attribute `Meta.sub_model_type` value is correct
         """
 
-        assert self.model._meta.sub_model_type == self.sub_model_type
+        assert model._meta.sub_model_type == self.sub_model_type
 
 
-    def test_attribute_type_get_comment_type(self):
+    def test_attribute_type_get_comment_type(self, model_instance):
         """Attribute Check
 
         Ensure attribute `get_comment_type` value is correct
         """
 
-        assert self.item.get_comment_type == self.item._meta.sub_model_type
+        assert model_instance.get_comment_type == model_instance._meta.sub_model_type
 
 
 
-    def test_function_get_related_model(self):
+    def test_function_get_related_model(self, model_instance):
         """Function Check
 
         Confirm function `get_related_model` returns `None` for self
         """
 
-        assert self.item.get_related_model() == None
+        assert model_instance.get_related_model() == None
 
 
 
-    def test_function_get_related_field_name(self):
+    def test_function_get_related_field_name(self, model_instance):
         """Function Check
 
         Confirm function `get_related_field_name` returns an empty string
         for self
         """
 
-        assert self.item.get_related_field_name() == ''
+        assert model_instance.get_related_field_name() == ''
 
 
 
-    def test_function_get_url(self):
+    def test_function_get_url(self, model_instance):
         """Function Check
 
         Confirm function `get_url` returns the correct url
         """
 
-        if self.item.parent:
+        if model_instance.parent:
 
-            expected_value = '/core/ticket/' + str(self.item.ticket.id) + '/' + self.sub_model_type + '/' + str(
-                self.item.parent.id) + '/threads/' + str(self.item.id) 
+            expected_value = '/core/ticket/' + str(
+                model_instance.ticket.id) + '/' + self.sub_model_type + '/' + str(
+                    model_instance.parent.id) + '/threads/' + str(model_instance.id)
 
         else:
 
-            expected_value = '/core/ticket/' + str( self.item.ticket.id) + '/' + self.sub_model_type + '/' + str(self.item.id)
+            expected_value = '/core/ticket/' + str( 
+                model_instance.ticket.id) + '/' + self.sub_model_type + '/' + str(
+                    model_instance.id)
 
-        assert self.item.get_url() == '/api/v2' + expected_value
+        assert model_instance.get_url() == '/api/v2' + expected_value
 
 
-    def test_function_parent_object(self):
+    def test_function_parent_object(self, model_instance):
         """Function Check
 
         Confirm function `parent_object` returns the ticket
         """
 
-        assert self.item.parent_object == self.item.ticket
+        assert model_instance.parent_object == model_instance.ticket
 
 
-    def test_function_clean_validation_mismatch_comment_type_raises_exception(self):
+    def test_function_clean_validation_mismatch_comment_type_raises_exception(self, model):
         """Function Check
 
         Ensure function `clean` does validation
@@ -454,7 +365,7 @@ class TicketCommentBaseModelTestCases(
 
         with pytest.raises(ValidationError) as err:
 
-            self.model.objects.create(
+            model.objects.create(
                 **valid_data
             )
 
@@ -462,7 +373,7 @@ class TicketCommentBaseModelTestCases(
 
 
 
-    def test_function_called_clean_ticketcommentbase(self, model, mocker, ticket):
+    def test_function_called_clean_ticketcommentbase(self, model, mocker, model_instance):
         """Function Check
 
         Ensure function `TicketCommentBase.clean` is called
@@ -472,7 +383,7 @@ class TicketCommentBaseModelTestCases(
 
         valid_data = self.kwargs_create_item.copy()
 
-        valid_data['ticket'] = ticket
+        valid_data['ticket'] = model_instance
 
         del valid_data['external_system']
         del valid_data['external_ref']
@@ -486,17 +397,17 @@ class TicketCommentBaseModelTestCases(
         assert spy.assert_called_once
 
 
-    def test_function_save_called_slash_command(self, model, mocker, ticket):
+    def test_function_save_called_slash_command(self, model, mocker, model_instance):
         """Function Check
 
         Ensure function `TicketCommentBase.clean` is called
         """
 
-        spy = mocker.spy(self.model, 'slash_command')
+        spy = mocker.spy(model, 'slash_command')
 
         valid_data = self.kwargs_create_item.copy()
 
-        valid_data['ticket'] = ticket
+        valid_data['ticket'] = model_instance
 
         del valid_data['external_system']
         del valid_data['external_ref']
@@ -512,27 +423,18 @@ class TicketCommentBaseModelTestCases(
 class TicketCommentBaseModelInheritedCases(
     TicketCommentBaseModelTestCases,
 ):
-    """Sub-Ticket Test Cases
-
-    Test Cases for Ticket models that inherit from model TicketCommentBase
-    """
-
-    kwargs_create_item: dict = {}
-
-    model = None
-
 
     sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
 
 
 
+@pytest.mark.module_core
 class TicketCommentBaseModelPyTest(
     TicketCommentBaseModelTestCases,
 ):
+
+    sub_model_type = 'comment'
+
 
 
     # def test_function_clean_validation_close_raises_exception(self, ticket):
@@ -558,7 +460,7 @@ class TicketCommentBaseModelPyTest(
     #     assert err.value.get_codes()['date_closed'] == 'ticket_closed_no_date'
 
 
-    def test_function_save_called_slash_command(self, model, mocker, ticket):
+    def test_function_save_called_slash_command(self, model, mocker, model_instance):
         """Function Check
 
         This test case is a duplicate of a test with the same name. This
@@ -567,11 +469,11 @@ class TicketCommentBaseModelPyTest(
         Ensure function `TicketCommentBase.clean` is called
         """
 
-        spy = mocker.spy(self.model, 'slash_command')
+        spy = mocker.spy(model, 'slash_command')
 
         valid_data = self.kwargs_create_item.copy()
 
-        valid_data['ticket'] = ticket
+        valid_data['ticket'] = model_instance
 
         del valid_data['external_system']
         del valid_data['external_ref']

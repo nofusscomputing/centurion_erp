@@ -140,7 +140,7 @@ class TicketCommentBase(
             field_validation_not_empty
         ],
         verbose_name = 'Type',
-    ) 
+    )
 
     category = models.ForeignKey(
         TicketCommentCategory,
@@ -208,7 +208,7 @@ class TicketCommentBase(
         help_text = 'Origin type for this comment',
         null = False,
         verbose_name = 'Source',
-    ) 
+    )
 
     user = models.ForeignKey(
         Entity,
@@ -331,7 +331,7 @@ class TicketCommentBase(
 
             if getattr(self, related_object.name, None):
 
-                if( 
+                if(
                     not str(related_object.name).endswith('history')
                     and not str(related_object.name).endswith('notes')
                 ):
@@ -396,7 +396,7 @@ class TicketCommentBase(
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.ticket
 
 
