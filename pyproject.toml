@@ -1138,6 +1138,7 @@ markers = [
     "model_projectstate: Selects tests for model Project State.",
     "model_projecttype: Selects tests for model Project Type.",
     "model_role: Selects tests for model Role.",
+    "model_requestticket: Selects tests for model Request Ticket.",
     "model_service: Selects tests for model Service.",
     "model_software: Selects tests for model Software.",
     "model_slmticket: Selects tests for model SLMTicket.",

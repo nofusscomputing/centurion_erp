@@ -233,6 +233,11 @@ from .model_projecttype import (
     model_projecttype,
 )
 
+from .model_requestticket import (
+    kwargs_requestticket,
+    model_requestticket,
+)
+
 from .model_role import (
     kwargs_role,
     model_role,
