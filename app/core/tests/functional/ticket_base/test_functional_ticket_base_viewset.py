@@ -93,7 +93,7 @@ class ViewSetBase:
         )
 
 
-        self.url_view_kwargs.update({ 'pk': self.item.id })
+        self.url_view_kwargs.update({'model_name': self.item._meta.model_name, 'pk': self.item.id })
 
         if self.add_data is not None:
 
@@ -267,11 +267,11 @@ class TicketBaseViewSetInheritedCases(
         }
 
         self.url_kwargs = {
-            'ticket_model': self.model._meta.model_name
+            'model_name': self.model._meta.model_name
         }
 
         self.url_view_kwargs = {
-            'ticket_model': self.model._meta.model_name
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()

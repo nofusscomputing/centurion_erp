@@ -45,7 +45,7 @@ class ViewsetTestCases(
         if self.model != TicketBase:
 
             self.kwargs = {
-                'ticket_model': self.model._meta.sub_model_type
+                'model_name': self.model._meta.model_name
             }
 
             self.viewset.kwargs = self.kwargs
@@ -73,7 +73,7 @@ class ViewsetTestCases(
 
         view_set = self.viewset()
 
-        assert view_set.model_kwarg == 'ticket_model'
+        assert view_set.model_kwarg == 'model_name'
 
 
 

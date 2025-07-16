@@ -21,7 +21,7 @@ for model in apps.get_models():
 
     if issubclass(model, ticket.TicketBase):
 
-        ticket_type_names += model._meta.sub_model_type + '|'
+        ticket_type_names += model._meta.model_name + '|'
 
 
     if issubclass(model, ticket_comment.TicketCommentBase):

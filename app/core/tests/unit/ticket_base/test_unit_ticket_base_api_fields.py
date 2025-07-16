@@ -70,7 +70,7 @@ class APITestCases(
             if request.cls.model._meta.model_name != 'ticketbase':
 
                 request.cls.url_view_kwargs.update({
-                    'ticket_model': str(request.cls.model._meta.sub_model_type),
+                    'model_name': str(request.cls.model._meta.sub_model_type),
                 })
 
         yield
@@ -87,9 +87,9 @@ class APITestCases(
 
             request.cls.kwargs_create_item['category'].delete()
 
-            if 'ticket_model' in request.cls.url_view_kwargs:
+            if 'model_name' in request.cls.url_view_kwargs:
 
-                del request.cls.url_view_kwargs['ticket_model']
+                del request.cls.url_view_kwargs['model_name']
 
 
 
