@@ -1149,6 +1149,7 @@ markers = [
     "model_ticketcategory: Select all ticket category tests.",
     "model_ticketcommentaction: Select test for model ticket Action Comment.",
     "model_ticketcommentbase: Select all ticket Comment.",
+    "model_ticketcommentsolution: Select test for model ticket Action Solution.",
     "model_ticketcommentcategory: Select all ticket comment category tests.",
     "models: Selects all models tests.",
     "model_tenant: Select all Tentant model tests.",

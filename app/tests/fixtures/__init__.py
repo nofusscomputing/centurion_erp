@@ -288,6 +288,11 @@ from .model_ticketcommentbase import (
     model_ticketcommentbase,
 )
 
+from .model_ticketcommentsolution import (
+    kwargs_ticketcommentsolution,
+    model_ticketcommentsolution,
+)
+
 from .model_team import (
     kwargs_team,
     model_team,
