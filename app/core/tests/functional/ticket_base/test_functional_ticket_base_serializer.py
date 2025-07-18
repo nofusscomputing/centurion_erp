@@ -207,7 +207,10 @@ class TicketBaseSerializerTestCases:
 
         with django_db_blocker.unblock():
 
-            request.cls.view_user.delete()
+            try:
+                request.cls.view_user.delete()
+            except django.db.models.deletion.ProtectedError:
+                pass
             request.cls.other_user.delete()
 
             del request.cls.valid_data

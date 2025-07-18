@@ -48,7 +48,7 @@ class TicketBase(
 
     save_model_history: bool = False
 
-    url_model_name = 'ticket'
+    url_model_name = 'ticketbase'
 
     class Ticket_ExternalSystem(models.IntegerChoices): # <null|github|gitlab>
         GITHUB   = TicketValues.ExternalSystem._GITHUB_INT, TicketValues.ExternalSystem._GITHUB_VALUE
@@ -829,6 +829,35 @@ class TicketBase(
 
 
         return related_model
+
+
+
+    def get_url_kwargs(self, many = False) -> dict:
+        """Get URL Kwargs
+
+        Fecth the kwargs required for building a models URL using the reverse
+        method.
+
+        **Note:** It's advisable that if you override this function, that you
+        call it's super, so as not to duplicate code. That way each override
+        builds up[on the parent `get_url_kwargs` function.
+
+        Returns:
+            dict: Kwargs required for reverse function to build a models URL.
+        """
+
+        kwargs = super().get_url_kwargs( many = many )
+
+        if self._is_submodel:
+
+            del kwargs['model_name']
+
+            kwargs.update({
+                'ticket_type': str(self._meta.sub_model_type),
+            })
+
+        return kwargs
+
 
 
     def create_action_comment(self) -> None:

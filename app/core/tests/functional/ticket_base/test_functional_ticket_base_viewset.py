@@ -93,7 +93,8 @@ class ViewSetBase:
         )
 
 
-        self.url_view_kwargs.update({'model_name': self.item._meta.model_name, 'pk': self.item.id })
+        # self.url_view_kwargs.update({'ticket_type': self.item._meta.sub_model_type, 'pk': self.item.id })
+        self.url_view_kwargs.update({'pk': self.item.id })
 
         if self.add_data is not None:
 
@@ -250,7 +251,7 @@ class TicketBaseViewSetInheritedCases(
 
     # kwargs_create_item_diff_org: dict = {}
 
-    url_name = '_api_ticket_sub'
+    url_name = '_api_ticketbase_sub'
 
 
     @classmethod
@@ -267,11 +268,11 @@ class TicketBaseViewSetInheritedCases(
         }
 
         self.url_kwargs = {
-            'model_name': self.model._meta.model_name
+            'ticket_type': self.model._meta.sub_model_type
         }
 
         self.url_view_kwargs = {
-            'model_name': self.model._meta.model_name
+            'ticket_type': self.model._meta.sub_model_type
         }
 
         super().setUpTestData()
@@ -283,4 +284,4 @@ class TicketBaseViewSetTest(
     TestCase,
 ):
 
-    url_name = '_api_v2_ticket'
+    url_name = '_api_ticketbase'

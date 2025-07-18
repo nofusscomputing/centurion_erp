@@ -1,6 +1,8 @@
 import datetime
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
 import pytest
+import random
+
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from django.db import models
 
@@ -21,8 +23,16 @@ def model_kwarg_data():
 
         for field, value in model_kwargs.items():
 
+            is_unique_together_field = False
+
             if not hasattr(getattr(model, field), 'field'):
                 continue
+
+            for unique_field in getattr(model, field).field.model._meta.unique_together:
+
+                if field in unique_field and getattr(model, field).field.choices is None:
+
+                    is_unique_together_field = True
 
             if isinstance(getattr(model, field).field, models.ManyToManyField):
 
@@ -59,7 +69,10 @@ def model_kwarg_data():
                 continue
 
             elif(
-                getattr(model, field).field.unique
+                (
+                    getattr(model, field).field.unique
+                    or is_unique_together_field
+                )
                 and not isinstance(getattr(model, field).field, models.UUIDField)
                 and not isinstance(getattr(model, field).field, models.ForeignKey)
 
@@ -69,7 +82,8 @@ def model_kwarg_data():
 
                 if isinstance(getattr(model, field).field, models.IntegerField):
 
-                    value = str(random_str)[( len(random_str) - 13 ):]
+                    # value = str(random_str)[( len(random_str) - 13 ):]
+                    value = random.randint(1,999999)
 
                 elif isinstance(getattr(model, field).field, models.EmailField):
 
@@ -110,9 +124,9 @@ def model_kwarg_data():
                                 no_modified_in_kwargs = kwargs.copy()
                                 del no_modified_in_kwargs['modified']
 
-                            instance = model.objects.get(
-                                **no_modified_in_kwargs
-                            )
+                                instance = model.objects.get(
+                                    **no_modified_in_kwargs
+                                )
 
 
             for field, values in many_field.items():

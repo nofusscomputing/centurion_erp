@@ -21,7 +21,7 @@ for model in apps.get_models():
 
     if issubclass(model, ticket.TicketBase):
 
-        ticket_type_names += model._meta.model_name + '|'
+        ticket_type_names += model._meta.sub_model_type + '|'
 
 
     if issubclass(model, ticket_comment.TicketCommentBase):
@@ -48,16 +48,12 @@ router.register(
 
 
 router.register(
-    prefix=f'ticket', viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticket'
+    prefix=f'ticket', viewset = ticket.NoDocsViewSet,
+    feature_flag = '2025-00006', basename = '_api_ticketbase'
 )
 router.register(
-    prefix=f'ticket/(?P<model_name>[{ticket_type_names}]+)', viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticket_sub'
-)
-router.register(
-    prefix = 'ticket', viewset = ticket.NoDocsViewSet,
-    basename = '_api_v2_ticket'
+    prefix=f'ticket/(?P<ticket_type>[{ticket_type_names}]+)', viewset = ticket.ViewSet,
+    feature_flag = '2025-00006', basename = '_api_ticketbase_sub'
 )
 router.register(
     prefix = 'ticket/(?P<ticket_id>[0-9]+)/comment', viewset = ticket_comment.NoDocsViewSet,

@@ -36,7 +36,7 @@ class TicketBaseModelTestCases(
             },
             'url_model_name': {
                 'type': str,
-                'value': 'ticket'
+                'value': 'ticketbase'
             },
         }
 
@@ -487,8 +487,12 @@ class TicketBaseModelTestCases(
         model_ticketcommentbase, kwargs_ticketcommentbase
     ):
 
+        kwargs = kwargs_ticketcommentbase.copy()
+        del kwargs['ticket']
+
+
         comment = model_ticketcommentbase.objects.create(
-            **kwargs_ticketcommentbase,
+            **kwargs,
             ticket = ticket,
         )
 

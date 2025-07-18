@@ -29,7 +29,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             serializer_name = 'ticket'
 
-            if model._meta.model_name != 'ticketbase':
+            if model._meta.sub_model_type != 'ticket':
                 
                 serializer_name += '_' + model._meta.sub_model_type
 
@@ -53,7 +53,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'model_name',
+                name = 'ticket_type',
                 description = 'Enter the Ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -94,7 +94,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'model_name',
+                name = 'ticket_type',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -118,7 +118,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'model_name',
+                name = 'ticket_type',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -150,7 +150,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'model_name',
+                name = 'ticket_type',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -183,7 +183,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters = [
             OpenApiParameter(
-                name = 'tickets_model',
+                name = 'tickets_type',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -238,7 +238,7 @@ class ViewSet( SubModelViewSet ):
         'is_deleted'
     ]
 
-    model_kwarg = 'model_name'
+    model_kwarg = 'ticket_type'
 
     search_fields = [
         'title',
@@ -257,10 +257,10 @@ class ViewSet( SubModelViewSet ):
         ):
 
             self.back_url = reverse(
-                viewname = '_api_ticket_sub-list',
+                viewname = '_api_ticketbase_sub-list',
                 request = self.request,
                 kwargs = {
-                    'model_name': self.kwargs[self.model_kwarg],
+                    'ticket_type': self.kwargs[self.model_kwarg],
                 }
             )
 
