@@ -35,7 +35,7 @@ class RequestTicketTestCases(
             },
             'url_model_name': {
                 'type': str,
-                'value': 'ticket'
+                'value': 'ticketbase'
             },
         }
 
