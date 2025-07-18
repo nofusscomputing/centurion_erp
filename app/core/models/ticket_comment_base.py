@@ -1,6 +1,7 @@
 import datetime
 
 from django.apps import apps
+from django.conf import settings
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -9,7 +10,6 @@ from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.entity import Entity
 
 from core import exceptions as centurion_exception
-from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
 from core.models.centurion import CenturionModel
 from core.models.ticket_base import TicketBase
@@ -29,7 +29,11 @@ class TicketCommentBase(
 
     model_notes = None
 
+    model_tag = None
+
     save_model_history: bool = False
+
+    url_model_name = 'ticket_comment_base'
 
 
     class Meta:
@@ -257,7 +261,8 @@ class TicketCommentBase(
 
             if self.is_closed and self.date_closed is None:
 
-                self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+                self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(
+                    microsecond=0).isoformat()
 
 
             if self.comment_type != self._meta.sub_model_type:
@@ -280,7 +285,7 @@ class TicketCommentBase(
             self.organization = self.ticket.organization
 
 
-        return super().clean_fields(exclude)
+        super().clean_fields(exclude = exclude)
 
 
 
@@ -343,40 +348,62 @@ class TicketCommentBase(
 
 
 
-    def get_url( self, request = None ) -> str:
+    def get_url(
+        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+    ) -> str:
 
-        kwargs = self.get_url_kwargs()
+        namespace = f'v{api_version}'
+
+        if self.get_app_namespace():
+            namespace = namespace + ':' + self.get_app_namespace()
+
+
+        url_basename = f'{namespace}:_api_{self._meta.model_name}'
+
+        if self.url_model_name:
+
+            url_basename = f'{namespace}:_api_{self.url_model_name}'
+
+        if self._is_submodel:
+
+            url_basename += '_sub'
 
         if self.parent:
 
-            url_name = '_api_ticket_comment_base_sub_thread'
+            url_basename += '_thread'
+
+
+        if many:
+
+            url_basename += '-list'
 
         else:
 
-            url_name = '_api_ticket_comment_base_sub'
+            url_basename += '-detail'
 
 
-        if request:
+        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs( many = many ) )
 
-            return reverse('v2:' + url_name + '-detail', request=request, kwargs = kwargs )
+        if not relative:
 
-
-        return reverse('v2:' + url_name + '-detail', kwargs = kwargs )
-
+            url = settings.SITE_URL + url
 
 
-    def get_url_kwargs(self) -> dict:
+        return url
 
-        kwargs = {
-            'ticket_comment_model': self.comment_type,
+
+
+    def get_url_kwargs(self, many = False) -> dict:
+        kwargs = {}
+
+        if self._is_submodel:
+            kwargs = {
+                'ticket_comment_model': self._meta.sub_model_type
+            }
+
+        kwargs.update({
             'ticket_id': self.ticket.id,
-        }
-
-        if self.pk:
-
-            kwargs.update({
-                'pk': self.id
-            })
+        })
 
         if self.parent:
 
@@ -385,12 +412,15 @@ class TicketCommentBase(
             })
 
 
+        if not many:
+
+            kwargs.update({
+                'pk': self.id
+            })
+
+
         return kwargs
 
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
 
 
     @property
@@ -420,7 +450,8 @@ class TicketCommentBase(
             or self.comment_type == self.CommentType.SOLUTION
         ):
 
-            super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+            super().save(force_insert=force_insert, force_update=force_update,
+                using=using, update_fields=update_fields)
 
             # clear ticket comment cache
             if hasattr(self.ticket, '_ticket_comments'):

@@ -1,4 +1,4 @@
-
+import datetime
 import pytest
 
 from django.db import models
@@ -29,14 +29,17 @@ class TicketCommentBaseModelTestCases(
             '_notes_enabled': {
                 'value': False
             },
+            '_is_submodel': {
+                'value': False
+            },
             'model_tag': {
-                'type': None,
+                'type': type(None),
                 'value': None
             },
-            # 'url_model_name': {
-            #     'type': str,
-            #     'value': 'ticket'
-            # },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticket_comment_base'
+            },
         }
 
 
@@ -158,6 +161,45 @@ class TicketCommentBaseModelTestCases(
             }
         }
 
+
+    @pytest.fixture
+    def ticket(self, request, django_db_blocker, model_ticketbase, kwargs_ticketbase):
+
+        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+        random_str = str(random_str).replace(
+                ' ', '').replace(':', '').replace('+', '').replace('.', '')
+
+        with django_db_blocker.unblock():
+
+            kwargs = kwargs_ticketbase.copy()
+
+            del kwargs['external_system']
+            del kwargs['external_ref']
+
+            kwargs['title'] = 'fn_ticket_' + str(random_str)
+
+            ticket = model_ticketbase.objects.create(
+                **kwargs,
+            )
+
+        yield ticket
+
+
+        with django_db_blocker.unblock():
+
+            for comment in ticket.ticketcommentbase_set.all():
+
+                comment.delete()
+
+            ticket.delete()
+
+
+    def test_method_value_not_default___str__(self, model, model_instance ):
+        pytest.xfail( reason = 'model does not require this function' )
+
+
+    def test_model_tag_defined(self, model):
+        pytest.xfail( reason = 'model does not require this function' )
 
 
     def test_class_inherits_TicketCommentBase(self, model):
@@ -341,7 +383,32 @@ class TicketCommentBaseModelTestCases(
                 model_instance.ticket.id) + '/' + self.sub_model_type + '/' + str(
                     model_instance.id)
 
-        assert model_instance.get_url() == '/api/v2' + expected_value
+        assert model_instance.get_url(relative = True) == '/api/v2' + expected_value
+
+
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        kwargs = {
+            'ticket_id': model_instance.ticket.id,
+            'pk': model_instance.id,
+        }
+
+        if model_instance._is_submodel:
+            kwargs.update({
+                'ticket_comment_model': model_instance._meta.sub_model_type
+            })
+
+        assert model_instance.get_url_kwargs() == kwargs
+
 
 
     def test_function_parent_object(self, model_instance):
@@ -373,7 +440,7 @@ class TicketCommentBaseModelTestCases(
 
 
 
-    def test_function_called_clean_ticketcommentbase(self, model, mocker, model_instance):
+    def test_function_called_clean_ticketcommentbase(self, model, mocker, ticket):
         """Function Check
 
         Ensure function `TicketCommentBase.clean` is called
@@ -383,10 +450,10 @@ class TicketCommentBaseModelTestCases(
 
         valid_data = self.kwargs_create_item.copy()
 
-        valid_data['ticket'] = model_instance
+        valid_data['ticket'] = ticket
 
-        del valid_data['external_system']
-        del valid_data['external_ref']
+        # del valid_data['external_system']
+        # del valid_data['external_ref']
 
         comment = model.objects.create(
             **valid_data
@@ -397,7 +464,7 @@ class TicketCommentBaseModelTestCases(
         assert spy.assert_called_once
 
 
-    def test_function_save_called_slash_command(self, model, mocker, model_instance):
+    def test_function_save_called_slash_command(self, model, mocker, ticket):
         """Function Check
 
         Ensure function `TicketCommentBase.clean` is called
@@ -407,10 +474,10 @@ class TicketCommentBaseModelTestCases(
 
         valid_data = self.kwargs_create_item.copy()
 
-        valid_data['ticket'] = model_instance
+        valid_data['ticket'] = ticket
 
-        del valid_data['external_system']
-        del valid_data['external_ref']
+        # del valid_data['external_system']
+        # del valid_data['external_ref']
 
         item = model.objects.create(
             **valid_data
@@ -460,7 +527,7 @@ class TicketCommentBaseModelPyTest(
     #     assert err.value.get_codes()['date_closed'] == 'ticket_closed_no_date'
 
 
-    def test_function_save_called_slash_command(self, model, mocker, model_instance):
+    def test_function_save_called_slash_command(self, model, mocker, ticket):
         """Function Check
 
         This test case is a duplicate of a test with the same name. This
@@ -473,13 +540,33 @@ class TicketCommentBaseModelPyTest(
 
         valid_data = self.kwargs_create_item.copy()
 
-        valid_data['ticket'] = model_instance
+        valid_data['ticket'] = ticket
 
-        del valid_data['external_system']
-        del valid_data['external_ref']
+        # del valid_data['external_system']
+        # del valid_data['external_ref']
 
         item = model.objects.create(
             **valid_data
         )
 
         spy.assert_called_with(item, valid_data['body'])
+
+    def test_function_get_url(self, model_instance):
+        """Function Check
+
+        Confirm function `get_url` returns the correct url
+        """
+
+        if model_instance.parent:
+
+            expected_value = '/core/ticket/' + str(
+                model_instance.ticket.id) + '/comment/' + str(
+                    model_instance.parent.id) + '/threads/' + str(model_instance.id)
+
+        else:
+
+            expected_value = '/core/ticket/' + str( 
+                model_instance.ticket.id) + '/comment/' + str(
+                    model_instance.id)
+
+        assert model_instance.get_url(relative = True) == '/api/v2' + expected_value

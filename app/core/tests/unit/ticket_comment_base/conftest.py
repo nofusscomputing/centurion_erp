@@ -18,6 +18,3 @@ def model_kwargs(request, kwargs_ticketcommentbase):
     request.cls.kwargs_create_item = kwargs_ticketcommentbase.copy()
 
     yield kwargs_ticketcommentbase.copy()
-
-    if hasattr(request.cls, 'kwargs_create_item'):
-        del request.cls.kwargs_create_item

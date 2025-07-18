@@ -23,6 +23,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_ticketcommentbase
 class TicketCommentBaseAPITestCases(
     APIFieldsInheritedCases,
 ):
@@ -107,9 +108,15 @@ class TicketCommentBaseAPITestCases(
 
         with django_db_blocker.unblock():
 
-            template_comment.delete()
+            try:
+                template_comment.delete()
+            except:
+                pass
 
-            category.delete()
+            try:
+                category.delete()
+            except:
+                pass
 
             del request.cls.comment_user
 
@@ -370,6 +377,7 @@ class TicketCommentBaseAPIInheritedCases(
 
 
 
+@pytest.mark.module_core
 class TicketCommentBaseAPIPyTest(
     TicketCommentBaseAPITestCases,
 ):
