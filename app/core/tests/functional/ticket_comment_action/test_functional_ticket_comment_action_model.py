@@ -1,6 +1,9 @@
+import pytest
+
 from core.tests.functional.ticket_comment_base.test_functional_ticket_comment_base_model import TicketCommentBaseModelInheritedTestCases
 
 
+@pytest.mark.model_ticketcommentaction
 class TicketCommentActionModelTestCases(
     TicketCommentBaseModelInheritedTestCases
 ):
@@ -19,6 +22,7 @@ class TicketCommentActionModelInheritedTestCases(
 
 
 
+@pytest.mark.module_core
 class TicketCommentActionModelPyTest(
     TicketCommentActionModelTestCases
 ):

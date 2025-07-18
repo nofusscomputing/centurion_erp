@@ -1147,6 +1147,7 @@ markers = [
     "model_softwareversion: Selects tests for model Software Version.",
     "model_ticketbase: Selects tests for model Ticket Base.",
     "model_ticketcategory: Select all ticket category tests.",
+    "model_ticketcommentaction: Select test for model ticket Action Comment.",
     "model_ticketcommentbase: Select all ticket Comment.",
     "model_ticketcommentcategory: Select all ticket comment category tests.",
     "models: Selects all models tests.",
