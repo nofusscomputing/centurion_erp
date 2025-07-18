@@ -33,7 +33,7 @@ class SLMTicketModelTestCases(
             },
             'url_model_name': {
                 'type': str,
-                'value': 'ticket'
+                'value': 'ticketbase'
             },
         }
 
@@ -100,7 +100,7 @@ class SLMTicketModelTestCases(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'model_name': model_instance._meta.model_name,
+            'ticket_type': model_instance._meta.sub_model_type,
             'pk': model_instance.id
         }
 
