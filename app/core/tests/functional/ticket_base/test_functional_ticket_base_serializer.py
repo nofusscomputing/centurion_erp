@@ -1,5 +1,6 @@
 import django
 import pytest
+import random
 
 from rest_framework.exceptions import (
     ValidationError
@@ -198,9 +199,9 @@ class TicketBaseSerializerTestCases:
                 })
 
 
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view", password="password")
+            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view" + str(random.randint(1,99999)), password="password")
 
-            request.cls.other_user = User.objects.create_user(username="cafs_test_user_other", password="password")
+            request.cls.other_user = User.objects.create_user(username="cafs_test_user_other" + str(random.randint(1,99999)), password="password")
 
 
         yield
