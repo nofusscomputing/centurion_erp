@@ -57,7 +57,7 @@ class APIPermissionAddInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        the_model = model_instance( kwargs_create = model_kwargs )
+        the_model = model_instance( kwargs_create = self.kwargs_create_item )
 
         try:
 
@@ -99,7 +99,7 @@ class APIPermissionAddInheritedCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs )
+        the_model = model_instance( kwargs_create = self.kwargs_create_item )
 
         url = the_model.get_url( many = True )
 
@@ -175,10 +175,15 @@ class APIPermissionChangeInheritedCases:
 
         client = Client()
 
+
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+
         change_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            },
+            kwargs_create = kwargs,
         )
 
         if user != 'anon':
@@ -208,10 +213,13 @@ class APIPermissionChangeInheritedCases:
 
         client.force_login( api_request_permissions['user']['change'] )
 
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
         change_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            },
+            kwargs_create = kwargs,
         )
 
         response = client.patch(
@@ -274,10 +282,13 @@ class APIPermissionDeleteInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
         delete_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            }
+            kwargs_create = kwargs
         )
 
         response = client.delete(
@@ -301,10 +312,13 @@ class APIPermissionDeleteInheritedCases:
 
         client.force_login( api_request_permissions['user']['delete'] )
 
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
         delete_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            }
+            kwargs_create = kwargs
         )
 
         response = client.delete(
@@ -361,10 +375,13 @@ class APIPermissionViewInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
         view_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            }
+            kwargs_create = kwargs
         )
 
         response = client.get(
@@ -393,10 +410,13 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
         view_item = model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['user']
-            }
+            kwargs_create = kwargs
         )
 
         response = client.get(
@@ -435,19 +455,25 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['different']
-            }
-        )
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['different']
+        })
 
         model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['global']
-            }
+            kwargs_create = kwargs
         )
 
-        the_model = model_instance( kwargs_create = model_kwargs )
+        kwargs = self.kwargs_create_item
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['global']
+        })
+
+        model_instance(
+            kwargs_create = kwargs
+        )
+
+        the_model = model_instance( kwargs_create = self.kwargs_create_item )
 
         response = client.get(
             path = the_model.get_url( many = True )
@@ -505,22 +531,28 @@ class APIPermissionViewInheritedCases:
         ]
 
 
-        model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['different']
-            }
+        kwargs = self.kwargs_create_item.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['different']
+        })
+
+        the_model = model_instance(
+            kwargs_create = kwargs
         )
 
+        kwargs = self.kwargs_create_item.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['global']
+        })
+
         model_instance(
-            kwargs_create = {
-                'organization': api_request_permissions['tenancy']['global']
-            }
+            kwargs_create = kwargs
         )
 
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs )
+        the_model = model_instance( kwargs_create = self.kwargs_create_item )
 
         response = client.get(
             path = the_model.get_url( many = True )
