@@ -243,7 +243,7 @@ class TicketBaseMetadataInheritedCases(
 
     kwargs_create_item_diff_org: dict = {}
 
-    url_name = '_api_ticket_sub'
+    url_name = '_api_ticketbase_sub'
 
 
     @classmethod
@@ -260,11 +260,11 @@ class TicketBaseMetadataInheritedCases(
         }
 
         self.url_kwargs = {
-            'ticket_model': self.model._meta.sub_model_type
+            'ticket_type': self.model._meta.sub_model_type
         }
 
         self.url_view_kwargs = {
-            'ticket_model': self.model._meta.sub_model_type
+            'ticket_type': self.model._meta.sub_model_type
         }
 
         super().setUpTestData()
@@ -277,7 +277,7 @@ class TicketBaseMetadataTest(
 
 ):
 
-    url_name = '_api_v2_ticket'
+    url_name = '_api_ticketbase'
 
 
     # def test_method_options_request_detail_data_has_key_urls_back(self):

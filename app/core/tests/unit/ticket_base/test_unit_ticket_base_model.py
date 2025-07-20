@@ -1,11 +1,10 @@
 import datetime
 import pytest
-import django
 
 from django.db import models
 from django.db.models.query import QuerySet
 
-
+from core import exceptions as centurion_exceptions
 from core.fields.badge import Badge
 from core.models.ticket_base import TicketBase
 # from core.models.ticket_comment_base import TicketCommentBase
@@ -34,6 +33,10 @@ class TicketBaseModelTestCases(
             'model_tag': {
                 'type': str,
                 'value': 'ticket'
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticketbase'
             },
         }
 
@@ -247,17 +250,40 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_milestone_different_project_raises_validationerror(self, model, model_kwargs):
+    def test_milestone_different_project_raises_validationerror(self,
+        model, model_kwargs,
+        model_project, kwargs_project,
+        model_projectmilestone, kwargs_projectmilestone,
+    ):
 
         kwargs = model_kwargs.copy()
         kwargs['title'] = kwargs['title'] + 'a'
+        kwargs['external_ref'] = 123
 
         ticket = model.objects.create( **kwargs )
 
-        with pytest.raises(django.core.exceptions.ValidationError) as err:
+        project_one = model_project.objects.create( **kwargs_project )
 
-            ticket.project = self.project_one
-            ticket.milestone = self.milestone_two
+
+        kwargs = kwargs_projectmilestone
+        kwargs['project'] = project_one
+        milestone_one = model_projectmilestone.objects.create( **kwargs )
+
+        kwargs = kwargs_project
+        kwargs['name'] = 'project_two'
+        project_two = model_project.objects.create( **kwargs )
+
+        kwargs = kwargs_projectmilestone
+        kwargs['name'] = 'two'
+        kwargs['project'] = project_two
+        milestone_two = model_projectmilestone.objects.create( **kwargs )
+
+
+
+        with pytest.raises(centurion_exceptions.ValidationError) as err:
+
+            ticket.project = project_one
+            ticket.milestone = milestone_two
             ticket.save()
 
         assert err.value.get_codes()['milestone'] == 'milestone_different_project'
@@ -461,8 +487,12 @@ class TicketBaseModelTestCases(
         model_ticketcommentbase, kwargs_ticketcommentbase
     ):
 
+        kwargs = kwargs_ticketcommentbase.copy()
+        del kwargs['ticket']
+
+
         comment = model_ticketcommentbase.objects.create(
-            **kwargs_ticketcommentbase,
+            **kwargs,
             ticket = ticket,
         )
 
@@ -682,7 +712,7 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_function_get_related_field_name_type(self, model):
+    def test_function_get_related_field_name_type(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_field_name` returns a value that
@@ -690,13 +720,13 @@ class TicketBaseModelTestCases(
         """
 
         ticket = model.objects.get(
-            pk = self.item.pk
+            pk = ticket.pk
         )
 
         assert type(ticket.get_related_field_name()) is str
 
 
-    def test_function_get_related_field_name_value(self, model):
+    def test_function_get_related_field_name_value(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_field_name` returns a string that is
@@ -704,7 +734,7 @@ class TicketBaseModelTestCases(
         """
 
         ticket = model.objects.get(
-            pk = self.item.pk
+            pk = ticket.pk
         )
 
         assert(
@@ -713,7 +743,7 @@ class TicketBaseModelTestCases(
         )
 
 
-    def test_function_get_related_model_type(self, model):
+    def test_function_get_related_model_type(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_model` returns a value that
@@ -721,7 +751,7 @@ class TicketBaseModelTestCases(
         """
 
         ticket = model.objects.get(
-            pk = self.item.pk
+            pk = ticket.pk
         )
 
         assert type(ticket.get_related_model()) is model
@@ -808,7 +838,8 @@ class TicketBaseModelTestCases(
 class TicketBaseModelInheritedCases(
     TicketBaseModelTestCases,
 ):
-    pass
+
+    sub_model_type = None
 
 
 
@@ -816,6 +847,8 @@ class TicketBaseModelInheritedCases(
 class TicketBaseModelPyTest(
     TicketBaseModelTestCases,
 ):
+
+    sub_model_type = 'ticket'
 
 
     def test_function_get_related_field_name_value(self, model):

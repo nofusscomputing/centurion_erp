@@ -30,7 +30,7 @@ class ModelSerializer(
 
         model = TicketCommentSolution
 
-        read_only_fields = TicketCommentBaseModelSerializer.Meta.fields + [
+        read_only_fields = TicketCommentBaseModelSerializer.Meta.read_only_fields + [
             'is_closed',
             'date_closed',
         ]

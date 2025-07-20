@@ -24,7 +24,6 @@ User = django.contrib.auth.get_user_model()
 
 @pytest.mark.model_projectstate
 @pytest.mark.module_project_management
-# @pytest.mark.skip( reason = 'to be re-written' )
 class ProjectStateAPI(
     TestCase,
     APITenancyObject

@@ -297,7 +297,7 @@ class ConfigGroups(
                     state = 'absent'
 
                 software_action = {
-                    "name": software.software.slug,
+                    "name": str(Software),
                     "state": state
                 }
 

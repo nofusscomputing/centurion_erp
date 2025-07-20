@@ -10,6 +10,8 @@ class TicketCommentSolution(
     TicketCommentBase,
 ):
 
+    _is_submodel = True
+
     class Meta:
 
         ordering = [
@@ -40,9 +42,9 @@ class TicketCommentSolution(
                 code = 'ticket_already_solved'
             )
 
-        
+
         try:
-        
+
             self.ticket.get_can_resolve(raise_exceptions = True)
 
         except centurion_exception.ValidationError as err:
@@ -55,12 +57,17 @@ class TicketCommentSolution(
             )
 
 
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def clean_fields(self, exclude=None):
 
         self.is_closed = True
 
         self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        super().clean_fields(exclude = exclude)
+
+
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         super().save(force_insert = force_insert, force_update = force_update, using = using, update_fields = update_fields)
 
@@ -76,5 +83,3 @@ class TicketCommentSolution(
         if hasattr(self.ticket, '_ticket_comments'):
 
             del self.ticket._ticket_comments
-
-

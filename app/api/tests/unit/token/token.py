@@ -17,6 +17,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_authtoken
+@pytest.mark.module_api
 class APIAuthToken(TestCase):
 
 

@@ -1,3 +1,5 @@
+import pytest
+
 from django.db import models
 
 from core.tests.unit.ticket_base.test_unit_ticket_base_model import TicketBaseModelInheritedCases
@@ -6,77 +8,115 @@ from itim.models.slm_ticket_base import SLMTicket
 
 
 
+@pytest.mark.model_slmticket
 class SLMTicketModelTestCases(
-    TicketBaseModelInheritedCases,
+    TicketBaseModelInheritedCases
 ):
 
-    kwargs_create_item: dict = {
-        'tto': 1,
-        'ttr': 2,
-    }
 
-    parameterized_fields: dict = {
-        "tto": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': 0,
-            'field_parameter_verbose_name_type': str
-        },
-        "ttr": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': 0,
-            'field_parameter_verbose_name_type': str
-        },
-    }
+    @property
+    def parameterized_class_attributes(self):
 
-    sub_model_type = 'slm'
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            '_is_submodel': {
+                'value': True
+            },
+            'model_tag': {
+                'type': str,
+                'value': 'ticket'
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticketbase'
+            },
+        }
 
 
-    def test_class_inherits_slmticket(self):
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            "tto": {
+                'blank': True,
+                'default': 0,
+                'field_type': models.fields.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+            "ttr": {
+                'blank': True,
+                'default': 0,
+                'field_type': models.fields.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+        }
+
+
+
+    def test_class_inherits_SLMTicket(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, SLMTicket)
+        assert issubclass(model, SLMTicket)
 
 
-    def test_function_get_ticket_type(self):
+    def test_function_get_related_field_name_value(self, model):
         """Function test
 
-        As this model is not intended to be used alone.
+        This test case overwrites a test of the same name. This model should
+        return an empty string as it's the base model.
 
-        Ensure that function `get_ticket_type` returns None for model
-        `SLMTicket`
+        Ensure that function `get_related_field_name` returns a string that is
+        model the attribute the model exists under.
         """
 
-        assert self.model().get_ticket_type == None
+        assert model().get_related_field_name() == ''
+
+
+    def test_function_get_related_model_type(self, model):
+        """Function test
+
+        This test case overwrites a test of the same name. This model should
+        return `None` as it's the base model.
+
+        Ensure that function `get_related_model` returns a value that
+        is of type `QuerySet`.
+        """
+
+        assert type(model().get_related_model()) is type(None)
+
+
+    def test_method_get_url_kwargs(self, model_instance):
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'ticket_type': model_instance._meta.sub_model_type,
+            'pk': model_instance.id
+        }
 
 
 
 class SLMTicketModelInheritedCases(
     SLMTicketModelTestCases,
 ):
-    """Sub-Ticket Test Cases
-
-    Test Cases for Ticket models that inherit from model SLMTicket
-    """
-
-    kwargs_create_item: dict = None
-
-    model = None
 
     sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
 
 
 
+@pytest.mark.module_itim
 class SLMTicketModelPyTest(
     SLMTicketModelTestCases,
 ):
 
-    pass
+    sub_model_type = 'slm'

@@ -1,3 +1,4 @@
+import django
 import pytest
 
 from rest_framework.relations import Hyperlink
@@ -67,10 +68,10 @@ class APITestCases(
             })
 
 
-            if request.cls.model._meta.model_name != 'ticketbase':
+            if request.cls.model._meta.sub_model_type != 'ticket':
 
                 request.cls.url_view_kwargs.update({
-                    'ticket_model': str(request.cls.model._meta.sub_model_type),
+                    'ticket_type': str(request.cls.model._meta.sub_model_type),
                 })
 
         yield
@@ -81,15 +82,24 @@ class APITestCases(
 
             parent_ticket.delete()
 
-            project_milestone.delete()
+            try:
+                project_milestone.delete()
+            except django.db.models.deletion.ProtectedError:
+                pass
 
-            project.delete()
+            try:
+                project.delete()
+            except django.db.models.deletion.ProtectedError:
+                pass
 
-            request.cls.kwargs_create_item['category'].delete()
+            try:
+                request.cls.kwargs_create_item['category'].delete()
+            except django.db.models.deletion.ProtectedError:
+                pass
 
-            if 'ticket_model' in request.cls.url_view_kwargs:
+            if 'ticket_type' in request.cls.url_view_kwargs:
 
-                del request.cls.url_view_kwargs['ticket_model']
+                del request.cls.url_view_kwargs['ticket_type']
 
 
 
@@ -386,7 +396,7 @@ class APITestCases(
         'date_closed': '2025-05-12T02:30:02',
     }
 
-    url_ns_name = '_api_v2_ticket'
+    url_ns_name = '_api_ticketbase'
     """Url namespace (optional, if not required) and url name"""
 
 
@@ -411,7 +421,7 @@ class TicketBaseAPIInheritedCases(
 
     model = None
 
-    url_ns_name = '_api_ticket_sub'
+    url_ns_name = '_api_ticketbase_sub'
 
 
 @pytest.mark.module_core

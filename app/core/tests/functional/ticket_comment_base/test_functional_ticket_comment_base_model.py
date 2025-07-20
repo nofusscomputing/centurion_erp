@@ -1,10 +1,10 @@
 import pytest
 
-from core.models.ticket.ticket import Ticket
 from core.tests.functional.slash_commands.test_slash_command_related import SlashCommandsTicketCommentInheritedTestCases
 
 
 
+@pytest.mark.model_ticketcommentbase
 class TicketCommentBaseModelTestCases(
     SlashCommandsTicketCommentInheritedTestCases
 ):
@@ -82,6 +82,7 @@ class TicketCommentBaseModelInheritedTestCases(
 
 
 
+@pytest.mark.module_core
 class TicketCommentBaseModelPyTest(
     TicketCommentBaseModelTestCases
 ):

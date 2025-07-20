@@ -1,4 +1,5 @@
 import django
+import pytest
 
 from django.test import Client, TestCase
 
@@ -17,6 +18,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_ticketcommentbase
 class TicketCommentBaseViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
@@ -113,6 +115,7 @@ class TicketCommentBaseViewsetInheritedCases(
 
 
 
+@pytest.mark.module_core
 class TicketCommentBaseViewsetTest(
     TicketCommentBaseViewsetTestCases,
     TestCase,

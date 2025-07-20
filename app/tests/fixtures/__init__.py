@@ -233,6 +233,11 @@ from .model_projecttype import (
     model_projecttype,
 )
 
+from .model_requestticket import (
+    kwargs_requestticket,
+    model_requestticket,
+)
+
 from .model_role import (
     kwargs_role,
     model_role,
@@ -241,6 +246,11 @@ from .model_role import (
 from .model_service import (
     kwargs_service,
     model_service,
+)
+
+from .model_slmticket import (
+    kwargs_slmticket,
+    model_slmticket,
 )
 
 from .model_software import (
@@ -268,9 +278,19 @@ from .model_ticketbase import (
     model_ticketbase,
 )
 
+from .model_ticketcommentaction import (
+    kwargs_ticketcommentaction,
+    model_ticketcommentaction,
+)
+
 from .model_ticketcommentbase import (
     kwargs_ticketcommentbase,
     model_ticketcommentbase,
+)
+
+from .model_ticketcommentsolution import (
+    kwargs_ticketcommentsolution,
+    model_ticketcommentsolution,
 )
 
 from .model_team import (

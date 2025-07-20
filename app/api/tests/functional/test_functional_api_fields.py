@@ -184,7 +184,10 @@ class APIFieldsTestCases:
 
             view_team.delete()
 
-            request.cls.view_user.delete()
+            try:
+                request.cls.view_user.delete()
+            except django.db.models.deletion.ProtectedError:
+                pass
 
             del request.cls.kwargs_create_item
 

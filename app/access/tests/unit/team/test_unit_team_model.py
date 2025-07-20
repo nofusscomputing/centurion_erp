@@ -22,7 +22,6 @@ class ModelTestCases(
     }
 
 
-@pytest.mark.skip( reason = 'refactor')
 class TeamModelTest(
     ModelTestCases,
     TestCase,

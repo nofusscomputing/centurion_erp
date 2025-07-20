@@ -14,7 +14,7 @@ from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from itam.models.software import Software
 
 
-@pytest.mark.skip( reason = "Audit history requires context['user']")
+
 class API(
     TestCase,
 ):

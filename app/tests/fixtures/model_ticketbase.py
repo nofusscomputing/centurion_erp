@@ -40,4 +40,7 @@ def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
 
     with django_db_blocker.unblock():
 
-        user.delete()
+        try:
+            user.delete()
+        except:
+            pass

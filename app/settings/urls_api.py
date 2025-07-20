@@ -116,7 +116,7 @@ router.register(
 )
 router.register(
     prefix = 'user_(?P<model_id>[0-9]+)/token', viewset = auth_token.ViewSet,
-    basename = '_api_usersettings_token'
+    basename = '_api_authtoken'
 )
 
 

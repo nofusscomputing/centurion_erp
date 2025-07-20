@@ -45,7 +45,7 @@ class ViewsetTestCases(
         if self.model != TicketBase:
 
             self.kwargs = {
-                'ticket_model': self.model._meta.sub_model_type
+                'ticket_type': self.model._meta.sub_model_type
             }
 
             self.viewset.kwargs = self.kwargs
@@ -73,7 +73,7 @@ class ViewsetTestCases(
 
         view_set = self.viewset()
 
-        assert view_set.model_kwarg == 'ticket_model'
+        assert view_set.model_kwarg == 'ticket_type'
 
 
 
@@ -88,7 +88,7 @@ class TicketBaseViewsetInheritedCases(
     model: str = None
     """name of the model to test"""
 
-    route_name = 'v2:_api_ticket_sub'
+    route_name = 'v2:_api_ticketbase_sub'
 
 
 @pytest.mark.module_core
@@ -97,6 +97,6 @@ class TicketBaseViewsetTest(
     TestCase,
 ):
 
-    route_name = 'v2:_api_v2_ticket'
+    route_name = 'v2:_api_ticketbase'
 
     viewset = NoDocsViewSet

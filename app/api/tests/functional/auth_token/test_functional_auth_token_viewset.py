@@ -1,4 +1,6 @@
 import django
+import pytest
+
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
@@ -28,14 +30,15 @@ User = django.contrib.auth.get_user_model()
 
 
 
-
+@pytest.mark.model_authtoken
+@pytest.mark.module_api
 class ViewSetBase:
 
     model = AuthToken
 
     app_namespace = 'v2'
     
-    url_name = '_api_usersettings_token'
+    url_name = '_api_authtoken'
 
     change_data = {'device_model_is_global': True}
 
