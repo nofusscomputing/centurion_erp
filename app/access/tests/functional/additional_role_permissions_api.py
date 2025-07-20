@@ -28,7 +28,7 @@ class AdditionalTestCases:
             content_type = 'application/json'
         )
 
-        assert response.status_code == 200, response.content
+        assert response.status_code == 201, response.content
 
 
 
