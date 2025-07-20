@@ -10,7 +10,6 @@ from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 
 
-@pytest.mark.skip( reason = 'to be refactored' )
 class OrganizationViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

@@ -15,7 +15,6 @@ from devops.models.check_ins import CheckIn
 
 
 
-@pytest.mark.skip( reason = "Audit history requires context['user']")
 class Checkin(
     TestCase,
 ):
