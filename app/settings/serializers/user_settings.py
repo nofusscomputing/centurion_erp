@@ -49,7 +49,7 @@ class UserSettingsModelSerializer(UserSettingsBaseSerializer):
         return {
             '_self': reverse("v2:_api_usersettings-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'tokens': reverse(
-                "v2:_api_usersettings_token-list",
+                "v2:_api_authtoken-list",
                 request=self._context['view'].request,
                 kwargs={
                     'model_id': item.user.pk

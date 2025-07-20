@@ -20,7 +20,7 @@ class ViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:_api_usersettings_token'
+    route_name = 'v2:_api_authtoken'
 
 
     @classmethod
