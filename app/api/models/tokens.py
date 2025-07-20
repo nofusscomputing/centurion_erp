@@ -6,18 +6,22 @@ from django.conf import settings
 from django.db import models
 from django.forms import ValidationError
 
-from rest_framework.reverse import reverse
-
 from access.fields import (
     AutoCreatedField,
     AutoLastModifiedField
 )
 
-from core.lib.feature_not_used import FeatureNotUsed
+from core.mixins.centurion import Centurion
 
 
+class AuthToken(
+    Centurion
+):
 
-class AuthToken(models.Model):
+
+    _audit_enabled = False
+
+    _notes_enabled = False
 
 
     class Meta:
@@ -53,7 +57,8 @@ class AuthToken(models.Model):
             validation = False
 
 
-        if str(token)[:9] in str(note):    # Allow user to use up to 8 chars so they can reference it.
+        if str(token)[:9] in str(note):
+            # Allow user to use up to 8 chars so they can reference it.
 
             validation = False
 
@@ -132,7 +137,7 @@ class AuthToken(models.Model):
 
 
     def randomword(self) -> str:
-    
+
         return ''.join(random.choice(string.ascii_letters) for i in range(120))
 
 
@@ -149,28 +154,11 @@ class AuthToken(models.Model):
     ]
 
 
-    def get_url( self, request = None ) -> str:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        if request:
+        kwargs = super().get_url_kwargs( many = many)
+        kwargs.update({
+            'model_id': self.user.id
+        })
 
-            return reverse(f"v2:_api_usersettings_token-detail", request=request, kwargs = self.get_url_kwargs() )
-
-        return reverse(f"v2:_api_usersettings_token-detail", kwargs = self.get_url_kwargs() )
-
-
-    def get_url_kwargs(self) -> dict:
-        """Fetch the URL kwargs
-
-        Returns:
-            dict: kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'model_id': self.user.id,
-            'pk': self.id
-        }
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        return kwargs
