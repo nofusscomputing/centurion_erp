@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,10 +10,10 @@ from api.tests.unit.test_unit_common_viewset import (
 )
 from api.viewsets.auth_token import ViewSet
 
-# from settings.viewsets.user_settings import ViewSet
 
 
-
+@pytest.mark.model_authtoken
+@pytest.mark.module_api
 class ViewsetList(
     ModelCreateViewSetInheritedCases,
     ModelListRetrieveDeleteViewSetInheritedCases,

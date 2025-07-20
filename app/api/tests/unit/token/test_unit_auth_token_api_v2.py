@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -14,12 +13,12 @@ from access.models.team_user import TeamUsers
 from api.models.tokens import AuthToken
 from api.tests.abstract.api_fields import APIModelFields
 
-from core.models.manufacturer import Manufacturer
-
 User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_authtoken
+@pytest.mark.module_api
 class API(
     TestCase,
     APIModelFields

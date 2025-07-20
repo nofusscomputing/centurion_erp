@@ -10,10 +10,10 @@ from api.serializers.auth_token import AuthToken, AuthTokenModelSerializer
 
 from centurion.tests.abstract.mock_view import MockView, User
 
-# from core.serializers.manufacturer import Manufacturer, ManufacturerModelSerializer
 
 
-
+@pytest.mark.model_authtoken
+@pytest.mark.module_api
 class ValidationAPI(
     TestCase,
 ):
