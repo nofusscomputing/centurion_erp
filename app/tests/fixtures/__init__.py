@@ -23,6 +23,11 @@ from .model_assetbase import (
     model_assetbase,
 )
 
+from .model_authtoken import (
+    kwargs_authtoken,
+    model_authtoken,
+)
+
 from .model_centurionaudit import (
     kwargs_centurionaudit,
     model_centurionaudit,

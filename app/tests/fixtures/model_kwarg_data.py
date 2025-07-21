@@ -24,6 +24,9 @@ def model_kwarg_data():
         for field, value in model_kwargs.items():
 
             is_unique_together_field = False
+            
+            if not hasattr(model, field):
+                continue
 
             if not hasattr(getattr(model, field), 'field'):
                 continue
