@@ -49,7 +49,7 @@ class CenturionAuditModelTestCases(
         'content_type': {
             'blank': True,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
+            'field_type': models.ForeignKey,
             'null': False,
             'unique': False,
         },

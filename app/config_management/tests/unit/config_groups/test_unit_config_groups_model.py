@@ -117,7 +117,7 @@ class ConfigGroupModelTestCases(
         'name': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.TextField,
+            'field_type': models.CharField,
             'max_length': 50,
             'null': False,
             'unique': False,
