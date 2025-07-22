@@ -47,7 +47,7 @@ class ViewsetTestCases(
 
 
 
-@pytest.mark.module_role
+@pytest.mark.model_role
 class RoleViewsetTest(
     ViewsetTestCases,
     TestCase,
