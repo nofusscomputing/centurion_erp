@@ -51,3 +51,36 @@ class SerializerTestCases:
         )
 
         assert serializer.is_valid(raise_exception = True)
+
+
+
+    @pytest.mark.regression
+    def test_serializer_create_calls_model_full_clean(self,
+        kwargs_api_create, mocker, model, model_serializer, request_user
+    ):
+        """ Serializer Check
+
+        Confirm that using valid data the object validates without exceptions.
+        """
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'create',
+        )
+
+        serializer = model_serializer['model'](
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        serializer.is_valid(raise_exception = True)
+
+        full_clean = mocker.spy(model, 'full_clean')
+
+        serializer.save()
+
+        full_clean.assert_called_once()
