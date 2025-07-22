@@ -261,6 +261,101 @@ class ModelTestCases(
 
 
     @pytest.mark.regression
+    def test_method_clean_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `clean` is called once only.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'model is an Abstract model, test is N/A' )
+
+
+        clean = mocker.spy(model_instance, 'clean')
+
+        model_instance.full_clean()
+
+        clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_clean_fields_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `clean_fields` is called once only.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'model is an Abstract model, test is N/A' )
+
+
+        clean_fields = mocker.spy(model_instance, 'clean_fields')
+
+        model_instance.full_clean()
+
+        clean_fields.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_full_clean_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `full_clean` is called once only.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'model is an Abstract model, test is N/A' )
+
+
+        full_clean = mocker.spy(model_instance, 'full_clean')
+
+        model_instance.save()
+
+        full_clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_validate_constraints_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `validate_constraints` is called once only.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'model is an Abstract model, test is N/A' )
+
+
+        validate_constraints = mocker.spy(model_instance, 'validate_constraints')
+
+        model_instance.full_clean()
+
+        validate_constraints.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_validate_unique_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `validate_unique` is called once only.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'model is an Abstract model, test is N/A' )
+
+
+        validate_unique = mocker.spy(model_instance, 'validate_unique')
+
+        model_instance.full_clean()
+
+        validate_unique.assert_called_once()
+
+
+
+    @pytest.mark.regression
     def test_method_type___str__(self, model, model_instance ):
         """Test Method
 

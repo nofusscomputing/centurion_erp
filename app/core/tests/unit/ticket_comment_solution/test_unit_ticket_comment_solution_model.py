@@ -173,3 +173,92 @@ class TicketCommentSolutionModelPyTest(
 ):
 
     sub_model_type = 'solution'
+
+
+    @pytest.mark.regression
+    def test_method_clean_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `clean` is called once only.
+        """
+
+        clean = mocker.spy(model_instance, 'clean')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_clean_fields_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `clean_fields` is called once only.
+        """
+
+        clean_fields = mocker.spy(model_instance, 'clean_fields')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        clean_fields.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_full_clean_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `full_clean` is called once only.
+        """
+
+        full_clean = mocker.spy(model_instance, 'full_clean')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        full_clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_validate_constraints_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `validate_constraints` is called once only.
+        """
+
+        validate_constraints = mocker.spy(model_instance, 'validate_constraints')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        validate_constraints.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_validate_unique_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `validate_unique` is called once only.
+        """
+
+        validate_unique = mocker.spy(model_instance, 'validate_unique')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        validate_unique.assert_called_once()
