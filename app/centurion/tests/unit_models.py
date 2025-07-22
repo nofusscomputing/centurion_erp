@@ -1,3 +1,4 @@
+import django
 import pytest
 
 from django.apps import apps
@@ -153,6 +154,7 @@ class ModelTestCases(
 
 
 
+    @pytest.mark.regression
     def test_model_field_parameter_value_blank(self,
         model_instance,
         parameterized, param_key_model_fields, param_field_name, param_blank
@@ -172,6 +174,7 @@ class ModelTestCases(
 
 
 
+    @pytest.mark.regression
     def test_model_field_parameter_value_default(self,
         model_instance,
         parameterized, param_key_model_fields, param_field_name, param_default
@@ -192,6 +195,7 @@ class ModelTestCases(
 
 
 
+    @pytest.mark.regression
     def test_model_field_parameter_value_null(self,
         model_instance,
         parameterized, param_key_model_fields, param_field_name, param_null
@@ -212,6 +216,7 @@ class ModelTestCases(
 
 
 
+    @pytest.mark.regression
     def test_model_field_parameter_value_unique(self,
         model_instance,
         parameterized, param_key_model_fields, param_field_name, param_unique
@@ -232,6 +237,30 @@ class ModelTestCases(
 
 
 
+    @pytest.mark.regression
+    def test_model_field_type(self,
+        model_instance,
+        parameterized, param_key_model_fields, param_field_name, param_field_type
+    ):
+        """Test Model Field
+
+        Ensure field `param_field_type` is of the correct type
+        """
+
+        if param_field_type is models.fields.NOT_PROVIDED:
+
+            pytest.xfail( reason = 'Field not used for model.' )
+
+        try:
+            the_field = model_instance._meta.get_field(param_field_name)
+        except django.core.exceptions.FieldDoesNotExist:
+            pytest.mark.xfail( reason = 'Field does not exist for model.' )
+
+        assert isinstance(the_field, param_field_type), type(the_field)
+
+
+
+    @pytest.mark.regression
     def test_method_type___str__(self, model, model_instance ):
         """Test Method
 

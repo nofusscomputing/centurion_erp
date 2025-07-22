@@ -93,7 +93,7 @@ class AuditHistoryMetaModelTestCases(
         model_kwargs = kwargs_centurionauditmeta.copy()
 
         with django_db_blocker.unblock():
-            
+
             audit_model_kwargs = request.getfixturevalue('kwargs_' + audit_model._meta.model_name)
 
             kwargs = {}

@@ -67,7 +67,7 @@ class CenturionAbstractModelTestCases(
             'created': {
                 'blank': False,
                 'default': now,
-                'field_type': models.IntegerField,
+                'field_type': models.DateTimeField,
                 'null': False,
                 'unique': False,
             },

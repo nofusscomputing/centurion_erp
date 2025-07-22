@@ -80,7 +80,6 @@ class AuthToken(
 
     note = models.CharField(
         blank = True,
-        default = None,
         help_text = 'A note about this token',
         max_length = 50,
         null= True,
@@ -118,10 +117,6 @@ class AuthToken(
     modified = AutoLastModifiedField()
 
 
-    history_app_label: str = None
-    history_model_name: str = None
-    kb_model_name: str = None
-    note_basename: str = None
 
     @property
     def generate(self) -> str:
@@ -145,6 +140,7 @@ class AuthToken(
 
         return self.token
 
+    page_layout = []
 
     table_fields: list = [
         'note',

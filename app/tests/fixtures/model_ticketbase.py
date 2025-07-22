@@ -22,7 +22,7 @@ def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
 
     with django_db_blocker.unblock():
 
-        user = model_user.objects.create( **kwargs_user )
+        user = model_user.objects.create( **kwargs_user.copy() )
 
     kwargs = kwargs_centurionmodel.copy()
     del kwargs['model_notes']

@@ -82,7 +82,13 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
 
                 if(
                     model is not Tenant
-                    and org is not None
+                    and (
+                        org is not None
+                        or (
+                            'organization' not in model_kwargs
+                            and 'organization' not in kwargs_create
+                        )
+                    )
                 ):
 
                     obj = model_kwarg_data(

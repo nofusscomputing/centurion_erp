@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS "accounting_assetbase" ("id" integer NOT NULL PRIMARY
 CREATE TABLE IF NOT EXISTS "accounting_assetbase_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "accounting_assetbase" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "accounting_assetbase_centurionmodelnote" ("centurionmodelnote_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_centurionmodelnote" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "accounting_assetbase" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "django_admin_log" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "object_id" text NULL, "object_repr" varchar(200) NOT NULL, "action_flag" smallint unsigned NOT NULL CHECK ("action_flag" >= 0), "change_message" text NOT NULL, "content_type_id" integer NULL REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "action_time" datetime NOT NULL);
-CREATE TABLE IF NOT EXISTS "api_authtoken" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "note" varchar(50) NULL, "token" varchar(64) NOT NULL UNIQUE, "expires" datetime NOT NULL, "created" datetime NOT NULL, "modified" datetime NOT NULL, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED);
+CREATE TABLE IF NOT EXISTS "api_authtoken" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(64) NOT NULL UNIQUE, "expires" datetime NOT NULL, "created" datetime NOT NULL, "modified" datetime NOT NULL, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "note" varchar(50) NULL);
 CREATE TABLE IF NOT EXISTS "itam_itamassetbase" ("assetbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "accounting_assetbase" ("id") DEFERRABLE INITIALLY DEFERRED, "itam_type" varchar(30) NOT NULL);
 CREATE TABLE IF NOT EXISTS "itam_devicemodel_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "itam_devicemodel" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itam_devicemodel_centurionmodelnote" ("centurionmodelnote_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_centurionmodelnote" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "itam_devicemodel" ("id") DEFERRABLE INITIALLY DEFERRED);
@@ -239,7 +239,7 @@ CREATE TABLE IF NOT EXISTS "social_auth_nonce" ("id" integer NOT NULL PRIMARY KE
 CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "provider" varchar(32) NOT NULL, "uid" varchar(255) NOT NULL, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "created" datetime NOT NULL, "modified" datetime NOT NULL, "extra_data" text NOT NULL CHECK ((JSON_VALID("extra_data") OR "extra_data" IS NULL)));
 CREATE TABLE IF NOT EXISTS "social_auth_partial" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(32) NOT NULL, "next_step" smallint unsigned NOT NULL CHECK ("next_step" >= 0), "backend" varchar(32) NOT NULL, "timestamp" datetime NOT NULL, "data" text NOT NULL CHECK ((JSON_VALID("data") OR "data" IS NULL)));
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('django_migrations',230);
+INSERT INTO sqlite_sequence VALUES('django_migrations',231);
 INSERT INTO sqlite_sequence VALUES('django_content_type',218);
 INSERT INTO sqlite_sequence VALUES('auth_permission',917);
 INSERT INTO sqlite_sequence VALUES('auth_group',0);
@@ -265,6 +265,7 @@ INSERT INTO sqlite_sequence VALUES('access_entity',0);
 INSERT INTO sqlite_sequence VALUES('access_role',0);
 INSERT INTO sqlite_sequence VALUES('accounting_assetbase',0);
 INSERT INTO sqlite_sequence VALUES('django_admin_log',0);
+INSERT INTO sqlite_sequence VALUES('api_authtoken',0);
 INSERT INTO sqlite_sequence VALUES('itam_devicetype',0);
 INSERT INTO sqlite_sequence VALUES('config_management_configgrouphosts',0);
 INSERT INTO sqlite_sequence VALUES('config_management_configgroups',0);
