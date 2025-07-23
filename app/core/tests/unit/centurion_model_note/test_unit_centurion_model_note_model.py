@@ -50,7 +50,7 @@ class CenturionNoteModelTestCases(
             'blank': True,
             'default': models.fields.NOT_PROVIDED,
             'field_type': models.ForeignKey,
-            'null': False,
+            'null': True,
             'unique': False,
         },
         'modified_by': {
@@ -64,7 +64,7 @@ class CenturionNoteModelTestCases(
             'blank': True,
             'default': models.fields.NOT_PROVIDED,
             'field_type': models.ForeignKey,
-            'null': False,
+            'null': True,
             'unique': False,
         },
         'modified': {
