@@ -156,7 +156,7 @@ class APITestCases(
 
 
 
-@pytest.mark.module_role
+@pytest.mark.model_role
 class RoleAPITest(
     APITestCases,
     TestCase,

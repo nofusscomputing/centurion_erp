@@ -63,7 +63,7 @@ class RoleModelInheritedCases(
 
 
 
-@pytest.mark.module_role
+@pytest.mark.model_role
 class RoleModelPyTest(
     RoleModelTestCases,
 ):

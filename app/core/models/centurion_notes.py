@@ -53,7 +53,7 @@ class CenturionModelNote(
         settings.AUTH_USER_MODEL,
         blank = True,
         help_text = 'User whom added the Note',
-        null = False,
+        null = True,
         on_delete = models.PROTECT,
         related_name = '+',
         verbose_name = 'Created By',
@@ -75,7 +75,7 @@ class CenturionModelNote(
         ContentType,
         blank = True,
         help_text = 'Model this note is for',
-        null = False,
+        null = True,
         on_delete=models.CASCADE,
         verbose_name = 'Content Model'
     )
