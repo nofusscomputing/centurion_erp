@@ -8,9 +8,6 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Viewsets are used by Centurion ERP for each of the API views.
 
-!!! info
-    Centurion release v1.3.0 added a feature lock to **ALL** Views and the current API. From this release, there is a new API at endpoint `api/v2`. As such we will only be using DRF `ViewSets`. This is required as the UI is being separated from the Centurion Codebase to its own repository. This means that Centurion will become an API only codebase. Release 2.0.0 will remove the current UI and api from Centurion. [See #](https://github.com/nofusscomputing/centurion_erp/issues/343) for details.
-
 
 ## Requirements
 
