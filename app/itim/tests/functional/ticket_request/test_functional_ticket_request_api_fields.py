@@ -1,4 +1,4 @@
-from itim.tests.unit.ticket_slm.test_unit_ticket_slm_api_fields import TicketSLMAPIInheritedCases
+from itim.tests.functional.ticket_slm.test_functional_ticket_slm_api_fields import TicketSLMAPIInheritedCases
 
 
 
@@ -6,7 +6,7 @@ class TicketRequestAPITestCases(
     TicketSLMAPIInheritedCases,
 ):
 
-    model = None
+    pass
 
 
 
@@ -14,9 +14,7 @@ class TicketRequestAPIInheritedCases(
     TicketRequestAPITestCases,
 ):
 
-    kwargs_create_item: dict = None
-
-    model = None
+    pass
 
 
 
