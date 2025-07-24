@@ -1,18 +1,9 @@
-import datetime
-import django
 import pytest
 
-from django.contrib.auth.models import ContentType, Permission
 from django.db import models
-from django.shortcuts import reverse
 from django.test import Client
 
 from rest_framework.relations import Hyperlink
-
-from access.models.team import Team
-from access.models.team_user import TeamUsers
-
-User = django.contrib.auth.get_user_model()
 
 
 
@@ -24,21 +15,20 @@ class APIFieldsTestCases:
     ## Additional Items
 
     You may find a scenario where you are unable to have all fileds available
-    within a single request. to overcome this this test suite has the features
+    within a single request. to overcome this, this test suite has the features
     available wherein you can prepare an additional item for an additional
-    check. the following is required before the API request is made
-    (setup_post fixture):
+    check. the following is required before the API request is made:
 
     - additional item created and stored in attribute `self.item_two`
-    - additional url as a string and stored in attribute `self.url_two`
 
-    Once you have these two objects, an additional check will be done and each
-    test will check both API requests. if the field is found in either api
-    request the test will pass
+    This object should be created in fixture `create_model` to which you should
+    override to add this object.Once you have these two objects, an additional
+    check will be done and each test will check both API requests. If the field
+    is found in either api request the test will pass
     """
 
     @property
-    def parameterized_test_data(self) -> dict:
+    def parameterized_api_fields(self) -> dict:
 
         api_fields_common = {
             'id': {
@@ -91,157 +81,76 @@ class APIFieldsTestCases:
             **api_fields_model.copy(),
         }
 
-    url_view_kwargs = {}
-
 
 
     @pytest.fixture( scope = 'class')
-    def setup_pre(self,
-        request,
-        model,
-        django_db_blocker,
-        organization_one,
-        organization_two
+    def create_model(self, request, django_db_blocker,
+        model, model_kwargs
     ):
 
-        request.cls.url_view_kwargs = {}
-        request.cls.model = model
+        item = None
 
         with django_db_blocker.unblock():
 
-            random_str = datetime.datetime.now(tz=datetime.timezone.utc)
-
-            request.cls.organization = organization_one
-
-            request.cls.different_organization = organization_two
-
-            kwargs_create_item = {}
-
-            for base in reversed(request.cls.__mro__):
-
-                if hasattr(base, 'kwargs_create_item'):
-
-                    if base.kwargs_create_item is None:
-
-                        continue
-
-                    kwargs_create_item.update(**base.kwargs_create_item)
-
-
-            if len(kwargs_create_item) > 0:
-
-                request.cls.kwargs_create_item = kwargs_create_item
-
-
-            if 'organization' not in request.cls.kwargs_create_item:
-
-                request.cls.kwargs_create_item.update({
-                    'organization': request.cls.organization
-                })
-
-
-            if hasattr(request.cls.model(), 'model_notes'):
-
-                for field in request.cls.model()._meta.fields:
-
-                    if field.attname == 'model_notes':
-
-                        request.cls.kwargs_create_item.update({
-                            'model_notes': 'notes',
-                        })
-
-
-            view_permissions = Permission.objects.get(
-                    codename = 'view_' + request.cls.model._meta.model_name,
-                    content_type = ContentType.objects.get(
-                        app_label = request.cls.model._meta.app_label,
-                        model = request.cls.model._meta.model_name,
-                    )
-                )
-
-            view_team = Team.objects.create(
-                team_name = 'cs_api_view_team' + str(random_str),
-                organization = request.cls.organization,
+            item = model.objects.create(
+                **model_kwargs
             )
 
-            request.cls.view_team = view_team
+            request.cls.item = item
 
-            view_team.permissions.set([view_permissions])
-
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view" + str(random_str), password="password", is_superuser = True)
-
-            team_user = TeamUsers.objects.create(
-                team = view_team,
-                user = request.cls.view_user
-            )
-
-        yield
+        yield item
 
         with django_db_blocker.unblock():
 
-            team_user.delete()
+            item.delete()
 
-            view_team.delete()
-
-            try:
-                request.cls.view_user.delete()
-            except django.db.models.deletion.ProtectedError:
-                pass
-
-            del request.cls.kwargs_create_item
 
 
     @pytest.fixture( scope = 'class')
-    def setup_post(self, request, django_db_blocker):
+    def make_request(self,
+        request,
+        api_request_permissions,
+    ):
 
-        with django_db_blocker.unblock():
+        client = Client()
 
-            request.cls.url_view_kwargs.update({
-                'pk': request.cls.item.id
-            })
+        client.force_login( api_request_permissions['user']['view'] )
+        response = client.get( self.item.get_url() )
 
-            client = Client()
-            url = reverse('v2:' + request.cls.url_ns_name + '-detail', kwargs=request.cls.url_view_kwargs)
+        request.cls.api_data = response.data
 
 
-            client.force_login(request.cls.view_user)
-            response = client.get(url)
 
-            request.cls.api_data = response.data
+        item_two = getattr(request.cls, 'item_two', None)
 
-            item_two = getattr(request.cls, 'url_two', None)
+        if item_two:
 
-            if item_two:
+            response_two = client.get( self.item_two.get_url() )
 
-                response_two = client.get(request.cls.url_two)
+            request.cls.api_data_two = response_two.data
 
-                request.cls.api_data_two = response_two.data
+        else:
 
-            else:
-
-                request.cls.api_data_two = {}
+            request.cls.api_data_two = {}
 
 
         yield
-
-        del request.cls.url_view_kwargs['pk']
-
-        del request.cls.api_data_two
-
 
 
 
     @pytest.fixture( scope = 'class', autouse = True)
     def class_setup(self,
-        setup_pre,
         create_model,
-        setup_post,
+        make_request,
     ):
 
         pass
 
 
-    def test_api_field_exists(self, recursearray, parameterized, param_key_test_data,
+
+    @pytest.mark.regression
+    def test_api_field_exists(self, recursearray,
+        parameterized, param_key_api_fields,
         param_value,
         param_expected
     ):
@@ -267,7 +176,9 @@ class APIFieldsTestCases:
 
 
 
-    def test_api_field_type(self, recursearray, parameterized, param_key_test_data,
+    @pytest.mark.regression
+    def test_api_field_type(self, recursearray,
+        parameterized, param_key_api_fields,
         param_value,
         param_expected
     ):
@@ -297,6 +208,4 @@ class APIFieldsInheritedCases(
     APIFieldsTestCases
 ):
 
-    model = None
-
-    parameterized_test_data = {}
+    pass
