@@ -1,6 +1,6 @@
 import pytest
 
-from core.tests.unit.ticket_base.test_unit_ticket_base_api_fields import (
+from core.tests.functional.ticket_base.test_functional_ticket_base_api_fields import (
     TicketBaseAPIInheritedCases,
 )
 
@@ -11,19 +11,18 @@ class TicketSLMAPITestCases(
     TicketBaseAPIInheritedCases,
 ):
 
-    parameterized_test_data = {
-        'tto': {
-            'expected': int
-        },
-        'ttr': {
-            'expected': int
-        }
-    }
+    @property
+    def parameterized_api_fields(self):
 
-    kwargs_create_item: dict = {
-        'tto': 11,
-        'ttr': 22,
-    }
+        return {
+            'tto': {
+                'expected': int
+            },
+            'ttr': {
+                'expected': int
+            }
+        }
+
 
 
 
@@ -32,9 +31,7 @@ class TicketSLMAPIInheritedCases(
     TicketSLMAPITestCases,
 ):
 
-    kwargs_create_item: dict = None
-
-    model = None
+    pass
 
 
 #

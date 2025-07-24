@@ -22,3 +22,14 @@ def create_serializer():
     yield serializer
 
     del serializer
+
+
+@pytest.fixture( scope = 'class', autouse = True)
+def model_kwargs(request, kwargs_slmticket):
+
+    request.cls.kwargs_create_item = kwargs_slmticket.copy()
+
+    yield kwargs_slmticket.copy()
+
+    if hasattr(request.cls, 'kwargs_create_item'):
+        del request.cls.kwargs_create_item
