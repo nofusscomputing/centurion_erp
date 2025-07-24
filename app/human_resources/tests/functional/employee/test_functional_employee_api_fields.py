@@ -1,6 +1,6 @@
 import pytest
 
-from access.tests.unit.contact.test_unit_contact_api_fields import (
+from access.tests.functional.contact.test_functional_contact_api_fields import (
     ContactAPIInheritedCases
 )
 
@@ -11,15 +11,14 @@ class EmployeeAPITestCases(
     ContactAPIInheritedCases,
 ):
 
-    parameterized_test_data = {
-        'employee_number': {
-            'expected': int
-        }
-    }
+    @property
+    def parameterized_api_fields(self): 
 
-    kwargs_create_item: dict = {
-        'employee_number': 12345,
-    }
+        return {
+            'employee_number': {
+                'expected': int
+            }
+        }
 
 
 
@@ -27,9 +26,7 @@ class EmployeeAPIInheritedCases(
     EmployeeAPITestCases,
 ):
 
-    kwargs_create_item: dict = None
-
-    model = None
+    pass
 
 
 
