@@ -1,6 +1,6 @@
 import pytest
 
-from access.tests.unit.entity.test_unit_entity_api_fields import (
+from access.tests.functional.entity.test_functional_entity_api_fields import (
     EntityAPIInheritedCases
 )
 
@@ -11,25 +11,20 @@ class CompanyAPITestCases(
     EntityAPIInheritedCases,
 ):
 
-    parameterized_test_data = {
-        'name': {
-            'expected': str
+    @property
+    def parameterized_api_fields(self): 
+
+        return {
+            'name': {
+                'expected': str
+            }
         }
-    }
-
-    kwargs_create_item: dict = {
-        'name': 'Ian'
-    }
-
 
 
 class CompanyAPIInheritedCases(
     CompanyAPITestCases,
 ):
-
-    kwargs_create_item: dict = None
-
-    model = None
+    pass
 
 
 
