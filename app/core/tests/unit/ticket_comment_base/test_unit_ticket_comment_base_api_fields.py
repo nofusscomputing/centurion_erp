@@ -2,11 +2,10 @@ import django
 import pytest
 
 from django.contrib.auth.models import ContentType, Permission
+from django.db import models
 from django.shortcuts import reverse
 
 from rest_framework.relations import Hyperlink
-
-from centurion.tests.common import DoesNotExist
 
 from api.tests.functional.test_functional_api_fields import (
     APIFieldsInheritedCases,
@@ -327,13 +326,13 @@ class TicketCommentBaseAPITestCases(
         # Below fields dont exist.
 
         'display_name': {
-            'expected': DoesNotExist
+            'expected': models.NOT_PROVIDED
         },
         'model_notes': {
-            'expected': DoesNotExist
+            'expected': models.NOT_PROVIDED
         },
         '_urls.notes': {
-            'expected': DoesNotExist
+            'expected': models.NOT_PROVIDED
         },
     }
 

@@ -3,6 +3,7 @@ import django
 import pytest
 
 from django.contrib.auth.models import ContentType, Permission
+from django.db import models
 from django.shortcuts import reverse
 from django.test import Client
 
@@ -10,8 +11,6 @@ from rest_framework.relations import Hyperlink
 
 from access.models.team import Team
 from access.models.team_user import TeamUsers
-
-from centurion.tests.common import DoesNotExist
 
 User = django.contrib.auth.get_user_model()
 
@@ -252,7 +251,7 @@ class APIFieldsTestCases:
 
         api_data_two = recursearray(self.api_data_two, param_value)
 
-        if param_expected is DoesNotExist:
+        if param_expected is models.NOT_PROVIDED:
 
             assert(
                 api_data['key'] not in api_data['obj']
@@ -278,7 +277,7 @@ class APIFieldsTestCases:
 
         api_data_two = recursearray(self.api_data_two, param_value)
 
-        if param_expected is DoesNotExist:
+        if param_expected is models.NOT_PROVIDED:
 
             assert(
                 api_data['key'] not in api_data['obj']
