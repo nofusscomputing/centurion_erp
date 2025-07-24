@@ -9,24 +9,7 @@ class TenancyAbstractModelTestCases(
     ModelTestCases
 ):
 
-
-
-    @pytest.fixture( scope = 'class', autouse = True)
-    def setup_organization(cls, request, model, organization_one, model_kwargs):
-
-        request.cls.organization = organization_one
-        
-        if request.cls.kwargs_create_item:
-
-            request.cls.kwargs_create_item.update({
-                'organization': organization_one,
-            })
-
-        else:
-
-            request.cls.kwargs_create_item = {
-                'organization': organization_one,
-            }
+    pass
 
 
 

@@ -123,6 +123,11 @@ All models must contain the core features, being:
     _Enables the possibility within markdown fields to use its [tag](../user/core/markdown.md#model-reference--model-tag) to create a link to the model._
 
 
+### History
+
+Adding [History](./core/model_history.md) to a model is automatic. If there is a desire not to have model history it can be disabled by adding attribute `_audit_enabled` to the model class and setting its value to `False.`
+
+
 ## Validation Methods
 
 Within All of our models including when they are created via an [API serializer](./serializers.md), the models [validators](https://docs.djangoproject.com/en/5.1/ref/models/instances/#validating-objects) are called. The models validators are responsible for ensuring that no data goes into the database that may create an inconsistancy.
@@ -213,6 +218,44 @@ table_fields: list = [
 ```
 
 
+## Tests
+
+The following Unit test suites exists for models:
+
+- Unit Tests
+
+    - model (Base Model) `core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model.CenturionAbstractModelInheritedCases`
+
+    - model (Sub-Model) `core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model.CenturionSubAbstractModelInheritedCases`
+
+    - Serializer `api.tests.unit.test_unit_serializer.SerializerTestCases`
+
+    - ViewSet `api.tests.unit.test_unit_common_viewset.*`
+
+
+- Functional Tests
+
+    - model `core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model.CenturionAbstractModelInheritedCases`
+
+    - API Fields Render `api.tests.functional.test_functional_api_fields.APIFieldsInheritedCases`
+
+
+!!! info
+    If you add a feature you will have to [write the test cases](./testing.md) for that feature if they are not covered by existing test cases.
+
+Each model has the following Test Suites auto-magic created:
+
+- API Permissions checks `api.tests.functional.test_functional_meta_permissions_api`
+
+    _Checks the CRUD permissions against the models API endpoints_
+
+- Audit History Model checks, `core.tests.unit.centurion_audit_meta.test_unit_meta_audit_history_model`
+
+    _Confirms the model has a [`AuditHistory`](./api/models/audit_history.md) model and other checks as required for an `AuditHistory` model._
+
+These auto-magic tests require no input and will be created on a model inheriting from [`CenturionModel`](./api/models/centurion.md) and run every time the tests are run.
+
+
 ## Depreciated Docs undergoing re-write
 
 - ToDo
@@ -257,44 +300,6 @@ This section details the additional items that may need to be done when adding a
 - If the model is a primary model, add it to model reference rendering in `app/core/lib/markdown_plugins/model_reference.py` function `tag_html`
 
 - If the model is a primary model, add it to the model link slash command in `app/core/lib/slash_commands/linked_model.py` function `command_linked_model`
-
-
-## History
-
-Adding [History](./core/model_history.md) to a model is automatic. If there is a desire not to have model history it can be disabled by adding attribute `_audit_enabled` to the model class and setting its value to `False.`
-
-
-## Tests
-
-The following Unit test suites exists for models:
-
-- Unit Tests
-
-    - model (Base Model) `core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model.CenturionAbstractModelInheritedCases`
-
-    - model (Sub-Model) `core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model.CenturionSubAbstractModelInheritedCases`
-
-
-- Functional Tests
-
-    - model `core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model.CenturionAbstractModelInheritedCases`
-
-    - API Fields Render `api.tests.functional.test_functional_api_fields.APIFieldsInheritedCases`
-
-!!! info
-    If you add a feature you will have to [write the test cases](./testing.md) for that feature if they are not covered by existing test cases.
-
-Each model has the following Test Suites auto-magic created:
-
-- API Permissions checks `api.tests.functional.test_functional_meta_permissions_api`
-
-    _Checks the CRUD permissions against the models API endpoints_
-
-- Audit History Model checks, `core.tests.unit.centurion_audit_meta.test_unit_meta_audit_history_model`
-
-    _Confirms the model has a [`AuditHistory`](./api/models/audit_history.md) model and other checks as required for an `AuditHistory` model._
-
-These auto-magic tests require no input and will be created on a model inheriting from [`CenturionModel`](./api/models/centurion.md) and run every time the tests are run.
 
 
 ## Knowledge Base Article linking

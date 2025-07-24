@@ -1,13 +1,14 @@
 import django
 import pytest
 
+from django.db import models
+
 from rest_framework.relations import Hyperlink
 
 from access.models.entity import Entity
 
 from api.tests.functional.test_functional_api_fields import (
     APIFieldsInheritedCases,
-    DoesNotExist,
 )
 
 from core.models.ticket.ticket_category import TicketCategory
@@ -127,10 +128,10 @@ class APITestCases(
 
     parameterized_test_data = {
         'model_notes': {
-            'expected': DoesNotExist
+            'expected': models.NOT_PROVIDED
         },
         '_urls.notes': {
-            'expected': DoesNotExist
+            'expected': models.NOT_PROVIDED
         },
         'external_system': {
             'expected': int

@@ -1,6 +1,6 @@
 import pytest
 
-from accounting.tests.unit.asset_base.test_unit_asset_base_api_fields import (
+from accounting.tests.functional.asset_base.test_functional_asset_base_api_fields import (
     AssetBaseAPIInheritedCases
 )
 
@@ -12,13 +12,14 @@ class ITAMAssetBaseAPITestCases(
 ):
 
 
-    parameterized_test_data = {
-        'itam_type': {
-            'expected': str
-        },
-    }
+    @property
+    def parameterized_api_fields(self):
 
-    kwargs_create_item: dict = {}
+        return {
+            'itam_type': {
+                'expected': str
+            },
+        }
 
 
 
@@ -26,9 +27,7 @@ class ITAMAssetBaseAPIInheritedCases(
     ITAMAssetBaseAPITestCases,
 ):
 
-    kwargs_create_item: dict = None
-
-    model = None
+    pass
 
 
 

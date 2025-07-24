@@ -22,7 +22,9 @@ def kwargs_person( kwargs_entity ):
         **kwargs_entity.copy(),
         'entity_type': 'person',
         'f_name': 'p' + random_str,
-        'l_name': 'p' + random_str
+        'm_name': 'p' + random_str,
+        'l_name': 'p' + random_str,
+        'dob': '2025-04-08'
     }
 
     yield kwargs.copy()
