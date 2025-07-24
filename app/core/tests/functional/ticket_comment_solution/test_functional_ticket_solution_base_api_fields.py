@@ -1,19 +1,17 @@
 import pytest
 
-from core.tests.unit.ticket_comment_base.test_unit_ticket_comment_base_api_fields import (
-    TicketCommentBaseAPIInheritedCases
+from core.tests.functional.ticket_comment_base.test_functional_ticket_comment_base_api_fields import (
+    TicketCommentBaseAPIFieldsInheritedCases
 )
 
 
 
 @pytest.mark.model_ticketcommentsolution
 class TicketCommentSolutionAPITestCases(
-    TicketCommentBaseAPIInheritedCases,
+    TicketCommentBaseAPIFieldsInheritedCases,
 ):
 
-    parameterized_test_data = {}
-
-    kwargs_create_item: dict = {}
+    pass
 
 
 
@@ -21,9 +19,7 @@ class TicketCommentSolutionAPIInheritedCases(
     TicketCommentSolutionAPITestCases,
 ):
 
-    kwargs_create_item: dict = {None}
-
-    model = None
+    pass
 
 
 
