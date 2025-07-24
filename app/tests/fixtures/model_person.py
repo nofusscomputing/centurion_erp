@@ -1,5 +1,6 @@
 import datetime
 import pytest
+import random
 
 from access.models.person import Person
 
@@ -24,7 +25,8 @@ def kwargs_person( kwargs_entity ):
         'f_name': 'p' + random_str,
         'm_name': 'p' + random_str,
         'l_name': 'p' + random_str,
-        'dob': '2025-04-08'
+        'dob': str(random.randint(1972, 2037)) + '-' + str(
+            random.randint(1, 12)) + '-' + str(random.randint(1, 28))
     }
 
     yield kwargs.copy()

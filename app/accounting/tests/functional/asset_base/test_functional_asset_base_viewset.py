@@ -77,9 +77,10 @@ class ViewSetBase:
 
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
 
+        kwargs = self.kwargs_create_item
+        kwargs['organization'] = organization
         self.item = self.model.objects.create(
-            organization = organization,
-            **self.kwargs_create_item
+            **kwargs
         )
 
         self.other_org_item = self.model.objects.create(

@@ -464,11 +464,11 @@ class TicketBaseModelTestCases(
                 ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
         kwargs['external_ref'] = int(random_str[len(random_str)-9:])
+        kwargs['status'] = model._meta.get_field('status').default
 
 
         ticket = model.objects.create(
             **kwargs,
-            status = model._meta.get_field('status').default,
         )
 
         yield ticket

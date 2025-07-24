@@ -1,20 +1,14 @@
 import django
 import pytest
-import unittest
-import requests
 
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
@@ -195,108 +189,6 @@ class ViewSetBase:
             user = self.different_organization_user
         )
 
-
-
-class OrganizationPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase
-):
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
-
-    def test_add_has_permission(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with permission
-        """
-
-        client = Client()
-
-        if self.url_kwargs:
-
-            url = reverse( self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs )
-
-        else:
-
-            url = reverse( self.app_namespace + ':' + self.url_name + '-list' )
-
-
-        client.force_login( self.add_user )
-
-        response = client.post( url, data = self.add_data )
-
-        assert response.status_code == 201
-
-
-
-    def test_returned_results_only_user_orgs(self):
-        """Returned results check
-
-        This test case is an override of a test of the same name.
-        organizations are not tenancy objects and therefor are supposed to
-        return all items when a user queries them.
-
-        Ensure that a query to the viewset endpoint does not return
-        items that are not part of the users organizations.
-        """
-
-
-        # Ensure the other org item exists, without test not able to function
-        print('Check that the different organization item has been defined')
-        assert hasattr(self, 'other_org_item')
-
-        # ensure that the variables for the two orgs are different orgs
-        print('checking that the different and user oganizations are different')
-        assert self.different_organization.id != self.organization.id
-
-
-        client = Client()
-
-        if self.url_kwargs:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.view_user)
-        response = client.get(url)
-
-        contains_different_org: bool = False
-
-        # for item in response.data['results']:
-
-        #     if int(item['id']) != self.organization.id:
-
-        #         contains_different_org = True
-
-        assert len(response.data['results']) == 2
-
-
-    def test_add_different_organization_denied(self):
-        """ Check correct permission for add
-
-        This test is a duplicate of a test case with the same name.
-        Organizations are not tenancy models so this test does nothing of value
-
-        attempt to add as user from different organization
-        """
-
-        pass
 
 
 class OrganizationViewSet(

@@ -78,9 +78,11 @@ class ViewSetBase:
             'opened_by': self.view_user
         })
 
+        kwargs = self.kwargs_create_item.copy()
+        kwargs['organization'] = organization
+
         self.item = self.model.objects.create(
-            organization = organization,
-            **self.kwargs_create_item
+            **kwargs
         )
 
         self.kwargs_create_item_diff_org.update({
