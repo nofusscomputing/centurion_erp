@@ -302,7 +302,6 @@ This section details the additional items that may need to be done when adding a
 - If the model is a primary model, add it to the model link slash command in `app/core/lib/slash_commands/linked_model.py` function `command_linked_model`
 
 
-
 ## Knowledge Base Article linking
 
 All Tenancy Models must have the ability to be able to have a knowledge base article linked to it. To do so the following must be done:

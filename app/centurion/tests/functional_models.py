@@ -26,11 +26,9 @@ class ModelTestCases:
     @pytest.fixture( scope = 'function' )
     def created_model(self, django_db_blocker, model, model_kwargs):
 
-        if model._meta.abstract:
+        model_object = None
 
-            yield None
-
-        else:
+        if not model._meta.abstract:
 
             with django_db_blocker.unblock():
 
@@ -42,7 +40,8 @@ class ModelTestCases:
 
         with django_db_blocker.unblock():
 
-            model_object.delete()
+            if model_object:
+                model_object.delete()
 
 
 
