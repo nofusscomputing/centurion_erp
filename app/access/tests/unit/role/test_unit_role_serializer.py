@@ -1,5 +1,33 @@
 import pytest
 
+from api.tests.unit.test_unit_serializer import (
+    SerializerTestCases
+)
+
+
+@pytest.mark.model_role
+class RoleSerializerTestCases(
+    SerializerTestCases
+):
+    pass
+
+
+
+class RoleSerializerInheritedCases(
+    RoleSerializerTestCases
+):
+    pass
+
+
+
+@pytest.mark.module_access
+class RoleSerializerPyTest(
+    RoleSerializerTestCases
+):
+    pass
+
+
+
 # from pytest import MonkeyPatch
 
 # from unittest.mock import patch

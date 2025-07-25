@@ -250,6 +250,7 @@ from .model_requestticket import (
 from .model_role import (
     kwargs_role,
     model_role,
+    serializer_role,
 )
 
 from .model_service import (
