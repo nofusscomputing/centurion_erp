@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from access.models.contact import Contact
+from access.serializers.entity_contact import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -25,3 +30,13 @@ def kwargs_contact( kwargs_person ):
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_contact():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

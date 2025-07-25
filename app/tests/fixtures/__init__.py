@@ -92,6 +92,7 @@ from .model_configgroupsoftware import (
 from .model_contact import (
     kwargs_contact,
     model_contact,
+    serializer_contact,
 )
 
 from .model_contenttype import (
