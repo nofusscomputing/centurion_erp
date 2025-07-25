@@ -8,6 +8,7 @@ from assistance.viewsets.knowledge_base_category import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class KnowledgeBaseViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

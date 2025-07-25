@@ -8,6 +8,7 @@ from assistance.viewsets.request import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class RequestViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

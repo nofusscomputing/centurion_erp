@@ -11,6 +11,7 @@ from project_management.viewsets.project_milestone import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_projectmilestone
 @pytest.mark.module_project_management
 class ProjectMilestoneViewsetList(

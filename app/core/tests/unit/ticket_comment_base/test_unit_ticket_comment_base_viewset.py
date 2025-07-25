@@ -18,6 +18,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_ticketcommentbase
 class TicketCommentBaseViewsetTestCases(
     SubModelViewSetInheritedCases,

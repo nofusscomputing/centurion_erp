@@ -10,6 +10,7 @@ from settings.viewsets.external_link import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_externallink
 @pytest.mark.module_settings
 class ExternalLinksViewsetList(

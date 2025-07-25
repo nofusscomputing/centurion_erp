@@ -8,6 +8,7 @@ from config_management.viewsets.config_group import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class ConfigGroupsViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

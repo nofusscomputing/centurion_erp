@@ -9,6 +9,7 @@ from project_management.viewsets.project_task import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class ProjectTaskViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

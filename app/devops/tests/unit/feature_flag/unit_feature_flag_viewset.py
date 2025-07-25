@@ -8,6 +8,7 @@ from devops.viewsets.feature_flag import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class ViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

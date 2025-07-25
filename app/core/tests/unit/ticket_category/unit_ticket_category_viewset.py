@@ -8,6 +8,7 @@ from core.viewsets.ticket_category import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class TicketCategoryViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

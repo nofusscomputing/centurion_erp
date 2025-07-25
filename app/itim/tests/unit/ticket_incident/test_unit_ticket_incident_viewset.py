@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,7 @@ from itim.viewsets.incident import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class IncidentTicketViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

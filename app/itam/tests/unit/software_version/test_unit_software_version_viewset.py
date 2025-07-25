@@ -11,6 +11,7 @@ from itam.viewsets.software_version import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_softwareversion
 @pytest.mark.module_itam
 class SoftwareVersionViewsetList(

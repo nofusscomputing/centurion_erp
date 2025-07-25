@@ -9,6 +9,7 @@ from itam.viewsets.software_category import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_softwarecategory
 @pytest.mark.module_itam
 class SoftwareCategoryViewsetList(

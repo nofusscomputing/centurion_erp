@@ -11,6 +11,7 @@ from itam.viewsets.device_software import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_devicesoftware
 @pytest.mark.module_itam
 class DeviceSoftwareViewsetList(

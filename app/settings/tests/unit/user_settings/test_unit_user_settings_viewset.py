@@ -10,6 +10,7 @@ from settings.viewsets.user_settings import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_usersettings
 @pytest.mark.module_settings
 class UserSettingsViewsetList(

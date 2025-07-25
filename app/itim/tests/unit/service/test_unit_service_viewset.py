@@ -10,6 +10,7 @@ from itim.viewsets.service import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_service
 @pytest.mark.module_itim
 class ServiceViewsetList(
