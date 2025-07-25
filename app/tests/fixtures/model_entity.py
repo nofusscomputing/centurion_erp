@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from access.models.entity import Entity
+from access.serializers.entity import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -24,3 +29,13 @@ def kwargs_entity( kwargs_centurionmodel ):
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_entity():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

@@ -132,6 +132,7 @@ from .model_employee import (
 from .model_entity import (
     kwargs_entity,
     model_entity,
+    serializer_entity,
 )
 
 from .model_externallink import (
