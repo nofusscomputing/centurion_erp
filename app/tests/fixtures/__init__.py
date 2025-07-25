@@ -214,6 +214,7 @@ from .model_permission import (
 from .model_person import (
     kwargs_person,
     model_person,
+    serializer_person,
 )
 
 from .model_port import (
