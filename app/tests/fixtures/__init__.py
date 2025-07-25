@@ -71,6 +71,7 @@ from .model_clustertype import (
 from .model_company import (
     kwargs_company,
     model_company,
+    serializer_company,
 )
 
 from .model_configgroup import (
