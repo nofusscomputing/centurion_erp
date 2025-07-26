@@ -71,6 +71,7 @@ from .model_clustertype import (
 from .model_company import (
     kwargs_company,
     model_company,
+    serializer_company,
 )
 
 from .model_configgroup import (
@@ -91,6 +92,7 @@ from .model_configgroupsoftware import (
 from .model_contact import (
     kwargs_contact,
     model_contact,
+    serializer_contact,
 )
 
 from .model_contenttype import (
@@ -130,6 +132,7 @@ from .model_employee import (
 from .model_entity import (
     kwargs_entity,
     model_entity,
+    serializer_entity,
 )
 
 from .model_externallink import (
@@ -211,6 +214,7 @@ from .model_permission import (
 from .model_person import (
     kwargs_person,
     model_person,
+    serializer_person,
 )
 
 from .model_port import (
@@ -246,6 +250,7 @@ from .model_requestticket import (
 from .model_role import (
     kwargs_role,
     model_role,
+    serializer_role,
 )
 
 from .model_service import (

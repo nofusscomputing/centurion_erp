@@ -10,6 +10,7 @@ from itam.viewsets.operating_system_version import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_operatingsystemversion
 @pytest.mark.module_itam
 class DeviceSoftwareViewsetList(

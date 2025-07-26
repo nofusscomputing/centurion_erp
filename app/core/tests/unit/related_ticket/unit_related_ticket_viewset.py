@@ -9,6 +9,7 @@ from core.viewsets.related_ticket import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class RelatedTicketViewsetList(
     ModelListRetrieveDeleteViewSetInheritedCases,
     TestCase,

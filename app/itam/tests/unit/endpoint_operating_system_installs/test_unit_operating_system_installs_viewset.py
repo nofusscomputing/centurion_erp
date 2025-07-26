@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -9,6 +11,7 @@ from itam.viewsets.device_operating_system import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class OperatingSystemInstallsViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

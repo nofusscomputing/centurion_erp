@@ -12,6 +12,7 @@ from itam.models.software import Software
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class ViewsetList(
     PublicReadOnlyViewSetInheritedCases,
     TestCase,

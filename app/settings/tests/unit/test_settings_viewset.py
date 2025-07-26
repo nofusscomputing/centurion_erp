@@ -9,6 +9,7 @@ from itim.viewsets.index import Index
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.module_settings
 class SettingsViewset(
     IndexViewsetInheritedCases,

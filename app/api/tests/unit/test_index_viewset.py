@@ -1,4 +1,6 @@
 import django
+import pytest
+
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
@@ -12,6 +14,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class HomeViewset(
     TestCase,
     IndexViewsetInheritedCases

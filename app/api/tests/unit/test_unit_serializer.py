@@ -30,7 +30,7 @@ class SerializerTestCases:
             user.delete()
 
 
-    def test_serializer_create(self, kwargs_api_create, model, model_serializer, request_user):
+    def test_serializer_is_valid(self, kwargs_api_create, model, model_serializer, request_user):
         """ Serializer Check
 
         Confirm that using valid data the object validates without exceptions.

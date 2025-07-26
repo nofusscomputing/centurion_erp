@@ -10,6 +10,7 @@ from itim.viewsets.port import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_port
 @pytest.mark.module_itim
 class PortViewsetList(

@@ -3,6 +3,11 @@ import pytest
 import random
 
 from access.models.person import Person
+from access.serializers.entity_person import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -30,3 +35,13 @@ def kwargs_person( kwargs_entity ):
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_person():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

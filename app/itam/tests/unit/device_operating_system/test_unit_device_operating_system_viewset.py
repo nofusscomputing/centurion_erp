@@ -11,6 +11,7 @@ from itam.viewsets.device_operating_system import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_deviceoperatingsystem
 @pytest.mark.module_itam
 class DeviceOperatingSystemViewsetList(

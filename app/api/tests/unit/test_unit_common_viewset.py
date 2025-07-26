@@ -116,239 +116,235 @@ class MockRequest:
 
 class CreateCases:
 
-    viewset = Create
 
-
-    def test_class_inherits_viewsets_mixins_createmodel_mixin(self):
+    def test_class_inherits_viewsets_mixins_createmodel_mixin(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.mixins.CreateModelMixin`
         """
 
-        assert issubclass(self.viewset, viewsets.mixins.CreateModelMixin)
+        assert issubclass(viewset, viewsets.mixins.CreateModelMixin)
 
 
-    def test_view_attr_create_exists(self):
+    def test_view_attr_create_exists(self, viewset):
         """Attribute Test
 
         Function `create` must exist
         """
 
-        assert hasattr(self.viewset, 'create')
+        assert hasattr(viewset, 'create')
 
 
-    def test_view_attr_create_is_callable(self):
+    def test_view_attr_create_is_callable(self, viewset):
         """Attribute Test
 
         attribute `create` is callable / is a Function
         """
 
-        view_set = self.viewset()
-
-        assert callable(view_set.create)
+        assert callable(viewset().create)
 
 
 
-class CreateTest(
+@pytest.mark.api
+@pytest.mark.viewset
+class CreatePyTest(
     CreateCases,
-    TestCase,
 ):
 
-    pass
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return Create
+
 
 
 class DestroyCases:
 
-    viewset = Destroy
 
-
-    def test_class_inherits_viewsets_mixins_destroymodel_mixin(self):
+    def test_class_inherits_viewsets_mixins_destroymodel_mixin(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.mixins.DestroyModelMixin`
         """
 
-        assert issubclass(self.viewset, viewsets.mixins.DestroyModelMixin)
+        assert issubclass(viewset, viewsets.mixins.DestroyModelMixin)
 
 
-    def test_view_attr_destroy_exists(self):
+    def test_view_attr_destroy_exists(self, viewset):
         """Attribute Test
 
         Function `destroy` must exist
         """
 
-        assert hasattr(self.viewset, 'destroy')
+        assert hasattr(viewset, 'destroy')
 
 
-    def test_view_attr_destroy_is_callable(self):
+    def test_view_attr_destroy_is_callable(self, viewset):
         """Attribute Test
 
         attribute `destroy` is callable / is a Function
         """
 
-        view_set = self.viewset()
-
-        assert callable(view_set.destroy)
+        assert callable(viewset().destroy)
 
 
 
-class DestroyTest(
+@pytest.mark.api
+@pytest.mark.viewset
+class DestroyPyTest(
     DestroyCases,
-    TestCase,
 ):
 
-    pass
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return Destroy
+
 
 
 class ListCases:
 
-    viewset = List
 
-
-    def test_class_inherits_viewsets_mixins_listmodel_mixin(self):
+    def test_class_inherits_viewsets_mixins_listmodel_mixin(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.mixins.ListModelMixin`
         """
 
-        assert issubclass(self.viewset, viewsets.mixins.ListModelMixin)
+        assert issubclass(viewset, viewsets.mixins.ListModelMixin)
 
 
-    def test_view_attr_list_exists(self):
+    def test_view_attr_list_exists(self, viewset):
         """Attribute Test
 
         Function `list` must exist
         """
 
-        assert hasattr(self.viewset, 'list')
+        assert hasattr(viewset, 'list')
 
 
-    def test_view_attr_list_is_callable(self):
+    def test_view_attr_list_is_callable(self, viewset):
         """Attribute Test
 
         attribute `list` is callable / is a Function
         """
 
-        view_set = self.viewset()
-
-        assert callable(view_set.list)
+        assert callable(viewset().list)
 
 
 
-class ListTest(
+@pytest.mark.api
+@pytest.mark.viewset
+class ListPyTest(
     ListCases,
-    TestCase,
 ):
 
-    pass
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return List
 
 
 
 class RetrieveCases:
 
-    viewset = Retrieve
 
-
-    def test_class_inherits_viewsets_mixins_retrievemodel_mixin(self):
+    def test_class_inherits_viewsets_mixins_retrievemodel_mixin(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.mixins.RetrieveModelMixin`
         """
 
-        assert issubclass(self.viewset, viewsets.mixins.RetrieveModelMixin)
+        assert issubclass(viewset, viewsets.mixins.RetrieveModelMixin)
 
 
-    def test_view_attr_retrieve_exists(self):
+    def test_view_attr_retrieve_exists(self, viewset):
         """Attribute Test
 
         Function `retrieve` must exist
         """
 
-        assert hasattr(self.viewset, 'retrieve')
+        assert hasattr(viewset, 'retrieve')
 
 
-    def test_view_attr_retrieve_is_callable(self):
+    def test_view_attr_retrieve_is_callable(self, viewset):
         """Attribute Test
 
         attribute `retrieve` is callable / is a Function
         """
 
-        view_set = self.viewset()
-
-        assert callable(view_set.retrieve)
+        assert callable(viewset().retrieve)
 
 
 
-class RetrieveTest(
+@pytest.mark.api
+@pytest.mark.viewset
+class RetrievePyTest(
     RetrieveCases,
-    TestCase,
 ):
 
-    pass
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return Retrieve
 
 
 
 class UpdateCases:
 
-    viewset = Update
 
-
-    def test_class_inherits_viewsets_mixins_updatemodel_mixin(self):
+    def test_class_inherits_viewsets_mixins_updatemodel_mixin(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.mixins.UpdateModelMixin`
         """
 
-        assert issubclass(self.viewset, viewsets.mixins.UpdateModelMixin)
+        assert issubclass(viewset, viewsets.mixins.UpdateModelMixin)
 
 
-    def test_view_attr_partial_update_exists(self):
+    def test_view_attr_partial_update_exists(self, viewset):
         """Attribute Test
 
         Function `partial_update` must exist
         """
 
-        assert hasattr(self.viewset, 'partial_update')
+        assert hasattr(viewset, 'partial_update')
 
 
-    def test_view_attr_partial_update_is_callable(self):
+    def test_view_attr_partial_update_is_callable(self, viewset):
         """Attribute Test
 
         attribute `partial_update` is callable / is a Function
         """
 
-        view_set = self.viewset()
-
-        assert callable(view_set.partial_update)
+        assert callable(viewset().partial_update)
 
 
-    def test_view_attr_update_exists(self):
+    def test_view_attr_update_exists(self, viewset):
         """Attribute Test
 
         Function `update` must exist
         """
 
-        assert hasattr(self.viewset, 'update')
+        assert hasattr(viewset, 'update')
 
 
-    def test_view_attr_update_is_callable(self):
+    def test_view_attr_update_is_callable(self, viewset):
         """Attribute Test
 
         attribute `update` is callable / is a Function
         """
 
-        view_set = self.viewset()
-
-        assert callable(view_set.update)
+        assert callable(viewset().update)
 
 
 
-class UpdateTest(
+@pytest.mark.api
+@pytest.mark.viewset
+class UpdatePyTest(
     UpdateCases,
-    TestCase,
 ):
 
-    pass
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return Update
+
 
 
 
@@ -357,75 +353,81 @@ class CommonViewSetCases(
 ):
     """Test Suite for class CommonViewSet"""
 
+    @pytest.fixture( scope = 'function' )
+    def viewset_mock_request(self, viewset):
 
-    viewset = CommonViewSet
+        request = MockRequest(
+            user = self.view_user,
+            model = getattr(self, 'model',None),
+            viewset = self.viewset,
+            organization = self.organization
+        )
+
+        view_set = viewset()
+        view_set.request = request
+
+        yield view_set
+
+        del view_set.request
 
 
-    @classmethod
-    def setUpTestData(self):
+    # @classmethod
+    # def setUpTestData(self):
 
-        self.kwargs: dict = {}
+    #     self.kwargs: dict = {}
 
-        if self.viewset is CommonViewSet:
+    #     if self.viewset is CommonViewSet:
 
-            self.viewset.model = Organization
+    #         self.viewset.model = Organization
 
 
-    def test_class_inherits_organizationmixin(self):
+    def test_class_inherits_organizationmixin(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `OrganizationMixin`
         """
 
-        assert issubclass(self.viewset, OrganizationMixin)
+        assert issubclass(viewset, OrganizationMixin)
 
 
-    def test_class_inherits_viewsets_viewset(self):
+    def test_class_inherits_viewsets_viewset(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.ViewSet`
         """
 
-        assert issubclass(self.viewset, viewsets.ViewSet)
+        assert issubclass(viewset, viewsets.ViewSet)
 
 
 
-    def test_view_attr_allowed_methods_exists(self):
+    def test_view_attr_allowed_methods_exists(self, viewset):
         """Attribute Test
 
         Attribute `allowed_methods` must exist
         """
 
-        assert hasattr(self.viewset, 'allowed_methods')
+        assert hasattr(viewset, 'allowed_methods')
 
 
-    def test_view_attr_allowed_methods_not_empty(self):
+    def test_view_attr_allowed_methods_not_empty(self, viewset):
         """Attribute Test
 
         Attribute `allowed_methods` must return a value
         """
 
-        view_set = self.viewset()
-
-        view_set.kwargs = self.kwargs
-
-        assert view_set.allowed_methods is not None
+        assert viewset.allowed_methods is not None
 
 
-    def test_view_attr_allowed_methods_type(self):
+    def test_view_attr_allowed_methods_type(self, viewset):
         """Attribute Test
 
         Attribute `allowed_methods` must be of type list
         """
 
-        view_set = self.viewset()
-
-        view_set.kwargs = self.kwargs
-
-        assert type(view_set.allowed_methods) is list
+        assert type(viewset().allowed_methods) is list
 
 
-    def test_view_attr_allowed_methods_values(self):
+    def test_view_attr_allowed_methods_values(self, viewset):
         """Attribute Test
 
         Attribute `allowed_methods` only contains valid values
@@ -440,9 +442,7 @@ class CommonViewSetCases(
 
         all_valid: bool = True
 
-        view_set = self.viewset()
-
-        for method in list(view_set.allowed_methods):
+        for method in list(viewset().allowed_methods):
 
             if method not in valid_values:
 
@@ -454,16 +454,16 @@ class CommonViewSetCases(
     # ToDo: back_url
 
 
-    def test_view_attr_documentation_exists(self):
+    def test_view_attr_documentation_exists(self, viewset):
         """Attribute Test
 
         Attribute `documentation` must exist
         """
 
-        assert hasattr(self.viewset, 'documentation')
+        assert hasattr(viewset, 'documentation')
 
 
-    def test_view_attr_documentation_type(self):
+    def test_view_attr_documentation_type(self, viewset):
         """Attribute Test
 
         Attribute `documentation` must be of type str or None.
@@ -471,43 +471,37 @@ class CommonViewSetCases(
         this attribute is optional.
         """
 
-        view_set = self.viewset()
-
         assert (
-            type(view_set.documentation) is str
-            or view_set.documentation is None
+            type(viewset.documentation) is str
+            or viewset.documentation is None
         )
 
 
-    def test_view_attr_metadata_class_exists(self):
+    def test_view_attr_metadata_class_exists(self, viewset):
         """Attribute Test
 
         Attribute `metadata_class` must exist
         """
 
-        assert hasattr(self.viewset, 'metadata_class')
+        assert hasattr(viewset, 'metadata_class')
 
 
-    def test_view_attr_metadata_class_not_empty(self):
+    def test_view_attr_metadata_class_not_empty(self, viewset):
         """Attribute Test
 
         Attribute `metadata_class` must return a value
         """
 
-        view_set = self.viewset()
-
-        assert view_set.metadata_class is not None
+        assert viewset.metadata_class is not None
 
 
-    def test_view_attr_metadata_class_type(self):
+    def test_view_attr_metadata_class_type(self, viewset):
         """Attribute Test
 
         Attribute `metadata_class` must be metadata class `ReactUIMetadata`
         """
 
-        view_set = self.viewset()
-
-        assert view_set.metadata_class is ReactUIMetadata
+        assert viewset.metadata_class is ReactUIMetadata
 
 
     # ToDo: metadata_markdown
@@ -518,94 +512,86 @@ class CommonViewSetCases(
 
     # ToDo: page_layout
 
-    def test_view_attr_permission_classes_exists(self):
+    def test_view_attr_permission_classes_exists(self, viewset):
         """Attribute Test
 
         Attribute `permission_classes` must exist
         """
 
-        assert hasattr(self.viewset, 'permission_classes')
+        assert hasattr(viewset, 'permission_classes')
 
 
-    def test_view_attr_permission_classes_not_empty(self):
+    def test_view_attr_permission_classes_not_empty(self, viewset):
         """Attribute Test
 
         Attribute `permission_classes` must return a value
         """
 
-        view_set = self.viewset()
-
-        assert view_set.permission_classes is not None
+        assert viewset.permission_classes is not None
 
 
-    def test_view_attr_permission_classes_type(self):
+    def test_view_attr_permission_classes_type(self, viewset):
         """Attribute Test
 
         Attribute `permission_classes` must be list
         """
 
-        view_set = self.viewset()
-
-        assert type(view_set.permission_classes) is list
+        assert type(viewset.permission_classes) is list
 
 
-    def test_view_attr_permission_classes_value(self):
+    def test_view_attr_permission_classes_value(self, viewset):
         """Attribute Test
 
         Attribute `permission_classes` must be metadata class `ReactUIMetadata`
         """
 
-        view_set = self.viewset()
+        assert viewset.permission_classes[0] is OrganizationPermissionMixin
 
-        assert view_set.permission_classes[0] is OrganizationPermissionMixin
-
-        assert len(view_set.permission_classes) == 1
+        assert len(viewset.permission_classes) == 1
 
 
     # ToDo: table_fields
 
 
-    def test_view_attr_view_description_exists(self):
+    def test_view_attr_view_description_exists(self, viewset):
         """Attribute Test
 
         Attribute `view_description` must exist
         """
 
-        assert hasattr(self.viewset, 'view_description')
+        assert hasattr(viewset, 'view_description')
 
 
-    def test_view_attr_view_description_type(self):
+    def test_view_attr_view_description_type(self, viewset):
         """Attribute Test
 
         Attribute `view_description` must be of type str if defined or None otherwise
         """
 
         assert(
-            type(self.viewset.view_description) is str
-            or type(self.viewset.view_description) is type(None)
+            type(viewset.view_description) is str
+            or type(viewset.view_description) is type(None)
         )
 
 
-    def test_view_attr_view_name_exists(self):
+    def test_view_attr_view_name_exists(self, viewset):
         """Attribute Test
 
         Attribute `view_name` must exist
         """
 
-        assert hasattr(self.viewset, 'view_name')
+        assert hasattr(viewset, 'view_name')
 
 
-    def test_view_attr_view_name_type(self):
+    def test_view_attr_view_name_type(self, viewset):
         """Attribute Test
 
         Attribute `view_name` must be of type str if defined or None otherwise
         """
 
-        view_set = self.viewset()
-
         assert(
-            type(view_set.view_name) is str
-            or type(view_set.view_name) is type(None)
+            type(viewset.view_name) is str
+            or type(viewset.view_name) is type(None)
         )
 
 
@@ -625,12 +611,18 @@ class CommonViewSetCases(
 
 
 
-class CommonViewSetTest(
+@pytest.mark.api
+@pytest.mark.viewset
+class CommonViewSetPyTest(
     CommonViewSetCases,
-    TestCase,
 ):
 
-    def test_view_attr_view_description_not_empty(self):
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return CommonViewSet
+
+
+    def test_view_attr_view_description_not_empty(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this value should be `None`
@@ -638,10 +630,10 @@ class CommonViewSetTest(
         Attribute `view_description` must return a value that is not None
         """
 
-        assert self.viewset.view_description is None
+        assert viewset.view_description is None
 
 
-    def test_view_attr_view_description_type(self):
+    def test_view_attr_view_description_type(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this values type should be `None`
@@ -649,10 +641,10 @@ class CommonViewSetTest(
         Attribute `view_description` must be of type str
         """
 
-        assert type(self.viewset.view_description) is type(None)
+        assert type(viewset.view_description) is type(None)
 
 
-    def test_view_attr_view_name_not_empty(self):
+    def test_view_attr_view_name_not_empty(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this value should be `None`
@@ -660,10 +652,10 @@ class CommonViewSetTest(
         Attribute `view_name` must return a value that is not None
         """
 
-        assert self.viewset.view_name is None
+        assert viewset.view_name is None
 
 
-    def test_view_attr_view_name_type(self):
+    def test_view_attr_view_name_type(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this value should be `None`
@@ -671,13 +663,11 @@ class CommonViewSetTest(
         Attribute `view_name` must be of type str
         """
 
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
+        assert type(viewset.view_name) is type(None)
 
 
 
-class CommonViewSetAPIRenderOptionsCases:
+class CommonViewSetAPIRenderOptionsCases:    # ToDo
     """Test Cases for ViewSets that inherit from CommonViewSet
     
     Dont Include this test suite directy, use the test cases below `*InheritedTest`
@@ -800,178 +790,168 @@ class ModelViewSetBaseCases(
 ):
     """Test Suite for class ModelViewSetBase"""
 
-    kwargs: dict = {}
+    # kwargs: dict = {}
 
-    organization: Organization
+    # organization: Organization
 
-    view_user: User
+    # view_user: User
 
-    viewset = ModelViewSetBase
+    # @classmethod
+    # def setUpTestData(self):
 
-    @classmethod
-    def setUpTestData(self):
+    #     super().setUpTestData()    # Sets attribute self.view_set.model
 
-        super().setUpTestData()    # Sets attribute self.view_set.model
+    #     self.organization = Organization.objects.create(name='test_org')
 
-        self.organization = Organization.objects.create(name='test_org')
-
-        self.view_user = User.objects.create_user(username="test_view_user1278", password="password", is_superuser=True)
+    #     self.view_user = User.objects.create_user(username="test_view_user1278", password="password", is_superuser=True)
 
 
-        @classmethod
-        def tearDownClass(cls):
+    #     @classmethod
+    #     def tearDownClass(cls):
 
-            cls.model = None
+    #         cls.model = None
 
-            cls.organization.delete()
+    #         cls.organization.delete()
 
-            cls.view_user.delete()
+    #         cls.view_user.delete()
 
-            super().tearDownClass()
+    #         super().tearDownClass()
 
 
-    def test_class_inherits_modelviewsetbase(self):
+    def test_class_inherits_modelviewsetbase(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `ModelViewSetBase`
         """
 
-        assert issubclass(self.viewset, CommonViewSet)
+        assert issubclass(viewset, CommonViewSet)
 
 
-    def test_view_attr_filterset_fields_exists(self):
+    def test_view_attr_filterset_fields_exists(self, viewset):
         """Attribute Test
 
         Attribute `filterset_fields` must exist
         """
 
-        assert hasattr(self.viewset, 'filterset_fields')
+        assert hasattr(viewset, 'filterset_fields')
 
 
-    def test_view_attr_filterset_fields_not_empty(self):
+    def test_view_attr_filterset_fields_not_empty(self, viewset):
         """Attribute Test
 
         Attribute `filterset_fields` must return a value
         """
 
-        assert self.viewset.filterset_fields is not None
+        assert viewset.filterset_fields is not None
 
 
-    def test_view_attr_filterset_fields_type(self):
+    def test_view_attr_filterset_fields_type(self, viewset):
         """Attribute Test
 
         Attribute `filterset_fields` must be of type list
         """
 
-        view_set = self.viewset()
-
         assert (
-            type(view_set.filterset_fields) is list
+            type(viewset().filterset_fields) is list
         )
 
 
 
-    def test_view_attr_lookup_value_regex_exists(self):
+    def test_view_attr_lookup_value_regex_exists(self, viewset):
         """Attribute Test
 
         Attribute `lookup_value_regex` must exist
         """
 
-        assert hasattr(self.viewset, 'lookup_value_regex')
+        assert hasattr(viewset, 'lookup_value_regex')
 
 
-    def test_view_attr_lookup_value_regex_not_empty(self):
+    def test_view_attr_lookup_value_regex_not_empty(self, viewset):
         """Attribute Test
 
         Attribute `lookup_value_regex` must return a value
         """
 
-        assert self.viewset.lookup_value_regex is not None
+        assert viewset.lookup_value_regex is not None
 
 
-    def test_view_attr_lookup_value_regex_type(self):
+    def test_view_attr_lookup_value_regex_type(self, viewset):
         """Attribute Test
 
         Attribute `lookup_value_regex` must be of type list
         """
 
-        view_set = self.viewset()
-
         assert (
-            type(view_set.lookup_value_regex) is str
+            type(viewset().lookup_value_regex) is str
         )
 
 
-    def test_view_attr_lookup_value_regex_value(self):
+    def test_view_attr_lookup_value_regex_value(self, viewset):
         """Attribute Test
 
         Attribute `lookup_value_regex` must have a value of `[0-9]+` as this
         is used for the PK lookup which is always a number.
         """
 
-        view_set = self.viewset()
-
-        assert view_set.lookup_value_regex == '[0-9]+'
+        assert viewset().lookup_value_regex == '[0-9]+'
 
 
 
-    def test_view_attr_model_exists(self):
+    def test_view_attr_model_exists(self, viewset):
         """Attribute Test
 
         Attribute `model` must exist
         """
 
-        assert hasattr(self.viewset, 'model')
+        assert hasattr(viewset, 'model')
 
 
-    def test_view_attr_model_not_empty(self):
+    def test_view_attr_model_not_empty(self, viewset_mock_request):
         """Attribute Test
 
         Attribute `model` must return a value that is not None
         """
 
-        view_set = self.viewset()
-        view_set.request = MockRequest(
-            user = self.view_user,
-            model = getattr(self, 'model',None),
-            viewset = self.viewset,
-            organization = self.organization
-        )
+        # view_set = self.viewset()
+        # view_set.request = MockRequest(
+        #     user = self.view_user,
+        #     model = getattr(self, 'model',None),
+        #     viewset = self.viewset,
+        #     organization = self.organization
+        # )
 
-        assert view_set.model is not None
+        assert viewset_mock_request.model is not None
 
 
     # ToDo: queryset
 
 
-    def test_view_attr_search_fields_exists(self):
+    def test_view_attr_search_fields_exists(self, viewset):
         """Attribute Test
 
         Attribute `search_fields` must exist
         """
 
-        assert hasattr(self.viewset, 'search_fields')
+        assert hasattr(viewset, 'search_fields')
 
 
-    def test_view_attr_search_fields_not_empty(self):
+    def test_view_attr_search_fields_not_empty(self, viewset):
         """Attribute Test
 
         Attribute `search_fields` must return a value
         """
 
-        assert self.viewset.search_fields is not None
+        assert viewset.search_fields is not None
 
 
-    def test_view_attr_search_fields_type(self):
+    def test_view_attr_search_fields_type(self, viewset):
         """Attribute Test
 
         Attribute `search_fields` must be of type list
         """
 
-        view_set = self.viewset()
-
         assert (
-            type(view_set.search_fields) is list
+            type(viewset().search_fields) is list
         )
 
 
@@ -981,29 +961,29 @@ class ModelViewSetBaseCases(
     # ToDo: view_serializer_name
 
 
-    def test_view_func_get_queryset_cache_result(self):
+    def test_view_func_get_queryset_cache_result(self, viewset_mock_request):
         """Viewset Test
 
         Ensure that the `get_queryset` function caches the result under
         attribute `<viewset>.queryset`
         """
 
-        view_set = self.viewset()
+        view_set = viewset_mock_request
 
-        view_set.request = MockRequest(
-            user = self.view_user,
-            model = getattr(self, 'model',None),
-            organization = self.organization,
-            viewset = self.viewset,
-        )
+        # view_set.request = MockRequest(
+        #     user = self.view_user,
+        #     model = getattr(self, 'model',None),
+        #     organization = self.organization,
+        #     viewset = self.viewset,
+        # )
 
-        view_set.request.headers = {}
+        # view_set.request.headers = {}
 
-        view_set.kwargs = self.kwargs
+        # view_set.kwargs = self.kwargs
 
-        view_set.action = 'list'
+        # view_set.action = 'list'
 
-        view_set.detail = False
+        # view_set.detail = False
 
         assert view_set.queryset is None    # Must be empty before init
 
@@ -1014,28 +994,28 @@ class ModelViewSetBaseCases(
         assert q == view_set.queryset
 
 
-    def test_view_func_get_queryset_cache_result_used(self):
+    def test_view_func_get_queryset_cache_result_used(self, viewset_mock_request):
         """Viewset Test
 
         Ensure that the `get_queryset` function caches the result under
         attribute `<viewset>.queryset`
         """
 
-        view_set = self.viewset()
+        view_set = viewset_mock_request
 
-        view_set.request = MockRequest(
-            user = self.view_user,
-            model = getattr(self, 'model',None),
-            organization = self.organization,
-            viewset = self.viewset,
-        )
+        # view_set.request = MockRequest(
+        #     user = self.view_user,
+        #     model = getattr(self, 'model',None),
+        #     organization = self.organization,
+        #     viewset = self.viewset,
+        # )
 
-        view_set.request.headers = {}
-        view_set.kwargs = self.kwargs
-        view_set.action = 'list'
-        view_set.detail = False
+        # view_set.request.headers = {}
+        # view_set.kwargs = self.kwargs
+        # view_set.action = 'list'
+        # view_set.detail = False
 
-        mock_return = view_set.get_queryset()    # Real item to be used as mock return Some 
+        mock_return = view_set.get_queryset()    # Real item to be used as mock return Some
                                                  # functions use `Queryset` for additional filtering
 
         setter_not_called = True
@@ -1068,12 +1048,19 @@ class ModelViewSetBaseCases(
 
 
 
-class ModelViewSetBaseTest(
+@pytest.mark.api
+@pytest.mark.viewset
+class ModelViewSetBasePyTest(
     ModelViewSetBaseCases,
-    TestCase
 ):
 
-    def test_view_attr_model_not_empty(self):
+
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ModelViewSetBase
+
+
+    def test_view_attr_model_not_empty(self, viewset):
         """Attribute Test
 
         This test case overrides a test case of the same name. As this test is
@@ -1083,11 +1070,9 @@ class ModelViewSetBaseTest(
         Attribute `model` must return a value that is not None
         """
 
-        view_set = self.viewset()
+        assert viewset().model is None
 
-        assert view_set.model is None
-
-    def test_view_func_get_queryset_cache_result(self):
+    def test_view_func_get_queryset_cache_result(self, viewset):
         """Viewset Test
 
         This test case overrides a test case of the same name. This test case
@@ -1100,7 +1085,7 @@ class ModelViewSetBaseTest(
         assert True
 
 
-    def test_view_func_get_queryset_cache_result_used(self):
+    def test_view_func_get_queryset_cache_result_used(self, viewset):
         """Viewset Test
 
         This test case overrides a test case of the same name. This test case
@@ -1113,7 +1098,7 @@ class ModelViewSetBaseTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self):
+    def test_view_attr_view_description_not_empty(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this value should be `None`
@@ -1121,10 +1106,10 @@ class ModelViewSetBaseTest(
         Attribute `view_description` must return a value that is not None
         """
 
-        assert self.viewset.view_description is None
+        assert viewset.view_description is None
 
 
-    def test_view_attr_view_description_type(self):
+    def test_view_attr_view_description_type(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this values type should be `None`
@@ -1132,10 +1117,10 @@ class ModelViewSetBaseTest(
         Attribute `view_description` must be of type str
         """
 
-        assert type(self.viewset.view_description) is type(None)
+        assert type(viewset.view_description) is type(None)
 
 
-    def test_view_attr_view_name_not_empty(self):
+    def test_view_attr_view_name_not_empty(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this value should be `None`
@@ -1143,10 +1128,10 @@ class ModelViewSetBaseTest(
         Attribute `view_name` must return a value that is not None
         """
 
-        assert self.viewset.view_name is None
+        assert viewset.view_name is None
 
 
-    def test_view_attr_view_name_type(self):
+    def test_view_attr_view_name_type(self, viewset):
         """Attribute Test
 
         As this Test Case is for the Base class this value should be `None`
@@ -1154,9 +1139,7 @@ class ModelViewSetBaseTest(
         Attribute `view_name` must be of type str
         """
 
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
+        assert type(viewset().view_name) is type(None)
 
 
 
@@ -1274,6 +1257,8 @@ class ModelViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ModelViewSetTest(
     ModelViewSetCases,
     TestCase,
@@ -1478,6 +1463,8 @@ class SubModelViewSetTestCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class SubModelViewSetTest(
     SubModelViewSetTestCases,
     TestCase,
@@ -1590,6 +1577,8 @@ class ModelCreateViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ModelCreateViewSetTest(
     ModelCreateViewSetCases,
     TestCase,
@@ -1703,6 +1692,8 @@ class ModelListRetrieveDeleteViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ModelListRetrieveDeleteViewSetTest(
     ModelListRetrieveDeleteViewSetCases,
     TestCase,
@@ -1815,6 +1806,8 @@ class ModelRetrieveUpdateViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ModelRetrieveUpdateViewSetTest(
     ModelRetrieveUpdateViewSetCases,
     TestCase,
@@ -1928,6 +1921,8 @@ class ReadOnlyModelViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ReadOnlyModelViewSetTest(
     ReadOnlyModelViewSetCases,
     TestCase,
@@ -2039,6 +2034,8 @@ class ReadOnlyListModelViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ReadOnlyListModelViewSetTest(
     ReadOnlyListModelViewSetCases,
     TestCase,
@@ -2153,6 +2150,8 @@ class AuthUserReadOnlyModelViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class AuthUserReadOnlyModelViewSetTest(
     AuthUserReadOnlyModelViewSetCases,
     TestCase,
@@ -2267,6 +2266,8 @@ class IndexViewsetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class IndexViewsetTest(
     IndexViewsetCases,
     TestCase,
@@ -2424,6 +2425,8 @@ class PublicReadOnlyViewSetCases(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class PublicReadOnlyViewSetTest(
     PublicReadOnlyViewSetCases,
     TestCase,

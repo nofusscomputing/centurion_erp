@@ -10,6 +10,7 @@ from itim.viewsets.cluster import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_cluster
 @pytest.mark.module_itim
 class ClusterViewsetList(

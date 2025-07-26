@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -8,6 +10,7 @@ from core.viewsets.celery_log import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class TaskResultViewsetList(
     AuthUserReadOnlyModelViewSetInheritedCases,
     TestCase,

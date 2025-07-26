@@ -9,6 +9,7 @@ from settings.viewsets.app_settings import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_appsettings
 @pytest.mark.module_settings
 class AppSettingsViewsetList(

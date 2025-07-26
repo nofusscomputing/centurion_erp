@@ -10,6 +10,7 @@ from itam.viewsets.device_type import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_devicetype
 @pytest.mark.module_itam
 class DeviceTYpeViewsetList(

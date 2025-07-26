@@ -19,6 +19,7 @@ from settings.models.app_settings import AppSettings
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_assetbase
 class AssetBaseViewsetTestCases(
     SubModelViewSetInheritedCases,

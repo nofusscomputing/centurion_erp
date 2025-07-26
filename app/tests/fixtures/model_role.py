@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from access.models.role import Role
+from access.serializers.role import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -27,3 +32,13 @@ def kwargs_role(
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_role():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

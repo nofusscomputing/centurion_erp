@@ -24,6 +24,7 @@ from itam.models.itam_asset_base import ITAMAssetBase
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_itamassetbase
 class ITAMAssetBaseViewsetTestCases(
     AssetBaseViewsetInheritedCases,

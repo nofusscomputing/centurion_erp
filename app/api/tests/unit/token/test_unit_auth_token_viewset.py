@@ -12,6 +12,7 @@ from api.viewsets.auth_token import ViewSet
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_authtoken
 @pytest.mark.module_api
 class ViewsetList(

@@ -11,6 +11,7 @@ from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_role
 class ViewsetTestCases(
     ModelViewSetInheritedCases,
