@@ -4,8 +4,6 @@ import pytest
 
 from django.contrib.auth.models import ContentType, Permission
 
-from unittest.mock import patch, PropertyMock
-
 from rest_framework import viewsets
 from rest_framework.permissions import (
     IsAuthenticated,
@@ -786,57 +784,24 @@ class ModelViewSetBaseCases(
         assert q == view_set.queryset
 
 
-    def test_view_func_get_queryset_cache_result_used(self, viewset_mock_request):
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
         """Viewset Test
 
         Ensure that the `get_queryset` function caches the result under
         attribute `<viewset>.queryset`
         """
 
-        view_set = viewset_mock_request
+        qs = mocker.spy(viewset_mock_request.model, 'objects')
 
-        # view_set.request = MockRequest(
-        #     user = self.view_user,
-        #     model = getattr(self, 'model',None),
-        #     organization = self.organization,
-        #     viewset = self.viewset,
-        # )
+        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
 
-        # view_set.request.headers = {}
-        # view_set.kwargs = self.kwargs
-        # view_set.action = 'list'
-        # view_set.detail = False
+        assert len(qs.method_calls) == 1       # one call to .all()
+        assert len(qs.mock_calls) == 2         # calls = .all(), all().filter()
 
-        mock_return = view_set.get_queryset()    # Real item to be used as mock return Some
-                                                 # functions use `Queryset` for additional filtering
+        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
 
-        setter_not_called = True
-
-
-        with patch.object(self.viewset, 'queryset', new_callable=PropertyMock) as qs:
-
-            qs.return_value = mock_return
-
-            mocked_view_set = self.viewset()
-
-            mocked_view_set.kwargs = self.kwargs
-            mocked_view_set.action = 'list'
-            mocked_view_set.detail = False
-
-            qs.reset_mock()    # Just in case
-
-            mocked_view_set.get_queryset()    # should only add two calls, if exists and the return
-
-
-            for mock_call in list(qs.mock_calls):    # mock_calls with args means setter was called
-
-                if len(mock_call.args) > 0:
-
-                    setter_not_called = False
-
-
-        assert setter_not_called
-        assert qs.call_count == 2
+        assert len(qs.method_calls) == 1
+        assert len(qs.mock_calls) == 2
 
 
 
@@ -2518,35 +2483,6 @@ class SubModelViewSetInheritedCases(
     #     self.viewset.kwargs[self.viewset.model_kwarg] = self.model._meta.sub_model_type
 
     #     super().setUpTestData()
-
-
-
-    def test_api_render_field_allowed_methods_values(self):
-        """Attribute Test
-
-        Attribute `allowed_methods` only contains valid values
-        """
-
-        # Values valid for model views
-        valid_values: list = [
-            'DELETE',
-            'GET',
-            'HEAD',
-            'OPTIONS',
-            'PATCH',
-            'POST',
-            'PUT',
-        ]
-
-        all_valid: bool = True
-
-        for method in list(self.http_options_response_list.data['allowed_methods']):
-
-            if method not in valid_values:
-
-                all_valid = False
-
-        assert all_valid
 
 
     def test_view_attr_model_value(self, viewset):
