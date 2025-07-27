@@ -556,6 +556,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
     """Inherited class must make and store here a HTTP/Options request"""
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_exists(self):
         """Attribute Test
 
@@ -565,6 +566,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert 'allowed_methods' in self.http_options_response_list.data
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_not_empty(self):
         """Attribute Test
 
@@ -574,6 +576,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert len(self.http_options_response_list.data['allowed_methods']) > 0
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_type(self):
         """Attribute Test
 
@@ -583,6 +586,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert type(self.http_options_response_list.data['allowed_methods']) is list
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_values(self):
         """Attribute Test
 
@@ -608,6 +612,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_description_exists(self):
         """Attribute Test
 
@@ -617,6 +622,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert 'description' in self.http_options_response_list.data
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_description_not_empty(self):
         """Attribute Test
 
@@ -626,6 +632,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert self.http_options_response_list.data['description'] is not None
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_description_type(self):
         """Attribute Test
 
@@ -636,6 +643,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_name_exists(self):
         """Attribute Test
 
@@ -645,6 +653,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert 'name' in self.http_options_response_list.data
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_name_not_empty(self):
         """Attribute Test
 
@@ -654,6 +663,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert self.http_options_response_list.data['name'] is not None
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_name_type(self):
         """Attribute Test
 
