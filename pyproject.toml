@@ -1175,6 +1175,7 @@ markers = [
     "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
     "unit: Selects all Unit Tests.",
+    "viewset: Selects all ViewSet Tests.",
 ]
 
 # testpaths = [
