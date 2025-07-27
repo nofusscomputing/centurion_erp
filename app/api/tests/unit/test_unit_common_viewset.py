@@ -1,15 +1,12 @@
 import django
+import logging
 import pytest
 
 from django.contrib.auth.models import ContentType, Permission
-from django.db import models
-from django.test import TestCase
-
-from unittest.mock import patch, PropertyMock
 
 from rest_framework import viewsets
 from rest_framework.permissions import (
-    IsAuthenticated, 
+    IsAuthenticated,
     IsAuthenticatedOrReadOnly,
 )
 from rest_framework_json_api.metadata import JSONAPIMetadata
@@ -17,7 +14,7 @@ from rest_framework_json_api.metadata import JSONAPIMetadata
 from access.middleware.request import Tenancy
 from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import OrganizationPermissionMixin
-from access.models.tenant import Tenant as Organization
+from access.models.tenant import Tenant as Organization, Tenant
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
@@ -45,6 +42,8 @@ from api.viewsets.common import (
     IndexViewset,
     PublicReadOnlyViewSet,
 )
+
+from centurion.tests.unit_class import ClassTestCases
 
 from settings.models.app_settings import AppSettings
 
@@ -348,28 +347,112 @@ class UpdatePyTest(
 
 
 
-class CommonViewSetCases(
+class CommonViewSetTestCases(
     # OrganizationMixinTest,    # ToDo: Add `OrganizationMixin` test suit
+    ClassTestCases,
 ):
     """Test Suite for class CommonViewSet"""
 
     @pytest.fixture( scope = 'function' )
-    def viewset_mock_request(self, viewset):
+    def viewset_mock_request(self, django_db_blocker, viewset,
+        model_user, kwargs_user, organization_one
+    ):
 
-        request = MockRequest(
-            user = self.view_user,
-            model = getattr(self, 'model',None),
-            viewset = self.viewset,
-            organization = self.organization
-        )
+        with django_db_blocker.unblock():
+
+            user = model_user.objects.create( **kwargs_user )
 
         view_set = viewset()
+        model = getattr(view_set, 'model', None)
+
+        if not model:
+            model = Tenant
+
+        request = MockRequest(
+            user = user,
+            model = model,
+            viewset = viewset,
+            organization = organization_one
+        )
+
         view_set.request = request
 
         yield view_set
 
         del view_set.request
 
+        with django_db_blocker.unblock():
+
+            user.delete()
+
+
+    @pytest.fixture( scope = 'function')
+    def test_class(cls, viewset_mock_request):
+
+        yield viewset_mock_request
+
+
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': logging.Logger,
+                'value': None
+            },
+            '_model_documentation': {
+                'type': str,
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': str,
+                'value': None
+            },
+            'documentation': {
+                'type': str,
+                'value': None
+            },
+            'metadata_class': {
+                'type': type,
+                'value': ReactUIMetadata
+            },
+            'metadata_markdown': {
+                'type': bool,
+                'value': False
+            },
+            'model_documentation': {
+                'type': str,
+                'value': None
+            },
+            'page_layout': {
+                'type': list,
+                'value': []
+            },
+            'permission_classes': {
+                'type': list,
+                'value': [
+                    OrganizationPermissionMixin,
+                ]
+            },
+            'table_fields': {
+                'type': list,
+                'value': []
+            },
+            'view_description': {
+                'type': str,
+                'value': None
+            },
+            'view_name': {
+                'type': str,
+                'value': None
+            }
+        }
 
     # @classmethod
     # def setUpTestData(self):
@@ -399,202 +482,6 @@ class CommonViewSetCases(
         assert issubclass(viewset, viewsets.ViewSet)
 
 
-
-    def test_view_attr_allowed_methods_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `allowed_methods` must exist
-        """
-
-        assert hasattr(viewset, 'allowed_methods')
-
-
-    def test_view_attr_allowed_methods_not_empty(self, viewset):
-        """Attribute Test
-
-        Attribute `allowed_methods` must return a value
-        """
-
-        assert viewset.allowed_methods is not None
-
-
-    def test_view_attr_allowed_methods_type(self, viewset):
-        """Attribute Test
-
-        Attribute `allowed_methods` must be of type list
-        """
-
-        assert type(viewset().allowed_methods) is list
-
-
-    def test_view_attr_allowed_methods_values(self, viewset):
-        """Attribute Test
-
-        Attribute `allowed_methods` only contains valid values
-        """
-
-        # Values valid for index views
-        valid_values: list = [
-            'GET',
-            'HEAD',
-            'OPTIONS',
-        ]
-
-        all_valid: bool = True
-
-        for method in list(viewset().allowed_methods):
-
-            if method not in valid_values:
-
-                all_valid = False
-
-        assert all_valid
-
-
-    # ToDo: back_url
-
-
-    def test_view_attr_documentation_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `documentation` must exist
-        """
-
-        assert hasattr(viewset, 'documentation')
-
-
-    def test_view_attr_documentation_type(self, viewset):
-        """Attribute Test
-
-        Attribute `documentation` must be of type str or None.
-
-        this attribute is optional.
-        """
-
-        assert (
-            type(viewset.documentation) is str
-            or viewset.documentation is None
-        )
-
-
-    def test_view_attr_metadata_class_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `metadata_class` must exist
-        """
-
-        assert hasattr(viewset, 'metadata_class')
-
-
-    def test_view_attr_metadata_class_not_empty(self, viewset):
-        """Attribute Test
-
-        Attribute `metadata_class` must return a value
-        """
-
-        assert viewset.metadata_class is not None
-
-
-    def test_view_attr_metadata_class_type(self, viewset):
-        """Attribute Test
-
-        Attribute `metadata_class` must be metadata class `ReactUIMetadata`
-        """
-
-        assert viewset.metadata_class is ReactUIMetadata
-
-
-    # ToDo: metadata_markdown
-
-    # ToDo: _model_documentation
-
-    # ToDo: model_documentation
-
-    # ToDo: page_layout
-
-    def test_view_attr_permission_classes_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `permission_classes` must exist
-        """
-
-        assert hasattr(viewset, 'permission_classes')
-
-
-    def test_view_attr_permission_classes_not_empty(self, viewset):
-        """Attribute Test
-
-        Attribute `permission_classes` must return a value
-        """
-
-        assert viewset.permission_classes is not None
-
-
-    def test_view_attr_permission_classes_type(self, viewset):
-        """Attribute Test
-
-        Attribute `permission_classes` must be list
-        """
-
-        assert type(viewset.permission_classes) is list
-
-
-    def test_view_attr_permission_classes_value(self, viewset):
-        """Attribute Test
-
-        Attribute `permission_classes` must be metadata class `ReactUIMetadata`
-        """
-
-        assert viewset.permission_classes[0] is OrganizationPermissionMixin
-
-        assert len(viewset.permission_classes) == 1
-
-
-    # ToDo: table_fields
-
-
-    def test_view_attr_view_description_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `view_description` must exist
-        """
-
-        assert hasattr(viewset, 'view_description')
-
-
-    def test_view_attr_view_description_type(self, viewset):
-        """Attribute Test
-
-        Attribute `view_description` must be of type str if defined or None otherwise
-        """
-
-        assert(
-            type(viewset.view_description) is str
-            or type(viewset.view_description) is type(None)
-        )
-
-
-    def test_view_attr_view_name_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `view_name` must exist
-        """
-
-        assert hasattr(viewset, 'view_name')
-
-
-    def test_view_attr_view_name_type(self, viewset):
-        """Attribute Test
-
-        Attribute `view_name` must be of type str if defined or None otherwise
-        """
-
-        assert(
-            type(viewset.view_name) is str
-            or type(viewset.view_name) is type(None)
-        )
-
-
     # ToDo: get_back_url
 
     # ToDo: get_model_documentation
@@ -614,7 +501,7 @@ class CommonViewSetCases(
 @pytest.mark.api
 @pytest.mark.viewset
 class CommonViewSetPyTest(
-    CommonViewSetCases,
+    CommonViewSetTestCases,
 ):
 
     @pytest.fixture( scope = 'function' )
@@ -622,48 +509,38 @@ class CommonViewSetPyTest(
         return CommonViewSet
 
 
-    def test_view_attr_view_description_not_empty(self, viewset):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self, viewset):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self, viewset):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self, viewset):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        assert type(viewset.view_name) is type(None)
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
 
 
@@ -677,6 +554,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
     """Inherited class must make and store here a HTTP/Options request"""
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_exists(self):
         """Attribute Test
 
@@ -686,6 +564,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert 'allowed_methods' in self.http_options_response_list.data
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_not_empty(self):
         """Attribute Test
 
@@ -695,6 +574,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert len(self.http_options_response_list.data['allowed_methods']) > 0
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_type(self):
         """Attribute Test
 
@@ -704,6 +584,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert type(self.http_options_response_list.data['allowed_methods']) is list
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_allowed_methods_values(self):
         """Attribute Test
 
@@ -729,6 +610,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_description_exists(self):
         """Attribute Test
 
@@ -738,6 +620,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert 'description' in self.http_options_response_list.data
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_description_not_empty(self):
         """Attribute Test
 
@@ -747,6 +630,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert self.http_options_response_list.data['description'] is not None
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_description_type(self):
         """Attribute Test
 
@@ -757,6 +641,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_name_exists(self):
         """Attribute Test
 
@@ -766,6 +651,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert 'name' in self.http_options_response_list.data
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_name_not_empty(self):
         """Attribute Test
 
@@ -775,6 +661,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
         assert self.http_options_response_list.data['name'] is not None
 
 
+    @pytest.mark.skip(reason = 'see #895, tests being refactored')
     def test_api_render_field_view_name_type(self):
         """Attribute Test
 
@@ -786,9 +673,43 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 class ModelViewSetBaseCases(
-    CommonViewSetCases,
+    CommonViewSetTestCases,
 ):
     """Test Suite for class ModelViewSetBase"""
+
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'filterset_fields': {
+                'type': list,
+                'value': []
+            },
+            'lookup_value_regex': {
+                'type': str,
+                'value': '[0-9]+'
+            },
+            'model': {
+                'type': django.db.models.base.ModelBase,
+                'value': None
+            },
+            'queryset': {
+                'type': object,
+                'value': None
+            },
+            'search_fields': {
+                'type': list,
+                'value': []
+            },
+            'serializer_class': {
+                'type': str,
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': str,
+                'value': None
+            },
+        }
 
     # kwargs: dict = {}
 
@@ -803,7 +724,8 @@ class ModelViewSetBaseCases(
 
     #     self.organization = Organization.objects.create(name='test_org')
 
-    #     self.view_user = User.objects.create_user(username="test_view_user1278", password="password", is_superuser=True)
+    #     self.view_user = User.objects.create_user(
+    #         username="test_view_user1278", password="password", is_superuser=True)
 
 
     #     @classmethod
@@ -827,138 +749,6 @@ class ModelViewSetBaseCases(
         assert issubclass(viewset, CommonViewSet)
 
 
-    def test_view_attr_filterset_fields_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `filterset_fields` must exist
-        """
-
-        assert hasattr(viewset, 'filterset_fields')
-
-
-    def test_view_attr_filterset_fields_not_empty(self, viewset):
-        """Attribute Test
-
-        Attribute `filterset_fields` must return a value
-        """
-
-        assert viewset.filterset_fields is not None
-
-
-    def test_view_attr_filterset_fields_type(self, viewset):
-        """Attribute Test
-
-        Attribute `filterset_fields` must be of type list
-        """
-
-        assert (
-            type(viewset().filterset_fields) is list
-        )
-
-
-
-    def test_view_attr_lookup_value_regex_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `lookup_value_regex` must exist
-        """
-
-        assert hasattr(viewset, 'lookup_value_regex')
-
-
-    def test_view_attr_lookup_value_regex_not_empty(self, viewset):
-        """Attribute Test
-
-        Attribute `lookup_value_regex` must return a value
-        """
-
-        assert viewset.lookup_value_regex is not None
-
-
-    def test_view_attr_lookup_value_regex_type(self, viewset):
-        """Attribute Test
-
-        Attribute `lookup_value_regex` must be of type list
-        """
-
-        assert (
-            type(viewset().lookup_value_regex) is str
-        )
-
-
-    def test_view_attr_lookup_value_regex_value(self, viewset):
-        """Attribute Test
-
-        Attribute `lookup_value_regex` must have a value of `[0-9]+` as this
-        is used for the PK lookup which is always a number.
-        """
-
-        assert viewset().lookup_value_regex == '[0-9]+'
-
-
-
-    def test_view_attr_model_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `model` must exist
-        """
-
-        assert hasattr(viewset, 'model')
-
-
-    def test_view_attr_model_not_empty(self, viewset_mock_request):
-        """Attribute Test
-
-        Attribute `model` must return a value that is not None
-        """
-
-        # view_set = self.viewset()
-        # view_set.request = MockRequest(
-        #     user = self.view_user,
-        #     model = getattr(self, 'model',None),
-        #     viewset = self.viewset,
-        #     organization = self.organization
-        # )
-
-        assert viewset_mock_request.model is not None
-
-
-    # ToDo: queryset
-
-
-    def test_view_attr_search_fields_exists(self, viewset):
-        """Attribute Test
-
-        Attribute `search_fields` must exist
-        """
-
-        assert hasattr(viewset, 'search_fields')
-
-
-    def test_view_attr_search_fields_not_empty(self, viewset):
-        """Attribute Test
-
-        Attribute `search_fields` must return a value
-        """
-
-        assert viewset.search_fields is not None
-
-
-    def test_view_attr_search_fields_type(self, viewset):
-        """Attribute Test
-
-        Attribute `search_fields` must be of type list
-        """
-
-        assert (
-            type(viewset().search_fields) is list
-        )
-
-
-    # ToDo: serializer_class
-
-
-    # ToDo: view_serializer_name
 
 
     def test_view_func_get_queryset_cache_result(self, viewset_mock_request):
@@ -994,57 +784,24 @@ class ModelViewSetBaseCases(
         assert q == view_set.queryset
 
 
-    def test_view_func_get_queryset_cache_result_used(self, viewset_mock_request):
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
         """Viewset Test
 
         Ensure that the `get_queryset` function caches the result under
         attribute `<viewset>.queryset`
         """
 
-        view_set = viewset_mock_request
+        qs = mocker.spy(viewset_mock_request.model, 'objects')
 
-        # view_set.request = MockRequest(
-        #     user = self.view_user,
-        #     model = getattr(self, 'model',None),
-        #     organization = self.organization,
-        #     viewset = self.viewset,
-        # )
+        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
 
-        # view_set.request.headers = {}
-        # view_set.kwargs = self.kwargs
-        # view_set.action = 'list'
-        # view_set.detail = False
+        assert len(qs.method_calls) == 1       # one call to .all()
+        assert len(qs.mock_calls) == 2         # calls = .all(), all().filter()
 
-        mock_return = view_set.get_queryset()    # Real item to be used as mock return Some
-                                                 # functions use `Queryset` for additional filtering
+        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
 
-        setter_not_called = True
-
-
-        with patch.object(self.viewset, 'queryset', new_callable=PropertyMock) as qs:
-
-            qs.return_value = mock_return
-
-            mocked_view_set = self.viewset()
-
-            mocked_view_set.kwargs = self.kwargs
-            mocked_view_set.action = 'list'
-            mocked_view_set.detail = False
-
-            qs.reset_mock()    # Just in case
-
-            mocked_view_set.get_queryset()    # should only add two calls, if exists and the return
-
-
-            for mock_call in list(qs.mock_calls):    # mock_calls with args means setter was called
-
-                if len(mock_call.args) > 0:
-
-                    setter_not_called = False
-
-
-        assert setter_not_called
-        assert qs.call_count == 2
+        assert len(qs.method_calls) == 1
+        assert len(qs.mock_calls) == 2
 
 
 
@@ -1060,17 +817,55 @@ class ModelViewSetBasePyTest(
         return ModelViewSetBase
 
 
-    def test_view_attr_model_not_empty(self, viewset):
-        """Attribute Test
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
-
-        Attribute `model` must return a value that is not None
-        """
-
-        assert viewset().model is None
 
     def test_view_func_get_queryset_cache_result(self, viewset):
         """Viewset Test
@@ -1098,52 +893,8 @@ class ModelViewSetBasePyTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self, viewset):
-        """Attribute Test
 
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self, viewset):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self, viewset):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self, viewset):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        assert type(viewset().view_name) is type(None)
-
-
-
-class ModelViewSetCases(
+class ModelViewSetTestCases(
     ModelViewSetBaseCases,
     CreateCases,
     RetrieveCases,
@@ -1156,129 +907,156 @@ class ModelViewSetCases(
     Dont use inherit from this class use `ModelViewSetInheritedTest`
     """
 
-    viewset = ModelViewSet
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'DELETE',
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                    'PATCH',
+                    'POST',
+                    'PUT',
+                ]
+            },
+        }
 
 
-
-    def test_view_attr_allowed_methods_values(self):
-        """Attribute Test
-
-        Attribute `allowed_methods` only contains valid values
-        """
-
-        # Values valid for model views
-        valid_values: list = [
-            'DELETE',
-            'GET',
-            'HEAD',
-            'OPTIONS',
-            'PATCH',
-            'POST',
-            'PUT',
-        ]
-
-        all_valid: bool = True
-
-        view_set = self.viewset()
-
-        view_set.kwargs = self.kwargs
-
-        for method in list(view_set.allowed_methods):
-
-            if method not in valid_values:
-
-                all_valid = False
-
-        assert all_valid
-
-
-
-    def test_class_inherits_modelviewsetbase(self):
+    def test_class_inherits_modelviewsetbase(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `ModelViewSetBase`
         """
 
-        assert issubclass(self.viewset, ModelViewSetBase)
+        assert issubclass(viewset, ModelViewSetBase)
 
 
-    def test_class_inherits_create(self):
+    def test_class_inherits_create(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `Create`
         """
 
-        assert issubclass(self.viewset, Create)
+        assert issubclass(viewset, Create)
 
 
-    def test_class_inherits_retrieve(self):
+    def test_class_inherits_retrieve(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `Retrieve`
         """
 
-        assert issubclass(self.viewset, Retrieve)
+        assert issubclass(viewset, Retrieve)
 
 
-    def test_class_inherits_update(self):
+    def test_class_inherits_update(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `Update`
         """
 
-        assert issubclass(self.viewset, Update)
+        assert issubclass(viewset, Update)
 
 
-    def test_class_inherits_destroy(self):
+    def test_class_inherits_destroy(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `Destroy`
         """
 
-        assert issubclass(self.viewset, Destroy)
+        assert issubclass(viewset, Destroy)
 
 
-    def test_class_inherits_list(self):
+    def test_class_inherits_list(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `List`
         """
 
-        assert issubclass(self.viewset, List)
+        assert issubclass(viewset, List)
 
 
-    def test_class_inherits_viewsets_modelviewset(self):
+    def test_class_inherits_viewsets_modelviewset(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.ModelViewSet`
         """
 
-        assert issubclass(self.viewset, viewsets.ModelViewSet)
+        assert issubclass(viewset, viewsets.ModelViewSet)
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class ModelViewSetTest(
-    ModelViewSetCases,
-    TestCase,
+class ModelViewSetPyTest(
+    ModelViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ModelViewSet
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
 
-        Attribute `model` must return a value that is not None
-        """
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        view_set = self.viewset()
 
-        assert view_set.model is None
-
-    def test_view_func_get_queryset_cache_result(self):
+    def test_view_func_get_queryset_cache_result(self, viewset):
         """Viewset Test
 
         This test case overrides a test case of the same name. This test case
@@ -1291,7 +1069,7 @@ class ModelViewSetTest(
         assert True
 
 
-    def test_view_func_get_queryset_cache_result_used(self):
+    def test_view_func_get_queryset_cache_result_used(self, viewset):
         """Viewset Test
 
         This test case overrides a test case of the same name. This test case
@@ -1302,128 +1080,55 @@ class ModelViewSetTest(
         """
 
         assert True
-
-
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
 
 
 
 class SubModelViewSetTestCases(
-    ModelViewSetCases
+    ModelViewSetTestCases
 ):
 
-    kwargs: dict
 
-    organization: Organization
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'DELETE',
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                    'PATCH',
+                    'POST',
+                    'PUT',
+                ]
+            },
+            'base_model': {
+                'type': type,
+                'value': None
+            },
+            'model_kwarg': {
+                'type': str,
+                'value': None
+            }
+        }
 
-    view_user: User
+    # kwargs: dict
 
-    viewset = SubModelViewSet
+    # organization: Organization
+
+    # view_user: User
+
+    # viewset = SubModelViewSet
 
 
-    def test_class_inherits_submodelviewsetbase(self):
+    def test_class_inherits_submodelviewsetbase(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `SubModelViewSet`
         """
 
-        assert issubclass(self.viewset, SubModelViewSet)
-
-
-    def test_view_attr_exists_base_model(self):
-        """Attribute Test
-
-        Attribute `base_model` must exist
-        """
-
-        assert hasattr(self.viewset, 'base_model')
-
-
-    def test_view_attr_type_base_model(self):
-        """Attribute Test
-
-        Attribute `base_model` must be of type Django Model
-        """
-
-        view_set = self.viewset()
-
-        assert issubclass(view_set.base_model, models.Model)
-
-
-
-    def test_view_attr_exists_model_kwarg(self):
-        """Attribute Test
-
-        Attribute `model_kwarg` must exist
-        """
-
-        assert hasattr(self.viewset, 'model_kwarg')
-
-
-    def test_view_attr_type_model_kwarg(self):
-        """Attribute Test
-
-        Attribute `model_kwarg` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.model_kwarg) is str
-
-
-
-    def test_view_attr_value_model_kwarg(self):
-        """Attribute Test
-
-        Attribute `model_kwarg` must be equal to model._meta.sub_model_type
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.model_kwarg is not None
+        assert issubclass(viewset, SubModelViewSet)
 
 
 
@@ -1465,13 +1170,81 @@ class SubModelViewSetTestCases(
 
 @pytest.mark.api
 @pytest.mark.viewset
-class SubModelViewSetTest(
+class SubModelViewSetPyTest(
     SubModelViewSetTestCases,
-    TestCase,
 ):
 
 
-    def test_view_attr_model_not_empty(self):
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return SubModelViewSet
+
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'base_model': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model_kwarg': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
+
+
+    def test_view_attr_model_not_empty(self, viewset):
         """Attribute Test
 
         This test case overrides a test case of the same name. As this test is
@@ -1481,9 +1254,7 @@ class SubModelViewSetTest(
         Attribute `model` must return a value that is not None
         """
 
-        view_set = self.viewset()
-
-        assert view_set.model is None
+        assert viewset().model is None
 
 
 
@@ -1500,7 +1271,7 @@ class SubModelViewSetTest(
         assert True
 
 
-    def test_view_attr_type_model_kwarg(self):
+    def test_view_attr_type_model_kwarg(self, viewset):
         """Attribute Test
 
         This test case overrides a test case of the same name. As this test is
@@ -1510,12 +1281,10 @@ class SubModelViewSetTest(
         Attribute `model_kwarg` must be of type str
         """
 
-        view_set = self.viewset()
-
-        assert view_set.model_kwarg is None
+        assert viewset().model_kwarg is None
 
 
-    def test_view_attr_value_model_kwarg(self):
+    def test_view_attr_value_model_kwarg(self, viewset):
         """Attribute Test
 
         This test case overrides a test case of the same name. As this test is
@@ -1525,9 +1294,7 @@ class SubModelViewSetTest(
         Attribute `model_kwarg` must be equal to model._meta.sub_model_type
         """
 
-        view_set = self.viewset()
-
-        assert view_set.model_kwarg is None
+        assert viewset().model_kwarg is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -1558,45 +1325,103 @@ class SubModelViewSetTest(
 
 
 
-class ModelCreateViewSetCases(
+class ModelCreateViewSetTestCases(
     ModelViewSetBaseCases,
     CreateCases,
 ):
     """Test Suite for class ModelCreateViewSet"""
 
-    viewset = ModelCreateViewSet
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                    'POST',
+                ]
+            }
+        }
 
-
-    def test_class_inherits_viewsets_genericviewset(self):
+    def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.GenericViewSet`
         """
 
-        assert issubclass(self.viewset, viewsets.GenericViewSet)
+        assert issubclass(viewset, viewsets.GenericViewSet)
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class ModelCreateViewSetTest(
-    ModelCreateViewSetCases,
-    TestCase,
+class ModelCreateViewSetPyTest(
+    ModelCreateViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ModelCreateViewSet
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        assert view_set.model is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -1624,54 +1449,8 @@ class ModelCreateViewSetTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
 
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
-
-
-
-class ModelListRetrieveDeleteViewSetCases(
+class ModelListRetrieveDeleteViewSetTestCases(
     ModelViewSetBaseCases,
     ListCases,
     RetrieveCases,
@@ -1679,39 +1458,99 @@ class ModelListRetrieveDeleteViewSetCases(
 ):
     """Test Suite for class ModelListRetrieveDeleteViewSet"""
 
-    viewset = ModelListRetrieveDeleteViewSet
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'DELETE',
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                ]
+            }
+        }
 
 
-    def test_class_inherits_viewsets_genericviewset(self):
+    def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.GenericViewSet`
         """
 
-        assert issubclass(self.viewset, viewsets.GenericViewSet)
+        assert issubclass(viewset, viewsets.GenericViewSet)
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class ModelListRetrieveDeleteViewSetTest(
-    ModelListRetrieveDeleteViewSetCases,
-    TestCase,
+class ModelListRetrieveDeleteViewSetPyTest(
+    ModelListRetrieveDeleteViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ModelListRetrieveDeleteViewSet
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        assert view_set.model is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -1739,93 +1578,105 @@ class ModelListRetrieveDeleteViewSetTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
 
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
-
-
-
-class ModelRetrieveUpdateViewSetCases(
+class ModelRetrieveUpdateViewSetTestCases(
     ModelViewSetBaseCases,
     RetrieveCases,
     UpdateCases,
 ):
     """Test Suite for class ModelRetrieveUpdateViewSet"""
 
-    viewset = ModelRetrieveUpdateViewSet
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                    'PATCH',
+                    'PUT'
+                ]
+            }
+        }
 
-
-    def test_class_inherits_viewsets_genericviewset(self):
+    def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.GenericViewSet`
         """
 
-        assert issubclass(self.viewset, viewsets.GenericViewSet)
+        assert issubclass(viewset, viewsets.GenericViewSet)
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class ModelRetrieveUpdateViewSetTest(
-    ModelRetrieveUpdateViewSetCases,
-    TestCase,
+class ModelRetrieveUpdateViewSetPyTest(
+    ModelRetrieveUpdateViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ModelRetrieveUpdateViewSet
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
-
-        assert view_set.model is None
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
 
     def test_view_func_get_queryset_cache_result(self):
@@ -1854,93 +1705,105 @@ class ModelRetrieveUpdateViewSetTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
 
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
-
-
-
-class ReadOnlyModelViewSetCases(
+class ReadOnlyModelViewSetTestCases(
     ModelViewSetBaseCases,
     RetrieveCases,
     ListCases,
 ):
     """Test Suite for class ReadOnlyModelViewSet"""
 
-    viewset = ReadOnlyModelViewSet
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                ]
+            }
+        }
 
 
-    def test_class_inherits_viewsets_genericviewset(self):
+    def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.GenericViewSet`
         """
 
-        assert issubclass(self.viewset, viewsets.GenericViewSet)
+        assert issubclass(viewset, viewsets.GenericViewSet)
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class ReadOnlyModelViewSetTest(
-    ReadOnlyModelViewSetCases,
-    TestCase,
+class ReadOnlyModelViewSetPyTest(
+    ReadOnlyModelViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ReadOnlyModelViewSet
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        assert view_set.model is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -1968,92 +1831,105 @@ class ReadOnlyModelViewSetTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
 
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
-
-
-
-class ReadOnlyListModelViewSetCases(
+class ReadOnlyListModelViewSetTestCases(
     ModelViewSetBaseCases,
     ListCases,
 ):
     """Test Suite for class ReadOnlyListModelViewSet"""
 
-    viewset = ReadOnlyListModelViewSet
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                ]
+            }
+        }
 
 
-    def test_class_inherits_viewsets_genericviewset(self):
+    def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
         Class must inherit from `viewsets.GenericViewSet`
         """
 
-        assert issubclass(self.viewset, viewsets.GenericViewSet)
+        assert issubclass(viewset, viewsets.GenericViewSet)
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class ReadOnlyListModelViewSetTest(
-    ReadOnlyListModelViewSetCases,
-    TestCase,
+class ReadOnlyListModelViewSetPyTest(
+    ReadOnlyListModelViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ReadOnlyListModelViewSet
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        assert view_set.model is None
+
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -2081,95 +1957,101 @@ class ReadOnlyListModelViewSetTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
 
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
-
-
-
-class AuthUserReadOnlyModelViewSetCases(
-    ReadOnlyModelViewSetCases,
+class AuthUserReadOnlyModelViewSetTestCases(
+    ReadOnlyModelViewSetTestCases,
 ):
     """Test Suite for class AuthUserReadOnlyModelViewSet"""
 
-    viewset = AuthUserReadOnlyModelViewSet
 
-
-    def test_view_attr_permission_classes_value(self):
-        """Attribute Test
-
-        Attribute `permission_classes` must be metadata class `IsAuthenticated`
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.permission_classes[0] is IsAuthenticated
-
-        assert len(view_set.permission_classes) == 1
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                ]
+            },
+            'permission_classes': {
+                'type': list,
+                'value': [
+                    IsAuthenticated,
+                ]
+            }
+        }
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class AuthUserReadOnlyModelViewSetTest(
-    AuthUserReadOnlyModelViewSetCases,
-    TestCase,
+class AuthUserReadOnlyModelViewSetPyTest(
+    AuthUserReadOnlyModelViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return AuthUserReadOnlyModelViewSet
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        assert view_set.model is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -2195,52 +2077,6 @@ class AuthUserReadOnlyModelViewSetTest(
         """
 
         assert True
-
-
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
 
 
 
@@ -2249,43 +2085,95 @@ class IndexViewsetCases(
 ):
     """Test Suite for class IndexViewset"""
 
-    viewset = IndexViewset
 
-
-    def test_view_attr_permission_classes_value(self):
-        """Attribute Test
-
-        Attribute `permission_classes` must be metadata class `IsAuthenticated`
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.permission_classes[0] is IsAuthenticated
-
-        assert len(view_set.permission_classes) == 1
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                ]
+            },
+            'permission_classes': {
+                'type': list,
+                'value': [
+                    IsAuthenticated,
+                ]
+            }
+        }
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class IndexViewsetTest(
+class IndexViewsetPyTest(
     IndexViewsetCases,
-    TestCase,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return IndexViewset
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        assert view_set.model is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -2313,138 +2201,109 @@ class IndexViewsetTest(
         assert True
 
 
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
 
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
-
-
-
-class PublicReadOnlyViewSetCases(
-    ReadOnlyListModelViewSetCases,
+class PublicReadOnlyViewSetTestCases(
+    ReadOnlyListModelViewSetTestCases,
 ):
     """Test Suite for class PublicReadOnlyViewSet"""
 
-    viewset = PublicReadOnlyViewSet
 
-
-    def test_view_attr_metadata_class_type(self):
-        """Attribute Test
-
-        Attribute `metadata_class` must be metadata class `ReactUIMetadata`
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.metadata_class is JSONAPIMetadata
-
-
-    def test_view_attr_permission_classes_value(self):
-        """Attribute Test
-
-        Attribute `permission_classes` must be metadata class `IsAuthenticatedOrReadOnly`
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.permission_classes[0] is IsAuthenticatedOrReadOnly
-
-        assert len(view_set.permission_classes) == 1
-
-
-
-    def test_view_attr_pagination_class_exists(self):
-        """Attribute Test
-
-        Attribute `pagination_class` must exist
-        """
-
-        assert hasattr(self.viewset, 'pagination_class')
-
-
-    def test_view_attr_pagination_class_not_empty(self):
-        """Attribute Test
-
-        Attribute `pagination_class` must return a value
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.pagination_class is not None
-
-
-    def test_view_attr_pagination_class_type(self):
-        """Attribute Test
-
-        Attribute `pagination_class` must be of type StaticPageNumbering
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.pagination_class is StaticPageNumbering
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'GET',
+                    'HEAD',
+                    'OPTIONS',
+                ]
+            },
+            'pagination_class': {
+                'type': type,
+                'value': StaticPageNumbering
+            },
+            'permission_classes': {
+                'type': list,
+                'value': [
+                    IsAuthenticatedOrReadOnly,
+                ]
+            },
+            'metadata_class': {
+                'type': type,
+                'value': JSONAPIMetadata
+            }
+        }
 
 
 
 @pytest.mark.api
 @pytest.mark.viewset
-class PublicReadOnlyViewSetTest(
-    PublicReadOnlyViewSetCases,
-    TestCase,
+class PublicReadOnlyViewSetPyTest(
+    PublicReadOnlyViewSetTestCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
 
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return PublicReadOnlyViewSet
 
-        Attribute `model` must return a value that is not None
-        """
 
-        view_set = self.viewset()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+                'value': None
+            },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'allowed_methods': {
+                'type': list,
+                'value': [
+                    'OPTIONS',
+                ]
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model': {
+                'type': type(None),
+                'value': None
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'view_description': {
+                'type': type(None),
+                'value': None
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
-        assert view_set.model is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -2470,52 +2329,6 @@ class PublicReadOnlyViewSetTest(
         """
 
         assert True
-
-
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this values type should be `None`
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is type(None)
-
-
-    def test_view_attr_view_name_not_empty(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must return a value that is not None
-        """
-
-        assert self.viewset.view_name is None
-
-
-    def test_view_attr_view_name_type(self):
-        """Attribute Test
-
-        As this Test Case is for the Base class this value should be `None`
-
-        Attribute `view_name` must be of type str
-        """
-
-        view_set = self.viewset()
-
-        assert type(view_set.view_name) is type(None)
 
 
 
@@ -2528,7 +2341,7 @@ class PublicReadOnlyViewSetTest(
 
 
 class AuthUserReadOnlyModelViewSetInheritedCases(
-    AuthUserReadOnlyModelViewSetCases,
+    AuthUserReadOnlyModelViewSetTestCases,
 ):
 
     pass
@@ -2539,17 +2352,6 @@ class IndexViewsetInheritedCases(
     IndexViewsetCases,
 ):
 
-    def test_view_attr_model_not_empty(self):
-        """Attribute Test
-
-        This view does not use a model
-
-        Attribute `model` must return a value that is not None
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.model is None
 
     def test_view_func_get_queryset_cache_result(self):
         """Viewset Test
@@ -2577,7 +2379,7 @@ class IndexViewsetInheritedCases(
 
 
 class ModelCreateViewSetInheritedCases(
-    ModelCreateViewSetCases,
+    ModelCreateViewSetTestCases,
 ):
 
     pass
@@ -2585,7 +2387,7 @@ class ModelCreateViewSetInheritedCases(
 
 
 class ModelListRetrieveDeleteViewSetInheritedCases(
-    ModelListRetrieveDeleteViewSetCases,
+    ModelListRetrieveDeleteViewSetTestCases,
 ):
 
     pass
@@ -2593,7 +2395,7 @@ class ModelListRetrieveDeleteViewSetInheritedCases(
 
 
 class ModelRetrieveUpdateViewSetInheritedCases(
-    ModelRetrieveUpdateViewSetCases,
+    ModelRetrieveUpdateViewSetTestCases,
 ):
 
     pass
@@ -2601,7 +2403,7 @@ class ModelRetrieveUpdateViewSetInheritedCases(
 
 
 class ModelViewSetInheritedCases(
-    ModelViewSetCases,
+    ModelViewSetTestCases,
     CommonViewSetAPIRenderOptionsCases,
 ):
     """Test Suite for classes that inherit ModelViewSet
@@ -2609,59 +2411,7 @@ class ModelViewSetInheritedCases(
     Use this Test Suite for ViewSet classes that inherit from ModelViewSet
     """
 
-    http_options_response_list = None
-    """Inherited class must make and store here a HTTP/Options request"""
-
-    route_name = None
-    """Inherited class must define the url rout name with namespace"""
-
-    viewset = None
-
-
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
-
-        Attribute `view_description` must return a value that is not None
-        """
-
-        assert self.viewset.view_description is not None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is str
-
-
-    def test_api_render_field_allowed_methods_values(self):
-        """Attribute Test
-
-        Attribute `allowed_methods` only contains valid values
-        """
-
-        # Values valid for model views
-        valid_values: list = [
-            'DELETE',
-            'GET',
-            'HEAD',
-            'OPTIONS',
-            'PATCH',
-            'POST',
-            'PUT',
-        ]
-
-        all_valid: bool = True
-
-        for method in list(self.http_options_response_list.data['allowed_methods']):
-
-            if method not in valid_values:
-
-                all_valid = False
-
-        assert all_valid
+    pass
 
 
 
@@ -2683,7 +2433,7 @@ class SubModelViewSetInheritedCases(
     base_model = None
     """The Sub Model that is returned from the model property"""
 
-    viewset = None
+    # viewset = None
 
 
     # @classmethod
@@ -2700,49 +2450,18 @@ class SubModelViewSetInheritedCases(
     #     super().setUpTestData()
 
 
-
-    def test_api_render_field_allowed_methods_values(self):
-        """Attribute Test
-
-        Attribute `allowed_methods` only contains valid values
-        """
-
-        # Values valid for model views
-        valid_values: list = [
-            'DELETE',
-            'GET',
-            'HEAD',
-            'OPTIONS',
-            'PATCH',
-            'POST',
-            'PUT',
-        ]
-
-        all_valid: bool = True
-
-        for method in list(self.http_options_response_list.data['allowed_methods']):
-
-            if method not in valid_values:
-
-                all_valid = False
-
-        assert all_valid
-
-
-    def test_view_attr_model_value(self):
+    def test_view_attr_model_value(self, viewset):
         """Attribute Test
 
         Attribute `model` must return the correct sub-model
         """
 
-        view_set = self.viewset()
-
-        assert view_set.model == self.model
+        assert viewset().model == self.model
 
 
 
 class PublicReadOnlyViewSetInheritedCases(
-    PublicReadOnlyViewSetCases,
+    PublicReadOnlyViewSetTestCases,
 ):
 
     pass
@@ -2750,7 +2469,7 @@ class PublicReadOnlyViewSetInheritedCases(
 
 
 class ReadOnlyModelViewSetInheritedCases(
-    ReadOnlyModelViewSetCases,
+    ReadOnlyModelViewSetTestCases,
 ):
 
     pass
