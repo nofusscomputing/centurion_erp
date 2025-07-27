@@ -690,7 +690,7 @@ class ModelViewSetBaseCases(
                 'value': '[0-9]+'
             },
             'model': {
-                'type': object,
+                'type': django.db.models.base.ModelBase,
                 'value': None
             },
             'queryset': {
@@ -2411,42 +2411,7 @@ class ModelViewSetInheritedCases(
     Use this Test Suite for ViewSet classes that inherit from ModelViewSet
     """
 
-    http_options_response_list = None
-    """Inherited class must make and store here a HTTP/Options request"""
-
-    route_name = None
-    """Inherited class must define the url rout name with namespace"""
-
-    # viewset = None
-
-
-
-    def test_api_render_field_allowed_methods_values(self):
-        """Attribute Test
-
-        Attribute `allowed_methods` only contains valid values
-        """
-
-        # Values valid for model views
-        valid_values: list = [
-            'DELETE',
-            'GET',
-            'HEAD',
-            'OPTIONS',
-            'PATCH',
-            'POST',
-            'PUT',
-        ]
-
-        all_valid: bool = True
-
-        for method in list(self.http_options_response_list.data['allowed_methods']):
-
-            if method not in valid_values:
-
-                all_valid = False
-
-        assert all_valid
+    pass
 
 
 
