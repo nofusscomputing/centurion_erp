@@ -35,7 +35,7 @@ class ClassTestCases:
         return {}
 
 
-
+    @pytest.mark.regression
     def test_class_attribute_exists(self,
         test_class,
         parameterized, param_key_class_attributes, param_field_name, param_type
@@ -69,11 +69,11 @@ class ClassTestCases:
 
         if type(getattr(test_class, param_field_name)) is property:
 
-            assert type( getattr(test_class, param_field_name).fget(test_class) ) is param_type
+            assert type( getattr(test_class, param_field_name).fget(test_class) ) is param_type, type( getattr(test_class, param_field_name).fget(test_class) )
 
         else:
 
-            assert type(getattr(test_class, param_field_name)) is param_type
+            assert type(getattr(test_class, param_field_name)) is param_type, type(getattr(test_class, param_field_name))
 
 
 
