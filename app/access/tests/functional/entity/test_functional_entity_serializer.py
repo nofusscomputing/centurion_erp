@@ -28,7 +28,7 @@ class MockView:
     """
 
 
-
+@pytest.mark.skip(reason = 'see #874, tests being refactored')
 class EntitySerializerTestCases:
 
 
