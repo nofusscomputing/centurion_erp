@@ -33,14 +33,6 @@ class ViewsetTestCases(
                 'type': type(None),
                 'value': None
             },
-            # 'allowed_methods': {
-            #     'type': list,
-            #     'value': [
-            #         'GET',
-            #         'HEAD',
-            #         'OPTIONS',
-            #     ]
-            # },
             'back_url': {
                 'type': type(None),
                 'value': None
