@@ -90,7 +90,6 @@ class ViewsetTestCases(
 
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class EntityViewsetInheritedCases(
     ViewsetTestCases,
 ):
