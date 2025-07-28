@@ -2242,6 +2242,39 @@ class SubModelViewSetInheritedCases(
 
     #     super().setUpTestData()
 
+
+    @pytest.fixture( scope = 'function' )
+    def viewset_mock_request(self, django_db_blocker, viewset,
+        model_user, kwargs_user, organization_one, model
+    ):
+
+        with django_db_blocker.unblock():
+
+            user = model_user.objects.create( **kwargs_user )
+
+        view_set = viewset()
+
+        request = MockRequest(
+            user = user,
+            model = model,
+            viewset = viewset,
+            organization = organization_one,
+        )
+
+        view_set.request = request
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+        yield view_set
+
+        del view_set.request
+
+        with django_db_blocker.unblock():
+
+            user.delete()
+
+
     @property
     def parameterized_class_attributes(self):
         return {
