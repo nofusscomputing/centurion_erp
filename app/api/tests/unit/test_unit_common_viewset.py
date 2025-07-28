@@ -2245,6 +2245,13 @@ class SubModelViewSetInheritedCases(
     @property
     def parameterized_class_attributes(self):
         return {
+            # '_log': {
+            #     'type': logging.Logger,
+            #     'value': None
+            # },
+            '_log': {
+                'type': type(None),
+            },
             'model_suffix': {
                 'type': str,
                 'value': None

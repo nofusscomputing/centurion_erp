@@ -25,10 +25,10 @@ class ViewsetTestCases(
     @property
     def parameterized_class_attributes(self):
         return {
-            '_log': {
-                'type': logging.Logger,
-                'value': None
-            },
+            # '_log': {
+            #     'type': logging.Logger,
+            #     'value': None
+            # },
             '_model_documentation': {
                 'type': type(None),
                 'value': None
