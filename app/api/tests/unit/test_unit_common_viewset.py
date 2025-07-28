@@ -2219,7 +2219,19 @@ class ModelViewSetInheritedCases(
     Use this Test Suite for ViewSet classes that inherit from ModelViewSet
     """
 
-    pass
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            # '_log': {
+            #     'type': logging.Logger,
+            #     'value': None
+            # },
+            '_log': {
+                'type': type(None),
+            },
+        }
+
 
 
 
