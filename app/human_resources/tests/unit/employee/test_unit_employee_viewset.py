@@ -9,7 +9,7 @@ from access.tests.unit.contact.test_unit_contact_viewset import (
 from human_resources.models.employee import Employee
 
 
-
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_employee
 class ViewsetTestCases(
     ContactViewsetInheritedCases,

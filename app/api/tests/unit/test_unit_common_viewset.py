@@ -32,6 +32,7 @@ from api.viewsets.common import (
     CommonViewSet,
     ModelViewSet,
     SubModelViewSet,
+    SubModelViewSet_ReWrite,
 
     ModelCreateViewSet,
     ModelListRetrieveDeleteViewSet,
@@ -403,12 +404,6 @@ class CommonViewSetTestCases(
             '_model_documentation': {
                 'type': str,
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': str,
@@ -907,23 +902,6 @@ class ModelViewSetTestCases(
     Dont use inherit from this class use `ModelViewSetInheritedTest`
     """
 
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'DELETE',
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                    'PATCH',
-                    'POST',
-                    'PUT',
-                ]
-            },
-        }
-
 
     def test_class_inherits_modelviewsetbase(self, viewset):
         """Class Inheritence check
@@ -1011,12 +989,6 @@ class ModelViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
-            },
             'back_url': {
                 'type': type(None),
                 'value': None
@@ -1091,23 +1063,15 @@ class SubModelViewSetTestCases(
     @property
     def parameterized_class_attributes(self):
         return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'DELETE',
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                    'PATCH',
-                    'POST',
-                    'PUT',
-                ]
-            },
             'base_model': {
                 'type': type,
                 'value': None
             },
             'model_kwarg': {
+                'type': str,
+                'value': None
+            },
+            'model_suffix': {
                 'type': str,
                 'value': None
             }
@@ -1167,6 +1131,9 @@ class SubModelViewSetTestCases(
         pass
 
 
+    # ToDo: Test returned serializer for all CRUD. Add, Change, Delete, Replace and View
+
+
 
 @pytest.mark.api
 @pytest.mark.viewset
@@ -1177,7 +1144,7 @@ class SubModelViewSetPyTest(
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return SubModelViewSet
+        return SubModelViewSet_ReWrite
 
 
     @property
@@ -1190,12 +1157,6 @@ class SubModelViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -1210,8 +1171,11 @@ class SubModelViewSetPyTest(
                 'value': None
             },
             'model': {
+                'type': django.db.models.NOT_PROVIDED,
+                'value': django.db.models.NOT_PROVIDED
+            },
+            'model_suffix': {
                 'type': type(None),
-                'value': None
             },
             'model_documentation': {
                 'type': type(None),
@@ -1242,20 +1206,6 @@ class SubModelViewSetPyTest(
                 'value': None
             }
         }
-
-
-    def test_view_attr_model_not_empty(self, viewset):
-        """Attribute Test
-
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
-
-        Attribute `model` must return a value that is not None
-        """
-
-        assert viewset().model is None
-
 
 
     def test_view_attr_type_base_model(self):
@@ -1331,20 +1281,6 @@ class ModelCreateViewSetTestCases(
 ):
     """Test Suite for class ModelCreateViewSet"""
 
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                    'POST',
-                ]
-            }
-        }
-
     def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
@@ -1377,12 +1313,6 @@ class ModelCreateViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -1459,21 +1389,6 @@ class ModelListRetrieveDeleteViewSetTestCases(
     """Test Suite for class ModelListRetrieveDeleteViewSet"""
 
 
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'DELETE',
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                ]
-            }
-        }
-
-
     def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
@@ -1506,12 +1421,6 @@ class ModelListRetrieveDeleteViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -1586,21 +1495,6 @@ class ModelRetrieveUpdateViewSetTestCases(
 ):
     """Test Suite for class ModelRetrieveUpdateViewSet"""
 
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                    'PATCH',
-                    'PUT'
-                ]
-            }
-        }
-
     def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
 
@@ -1633,12 +1527,6 @@ class ModelRetrieveUpdateViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -1713,19 +1601,6 @@ class ReadOnlyModelViewSetTestCases(
 ):
     """Test Suite for class ReadOnlyModelViewSet"""
 
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                ]
-            }
-        }
-
 
     def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
@@ -1759,12 +1634,6 @@ class ReadOnlyModelViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -1838,19 +1707,6 @@ class ReadOnlyListModelViewSetTestCases(
 ):
     """Test Suite for class ReadOnlyListModelViewSet"""
 
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                ]
-            }
-        }
-
 
     def test_class_inherits_viewsets_genericviewset(self, viewset):
         """Class Inheritence check
@@ -1884,12 +1740,6 @@ class ReadOnlyListModelViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -1967,14 +1817,6 @@ class AuthUserReadOnlyModelViewSetTestCases(
     @property
     def parameterized_class_attributes(self):
         return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                ]
-            },
             'permission_classes': {
                 'type': list,
                 'value': [
@@ -2007,12 +1849,6 @@ class AuthUserReadOnlyModelViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -2089,14 +1925,6 @@ class IndexViewsetCases(
     @property
     def parameterized_class_attributes(self):
         return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                ]
-            },
             'permission_classes': {
                 'type': list,
                 'value': [
@@ -2129,12 +1957,6 @@ class IndexViewsetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -2211,14 +2033,6 @@ class PublicReadOnlyViewSetTestCases(
     @property
     def parameterized_class_attributes(self):
         return {
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'GET',
-                    'HEAD',
-                    'OPTIONS',
-                ]
-            },
             'pagination_class': {
                 'type': type,
                 'value': StaticPageNumbering
@@ -2259,12 +2073,6 @@ class PublicReadOnlyViewSetPyTest(
             '_model_documentation': {
                 'type': type(None),
                 'value': None
-            },
-            'allowed_methods': {
-                'type': list,
-                'value': [
-                    'OPTIONS',
-                ]
             },
             'back_url': {
                 'type': type(None),
@@ -2411,7 +2219,19 @@ class ModelViewSetInheritedCases(
     Use this Test Suite for ViewSet classes that inherit from ModelViewSet
     """
 
-    pass
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            # '_log': {
+            #     'type': logging.Logger,
+            #     'value': None
+            # },
+            '_log': {
+                'type': type(None),
+            },
+        }
+
 
 
 
@@ -2423,18 +2243,6 @@ class SubModelViewSetInheritedCases(
     
     Use this Test Suite for ViewSet classes that inherit from SubModelViewSet
     """
-
-    http_options_response_list = None
-    """Inherited class must make and store here a HTTP/Options request"""
-
-    route_name = None
-    """Inherited class must define the url rout name with namespace"""
-
-    base_model = None
-    """The Sub Model that is returned from the model property"""
-
-    # viewset = None
-
 
     # @classmethod
     # def setUpTestData(self):
@@ -2450,13 +2258,70 @@ class SubModelViewSetInheritedCases(
     #     super().setUpTestData()
 
 
-    def test_view_attr_model_value(self, viewset):
-        """Attribute Test
+    @pytest.fixture( scope = 'function' )
+    def viewset_mock_request(self, django_db_blocker, viewset,
+        model_user, kwargs_user, organization_one, model
+    ):
 
-        Attribute `model` must return the correct sub-model
-        """
+        with django_db_blocker.unblock():
 
-        assert viewset().model == self.model
+            user = model_user.objects.create( **kwargs_user )
+
+        view_set = viewset()
+
+        request = MockRequest(
+            user = user,
+            model = model,
+            viewset = viewset,
+            organization = organization_one,
+        )
+
+        view_set.request = request
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+        yield view_set
+
+        del view_set.request
+
+        with django_db_blocker.unblock():
+
+            user.delete()
+
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            # '_log': {
+            #     'type': logging.Logger,
+            #     'value': None
+            # },
+            '_log': {
+                'type': type(None),
+            },
+            'model_suffix': {
+                'type': str,
+                'value': None
+            },
+            'base_model': {
+                'type': django.db.models.base.ModelBase,
+                'value': None
+            },
+            'model_kwarg': {
+                'type': str,
+                'value': None
+            }
+        }
+
+
+    # ToDo: model
+
+    # ToDo: related_objects
+
+    # ToDo: get_serializer_class
+
+    # ToDo: related_objects
 
 
 

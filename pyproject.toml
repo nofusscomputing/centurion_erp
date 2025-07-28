@@ -1146,6 +1146,7 @@ markers = [
     "model_softwarecategory: Selects tests for model Software Category.",
     "model_softwareenablefeatureflag: Selects tests for model Software Enabled Feature Flag.",
     "model_softwareversion: Selects tests for model Software Version.",
+    "model_tenant: Selects tests for model Tenant.",
     "model_ticketbase: Selects tests for model Ticket Base.",
     "model_ticketcategory: Select all ticket category tests.",
     "model_ticketcommentaction: Select test for model ticket Action Comment.",
