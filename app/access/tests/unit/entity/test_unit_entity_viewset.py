@@ -7,13 +7,13 @@ from access.viewsets.entity import (
     ViewSet,
 )
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCases
 
 
 
 @pytest.mark.model_entity
 class ViewsetTestCases(
-    ModelViewSetInheritedCases,
+    SubModelViewSetInheritedCases,
 ):
 
 
@@ -37,6 +37,9 @@ class ViewsetTestCases(
                 'type': type(None),
                 'value': None
             },
+            'base_model': {
+                'value': Entity
+            },
             'documentation': {
                 'type': type(None),
                 'value': None
@@ -52,6 +55,12 @@ class ViewsetTestCases(
             'model_documentation': {
                 'type': type(None),
                 'value': None
+            },
+            'model_kwarg': {
+                'value': 'model_name'
+            },
+            'model_suffix': {
+                'type': type(None)
             },
             'queryset': {
                 'type': type(None),

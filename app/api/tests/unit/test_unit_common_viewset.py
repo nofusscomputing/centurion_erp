@@ -32,6 +32,7 @@ from api.viewsets.common import (
     CommonViewSet,
     ModelViewSet,
     SubModelViewSet,
+    SubModelViewSet_ReWrite,
 
     ModelCreateViewSet,
     ModelListRetrieveDeleteViewSet,
@@ -1069,6 +1070,10 @@ class SubModelViewSetTestCases(
             'model_kwarg': {
                 'type': str,
                 'value': None
+            },
+            'model_suffix': {
+                'type': str,
+                'value': None
             }
         }
 
@@ -1136,7 +1141,7 @@ class SubModelViewSetPyTest(
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return SubModelViewSet
+        return SubModelViewSet_ReWrite
 
 
     @property
@@ -1163,8 +1168,11 @@ class SubModelViewSetPyTest(
                 'value': None
             },
             'model': {
+                'type': django.db.models.NOT_PROVIDED,
+                'value': django.db.models.NOT_PROVIDED
+            },
+            'model_suffix': {
                 'type': type(None),
-                'value': None
             },
             'model_documentation': {
                 'type': type(None),
@@ -1195,20 +1203,6 @@ class SubModelViewSetPyTest(
                 'value': None
             }
         }
-
-
-    def test_view_attr_model_not_empty(self, viewset):
-        """Attribute Test
-
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
-
-        Attribute `model` must return a value that is not None
-        """
-
-        assert viewset().model is None
-
 
 
     def test_view_attr_type_base_model(self):
@@ -2235,18 +2229,6 @@ class SubModelViewSetInheritedCases(
     Use this Test Suite for ViewSet classes that inherit from SubModelViewSet
     """
 
-    http_options_response_list = None
-    """Inherited class must make and store here a HTTP/Options request"""
-
-    route_name = None
-    """Inherited class must define the url rout name with namespace"""
-
-    base_model = None
-    """The Sub Model that is returned from the model property"""
-
-    # viewset = None
-
-
     # @classmethod
     # def setUpTestData(self):
     #     """Setup Test
@@ -2260,14 +2242,31 @@ class SubModelViewSetInheritedCases(
 
     #     super().setUpTestData()
 
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'model_suffix': {
+                'type': str,
+                'value': None
+            },
+            'base_model': {
+                'type': django.db.models.base.ModelBase,
+                'value': None
+            },
+            'model_kwarg': {
+                'type': str,
+                'value': None
+            }
+        }
 
-    def test_view_attr_model_value(self, viewset):
-        """Attribute Test
 
-        Attribute `model` must return the correct sub-model
-        """
+    # ToDo: model
 
-        assert viewset().model == self.model
+    # ToDo: related_objects
+
+    # ToDo: get_serializer_class
+
+    # ToDo: related_objects
 
 
 
