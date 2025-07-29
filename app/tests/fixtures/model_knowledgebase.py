@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from assistance.models.knowledge_base import KnowledgeBase
+from assistance.serializers.knowledge_base import (
+    KnowledgeBaseBaseSerializer,
+    KnowledgeBaseModelSerializer,
+    KnowledgeBaseViewSerializer
+)
 
 
 
@@ -65,3 +70,13 @@ def kwargs_knowledgebase(django_db_blocker,
             pass
 
         category.delete()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_knowledgebase():
+
+    yield {
+        'base': KnowledgeBaseBaseSerializer,
+        'model': KnowledgeBaseModelSerializer,
+        'view': KnowledgeBaseViewSerializer
+    }
