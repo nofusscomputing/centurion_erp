@@ -1,11 +1,6 @@
 import django
 import pytest
-import unittest
-import requests
-
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,8 +8,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
 from config_management.models.groups import ConfigGroups
@@ -25,13 +18,13 @@ User = django.contrib.auth.get_user_model()
 
 
 
-
+@pytest.mark.model_configgroups
 class ViewSetBase:
 
     model = ConfigGroups
 
     app_namespace = 'v2'
-    
+
     url_name = '_api_configgroups'
 
     change_data = {'name': 'device'}
@@ -57,10 +50,6 @@ class ViewSetBase:
 
         self.different_organization = different_organization
 
-
-
-
-
         self.global_organization = Organization.objects.create(
             name = 'test_global_organization'
         )
@@ -79,9 +68,6 @@ class ViewSetBase:
         app_settings.save()
 
 
-
-
-
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
@@ -98,7 +84,6 @@ class ViewSetBase:
         view_team.permissions.set([view_permissions])
 
 
-
         add_permissions = Permission.objects.get(
                 codename = 'add_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
@@ -113,7 +98,6 @@ class ViewSetBase:
         )
 
         add_team.permissions.set([add_permissions])
-
 
 
         change_permissions = Permission.objects.get(
@@ -219,26 +203,7 @@ class ViewSetBase:
 
 
 
-class ConfigGroupsPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase
-):
-
-    pass
-
-
-
-class ConfigGroupsViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
-
-
-
+@pytest.mark.module_config_management
 class ConfigGroupsMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
