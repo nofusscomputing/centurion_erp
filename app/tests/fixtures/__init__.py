@@ -77,6 +77,7 @@ from .model_company import (
 from .model_configgroup import (
     kwargs_configgroups,
     model_configgroups,
+    serializer_configgroups,
 )
 
 from .model_configgrouphost import (
