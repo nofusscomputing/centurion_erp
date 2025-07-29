@@ -11,7 +11,7 @@ from assistance.viewsets.model_knowledge_base_article import ViewSet
 from itam.models.device import Device
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
+@pytest.mark.skip(reason = 'see #895 #903, tests being refactored')
 class ModelKnowledgeBaseArticleViewsetList(
     ModelViewSetInheritedCases,
     TestCase,

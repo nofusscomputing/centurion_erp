@@ -187,6 +187,7 @@ from .model_knowledgebase import (
 from .model_knowledgebasecategory import (
     kwargs_knowledgebasecategory,
     model_knowledgebasecategory,
+    serializer_knowledgebasecategory,
 )
 
 from .model_kwarg_data import (
