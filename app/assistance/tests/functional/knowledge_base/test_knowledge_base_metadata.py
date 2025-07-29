@@ -1,11 +1,7 @@
 import django
 import pytest
-import unittest
-import requests
 
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,16 +9,13 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
-from assistance.models.knowledge_base import KnowledgeBase
+from assistance.models.knowledge_base import KnowledgeBase, KnowledgeBaseCategory
 
 from settings.models.app_settings import AppSettings
 
 User = django.contrib.auth.get_user_model()
-
 
 
 
@@ -65,11 +58,17 @@ class ViewSetBase:
             name = 'test_global_organization'
         )
 
+        category = KnowledgeBaseCategory.objects.create(
+            organization = self.global_organization,
+            name = 'cat2'
+        )
+
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
             title = 'one',
             content = 'some text for bodygfdgdf',
-            target_user = self.view_user
+            target_user = self.view_user,
+            category = category,
         )
 
         app_settings = AppSettings.objects.get(
@@ -163,19 +162,29 @@ class ViewSetBase:
             user = self.view_user
         )
 
+        category_item = KnowledgeBaseCategory.objects.create(
+            organization = self.organization,
+            name = 'cat'
+        )
 
         self.item = self.model.objects.create(
             organization = self.organization,
             title = 'one',
             content = 'some text for body',
-            target_user = self.view_user
+            target_user = self.view_user,
+            category = category_item,
         )
 
+        category = KnowledgeBaseCategory.objects.create(
+            organization = self.different_organization,
+            name = 'cat1'
+        )
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
             title = 'two',
             content = 'some text for body',
-            target_user = self.view_user_b
+            target_user = self.view_user_b,
+            category = category,
         )
 
 
@@ -185,7 +194,8 @@ class ViewSetBase:
             'title': 'team_post',
             'organization': self.organization.id,
             'content': 'article text',
-            'target_user': self.view_user.id
+            'target_user': self.view_user.id,
+            'category': category_item.id,
         }
 
 
@@ -227,24 +237,6 @@ class ViewSetBase:
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-class KnowledgeBasePermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-
-class KnowledgeBaseViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase,
-):
-
-    pass
 
 
 
