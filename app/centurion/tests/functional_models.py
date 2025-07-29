@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import models
+
 
 
 @pytest.mark.models
@@ -23,25 +25,70 @@ class ModelTestCases:
     """
 
 
-    @pytest.fixture( scope = 'function' )
-    def created_model(self, django_db_blocker, model, model_kwargs):
+    @pytest.fixture( scope = 'function')
+    def created_model(self, request, django_db_blocker,
+        model, model_kwargs, mocker, model_user, kwargs_user
+    ):
 
-        model_object = None
+        item = None
 
         if not model._meta.abstract:
 
             with django_db_blocker.unblock():
 
-                model_object = model.objects.create(
-                    **model_kwargs
+                kwargs_many_to_many = {}
+
+                kwargs = {}
+
+                for key, value in model_kwargs.items():
+
+                    field = model._meta.get_field(key)
+
+                    if isinstance(field, models.ManyToManyField):
+
+                        kwargs_many_to_many.update({
+                            key: value
+                        })
+
+                    else:
+
+                        kwargs.update({
+                            key: value
+                        })
+
+
+                context_user = mocker.patch.object(
+                    model, 'context'
+                )
+                user = model_user.objects.create( **kwargs_user )
+                context_user.__getitem__.side_effect = {
+                    'logger': None,
+                    'user': user
+                }.__getitem__
+
+                item = model.objects.create(
+                    **kwargs
                 )
 
-        yield model_object
+                for key, value in kwargs_many_to_many.items():
 
-        with django_db_blocker.unblock():
+                    field = getattr(item, key)
 
-            if model_object:
-                model_object.delete()
+                    for entry in value:
+
+                        field.add(entry)
+
+                request.cls.item = item
+
+        yield item
+
+        if item:
+
+            with django_db_blocker.unblock():
+
+                item.delete()
+
+                user.delete()
 
 
 

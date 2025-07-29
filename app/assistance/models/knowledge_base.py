@@ -103,7 +103,7 @@ class KnowledgeBase(
 
     responsible_user = models.ForeignKey(
         User,
-        blank = False,
+        blank = True,
         help_text = 'User(s) whom is considered the articles owner.',
         null = True,
         on_delete = models.PROTECT,

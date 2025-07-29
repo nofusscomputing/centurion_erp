@@ -2,14 +2,14 @@ import pytest
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from assistance.viewsets.knowledge_base import (
-    KnowledgeBase,
+from assistance.viewsets.knowledge_base_category import (
+    KnowledgeBaseCategory,
     ViewSet,
 )
 
 
 
-@pytest.mark.model_knowledgebase
+@pytest.mark.model_knowledgebasecategory
 class ViewsetTestCases(
     ModelViewSetInheritedCases,
 ):
@@ -35,17 +35,15 @@ class ViewsetTestCases(
             },
             'filterset_fields': {
                 'value': [
+                    'name',
                     'organization',
-                    'category',
+                    'parent_category',
                     'target_user',
-                    'target_team',
-                    'responsible_user',
-                    'responsible_teams',
-                    'public'
+                    'target_team'
                 ]
             },
             'model': {
-                'value': KnowledgeBase
+                'value': KnowledgeBaseCategory
             },
             'model_documentation': {
                 'type': type(None),
@@ -58,13 +56,11 @@ class ViewsetTestCases(
             },
             'search_fields': {
                 'value': [
-                    'title',
-                    'summary',
-                    'content'
+                    'name'
                 ]
             },
             'view_description': {
-                'value': 'Information Management Knowledge Base Article(s)'
+                'value': 'Settings, Knowledge Base Categories'
             },
             'view_name': {
                 'type': type(None),
@@ -76,7 +72,7 @@ class ViewsetTestCases(
 
 
 
-class KnowledgeBaseViewsetInheritedCases(
+class knowledgebaseCategoryViewsetInheritedCases(
     ViewsetTestCases,
 ):
     pass
@@ -84,7 +80,7 @@ class KnowledgeBaseViewsetInheritedCases(
 
 
 @pytest.mark.module_assistance
-class KnowledgeBaseViewsetPyTest(
+class knowledgebaseCategoryViewsetPyTest(
     ViewsetTestCases,
 ):
 

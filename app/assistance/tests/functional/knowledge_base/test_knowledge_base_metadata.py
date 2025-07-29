@@ -9,11 +9,9 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
-from assistance.models.knowledge_base_category import KnowledgeBaseCategory
+from assistance.models.knowledge_base import KnowledgeBase, KnowledgeBaseCategory
 
 from settings.models.app_settings import AppSettings
 
@@ -23,13 +21,13 @@ User = django.contrib.auth.get_user_model()
 
 class ViewSetBase:
 
-    model = KnowledgeBaseCategory
+    model = KnowledgeBase
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_knowledge_base_category'
+    url_name = '_api_knowledgebase'
 
-    change_data = {'name': 'device'}
+    change_data = {'title': 'device'}
 
     delete_data = {}
 
@@ -60,10 +58,17 @@ class ViewSetBase:
             name = 'test_global_organization'
         )
 
+        category = KnowledgeBaseCategory.objects.create(
+            organization = self.global_organization,
+            name = 'cat2'
+        )
+
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
-            name = 'onesdsad',
-            target_user = self.view_user
+            title = 'one',
+            content = 'some text for bodygfdgdf',
+            target_user = self.view_user,
+            category = category,
         )
 
         app_settings = AppSettings.objects.get(
@@ -76,6 +81,9 @@ class ViewSetBase:
 
 
 
+
+
+        self.url_kwargs = {}
 
 
         view_permissions = Permission.objects.get(
@@ -154,26 +162,40 @@ class ViewSetBase:
             user = self.view_user
         )
 
+        category_item = KnowledgeBaseCategory.objects.create(
+            organization = self.organization,
+            name = 'cat'
+        )
 
         self.item = self.model.objects.create(
             organization = self.organization,
-            name = 'one',
-            target_user = self.view_user
+            title = 'one',
+            content = 'some text for body',
+            target_user = self.view_user,
+            category = category_item,
         )
 
+        category = KnowledgeBaseCategory.objects.create(
+            organization = self.different_organization,
+            name = 'cat1'
+        )
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
-            name = 'two',
-            target_user = self.view_user_b
+            title = 'two',
+            content = 'some text for body',
+            target_user = self.view_user_b,
+            category = category,
         )
 
 
         self.url_view_kwargs = {'pk': self.item.id}
 
         self.add_data = {
-            'name': 'team_post',
+            'title': 'team_post',
             'organization': self.organization.id,
-            'target_user': self.view_user.id
+            'content': 'article text',
+            'target_user': self.view_user.id,
+            'category': category_item.id,
         }
 
 
@@ -218,29 +240,13 @@ class ViewSetBase:
 
 
 
-class KnowledgeBaseCategoryPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-
-class KnowledgeBaseCategoryViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase,
-):
-
-    pass
-
-
-
-class KnowledgeBaseCategoryMetadata(
+class KnowledgeBaseMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
+    MetaDataNavigationEntriesFunctional,
     TestCase
 ):
 
-    pass
+    menu_id = 'assistance'
+
+    menu_entry_id = 'knowledge_base'

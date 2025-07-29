@@ -685,7 +685,11 @@ def recursearray() -> dict[dict, str, any]:
 
                             print( f'Index {keys[1]} does not exist. List had a length of {len(v)}', file = sys.stderr )
 
-                            return None
+                            return {
+                                'obj': obj,
+                                'key': key,
+                                'value': '-value-does_not-exist-'
+                            }
 
                     except ValueError:
 

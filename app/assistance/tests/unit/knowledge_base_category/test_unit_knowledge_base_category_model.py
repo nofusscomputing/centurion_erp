@@ -77,6 +77,7 @@ class KnowledgeBaseCategoryModelInheritedCases(
 
 
 
+@pytest.mark.module_assistance
 class KnowledgeBaseCategoryModelPyTest(
     KnowledgeBaseCategoryModelTestCases,
 ):

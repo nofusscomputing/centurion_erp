@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from assistance.models.knowledge_base_category import KnowledgeBaseCategory
+from assistance.serializers.knowledge_base_category import (
+    KnowledgeBaseCategoryBaseSerializer,
+    KnowledgeBaseCategoryModelSerializer,
+    KnowledgeBaseCategoryViewSerializer
+)
 
 
 
@@ -37,3 +42,13 @@ def kwargs_knowledgebasecategory(django_db_blocker, kwargs_centurionmodel, model
     with django_db_blocker.unblock():
 
         user.delete()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_knowledgebasecategory():
+
+    yield {
+        'base': KnowledgeBaseCategoryBaseSerializer,
+        'model': KnowledgeBaseCategoryModelSerializer,
+        'view': KnowledgeBaseCategoryViewSerializer
+    }

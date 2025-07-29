@@ -88,7 +88,7 @@ class KnowledgeBaseModelTestCases(
             'unique': False,
         },
         'responsible_user': {
-            'blank': False,
+            'blank': True,
             'default': models.fields.NOT_PROVIDED,
             'field_type': models.ForeignKey,
             'null': True,
@@ -128,6 +128,7 @@ class KnowledgeBaseModelInheritedCases(
 
 
 
+@pytest.mark.module_module_assistance
 class KnowledgeBaseModelPyTest(
     KnowledgeBaseModelTestCases,
 ):

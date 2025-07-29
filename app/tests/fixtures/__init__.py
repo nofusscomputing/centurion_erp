@@ -181,11 +181,13 @@ from .model_itamassetbase import (
 from .model_knowledgebase import (
     kwargs_knowledgebase,
     model_knowledgebase,
+    serializer_knowledgebase,
 )
 
 from .model_knowledgebasecategory import (
     kwargs_knowledgebasecategory,
     model_knowledgebasecategory,
+    serializer_knowledgebasecategory,
 )
 
 from .model_kwarg_data import (

@@ -39,7 +39,7 @@ class CenturionAbstractModelTestCases(
         assert history_model.__name__ == model().get_history_model_name()
 
 
-
+    @pytest.mark.skip( reason = 'test must be as part of serializer and viewset tests, not model' )
     def test_model_create_has_history_entry(self, model_contenttype, created_model, model):
         """Model Created
 
