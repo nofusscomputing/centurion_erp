@@ -108,7 +108,6 @@ class KnowledgeBaseSerializerTestCases(
         )
 
         kwargs = kwargs_api_create.copy()
-        # team = model_team.objects.create( **kwargs_team )
         kwargs.update({
             'target_user': request_user.id
         })
@@ -124,8 +123,6 @@ class KnowledgeBaseSerializerTestCases(
             )
 
             serializer.is_valid(raise_exception = True)
-
-        # team.delete()
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
 
