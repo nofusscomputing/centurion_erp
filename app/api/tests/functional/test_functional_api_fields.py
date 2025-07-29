@@ -92,9 +92,38 @@ class APIFieldsTestCases:
 
         with django_db_blocker.unblock():
 
+            kwargs_many_to_many = {}
+
+            kwargs = {}
+
+            for key, value in model_kwargs.items():
+
+                field = model._meta.get_field(key)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    kwargs_many_to_many.update({
+                        key: value
+                    })
+
+                else:
+
+                    kwargs.update({
+                        key: value
+                    })
+
+
             item = model.objects.create(
-                **model_kwargs
+                **kwargs
             )
+
+            for key, value in kwargs_many_to_many.items():
+
+                field = getattr(item, 'target_team')
+
+                for entry in value:
+
+                    field.add(entry)
 
             request.cls.item = item
 
@@ -198,7 +227,7 @@ class APIFieldsTestCases:
         else:
 
             assert(
-                type( api_data['value'] ) is param_expected
+                type( api_data.get('value', 'is empty') ) is param_expected
                 or type( api_data_two.get('value', 'is empty') ) is param_expected
             )
 
