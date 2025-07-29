@@ -88,7 +88,7 @@ class KnowledgeBaseModelTestCases(
             'unique': False,
         },
         'responsible_user': {
-            'blank': False,
+            'blank': True,
             'default': models.fields.NOT_PROVIDED,
             'field_type': models.ForeignKey,
             'null': True,
