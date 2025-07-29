@@ -1,3 +1,4 @@
+import pytest
 import django
 
 from django.contrib.auth.models import Permission
