@@ -9,8 +9,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from assistance.models.knowledge_base_category import KnowledgeBaseCategory
@@ -26,8 +24,8 @@ class ViewSetBase:
     model = KnowledgeBaseCategory
 
     app_namespace = 'v2'
-    
-    url_name = '_api_v2_knowledge_base_category'
+
+    url_name = '_api_knowledgebasecategory'
 
     change_data = {'name': 'device'}
 
@@ -215,25 +213,6 @@ class ViewSetBase:
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-class KnowledgeBaseCategoryPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-
-class KnowledgeBaseCategoryViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase,
-):
-
-    pass
 
 
 
