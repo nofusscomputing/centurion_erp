@@ -32,59 +32,63 @@ class ModelTestCases:
 
         item = None
 
-        with django_db_blocker.unblock():
+        if not model._meta.abstract:
 
-            kwargs_many_to_many = {}
+            with django_db_blocker.unblock():
 
-            kwargs = {}
+                kwargs_many_to_many = {}
 
-            for key, value in model_kwargs.items():
+                kwargs = {}
 
-                field = model._meta.get_field(key)
+                for key, value in model_kwargs.items():
 
-                if isinstance(field, models.ManyToManyField):
+                    field = model._meta.get_field(key)
 
-                    kwargs_many_to_many.update({
-                        key: value
-                    })
+                    if isinstance(field, models.ManyToManyField):
 
-                else:
+                        kwargs_many_to_many.update({
+                            key: value
+                        })
 
-                    kwargs.update({
-                        key: value
-                    })
+                    else:
+
+                        kwargs.update({
+                            key: value
+                        })
 
 
-            context_user = mocker.patch.object(
-                model, 'context'
-            )
-            user = model_user.objects.create( **kwargs_user )
-            context_user.__getitem__.side_effect = {
-                'logger': None,
-                'user': user
-            }.__getitem__
+                context_user = mocker.patch.object(
+                    model, 'context'
+                )
+                user = model_user.objects.create( **kwargs_user )
+                context_user.__getitem__.side_effect = {
+                    'logger': None,
+                    'user': user
+                }.__getitem__
 
-            item = model.objects.create(
-                **kwargs
-            )
+                item = model.objects.create(
+                    **kwargs
+                )
 
-            for key, value in kwargs_many_to_many.items():
+                for key, value in kwargs_many_to_many.items():
 
-                field = getattr(item, 'target_team')
+                    field = getattr(item, 'target_team')
 
-                for entry in value:
+                    for entry in value:
 
-                    field.add(entry)
+                        field.add(entry)
 
-            request.cls.item = item
+                request.cls.item = item
 
         yield item
 
-        with django_db_blocker.unblock():
+        if item:
 
-            item.delete()
+            with django_db_blocker.unblock():
 
-            user.delete()
+                item.delete()
+
+                user.delete()
 
 
 
