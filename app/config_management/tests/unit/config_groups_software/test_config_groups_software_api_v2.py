@@ -20,6 +20,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_configgroupsoftware
+@pytest.mark.module_config_management
 class ConfigGroupsAPI(
     TestCase,
     APITenancyObject
