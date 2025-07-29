@@ -1,11 +1,6 @@
 import django
-import pytest
-import unittest
-import requests
 
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,8 +8,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from config_management.models.groups import ConfigGroups, ConfigGroupSoftware, Software, SoftwareVersion
@@ -23,6 +16,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_configgroupsoftware
 class ViewSetBase:
 
     model = ConfigGroupSoftware
@@ -236,37 +230,7 @@ class ViewSetBase:
 
 
 
-class ConfigGroupSoftwarePermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
-
-
-class ConfigGroupSoftwareViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
-
-
-
+@pytest.mark.module_config_management
 class ConfigGroupSoftwareMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
