@@ -1,11 +1,7 @@
 import django
 import pytest
-import unittest
-import requests
 
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,11 +9,9 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from config_management.models.groups import ConfigGroups
+from core.models.manufacturer import Manufacturer
 
 from settings.models.app_settings import AppSettings
 
@@ -26,13 +20,14 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_manufacturer
 class ViewSetBase:
 
-    model = ConfigGroups
+    model = Manufacturer
 
     app_namespace = 'v2'
     
-    url_name = '_api_configgroups'
+    url_name = '_api_manufacturer'
 
     change_data = {'name': 'device'}
 
@@ -77,6 +72,7 @@ class ViewSetBase:
         app_settings.global_organization = self.global_organization
 
         app_settings.save()
+
 
 
 
@@ -219,33 +215,11 @@ class ViewSetBase:
 
 
 
-class ConfigGroupsPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase
-):
-
-    pass
-
-
-
-class ConfigGroupsViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
-
-
-
-class ConfigGroupsMetadata(
+@pytest.mark.module_core
+class ManufacturerMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
-    MetaDataNavigationEntriesFunctional,
     TestCase
 ):
 
-    menu_id = 'config_management'
-
-    menu_entry_id = 'group'
+    pass

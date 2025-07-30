@@ -74,7 +74,7 @@ class ViewSet( ModelViewSet ):
 
     model = ConfigGroups
 
-    view_description = 'Information Management Knowledge Base Article(s)'
+    view_description = 'Configuration Groups'
 
 
     def get_queryset(self):
@@ -94,7 +94,7 @@ class ViewSet( ModelViewSet ):
         else:
 
             self.queryset = super().get_queryset().filter( parent = None )
-        
+
         return self.queryset
 
 
@@ -105,12 +105,13 @@ class ViewSet( ModelViewSet ):
             or self.action == 'retrieve'
         ):
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
+            self.serializer_class = globals()[str(
+                self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
 
         else:
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
+            self.serializer_class = globals()[str(
+                self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
 
 
         return self.serializer_class
-

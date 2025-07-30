@@ -377,6 +377,7 @@ class CommonViewSetTestCases(
         )
 
         view_set.request = request
+        view_set.kwargs = {}
 
         yield view_set
 

@@ -13,6 +13,8 @@ from itam.models.software import Software, SoftwareVersion
 
 
 
+@pytest.mark.model_configgroupsoftware
+@pytest.mark.module_config_management
 class ConfigGroupSoftwareValidationAPI(
     TestCase,
 ):

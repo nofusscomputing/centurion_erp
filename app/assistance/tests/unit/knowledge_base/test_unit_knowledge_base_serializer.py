@@ -61,7 +61,8 @@ class KnowledgeBaseSerializerTestCases(
 
 
     def test_serializer_validation_no_title(self,
-        kwargs_api_create, model, model_serializer, request_user):
+        kwargs_api_create, model, model_serializer, request_user
+    ):
         """Serializer Validation Check
 
         Ensure that if creating and no title is provided a validation error occurs

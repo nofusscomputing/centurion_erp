@@ -2,6 +2,12 @@ import datetime
 import pytest
 
 from config_management.models.groups import ConfigGroups
+from config_management.serializers.config_group import  (
+    ConfigGroupBaseSerializer,
+    ConfigGroupModelSerializer,
+    ConfigGroupViewSerializer,
+)
+
 
 
 @pytest.fixture( scope = 'class')
@@ -25,3 +31,13 @@ def kwargs_configgroups(django_db_blocker,
         }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_configgroups():
+
+    yield {
+        'base': ConfigGroupBaseSerializer,
+        'model': ConfigGroupModelSerializer,
+        'view': ConfigGroupViewSerializer
+    }

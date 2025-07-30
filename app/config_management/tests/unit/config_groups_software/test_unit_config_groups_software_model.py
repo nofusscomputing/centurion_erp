@@ -72,6 +72,9 @@ class ConfigGroupSoftwareModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_notes_enabled': {
+                'value': False,
+            },
             'model_tag': {
                 'type': models.NOT_PROVIDED,
                 'value': models.NOT_PROVIDED,

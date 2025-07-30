@@ -10,6 +10,8 @@ from core.serializers.manufacturer import Manufacturer, ManufacturerModelSeriali
 
 
 
+@pytest.mark.model_manufacturer
+@pytest.mark.module_core
 class ManufacturerValidationAPI(
     TestCase,
 ):
