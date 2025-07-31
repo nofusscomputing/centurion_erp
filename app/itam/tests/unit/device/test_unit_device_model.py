@@ -17,7 +17,7 @@ class DeviceModelTestCases(
 
     @property
     def parameterized_class_attributes(self):
-        
+
         return {
             'model_tag': {
                 'type': str,
@@ -28,12 +28,12 @@ class DeviceModelTestCases(
 
     @property
     def parameterized_model_fields(self):
-        
+
         return {
         'name': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
+            'field_type': models.CharField,
             'length': 50,
             'null': False,
             'unique': True,
@@ -48,7 +48,7 @@ class DeviceModelTestCases(
         'uuid': {
             'blank': True,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.CharField,
+            'field_type': models.UUIDField,
             'length': 50,
             'null': True,
             'unique': True,
