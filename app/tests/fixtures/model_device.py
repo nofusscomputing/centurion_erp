@@ -1,4 +1,3 @@
-import datetime
 import pytest
 import random
 
@@ -23,8 +22,6 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
     model_devicetype, kwargs_devicetype,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-
     with django_db_blocker.unblock():
 
         device_model = model_devicemodel.objects.create( **kwargs_devicemodel )
@@ -33,10 +30,8 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
 
     kwargs = {
         **kwargs_centurionmodel.copy(),
-        'name': 'dev' + str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', ''),
-        'serial_number': str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', ''),
+        'name': 'dev-' + str( random.randint(10000, 99999) ),
+        'serial_number': 'dev-' + str( random.randint(1, 99999) ),
         'uuid': '7318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(10000, 99999) ),
         'device_model': device_model,
         'device_type': device_type,
