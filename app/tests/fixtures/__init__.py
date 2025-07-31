@@ -103,6 +103,7 @@ from .model_contenttype import (
 from .model_device import (
     kwargs_device,
     model_device,
+    serializer_device,
 )
 
 from .model_devicemodel import (

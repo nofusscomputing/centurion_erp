@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from itam.models.device import Device
+from itam.serializers.device import (
+    DeviceBaseSerializer,
+    DeviceModelSerializer,
+    DeviceViewSerializer,
+)
 
 
 
@@ -28,3 +33,13 @@ def kwargs_device(kwargs_centurionmodel):
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_device():
+
+    yield {
+        'base': DeviceBaseSerializer,
+        'model': DeviceModelSerializer,
+        'view': DeviceViewSerializer
+    }
