@@ -1,8 +1,7 @@
 import django
-
 import pytest
 
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -10,8 +9,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from itam.models.device import DeviceModel
@@ -22,6 +19,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_devicemodel
 class ViewSetBase:
 
     model = DeviceModel
@@ -217,26 +215,7 @@ class ViewSetBase:
 
 
 
-class DeviceModelPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase
-):
-
-    pass
-
-
-
-class DeviceModelViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
-
-
-
+@pytest.mark.module_itam
 class DeviceModelMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
