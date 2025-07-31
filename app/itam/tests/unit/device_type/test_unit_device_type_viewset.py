@@ -1,46 +1,83 @@
 import pytest
 
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
-
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from itam.viewsets.device_type import ViewSet
+from itam.viewsets.device_type import (
+    DeviceType,
+    ViewSet,
+)
 
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_devicetype
-@pytest.mark.module_itam
-class DeviceTYpeViewsetList(
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_devicetype'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'organization'
+                ]
+            },
+            'model': {
+                'value': DeviceType
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'name'
+                ]
+            },
+            'view_description': {
+                'value': 'Device Models'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
 
-        client = Client()
 
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+class DeviceTypeViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
 
-        client.force_login(self.view_user)
 
-        self.http_options_response_list = client.options(url)
+
+@pytest.mark.module_itam
+class DeviceTypeViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass
