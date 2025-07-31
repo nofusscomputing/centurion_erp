@@ -103,11 +103,13 @@ from .model_contenttype import (
 from .model_device import (
     kwargs_device,
     model_device,
+    serializer_device,
 )
 
 from .model_devicemodel import (
     kwargs_devicemodel,
     model_devicemodel,
+    serializer_devicemodel,
 )
 
 from .model_deviceoperatingsystem import (
@@ -123,6 +125,7 @@ from .model_devicesoftware import (
 from .model_devicetype import (
     kwargs_devicetype,
     model_devicetype,
+    serializer_devicetype,
 )
 
 from .model_employee import (

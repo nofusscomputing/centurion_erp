@@ -1,18 +1,18 @@
 import django
 import pytest
 
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctional,
+    MetaDataNavigationEntriesFunctional
+)
 
 from itam.models.device import Device
 
@@ -22,12 +22,13 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_device
 class ViewSetBase:
 
     model = Device
 
     app_namespace = 'v2'
-    
+
     url_name = '_api_device'
 
     change_data = {'name': 'device-change'}
@@ -61,7 +62,7 @@ class ViewSetBase:
 
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
-            name = 'global_item'
+            name = 'global-item'
         )
 
         app_settings = AppSettings.objects.get(
@@ -142,7 +143,8 @@ class ViewSetBase:
         delete_team.permissions.set([delete_permissions])
 
 
-        self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
+        self.no_permissions_user = User.objects.create_user(
+            username="test_no_permissions", password="password")
 
 
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
@@ -159,7 +161,7 @@ class ViewSetBase:
 
         self.other_org_item = self.model.objects.create(
             organization = different_organization,
-            name = 'other_item'
+            name = 'other-item'
         )
 
 
@@ -177,20 +179,23 @@ class ViewSetBase:
             user = self.add_user
         )
 
-        self.change_user = User.objects.create_user(username="test_user_change", password="password")
+        self.change_user = User.objects.create_user(
+            username="test_user_change", password="password")
         teamuser = TeamUsers.objects.create(
             team = change_team,
             user = self.change_user
         )
 
-        self.delete_user = User.objects.create_user(username="test_user_delete", password="password")
+        self.delete_user = User.objects.create_user(
+            username="test_user_delete", password="password")
         teamuser = TeamUsers.objects.create(
             team = delete_team,
             user = self.delete_user
         )
 
 
-        self.different_organization_user = User.objects.create_user(username="test_different_organization_user", password="password")
+        self.different_organization_user = User.objects.create_user(
+            username="test_different_organization_user", password="password")
 
 
         different_organization_team = Team.objects.create(
@@ -212,25 +217,7 @@ class ViewSetBase:
 
 
 
-class DevicePermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase
-):
-
-    pass
-
-
-class DeviceViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
-
-
-
+@pytest.mark.module_itam
 class DeviceMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,

@@ -1,7 +1,7 @@
 import django
 import pytest
 
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -9,11 +9,9 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from itam.models.device import DeviceType
+from itam.models.device import DeviceModel
 
 from settings.models.app_settings import AppSettings
 
@@ -21,13 +19,14 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_devicemodel
 class ViewSetBase:
 
-    model = DeviceType
+    model = DeviceModel
 
     app_namespace = 'v2'
     
-    url_name = '_api_devicetype'
+    url_name = '_api_devicemodel'
 
     change_data = {'name': 'device-change'}
 
@@ -56,7 +55,6 @@ class ViewSetBase:
 
 
 
-
         self.global_organization = Organization.objects.create(
             name = 'test_global_organization'
         )
@@ -73,7 +71,6 @@ class ViewSetBase:
         app_settings.global_organization = self.global_organization
 
         app_settings.save()
-
 
 
 
@@ -218,27 +215,8 @@ class ViewSetBase:
 
 
 
-class DeviceTypePermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-
-
-class DeviceTypeViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase,
-):
-
-    pass
-
-
-
-class DeviceTypeMetadata(
+@pytest.mark.module_itam
+class DeviceModelMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
     TestCase

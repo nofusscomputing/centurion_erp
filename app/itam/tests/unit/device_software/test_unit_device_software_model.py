@@ -60,7 +60,7 @@ class DeviceSoftwareModelTestCases(
             'action': {
                 'blank': True,
                 'default': models.fields.NOT_PROVIDED,
-                'field_type': models.CharField,
+                'field_type': models.IntegerField,
                 'null': True,
                 'unique': False,
             },
