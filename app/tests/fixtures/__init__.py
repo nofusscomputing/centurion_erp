@@ -125,6 +125,7 @@ from .model_devicesoftware import (
 from .model_devicetype import (
     kwargs_devicetype,
     model_devicetype,
+    serializer_devicetype,
 )
 
 from .model_employee import (
