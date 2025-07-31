@@ -23,3 +23,13 @@ def kwargs_devicemodel(kwargs_centurionmodel):
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_devicemodel():
+
+    yield {
+        'base': DeviceModelBaseSerializer,
+        'model': DeviceModelModelSerializer,
+        'view': DeviceModelViewSerializer
+    }

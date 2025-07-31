@@ -109,6 +109,7 @@ from .model_device import (
 from .model_devicemodel import (
     kwargs_devicemodel,
     model_devicemodel,
+    serializer_devicemodel,
 )
 
 from .model_deviceoperatingsystem import (
