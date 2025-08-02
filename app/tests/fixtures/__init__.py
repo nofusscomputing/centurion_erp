@@ -291,6 +291,7 @@ from .model_softwareenablefeatureflag import (
 from .model_softwareversion import (
     kwargs_softwareversion,
     model_softwareversion,
+    serializer_softwareversion,
 )
 
 from .model_ticketbase import (
