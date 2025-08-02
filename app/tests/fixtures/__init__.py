@@ -274,6 +274,7 @@ from .model_slmticket import (
 from .model_software import (
     kwargs_software,
     model_software,
+    serializer_software
 )
 
 from .model_softwarecategory import (
