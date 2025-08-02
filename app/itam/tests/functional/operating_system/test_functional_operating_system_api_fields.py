@@ -10,7 +10,7 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
-@pytest.mark.model_device
+@pytest.mark.model_operatingsystem
 class OperatingSystemAPITestCases(
     APIFieldsInheritedCases,
 ):

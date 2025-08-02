@@ -19,6 +19,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.module_itam
 class ViewSetBase:
 
     model = OperatingSystem
@@ -216,6 +217,7 @@ class ViewSetBase:
 
 
 
+@pytest.mark.module_itam
 class OperatingSystemMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,

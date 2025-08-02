@@ -6,7 +6,7 @@ from core.tests.functional.centurion_abstract.test_functional_centurion_abstract
 
 
 
-@pytest.mark.model_device
+@pytest.mark.model_operatingsystem
 class OperatingSystemModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
