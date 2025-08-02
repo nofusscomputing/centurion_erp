@@ -212,6 +212,7 @@ from .model_operatingsystem import (
 from .model_operatingsystemversion import (
     kwargs_operatingsystemversion,
     model_operatingsystemversion,
+    serializer_operatingsystemversion
 )
 
 from .model_permission import (
