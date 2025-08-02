@@ -1,44 +1,84 @@
 import pytest
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from itam.viewsets.operating_system import ViewSet
+from itam.viewsets.operating_system import (
+    OperatingSystem,
+    ViewSet,
+)
 
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_operatingsystem
-@pytest.mark.module_itam
-class OperatingSystemViewsetList(
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_operatingsystem'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
-
-        super().setUpTestData()
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': str,
+                'value': 'itam/operating_system'
+            },
+            'filterset_fields': {
+                'value': [
+                    'organization',
+                    'publisher'
+                ]
+            },
+            'model': {
+                'value': OperatingSystem
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'name'
+                ]
+            },
+            'view_description': {
+                'value': 'Operating Systems'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
-        client.force_login(self.view_user)
 
-        self.http_options_response_list = client.options(url)
+
+class OperatingSystemViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_itam
+class OperatingSystemViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass
