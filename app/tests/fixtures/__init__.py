@@ -206,11 +206,13 @@ from .model_manufacturer import (
 from .model_operatingsystem import (
     kwargs_operatingsystem,
     model_operatingsystem,
+    serializer_operatingsystem,
 )
 
 from .model_operatingsystemversion import (
     kwargs_operatingsystemversion,
     model_operatingsystemversion,
+    serializer_operatingsystemversion
 )
 
 from .model_permission import (
@@ -272,11 +274,13 @@ from .model_slmticket import (
 from .model_software import (
     kwargs_software,
     model_software,
+    serializer_software
 )
 
 from .model_softwarecategory import (
     kwargs_softwarecategory,
     model_softwarecategory,
+    serializer_softwarecategory,
 )
 
 from .model_softwareenablefeatureflag import (
@@ -287,6 +291,7 @@ from .model_softwareenablefeatureflag import (
 from .model_softwareversion import (
     kwargs_softwareversion,
     model_softwareversion,
+    serializer_softwareversion,
 )
 
 from .model_ticketbase import (

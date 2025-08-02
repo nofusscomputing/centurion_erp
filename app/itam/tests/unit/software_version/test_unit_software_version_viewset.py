@@ -1,53 +1,134 @@
 import pytest
 
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
-
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from itam.models.software import Software
-from itam.viewsets.software_version import ViewSet
+from itam.viewsets.software_version import (
+    SoftwareVersion,
+    ViewSet,
+)
 
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_softwareversion
-@pytest.mark.module_itam
-class SoftwareVersionViewsetList(
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_softwareversion'
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
-
-        super().setUpTestData()
-
-        self.kwargs = {
-            'software_id': Software.objects.create(
-                organization = self.organization,
-                name = 'soft'
-            ).id
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'organization',
+                    'software'
+                ]
+            },
+            'model': {
+                'value': SoftwareVersion
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'name'
+                ]
+            },
+            'view_description': {
+                'value': 'Physical Softwares'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
         }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
 
-        client.force_login(self.view_user)
+    def test_view_func_get_queryset_cache_result(self, viewset_mock_request):
+        """Viewset Test
 
-        self.http_options_response_list = client.options(url)
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>.queryset`
+        """
+
+        view_set = viewset_mock_request
+
+        view_set.kwargs = {
+            'software_id': self.kwargs_create_item['software'].id
+        }
+
+        assert view_set.queryset is None    # Must be empty before init
+
+        q = view_set.get_queryset()
+
+        assert view_set.queryset is not None    # Must not be empty after init
+
+        assert q == view_set.queryset
+
+
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>.queryset`
+        """
+
+        qs = mocker.spy(viewset_mock_request.model, 'objects')
+
+        view_set = viewset_mock_request
+
+        view_set.kwargs = {
+            'software_id': self.kwargs_create_item['software'].id
+        }
+
+        view_set.get_queryset()    # Initial QuerySet fetch/filter and cache
+
+        assert len(qs.method_calls) == 1       # one call to .all()
+        assert len(qs.mock_calls) == 3         # calls = .all(), all().filter()
+
+        view_set.get_queryset()    # Use Cached results, dont re-fetch QuerySet
+
+        assert len(qs.method_calls) == 1
+        assert len(qs.mock_calls) == 3
+
+
+
+
+class SoftwareVersionViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_itam
+class SoftwareVersionViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

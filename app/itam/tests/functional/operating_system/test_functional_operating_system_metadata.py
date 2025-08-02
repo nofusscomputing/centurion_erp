@@ -9,8 +9,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
 from itam.models.operating_system import OperatingSystem
@@ -21,6 +19,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.module_itam
 class ViewSetBase:
 
     model = OperatingSystem
@@ -218,26 +217,7 @@ class ViewSetBase:
 
 
 
-class OperatingSystemPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-
-
-class OperatingSystemViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase,
-):
-
-    pass
-
-
-
+@pytest.mark.module_itam
 class OperatingSystemMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,

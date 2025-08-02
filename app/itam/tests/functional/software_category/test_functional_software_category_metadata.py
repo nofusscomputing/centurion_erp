@@ -9,11 +9,9 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
+from itam.models.software import SoftwareCategory
 
 from settings.models.app_settings import AppSettings
 
@@ -21,15 +19,16 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_softwarecategory
 class ViewSetBase:
 
-    model = OperatingSystemVersion
+    model = SoftwareCategory
 
     app_namespace = 'v2'
     
-    url_name = '_api_operatingsystemversion'
+    url_name = '_api_softwarecategory'
 
-    change_data = {'name': '22'}
+    change_data = {'name': 'device-change'}
 
     delete_data = {}
 
@@ -54,10 +53,6 @@ class ViewSetBase:
 
 
 
-        os = OperatingSystem.objects.create(
-            organization = self.organization,
-            name = 'one-add'
-        )
 
 
 
@@ -67,8 +62,7 @@ class ViewSetBase:
 
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
-            name = '22',
-            operating_system = os
+            name = 'global_item'
         )
 
         app_settings = AppSettings.objects.get(
@@ -162,31 +156,22 @@ class ViewSetBase:
             user = self.view_user
         )
 
-        os_b = OperatingSystem.objects.create(
+
+        self.item = self.model.objects.create(
+            organization = self.organization,
+            name = 'one-add'
+        )
+
+        self.other_org_item = self.model.objects.create(
             organization = different_organization,
             name = 'two-add'
         )
 
 
-        self.item = self.model.objects.create(
-            organization = self.organization,
-            name = '5',
-            operating_system = os
-        )
-
-        self.other_org_item = self.model.objects.create(
-            organization = different_organization,
-            name = '6',
-            operating_system = os_b
-        )
-
-
-        self.url_view_kwargs = {'operating_system_id': os.id, 'pk': self.item.id}
-
-        self.url_kwargs = {'operating_system_id': os.id,}
+        self.url_view_kwargs = {'pk': self.item.id}
 
         self.add_data = {
-            'name': '22',
+            'name': 'team-post',
             'organization': self.organization.id,
         }
 
@@ -232,19 +217,8 @@ class ViewSetBase:
 
 
 
-class OperatingSystemVersionPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-    pass
-
-
-
-class OperatingSystemVersionViewSetBase(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
-class OperatingSystemVersionMetadata(
+@pytest.mark.module_itam
+class SoftwareCategoryMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
     TestCase

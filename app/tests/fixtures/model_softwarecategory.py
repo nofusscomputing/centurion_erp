@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from itam.models.software import SoftwareCategory
+from itam.serializers.software_category import (
+    SoftwareCategoryBaseSerializer,
+    SoftwareCategoryModelSerializer,
+    SoftwareCategoryViewSerializer
+)
 
 
 
@@ -24,3 +29,13 @@ def kwargs_softwarecategory(kwargs_centurionmodel):
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_softwarecategory():
+
+    yield {
+        'base': SoftwareCategoryBaseSerializer,
+        'model': SoftwareCategoryModelSerializer,
+        'view': SoftwareCategoryViewSerializer
+    }

@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from itam.models.software import SoftwareVersion
+from itam.serializers.software_version import (
+    SoftwareVersionBaseSerializer,
+    SoftwareVersionModelSerializer,
+    SoftwareVersionViewSerializer
+)
 
 
 
@@ -41,3 +46,13 @@ def kwargs_softwareversion(django_db_blocker,
     with django_db_blocker.unblock():
 
         software.delete()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_softwareversion():
+
+    yield {
+        'base': SoftwareVersionBaseSerializer,
+        'model': SoftwareVersionModelSerializer,
+        'view': SoftwareVersionViewSerializer
+    }

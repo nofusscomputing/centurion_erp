@@ -20,6 +20,6 @@ def model_kwargs(request, kwargs_operatingsystem):
 
 
 @pytest.fixture( scope = 'class')
-def model_serializer(serializer_operatingsystem):
+def model_serializer(serializer_device):
 
-    yield serializer_operatingsystem
+    yield serializer_device

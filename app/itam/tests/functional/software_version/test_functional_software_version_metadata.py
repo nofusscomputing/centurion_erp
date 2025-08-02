@@ -9,11 +9,9 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from itam.models.software import Software
+from itam.models.software import Software, SoftwareVersion
 
 from settings.models.app_settings import AppSettings
 
@@ -21,13 +19,14 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_softwareversion
 class ViewSetBase:
 
-    model = Software
+    model = SoftwareVersion
 
     app_namespace = 'v2'
     
-    url_name = '_api_software'
+    url_name = '_api_softwareversion'
 
     change_data = {'name': 'device-change'}
 
@@ -54,6 +53,11 @@ class ViewSetBase:
 
 
 
+        software = Software.objects.create(
+                organization = self.organization,
+                name = 'software'
+            )
+
 
 
 
@@ -63,7 +67,8 @@ class ViewSetBase:
 
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
-            name = 'global_item'
+            name = '12',
+            software = software
         )
 
         app_settings = AppSettings.objects.get(
@@ -73,8 +78,6 @@ class ViewSetBase:
         app_settings.global_organization = self.global_organization
 
         app_settings.save()
-
-
 
 
 
@@ -158,19 +161,27 @@ class ViewSetBase:
             user = self.view_user
         )
 
+        software_b = Software.objects.create(
+                organization = different_organization,
+                name = 'software-b'
+            )
 
         self.item = self.model.objects.create(
             organization = self.organization,
-            name = 'one-add'
+            name = '12',
+            software = software
         )
 
         self.other_org_item = self.model.objects.create(
             organization = different_organization,
-            name = 'two-add'
+            name = '13',
+            software = software_b
         )
 
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.url_view_kwargs = {'software_id': software.id, 'pk': self.item.id}
+
+        self.url_kwargs = {'software_id': software.id}
 
         self.add_data = {
             'name': 'team-post',
@@ -219,25 +230,11 @@ class ViewSetBase:
 
 
 
-class SoftwarePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-    pass
-
-
-
-class SoftwareViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
-class SoftwareMetadata(
+@pytest.mark.module_itam
+class SoftwareVersionMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
-    MetaDataNavigationEntriesFunctional,
     TestCase
 ):
 
-    menu_id = 'itam'
-
-    menu_entry_id = 'software'
+    pass
