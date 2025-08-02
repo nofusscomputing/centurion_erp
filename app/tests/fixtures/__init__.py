@@ -206,6 +206,7 @@ from .model_manufacturer import (
 from .model_operatingsystem import (
     kwargs_operatingsystem,
     model_operatingsystem,
+    serializer_operatingsystem,
 )
 
 from .model_operatingsystemversion import (
