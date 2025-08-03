@@ -67,6 +67,7 @@ from .model_cluster import (
 from .model_clustertype import (
     kwargs_clustertype,
     model_clustertype,
+    serializer_clustertype,
 )
 
 from .model_company import (
