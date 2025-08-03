@@ -2,6 +2,8 @@ import datetime
 import pytest
 import random
 
+from django.db import models
+
 from itam.models.device import DeviceModel
 from itam.serializers.device_model import (
     DeviceModelBaseSerializer,
@@ -41,7 +43,10 @@ def kwargs_devicemodel(kwargs_centurionmodel, django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        manufacturer.delete()
+        try:
+            manufacturer.delete()
+        except models.deletion.ProtectedError:
+            pass
 
 
 @pytest.fixture( scope = 'class')

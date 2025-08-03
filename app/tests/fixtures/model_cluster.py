@@ -28,7 +28,11 @@ def kwargs_cluster(kwargs_centurionmodel, django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        node = model_device.objects.create( **kwargs_device )
+        kwargs = kwargs_device.copy()
+        kwargs['serial_number'] = 'clu-123-654'
+        kwargs['uuid'] = '1cf3a2d4-1776-418b-86eb-00404a43d60e'
+
+        node = model_device.objects.create( **kwargs )
         cluster_type = model_clustertype.objects.create( **kwargs_clustertype )
 
     kwargs = {

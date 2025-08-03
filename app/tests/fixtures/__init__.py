@@ -267,6 +267,7 @@ from .model_role import (
 from .model_service import (
     kwargs_service,
     model_service,
+    serializer_service,
 )
 
 from .model_slmticket import (

@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from itim.models.services import Service
+from itim.serializers.service import (
+    ServiceBaseSerializer,
+    ServiceModelSerializer,
+    ServiceViewSerializer,
+)
 
 
 
@@ -39,6 +44,7 @@ def kwargs_service(django_db_blocker,
         'device': device,
         'config_key_variable': 'svc',
         'port': [ port ],
+        'config': { 'config_key_1': 'config_value_1' }
     }
 
     yield kwargs.copy()
@@ -51,3 +57,14 @@ def kwargs_service(django_db_blocker,
             pass
 
         port.delete()
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_service():
+
+    yield {
+        'base': ServiceBaseSerializer,
+        'model': ServiceModelSerializer,
+        'view': ServiceViewSerializer
+    }
