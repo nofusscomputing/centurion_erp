@@ -230,6 +230,7 @@ from .model_person import (
 from .model_port import (
     kwargs_port,
     model_port,
+    serializer_port,
 )
 
 from .model_project import (
