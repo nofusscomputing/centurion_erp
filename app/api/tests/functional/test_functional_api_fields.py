@@ -119,7 +119,7 @@ class APIFieldsTestCases:
 
             for key, value in kwargs_many_to_many.items():
 
-                field = getattr(item, 'target_team')
+                field = getattr(item, key)
 
                 for entry in value:
 
