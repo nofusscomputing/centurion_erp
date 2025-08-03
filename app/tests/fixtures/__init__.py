@@ -61,11 +61,13 @@ from .model_checkin import (
 from .model_cluster import (
     kwargs_cluster,
     model_cluster,
+    serializer_cluster,
 )
 
 from .model_clustertype import (
     kwargs_clustertype,
     model_clustertype,
+    serializer_clustertype,
 )
 
 from .model_company import (
@@ -228,6 +230,7 @@ from .model_person import (
 from .model_port import (
     kwargs_port,
     model_port,
+    serializer_port,
 )
 
 from .model_project import (
@@ -264,6 +267,7 @@ from .model_role import (
 from .model_service import (
     kwargs_service,
     model_service,
+    serializer_service,
 )
 
 from .model_slmticket import (

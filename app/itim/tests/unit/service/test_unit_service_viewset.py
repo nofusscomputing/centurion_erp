@@ -1,46 +1,87 @@
+
 import pytest
-
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from itim.viewsets.service import ViewSet
+from itim.viewsets.service import (
+    Service,
+    ViewSet,
+)
 
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_service
-@pytest.mark.module_itim
-class ServiceViewsetList(
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_service'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'name',
+                    'cluster',
+                    'device',
+                    'port'
+                ]
+            },
+            'model': {
+                'value': Service
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'name'
+                ]
+            },
+            'view_description': {
+                'value': 'Physical Devices'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
 
-        client.force_login(self.view_user)
+class ServiceViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
 
-        self.http_options_response_list = client.options(url)
+
+
+@pytest.mark.module_itim
+class ServiceViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

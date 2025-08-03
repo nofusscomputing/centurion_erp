@@ -1,6 +1,6 @@
 import pytest
 
-from django.contrib.auth.models import Permission,User
+from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -8,25 +8,25 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctional,
+    MetaDataNavigationEntriesFunctional
+)
 
-from itam.models.device import Device
-
-from itim.models.services import Service, Port
+from itim.models.clusters import Cluster
 
 from settings.models.app_settings import AppSettings
 
 
 
+@pytest.mark.model_cluster
 class ViewSetBase:
 
-    model = Service
+    model = Cluster
 
     app_namespace = 'v2'
     
-    url_name = '_api_service'
+    url_name = '_api_cluster'
 
     change_data = {'name': 'device-change'}
 
@@ -54,12 +54,6 @@ class ViewSetBase:
 
 
 
-        device = Device.objects.create(
-            organization=organization,
-            name = 'device'
-        )
-
-
 
         self.global_organization = Organization.objects.create(
             name = 'test_global_organization'
@@ -67,9 +61,7 @@ class ViewSetBase:
 
         self.global_org_item = self.model.objects.create(
             organization = self.global_organization,
-            name = 'global_item',
-            device = device,
-            config_key_variable = 'value'
+            name = 'global_item'
         )
 
         app_settings = AppSettings.objects.get(
@@ -79,6 +71,7 @@ class ViewSetBase:
         app_settings.global_organization = self.global_organization
 
         app_settings.save()
+
 
 
 
@@ -162,28 +155,16 @@ class ViewSetBase:
             user = self.view_user
         )
 
-        port = Port.objects.create(
-            organization=organization,
-            number = 80,
-            protocol = Port.Protocol.TCP
-        )
 
         self.item = self.model.objects.create(
-            organization=organization,
-            name = 'os name',
-            device = device,
-            config_key_variable = 'value'
+            organization = self.organization,
+            name = 'one-add'
         )
 
         self.other_org_item = self.model.objects.create(
-            organization=different_organization,
-            name = 'os name b',
-            device = device,
-            config_key_variable = 'values'
+            organization = self.different_organization,
+            name = 'two-add'
         )
-
-        self.item.port.set([ port ])
-
 
 
         self.url_view_kwargs = {'pk': self.item.id}
@@ -191,9 +172,6 @@ class ViewSetBase:
         self.add_data = {
             'name': 'team-post',
             'organization': self.organization.id,
-            'device': device.id,
-            'port': [ port.id ],
-            'config_key_variable': 'value'
         }
 
 
@@ -238,19 +216,8 @@ class ViewSetBase:
 
 
 
-class ServicePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-    pass
-
-
-
-class ServiceViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
-class ServiceMetadata(
+@pytest.mark.module_itim
+class ClusterMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
     MetaDataNavigationEntriesFunctional,
@@ -259,4 +226,4 @@ class ServiceMetadata(
 
     menu_id = 'itim'
 
-    menu_entry_id = 'service'
+    menu_entry_id = 'cluster'

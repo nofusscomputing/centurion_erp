@@ -2,6 +2,11 @@ import datetime
 import pytest
 
 from itim.models.clusters import ClusterType
+from itim.serializers.cluster_type import (
+    ClusterTypeBaseSerializer,
+    ClusterTypeModelSerializer,
+    ClusterTypeViewSerializer
+)
 
 
 
@@ -21,6 +26,17 @@ def kwargs_clustertype(kwargs_centurionmodel):
     kwargs = {
         **kwargs_centurionmodel.copy(),
         'name': 'clustertype_' + random_str,
+        'config': { 'config_key_1': 'config_value_1' }
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_clustertype():
+
+    yield {
+        'base': ClusterTypeBaseSerializer,
+        'model': ClusterTypeModelSerializer,
+        'view': ClusterTypeViewSerializer
+    }

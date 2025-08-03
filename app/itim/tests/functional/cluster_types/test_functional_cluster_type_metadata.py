@@ -8,8 +8,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from itim.models.clusters import ClusterType
@@ -18,6 +16,7 @@ from settings.models.app_settings import AppSettings
 
 
 
+@pytest.mark.model_clustertype
 class ViewSetBase:
 
     model = ClusterType
@@ -213,18 +212,7 @@ class ViewSetBase:
 
 
 
-class ClusterTypePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-    pass
-
-
-
-class ClusterTypeViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
+@pytest.mark.module_itim
 class ClusterTypeMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,

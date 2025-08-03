@@ -1,6 +1,8 @@
 import pytest
 import random
 
+from django.db import models
+
 from itam.models.device import Device
 from itam.serializers.device import (
     DeviceBaseSerializer,
@@ -43,8 +45,15 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
 
     with django_db_blocker.unblock():
 
-        device_model.delete()
-        device_type.delete()
+        try:
+            device_model.delete()
+        except models.deletion.ProtectedError:
+            pass
+
+        try:
+            device_type.delete()
+        except models.deletion.ProtectedError:
+            pass
 
 
 @pytest.fixture( scope = 'class')
