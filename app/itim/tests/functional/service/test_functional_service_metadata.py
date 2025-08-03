@@ -8,8 +8,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
 from itam.models.device import Device
@@ -20,6 +18,7 @@ from settings.models.app_settings import AppSettings
 
 
 
+@pytest.mark.model_service
 class ViewSetBase:
 
     model = Service
@@ -238,18 +237,7 @@ class ViewSetBase:
 
 
 
-class ServicePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-    pass
-
-
-
-class ServiceViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
+@pytest.mark.module_itim
 class ServiceMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
