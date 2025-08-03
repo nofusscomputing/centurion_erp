@@ -61,6 +61,7 @@ from .model_checkin import (
 from .model_cluster import (
     kwargs_cluster,
     model_cluster,
+    serializer_cluster,
 )
 
 from .model_clustertype import (
