@@ -21,7 +21,7 @@ class ClusterModelTestCases(
         return {
             'model_tag': {
                 'type': str,
-                'value': 'cluster'
+                'value': 'cluster_type'
             },
         }
 
