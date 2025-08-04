@@ -254,6 +254,7 @@ from .model_projectstate import (
 from .model_projecttype import (
     kwargs_projecttype,
     model_projecttype,
+    serializer_projecttype,
 )
 
 from .model_requestticket import (
