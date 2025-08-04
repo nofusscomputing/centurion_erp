@@ -53,7 +53,7 @@ class SoftwareEnableFeatureFlagModelTestCases(
         'enabled': {
             'blank': False,
             'default': False,
-            'field_type': models.IntegerField,
+            'field_type': models.BooleanField,
             'null': False,
             'unique': False,
         },

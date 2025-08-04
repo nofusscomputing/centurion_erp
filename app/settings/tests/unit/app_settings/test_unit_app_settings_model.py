@@ -36,14 +36,14 @@ class AppSettingsModelTestCases(
             'model_notes': {
                 'blank': models.fields.NOT_PROVIDED,
                 'default': models.fields.NOT_PROVIDED,
-                'field_type': models.CharField,
+                'field_type': models.fields.NOT_PROVIDED,
                 'null': models.fields.NOT_PROVIDED,
                 'unique': models.fields.NOT_PROVIDED,
             },
             'organization': {
                 'blank': models.fields.NOT_PROVIDED,
                 'default': models.fields.NOT_PROVIDED,
-                'field_type': models.CharField,
+                'field_type': models.fields.NOT_PROVIDED,
                 'null': models.fields.NOT_PROVIDED,
                 'unique': models.fields.NOT_PROVIDED,
             },
