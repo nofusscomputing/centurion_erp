@@ -9,23 +9,24 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from project_management.models.project_milestone import Project, ProjectMilestone
+from project_management.models.project_states import ProjectState
+
+from settings.models.app_settings import AppSettings
 
 User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_projectstate
 class ViewSetBase:
 
-    model = ProjectMilestone
+    model = ProjectState
 
     app_namespace = 'v2'
     
-    url_name = '_api_projectmilestone'
+    url_name = '_api_projectstate'
 
     change_data = {'name': 'device-change'}
 
@@ -49,6 +50,32 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
+
+
+
+
+
+
+        self.global_organization = Organization.objects.create(
+            name = 'test_global_organization'
+        )
+
+        self.global_org_item = self.model.objects.create(
+            organization = self.global_organization,
+            name = 'global_item'
+        )
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
+        app_settings.global_organization = self.global_organization
+
+        app_settings.save()
+
+
+
+
 
 
         view_permissions = Permission.objects.get(
@@ -127,33 +154,19 @@ class ViewSetBase:
             user = self.view_user
         )
 
-        project = Project.objects.create(
-            organization = self.organization,
-            name = 'proj milestone test'
-        )
-
-        project_b = Project.objects.create(
-            organization = self.different_organization,
-            name = 'proj b milestone test'
-        )
-
 
         self.item = self.model.objects.create(
             organization = self.organization,
-            name = 'one-add',
-            project = project
+            name = 'one-add'
         )
 
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
-            name = 'two-add',
-            project = project_b
+            name = 'two-add'
         )
 
 
-        self.url_view_kwargs = {'project_id': project.id, 'pk': self.item.id}
-
-        self.url_kwargs = {'project_id': project.id}
+        self.url_view_kwargs = {'pk': self.item.id}
 
         self.add_data = {
             'name': 'team-post',
@@ -202,30 +215,8 @@ class ViewSetBase:
 
 
 
-class ProjectMilestonePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
-
-
-class ProjectMilestoneViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
-class ProjectMilestoneMetadata(
+@pytest.mark.module_project_management
+class ProjectStateMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
     TestCase

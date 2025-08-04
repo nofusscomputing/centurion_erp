@@ -236,21 +236,25 @@ from .model_port import (
 from .model_project import (
     kwargs_project,
     model_project,
+    serializer_project,
 )
 
 from .model_projectmilestone import (
     kwargs_projectmilestone,
     model_projectmilestone,
+    serializer_projectmilestone,
 )
 
 from .model_projectstate import (
     kwargs_projectstate,
     model_projectstate,
+    serializer_projectstate,
 )
 
 from .model_projecttype import (
     kwargs_projecttype,
     model_projecttype,
+    serializer_projecttype,
 )
 
 from .model_requestticket import (

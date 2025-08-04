@@ -3,32 +3,28 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from project_management.models.projects import Project
-
-from settings.models.app_settings import AppSettings
+from project_management.models.project_milestone import Project, ProjectMilestone
 
 User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_projectmilestone
 class ViewSetBase:
 
-    model = Project
+    model = ProjectMilestone
 
     app_namespace = 'v2'
     
-    url_name = '_api_project'
+    url_name = '_api_projectmilestone'
 
     change_data = {'name': 'device-change'}
 
@@ -52,31 +48,6 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
-
-
-
-
-
-        self.global_organization = Organization.objects.create(
-            name = 'test_global_organization'
-        )
-
-        self.global_org_item = self.model.objects.create(
-            organization = self.global_organization,
-            name = 'global_item'
-        )
-
-        app_settings = AppSettings.objects.get(
-            owner_organization = None
-        )
-
-        app_settings.global_organization = self.global_organization
-
-        app_settings.save()
-
-
-
-
 
 
         view_permissions = Permission.objects.get(
@@ -146,29 +117,6 @@ class ViewSetBase:
         delete_team.permissions.set([delete_permissions])
 
 
-        import_permissions = Permission.objects.get(
-                codename = 'import_' + self.model._meta.model_name,
-                content_type = ContentType.objects.get(
-                    app_label = self.model._meta.app_label,
-                    model = self.model._meta.model_name,
-                )
-            )
-
-        import_team = Team.objects.create(
-            team_name = 'import_team',
-            organization = organization,
-        )
-
-        import_team.permissions.set( [ import_permissions, add_permissions ] )
-
-
-        self.import_user = User.objects.create_user(username="test_user_import", password="password")
-        teamuser = TeamUsers.objects.create(
-            team = import_team,
-            user = self.import_user
-        )
-
-
         self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
 
 
@@ -178,31 +126,37 @@ class ViewSetBase:
             user = self.view_user
         )
 
+        project = Project.objects.create(
+            organization = self.organization,
+            name = 'proj milestone test'
+        )
+
+        project_b = Project.objects.create(
+            organization = self.different_organization,
+            name = 'proj b milestone test'
+        )
+
 
         self.item = self.model.objects.create(
             organization = self.organization,
-            name = 'one-add'
+            name = 'one-add',
+            project = project
         )
 
         self.other_org_item = self.model.objects.create(
             organization = self.different_organization,
-            name = 'two-add'
+            name = 'two-add',
+            project = project_b
         )
 
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.url_view_kwargs = {'project_id': project.id, 'pk': self.item.id}
+
+        self.url_kwargs = {'project_id': project.id}
 
         self.add_data = {
             'name': 'team-post',
             'organization': self.organization.id,
-        }
-
-
-        self.add_data_import_fields = {
-            'name': 'team-post',
-            'organization': self.organization.id,
-            'external_ref': 1,
-            'external_system': int(Project.Ticket_ExternalSystem.CUSTOM_1)
         }
 
 
@@ -247,76 +201,11 @@ class ViewSetBase:
 
 
 
-class ProjectPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-
-    def test_add_has_permission_no_import_fields(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with permission
-        """
-
-        client = Client()
-        if self.url_kwargs:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data=self.add_data_import_fields)
-
-        assert (
-            response.status_code == 201
-            and response.data['external_ref'] is None
-            and response.data['external_system'] is None
-        )
-
-
-
-    def test_add_has_permission_import_fields(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with permission
-        """
-
-        client = Client()
-        if self.url_kwargs:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.import_user)
-        response = client.post(url, data=self.add_data_import_fields)
-
-        assert (
-            response.status_code == 201
-            and response.data['external_ref'] == 1
-            and response.data['external_system'] == int(Project.Ticket_ExternalSystem.CUSTOM_1)
-        )
-
-
-
-class ProjectViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
-class ProjectMetadata(
+@pytest.mark.module_project_management
+class ProjectMilestoneMetadata(
     ViewSetBase,
-    MetaDataNavigationEntriesFunctional,
     MetadataAttributesFunctional,
     TestCase
 ):
 
-    menu_id = 'project_management'
-
-    menu_entry_id = 'project'
+    pass

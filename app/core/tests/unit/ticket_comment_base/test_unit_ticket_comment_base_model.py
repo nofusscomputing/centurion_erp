@@ -148,7 +148,7 @@ class TicketCommentBaseModelTestCases(
             "is_closed": {
                 'blank': False,
                 'default': False,
-                'field_type': models.fields.IntegerField,
+                'field_type': models.fields.BooleanField,
                 'null': False,
                 'unique': False,
             },

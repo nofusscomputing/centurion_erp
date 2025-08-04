@@ -25,7 +25,7 @@ class GitLabRepositoryBaseModelTestCases(
         'visibility': {
             'blank': False,
             'default': models.NOT_PROVIDED,
-            'field_type': models.BooleanField,
+            'field_type': models.IntegerField,
             'null': False,
             'unique': False,
         }

@@ -142,7 +142,7 @@ class ClusterModelTestCases(
         'team_members': {
             'blank': True,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.ForeignKey,
+            'field_type': models.ManyToManyField,
             'null': False,
             'unique': False,
         },

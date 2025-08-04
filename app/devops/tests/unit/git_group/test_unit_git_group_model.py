@@ -54,7 +54,7 @@ class GitGroupModelTestCases(
         'name': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
+            'field_type': models.CharField,
             'length': 80,
             'null': False,
             'unique': False,
@@ -62,7 +62,7 @@ class GitGroupModelTestCases(
         'path': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
+            'field_type': models.CharField,
             'length': 80,
             'null': False,
             'unique': False,
@@ -70,7 +70,7 @@ class GitGroupModelTestCases(
         'description': {
             'blank': True,
             'default': models.fields.NOT_PROVIDED,
-            'field_type': models.IntegerField,
+            'field_type': models.TextField,
             'max_length': 80,
             'null': True,
             'unique': False,

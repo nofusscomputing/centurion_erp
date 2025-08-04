@@ -9,11 +9,9 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
-from project_management.models.project_states import ProjectState
+from project_management.models.projects import Project
 
 from settings.models.app_settings import AppSettings
 
@@ -21,13 +19,14 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.module_project_management
 class ViewSetBase:
 
-    model = ProjectState
+    model = Project
 
     app_namespace = 'v2'
     
-    url_name = '_api_projectstate'
+    url_name = '_api_project'
 
     change_data = {'name': 'device-change'}
 
@@ -51,7 +50,6 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
-
 
 
 
@@ -146,6 +144,29 @@ class ViewSetBase:
         delete_team.permissions.set([delete_permissions])
 
 
+        import_permissions = Permission.objects.get(
+                codename = 'import_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+        import_team = Team.objects.create(
+            team_name = 'import_team',
+            organization = organization,
+        )
+
+        import_team.permissions.set( [ import_permissions, add_permissions ] )
+
+
+        self.import_user = User.objects.create_user(username="test_user_import", password="password")
+        teamuser = TeamUsers.objects.create(
+            team = import_team,
+            user = self.import_user
+        )
+
+
         self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
 
 
@@ -172,6 +193,14 @@ class ViewSetBase:
         self.add_data = {
             'name': 'team-post',
             'organization': self.organization.id,
+        }
+
+
+        self.add_data_import_fields = {
+            'name': 'team-post',
+            'organization': self.organization.id,
+            'external_ref': 1,
+            'external_system': int(Project.Ticket_ExternalSystem.CUSTOM_1)
         }
 
 
@@ -216,22 +245,14 @@ class ViewSetBase:
 
 
 
-class ProjectStatePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-    pass
-
-
-
-class ProjectStateViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
-class ProjectStateMetadata(
+@pytest.mark.model_project
+class ProjectMetadata(
     ViewSetBase,
+    MetaDataNavigationEntriesFunctional,
     MetadataAttributesFunctional,
     TestCase
 ):
 
-    pass
+    menu_id = 'project_management'
+
+    menu_entry_id = 'project'

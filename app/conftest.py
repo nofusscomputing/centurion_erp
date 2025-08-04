@@ -262,6 +262,15 @@ def pytest_generate_tests(metafunc):
 
             if len(arg_values) > 0:
 
+                # Get the test method
+                test_func = getattr(metafunc.cls, metafunc.definition.name, None)
+
+                # Remove previous xfail mark if present
+                if test_func and hasattr(test_func, 'pytestmark'):
+                    test_func.pytestmark = [
+                        mark for mark in test_func.pytestmark if mark.name != 'xfail'
+                    ]
+
                 metafunc.parametrize(
                     argnames = [
                         *fixture_parameters
