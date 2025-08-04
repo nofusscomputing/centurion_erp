@@ -242,6 +242,7 @@ from .model_project import (
 from .model_projectmilestone import (
     kwargs_projectmilestone,
     model_projectmilestone,
+    serializer_projectmilestone,
 )
 
 from .model_projectstate import (

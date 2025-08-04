@@ -2,6 +2,8 @@ import datetime
 import pytest
 import random
 
+from django.db import models
+
 from project_management.models.projects import Project
 from project_management.serializers.project import (
     ProjectBaseSerializer,
@@ -66,10 +68,26 @@ def kwargs_project(kwargs_centurionmodel, django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        state.delete()
-        pr_type.delete()
-        manager.delete()
-        team_member.delete()
+        try:
+            state.delete()
+        except models.deletion.ProtectedError:
+            pass
+
+        try:
+            pr_type.delete()
+        except models.deletion.ProtectedError:
+            pass
+
+        try:
+            manager.delete()
+        except models.deletion.ProtectedError:
+            pass
+
+        try:
+            team_member.delete()
+        except models.deletion.ProtectedError:
+            pass
+
 
 
 @pytest.fixture( scope = 'class')

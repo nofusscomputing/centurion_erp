@@ -1,7 +1,14 @@
 import datetime
 import pytest
 
+from django.db import models
+
 from project_management.models.project_milestone import ProjectMilestone
+from project_management.serializers.project_milestone import (
+    ProjectMilestoneBaseSerializer,
+    ProjectMilestoneModelSerializer,
+    ProjectMilestoneViewSerializer,
+)
 
 
 
@@ -22,14 +29,38 @@ def kwargs_projectmilestone(django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        kwargs = kwargs_project.copy()
+        # kwargs = kwargs_project.copy()
+
+
+        kwargs_many_to_many = {}
+
+        kwargs = {}
+
+        for key, value in kwargs_project.items():
+
+            field = model_project._meta.get_field(key)
+
+            if isinstance(field, models.ManyToManyField):
+
+                kwargs_many_to_many.update({
+                    key: value
+                })
+
+            else:
+
+                kwargs.update({
+                    key: value
+                })
+
         kwargs.update({
             'name': 'pm' + random_str
         })
+        del kwargs['code']
 
         project = model_project.objects.create(
             **kwargs
         )
+
 
     kwargs = kwargs_centurionmodel.copy()
     del kwargs['model_notes']
@@ -38,6 +69,8 @@ def kwargs_projectmilestone(django_db_blocker,
         **kwargs,
         'name': 'pm_' + random_str,
         'project': project,
+        'start_date': '2025-08-04T00:00:01Z',
+        'finish_date': '2025-08-04T00:00:02Z',
     }
 
     yield kwargs.copy()
@@ -45,3 +78,13 @@ def kwargs_projectmilestone(django_db_blocker,
     # with django_db_blocker.unblock():
 
     #     project.delete()    # milestone is cascade delete
+
+
+@pytest.fixture( scope = 'class')
+def serializer_projectmilestone():
+
+    yield {
+        'base': ProjectMilestoneBaseSerializer,
+        'model': ProjectMilestoneModelSerializer,
+        'view': ProjectMilestoneViewSerializer
+    }
