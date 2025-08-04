@@ -29,7 +29,7 @@ def kwargs_projecttype(kwargs_centurionmodel, django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        kwargs = kwargs_knowledgebase
+        kwargs = kwargs_knowledgebase.copy()
         team = kwargs['target_team']
         del kwargs['target_team']
 
