@@ -3,15 +3,12 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
 from project_management.models.projects import Project
@@ -22,6 +19,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.module_project_management
 class ViewSetBase:
 
     model = Project
@@ -247,69 +245,7 @@ class ViewSetBase:
 
 
 
-class ProjectPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-
-    def test_add_has_permission_no_import_fields(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with permission
-        """
-
-        client = Client()
-        if self.url_kwargs:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data=self.add_data_import_fields)
-
-        assert (
-            response.status_code == 201
-            and response.data['external_ref'] is None
-            and response.data['external_system'] is None
-        )
-
-
-
-    def test_add_has_permission_import_fields(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with permission
-        """
-
-        client = Client()
-        if self.url_kwargs:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.import_user)
-        response = client.post(url, data=self.add_data_import_fields)
-
-        assert (
-            response.status_code == 201
-            and response.data['external_ref'] == 1
-            and response.data['external_system'] == int(Project.Ticket_ExternalSystem.CUSTOM_1)
-        )
-
-
-
-class ProjectViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
+@pytest.mark.model_project
 class ProjectMetadata(
     ViewSetBase,
     MetaDataNavigationEntriesFunctional,
