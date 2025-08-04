@@ -9,8 +9,6 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from project_management.models.project_milestone import Project, ProjectMilestone
@@ -19,6 +17,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_projectmilestone
 class ViewSetBase:
 
     model = ProjectMilestone
@@ -202,29 +201,7 @@ class ViewSetBase:
 
 
 
-class ProjectMilestonePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
-
-
-class ProjectMilestoneViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
+@pytest.mark.module_project_management
 class ProjectMilestoneMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
