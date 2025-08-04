@@ -236,6 +236,7 @@ from .model_port import (
 from .model_project import (
     kwargs_project,
     model_project,
+    serializer_project,
 )
 
 from .model_projectmilestone import (
