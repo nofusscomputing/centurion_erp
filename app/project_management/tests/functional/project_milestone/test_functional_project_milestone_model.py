@@ -7,22 +7,22 @@ from core.tests.functional.centurion_abstract.test_functional_centurion_abstract
 
 
 @pytest.mark.model_project
-class ProjectModelTestCases(
+class ProjectMilestoneModelTestCases(
     CenturionAbstractModelInheritedCases
 ):
     pass
 
 
 
-class ProjectModelInheritedCases(
-    ProjectModelTestCases,
+class ProjectMilestoneModelInheritedCases(
+    ProjectMilestoneModelTestCases,
 ):
     pass
 
 
 
 @pytest.mark.module_project_management
-class ProjectModelPyTest(
-    ProjectModelTestCases,
+class ProjectMilestoneModelPyTest(
+    ProjectMilestoneModelTestCases,
 ):
     pass

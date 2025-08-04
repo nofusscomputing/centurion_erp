@@ -262,7 +262,13 @@ class TicketBaseModelTestCases(
 
         ticket = model.objects.create( **kwargs )
 
-        project_one = model_project.objects.create( **kwargs_project )
+        kwargs_proj = kwargs_project.copy()
+        team_members = kwargs_proj['team_members']
+        del kwargs_proj['team_members']
+        del kwargs_proj['code']
+
+        project_one = model_project.objects.create( **kwargs_proj )
+        project_one.team_members.add( team_members[0] )
 
 
         kwargs = kwargs_projectmilestone
@@ -271,7 +277,12 @@ class TicketBaseModelTestCases(
 
         kwargs = kwargs_project
         kwargs['name'] = 'project_two'
+        team_members = kwargs['team_members']
+        del kwargs['team_members']
+        del kwargs['code']
+
         project_two = model_project.objects.create( **kwargs )
+        project_two.team_members.add( team_members[0] )
 
         kwargs = kwargs_projectmilestone
         kwargs['name'] = 'two'
