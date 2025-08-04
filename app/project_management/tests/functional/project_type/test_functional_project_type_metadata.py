@@ -21,6 +21,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_projecttype
 class ViewSetBase:
 
     model = ProjectType
@@ -215,18 +216,7 @@ class ViewSetBase:
 
 
 
-class ProjectTypePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-    pass
-
-
-
-class ProjectTypeViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
+@pytest.mark.module_project_management
 class ProjectTypeMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,
