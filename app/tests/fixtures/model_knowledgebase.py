@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.db import models
+
 from assistance.models.knowledge_base import KnowledgeBase
 from assistance.serializers.knowledge_base import (
     KnowledgeBaseBaseSerializer,
@@ -66,10 +68,14 @@ def kwargs_knowledgebase(django_db_blocker,
         try:
 
             user.delete()
-        except:
+        except models.deletion.ProtectedError:
             pass
 
-        category.delete()
+        try:
+            category.delete()
+        except models.deletion.ProtectedError:
+            pass
+
 
 
 @pytest.fixture( scope = 'class')
