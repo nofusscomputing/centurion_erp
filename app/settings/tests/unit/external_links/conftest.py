@@ -17,3 +17,9 @@ def model_kwargs(request, kwargs_externallink):
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item
+
+
+@pytest.fixture( scope = 'class')
+def model_serializer(serializer_externallink):
+
+    yield serializer_externallink

@@ -145,6 +145,7 @@ from .model_entity import (
 from .model_externallink import (
     kwargs_externallink,
     model_externallink,
+    serializer_externallink,
 )
 
 from .model_featureflag import (
