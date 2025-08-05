@@ -1,50 +1,84 @@
 import pytest
 
-from django.test import Client, TestCase
+from api.tests.unit.test_unit_common_viewset import (
+    ModelRetrieveUpdateViewSetInheritedCases
+)
 
-from rest_framework.reverse import reverse
-
-from api.tests.unit.test_unit_common_viewset import ModelRetrieveUpdateViewSetInheritedCases
-
-from settings.viewsets.user_settings import ViewSet
-
+from settings.viewsets.user_settings import (
+    UserSettings,
+    ViewSet,
+)
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
+
 @pytest.mark.model_usersettings
-@pytest.mark.module_settings
-class UserSettingsViewsetList(
+class ViewsetTestCases(
     ModelRetrieveUpdateViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_usersettings'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
-
-        self.kwargs = {
-            'pk': self.view_user.id
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+            },
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': []
+            },
+            'model': {
+                'value': UserSettings
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': []
+            },
+            'view_description': {
+                'value': 'Your Settings'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
         }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-detail',
-            kwargs = self.kwargs
-        )
 
-        client.force_login(self.view_user)
+class UserSettingsViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
 
-        self.http_options_response_list = client.options(url)
+
+
+@pytest.mark.module_settings
+class UserSettingsViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass
