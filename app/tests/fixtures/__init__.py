@@ -362,4 +362,5 @@ from .model_user import (
 from .model_usersettings import (
     kwargs_usersettings,
     model_usersettings,
+    serializer_usersettings,
 )
