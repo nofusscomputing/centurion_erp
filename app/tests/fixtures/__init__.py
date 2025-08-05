@@ -16,6 +16,7 @@ from .mixin_centurion import (
 from .model_appsettings import (
     kwargs_appsettings,
     model_appsettings,
+    serializer_appsettings,
 )
 
 from .model_assetbase import (
