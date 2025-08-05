@@ -16,7 +16,7 @@ from centurion.tests.abstract.mock_view import MockView
 
 
 @pytest.mark.model_appsettings
-class ProjectSerializerTestCases(
+class AppSettingsSerializerTestCases(
     SerializerTestCases
 ):
 
@@ -96,15 +96,15 @@ class ProjectSerializerTestCases(
 
 
 
-class ProjectSerializerInheritedCases(
-    ProjectSerializerTestCases
+class AppSettingsSerializerInheritedCases(
+    AppSettingsSerializerTestCases
 ):
     pass
 
 
 
 @pytest.mark.module_settings
-class ProjectSerializerPyTest(
-    ProjectSerializerTestCases
+class AppSettingsSerializerPyTest(
+    AppSettingsSerializerTestCases
 ):
     pass
