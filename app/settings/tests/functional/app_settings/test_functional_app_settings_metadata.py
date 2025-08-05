@@ -3,22 +3,12 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
-from django import urls
+from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import (
-    APIPermissionChange,
-    APIPermissionView
-)
-from api.tests.abstract.api_serializer_viewset import (
-    SerializerChange,
-    SerializerView,
-)
 from api.tests.abstract.test_metadata_functional import (
     MetadataAttributesFunctionalBase,
     MetadataAttributesFunctionalEndpoint
@@ -30,6 +20,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_appsettings
 class ViewSetBase:
 
     model = AppSettings
@@ -193,17 +184,8 @@ class ViewSetBase:
         )
 
 
-class AppSettingsViewSet(
-    ViewSetBase,
-    SerializerChange,
-    SerializerView,
-    TestCase,
-):
 
-    pass
-
-
-
+@pytest.mark.module_settings
 class AppSettingsMetadata(
     ViewSetBase,
     MetadataAttributesFunctionalEndpoint,
