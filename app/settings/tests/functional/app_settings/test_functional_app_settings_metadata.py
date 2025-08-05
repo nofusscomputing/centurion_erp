@@ -1,11 +1,7 @@
 import django
 import pytest
-import unittest
-import requests
 
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -13,25 +9,27 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctionalBase,
+    MetadataAttributesFunctionalEndpoint
+)
 
-from settings.models.external_link import ExternalLink
+from settings.models.app_settings import AppSettings
 
 User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_appsettings
 class ViewSetBase:
 
-    model = ExternalLink
+    model = AppSettings
 
     app_namespace = 'v2'
     
-    url_name = '_api_externallink'
+    url_name = '_api_appsettings'
 
-    change_data = {'name': 'device'}
+    change_data = {'device_model_is_global': True}
 
     delete_data = {}
 
@@ -51,12 +49,6 @@ class ViewSetBase:
         self.organization = organization
 
         different_organization = Organization.objects.create(name='test_different_organization')
-
-        self.different_organization = different_organization
-
-
-
-        # self.url_kwargs = {}
 
 
         view_permissions = Permission.objects.get(
@@ -135,26 +127,20 @@ class ViewSetBase:
             user = self.view_user
         )
 
+        self.item = AppSettings.objects.get( id = 1 )
 
-        self.item = self.model.objects.create(
-            organization = self.organization,
-            name = 'one',
-            template = 'aa'
-        )
+        self.item.global_organization = self.organization
 
-        self.other_org_item = self.model.objects.create(
-            organization = self.different_organization,
-            name = 'aa',
-            template = 'aa'
-        )
+        self.item.save()
 
 
         self.url_view_kwargs = {'pk': self.item.id}
 
+        # self.url_kwargs = {}
+
         self.add_data = {
-            'name': 'team_post',
+            'name': 'team-post',
             'organization': self.organization.id,
-            'template': 'http://site.tld/{{ template }}'
         }
 
 
@@ -199,32 +185,20 @@ class ViewSetBase:
 
 
 
-class ExternalLinkPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
-
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
-
-class ExternalLinkViewSet(ViewSetBase, SerializersTestCases, TestCase):
-
-    pass
-
-
-
-class ExternalLinkMetadata(
+@pytest.mark.module_settings
+class AppSettingsMetadata(
     ViewSetBase,
-    MetadataAttributesFunctional,
+    MetadataAttributesFunctionalEndpoint,
+    MetadataAttributesFunctionalBase,
     TestCase
 ):
 
-    pass
+    viewset_type = 'detail'
+
+    @classmethod
+    def setUpTestData(self):
+
+        super().setUpTestData()
+
+        self.url_kwargs = self.url_view_kwargs
+

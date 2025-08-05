@@ -2,6 +2,13 @@ import datetime
 import pytest
 
 from settings.models.external_link import ExternalLink
+from settings.serializers.external_links import (
+    ExternalLinkBaseSerializer,
+    ExternalLinkModelSerializer,
+    ExternalLinkViewSerializer,
+)
+
+
 
 @pytest.fixture( scope = 'class')
 def model_externallink():
@@ -20,7 +27,18 @@ def kwargs_externallink( kwargs_centurionmodel ):
         **kwargs_centurionmodel.copy(),
         'name': 'el' + random_str,
         'button_text': 'bt' + random_str,
-        'template': 'boo'
+        'template': 'boo',
+        'colour': '#00FF00',
     }
 
     yield kwargs.copy()
+
+
+@pytest.fixture( scope = 'class')
+def serializer_externallink():
+
+    yield {
+        'base': ExternalLinkBaseSerializer,
+        'model': ExternalLinkModelSerializer,
+        'view': ExternalLinkViewSerializer
+    }

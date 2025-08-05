@@ -3,40 +3,34 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
-from django import urls
+
+from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import (
-    APIPermissionChange,
-    APIPermissionView
-)
-from api.tests.abstract.api_serializer_viewset import (
-    SerializerChange,
-    SerializerView,
-)
 from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctionalEndpoint,
     MetadataAttributesFunctionalBase,
-    MetadataAttributesFunctionalEndpoint
 )
 
-from settings.models.app_settings import AppSettings
+
+from settings.models.user_settings import UserSettings
 
 User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.functional
+@pytest.mark.module_settings
 class ViewSetBase:
 
-    model = AppSettings
+    model = UserSettings
 
     app_namespace = 'v2'
     
-    url_name = '_api_appsettings'
+    url_name = '_api_usersettings'
 
     change_data = {'device_model_is_global': True}
 
@@ -58,6 +52,8 @@ class ViewSetBase:
         self.organization = organization
 
         different_organization = Organization.objects.create(name='test_different_organization')
+
+        self.different_organization = different_organization
 
 
         view_permissions = Permission.objects.get(
@@ -136,16 +132,14 @@ class ViewSetBase:
             user = self.view_user
         )
 
-        self.item = AppSettings.objects.get( id = 1 )
+        self.item = self.model.objects.get( id = self.view_user.id )
 
-        self.item.global_organization = self.organization
+        self.item.default_organization = self.organization
 
         self.item.save()
 
 
         self.url_view_kwargs = {'pk': self.item.id}
-
-        # self.url_kwargs = {}
 
         self.add_data = {
             'name': 'team-post',
@@ -193,18 +187,9 @@ class ViewSetBase:
         )
 
 
-class AppSettingsViewSet(
-    ViewSetBase,
-    SerializerChange,
-    SerializerView,
-    TestCase,
-):
 
-    pass
-
-
-
-class AppSettingsMetadata(
+@pytest.mark.model_usersettings
+class UserSettingsMetadata(
     ViewSetBase,
     MetadataAttributesFunctionalEndpoint,
     MetadataAttributesFunctionalBase,
@@ -219,4 +204,3 @@ class AppSettingsMetadata(
         super().setUpTestData()
 
         self.url_kwargs = self.url_view_kwargs
-

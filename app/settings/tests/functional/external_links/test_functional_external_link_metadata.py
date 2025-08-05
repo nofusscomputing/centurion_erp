@@ -3,46 +3,30 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-
 from django.test import TestCase
-# from django import urls
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-# from api.tests.abstract.api_permissions_viewset import (
-#     APIPermissionChange,
-#     APIPermissionView
-# )
-from api.tests.abstract.api_serializer_viewset import (
-    SerializerChange,
-    SerializerView,
-)
-from api.tests.abstract.test_metadata_functional import (
-    MetadataAttributesFunctionalEndpoint,
-    MetadataAttributesFunctionalBase,
-)
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-
-from settings.models.user_settings import UserSettings
+from settings.models.external_link import ExternalLink
 
 User = django.contrib.auth.get_user_model()
 
 
 
-@pytest.mark.functional
-@pytest.mark.model_usersettings
-@pytest.mark.module_settings
+@pytest.mark.model_externallink
 class ViewSetBase:
 
-    model = UserSettings
+    model = ExternalLink
 
     app_namespace = 'v2'
     
-    url_name = '_api_usersettings'
+    url_name = '_api_externallink'
 
-    change_data = {'device_model_is_global': True}
+    change_data = {'name': 'device'}
 
     delete_data = {}
 
@@ -64,6 +48,10 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
+
+
+
+        # self.url_kwargs = {}
 
 
         view_permissions = Permission.objects.get(
@@ -142,18 +130,26 @@ class ViewSetBase:
             user = self.view_user
         )
 
-        self.item = self.model.objects.get( id = self.view_user.id )
 
-        self.item.default_organization = self.organization
+        self.item = self.model.objects.create(
+            organization = self.organization,
+            name = 'one',
+            template = 'aa'
+        )
 
-        self.item.save()
+        self.other_org_item = self.model.objects.create(
+            organization = self.different_organization,
+            name = 'aa',
+            template = 'aa'
+        )
 
 
         self.url_view_kwargs = {'pk': self.item.id}
 
         self.add_data = {
-            'name': 'team-post',
+            'name': 'team_post',
             'organization': self.organization.id,
+            'template': 'http://site.tld/{{ template }}'
         }
 
 
@@ -198,29 +194,11 @@ class ViewSetBase:
 
 
 
-class UserSettingsViewSet(
+@pytest.mark.module_settings
+class ExternalLinkMetadata(
     ViewSetBase,
-    SerializerChange,
-    SerializerView,
-    TestCase,
-):
-
-    pass
-
-
-
-class UserSettingsMetadata(
-    ViewSetBase,
-    MetadataAttributesFunctionalEndpoint,
-    MetadataAttributesFunctionalBase,
+    MetadataAttributesFunctional,
     TestCase
 ):
 
-    viewset_type = 'detail'
-
-    @classmethod
-    def setUpTestData(self):
-
-        super().setUpTestData()
-
-        self.url_kwargs = self.url_view_kwargs
+    pass

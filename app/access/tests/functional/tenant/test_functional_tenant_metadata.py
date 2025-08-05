@@ -16,6 +16,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_tenant
 class ViewSetBase:
 
     model = Organization
@@ -191,16 +192,7 @@ class ViewSetBase:
 
 
 
-class OrganizationViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
-
-
-
+@pytest.mark.module_access
 class OrganizationMetadata(
     ViewSetBase,
     MetadataAttributesFunctional,

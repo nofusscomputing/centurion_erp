@@ -16,6 +16,7 @@ from .mixin_centurion import (
 from .model_appsettings import (
     kwargs_appsettings,
     model_appsettings,
+    serializer_appsettings,
 )
 
 from .model_assetbase import (
@@ -144,6 +145,7 @@ from .model_entity import (
 from .model_externallink import (
     kwargs_externallink,
     model_externallink,
+    serializer_externallink,
 )
 
 from .model_featureflag import (
@@ -360,4 +362,5 @@ from .model_user import (
 from .model_usersettings import (
     kwargs_usersettings,
     model_usersettings,
+    serializer_usersettings,
 )
