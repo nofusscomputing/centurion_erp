@@ -109,7 +109,7 @@ class TenantAPIInheritedCases(
 
 
 
-@pytest.mark.module_assistance
+@pytest.mark.module_access
 class TenantAPIPyTest(
     TenantAPITestCases,
 ):
