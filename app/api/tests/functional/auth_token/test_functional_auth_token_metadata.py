@@ -3,24 +3,14 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from api.models.tokens import AuthToken
-from api.tests.abstract.api_permissions_viewset import (
-    APIPermissionAdd,
-    APIPermissionDelete,
-    APIPermissionView,
-)
-from api.tests.abstract.api_serializer_viewset import (
-    SerializerAdd,
-    SerializerDelete,
-    SerializerView,
-)
+
 from api.tests.abstract.test_metadata_functional import (
     MetadataAttributesFunctionalEndpoint,
     MetadataAttributesFunctionalBase,
@@ -31,7 +21,6 @@ User = django.contrib.auth.get_user_model()
 
 
 @pytest.mark.model_authtoken
-@pytest.mark.module_api
 class ViewSetBase:
 
     model = AuthToken
@@ -216,161 +205,7 @@ class ViewSetBase:
 
 
 
-class PermissionsAPI(
-    ViewSetBase,
-    APIPermissionAdd,
-    APIPermissionDelete,
-    APIPermissionView,
-    TestCase,
-):
-
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
-
-    def test_add_has_permission(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with permission
-        """
-
-        url_kwargs = self.url_kwargs.copy()
-
-        url_kwargs['model_id'] = self.add_user.id
-
-
-        client = Client()
-        if self.url_kwargs:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data=self.add_data)
-
-        assert response.status_code == 201
-
-
-    def test_add_permission_view_denied(self):
-        """ Check correct permission for add
-
-        Attempt to add a user with view permission
-        """
-
-        url_kwargs = self.url_kwargs.copy()
-
-        url_kwargs['model_id'] = self.add_user.id
-
-        client = Client()
-        if self.url_kwargs:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.view_user)
-        response = client.post(url, data=self.add_data)
-
-        assert response.status_code == 403
-
-
-
-    def test_delete_has_permission(self):
-        """ Check correct permission for delete
-
-        Delete item as user with delete permission
-        """
-
-        url_view_kwargs = self.url_view_kwargs.copy()
-
-        url_view_kwargs['model_id'] = self.delete_user.id
-        url_view_kwargs['pk'] = self.item_delete.id
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=url_view_kwargs)
-
-
-        client.force_login(self.delete_user)
-        response = client.delete(url, data=self.delete_data)
-
-        assert response.status_code == 204
-
-
-    def test_delete_permission_view_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with veiw permission only
-        """
-
-        url_view_kwargs = self.url_view_kwargs.copy()
-
-        url_view_kwargs['model_id'] = self.delete_user.id
-        url_view_kwargs['pk'] = self.item_delete.id
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=url_view_kwargs)
-
-
-        client.force_login(self.view_user)
-        response = client.delete(url, data=self.delete_data)
-
-        assert response.status_code == 403
-
-
-
-    def test_returned_results_only_user_orgs(self):
-        """Test not required
-
-        this test is not required as this model is not a tenancy model
-        """
-
-        pass
-
-
-
-    def test_view_no_permission_denied(self):
-        """ Check correct permission for view
-
-        This test case is a duplicate of a test case with the same name.
-        This test is not required for this model as there are no permissions
-        assosiated with accessing this model.
-
-        Attempt to view with user missing permission
-        """
-
-        pass
-
-
-
-class ViewSet(
-    ViewSetBase,
-    SerializerAdd,
-    SerializerDelete,
-    SerializerView,
-    TestCase,
-):
-
-    pass
-
-
-
+@pytest.mark.module_api
 class Metadata(
     ViewSetBase,
     MetadataAttributesFunctionalEndpoint,

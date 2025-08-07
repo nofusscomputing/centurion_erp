@@ -4,19 +4,15 @@ from django.contrib.auth.models import (
     Permission,
 )
 from django.contrib.contenttypes.models import ContentType
-from django.test import Client, TestCase
+from django.test import TestCase
 
-from django.shortcuts import reverse
 
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-# from devops.models.feature_flag import FeatureFlag
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
 from itam.models.software import Software
@@ -260,49 +256,6 @@ class ViewSetBase:
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-class PermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    pass
-
-    def test_add_has_permission(self):
-        """ Check correct permission for add 
-
-        This test cases is a duplicate of a test with the same name. Required
-        as the kwargs are different from normal
-
-        Attempt to add as user with permission
-        """
-
-        client = Client()
-        # if self.url_kwargs:
-
-        url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = {
-                'software_id': self.software_add.id,
-            }
-        )
-
-        client.force_login(self.add_user)
-        response = client.post(url, data=self.add_data)
-
-        assert response.status_code == 201
-
-
-
-
-class ViewSet(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase
-):
-
-    pass
 
 
 

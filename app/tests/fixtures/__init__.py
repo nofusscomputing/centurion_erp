@@ -27,6 +27,7 @@ from .model_assetbase import (
 from .model_authtoken import (
     kwargs_authtoken,
     model_authtoken,
+    serializer_authtoken,
 )
 
 from .model_centurionaudit import (
@@ -151,6 +152,7 @@ from .model_externallink import (
 from .model_featureflag import (
     kwargs_featureflag,
     model_featureflag,
+    serializer_featureflag,
 )
 
 from .model_gitgroup import (
@@ -296,6 +298,7 @@ from .model_softwarecategory import (
 from .model_softwareenablefeatureflag import (
     model_softwareenablefeatureflag,
     kwargs_softwareenablefeatureflag,
+    serializer_softwareenablefeatureflag,
 )
 
 from .model_softwareversion import (

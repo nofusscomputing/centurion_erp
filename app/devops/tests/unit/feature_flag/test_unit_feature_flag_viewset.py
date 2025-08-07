@@ -1,21 +1,17 @@
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import (
-    ModelCreateViewSetInheritedCases,
-    ModelListRetrieveDeleteViewSetInheritedCases,
-)
+from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from api.viewsets.auth_token import (
-    AuthToken,
+from devops.viewsets.feature_flag import (
+    FeatureFlag,
     ViewSet,
 )
 
 
 
-@pytest.mark.model_authtoken
+@pytest.mark.model_featureflag
 class ViewsetTestCases(
-    ModelCreateViewSetInheritedCases,
-    ModelListRetrieveDeleteViewSetInheritedCases,
+    ModelViewSetInheritedCases,
 ):
 
 
@@ -27,9 +23,6 @@ class ViewsetTestCases(
     @property
     def parameterized_class_attributes(self):
         return {
-            '_log': {
-                'type': type(None),
-            },
             '_model_documentation': {
                 'type': type(None),
             },
@@ -42,11 +35,13 @@ class ViewsetTestCases(
             },
             'filterset_fields': {
                 'value': [
-                    'expires'
+                    'enabled',
+                    'organization',
+                    'software'
                 ]
             },
             'model': {
-                'value': AuthToken
+                'value': FeatureFlag
             },
             'model_documentation': {
                 'type': type(None),
@@ -59,11 +54,12 @@ class ViewsetTestCases(
             },
             'search_fields': {
                 'value': [
-                    'note'
+                    'description',
+                    'name'
                 ]
             },
             'view_description': {
-                'value': 'User Authentication Tokens'
+                'value': 'Software Development Feature Flags'
             },
             'view_name': {
                 'type': type(None),
@@ -75,15 +71,15 @@ class ViewsetTestCases(
 
 
 
-class AuthTokenViewsetInheritedCases(
+class FeatureFlagViewsetInheritedCases(
     ViewsetTestCases,
 ):
     pass
 
 
 
-@pytest.mark.module_api
-class AuthTokenViewsetPyTest(
+@pytest.mark.module_devops
+class FeatureFlagViewsetPyTest(
     ViewsetTestCases,
 ):
 
