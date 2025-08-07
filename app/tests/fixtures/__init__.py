@@ -298,6 +298,7 @@ from .model_softwarecategory import (
 from .model_softwareenablefeatureflag import (
     model_softwareenablefeatureflag,
     kwargs_softwareenablefeatureflag,
+    serializer_softwareenablefeatureflag,
 )
 
 from .model_softwareversion import (

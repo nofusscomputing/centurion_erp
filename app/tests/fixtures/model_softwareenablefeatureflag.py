@@ -2,7 +2,11 @@ import datetime
 import pytest
 
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
-
+from devops.serializers.software_enable_feature_flag import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 @pytest.fixture( scope = 'class')
@@ -41,3 +45,14 @@ def kwargs_softwareenablefeatureflag(django_db_blocker,
     with django_db_blocker.unblock():
 
         software.delete()
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_softwareenablefeatureflag():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }
