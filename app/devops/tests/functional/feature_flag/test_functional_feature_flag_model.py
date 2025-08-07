@@ -21,7 +21,7 @@ class FeatureFlagModelInheritedCases(
 
 
 
-@pytest.mark.module_assistance
+@pytest.mark.module_devops
 class FeatureFlagModelPyTest(
     FeatureFlagModelTestCases,
 ):

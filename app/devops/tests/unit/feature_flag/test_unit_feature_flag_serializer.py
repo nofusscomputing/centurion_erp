@@ -250,7 +250,7 @@ class FeatureFlagSerializerInheritedCases(
 
 
 
-@pytest.mark.module_assistance
+@pytest.mark.module_devops
 class FeatureFlagSerializerPyTest(
     FeatureFlagSerializerTestCases
 ):

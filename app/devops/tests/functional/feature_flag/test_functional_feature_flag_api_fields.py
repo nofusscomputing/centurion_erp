@@ -126,7 +126,7 @@ class FeatureFlagAPIInheritedCases(
 
 
 
-@pytest.mark.module_assistance
+@pytest.mark.module_devops
 class FeatureFlagAPIPyTest(
     FeatureFlagAPITestCases,
 ):
