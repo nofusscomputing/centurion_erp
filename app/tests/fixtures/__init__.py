@@ -152,6 +152,7 @@ from .model_externallink import (
 from .model_featureflag import (
     kwargs_featureflag,
     model_featureflag,
+    serializer_featureflag,
 )
 
 from .model_gitgroup import (

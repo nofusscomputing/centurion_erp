@@ -1,6 +1,11 @@
 import pytest
 
 from devops.models.feature_flag import FeatureFlag
+from devops.serializers.feature_flag import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -45,3 +50,14 @@ def kwargs_featureflag(django_db_blocker, kwargs_centurionmodel, model_software,
             software.delete()
         except:
             pass
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_featureflag():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }
