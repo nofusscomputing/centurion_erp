@@ -10,8 +10,7 @@ from core.tests.unit.mixin_centurion.test_unit_centurion_mixin import CenturionM
 
 
 
-@pytest.mark.unit
-@pytest.mark.centurion_models
+@pytest.mark.model_authtoken
 class AuthTokenModelTestCases(
     CenturionMixnInheritedCases,
 ):
@@ -139,6 +138,7 @@ class AuthTokenModelInheritedCases(
 
 
 
+@pytest.mark.module_api
 class AuthTokenModelPyTest(
     AuthTokenModelTestCases,
 ):
