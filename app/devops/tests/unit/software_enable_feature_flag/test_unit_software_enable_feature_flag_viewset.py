@@ -1,53 +1,83 @@
 import pytest
 
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
-
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from devops.viewsets.software_enable_feature_flag import ViewSet
+from devops.viewsets.software_enable_feature_flag import (
+    SoftwareEnableFeatureFlag,
+    ViewSet,
+)
 
-from itam.models.software import Software
 
 
-
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
-class ViewsetList(
+@pytest.mark.model_softwareenablefeatureflag
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_softwareenablefeatureflag'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'enabled',
+                    'organization',
+                    'software'
+                ]
+            },
+            'model': {
+                'value': SoftwareEnableFeatureFlag
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': []
+            },
+            'view_description': {
+                'value': 'Enabled Software Development Feature Flags'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
-        software = Software.objects.create(
-            organization = self.organization,
-            name = 'soft',
-        )
-
-        self.kwargs = { 'software_id': software.id }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+class SoftwareEnableFeatureFlagViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
 
-        client.force_login(self.view_user)
 
-        self.http_options_response_list = client.options(url)
+
+@pytest.mark.module_devops
+class SoftwareEnableFeatureFlagViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass
