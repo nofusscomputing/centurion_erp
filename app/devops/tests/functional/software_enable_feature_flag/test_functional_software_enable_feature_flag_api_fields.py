@@ -19,6 +19,12 @@ class SoftwareEnableFeatureFlagAPITestCases(
     def parameterized_api_fields(self):
 
         return {
+            '_urls.notes': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes': {
+                'expected': models.NOT_PROVIDED
+            },
             'software': {
                 'expected': dict
             },
@@ -30,12 +36,6 @@ class SoftwareEnableFeatureFlagAPITestCases(
             },
             'software.url': {
                 'expected': Hyperlink
-            },
-            'name': {
-                'expected': str
-            },
-            'description': {
-                'expected': str
             },
             'enabled': {
                 'expected': bool

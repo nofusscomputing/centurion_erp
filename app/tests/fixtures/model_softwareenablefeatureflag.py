@@ -34,8 +34,10 @@ def kwargs_softwareenablefeatureflag(django_db_blocker,
             **kwargs_soft
         )
 
+    kwargs = kwargs_centurionmodel.copy()
+    del kwargs['model_notes']
     kwargs = {
-        **kwargs_centurionmodel.copy(),
+        **kwargs,
         'software': software,
         'enabled': True
     }
