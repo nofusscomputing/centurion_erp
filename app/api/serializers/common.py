@@ -1,5 +1,10 @@
-
+from django.core.exceptions import (
+    ValidationError as DjangoValidationError,
+)
 from rest_framework import serializers
+from rest_framework.exceptions import (
+    ValidationError
+)
 from rest_framework.reverse import reverse
 
 from access.serializers.organization import Tenant
@@ -44,15 +49,16 @@ class CommonModelSerializer(CommonBaseSerializer):
     _**Note:** This serializer is not inherited by the organization Serializer_
     _`access.serializers.organization`, this is by design_
 
-    This serializer is included within ALL model (Tenancy Model) serilaizers and is intended to be used
-    to add objects that ALL model serializers will require.
+    This serializer is included within ALL model (Tenancy Model) serilaizers
+    and is intended to be used to add objects that ALL model serializers will
+    require.
 
     Args:
         CommonBaseSerializer (Class): Common base serializer
     """
 
     model_notes = centurion_field.MarkdownField( required = False )
-    
+
     organization = OrganizationField(required = False)
 
 
@@ -169,3 +175,32 @@ class CommonModelSerializer(CommonBaseSerializer):
             )
 
         return get_url
+
+
+    def is_valid(self, *, raise_exception=False):
+        is_valid = False
+
+        try:
+            is_valid = super().is_valid(raise_exception=raise_exception)
+        except DjangoValidationError as ex:
+
+            if raise_exception:
+                raise ValidationError( serializers.as_serializer_error(ex ) )
+
+
+        return is_valid
+
+
+    def save(self, **kwargs):
+        save = None
+
+        try:
+
+            save = super().save( **kwargs )
+
+        except DjangoValidationError as ex:
+
+                raise ValidationError( serializers.as_serializer_error(ex ) )
+
+
+        return save
