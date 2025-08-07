@@ -27,6 +27,7 @@ from .model_assetbase import (
 from .model_authtoken import (
     kwargs_authtoken,
     model_authtoken,
+    serializer_authtoken,
 )
 
 from .model_centurionaudit import (

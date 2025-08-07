@@ -3,6 +3,11 @@ import pytest
 import random
 
 from api.models.tokens import AuthToken
+from api.serializers.auth_token import (
+    AuthTokenBaseSerializer,
+    AuthTokenModelSerializer,
+    AuthTokenViewSerializer,
+)
 
 
 
@@ -40,3 +45,14 @@ def kwargs_authtoken(django_db_blocker,
     with django_db_blocker.unblock():
 
         user.delete()
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_authtoken():
+
+    yield {
+        'base': AuthTokenBaseSerializer,
+        'model': AuthTokenModelSerializer,
+        'view': AuthTokenViewSerializer
+    }
