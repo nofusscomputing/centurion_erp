@@ -450,15 +450,6 @@ class CommonViewSetTestCases(
             }
         }
 
-    # @classmethod
-    # def setUpTestData(self):
-
-    #     self.kwargs: dict = {}
-
-    #     if self.viewset is CommonViewSet:
-
-    #         self.viewset.model = Organization
-
 
     def test_class_inherits_organizationmixin(self, viewset):
         """Class Inheritence check
@@ -707,34 +698,6 @@ class ModelViewSetBaseCases(
             },
         }
 
-    # kwargs: dict = {}
-
-    # organization: Organization
-
-    # view_user: User
-
-    # @classmethod
-    # def setUpTestData(self):
-
-    #     super().setUpTestData()    # Sets attribute self.view_set.model
-
-    #     self.organization = Organization.objects.create(name='test_org')
-
-    #     self.view_user = User.objects.create_user(
-    #         username="test_view_user1278", password="password", is_superuser=True)
-
-
-    #     @classmethod
-    #     def tearDownClass(cls):
-
-    #         cls.model = None
-
-    #         cls.organization.delete()
-
-    #         cls.view_user.delete()
-
-    #         super().tearDownClass()
-
 
     def test_class_inherits_modelviewsetbase(self, viewset):
         """Class Inheritence check
@@ -755,21 +718,6 @@ class ModelViewSetBaseCases(
         """
 
         view_set = viewset_mock_request
-
-        # view_set.request = MockRequest(
-        #     user = self.view_user,
-        #     model = getattr(self, 'model',None),
-        #     organization = self.organization,
-        #     viewset = self.viewset,
-        # )
-
-        # view_set.request.headers = {}
-
-        # view_set.kwargs = self.kwargs
-
-        # view_set.action = 'list'
-
-        # view_set.detail = False
 
         assert view_set.queryset is None    # Must be empty before init
 
@@ -1077,14 +1025,6 @@ class SubModelViewSetTestCases(
                 'value': None
             }
         }
-
-    # kwargs: dict
-
-    # organization: Organization
-
-    # view_user: User
-
-    # viewset = SubModelViewSet
 
 
     def test_class_inherits_submodelviewsetbase(self, viewset):
@@ -2244,19 +2184,6 @@ class SubModelViewSetInheritedCases(
     
     Use this Test Suite for ViewSet classes that inherit from SubModelViewSet
     """
-
-    # @classmethod
-    # def setUpTestData(self):
-    #     """Setup Test
-
-    #     1. make list request
-    #     """
-
-    #     self.viewset.kwargs = {}
-
-    #     self.viewset.kwargs[self.viewset.model_kwarg] = self.model._meta.sub_model_type
-
-    #     super().setUpTestData()
 
 
     @pytest.fixture( scope = 'function' )
