@@ -21,3 +21,6 @@ feature_flags.json
 coverage_*.json
 *-coverage.xml
 log/
+# Integration testing
+app/artifacts/
+app/pyproject.toml
