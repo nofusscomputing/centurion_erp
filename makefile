@@ -91,7 +91,7 @@ test-integration:
 			docker exec -i centurion-erp supervisorctl stop gunicorn;
 			docker exec -i centurion-erp sh -c 'rm -rf /app/artifacts/* /app/artifacts/.[!.]*';
 			docker exec -i centurion-erp supervisorctl start gunicorn;
-			sleep 30;
+			sleep 60;
 			docker ps -a;
 			curl --trace-ascii - http://localhost:8003/api;
 			echo '--------------------------------------------------------------------';
