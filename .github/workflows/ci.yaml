@@ -46,6 +46,17 @@ jobs:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
 
 
+  integration-test:
+    name: 'Integration Test'
+    uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
+    needs:
+      - docker
+    with:
+      PYTHON_VERSION: '3.11'
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+
+
   gitlab-mirror:
     if: ${{ github.repository == 'nofusscomputing/centurion_erp' }}
     runs-on: ubuntu-latest
