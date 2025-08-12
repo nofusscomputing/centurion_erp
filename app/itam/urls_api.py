@@ -34,57 +34,57 @@ router.register(
     basename = '_api_v2_itam_home'
 )
 router.register(
-    prefix = '(?P<model_name>[itamassetbase]+)', viewset = asset.ViewSet,
+    prefix = '/(?P<model_name>[itamassetbase]+)', viewset = asset.ViewSet,
     feature_flag = '2025-00007', basename = '_api_itamassetbase'
 )
 router.register(
-    prefix = 'device', viewset = device.ViewSet,
+    prefix = '/device', viewset = device.ViewSet,
     basename = '_api_device'
 )
 router.register(
-    prefix = 'device/(?P<device_id>[0-9]+)/operating_system',
+    prefix = '/device/(?P<device_id>[0-9]+)/operating_system',
     viewset = device_operating_system.ViewSet,
     basename = '_api_deviceoperatingsystem')
 router.register(
-    prefix = 'device/(?P<device_id>[0-9]+)/software', viewset = device_software_v2.ViewSet,
+    prefix = '/device/(?P<device_id>[0-9]+)/software', viewset = device_software_v2.ViewSet,
     basename = '_api_devicesoftware'
 )
 router.register(
-    prefix = 'device/(?P<device_id>[0-9]+)/service', viewset = service_device_v2.ViewSet,
+    prefix = '/device/(?P<device_id>[0-9]+)/service', viewset = service_device_v2.ViewSet,
     basename = '_api_v2_service_device'
 )
 router.register(
-    prefix = 'inventory', viewset = inventory.ViewSet,
+    prefix = '/inventory', viewset = inventory.ViewSet,
     basename = '_api_v2_inventory'
 )
 router.register(
-    prefix = 'operating_system', viewset = operating_system_v2.ViewSet,
+    prefix = '/operating_system', viewset = operating_system_v2.ViewSet,
     basename = '_api_operatingsystem'
 )
 router.register(
-    prefix = 'operating_system/(?P<operating_system_id>[0-9]+)/installs',
+    prefix = '/operating_system/(?P<operating_system_id>[0-9]+)/installs',
     viewset = device_operating_system.ViewSet,
     basename = '_api_v2_operating_system_installs'
 )
 router.register(
-    prefix = 'operating_system/(?P<operating_system_id>[0-9]+)/version',
+    prefix = '/operating_system/(?P<operating_system_id>[0-9]+)/version',
     viewset = operating_system_version_v2.ViewSet,
     basename = '_api_operatingsystemversion'
 )
 router.register(
-    prefix = 'software', viewset = software_v2.ViewSet,
+    prefix = '/software', viewset = software_v2.ViewSet,
     basename = '_api_software'
 )
 router.register(
-    prefix = 'software/(?P<software_id>[0-9]+)/installs', viewset = device_software_v2.ViewSet,
+    prefix = '/software/(?P<software_id>[0-9]+)/installs', viewset = device_software_v2.ViewSet,
     basename = '_api_v2_software_installs'
 )
 router.register(
-    prefix = 'software/(?P<software_id>[0-9]+)/version', viewset = software_version_v2.ViewSet,
+    prefix = '/software/(?P<software_id>[0-9]+)/version', viewset = software_version_v2.ViewSet,
     basename = '_api_softwareversion'
 )
 router.register(
-    prefix = 'software/(?P<software_id>[0-9]+)/feature_flag',
+    prefix = '/software/(?P<software_id>[0-9]+)/feature_flag',
     viewset = software_enable_feature_flag.ViewSet,
     basename = '_api_softwareenablefeatureflag'
 )

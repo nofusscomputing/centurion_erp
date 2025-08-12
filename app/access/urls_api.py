@@ -34,17 +34,17 @@ router = DefaultRouter(trailing_slash=False)
 router.register('', access_v2.Index, basename = '_api_v2_access_home')
 
 router.register(
-    prefix = '(?P<model_name>[company]+)', viewset = entity.ViewSet,
+    prefix = '/(?P<model_name>[company]+)', viewset = entity.ViewSet,
     feature_flag = '2025-00008',basename = '_api_v2_company'
 )
 
 router.register(
-    prefix=f'entity/(?P<model_name>[{entity_type_names}]+)?', viewset = entity.ViewSet,
+    prefix=f'/entity/(?P<model_name>[{entity_type_names}]+)?', viewset = entity.ViewSet,
     feature_flag = '2025-00002', basename = '_api_entity_sub'
 )
 
 router.register(
-    prefix = 'entity', viewset = entity.NoDocsViewSet,
+    prefix = '/entity', viewset = entity.NoDocsViewSet,
     feature_flag = '2025-00002', basename = '_api_entity'
 )
 
@@ -54,7 +54,7 @@ router.register(
 # )
 
 router.register(
-    prefix = 'tenant', viewset = organization.ViewSet,
+    prefix = '/tenant', viewset = organization.ViewSet,
     basename = '_api_tenant'
 )
 
@@ -64,7 +64,7 @@ router.register(
 # )
 
 router.register(
-    prefix = 'tenant/(?P<organization_id>[0-9]+)/team', viewset = team_v2.ViewSet,
+    prefix = '/tenant/(?P<organization_id>[0-9]+)/team', viewset = team_v2.ViewSet,
     basename = '_api_v2_organization_team'
 )
 
@@ -75,13 +75,13 @@ router.register(
 # )
 
 router.register(
-    prefix = 'access/tenant/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user',
+    prefix = '/access/tenant/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user',
     viewset = team_user_v2.ViewSet,
     basename = '_api_v2_organization_team_user'
 )
 
 router.register(
-    prefix = 'role', viewset = role.ViewSet,
+    prefix = '/role', viewset = role.ViewSet,
     feature_flag = '2025-00003', basename = '_api_role'
 )
 

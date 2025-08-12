@@ -18,15 +18,15 @@ router.register(
     basename = '_api_v2_config_management_home'
 )
 router.register(
-    prefix = 'group', viewset = config_group_v2.ViewSet,
+    prefix = '/group', viewset = config_group_v2.ViewSet,
     basename = '_api_configgroups'
 )
 router.register(
-    prefix = 'group/(?P<parent_group>[0-9]+)/child_group', viewset = config_group_v2.ViewSet,
+    prefix = '/group/(?P<parent_group>[0-9]+)/child_group', viewset = config_group_v2.ViewSet,
     basename = '_api_configgroups_child'
 )
 router.register(
-    prefix = 'group/(?P<config_group_id>[0-9]+)/software',
+    prefix = '/group/(?P<config_group_id>[0-9]+)/software',
     viewset = config_group_software_v2.ViewSet,
     basename = '_api_configgroupsoftware'
 )
