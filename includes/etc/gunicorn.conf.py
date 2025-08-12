@@ -1,3 +1,4 @@
+import coverage
 import logging
 import os
 
@@ -6,6 +7,32 @@ from pathlib import Path
 from django.conf import settings
 
 from prometheus_client import multiprocess, start_http_server, REGISTRY
+
+
+
+if bool(os.environ.get("IS_TESTING")):
+
+    def post_fork(server, worker):
+
+        worker_cov = coverage.Coverage(data_file=f"artifacts/.coverage.{os.getpid()}")
+
+        worker_cov.start()
+
+        worker.worker_cov = worker_cov
+
+
+    def worker_exit(server, worker):
+
+        if hasattr(worker, "worker_cov"):
+
+            worker.worker_cov.stop()
+
+            worker.worker_cov.save()
+
+
+    post_fork = post_fork
+
+    worker_exit = worker_exit
 
 
 
