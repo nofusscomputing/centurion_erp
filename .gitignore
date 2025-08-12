@@ -24,3 +24,5 @@ log/
 # Integration testing
 app/artifacts/
 app/pyproject.toml
+app/histogram_**
+app/counter_**

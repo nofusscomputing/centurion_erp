@@ -69,6 +69,70 @@ lint: markdown-mkdocs-lint
 test:
 	pytest --cov-report xml:artifacts/coverage_unit_functional.xml --cov-report html:artifacts/coverage/unit_functional/ --junit-xml=artifacts/unit_functional.JUnit.xml app/**/tests/unit app/**/tests/functional
 
+
+
+test-integration:
+	export exit_code=0;
+	cp pyproject.toml app/;
+	sed -i 's|^source = \[ "./app" \]|source = [ "." ]|' app/pyproject.toml;
+	cd test;
+	if docker-compose up -d; then
+
+		docker ps -a;
+
+		chmod +x setup-integration.sh;
+
+		if ./setup-integration.sh; then
+
+			cd ..;
+
+			ls -laR test/;
+
+			docker exec -i centurion-erp supervisorctl stop gunicorn;
+			docker exec -i centurion-erp sh -c 'rm -rf /app/artifacts/* /app/artifacts/.[!.]*';
+			docker exec -i centurion-erp supervisorctl start gunicorn;
+			sleep 30;
+			docker ps -a;
+			curl --trace-ascii - http://localhost:8003/api;
+			echo '--------------------------------------------------------------------';
+			curl --trace-ascii - http://127.0.0.1:8003/api;
+
+
+			if [ "0${GITHUB_SHA}"!="0" ]; then
+
+				sudo chmod 777 -R ./test
+
+			fi;
+
+			docker logs centurion-erp;
+			pytest --override-ini addopts= --no-migrations --tb=long --verbosity=2 --full-trace --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
+			docker exec -i centurion-erp supervisorctl restart gunicorn;
+			docker exec -i centurion-erp sh -c 'coverage combine; coverage report --skip-covered; coverage html -d artifacts/html/;';
+			docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
+			docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
+			docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
+			docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
+			cd test;
+
+		else
+
+			echo 'Error: could not setup containers for testing';
+			export exit_code=10;
+
+		fi;
+	else
+
+		echo 'Error: Failed to launch containers';
+		export exit_code=20;
+
+	fi;
+	cd test;
+	docker-compose down -v;
+	cd ..;
+	exit ${exit_code};
+
+
+
 test-functional:
 	pytest --cov-report xml:artifacts/coverage_functional.xml --cov-report html:artifacts/coverage/functional/ --junit-xml=artifacts/functional.JUnit.xml app/**/tests/functional
 
