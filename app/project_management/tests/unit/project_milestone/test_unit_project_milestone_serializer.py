@@ -64,7 +64,7 @@ class ProjectMilestoneSerializerTestCases(
 
 
     def test_serializer_validation_no_name(self,
-        kwargs_api_create, model, model_serializer, request_user
+        kwargs_api_create, model, model_serializer, request_user, model_kwargs
     ):
         """Serializer Validation Check
 

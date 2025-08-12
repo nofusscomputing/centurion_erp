@@ -75,9 +75,13 @@ def kwargs_projectmilestone(django_db_blocker,
 
     yield kwargs.copy()
 
-    # with django_db_blocker.unblock():
+    with django_db_blocker.unblock():
 
-    #     project.delete()    # milestone is cascade delete
+        for proj in project.projectmilestone_set.all():
+            proj.delete()
+
+        project.delete()
+
 
 
 @pytest.fixture( scope = 'class')
