@@ -48,10 +48,11 @@ def kwargs_projectstate(kwargs_centurionmodel, django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        try:
-            runbook.delete()
-        except models.deletion.ProtectedError:
-            pass
+        for proj in runbook.projectstate_set.all():
+            proj.delete()
+
+        runbook.delete()
+
 
 
 @pytest.fixture( scope = 'class')

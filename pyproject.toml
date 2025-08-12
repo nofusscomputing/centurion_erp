@@ -1100,6 +1100,7 @@ markers = [
     "audit_models: Selects Audit models.",
     "centurion_models: Selects Centurion models",
     "functional: Selects all Functional tests.",
+    "integration: Selects all Integration tests.",
     "meta_models: Selects Meta models",
     "mixin: Selects all mixin test cases.",
     "mixin_centurion: Selects all centurion mixin test cases.",

@@ -1,9 +1,10 @@
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.models import (
     ContentType,
     Permission
 )
-from django.conf import settings
+from django.db.models import QuerySet
 
 
 def permission_queryset():
@@ -61,47 +62,66 @@ def permission_queryset():
 
     if not settings.RUNNING_TESTS:
 
-        models = apps.get_models()
+        try:
+        # This blocks purpose is to cater for fresh install
+        # so that the app does not crash before the DB is setup.
 
-        for model in models:
+            models = apps.get_models()
 
-            if(
-                not str(model._meta.object_name).endswith('AuditHistory')
-                and not str(model._meta.model_name).lower().endswith('history')
-            ):
-                # check `endswith('history')` can be removed when the old history models are removed
-                continue
-
-            content_type = ContentType.objects.get(
-                app_label = model._meta.app_label,
-                model = model._meta.model_name
-            )
-
-            permissions = Permission.objects.filter(
-                content_type = content_type,
-            )
-
-            for permission in permissions:
+            for model in models:
 
                 if(
-                    not permission.codename == 'view_' + str(model._meta.model_name)
-                    and str(model._meta.object_name).endswith('AuditHistory')
-                ):
-                    exclude_permissions += [ permission.codename ]
-
-                elif(
                     not str(model._meta.object_name).endswith('AuditHistory')
-                    and str(model._meta.model_name).lower().endswith('history')
+                    and not str(model._meta.model_name).lower().endswith('history')
                 ):
-                    # This `elif` can be removed when the old history models are removed
+                    # check `endswith('history')` can be removed when the old history models are removed
+                    continue
 
-                    exclude_permissions += [ permission.codename ]
+                content_type = ContentType.objects.get(
+                    app_label = model._meta.app_label,
+                    model = model._meta.model_name
+                )
+
+                permissions = Permission.objects.filter(
+                    content_type = content_type,
+                )
+
+                for permission in permissions:
+
+                    if(
+                        not permission.codename == 'view_' + str(model._meta.model_name)
+                        and str(model._meta.object_name).endswith('AuditHistory')
+                    ):
+                        exclude_permissions += [ permission.codename ]
+
+                    elif(
+                        not str(model._meta.object_name).endswith('AuditHistory')
+                        and str(model._meta.model_name).lower().endswith('history')
+                    ):
+                        # This `elif` can be removed when the old history models are removed
+
+                        exclude_permissions += [ permission.codename ]
 
 
-    return Permission.objects.select_related('content_type').filter(
-            content_type__app_label__in = centurion_apps,
-        ).exclude(
-            content_type__model__in = exclude_models
-        ).exclude(
-            codename__in = exclude_permissions
-        )
+            return Permission.objects.select_related('content_type').filter(
+                    content_type__app_label__in = centurion_apps,
+                ).exclude(
+                    content_type__model__in = exclude_models
+                ).exclude(
+                    codename__in = exclude_permissions
+                )
+
+        except:
+            pass
+
+        return QuerySet()
+
+    else:
+
+        return Permission.objects.select_related('content_type').filter(
+                content_type__app_label__in = centurion_apps,
+            ).exclude(
+                content_type__model__in = exclude_models
+            ).exclude(
+                codename__in = exclude_permissions
+            )

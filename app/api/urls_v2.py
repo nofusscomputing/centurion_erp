@@ -61,22 +61,22 @@ router = DefaultRouter(trailing_slash=False)
 router.register('', v2.Index, basename='_api_v2_home')
 
 
-router.register('base', base_index_v2.Index, basename='_api_v2_base_home')
-router.register('base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
-router.register('base/permission', permission_v2.ViewSet, basename='_api_v2_permission')
-router.register('base/user', user_v2.ViewSet, basename='_api_v2_user')
+router.register('/base', base_index_v2.Index, basename='_api_v2_base_home')
+router.register('/base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
+router.register('/base/permission', permission_v2.ViewSet, basename='_api_v2_permission')
+router.register('/base/user', user_v2.ViewSet, basename='_api_v2_user')
 
 
 
 router.register(
-    prefix = f'(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names} \
+    prefix = f'/(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names} \
         ]+)/(?P<model_id>[0-9]+)/history',
     viewset = audit_history.ViewSet,
     basename = '_api_centurionaudit_sub'
 )
 
 router.register(
-    prefix = f'(?P<app_label>[{notes_app_labels}]+)/(?P<model_name>[{notes_type_names} \
+    prefix = f'/(?P<app_label>[{notes_app_labels}]+)/(?P<model_name>[{notes_type_names} \
         ]+)/(?P<model_id>[0-9]+)/notes',
     viewset = centurion_model_notes.ViewSet,
     basename = '_api_centurionmodelnote_sub'
@@ -85,24 +85,24 @@ router.register(
 
 urlpatterns = [
 
-    path('schema', SpectacularAPIView.as_view(api_version='v2'), name='schema-v2',),
-    path('docs', SpectacularSwaggerView.as_view(url_name='schema-v2'), name='_api_v2_docs'),
+    path('/schema', SpectacularAPIView.as_view(api_version='v2'), name='schema-v2',),
+    path('/docs', SpectacularSwaggerView.as_view(url_name='schema-v2'), name='_api_v2_docs'),
 
 ]
 
 urlpatterns += router.urls
 
 urlpatterns += [
-    path(route = "access/", view = include("access.urls_api")),
-    path(route = "accounting/", view = include("accounting.urls")),
-    path(route = "assistance/", view = include("assistance.urls_api")),
-    path(route = "config_management/", view = include("config_management.urls_api")),
-    path(route = "core/", view = include("core.urls_api")),
-    path(route = "devops/", view = include("devops.urls")),
-    path(route = "hr/", view = include('human_resources.urls')),
-    path(route = "itam/", view = include("itam.urls_api")),
-    path(route = "itim/", view = include("itim.urls_api")),
-    path(route = "project_management/", view = include("project_management.urls_api")),
-    path(route = "settings/", view = include("settings.urls_api")),
-    path(route = 'public/', view = include('api.urls_public')),
+    path(route = "/access", view = include("access.urls_api")),
+    path(route = "/accounting", view = include("accounting.urls")),
+    path(route = "/assistance", view = include("assistance.urls_api")),
+    path(route = "/config_management", view = include("config_management.urls_api")),
+    path(route = "/core", view = include("core.urls_api")),
+    path(route = "/devops", view = include("devops.urls")),
+    path(route = "/hr", view = include('human_resources.urls')),
+    path(route = "/itam", view = include("itam.urls_api")),
+    path(route = "/itim", view = include("itim.urls_api")),
+    path(route = "/project_management", view = include("project_management.urls_api")),
+    path(route = "/settings", view = include("settings.urls_api")),
+    path(route = '/public', view = include('api.urls_public')),
 ]
