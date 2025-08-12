@@ -48,9 +48,14 @@ forwarder_headers = "X-REAL-IP,X-FORWARDED-FOR,X-FORWARDED-PROTO"
 
 logger = logging.getLogger(__name__)
 
-preload_app = False
+max_requests = 100
+max_requests_jitter = 30
 
-workers = 10
+preload_app = True
+
+timeout = 180
+
+workers = 4
 
 
 def when_ready(_):
@@ -73,7 +78,8 @@ def when_ready(_):
         proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
 
 
-    logger.info(f'Setting up prometheus metrics HTTP server on port {str(settings.METRICS_EXPORT_PORT)}.')
+    logger.info(f'Setting up prometheus metrics HTTP server on port \
+        {str(settings.METRICS_EXPORT_PORT)}.')
 
     multiproc_folder_path = _setup_multiproc_folder()
 
