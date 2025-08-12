@@ -52,9 +52,9 @@ jobs:
     needs:
       - docker
     with:
-      POSTGRES_VERSIONS: "[ '13', '14', '15', '16', '17' ]"
+      POSTGRES_VERSIONS: '[ "13", "14", "15", "16", "17" ]'
       PYTHON_VERSION: '3.11'
-      RABBITMQ_VERSIONS: "[ '3.12', '3.13', '4.0', '4.1' ]"
+      RABBITMQ_VERSIONS: '[ "3.12", "3.13", "4.0", "4.1" ]'
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
 
