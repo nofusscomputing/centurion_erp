@@ -1,4 +1,6 @@
 from django.apps import apps
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import (
     post_migrate,
 )
@@ -13,6 +15,31 @@ def centurion_model_migrate(sender, **kwargs):
 
     if sender.label != 'core':
         return
+
+    try:
+
+        print('\n\nFetching System User.\n')
+
+        user = apps.get_model(settings.AUTH_USER_MODEL).objects.get(
+            username = 'system'
+        )
+
+        if user.is_active:
+            print('    System user is set as "Active", disabling.\n')
+            user.is_active = False
+
+            user.save()
+
+    except ObjectDoesNotExist:
+
+        print('    System user not found, creating.\n')
+
+        user = apps.get_model(settings.AUTH_USER_MODEL).objects.create(
+            username = 'system',
+            first_name = 'System',
+            last_name = 'User',
+            is_active = False,
+        )
 
     print('\n\nCenturion Model Migration Signal.....\n')
 
@@ -261,7 +288,7 @@ def centurion_model_migrate(sender, **kwargs):
                         model_name = model.get_history_model_name( model )
                     )
 
-                    history = original_history.objects.filter().exclude( user = None )
+                    history = original_history.objects.filter()
 
                     print(f'        Found {len(history)} history entries to migrate.')
 
@@ -269,18 +296,28 @@ def centurion_model_migrate(sender, **kwargs):
 
                         try:
 
+                            after = {}
+                            if entry.after:
+                                after = entry.after
+
                             entry_model = entry.model
                             if hasattr(entry, 'child_model'):
                                 entry_model = entry.child_model
+
+                            entry_user = entry.user
+
+                            if not entry_user:
+
+                                entry_user = user
 
                             migrated_history = audit_history.objects.create(
                                 organization = entry.organization,
                                 content_type = entry.content_type,
                                 model = entry_model,
                                 before = entry.before,
-                                after = entry.after,
+                                after = after,
                                 action = entry.action,
-                                user = entry.user,
+                                user = entry_user,
                                 created = entry.created
                             )
 
