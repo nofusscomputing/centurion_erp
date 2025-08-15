@@ -9,83 +9,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("access", "0011_remove_entitynotes_model_and_more"),
-        ("assistance", "0007_remove_knowledgebase_is_global_and_more"),
+        ("access", "0010_company_alter_entity_entity_type_alter_person_dob_and_more"),
         ("core", "0024_centurionaudit_centurionmodelnote_and_more"),
-        ("project_management", "0006_alter_project_organization_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name="project",
+            model_name="entity",
             name="is_global",
         ),
         migrations.RemoveField(
-            model_name="project",
+            model_name="tenant",
             name="slug",
         ),
-        migrations.RemoveField(
-            model_name="projectmilestone",
-            name="is_global",
-        ),
-        migrations.RemoveField(
-            model_name="projectmilestone",
-            name="slug",
-        ),
-        migrations.RemoveField(
-            model_name="projectstate",
-            name="is_global",
-        ),
-        migrations.RemoveField(
-            model_name="projecttype",
-            name="is_global",
-        ),
         migrations.AlterField(
-            model_name="project",
-            name="description",
-            field=models.TextField(
-                blank=True,
-                help_text="Outline of this Project",
-                null=True,
-                verbose_name="Description",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="external_ref",
-            field=models.IntegerField(
-                blank=True,
-                help_text="External System reference",
-                null=True,
-                verbose_name="Reference Number",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="external_system",
-            field=models.IntegerField(
-                blank=True,
-                choices=[
-                    (1, "Github"),
-                    (2, "Gitlab"),
-                    (9999, "Custom #1 (Imported)"),
-                    (9998, "Custom #2 (Imported)"),
-                    (9997, "Custom #3 (Imported)"),
-                    (9996, "Custom #4 (Imported)"),
-                    (9995, "Custom #5 (Imported)"),
-                    (9994, "Custom #6 (Imported)"),
-                    (9993, "Custom #7 (Imported)"),
-                    (9992, "Custom #8 (Imported)"),
-                    (9991, "Custom #9 (Imported)"),
-                ],
-                help_text="External system this item derives",
-                null=True,
-                verbose_name="External System",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
+            model_name="entity",
             name="id",
             field=models.AutoField(
                 help_text="ID of the item",
@@ -96,116 +35,78 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="project",
-            name="manager_team",
-            field=models.ForeignKey(
+            model_name="entity",
+            name="model_notes",
+            field=models.TextField(
                 blank=True,
-                help_text="Team which contains the Project Managers",
+                help_text="Tid bits of information",
                 null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="access.team",
-                verbose_name="Project Manager Team",
+                verbose_name="Notes",
             ),
         ),
         migrations.AlterField(
-            model_name="project",
-            name="manager_user",
+            model_name="entity",
+            name="organization",
+            field=models.ForeignKey(
+                help_text="Tenant this belongs to",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="access.tenant",
+                validators=[
+                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
+                ],
+                verbose_name="Tenant",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="role",
+            name="id",
+            field=models.AutoField(
+                help_text="ID of the item",
+                primary_key=True,
+                serialize=False,
+                unique=True,
+                verbose_name="ID",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="role",
+            name="model_notes",
+            field=models.TextField(
+                blank=True,
+                help_text="Tid bits of information",
+                null=True,
+                verbose_name="Notes",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="role",
+            name="organization",
+            field=models.ForeignKey(
+                help_text="Tenant this belongs to",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="access.tenant",
+                validators=[
+                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
+                ],
+                verbose_name="Tenant",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="tenant",
+            name="manager",
             field=models.ForeignKey(
                 blank=True,
-                help_text="User who is the Project Manager",
+                help_text="Manager for this Tenancy",
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
-                related_name="manager_user",
                 to=settings.AUTH_USER_MODEL,
                 verbose_name="Manager",
             ),
         ),
         migrations.AlterField(
-            model_name="project",
-            name="organization",
-            field=models.ForeignKey(
-                help_text="Tenant this belongs to",
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="+",
-                to="access.tenant",
-                validators=[
-                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
-                ],
-                verbose_name="Tenant",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="project_type",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="Type of project",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="project_management.projecttype",
-                verbose_name="Project Type",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="state",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="State of the project",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="project_management.projectstate",
-                verbose_name="Project State",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectmilestone",
-            name="description",
-            field=models.TextField(
-                blank=True,
-                help_text="Description of milestone. Markdown supported",
-                null=True,
-                verbose_name="Description",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectmilestone",
-            name="id",
-            field=models.AutoField(
-                help_text="ID of the item",
-                primary_key=True,
-                serialize=False,
-                unique=True,
-                verbose_name="ID",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectmilestone",
-            name="organization",
-            field=models.ForeignKey(
-                help_text="Tenant this belongs to",
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="+",
-                to="access.tenant",
-                validators=[
-                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
-                ],
-                verbose_name="Tenant",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectstate",
-            name="id",
-            field=models.AutoField(
-                help_text="ID of the item",
-                primary_key=True,
-                serialize=False,
-                unique=True,
-                verbose_name="ID",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectstate",
+            model_name="tenant",
             name="model_notes",
             field=models.TextField(
                 blank=True,
@@ -214,69 +115,8 @@ class Migration(migrations.Migration):
                 verbose_name="Notes",
             ),
         ),
-        migrations.AlterField(
-            model_name="projectstate",
-            name="organization",
-            field=models.ForeignKey(
-                help_text="Tenant this belongs to",
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="+",
-                to="access.tenant",
-                validators=[
-                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
-                ],
-                verbose_name="Tenant",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectstate",
-            name="runbook",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="The runbook for this project state",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="assistance.knowledgebase",
-                verbose_name="Runbook",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projecttype",
-            name="id",
-            field=models.AutoField(
-                help_text="ID of the item",
-                primary_key=True,
-                serialize=False,
-                unique=True,
-                verbose_name="ID",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projecttype",
-            name="model_notes",
-            field=models.TextField(
-                blank=True,
-                help_text="Tid bits of information",
-                null=True,
-                verbose_name="Notes",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projecttype",
-            name="organization",
-            field=models.ForeignKey(
-                help_text="Tenant this belongs to",
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="+",
-                to="access.tenant",
-                validators=[
-                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
-                ],
-                verbose_name="Tenant",
-            ),
-        ),
         migrations.CreateModel(
-            name="ProjectAuditHistory",
+            name="CompanyAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -294,22 +134,22 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="audit_history",
-                        to="project_management.project",
+                        related_name="+",
+                        to="access.company",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project History",
-                "verbose_name_plural": "Project Histories",
-                "db_table": "project_management_project_audithistory",
+                "verbose_name": "Company History",
+                "verbose_name_plural": "Company Histories",
+                "db_table": "access_company_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectCenturionModelNote",
+            name="CompanyCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -328,21 +168,21 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.project",
+                        to="access.company",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Note",
-                "verbose_name_plural": "Project Notes",
-                "db_table": "project_management_project_centurionmodelnote",
+                "verbose_name": "Company Note",
+                "verbose_name_plural": "Company Notes",
+                "db_table": "access_company_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
         ),
         migrations.CreateModel(
-            name="ProjectMilestoneAuditHistory",
+            name="ContactAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -360,22 +200,22 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="audit_history",
-                        to="project_management.projectmilestone",
+                        related_name="+",
+                        to="access.contact",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Milestone History",
-                "verbose_name_plural": "Project Milestone Histories",
-                "db_table": "project_management_projectmilestone_audithistory",
+                "verbose_name": "Contact History",
+                "verbose_name_plural": "Contact Histories",
+                "db_table": "access_contact_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectMilestoneCenturionModelNote",
+            name="ContactCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -394,21 +234,21 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.projectmilestone",
+                        to="access.contact",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Milestone Note",
-                "verbose_name_plural": "Project Milestone Notes",
-                "db_table": "project_management_projectmilestone_centurionmodelnote",
+                "verbose_name": "Contact Note",
+                "verbose_name_plural": "Contact Notes",
+                "db_table": "access_contact_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
         ),
         migrations.CreateModel(
-            name="ProjectStateAuditHistory",
+            name="EntityAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -427,21 +267,21 @@ class Migration(migrations.Migration):
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="audit_history",
-                        to="project_management.projectstate",
+                        to="access.entity",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project State History",
-                "verbose_name_plural": "Project State Histories",
-                "db_table": "project_management_projectstate_audithistory",
+                "verbose_name": "Entity History",
+                "verbose_name_plural": "Entity Histories",
+                "db_table": "access_entity_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectStateCenturionModelNote",
+            name="EntityCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -460,21 +300,87 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.projectstate",
+                        to="access.entity",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project State Note",
-                "verbose_name_plural": "Project State Notes",
-                "db_table": "project_management_projectstate_centurionmodelnote",
+                "verbose_name": "Entity Note",
+                "verbose_name_plural": "Entity Notes",
+                "db_table": "access_entity_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
         ),
         migrations.CreateModel(
-            name="ProjectTypeAuditHistory",
+            name="PersonAuditHistory",
+            fields=[
+                (
+                    "centurionaudit_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="core.centurionaudit",
+                    ),
+                ),
+                (
+                    "model",
+                    models.ForeignKey(
+                        help_text="Model this history belongs to",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="access.person",
+                        verbose_name="Model",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Person History",
+                "verbose_name_plural": "Person Histories",
+                "db_table": "access_person_audithistory",
+                "managed": True,
+            },
+            bases=("core.centurionaudit",),
+        ),
+        migrations.CreateModel(
+            name="PersonCenturionModelNote",
+            fields=[
+                (
+                    "centurionmodelnote_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="core.centurionmodelnote",
+                    ),
+                ),
+                (
+                    "model",
+                    models.ForeignKey(
+                        help_text="Model this note belongs to",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="access.person",
+                        verbose_name="Model",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Person Note",
+                "verbose_name_plural": "Person Notes",
+                "db_table": "access_person_centurionmodelnote",
+                "managed": True,
+            },
+            bases=("core.centurionmodelnote",),
+        ),
+        migrations.CreateModel(
+            name="RoleAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -493,21 +399,21 @@ class Migration(migrations.Migration):
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="audit_history",
-                        to="project_management.projecttype",
+                        to="access.role",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Type History",
-                "verbose_name_plural": "Project Type Histories",
-                "db_table": "project_management_projecttype_audithistory",
+                "verbose_name": "Role History",
+                "verbose_name_plural": "Role Histories",
+                "db_table": "access_role_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectTypeCenturionModelNote",
+            name="RoleCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -526,17 +432,95 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.projecttype",
+                        to="access.role",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Type Note",
-                "verbose_name_plural": "Project Type Notes",
-                "db_table": "project_management_projecttype_centurionmodelnote",
+                "verbose_name": "Role Note",
+                "verbose_name_plural": "Role Notes",
+                "db_table": "access_role_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
+        ),
+        migrations.CreateModel(
+            name="TenantAuditHistory",
+            fields=[
+                (
+                    "centurionaudit_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="core.centurionaudit",
+                    ),
+                ),
+                (
+                    "model",
+                    models.ForeignKey(
+                        help_text="Model this history belongs to",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="audit_history",
+                        to="access.tenant",
+                        verbose_name="Model",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Tenant History",
+                "verbose_name_plural": "Tenant Histories",
+                "db_table": "access_tenant_audithistory",
+                "managed": True,
+            },
+            bases=("core.centurionaudit",),
+        ),
+        migrations.CreateModel(
+            name="TenantCenturionModelNote",
+            fields=[
+                (
+                    "centurionmodelnote_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="core.centurionmodelnote",
+                    ),
+                ),
+                (
+                    "model",
+                    models.ForeignKey(
+                        help_text="Model this note belongs to",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="access.tenant",
+                        verbose_name="Model",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Tenant Note",
+                "verbose_name_plural": "Tenant Notes",
+                "db_table": "access_tenant_centurionmodelnote",
+                "managed": True,
+            },
+            bases=("core.centurionmodelnote",),
+        ),
+        migrations.DeleteModel(
+            name="EntityHistory",
+        ),
+        migrations.DeleteModel(
+            name="EntityNotes",
+        ),
+        migrations.DeleteModel(
+            name="RoleHistory",
+        ),
+        migrations.DeleteModel(
+            name="RoleNotes",
         ),
     ]

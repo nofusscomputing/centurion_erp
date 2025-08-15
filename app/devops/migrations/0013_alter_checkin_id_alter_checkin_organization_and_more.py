@@ -2,7 +2,6 @@
 
 import access.models.tenancy_abstract
 import django.db.models.deletion
-from django.conf import settings
 from django.db import migrations, models
 
 
@@ -10,82 +9,13 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("access", "0011_remove_entitynotes_model_and_more"),
-        ("assistance", "0007_remove_knowledgebase_is_global_and_more"),
         ("core", "0024_centurionaudit_centurionmodelnote_and_more"),
-        ("project_management", "0006_alter_project_organization_and_more"),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ("devops", "0012_alter_checkin_organization_and_more"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="project",
-            name="is_global",
-        ),
-        migrations.RemoveField(
-            model_name="project",
-            name="slug",
-        ),
-        migrations.RemoveField(
-            model_name="projectmilestone",
-            name="is_global",
-        ),
-        migrations.RemoveField(
-            model_name="projectmilestone",
-            name="slug",
-        ),
-        migrations.RemoveField(
-            model_name="projectstate",
-            name="is_global",
-        ),
-        migrations.RemoveField(
-            model_name="projecttype",
-            name="is_global",
-        ),
         migrations.AlterField(
-            model_name="project",
-            name="description",
-            field=models.TextField(
-                blank=True,
-                help_text="Outline of this Project",
-                null=True,
-                verbose_name="Description",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="external_ref",
-            field=models.IntegerField(
-                blank=True,
-                help_text="External System reference",
-                null=True,
-                verbose_name="Reference Number",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="external_system",
-            field=models.IntegerField(
-                blank=True,
-                choices=[
-                    (1, "Github"),
-                    (2, "Gitlab"),
-                    (9999, "Custom #1 (Imported)"),
-                    (9998, "Custom #2 (Imported)"),
-                    (9997, "Custom #3 (Imported)"),
-                    (9996, "Custom #4 (Imported)"),
-                    (9995, "Custom #5 (Imported)"),
-                    (9994, "Custom #6 (Imported)"),
-                    (9993, "Custom #7 (Imported)"),
-                    (9992, "Custom #8 (Imported)"),
-                    (9991, "Custom #9 (Imported)"),
-                ],
-                help_text="External system this item derives",
-                null=True,
-                verbose_name="External System",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
+            model_name="checkin",
             name="id",
             field=models.AutoField(
                 help_text="ID of the item",
@@ -96,32 +26,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="project",
-            name="manager_team",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="Team which contains the Project Managers",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="access.team",
-                verbose_name="Project Manager Team",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="manager_user",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="User who is the Project Manager",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                related_name="manager_user",
-                to=settings.AUTH_USER_MODEL,
-                verbose_name="Manager",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
+            model_name="checkin",
             name="organization",
             field=models.ForeignKey(
                 help_text="Tenant this belongs to",
@@ -135,41 +40,18 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="project",
-            name="project_type",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="Type of project",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="project_management.projecttype",
-                verbose_name="Project Type",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="project",
-            name="state",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="State of the project",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="project_management.projectstate",
-                verbose_name="Project State",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectmilestone",
+            model_name="featureflag",
             name="description",
             field=models.TextField(
                 blank=True,
-                help_text="Description of milestone. Markdown supported",
+                help_text="Description of this feature",
+                max_length=300,
                 null=True,
                 verbose_name="Description",
             ),
         ),
         migrations.AlterField(
-            model_name="projectmilestone",
+            model_name="featureflag",
             name="id",
             field=models.AutoField(
                 help_text="ID of the item",
@@ -180,32 +62,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="projectmilestone",
-            name="organization",
-            field=models.ForeignKey(
-                help_text="Tenant this belongs to",
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="+",
-                to="access.tenant",
-                validators=[
-                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
-                ],
-                verbose_name="Tenant",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectstate",
-            name="id",
-            field=models.AutoField(
-                help_text="ID of the item",
-                primary_key=True,
-                serialize=False,
-                unique=True,
-                verbose_name="ID",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projectstate",
+            model_name="featureflag",
             name="model_notes",
             field=models.TextField(
                 blank=True,
@@ -215,7 +72,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="projectstate",
+            model_name="featureflag",
             name="organization",
             field=models.ForeignKey(
                 help_text="Tenant this belongs to",
@@ -229,19 +86,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="projectstate",
-            name="runbook",
-            field=models.ForeignKey(
-                blank=True,
-                help_text="The runbook for this project state",
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                to="assistance.knowledgebase",
-                verbose_name="Runbook",
-            ),
-        ),
-        migrations.AlterField(
-            model_name="projecttype",
+            model_name="gitgroup",
             name="id",
             field=models.AutoField(
                 help_text="ID of the item",
@@ -252,7 +97,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="projecttype",
+            model_name="gitgroup",
             name="model_notes",
             field=models.TextField(
                 blank=True,
@@ -262,7 +107,80 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="projecttype",
+            model_name="gitgroup",
+            name="organization",
+            field=models.ForeignKey(
+                help_text="Tenant this belongs to",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="access.tenant",
+                validators=[
+                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
+                ],
+                verbose_name="Tenant",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="gitgroup",
+            name="parent_group",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="Parent Git Group this repository belongs to.",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="+",
+                to="devops.gitgroup",
+                verbose_name="Parent Group",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="gitrepository",
+            name="id",
+            field=models.AutoField(
+                help_text="ID of the item",
+                primary_key=True,
+                serialize=False,
+                unique=True,
+                verbose_name="ID",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="gitrepository",
+            name="model_notes",
+            field=models.TextField(
+                blank=True,
+                help_text="Tid bits of information",
+                null=True,
+                verbose_name="Notes",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="gitrepository",
+            name="organization",
+            field=models.ForeignKey(
+                help_text="Tenant this belongs to",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="access.tenant",
+                validators=[
+                    access.models.tenancy_abstract.TenancyAbstractModel.validatate_organization_exists
+                ],
+                verbose_name="Tenant",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="softwareenablefeatureflag",
+            name="id",
+            field=models.AutoField(
+                help_text="ID of the item",
+                primary_key=True,
+                serialize=False,
+                unique=True,
+                verbose_name="ID",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="softwareenablefeatureflag",
             name="organization",
             field=models.ForeignKey(
                 help_text="Tenant this belongs to",
@@ -276,7 +194,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.CreateModel(
-            name="ProjectAuditHistory",
+            name="FeatureFlagAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -295,21 +213,21 @@ class Migration(migrations.Migration):
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="audit_history",
-                        to="project_management.project",
+                        to="devops.featureflag",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project History",
-                "verbose_name_plural": "Project Histories",
-                "db_table": "project_management_project_audithistory",
+                "verbose_name": "Feature Flag History",
+                "verbose_name_plural": "Feature Flag Histories",
+                "db_table": "devops_featureflag_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectCenturionModelNote",
+            name="FeatureFlagCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -328,21 +246,21 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.project",
+                        to="devops.featureflag",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Note",
-                "verbose_name_plural": "Project Notes",
-                "db_table": "project_management_project_centurionmodelnote",
+                "verbose_name": "Feature Flag Note",
+                "verbose_name_plural": "Feature Flag Notes",
+                "db_table": "devops_featureflag_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
         ),
         migrations.CreateModel(
-            name="ProjectMilestoneAuditHistory",
+            name="GitGroupAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -361,21 +279,21 @@ class Migration(migrations.Migration):
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="audit_history",
-                        to="project_management.projectmilestone",
+                        to="devops.gitgroup",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Milestone History",
-                "verbose_name_plural": "Project Milestone Histories",
-                "db_table": "project_management_projectmilestone_audithistory",
+                "verbose_name": "GIT Group History",
+                "verbose_name_plural": "GIT Group Histories",
+                "db_table": "devops_gitgroup_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectMilestoneCenturionModelNote",
+            name="GitGroupCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -394,21 +312,21 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.projectmilestone",
+                        to="devops.gitgroup",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Milestone Note",
-                "verbose_name_plural": "Project Milestone Notes",
-                "db_table": "project_management_projectmilestone_centurionmodelnote",
+                "verbose_name": "GIT Group Note",
+                "verbose_name_plural": "GIT Group Notes",
+                "db_table": "devops_gitgroup_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
         ),
         migrations.CreateModel(
-            name="ProjectStateAuditHistory",
+            name="GitHubRepositoryAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -426,22 +344,22 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="audit_history",
-                        to="project_management.projectstate",
+                        related_name="+",
+                        to="devops.githubrepository",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project State History",
-                "verbose_name_plural": "Project State Histories",
-                "db_table": "project_management_projectstate_audithistory",
+                "verbose_name": "GitHub Repository History",
+                "verbose_name_plural": "GitHub Repository Histories",
+                "db_table": "devops_githubrepository_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectStateCenturionModelNote",
+            name="GitHubRepositoryCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -460,21 +378,21 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.projectstate",
+                        to="devops.githubrepository",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project State Note",
-                "verbose_name_plural": "Project State Notes",
-                "db_table": "project_management_projectstate_centurionmodelnote",
+                "verbose_name": "GitHub Repository Note",
+                "verbose_name_plural": "GitHub Repository Notes",
+                "db_table": "devops_githubrepository_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
         ),
         migrations.CreateModel(
-            name="ProjectTypeAuditHistory",
+            name="GitLabRepositoryAuditHistory",
             fields=[
                 (
                     "centurionaudit_ptr",
@@ -492,22 +410,22 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         help_text="Model this history belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="audit_history",
-                        to="project_management.projecttype",
+                        related_name="+",
+                        to="devops.gitlabrepository",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Type History",
-                "verbose_name_plural": "Project Type Histories",
-                "db_table": "project_management_projecttype_audithistory",
+                "verbose_name": "GitLab Repository History",
+                "verbose_name_plural": "GitLab Repository Histories",
+                "db_table": "devops_gitlabrepository_audithistory",
                 "managed": True,
             },
             bases=("core.centurionaudit",),
         ),
         migrations.CreateModel(
-            name="ProjectTypeCenturionModelNote",
+            name="GitLabRepositoryCenturionModelNote",
             fields=[
                 (
                     "centurionmodelnote_ptr",
@@ -526,15 +444,81 @@ class Migration(migrations.Migration):
                         help_text="Model this note belongs to",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="+",
-                        to="project_management.projecttype",
+                        to="devops.gitlabrepository",
                         verbose_name="Model",
                     ),
                 ),
             ],
             options={
-                "verbose_name": "Project Type Note",
-                "verbose_name_plural": "Project Type Notes",
-                "db_table": "project_management_projecttype_centurionmodelnote",
+                "verbose_name": "GitLab Repository Note",
+                "verbose_name_plural": "GitLab Repository Notes",
+                "db_table": "devops_gitlabrepository_centurionmodelnote",
+                "managed": True,
+            },
+            bases=("core.centurionmodelnote",),
+        ),
+        migrations.CreateModel(
+            name="GitRepositoryAuditHistory",
+            fields=[
+                (
+                    "centurionaudit_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="core.centurionaudit",
+                    ),
+                ),
+                (
+                    "model",
+                    models.ForeignKey(
+                        help_text="Model this history belongs to",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="audit_history",
+                        to="devops.gitrepository",
+                        verbose_name="Model",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "GIT Repository History",
+                "verbose_name_plural": "GIT Repository Histories",
+                "db_table": "devops_gitrepository_audithistory",
+                "managed": True,
+            },
+            bases=("core.centurionaudit",),
+        ),
+        migrations.CreateModel(
+            name="GitRepositoryCenturionModelNote",
+            fields=[
+                (
+                    "centurionmodelnote_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="core.centurionmodelnote",
+                    ),
+                ),
+                (
+                    "model",
+                    models.ForeignKey(
+                        help_text="Model this note belongs to",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="devops.gitrepository",
+                        verbose_name="Model",
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "GIT Repository Note",
+                "verbose_name_plural": "GIT Repository Notes",
+                "db_table": "devops_gitrepository_centurionmodelnote",
                 "managed": True,
             },
             bases=("core.centurionmodelnote",),
