@@ -1,3 +1,698 @@
+## 1.19.0 (2025-08-15)
+
+### feat
+
+- **core**: add to migration signal system user and use for inventory objects
+- **docker**: Adjust gunicorn works=4 100reqs/max and preload app
+- **api**: Ensure that serializer converts Django exceptions to rest_framework exceptions
+- **access**: Filter history permissions
+- **access**: Add Audit and notes tables for model Role
+- **access**: Add AuditHistory Serializer for Role model
+- **access**: Add Notes Serializer for Role model
+- **itam**: Add AuditHistory Serializer for ITAMAssetBase model
+- **itam**: Add Notes Serializer for ITAMAssetBase model
+- **accounting**: Add AuditHistory Serializer for AssetBase model
+- **accounting**: Add Notes Serializer for AssetBase model
+- When attempting to create and objetc must be unique and alrready exists, dont return error return existing object
+- **access**: History + Notes model migrations for Company Model
+- **api**: map notfound and perm denied django -> drf exceptions
+- **human_resources**: Add model tag for Employee model
+- **human_resources**: Add AuditHistory Serializer for Employee model
+- **human_resources**: Add Notes Serializer for Employee model
+- **human_resources**: Change model to inherit from `CenturionModel` for Employee model
+- **access**: Add model tag for Person model
+- **access**: Add AuditHistory Serializer for Person model
+- **access**: Add Notes Serializer for Person model
+- **access**: Change model to inherit from `CenturionModel` for Person model
+- **access**: Add model tag for Contact model
+- **access**: Add AuditHistory Serializer for Contact model
+- **access**: Add Notes Serializer for Contact model
+- **access**: Change model to inherit from `CenturionModel` for Contact model
+- **access**: Add AuditHistory Serializer for Company model
+- **access**: Add Notes Serializer for Entity model
+- **access**: Change model to inherit from `CenturionModel` for Company model
+- **access**: Change model to inherit from `CenturionModel` for Entity model
+- **access**: Add AuditHistory Serializer for Entity model
+- **access**: Add Notes Serializer for Entity model
+- **access**: Change model to inherit from `CenturionModel` for Entity model
+- **settings**: Add model tag for ExtrnalLink model
+- **settings**: Add AuditHistory Serializer for UserSettings model
+- **settings**: Add Notes Serializer for UserSettings model
+- **settings**: Change model to inherit from `CenturionModel` for UserSettings model
+- **settings**: Add model ExternalLink to migrate for history and notes
+- **settings**: Add AuditHistory Serializer for ExternalLink model
+- **settings**: Add Notes Serializer for ExternalLink model
+- **settings**: Change model to inherit from `CenturionModel` for ExternalSettings model
+- **settings**: Add model AppSettings to migrate for history and notes
+- **settings**: Add AuditHistory Serializer for AppSettings model
+- **settings**: Add Notes Serializer for AppSettings model
+- **settings**: Change model to inherit from `CenturionModel` for AppSettings model
+- **project_management**: Add model ProjectType to migrate for history and notes
+- **project_management**: Add AuditHistory Serializer for ProjectTYpe model
+- **project_management**: Add Notes Serializer for ProjectType model
+- **project_management**: Change model to inherit from `CenturionModel` for ProjectType model
+- **project_management**: Add model ProjectState to migrate for history and notes
+- **project_management**: Add AuditHistory Serializer for ProjectState model
+- **project_management**: Add Notes Serializer for ProjectState model
+- **project_management**: Change model to inherit from `CenturionModel` for ProjectState model
+- **project_management**: Add model ProjectMilestone to migrate for history and notes
+- **project_management**: Add AuditHistory Serializer for ProjectMilestone model
+- **project_management**: Add Notes Serializer for ProjectMilestone model
+- **project_management**: Change model to inherit from `CenturionModel` for ProjectManagement model
+- **project_management**: Add model Project to migrate for history and notes
+- **project_management**: Add AuditHistory Serializer for Project model
+- **project_management**: Add Notes Serializer for Project model
+- **project_management**: Change model to inherit from `CenturionModel` for Project model
+- **itim**: Add model Service to migrate for history and notes
+- **itim**: Add AuditHistory Serializer for Service model
+- **itim**: Add Notes Serializer for Service model
+- **itim**: Change model to inherit from `CenturionModel` for Service model
+- **itim**: Add model Port to migrate for history and notes
+- **itim**: Add AuditHistory Serializer for Port model
+- **itim**: Add Notes Serializer for Port model
+- **itim**: Change model to inherit from `CenturionModel` for Port model
+- **itim**: Add AuditHistory Serializer for ClusterType model
+- **itim**: Add Notes Serializer for ClusterType model
+- **itim**: Change model to inherit from `CenturionModel` for ClusterType model
+- **itim**: Add model Cluster to migrate for history and notes
+- **itim**: Add Notes Serializer for Cluster model
+- **itim**: Add AuditHistory Serializer for Cluster model
+- **itim**: Change model to inherit from `CenturionModel` for Cluster model
+- **itam**: Add model SoftwareVersion to migrate for history and notes
+- **itam**: Add Notes Serializer for SoftwareVersiony model
+- **itam**: Add AuditHistory Serializer for SoftwareVersion model
+- **itam**: Change model to inherit from `CenturionModel` for SoftwareVersion model
+- **itam**: Add model SoftwareCategory to migrate for history and notes
+- **itam**: Add Notes Serializer for SoftwareCategory model
+- **itam**: Add AuditHistory Serializer for SoftwareCategory model
+- **itam**: Change model to inherit from `CenturionModel` for SoftwareCategory model
+- **itam**: Add model Software to migrate for history and notes
+- **itam**: Add Notes Serializer for Software model
+- **itam**: Add AuditHistory Serializer for Software model
+- **itam**: Change model to inherit from `CenturionModel` for Software model
+- **itam**: Add model OperatingSystemVersion to migrate for history and notes
+- **itam**: Add Notes Serializer for OperatingSystemVersion model
+- **itam**: Add AuditHistory Serializer for OperatingSystemVersion model
+- **itam**: Change model to inherit from `CenturionModel` for OperatingSystemVersion model
+- **itam**: Add model OperatingSystem to migrate for history and notes
+- **itam**: Add Note Serializer for DeviceSoftware model
+- **itam**: Add AuditHistory Serializer for DeviceSoftware model
+- **itam**: Change model to inherit from `CenturionModel` for DeviceSoftware model
+- **itam**: Change model to inherit from `Centurion` for DeviceSoftware model
+- **itam**: Add model_tag to DeviceType model
+- **itam**: Add DeviceType for history and notes data migration
+- **itam**: Add DeviceModel for history and notes data migration
+- **itam**: Add DEvice for history and notes data migration
+- **devops**: Switch SoftwareEnabledFeatureFlag model to inherit from CenturionModel
+- **devops**: Update checkin model fixture so it creates the feature flag
+- **devops**: Add methods get_url and get_url_kwargs to CheckIn model
+- **devops**: Add migration to signal
+- **devops**: Add migration to signal
+- **devops**: Add migration to signal
+- **devops**: Add migration to signal
+- **devops**: Update URL route basename
+- **devops**: Migrations for switching GitLabRepository model to inherit from `CenturionModel`
+- **devops**: Migrations for switching GitRepository model to inherit from `CenturionModel`
+- **devops**: Migrations for switching GitRepository model to inherit from `CenturionModel`
+- **devops**: Serializers for GitRepository models notes and history
+- **devops**: Serializers for GitHubGitRepository models notes and history
+- **devops**: Serializers for GitLabGitRepository models notes and history
+- **devops**: Switch GitLabGitRepository model to inherit from `CenturionModel`
+- **devops**: Switch GitHubGitRepository model to inherit from `CenturionModel`
+- **devops**: Switch GitRepository model to inherit from `CenturionModel`
+- **devops**: Update Checkin model url route basename
+- **devops**: Add app_namespace Checkin model
+- **devops**: Add Checkin to migrate model history/notes
+- **devops**: Migrations for switching Checkin model to inherit from `CenturionModel`
+- **devops**: Switch Checkin model to inherit from `CenturionModel`
+- **core**: add TicketCommentCategory to history/notes migration
+- **core**: add model tag to ticket comment category
+- **core**: Migrations for TicketCategory
+- **core**: add TicketCategory to history/notes migration
+- **core**: add model tag to ticket category
+- **core**: add Manufacturer to history/notes migration
+- **core**: add model tag to manufacturer
+- **config_management**: add ConfigGroups to history/notes migration
+- **config_management**: add ConfigGroupSoftware to history/notes migration
+- **config_management**: add ConfigGroupHosts to history/notes migration
+- **access**: add tenant to history/notes migration
+- **access**: Migration for switching model inheritence to `CenturionModel`
+- **itam**: Update model methods
+- **access**: Migration for switching model inheritence to `CenturionMixin`
+- **access**: Switch model inheritence to `CenturionMixin`
+- **itam**: Update url basename
+- **itam**: Update url basename
+- **base**: add support for manytomany for model unit tests
+- **itam**: Update url basename
+- **core**: Update url basename
+- **core**: Update url basename
+- **core**: Update url basename
+- **core**: Update url basename
+- **core**: Update url basename
+- **core**: Update url basename
+- **access**: TeamUsers do not require notes
+- **config_management**: ConfigGroupHosts and ConfigGroupSoftware do not require notes
+- **config_management**: Add url_kwargs to ConfigGroupSoftware model
+- **access**: Add url_kwargs to Team model
+- **access**: Add url_kwargs to TeamUser model
+- **access**: Update TeamUser API basename
+- **access**: Update Team API basename
+- **itam**: switch model Device to inheirt from CenturionModel
+- **itam**: switch model DeviceType to inheirt from CenturionModel
+- **itam**: switch model DeviceModel to inheirt from CenturionModel
+- **core**: switch model TicketCategory to inheirt from CenturionModel
+- **core**: switch model TicktetCommentCategory to inheirt from CenturionModel
+- **core**: switch model Manufacturer to inheirt from CenturionModel
+- **config_management**: switch model ConfigGroupHosts to inheirt from CenturionModel
+- **config_management**: switch model ConfigGroupSoftware to inheirt from CenturionModel
+- **config_management**: switch model ConfigGroups to inheirt from CenturionModel
+- **access**: switch model TeamUsers to inheirt from CenturionModel
+- **access**: switch model Team to inheirt from CenturionModel
+- **core**: If user context not supplied, dont create audithistory for model
+- **access**: Add init to tenancy model to clear state
+- **core**: Ensure that model has user context
+- **core**: Add supprt to model_instance fixture for manytomany field
+- **core**: Add supprt to model create test for manytomany field
+- **assistance**: migrations for new history and notes models for KnowledgeBaseCategory model
+- **assistance**: migrations for new history and notes models for KnowledgeBase model
+- **assistance**: Model inheritance migrations
+- **core**: Migrate Centurion Model history and notes within a post_migrate signal
+- **core**: Add ability to CenturionModel `get_url` to be either detail/list
+- **core**: New Management command to list models
+- **devops**: Switch model FeatureFlag inheritance to CenturionModel
+- **core**: Disable Notes for model CenturionModelNote
+- **devops**: Enable Model notes for GitGroup
+- **core**: add Swagger docs for CenturionModelNotes ViewSet
+- **core**: Meta Model for CenturionModelNotes
+- **core**: Finalize Serializer for CenturionModelNotes
+- **api**: Add to common serializer meta notes model for notes url
+- **core**: Interim Meta model CenturionNotes
+- **core**: Interim ViewSet for model CenturionNotes
+- **core**: URL Route for model CenturionNotes
+- **core**: Serializer for model CenturionNotes
+- **core**: Migration for model CenturionNotes
+- **core**: Add model CenturionNotes
+- **devops**: dont allow deleting a git group if it has children
+- **devops**: Add model tag attribute to model
+- **core**: Add to Centurion Model an attribute to set the models tag
+- **core**: Add Context to model when ViewSet loads
+- **devops**: Add AuditHistory Serializer for GitGroup
+- **core**: Add AuditHistory Serializer
+- **core**: Add AuditHistory ViewSet
+- **core**: Add URL route for AuditHistory
+- **core**: Add audithistory URL to serializer for models with `_audit_enabled=True`
+- **core**: Models url kwarg helper
+- **core**: Support setting custom model name for url basename
+- **api**: Add sub-model filter to `get_queryset` method
+- **core**: Disable models audit history on model delete
+- **core**: Use Previous TenancyManager until UserModel rewrite done
+- **core**: Process a models history within AuditHistory
+- **core**: Enable AuditHistory signal to start when apps are ready
+- **core**: Add model instance to history object during history creation
+- **core**: Update Meta AuditModel `db_name` to be suffixed `_audithistory`
+- **core**: remove unnessecary method `clean_fields` from audit model
+- **core**: remove un-needed field `model_notes` from audit models
+- **core**: Run meta models create on Core module ready
+- **core**: New model core.CenturionAudit
+- **core**: cause sub-audit models to chuck a wobbler if clean_fields not re-implementated
+- **access**: remove mill-seconds from datetime auto fields
+- **core**: Centurion model Base
+- **core**: Centurion Audit model
+- **core**: permissions getter for role model
+- **core**: Audit History Signal for Delete/Save
+- **core**: Dynamic History model creation
+
+### Fixes
+
+- remove trailing slant from URLs
+- **access**: When creating permission QuerySet prevent app crash if db not setup
+- **itim**: Ensure during testing, fixture vals are copied for Model Service
+- **base**: on fixture cleanup, only clean if obj exists
+- **core**: required field must be null for logical chek to function
+- **itam**: field slug no longer avail, use str
+- **core**: Include model so content type is created
+- **settings**: AppSettings requires super user perms
+- **api**: Convert Django Exceptions to DRF API Exception equivilent
+- **api**: Ensure if exception DRF, message returned is from that exception
+- **devops**: git repository is sub-model ViewSet must inherit from SubModel
+- **access**: entity field `entity_type` is an auto field
+- **access**: Ensure that if method not allowed, exception is thrown first before perms check
+- **itam**: Model software must be related linked to organization model
+- **access**: if user has no orgs, dont filter by for query
+- **devops**: Ensure mandatory fields are writeable for model GitRepository
+- **access**: add property organization to Tenant model
+- **itam**: Add missing import `now`
+- **core**: notes meta model must add `model_kwargs` fixture
+- **core**: clean_fields for created_by field belongs in model that contains field
+- **core**: audit meta model must add `model_kwargs` fixture
+- model fixture names must match model_name
+- clean up mock model from django apps
+- **core**: When obtaining model fields ensure it exists first
+- **access**: use getattr instead as attribute may exist as None
+- **assistance**: make kb article field longer for model name
+- **assistance**: Add missing field `model_notes` to KB serializer
+- **core**: Before attempting to get model audit data confirm fields dont already exist
+- **api**: check if model has notes enabled before adding url to body
+- **api**: Only return View Serialized data if status code is HTTP/2xx
+- **core**: Conduct kwargs check fr ticket comment serializer during init
+- **core**: Enable CenturionAudit model to get model history for item being deleted
+- **core**: When creating the AuditHistory entry for a model, use the user from context
+- **core**: When collecting AuditHistory cater for models being created
+- **api**: remove surerflous feature for fetching app_namespace for models metadata
+- **core**: Correct attribute names for referencing a Centurion Model from an AuditModel
+- **core**: Correct before lookup for current models audit history
+- **core**: When deleting a model check if sub-model within delete method
+- **access**: Tenancy Manager should not attempt to get org as related field if it does not exist
+- **api**: ensure val returns at least none
+
+### Refactoring
+
+- **docker**: update healthcheck interval=10s and start-period=30s
+- **docker**: when l;aunching gunicorn create a pid file
+- **devops**: API Fields render Functional Test Suite re-written to Pytest for model SoftwareEnableFeatureFlag Again
+- **devops**: Remove old test suites no longer required model SoftwareEnableFeatureFlag
+- **devops**: ViewSet Unit Test Suite re-written to Pytest for model SoftwareEnableFeatureFlag
+- **devops**: Serializer Unit Test Suite re-written to Pytest for model SoftwareEnableFeatureFlag
+- **devops**: API Fields render Functional Test Suite re-written to Pytest for model SoftwareEnableFeatureFlag
+- **devops**: Model Functional Test Suite re-written to Pytest for model SoftwareEnableFeatureFlag
+- **devops**: API Metadata Functional Test Suite re-written to Pytest for model SoftwareEnableFeatureFlag
+- **devops**: Remove old test suites no longer required model FeatureFlag
+- **devops**: ViewSet Unit Test Suite re-written to Pytest for model FeatureFlag
+- **devops**: Serializer Unit Test Suite re-written to Pytest for model FeatureFlag
+- **devops**: API Fields render Functional Test Suite re-written to Pytest for model FeatureFlag
+- **devops**: Model Functional Test Suite re-written to Pytest for model FeatureFlag
+- **devops**: API Metadata Functional Test Suite re-written to Pytest for model FeatureFlag
+- **api**: Remove old test suites no longer required model AuthToken
+- **api**: ViewSet Unit Test Suite re-written to Pytest for model AuthToken
+- **api**: Serializer Unit Test Suite re-written to Pytest for model AuthToken
+- **api**: API Fields render Functional Test Suite re-written to Pytest for model AuthToken
+- **api**: Model Functional Test Suite re-written to Pytest for model AuthToken
+- **api**: API Metadata Functional Test Suite re-written to Pytest for model AuthToken
+- **access**: Remove old test suites no longer required model Tenant
+- **access**: Serializer Unit Test Suite re-written to Pytest for model Tenant
+- **access**: API Fields render Functional Test Suite re-written to Pytest for model Tenant
+- **access**: Model Functional Test Suite re-written to Pytest for model Tenant
+- **access**: API Metadata Functional Test Suite re-written to Pytest for model Tenant
+- **settings**: Remove old test suites no longer required model UserSettings
+- **settings**: ViewSet Unit Test Suite re-written to Pytest for model UserSettings
+- **settings**: Serializer Unit Test Suite re-written to Pytest for model UserSettings
+- **settings**: API Fields render Functional Test Suite re-written to Pytest for model UserSettings
+- **settings**: Model Functional Test Suite re-written to Pytest for model UserSettings
+- **settings**: API Metadata Functional Test Suite re-written to Pytest for model UserSettings
+- **settings**: Remove old test suites no longer required model ExternalLink
+- **settings**: ViewSet Unit Test Suite re-written to Pytest for model ExternalLink
+- **settings**: Serializer Unit Test Suite re-written to Pytest for model ExternalLink
+- **settings**: API Fields render Functional Test Suite re-written to Pytest for model ExternalLink
+- **settings**: Model Functional Test Suite re-written to Pytest for model ExternalLink
+- **settings**: API Metadata Functional Test Suite re-written to Pytest for model ExternalLink
+- **settings**: Remove old test suites no longer required model AppSettings
+- **settings**: ViewSet Unit Test Suite re-written to Pytest for model AppSettings
+- **settings**: Serializer Unit Test Suite re-written to Pytest for model AppSettings
+- **settings**: API Fields render Functional Test Suite re-written to Pytest for model AppSettings
+- **settings**: Model Functional Test Suite re-written to Pytest for model AppSettings
+- **settings**: API Metadata Functional Test Suite re-written to Pytest for model AppSettings
+- **test**: remove xfail during `pytest_generate_tests` before parameterizing
+- **project_management**: ensure within fixtur kwargs are copied
+- **project_management**: Remove old test suites no longer required model ProjectType
+- **project_management**: ViewSet Unit Test Suite re-written to Pytest for model ProjectType
+- **project_management**: Serializer Unit Test Suite re-written to Pytest for model ProjectType
+- **project_management**: API Fields render Functional Test Suite re-written to Pytest for model ProjectType
+- **project_management**: Model Functional Test Suite re-written to Pytest for model ProjectType
+- **project_management**: API Metadata Functional Test Suite re-written to Pytest for model ProjectType
+- **project_management**: Remove old test suites no longer required model ProjectState
+- **project_management**: ViewSet Unit Test Suite re-written to Pytest for model ProjectState
+- **project_management**: Serializer Unit Test Suite re-written to Pytest for model ProjectState
+- **project_management**: API Fields render Functional Test Suite re-written to Pytest for model ProjectState
+- **project_management**: Model Functional Test Suite re-written to Pytest for model ProjectState
+- **project_management**: API Metadata Functional Test Suite re-written to Pytest for model ProjectState
+- **project_management**: Remove old test suites no longer required model ProjectMilestone
+- **project_management**: ViewSet Unit Test Suite re-written to Pytest for model ProjectMilestone
+- **project_management**: Serializer Unit Test Suite re-written to Pytest for model ProjectMilestone
+- **project_management**: API Fields render Functional Test Suite re-written to Pytest for model ProjectMilestone
+- **project_management**: Model Functional Test Suite re-written to Pytest for model ProjectMilestone
+- **project_management**: API Metadata Functional Test Suite re-written to Pytest for model ProjectMilestone
+- **project_management**: Remove old test suites no longer required model Project
+- **project_management**: ViewSet Unit Test Suite re-written to Pytest for model Project
+- **project_management**: Serializer Unit Test Suite re-written to Pytest for model Project
+- **project_management**: API Fields render Functional Test Suite re-written to Pytest for model Project
+- **project_management**: Model Functional Test Suite re-written to Pytest for model Project
+- **project_management**: API Metadata Functional Test Suite re-written to Pytest for model Project
+- **itim**: Remove old test suites no longer required model Service
+- **itim**: ViewSet Unit Test Suite re-written to Pytest for model Service
+- **itim**: Serializer Unit Test Suite re-written to Pytest for model Service
+- **itim**: API Fields render Functional Test Suite re-written to Pytest for model Service
+- **itim**: Model Functional Test Suite re-written to Pytest for model Service
+- **itim**: API Metadata Functional Test Suite re-written to Pytest for model Service
+- **itim**: Remove old test suites no longer required model Port
+- **itim**: ViewSet Unit Test Suite re-written to Pytest for model Port
+- **itim**: Serializer Unit Test Suite re-written to Pytest for model Port
+- **itim**: API Fields render Functional Test Suite re-written to Pytest for model Port
+- **itim**: Model Functional Test Suite re-written to Pytest for model Port
+- **itim**: API Metadata Functional Test Suite re-written to Pytest for model Port
+- **itim**: Remove old test suites no longer required model ClusterType
+- **itim**: ViewSet Unit Test Suite re-written to Pytest for model ClusterType
+- **itim**: Serializer Unit Test Suite re-written to Pytest for model ClusterType
+- **itim**: API Fields render Functional Test Suite re-written to Pytest for model ClusterType
+- **itim**: Model Functional Test Suite re-written to Pytest for model ClusterType
+- **itim**: API Metadata Functional Test Suite re-written to Pytest for model ClusterType
+- **itim**: Remove old test suites no longer required model Cluster
+- **itim**: ViewSet Unit Test Suite re-written to Pytest for model Cluster
+- **itim**: Serializer Unit Test Suite re-written to Pytest for model Cluster
+- **itim**: API Fields render Functional Test Suite re-written to Pytest for model Cluster
+- **itim**: Model Functional Test Suite re-written to Pytest for model Cluster
+- **itim**: API Metadata Functional Test Suite re-written to Pytest for model Cluster
+- **itam**: Remove old test suites no longer required model SoftwareVersion
+- **itam**: ViewSet Unit Test Suite re-written to Pytest for model SoftwareVersion
+- **itam**: Serializer Unit Test Suite re-written to Pytest for model SoftwareVersion
+- **itam**: Model Functional Test Suite re-written to Pytest for model SoftwareVersion
+- **itam**: API Fields render Functional Test Suite re-written to Pytest for model SoftwareVersion
+- **itam**: API Metadata Functional Test Suite re-written to Pytest for model SoftwareVersion
+- **itam**: Remove old test suites no longer required model SoftwareCategory
+- **itam**: ViewSet Unit Test Suite re-written to Pytest for model SoftwareCategory
+- **itam**: Serializer Unit Test Suite re-written to Pytest for model SoftwareCategory
+- **itam**: Model Functional Test Suite re-written to Pytest for model SoftwareCategory
+- **itam**: API Fields render Functional Test Suite re-written to Pytest for model SoftwareCategory
+- **itam**: API Metadata Functional Test Suite re-written to Pytest for model SoftwareCategory
+- **itam**: Remove old test suites no longer required model Software
+- **itam**: ViewSet Unit Test Suite re-written to Pytest for model Software
+- **itam**: Serializer Unit Test Suite re-written to Pytest for model Software
+- **itam**: Model Functional Test Suite re-written to Pytest for model Software
+- **itam**: API Fields render Functional Test Suite re-written to Pytest for model Software
+- **itam**: API Metadata Functional Test Suite re-written to Pytest for model Software
+- **itam**: Remove old test suites no longer required model OperatingSystemVersion
+- **itam**: ViewSet Unit Test Suite re-written to Pytest for model OperatingSystemVersion
+- **itam**: Serializer Unit Test Suite re-written to Pytest for model OperatingSystemVersion
+- **itam**: Model Functional Test Suite re-written to Pytest for model OperatingSystemVersion
+- **itam**: API Fields render Functional Test Suite re-written to Pytest for model OperatingSystemVersion
+- **itam**: API Metadata Functional Test Suite re-written to Pytest for model OperatingSystemVersion
+- **itam**: Remove old test suites no longer required model OperatingSystem
+- **itam**: ViewSet Unit Test Suite re-written to Pytest for model OperatingSystem
+- **itam**: Serializer Unit Test Suite re-written to Pytest for model OperatingSystem
+- **itam**: Model Functional Test Suite re-written to Pytest for model OperatingSystem
+- **itam**: API Fields render Functional Test Suite re-written to Pytest for model OperatingSystem
+- **itam**: API Metadata Functional Test Suite re-written to Pytest for model OperatingSystem
+- **itam**: API Metadata Functional Test Suite re-written to Pytest for model DeviceType
+- **itam**: Model Functional Test Suite re-written to Pytest for model DeviceType
+- **itam**: API Fields render Test Suite re-written to Pytest for model DeviceType
+- **itam**: Serializer Unit Test Suite re-written to Pytest for model DeviceType
+- **itam**: ViewSet Unit Test Suite re-written to Pytest for model DeviceModel
+- **itam**: API Metadata Functional Test Suite re-written to Pytest for model DeviceModel
+- **itam**: API Field Render Functional Test Suite re-written to PyTest for model Device
+- **itam**: Metadate Functional Test Suite re-enabled for model Device
+- **itam**: Viewset Unit Test Suite re-written to pytest for model Device
+- **itam**: Serializer Unit Test Suite re-enabled for model Device
+- **core**: API Render Unit Test Suite re-enabled for model Manufacturer
+- **core**: API Metadata Functional Test Suite re-enabled for model Manufacturer
+- **core**: Serializer Functional Test Suite re-enabled for model Manufacturer
+- **core**: ViewSet Test Suite re-written to pytest for model Manufacturer
+- **config_management**: ViewSet Test Suite re-written to pytest for model ConfigGroupSoftware
+- **config_management**: API fields Test Suite  re-enalbed for model ConfigGroupSoftware
+- **config_management**: API Metadata Functional Test Suite for model ConfigGroupSoftware
+- **config_management**: Serializer Functional Test Suite Enabled for model ConfigGroupSoftware
+- **config_management**: Model Unit Test Suite re-written to pytest for model ConfigGroup
+- **config_management**: API Metadata Functional Test Suite re-written to pytest for model ConfigGroup
+- **assistance**: Serializer Unit Test Suite re-written to pytest for model KnowledgeBase
+- **assistance**: MetaData Unit Test Suite re-written to pytest for model KnowledgeBaseCategory
+- **assistance**: Serializer Unit Test Suite re-written to pytest for model KnowledgeBaseCategory
+- **assistance**: ViewSet Unit Test Suite re-written to pytest for model KnowledgeBaseCategory
+- **assistance**: Serializer Unit Test Suite re-written to pytest for model KnowledgeBaseCategory
+- **assistance**: Serializer Unit TestSuite re-written to pytest for model KnowledgeBase
+- **assistance**: ViewSet TestSuite re-written to pytest for model KnowledgeBase
+- **access**: ViewSet TestSuite re-written to pytest for model Tenant
+- **access**: ViewSet TestSuite re-written to pytest for model Person
+- **access**: ViewSet TestSuite re-written to pytest for model Entity
+- **access**: ViewSet TestSuite re-written to pytest for model Contact
+- **access**: ViewSet TestSuite re-written to pytest for model Company
+- **api**: migrate Common ViewSet unittest.mock to mocker
+- **api**: migrate Common ViewSet Unit Test Suite attribute to use test case `unit_class`
+- **api**: Converted Common ViewSet Unit Test Suite to use Pytest
+- **api**: partial conversion to pytest for Common ViewSet Unit Test Suite
+- **api**: Rename create Serializer unit test to `is_valid`
+- **base**: normalize empty/not used to be `models.NOT_PROVIDED`
+- **base**: adjust functional model test to use fixture kwargs
+- **api**: Update Test Suite for AuthToken model
+- **tests**: Unskip tests that'll work now due to model inheritance change
+- **api**: Update Test Suite for AuthToken model
+- **api**: Update URL route name for Role AuthToken
+- **api**: Switch to inherit from Centurion model for model AuthToken
+- **access**: When adding model role via api, status is 201/created
+- **itim**: Update Test Suite for TicketCommentSolution model
+- **itim**: Update Test Suite for TicketSLM model
+- **itim**: Update Test Suite for TicketRequest model
+- **core**: Update Test Suite for TicketBase model
+- **core**: Update Test Suite for TicketCommentSolution model
+- **core**: Update Test Suite for TicketCommentAction model
+- **core**: Update Test Suite for TicketCommentBase model
+- **core**: Initial Update Test Suite for TicketCommentBase model
+- **core**: Update Tests to cater for inheritence changes
+- **itim**: Update Test Suite for RequestTicket model
+- **itim**: Update Test Suite for SLMTicket model
+- **itim**: Update Test Suite for SLMTicket model
+- **core**: Update Test Suite for TicketBase model
+- **core**: Update Test Suite for TicketBase model
+- **core**: Switch to inherit from Centurion model for model TicketBase
+- **core**: Switch to inherit from Centurion model for model SLMTicketBase
+- **core**: Update URL route name for Role TicketCommentBase
+- **core**: Switch to inherit from Centurion model for model TicketCommentBase
+- **core**: Update URL route name for Role TicketBase
+- **core**: Switch to inherit from Centurion model for model TicketBase
+- **core**: Add fn get_organization to centurion mixin
+- **access**: Adjust add permission test for model Role
+- **access**: Migrations for Inheritance change for Role model
+- **access**: Update URL route name for Role model
+- **access**: Update Test Suite for Role model
+- **access**: Switch to inherit from Centurion model for model Role
+- Asset and ITAM Asset must use url kwarg model_name not asset_model
+- **accounting**: Update existing tests to work due to  model inheritance changes
+- **itam**: Update URL route name for ITAMAssetBase model
+- **itam**: Update Test Suite for ITAMAssetBase model
+- **itam**: Switch to inherit from Centurion model for model ITAMAssetBase
+- **accounting**: Switch to inherit from Centurion model for model AssetBase
+- **accounting**: Update URL route name for AssetBase model
+- **accounting**: Update Test Suite for AssetBase model
+- **accounting**: Switch to inherit from Centurion model for model AssetBase
+- **api**: dont query db for instance, use existing from response
+- **api**: additional perms tests if they exist must be inc first
+- **devops**: remove ViewSet `get_queryset` function
+- **access**: Update Entity model ViewSet attribute `model_kwarg` to `model_name`
+- **access**: Update Entity model ViewSet to inherit from submodel-rewrite
+- **access**: Update Test Suite for Employee model
+- **access**: Update Test Suite for Person model
+- **access**: Update Test Suite for Contact model
+- **access**: Update Test Suite for Company model
+- **access**: Update URL route name for Entity model
+- **access**: Update Test Suite for Entity model
+- **access**: Update is_tenancy_object to check for CenturionModel
+- **access**: For request middleware, use filter and first object so that testing can occur when mre than one exists
+- **settings**: Update URL route name for UserSettings model
+- **settings**: Update Test Suite for ExternalLink model
+- **settings**: Update URL route name for ExternalLink model
+- **settings**: Update Test Suite for ExternalLink model
+- **settings**: Update URL route name for AppSettings model
+- **settings**: Update Test Suite for AppSettings model
+- **project_management**: Update URL route name for ProjectType model
+- **project_management**: Update Test Suite for ProjectType model
+- **project_management**: Update URL route name for ProjectState model
+- **project_management**: Update Test Suite for ProjectState model
+- **project_management**: Update URL route name for ProjectMilestone model
+- **project_management**: Update Test Suite for ProjectMilestone model
+- **project_management**: Update URL route name for Project model
+- **project_management**: Update Test Suite for Project model
+- **itim**: Update URL route name for Service model
+- **itim**: Update Test Suite for Service model
+- **itim**: Update URL route name for Port model
+- **itim**: Update Test Suite for Port model
+- **itim**: Update URL route name for ClusterType model
+- **itim**: Update Test Suite for ClusterType model
+- **itim**: Update URL route name for Cluster model
+- **itim**: Update Test Suite for Cluster model
+- **itam**: Update Test Suite for SoftwareVersion model
+- **itam**: Update URL route name for SoftwareVersion model
+- **itam**: Update Test Suite for SoftwareCategory model
+- **itam**: Update URL route name for SoftwareCategory model
+- cater for dev that does not exist in test cleanup
+- **itam**: Update Test Suite for Software model
+- **itam**: Update URL route name for Software model
+- **itam**: Update Test Suite for OperatingSystemVersion model
+- **itam**: Update Test Suite for OperatingSystem model
+- **itam**: Update URL route name for DeviceSoftware model
+- **itam**: Update Test Suite for DeviceSoftware model
+- **itam**: Update Test Suite for DeviceDeviceOperatingSystem model
+- **itam**: Update URL route for DeviceDeviceOperatingSystem model
+- **itam**: Migration for updating model inheritance for DeviceDeviceOperatingSystem model
+- **itam**: Updated Unit model test suite for DeviceType model
+- **devops**: Updated Unit model test suite for DeviceModel model
+- **devops**: Migration for updating model inheritance for DeviceModel model
+- **itam**: Updated Unit model test suite for Device model
+- **devops**: Updated Unit model test ssuite for SoftwareEnabledFeatureFlag model
+- **devops**: Migration for updating model inheritance for SoftwareEnabledFeatureFlag model
+- **devops**: Update url route basename for SoftwareEnabledFeatureFlag model
+- **tests**: make all `parameterized_` vars properties
+- **core**: adjust CenturionSubModel to not be it's own inheritable class
+- **core**: Move CenturionModel logic to Mixin
+- **core**: rename mixin -> mixins
+- **base**: model instancxe code de-duplicated
+- **config_management**: Add ConfigGroupHost Model Tests
+- **config_management**: Add ConfigGroupSoftware Model Tests
+- **config_management**: Add ConfigGroup Model Tests
+- **assistance**: Refactor KnowledgeBaseCategory Unit model tests
+- **assistance**: Update KnowledgeBase Unit viewset url basename
+- **assistance**: Refactor KnowledgeBase Unit model tests
+- **assistance**: Add new history and notes Serializer for KnowledgeBase model
+- **assistance**: Add new history and notes Serializer for KnowledgeBaseCategory model
+- **assistance**: Change KnowledgeBaseCategory model inheritance TenancyObject -> CenturionModel
+- **assistance**: Change KnowledgeBase model inheritance TenancyObject -> CenturionModel
+- **assistance**: MV kb category model to its own file
+- **tests**: Create global model fixtures
+- **devops**: Switch FeatureFlag model unit  tests to CenturionModel
+- **settings**: move url routes from core.urls to own module `urls_api.py`
+- **project_management**: move url routes from core.urls to own module `urls_api.py`
+- **itim**: move url routes from core.urls to own module `urls_api.py`
+- **itam**: move url routes from core.urls to own module `urls_api.py`
+- **core**: move url routes from core.urls to own module `urls_api.py`
+- **config_management**: move url routes from core.urls to own module `urls_api.py`
+- **assistance**: move url routes from core.urls to own module `urls_api.py`
+- **access**: move url routes from core.urls to own module `urls_api.py`
+- **api**: Update Common ViewSet methds for re-write
+- **devops**: Switch GitGroup Model to CenturionModel
+- **core**: Loading of meta models should not be hidden behind program start ags
+- **core**: To obtain audit_values loop through model fields
+- rejig whats in each inherited centurion model
+- **access**: prefetch org with tenancy object
+- **core**: Relocate history model class
+- **base**: rename app to centurion
+
+### Tests
+
+- **core**: Notes Meta Models API Permissions Test cases for All Notes Models
+- Add initial integration tests
+- **docker**: Add compose setup for  integration testing
+- **itam**: ViewSet Unit Test Suite added for model DeviceType
+- **itam**: Serializer UnitTest Suite added for model DeviceModel
+- **itam**: API Fields render Functional Test Suite added for model DeviceModel
+- **itam**: Model Functional Test Suite added for model DeviceModel
+- **itam**: Refactor failing tests to cater for uniqueness so they pass
+- **itam**: Model Functional Test Suite aded for model Device
+- **config_management**: ViewSet Unit Test Suite re-written to pytest for model ConfigGroup
+- **config_management**: Serializer Unit Test Suite re-written to pytest for model ConfigGroup
+- **config_management**: Model Functional Test Suite re-written to pytest for model ConfigGroup
+- **config_management**: API Field Render Functional Test Suite re-written to pytest for model ConfigGroup
+- **assistance**: API Field Render Functional Test Suite re-written to pytest for model KnowledgeBaseCategory
+- **assistance**: Model Functional Test Suite re-written to pytest for model KnowledgeBaseCategory
+- **assistance**: Model Functional Test Suite re-written to pytest for model KnowledgeBase
+- **assistance**: API Fields Render Functional Test Suite re-written to pytest for model KnowledgeBase
+- **api**: SubModel ViewSet Test Suite to test re-written class
+- **api**: Dont test a django object that has not been customised
+- **access**: Initial ViewSet Unit Test Suite for Entity Model
+- **access**: Add Serializer unit test suit for model Role
+- **access**: Add Serializer unit test suit for model Person
+- **access**: Add Serializer unit test suit for model Entity
+- **access**: Add Serializer unit test suit for model Contact
+- **access**: Add Serializer unit test suit for model Company
+- **itim**: Refactor TicketSLM model API Fields render test Suite to PyTest
+- **itim**: Refactor TicketRequest model API Fields render test Suite to PyTest
+- **core**: Refactor TicketBase model API Fields render test Suite to PyTest
+- **api**: Refactor Test Suite for API Fields render tests to PyTest
+- **itam**: Refactor ITAMAssetBase model API Fields render test Suite to PyTest
+- **accounting**: Refactor AssetBase model API Fields render test Suite to PyTest
+- **core**: Refactor TicketCommentSolution model API Fields render test Suite to PyTest
+- **core**: Refactor TicketCommentAction model API Fields render test Suite to PyTest
+- **core**: Refactor TicketCommentBase model API Fields render test Suite to PyTest
+- **human_resources**: Refactor Employee model API Fields render test Suite to PyTest
+- **access**: Refactor Person model API Fields render test Suite to PyTest
+- **access**: Refactor Entity model API Fields render test Suite to PyTest
+- **access**: Refactor Contact model API Fields render test Suite to PyTest
+- **access**: Refactor Company model API Fields render test Suite to PyTest
+- **devops**: Adjust functional model test to use fixture kwargs
+- Ensure when obj created via serializer calls full_clean
+- Ensure Clean methods called
+- Test case for model field type
+- **fixture**: if item already exists, when fetching remove modified field from query if not found with
+- **access**: Model Role is not usable within global org, remove test
+- **devops**: skip Model History entry test as it should be done as part of serializer and viewset
+- **devops**: update no_org_serializer test so it works for model SoftwareEnableFeatureFlag
+- **itam**: Model DeviceOperatingSystem is not multi-org based skip those tests
+- **settings**: Model UserSettings does not allowing adding rows, skip test
+- **settings**: Model AppSettings does not allowing adding rows, skip test
+- **fixture**: Ensure _meta attribute exists when cleaning up models prior to attempting to use
+- **devops**: SoftwareEnableFeatureFlagging model does not use global org, so dont test global org return
+- **api**: when testing create object, remove the actual created object prior to testing the add
+- **fixture**: when creating object and it exists, rtn that object
+- **devops**: If test publically accessable, dont test by user org only as test is NA
+- **settings**: UserSettings perms tests are for the user that is accessing them
+- **settings**: UserSettings perms tests are not org based, skip those tests
+- **settings**: AppSettings perms tests are not org based, skip those tests
+- **settings**: for api checks for model AppSettings, make user super_user
+- **settings**: Exclude inter-org tests for model AppSettings
+- **settings**: Remove old API Permission tests no longer required
+- **settings**: Ensure ExternalLink model hasrequired field template added
+- **api**: if model lacks list endpoint, check if method alllowed for test cases for Functional API perms test suite
+- **api**: if model lacks organization field, xfail returned orgs test cases for Functional API perms test suite
+- Ensure service fixture assosiates with device
+- **api**: if model lacks organization field, xfail returned orgs test cases for Functional API perms test suite
+- Add depreciated models to be excluded from coverage
+- **api**: Update Functional API Permission test suite to cater for public RO endpoints
+- **core**: Ensure model mehod `get_url_kwargs` returns a dict for all Centurion Models
+- **devops**: Add GitLabRepository Unit Model test suite
+- **devops**: Add GitHubRepository Unit Model test suite
+- **devops**: Add GitRepository Unit Model test suite
+- **devops**: Add Checkin Unit Model test suite
+- **devops**: correct GitGroup Unit model test suite
+- **devops**: correct FeatureFlag Unit model test suite
+- **core**: Add TicketCommentCategory Unit model test suite
+- **core**: Add TicketCategory Unit model test suite
+- **core**: Add Manufacturer Unit model test suite
+- **access**: Add Tenant Unit serializer test suite
+- Add initial unit serializer test suite
+- **access**: Update Tenant URL route basename again
+- **itam**: Updated Unit model test for Device Model
+- **access**: Update Tenant URL route basename
+- **access**: Tenant Model Tests
+- **api**: Update Functional API Permissions to support listview models with kwargs
+- **api**: exclude model `ConfigGroupHosts` from api permission tests as it has no endpoint
+- **api**: API Permissions Functional test to supprt name as unique field
+- **config_management**: Completed ConfigGroupSoftware Model Tests
+- **config_management**: Completed ConfigGroup Model Tests
+- **config_management**: Completed ConfigGroupHost Model Tests
+- **core**: mock the user object within the model context
+- **core**: creating a model is a functional not unit test
+- **devops**: re-implement temp removed test suites.
+- **api**: API Permissions Auto-Creator test suite
+- **devops**: Add GitGroup API Permissions tests
+- **core**: Add fixtures for api permission tests
+- **core**: rewrite api permissions test suite to use pytest and fixtures
+- **core**: Ensure Method clean_fields functions for CenturionNotesModel
+- **core**: Function Model test suite for CenturionModelNote Meta Models
+- **core**: Interim Unit Model test suite for CenturionModelNote  Meta Models
+- **core**: Interim Unit Model test suite for CenturionModelNote
+- **core**: Dynamic Unit Test Suites for Meta Models AuditHistory
+- **core**: Unit Test Centurion Model method `__str__`
+- **core**: Unit Test Centurion Model method `get_url_kwargs`
+- **core**: Unite Tesxt Centurion Model method `get_url` attr `_is_submodel` set
+- **core**: Unite Tesxt Centurion Model method `get_url` attr `model_name` set
+- **core**: Ensure model that has audit enableed has audit model
+- **core**: Add Functional  model Test Suite for CenturionAuditModel
+- **devops**: Ensure that a Github group cant have a parent/"be nested"
+- **devops**: Ensure that when create a child git group that the tenancy matches the parent git group
+- **devops**: Add Functional  model Test Suite
+- **core**: Add Base Centurion model Functional Test Suite
+- **access**: Add Base Tenancy model Functional Test Suite
+- **base**: Add Base model Functional Test Suite
+- **core**: Model Unit Tests for AuditHistory `get_model_history` method
+- **core**: reset vals so as not to fuck other tests over
+- **core**: Correct test for method `get_audit_values` for `CenturionAbstractModel`
+- **devops**: Initial Model Unit tests for GitGroup
+- **core**: Add field `model_notes` as an excluded field for AuditModels
+- **core**: Remaining Unit Model Test Cases for CenturionAuditMeta Model
+- **core**: Initial Unit Model Test Cases for CenturionAuditMeta Model
+- **core**: Unit Model Test Cases for CenturionSubAbstract model
+- **core**: Initial Unit Model Test Cases for CenturionAudit Model
+- **core**: Unit test cases for Centurion get_url relative + non-relative
+- **access**: Unit Model Tests for TenancyAbstractModel
+- **base**: Unit Common Model test cases suite
+- **base**: Unit Common Class test cases suite
+- **access**: Unit Model Tests for TenancyAbstractModel
+
 ## 1.18.0 (2025-07-03)
 
 ### feat
