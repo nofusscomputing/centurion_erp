@@ -1,4 +1,4 @@
-## Version 1.18.0
+## Version 1.19.0
 
 - Added new model for History
 
@@ -18,7 +18,7 @@
 
 - Removed Django UI
 
-    [UI](https://github.com/nofusscomputing/centurion_erp) must be deployed seperatly.
+    [UI](https://github.com/nofusscomputing/centurion_erp_ui) must be deployed seperatly.
 
 - Removed API v1
 
