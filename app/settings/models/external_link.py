@@ -1,11 +1,16 @@
-from django.template import Template
+from django.db import models
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
+
+from core.models.centurion import CenturionModel
 
 
 
-class ExternalLink(TenancyObject):
+class ExternalLink(
+    CenturionModel
+):
+
+    model_tag = 'external_link'
 
 
     class Meta:
@@ -20,14 +25,6 @@ class ExternalLink(TenancyObject):
         verbose_name_plural = 'External Links'
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'ID for this external link',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     name = models.CharField(
         blank = False,
         help_text = 'Name to display on link button',
@@ -35,8 +32,6 @@ class ExternalLink(TenancyObject):
         unique = True,
         verbose_name = 'Friendly Name',
     )
-
-    slug = None
 
     button_text = models.CharField(
         blank = True,
@@ -57,7 +52,6 @@ class ExternalLink(TenancyObject):
 
     colour = models.CharField(
         blank = True,
-        default = None,
         help_text = 'Colour to render the link button. Use HTML colour code',
         max_length = 80,
         null = True,
@@ -66,34 +60,32 @@ class ExternalLink(TenancyObject):
     )
 
     cluster = models.BooleanField(
-        default = False,
         blank = False,
+        default = False,
         help_text = 'Render link for clusters',
         verbose_name = 'Clusters',
     )
 
     devices = models.BooleanField(
-        default = False,
         blank = False,
+        default = False,
         help_text = 'Render link for devices',
         verbose_name = 'Devices',
     )
 
     service = models.BooleanField(
-        default = False,
         blank = False,
+        default = False,
         help_text = 'Render link for service',
         verbose_name = 'Service',
     )
 
     software = models.BooleanField(
-        default = False,
         blank = False,
+        default = False,
         help_text = 'Render link for software',
         verbose_name = 'Software',
     )
-
-    created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
 
@@ -111,7 +103,6 @@ class ExternalLink(TenancyObject):
                         'button_text',
                         'template',
                         'colour',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -163,16 +154,3 @@ class ExternalLink(TenancyObject):
         """ Return the Template to render """
 
         return str(self.template)
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from settings.models.external_link_history import ExternalLinkHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ExternalLinkHistory,
-        )
-
-
-        return history

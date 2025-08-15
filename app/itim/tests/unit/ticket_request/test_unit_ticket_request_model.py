@@ -1,27 +1,62 @@
-from itim.models.request_ticket import RequestTicket
+import pytest
+
+from django.db import models
+
 from itim.tests.unit.ticket_slm.test_unit_ticket_slm_model import SLMTicketModelInheritedCases
 
+from itim.models.request_ticket import RequestTicket
 
 
-class RequestTicketModelTestCases(
-    SLMTicketModelInheritedCases,
+
+@pytest.mark.model_requestticket
+class RequestTicketTestCases(
+    SLMTicketModelInheritedCases
 ):
-
-    kwargs_create_item: dict = {}
 
     sub_model_type = 'request'
 
 
-    def test_class_inherits_requestticket(self):
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            '_is_submodel': {
+                'value': True
+            },
+            'model_tag': {
+                'type': str,
+                'value': 'ticket'
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticketbase'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {}
+
+
+
+    def test_class_inherits_requestticket(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, RequestTicket)
+        assert issubclass(model, RequestTicket)
 
 
-    def test_function_get_ticket_type(self):
+    def test_function_get_ticket_type(self, model):
         """Function test
 
         As this model is intended to be used alone.
@@ -30,31 +65,20 @@ class RequestTicketModelTestCases(
         `RequestTicket`
         """
 
-        assert self.model().get_ticket_type == 'request'
+        assert model().get_ticket_type == 'request'
 
 
 
-class RequestTicketModelInheritedCases(
-    RequestTicketModelTestCases,
+class RequestTicketInheritedCases(
+    RequestTicketTestCases,
 ):
-    """Sub-Ticket Test Cases
-
-    Test Cases for Ticket models that inherit from model RequestTicket
-    """
-
-    kwargs_create_item: dict = None
-
-    model = None
 
     sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
 
 
-class RequestTicketModelPyTest(
-    RequestTicketModelTestCases,
+
+@pytest.mark.module_itim
+class RequestTicketPyTest(
+    RequestTicketTestCases,
 ):
-
     pass

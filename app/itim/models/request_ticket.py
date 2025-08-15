@@ -6,6 +6,8 @@ class RequestTicket(
     SLMTicket
 ):
 
+    _is_submodel = True
+
 
     class Meta:
 

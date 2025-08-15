@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.db.models import Q
-from django.utils import timezone
 
 from core.models.manufacturer import Manufacturer
 
@@ -21,7 +20,7 @@ class Command(BaseCommand):
         
         if kwargs['global']:
 
-            softwares = Manufacturer.objects.filter(is_global = False)
+            softwares = Manufacturer.objects.filter()
 
             self.stdout.write('Running global')
 
@@ -46,8 +45,6 @@ class Command(BaseCommand):
 
             softwares = Manufacturer.objects.filter(
                 ~Q(organization = app_settings.global_organization)
-                |
-                Q(is_global = False)
                 &
                 Q(organization=app_settings.global_organization),
             )

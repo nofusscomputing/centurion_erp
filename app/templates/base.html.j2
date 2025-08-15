@@ -12,143 +12,15 @@
   <meta http-equiv="refresh" content="0; url=/{{ settings.LOGIN_URL }}" />
   {% else %}
   <link rel="stylesheet" href="{% static 'base.css' %}">
-  <link rel="stylesheet" href="{% static 'code.css' %}">
-  <link rel="stylesheet" href="{% static 'content.css' %}">
   {% block additional-stylesheet %}{% endblock additional-stylesheet %}
-  <script src="{% static 'functions.js' %}"></script>
+
   {% endif %}
 
 </head>
 
 <body>
-  {% block body %}
-  <header>
 
-    <h1 id="site-title"><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
-
-    {%if user.is_authenticated %}
-    <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
-      <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
-      <div class="dropdown-content">
-        <!-- <a href="#">Link 1</a> -->
-        {% if user.is_superuser or user.is_staff %}
-        <form action="{% url 'admin:index' %}" method="post">
-          {% csrf_token %}
-          <button class="accbtn">Admin Panel</button>
-        </form>
-        {% endif %}
-        <form action="{% url '_settings_user' pk=user_settings %}" method="post">
-          {% csrf_token %}
-          <button class="accbtn">Settings</button>
-        </form>
-        <form action="{% url 'password_change' %}" method="post">
-          {% csrf_token %}
-          <button class="accbtn">Change Password</button>
-        </form>
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button class="accbtn">Log Out</button>
-        </form>
-      </div>
-    </div>
-    {% endif %}
-
-  </header>
-
-  <main>
-    <nav style="padding: 0px;">
-      {% include 'navigation.html.j2' %}
-    </nav>
-
-<style>
-
-section h2 span svg {
-  height: 100%;
-  margin: auto 0 auto 0;
-  fill: #666;
-  cursor: pointer;
-  width: 30px;
-  /*height: 30px;*/
-}
-
-.icon-delete svg {
-  fill: #ff0000;
-}
-
-.icon-help svg {
-  fill: #177ee6;
-}
-
-.warning-bar {
-  background-color: #f1d599;
-  border: 1px solid #ecb785;
-  height: 30px;
-  line-height: 30px;
-  width: 100%;
-  padding: 0px 20px 0px 20px
-}
-
-</style>
-
-    <section>
-      <h2 id="content_title">{% block title %}{{ content_title }}{% endblock %}
-        {% if model_delete_url %}
-        <span title="Delete Item" id="content_header_icon" class="icon-delete" onclick="window.location='{{ model_delete_url }}';">
-          {% include 'icons/delete.svg' %}
-        </span>
-        {% endif %}
-        {% if model_docs_path %}
-        <span title="Help" id="content_header_icon" class="icon-help" onclick="window.open('{% settings_value 'DOCS_ROOT' %}{{ model_docs_path }}', '_blank')">
-          {% include 'icons/help.svg' %}
-        </span>
-        {% endif %}
-      </h2>
-      {% if user.is_authenticated %}
-        {% if not user_default_organization %}
-        <div class="warning-bar">You do not have a <b>default organization</b> set, go to <a href="{% url '_settings_user' pk=user_settings %}">user settings</a> to set one</div>
-        {% endif %}
-      {% endif %}
-      {% block article %}
-      <article id="content-body">
-        {% block content %}{% endblock %}
-      </article>
-      {% endblock article %}
-      <style>
-
-      </style>
-      <footer>
-        <span style=" text-align: left;">
-          <a title="Documentation" href="https://nofusscomputing.com/projects/centurion_erp/" target="_blank">
-            {% include 'icons/documentation.svg' %}
-          </a>
-          <a title="Rest API" href="/api/" target="_blank">
-            {% include 'icons/api.svg' %}
-          </a>
-          <a title="Swagger API Documentation" href="/api/v2/docs" target="_blank">
-            {% include 'icons/swagger_docs.svg' %}
-          </a>
-          <a title="Code Home" href="{{ build_details.project_url }}" target="_blank">
-            {% include 'icons/git.svg' %}
-          </a>
-        </span>
-        <span style="text-align: center;">
-          Centurion ERP brought to you by <a href="https://nofusscomputing.com" target="_blank">No Fuss Computing</a>
-        </span>
-        <span style="text-align: right;">
-          Release: 
-          {% if build_details.version %}
-          version: {{ build_details.version }} 
-          {% else %}
-            development
-          {% endif %}
-          ( {% if build_details.project_url %}<a href="{{ build_details.project_url }}/commit/{{ build_details.sha }}" target="_blank">{% endif %}
-          {{ build_details.sha }}
-          {% if build_details.project_url %}</a>{% endif %} )
-        </span>
-      </footer>
-    </section>
-  </main>
-  {% endblock body %}
+  {% block body %}{% endblock body %}
 
 </body>
 

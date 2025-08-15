@@ -1,3 +1,4 @@
+import coverage
 import logging
 import os
 
@@ -9,7 +10,33 @@ from prometheus_client import multiprocess, start_http_server, REGISTRY
 
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+if bool(os.environ.get("IS_TESTING")):
+
+    def post_fork(server, worker):
+
+        worker_cov = coverage.Coverage(data_file=f"artifacts/.coverage.{os.getpid()}")
+
+        worker_cov.start()
+
+        worker.worker_cov = worker_cov
+
+
+    def worker_exit(server, worker):
+
+        if hasattr(worker, "worker_cov"):
+
+            worker.worker_cov.stop()
+
+            worker.worker_cov.save()
+
+
+    post_fork = post_fork
+
+    worker_exit = worker_exit
+
+
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'centurion.settings')
 
 access_logfile = '-'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" "%({x-forwarded-for}i)s"'
@@ -21,9 +48,14 @@ forwarder_headers = "X-REAL-IP,X-FORWARDED-FOR,X-FORWARDED-PROTO"
 
 logger = logging.getLogger(__name__)
 
-preload_app = False
+max_requests = 100
+max_requests_jitter = 30
 
-workers = 10
+preload_app = True
+
+timeout = 180
+
+workers = 4
 
 
 def when_ready(_):
@@ -46,7 +78,8 @@ def when_ready(_):
         proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
 
 
-    logger.info(f'Setting up prometheus metrics HTTP server on port {str(settings.METRICS_EXPORT_PORT)}.')
+    logger.info(f'Setting up prometheus metrics HTTP server on port \
+        {str(settings.METRICS_EXPORT_PORT)}.')
 
     multiproc_folder_path = _setup_multiproc_folder()
 

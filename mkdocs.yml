@@ -24,17 +24,20 @@ plugins:
           find_stubs_package: true
           heading_level: 2
           inherited_members: false
-          members_order: source
+          members_order: alphabetical
           paths: [ '.' ]
           parameter_headings: false
+          separate_signature: true
+          show_bases: true
           show_category_heading: true
           show_if_no_docstring: true
           show_labels: false
           show_object_full_path: false
+          show_overloads: true
           show_root_heading: false
           show_root_full_path: true
           show_root_toc_entry: false
-          show_signature_annotations: false
+          show_signature_annotations: true
           show_source: false
           show_submodules: true
           summary: true
@@ -79,63 +82,35 @@ nav:
 
         - projects/centurion_erp/development/api/index.md
 
-        - projects/centurion_erp/development/api/admin_model_form.md
+        - projects/centurion_erp/development/api/models/audit_history.md
 
-        - projects/centurion_erp/development/api/model_form.md
+        - projects/centurion_erp/development/api/models/centurion.md
 
-        - projects/centurion_erp/development/api/token_authentication.md
+        - projects/centurion_erp/development/api/models/tenancy.md
 
-        - Models:
+        - Depreciated:
 
-          - projects/centurion_erp/development/api/models/index.md
+          - projects/centurion_erp/development/api/token_authentication.md
 
-          - projects/centurion_erp/development/api/models/core_history_save.md
+          - Models:
 
-          - projects/centurion_erp/development/api/models/external_links.md
+            - projects/centurion_erp/development/api/models/index.md
 
-          - projects/centurion_erp/development/api/models/itam_device.md
+            - projects/centurion_erp/development/api/models/external_links.md
 
-          - projects/centurion_erp/development/api/models/ticket.md
+            - projects/centurion_erp/development/api/models/itam_device.md
 
-        - projects/centurion_erp/development/api/common_views.md
+            - projects/centurion_erp/development/api/models/ticket.md
 
-        - Serializers:
+          - Serializers:
 
-          - projects/centurion_erp/development/api/serializer/index.md
+            - projects/centurion_erp/development/api/serializer/index.md
 
-          - projects/centurion_erp/development/api/serializer/inventory.md
-
-        - Unit Testing:
-
-          - projects/centurion_erp/development/api/tests/index.md
-
-          - projects/centurion_erp/development/api/tests/model_permissions.md
-
-          - projects/centurion_erp/development/api/tests/model_permissions_organization_manager.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_add.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_add_organization_manager.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_change.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_change_organization_manager.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_delete.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_delete_organization_manager.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_view.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_view_organization_manager.md
-
-          - projects/centurion_erp/development/api/tests/model_views.md
+            - projects/centurion_erp/development/api/serializer/inventory.md
 
       - projects/centurion_erp/development/accounting/asset.md
       
       - projects/centurion_erp/development/fields.md
-
-      - projects/centurion_erp/development/forms.md
 
       - projects/centurion_erp/development/models.md
 
@@ -144,6 +119,8 @@ nav:
       - projects/centurion_erp/development/core/model_history.md
 
       - projects/centurion_erp/development/core/model_notes.md
+
+      - projects/centurion_erp/development/serializers.md
 
       - projects/centurion_erp/development/itam/it_asset.md
 
@@ -199,7 +176,11 @@ nav:
 
         - projects/centurion_erp/user/core/index.md
 
+        - projects/centurion_erp/user/core/audit_history.md
+
         - projects/centurion_erp/user/core/markdown.md
+
+        - projects/centurion_erp/user/core/model_notes.md
 
         - projects/centurion_erp/user/core/tickets.md
 

@@ -1,27 +1,63 @@
-from django.test import TestCase
+import pytest
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from django.db import models
+
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from core.models.manufacturer import Manufacturer
 
 
+@pytest.mark.model_manufacturer
 class ManufacturerModelTestCases(
-    TenancyObjectInheritedCases,
+    CenturionAbstractModelInheritedCases
 ):
 
-    kwargs_item_create = {
-        'name': 'man'
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'manufacturer'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+        
+        return {
+        'name': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'max_length': 50,
+            'null': False,
+            'unique': True,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
     }
 
-    model = Manufacturer
 
 
-
-class ManufacturerModelTest(
+class ManufacturerModelInheritedCases(
     ManufacturerModelTestCases,
-    TestCase,
 ):
+    pass
 
+
+
+@pytest.mark.module_core
+class ManufacturerModelPyTest(
+    ManufacturerModelTestCases,
+):
     pass

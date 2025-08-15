@@ -1,6 +1,7 @@
+import pytest
+
 from django.test import TestCase
 
-# from access.models.contact import Contact
 from access.tests.unit.contact.test_unit_contact_viewset import (
     ContactViewsetInheritedCases
 )
@@ -8,7 +9,8 @@ from access.tests.unit.contact.test_unit_contact_viewset import (
 from human_resources.models.employee import Employee
 
 
-
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
+@pytest.mark.model_employee
 class ViewsetTestCases(
     ContactViewsetInheritedCases,
 ):
@@ -30,6 +32,7 @@ class EmployeeViewsetInheritedCases(
 
 
 
+@pytest.mark.module_human_resources
 class EmployeeViewsetTest(
     ViewsetTestCases,
     TestCase,

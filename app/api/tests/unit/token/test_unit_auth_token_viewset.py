@@ -1,49 +1,90 @@
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
+import pytest
 
 from api.tests.unit.test_unit_common_viewset import (
     ModelCreateViewSetInheritedCases,
     ModelListRetrieveDeleteViewSetInheritedCases,
 )
-from api.viewsets.auth_token import ViewSet
 
-# from settings.viewsets.user_settings import ViewSet
+from api.viewsets.auth_token import (
+    AuthToken,
+    ViewSet,
+)
 
 
 
-class ViewsetList(
+@pytest.mark.model_authtoken
+class ViewsetTestCases(
     ModelCreateViewSetInheritedCases,
     ModelListRetrieveDeleteViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_v2_user_settings_token'
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
-
-        super().setUpTestData()
-
-        self.kwargs = {
-            'model_id': self.view_user.id
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+            },
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'expires'
+                ]
+            },
+            'model': {
+                'value': AuthToken
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'note'
+                ]
+            },
+            'view_description': {
+                'value': 'User Authentication Tokens'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
         }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
 
-        client.force_login(self.view_user)
+class AuthTokenViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
 
-        self.http_options_response_list = client.options(url)
+
+
+@pytest.mark.module_api
+class AuthTokenViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

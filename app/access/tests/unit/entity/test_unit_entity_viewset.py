@@ -1,82 +1,107 @@
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
-
+import pytest
+import logging
 
 from access.viewsets.entity import (
+    Entity,
     NoDocsViewSet,
     ViewSet,
 )
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCases
 
 
 
+@pytest.mark.model_entity
 class ViewsetTestCases(
-    ModelViewSetInheritedCases,
+    SubModelViewSetInheritedCases,
 ):
 
-    kwargs = None
 
-    viewset = None
-
-    route_name = None
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
-
-
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
-
-        client.force_login(self.view_user)
-
-        self.http_options_response_list = client.options(url)
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            # '_log': {
+            #     'type': logging.Logger,
+            #     'value': None
+            # },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'base_model': {
+                'value': Entity
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'organization'
+                ]
+            },
+            'model': {
+                'value': Entity
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model_kwarg': {
+                'value': 'model_name'
+            },
+            'model_suffix': {
+                'type': type(None)
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'search_fields': {
+                'value': [
+                    'model_notes'
+                ]
+            },
+            'view_description': {
+                'value': 'All entities'
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
+            }
+        }
 
 
 
 class EntityViewsetInheritedCases(
     ViewsetTestCases,
 ):
-
-    model: str = None
-    """name of the model to test"""
-
-    route_name = 'API:_api_v2_entity_sub'
-
-    viewset = ViewSet
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs = {
-            'entity_model': self.model._meta.model_name
-        }
-
-        super().setUpTestData()
+    pass
 
 
 
-class EntityViewsetTest(
+@pytest.mark.module_access
+class EntityViewsetPyTest(
     ViewsetTestCases,
-    TestCase,
 ):
 
-    kwargs = {}
-
-    route_name = 'API:_api_v2_entity'
-
-    viewset = NoDocsViewSet
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return NoDocsViewSet

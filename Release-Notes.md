@@ -1,3 +1,28 @@
+## Version 1.19.0
+
+- Added new model for History
+
+    !!! info
+        Migration of the old history tables to the new history tables occurs as part of post migration. As such the time it will take to migrate the history is dependent upon how many history entries per model. This should be planned for when upgrading to this version. if for some reason the migration is interrupted, you can safely restart it again by running the migrate command.
+
+    !!! note
+        Permission migration from the old history models to the new Audit History models are not migrated. As such users whom used to be able to access history models will need to be granted the required permission to view the new Audit History models
+
+- Added new model for notes
+
+    !!! info
+        Migration of the old notes tables to the new note tables occurs as part of post migration. As such the time it will take to migrate the history is dependent upon how many history entries per model. This should be planned for when upgrading to this version. if for some reason the migration is interrupted, you can safely restart it again by running the migrate command.
+
+    !!! note
+        Permission migration from the old history models to the new Centurion Notes models are not migrated. As such users whom used to be able to access notes models will need to be granted the required permission to view the new Centurion Notes models
+
+- Removed Django UI
+
+    [UI](https://github.com/nofusscomputing/centurion_erp_ui) must be deployed seperatly.
+
+- Removed API v1
+
+
 ## Version 1.17.0
 
 - Added setting for log files.

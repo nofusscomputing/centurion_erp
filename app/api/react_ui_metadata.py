@@ -3,11 +3,8 @@ import re
 from django.conf import settings
 from django.utils.encoding import force_str
 
-from django.contrib.auth.models import ContentType, Permission
-
 from rest_framework import serializers
 from rest_framework_json_api.metadata import JSONAPIMetadata
-from rest_framework.request import clone_request
 from rest_framework.reverse import reverse
 from rest_framework.utils.field_mapping import ClassLookupDict
 
@@ -15,7 +12,7 @@ from rest_framework_json_api.utils import get_related_resource_type
 
 from access.models.tenant import Tenant
 
-from app.serializers.user import User, UserBaseSerializer
+from centurion.serializers.user import User, UserBaseSerializer
 
 from core import fields as centurion_field
 from core.fields.badge import BadgeField
@@ -87,21 +84,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         base_model = getattr(view, 'base_model', None)
 
-        if base_model is not None:
-
-            if(
-                base_model.app_namespace != ''
-                and base_model.app_namespace is not None
-            ):
-
-                app_namespace = base_model.app_namespace + ':'
-
-
         if getattr(view, 'model', None):
 
-            if getattr(view.model, 'get_app_namespace', None):
+            if getattr(view.model, 'app_namespace', None) not in [None, '']:
 
-                app_namespace = view.model().get_app_namespace()
+                app_namespace = view.model().get_app_namespace() + ':'
 
 
         if view.kwargs.get('pk', None) is not None:
@@ -386,7 +373,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
 
     def get_nav_items(self, request) -> dict:
-        
+
         nav = {
             'access': {
                 "display_name": "Access",
@@ -651,7 +638,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         'view_itamassetbase': {
                             "display_name": "IT Assets",
                             "name": "itasset",
-                            "link": "/itam/it_asset"
+                            "link": "/itam/itamassetbase"
                         },
                         **nav['itam']['pages']
                     }

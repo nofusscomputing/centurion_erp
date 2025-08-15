@@ -1,4 +1,6 @@
 import django
+import pytest
+
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
@@ -15,6 +17,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_assetbase
 class ViewSetBase:
 
     add_data: dict = {
@@ -74,9 +77,10 @@ class ViewSetBase:
 
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
 
+        kwargs = self.kwargs_create_item
+        kwargs['organization'] = organization
         self.item = self.model.objects.create(
-            organization = organization,
-            **self.kwargs_create_item
+            **kwargs
         )
 
         self.other_org_item = self.model.objects.create(
@@ -237,7 +241,7 @@ class AssetBaseViewSetInheritedCases(
 
     model = None
 
-    url_name = 'accounting:_api_v2_asset_sub'
+    url_name = 'accounting:_api_asset_sub'
 
 
     @classmethod
@@ -254,20 +258,21 @@ class AssetBaseViewSetInheritedCases(
         }
 
         self.url_kwargs = {
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         self.url_view_kwargs = {
-            'asset_model': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()
 
 
 
+@pytest.mark.module_accounting
 class AssetBaseViewSetTest(
     ViewSetTestCases,
     TestCase,
 ):
 
-    url_name = 'accounting:_api_v2_asset'
+    url_name = 'accounting:_api_asset'

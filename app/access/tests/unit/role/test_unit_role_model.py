@@ -1,41 +1,70 @@
-from django.test import TestCase
+import pytest
 
-from access.models.role import Role
+from django.db import models
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
 
 
+@pytest.mark.model_role
 class RoleModelTestCases(
-    TenancyObjectInheritedCases,
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = None
 
-    kwargs_item_create: dict = None
+    @property
+    def parameterized_class_attributes(self):
 
-
-    def test_field_exist_is_global(self):
-        """Test model field not used
-
-        object must not be settable as a global object
-
-        Attribute `is_global` must be defined as None
-        """
-
-        assert self.model.is_global is None
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'role'
+            },
+        }
 
 
+    @property
+    def parameterized_model_fields(self):
 
-class RoleModelTest(
-    RoleModelTestCases,
-    TestCase,
-):
-
-    model = Role
-
-    kwargs_item_create: dict = {
-        'name': 'a role'
+        return {
+        'name': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'max_length': 30,
+            'null': False,
+            'unique': False,
+        },
+        'permissions': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ManyToManyField,
+            'null': False,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
     }
+
+
+
+class RoleModelInheritedCases(
+    RoleModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.model_role
+class RoleModelPyTest(
+    RoleModelTestCases,
+):
+    pass

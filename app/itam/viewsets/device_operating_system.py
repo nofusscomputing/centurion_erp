@@ -1,29 +1,15 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
-
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
-
-from rest_framework.fields import empty
-from rest_framework import generics, viewsets
-from rest_framework.response import Response
-
-from access.mixin import OrganizationMixin
-
-from api.views.mixin import OrganizationPermissionAPI
 
 from api.viewsets.common import ModelViewSet
 
 # THis import only exists so that the migrations can be created
 from itam.models.device_operating_system_history import DeviceOperatingSystemHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.device_operating_system import (
+from itam.models.operating_system import OperatingSystem
+from itam.serializers.device_operating_system import (    # pylint: disable=W0611:unused-import
     Device,
     DeviceOperatingSystem,
     DeviceOperatingSystemModelSerializer,
     DeviceOperatingSystemViewSerializer,
-    OperatingSystem,
 )
 
 
@@ -41,6 +27,10 @@ from itam.serializers.device_operating_system import (
             ),
         ],
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = DeviceOperatingSystemViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=DeviceOperatingSystemModelSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

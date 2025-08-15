@@ -1,6 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
-from rest_framework.reverse import reverse
 
 from access.serializers.organization import TenantBaseSerializer
 
@@ -21,7 +19,7 @@ class ProjectTypeBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_project_type-detail", format="html"
+        view_name="v2:_api_projecttype-detail", format="html"
     )
 
 
@@ -70,7 +68,6 @@ class ProjectTypeModelSerializer(
             'name',
             'model_notes',
             'runbook',
-            'is_global',
             'created',
             'modified',
             '_urls',

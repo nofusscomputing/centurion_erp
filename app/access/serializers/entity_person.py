@@ -44,7 +44,6 @@ class ModelSerializer(
             'l_name',
             'dob',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

@@ -6,6 +6,7 @@
     ],
     "python.testing.pytestArgs": [
         "--override-ini", "addopts=",
+        "--no-migrations",
         "app",
     ],
     "python.testing.unittestEnabled": false,
@@ -24,4 +25,14 @@
         "green": 90
     },
     "telemetry.feedback.enabled": false,
+    "python.languageServer": "None",
+    "debug.javascript.enableNetworkView": false,
+    "typescript.experimental.expandableHover": false,
+    "ipynb.experimental.serialization": false,
+    "notebook.experimental.generate": false,
+    "extensions.experimental.issueQuickAccess": false,
+    "workbench.commandPalette.experimental.enableNaturalLanguageSearch": false,
+    "multiDiffEditor.experimental.enabled": false,
+    "diffEditor.experimental.showEmptyDecorations": false,
+    "editor.experimental.asyncTokenization": false,
 }

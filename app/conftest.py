@@ -1,21 +1,56 @@
 import datetime
+from typing import Any
+import django
 import pytest
+import os
+import sqlite3
 import sys
 
+from django.core.management import call_command
+from django.conf import settings
+from django.db import models
 from django.test import (
     TestCase
 )
 
+from tests.fixtures import *
+
 from access.models.tenant import Tenant
 
+User = django.contrib.auth.get_user_model()
 
 
-def pytest_configure(config):
 
-    print("\n--- Pytest Launch Arguments ---")
+@pytest.fixture(scope="session", autouse = True)
+def load_sqlite_fixture(django_db_setup, django_db_blocker):
+    """
+    Load the SQLite database from an SQL dump file.
+    This runs during test setup and loads the schema and data via SQLite directly.
+    """
+    db_path = settings.DATABASES['default']['NAME']
+    sql_file_path = os.path.join('app/fixtures', 'fresh_db.sql')
+
+
+    with django_db_blocker.unblock():
+        with open(sql_file_path, 'r') as f:
+            sql_script = f.read()
+        conn = sqlite3.connect(db_path)
+        try:
+            conn.executescript(sql_script)
+        finally:
+            conn.close()
+
+    
+    with django_db_blocker.unblock():
+
+        call_command('loaddata','fresh_db')
+
+
+
+def pytest_report_header(config):
+
     print(f"Command-line arguments: {config.invocation_params.args}")
     print(f"Config file options: {config.getini('addopts')}")
-    print("\n-------------------------------")
 
 
 def pytest_pycollect_makeitem(collector, name, obj):
@@ -206,6 +241,10 @@ def pytest_generate_tests(metafunc):
 
                                 ids_name += '_' + getattr(item[1][key], '__name__', 'err_generate_tests').lower()
 
+                            elif callable(item[1][key]):
+
+                                ids_name  += '_' + item[1][key].__name__
+
                             else:
 
                                 ids_name += '_' + str(item[1][key]).lower()
@@ -223,6 +262,15 @@ def pytest_generate_tests(metafunc):
 
             if len(arg_values) > 0:
 
+                # Get the test method
+                test_func = getattr(metafunc.cls, metafunc.definition.name, None)
+
+                # Remove previous xfail mark if present
+                if test_func and hasattr(test_func, 'pytestmark'):
+                    test_func.pytestmark = [
+                        mark for mark in test_func.pytestmark if mark.name != 'xfail'
+                    ]
+
                 metafunc.parametrize(
                     argnames = [
                         *fixture_parameters
@@ -230,6 +278,23 @@ def pytest_generate_tests(metafunc):
                     argvalues = arg_values,
                     ids = ids,
                 )
+
+            else:
+
+                pytest.mark.xfail(
+                    reason = 'No Parameters for parameterized test'
+                )(
+                    getattr(metafunc.cls, metafunc.definition.name)
+                )
+
+
+        else:
+
+            pytest.mark.xfail(
+                reason = 'No Parameters for parameterized test'
+            )(
+                getattr(metafunc.cls, metafunc.definition.name)
+            )
 
 
 
@@ -489,14 +554,17 @@ def organization_one(django_db_blocker):
         random_str = datetime.datetime.now(tz=datetime.timezone.utc)
 
         item = Tenant.objects.create(
-            name = 'org one from global' + str(random_str)
+            name = 'org one global' + str(random_str)
         )
 
     yield item
 
     with django_db_blocker.unblock():
 
-        item.delete()
+        try:
+            item.delete()
+        except:
+            pass
 
 
 
@@ -510,14 +578,41 @@ def organization_two(django_db_blocker):
         random_str = datetime.datetime.now(tz=datetime.timezone.utc)
 
         item = Tenant.objects.create(
-            name = 'org two from global' + str(random_str)
+            name = 'org two global' + str(random_str)
         )
 
     yield item
 
     with django_db_blocker.unblock():
 
-        item.delete()
+        try:
+            item.delete()
+        except:
+            pass
+
+
+
+@pytest.fixture( scope = 'class')
+def organization_three(django_db_blocker):
+
+    item = None
+
+    with django_db_blocker.unblock():
+
+        random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+
+        item = Tenant.objects.create(
+            name = 'org three global' + str(random_str)
+        )
+
+    yield item
+
+    with django_db_blocker.unblock():
+
+        try:
+            item.delete()
+        except:
+            pass
 
 
 
@@ -599,7 +694,11 @@ def recursearray() -> dict[dict, str, any]:
 
                             print( f'Index {keys[1]} does not exist. List had a length of {len(v)}', file = sys.stderr )
 
-                            return None
+                            return {
+                                'obj': obj,
+                                'key': key,
+                                'value': '-value-does_not-exist-'
+                            }
 
                     except ValueError:
 
@@ -691,3 +790,20 @@ def fake_view():
     yield fake_view
 
     del fake_view
+
+
+
+@pytest.fixture(scope = 'class')
+def user(django_db_blocker, model_user, kwargs_user):
+
+    with django_db_blocker.unblock():
+
+        user = model_user.objects.create(
+            **kwargs_user
+        )
+
+    yield user
+
+    with django_db_blocker.unblock():
+
+        user.delete()

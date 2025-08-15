@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from project_management.models.project_state_history import ProjectStateHistory    # pylint: disable=W0611:unused-import
-from project_management.serializers.project_states import (
+from project_management.serializers.project_states import (    # pylint: disable=W0611:unused-import
     ProjectState,
     ProjectStateModelSerializer,
     ProjectStateViewSerializer
@@ -17,6 +17,10 @@ from project_management.serializers.project_states import (
         summary = 'Create a project state',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ProjectStateViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ProjectStateViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),
@@ -60,7 +64,6 @@ class ViewSet( ModelViewSet ):
 
     filterset_fields = [
         'organization',
-        'is_global',
     ]
 
     search_fields = [

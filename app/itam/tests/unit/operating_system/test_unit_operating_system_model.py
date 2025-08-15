@@ -1,47 +1,69 @@
-from django.test import TestCase
-
 import pytest
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+from django.db import models
+
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itam.models.operating_system import OperatingSystem
 
 
-
-class OperatingSystemModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_operatingsystem
+class OperatingSystemModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = OperatingSystem
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'value': 'operating_system'
+            },
+        }
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_operating_system_update_is_global_no_change(user):
-        """Once operating_system is set to global it can't be changed.
+    @property
+    def parameterized_model_fields(self):
 
-            global status can't be changed as non-global items may reference the item.
-        """
+        return {
+            'publisher': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            'name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 50,
+                'null': False,
+                'unique': True,
+            },
+            'modified': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': False,
+                'unique': False,
+            },
+        }
 
-        pass
-
-    @pytest.mark.skip(reason="to be written")
-    def test_operating_system_prevent_delete_if_used(user):
-        """Any operating_system in use by a operating_system must not be deleted.
-
-            i.e. A global os can't be deleted
-        """
-
-        pass
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_operating_system_version_installs_by_os_count(user):
-        """Operating System Versions has a count field that must be accurate
+class OperatingSystemModelInheritedCases(
+    OperatingSystemModelTestCases,
+):
+    pass
 
-            The count is of model OperatingSystemVersion linked to model operating_systemOperatingSystem
-        """
 
-        pass
+
+@pytest.mark.module_itam
+class OperatingSystemModelPyTest(
+    OperatingSystemModelTestCases,
+):
+    pass

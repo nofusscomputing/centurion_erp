@@ -20,6 +20,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_configgroupsoftware
+@pytest.mark.module_config_management
 class ConfigGroupsAPI(
     TestCase,
     APITenancyObject
@@ -89,7 +91,7 @@ class ConfigGroupsAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_config_group_software-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_configgroupsoftware-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

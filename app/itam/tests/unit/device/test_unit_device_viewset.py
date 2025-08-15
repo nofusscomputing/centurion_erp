@@ -1,40 +1,90 @@
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
+import pytest
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from itam.viewsets.device import ViewSet
+from itam.viewsets.device import (
+    Device,
+    ViewSet,
+)
 
 
 
-class DeviceViewsetList(
+@pytest.mark.model_device
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
 
-    viewset = ViewSet
-
-    route_name = 'v2:_api_v2_device'
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
-
-        super().setUpTestData()
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'name',
+                    'serial_number',
+                    'organization',
+                    'uuid',
+                    'cluster_device',
+                    'cluster_node'
+                ]
+            },
+            'model': {
+                'value': Device
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'name',
+                    'serial_number',
+                    'uuid'
+                ]
+            },
+            'view_description': {
+                'value': 'Physical Devices'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
-        client.force_login(self.view_user)
 
-        self.http_options_response_list = client.options(url)
+
+class DeviceViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_itam
+class DeviceViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

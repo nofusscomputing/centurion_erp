@@ -1,17 +1,14 @@
 from django.apps import apps
 from django.db import models
 
-from rest_framework.reverse import reverse
+from access.fields import AutoLastModifiedField
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
-
-from core.lib.feature_not_used import FeatureNotUsed
+from core.models.centurion import CenturionModel
 
 
 
 class AssetBase(
-    TenancyObject,
+    CenturionModel,
 ):
     """Asset Base Model
 
@@ -22,6 +19,10 @@ class AssetBase(
     """
 
     app_namespace = 'accounting'
+
+    model_tag = 'asset'
+
+    url_model_name = 'asset'
 
 
     @property
@@ -51,18 +52,6 @@ class AssetBase(
 
         return True
 
-
-
-    is_global = None
-
-
-    id = models.AutoField(
-        blank = False,
-        help_text = 'Ticket ID Number',
-        primary_key = True,
-        unique = True,
-        verbose_name = 'Number',
-    )
 
     asset_number = models.CharField(
         blank = True,
@@ -98,12 +87,9 @@ class AssetBase(
     """
 
 
-
     # Status
 
     # model (manufacturer / model)
-
-
 
 
     @property
@@ -139,7 +125,7 @@ class AssetBase(
 
                 if(
                     ( isinstance(model, AssetBase) or issubclass(model, AssetBase) )
-                    and AssetBase._meta.sub_model_type != 'asset'
+                    # and AssetBase._meta.sub_model_type != 'asset'
 
                 ):
 
@@ -159,12 +145,6 @@ class AssetBase(
             validate_not_null
         ],
         verbose_name = 'Asset Type',
-    )
-
-
-
-    created = AutoCreatedField(
-        editable = True,
     )
 
     modified = AutoLastModifiedField()
@@ -239,6 +219,26 @@ class AssetBase(
 
 
 
+    def clean_fields(self, exclude = None):
+
+        related_model = self.get_related_model()
+
+        if related_model is None:
+
+            related_model = self
+
+        if (
+            self.asset_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_')
+            and str(related_model._meta.sub_model_type).lower().replace(' ', '_') != 'asset'
+        ):
+
+            self.asset_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
+
+
+        super().clean_fields(exclude = exclude)
+
+
+
     def get_related_field_name(self) -> str:
 
         meta = getattr(self, '_meta')
@@ -257,10 +257,10 @@ class AssetBase(
                 ):
 
                     return related_object.name
-                    break
 
 
         return ''
+
 
 
     def get_related_model(self):
@@ -295,74 +295,3 @@ class AssetBase(
 
 
         return related_model
-
-
-
-
-    def get_url( self, request = None ) -> str:
-
-        kwargs = self.get_url_kwargs()
-
-        url_path_name = '_api_v2_asset_sub'
-
-        if self._meta.sub_model_type == 'asset':
-
-            url_path_name = '_api_v2_asset'
-
-        if request:
-
-            return reverse(f"v2:accounting:{url_path_name}-detail", request=request, kwargs = kwargs )
-
-        return reverse(f"v2:accounting:{url_path_name}-detail", kwargs = kwargs )
-
-
-
-    def get_url_kwargs(self) -> dict:
-
-        kwargs = {
-            'asset_model': self.asset_type,
-        }
-
-        if self._meta.sub_model_type == 'asset':
-
-            kwargs = {}
-
-
-        if self.id:
-
-            kwargs.update({
-                'pk': self.id
-            })
-
-        return kwargs
-
-
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        related_model = self.get_related_model()
-
-        if related_model is None:
-
-            related_model = self
-
-        if self.asset_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
-
-            self.asset_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
-
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from accounting.models.asset_base_history import AssetBaseHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = AssetBaseHistory
-        )
-
-
-        return history

@@ -159,7 +159,7 @@ EXPOSE 8000
 VOLUME [ "/data", "/etc/itsm" ]
 
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD \
+HEALTHCHECK --interval=10s --timeout=30s --start-period=30s --retries=3 CMD \
   supervisorctl status || exit 1
 
 

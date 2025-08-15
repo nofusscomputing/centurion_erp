@@ -75,7 +75,7 @@ class SerializerAdd:
 
 
         client.force_login(self.add_user)
-        response = client.post(url, data=self.add_data)
+        response = client.post(url, data=self.add_data, content_type = 'application/json')
 
         assert str(response.renderer_context['view'].get_serializer().__class__.__name__).endswith('ModelSerializer')
 

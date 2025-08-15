@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
 from access.serializers.organization import TenantBaseSerializer
@@ -68,29 +67,29 @@ class ConfigGroupModelSerializer(
 
         get_url.update({
             'child_groups': reverse(
-                'v2:_api_v2_config_group_child-list',
+                'v2:_api_configgroups_child-list',
                 request = self.context['view'].request,
                 kwargs = {
                     'parent_group': item.pk
                 }
             ),
             'configgroups': reverse(
-                'v2:_api_v2_config_group-list',
+                'v2:_api_configgroups-list',
                 request = self.context['view'].request,
             ),
             'group_software': reverse(
-                'v2:_api_v2_config_group_software-list',
+                'v2:_api_configgroupsoftware-list',
                 request=self.context['view'].request,
                 kwargs = {
                     'config_group_id': item.pk
                 }
             ),
             'organization': reverse(
-                'v2:_api_v2_organization-list',
+                'v2:_api_tenant-list',
                 request=self.context['view'].request,
             ),
             'parent': reverse(
-                'v2:_api_v2_config_group-list',
+                'v2:_api_configgroups-list',
                 request=self.context['view'].request,
             ),
             'tickets': reverse(
@@ -127,7 +126,6 @@ class ConfigGroupModelSerializer(
             'config',
             'hosts',
             'rendered_config',
-            'is_global',
             'created',
             'modified',
             '_urls',

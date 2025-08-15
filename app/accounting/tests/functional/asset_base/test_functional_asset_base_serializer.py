@@ -27,6 +27,7 @@ class MockView:
 
 
 
+@pytest.mark.model_assetbase
 class AssetBaseSerializerTestCases:
 
 
@@ -188,6 +189,7 @@ class AssetBaseSerializerInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class AssetBaseSerializerPyTest(
     AssetBaseSerializerTestCases,
 ):

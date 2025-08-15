@@ -179,12 +179,12 @@ class Team(Group, TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from access.models.team_history import TeamHistory
+        from access.models.team_history import TeamAuditHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = TeamHistory
+            history_model = TeamAuditHistory
         )
 
 

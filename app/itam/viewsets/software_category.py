@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 # THis import only exists so that the migrations can be created
 from itam.models.software_category_history import SoftwareCategoryHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.software_category import (
+from itam.serializers.software_category import (    # pylint: disable=W0611:unused-import
     SoftwareCategory,
     SoftwareCategoryModelSerializer,
     SoftwareCategoryViewSerializer
@@ -16,6 +16,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a software category',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = SoftwareCategoryViewSerializer
+            ),
             201: OpenApiResponse(description='Software created', response=SoftwareCategoryViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),
@@ -59,7 +63,6 @@ class ViewSet( ModelViewSet ):
     """ Software """
 
     filterset_fields = [
-        'is_global',
         'organization',
     ]
 

@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # THis import only exists so that the migrations can be created
 from core.models.ticket.ticket_category_history import TicketCategoryHistory    # pylint: disable=W0611:unused-import
-from core.serializers.ticket_category import (
+from core.serializers.ticket_category import (    # pylint: disable=W0611:unused-import
     TicketCategory,
     TicketCategoryModelSerializer,
     TicketCategoryViewSerializer
@@ -17,6 +17,10 @@ from core.serializers.ticket_category import (
         summary = 'Create a ticket category',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TicketCategoryViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TicketCategoryViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
         }

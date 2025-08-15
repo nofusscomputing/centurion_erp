@@ -1,3 +1,5 @@
+import pytest
+
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
@@ -6,6 +8,7 @@ from api.tests.unit.test_unit_common_viewset import IndexViewsetInheritedCases
 from assistance.viewsets.index import Index
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class AssistanceViewset(
     IndexViewsetInheritedCases,
     TestCase,

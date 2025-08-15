@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from access.models.team import Team
 
-from access.serializers.team_user import (
+from access.serializers.team_user import (    # pylint: disable=W0611:unused-import
     TeamUsers,
     TeamUserModelSerializer,
     TeamUserViewSerializer
@@ -29,7 +29,10 @@ from api.viewsets.common import ModelViewSet
             ),
         ],
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=TeamUserViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TeamUserViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TeamUserViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

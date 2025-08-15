@@ -6,17 +6,14 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
-from rest_framework.reverse import reverse
-
-from access.fields import AutoCreatedField, AutoLastModifiedField
+from access.fields import AutoLastModifiedField
 from access.models.entity import Entity
-from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
 from core.classes.badge import Badge
-from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
 from core.middleware.get_request import get_request
+from core.models.centurion import CenturionModel
 from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket.ticket_enum_values import TicketValues
 
@@ -28,7 +25,7 @@ User = django.contrib.auth.get_user_model()
 
 class TicketBase(
     SlashCommands,
-    TenancyObject,
+    CenturionModel,
 ):
 
     _after: dict
@@ -36,12 +33,22 @@ class TicketBase(
     Data after save was called
     """
 
+    _audit_enabled = False
+
     _before: dict
     """History Before
     Data before save was called
     """
 
+    _notes_enabled = False
+
+    model_notes = None
+
+    model_tag = 'ticket'
+
     save_model_history: bool = False
+
+    url_model_name = 'ticketbase'
 
     class Ticket_ExternalSystem(models.IntegerChoices): # <null|github|gitlab>
         GITHUB   = TicketValues.ExternalSystem._GITHUB_INT, TicketValues.ExternalSystem._GITHUB_VALUE
@@ -141,19 +148,9 @@ class TicketBase(
         return True
 
 
-
-    id = models.AutoField(
-        blank = False,
-        help_text = 'Ticket ID Number',
-        primary_key = True,
-        unique = True,
-        verbose_name = 'Number',
-    )
-
     external_system = models.IntegerField(
         blank = True,
         choices = Ticket_ExternalSystem,
-        default = None,
         help_text = 'External system this item derives',
         null = True,
         verbose_name = 'External System',
@@ -161,7 +158,6 @@ class TicketBase(
 
     external_ref = models.IntegerField(
         blank = True,
-        default = None,
         help_text = 'External System reference',
         null = True,
         verbose_name = 'Reference Number',
@@ -175,10 +171,6 @@ class TicketBase(
         on_delete = models.PROTECT,
         verbose_name = 'Parent Ticket'
     )
-
-    model_notes = None
-
-    is_global = None
 
     @property
     def get_ticket_type(self):
@@ -542,10 +534,6 @@ class TicketBase(
         verbose_name = 'Closed Date',
     )
 
-    created = AutoCreatedField(
-        editable = True,
-    )
-
     modified = AutoLastModifiedField()
 
 
@@ -670,11 +658,36 @@ class TicketBase(
 
             self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
 
+
         if self.date_closed is not None and not self.is_closed:
 
             self.date_closed = None
 
 
+        self._before = {}
+
+        try:
+            self._before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+        except Exception:
+            pass
+
+
+
+    def clean_fields(self, exclude = None):
+
+        if(
+            self.description != ''
+            and self.description is not None
+        ):
+
+            description = self.slash_command(self.description)
+
+            if description != self.description:
+
+                self.description = description
+
+
+        return super().clean_fields(exclude = exclude)
 
 
 
@@ -761,7 +774,6 @@ class TicketBase(
 
 
 
-
     def get_related_field_name(self) -> str:
 
         meta = getattr(self, '_meta')
@@ -780,7 +792,6 @@ class TicketBase(
                 ):
 
                     return related_object.name
-                    break
 
 
         return ''
@@ -821,57 +832,31 @@ class TicketBase(
 
 
 
+    def get_url_kwargs(self, many = False) -> dict:
+        """Get URL Kwargs
 
-    def get_url( self, request = None ) -> str:
+        Fecth the kwargs required for building a models URL using the reverse
+        method.
 
-        ticket_type = self.ticket_type
+        **Note:** It's advisable that if you override this function, that you
+        call it's super, so as not to duplicate code. That way each override
+        builds up[on the parent `get_url_kwargs` function.
 
-        kwargs = self.get_url_kwargs()
+        Returns:
+            dict: Kwargs required for reverse function to build a models URL.
+        """
 
-        if ticket_type == 'project_task':
+        kwargs = super().get_url_kwargs( many = many )
 
-            kwargs.update({
-                'project_id': self.project.id
-            })
+        if self._is_submodel:
 
-
-        if request:
-
-            return reverse(f"v2:_api_v2_ticket_sub-detail", request=request, kwargs = kwargs )
-
-        return reverse(f"v2:_api_v2_ticket_sub-detail", kwargs = kwargs )
-
-
-    def get_url_kwargs(self) -> dict:
-
-        model = self.get_related_model()
-
-        # if len(self._meta.parents) == 0 and model is None:
-
-        #     return {
-        #         'pk': self.id
-        #     }
-
-        if model is None:
-
-            model = self
-
-        kwargs = {
-            'ticket_model': self.ticket_type,
-        }
-
-        if model.pk:
+            del kwargs['model_name']
 
             kwargs.update({
-                'pk': model.id
+                'ticket_type': str(self._meta.sub_model_type),
             })
 
         return kwargs
-
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
 
 
 
@@ -891,12 +876,14 @@ class TicketBase(
         ]
         changed_fields: list = []
 
+        fields = [ value.name for value in self._meta.fields ]
+
         for field, value in self._before.items():
 
             if (
                 self._before[field] != self._after[field]
                 and field not in excluded_fields
-                and field in self.fields
+                and field in fields
             ):
 
                 changed_fields = changed_fields + [ field ]
@@ -1090,13 +1077,13 @@ class TicketBase(
 
                     comment_user = None
 
-                comment = TicketCommentAction.objects.create(
-                    organization = self.organization,
-                    ticket = self,
-                    comment_type = TicketCommentAction._meta.sub_model_type,
-                    body = comment_text,
-                    # user = user
-                )
+                # comment = TicketCommentAction.objects.create(
+                #     organization = self.organization,
+                #     ticket = self,
+                #     comment_type = TicketCommentAction._meta.sub_model_type,
+                #     body = comment_text,
+                #     # user = user
+                # )
 
                 # comment.save()
                 a = 'b'
@@ -1123,26 +1110,6 @@ class TicketBase(
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
-
-        if(
-            self.description != ''
-            and self.description is not None
-        ):
-
-            description = self.slash_command(self.description)
-
-            if description != self.description:
-
-                self.description = description
-
-
-        self._before = {}
-
-        try:
-            self._before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
-        except Exception:
-            pass
-
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
         self._after = self.__dict__.copy()
@@ -1150,4 +1117,3 @@ class TicketBase(
         if self._before:
 
             self.create_action_comment()
-

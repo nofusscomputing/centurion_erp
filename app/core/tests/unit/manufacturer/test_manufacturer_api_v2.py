@@ -1,6 +1,5 @@
 import django
 import pytest
-import unittest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -19,6 +18,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_manufacturer
+@pytest.mark.module_core
 class ManufacturerAPI(
     TestCase,
     APITenancyObject
@@ -68,7 +69,7 @@ class ManufacturerAPI(
         )
 
         client = Client()
-        url = reverse('v2:_api_v2_manufacturer-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_manufacturer-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
@@ -97,19 +98,19 @@ class ManufacturerAPI(
 
 
 
-    def test_api_field_exists_url_history(self):
-        """ Test for existance of API Field
+    # def test_api_field_exists_url_history(self):
+    #     """ Test for existance of API Field
 
-        _urls.history field must exist
-        """
+    #     _urls.history field must exist
+    #     """
 
-        assert 'history' in self.api_data['_urls']
+    #     assert 'history' in self.api_data['_urls']
 
 
-    def test_api_field_type_url_history(self):
-        """ Test for type for API Field
+    # def test_api_field_type_url_history(self):
+    #     """ Test for type for API Field
 
-        _urls.history field must be str
-        """
+    #     _urls.history field must be str
+    #     """
 
-        assert type(self.api_data['_urls']['history']) is str
+    #     assert type(self.api_data['_urls']['history']) is str

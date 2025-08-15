@@ -1,14 +1,19 @@
 from django.contrib.auth.models import Permission
 from django.db import models
 
-from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.tenancy import TenancyObject
+from access.fields import AutoLastModifiedField
+
+from core.models.centurion import CenturionModel
 
 
 
 class Role(
-    TenancyObject
+    CenturionModel
 ):
+
+    documentation = ''
+
+    model_tag = 'role'
 
 
     class Meta:
@@ -28,14 +33,6 @@ class Role(
         verbose_name_plural = 'Roles'
 
 
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Primary key of the entry',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
     name = models.CharField(
         blank = False,
         help_text = 'Name of this role',
@@ -53,20 +50,14 @@ class Role(
         verbose_name = 'Permissions'
     )
 
-    created = AutoCreatedField()
-
     modified = AutoLastModifiedField()
-
-    is_global = None
 
 
 
     def __str__(self) -> str:
-        
+
         return str( self.organization ) + ' / ' + self.name
 
-
-    documentation = ''
 
     page_layout: dict = [
         {
@@ -130,14 +121,29 @@ class Role(
     ]
 
 
-    def save_history(self, before: dict, after: dict) -> bool:
+    _permissions: list[ Permission ] = None
 
-        from access.models.role_history import RoleHistory
+    _permissions_int: list[ int ] = None
 
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = RoleHistory
-        )
+    def get_permissions(self, as_int_list = False ):
 
-        return history
+        if self._permissions is None:
+
+            permissions = []
+            permissions_int = []
+
+            for permission in self.permissions:    # pylint: disable=E1133:not-an-iterable
+
+                if permission in _permissions:
+                    continue
+
+                permissions += [ permission ]
+                permissions_int += [ permission.id ]
+
+            self._permissions = permissions
+            self._permissions_int = permissions_int
+
+        if as_int_list:
+            return self._permissions_int
+
+        return self._permissions_int

@@ -9,16 +9,11 @@ from access.tests.unit.entity.test_unit_entity_model import (
 
 
 
+@pytest.mark.model_person
 class PersonModelTestCases(
     EntityModelInheritedCases,
 ):
 
-    kwargs_create_item: dict = {
-        'f_name': 'Ian',
-        'm_name': 'Peter',
-        'l_name': 'Funny',
-        'dob': '2025-04-08',
-    }
 
     sub_model_type = 'person'
     """Sub Model Type
@@ -27,64 +22,66 @@ class PersonModelTestCases(
     """
 
 
-    parameterized_fields: dict = {
-        "f_name": {
-            'field_type': models.fields.CharField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "m_name": {
-            'field_type': models.fields.CharField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "l_name": {
-            'field_type': models.fields.CharField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-        "dob": {
-            'field_type': models.fields.DateField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
-        },
-    }
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_is_submodel': {
+                'value': True
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'entity'
+            }
+        }
+
+
+    @property
+    def parameterized_fields(self):
+
+        return {
+            'f_name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 64,
+                'null': False,
+                'unique': False,
+            },
+            'm_name': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 100,
+                'null': True,
+                'unique': False,
+            },
+            'l_name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 64,
+                'null': False,
+                'unique': False,
+            },
+            'dob': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateField,
+                'null': True,
+                'unique': False,
+            },
+        }
 
 
 
-    def test_class_inherits_person(self):
+    def test_class_inherits_person(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, Person)
-
-
-    def test_attribute_value_history_app_label(self):
-        """Attribute Type
-
-        history_app_label has been set, override this test case with the value
-        of attribute `history_app_label`
-        """
-
-        assert self.model.history_app_label == 'access'
-
-
-    def test_attribute_value_history_model_name(self):
-        """Attribute Type
-
-        history_model_name has been set, override this test case with the value
-        of attribute `history_model_name`
-        """
-
-        assert self.model.history_model_name == 'person'
-
-
-
-    def test_function_value_get_url(self):
-
-        assert self.item.get_url() == '/api/v2/access/entity/person/' + str(self.item.id)
+        assert issubclass(model, Person)
 
 
 
@@ -95,28 +92,20 @@ class PersonModelInheritedCases(
 
     Test Cases for Ticket models that inherit from model Entity
     """
-
-    kwargs_create_item: dict = {}
-
-    model = None
-
-    sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
+    pass
 
 
 
+@pytest.mark.module_access
 class PersonModelPyTest(
     PersonModelTestCases,
 ):
 
 
-    def test_function_value_get_related_model(self):
+    def test_function_value_get_related_model(self, model_instance):
         """Function test
 
         Confirm function `get_related_model` is None for base model
         """
 
-        assert self.item.get_related_model() is None
+        assert model_instance.get_related_model() is None

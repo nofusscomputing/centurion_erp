@@ -1,41 +1,99 @@
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
+import pytest
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from config_management.viewsets.config_group import ViewSet
+from config_management.viewsets.config_group import (
+    ConfigGroups,
+    ViewSet,
+)
 
 
 
-class ConfigGroupsViewsetList(
+@pytest.mark.model_configgroups
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_v2_config_group'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'organization',
+                    'parent'
+                ]
+            },
+            'model': {
+                'value': ConfigGroups
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'name',
+                    'config'
+                ]
+            },
+            'view_description': {
+                'value': 'Configuration Groups'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
 
-        client.force_login(self.view_user)
+        qs = mocker.spy(viewset_mock_request.model, 'objects')
 
-        self.http_options_response_list = client.options(url)
+        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
+
+        assert len(qs.method_calls) == 1       # one call to .all()
+        assert len(qs.mock_calls) == 3         # calls = .all(), all().filter()
+
+        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
+
+        assert len(qs.method_calls) == 1
+        assert len(qs.mock_calls) == 3
+
+
+class KnowledgeBaseViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_config_management
+class KnowledgeBaseViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

@@ -1,9 +1,6 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
-
-from app.serializers.user import UserBaseSerializer
 
 from api.serializers import common
 
@@ -20,7 +17,7 @@ class TicketCommentCategoryBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_ticket_comment_category-detail", format="html"
+        view_name="v2:_api_ticketcommentcategory-detail", format="html"
     )
 
 
@@ -63,7 +60,6 @@ class TicketCommentCategoryModelSerializer(
             'parent',
             'name',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

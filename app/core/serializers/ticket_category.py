@@ -1,4 +1,3 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
@@ -19,7 +18,7 @@ class TicketCategoryBaseSerializer(serializers.ModelSerializer):
 
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_ticket_category-detail", format="html"
+        view_name="v2:_api_ticketcategory-detail", format="html"
     )
 
     class Meta:

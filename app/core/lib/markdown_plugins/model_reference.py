@@ -2,7 +2,6 @@
 import re
 
 from django.template import Context, Template
-from django.template.loader import render_to_string
 from django.urls import reverse
 
 from markdown_it import MarkdownIt

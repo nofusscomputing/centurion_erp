@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from assistance.serializers.model_knowledge_base_article import (
+from assistance.serializers.model_knowledge_base_article import (    # pylint: disable=W0611:unused-import
     all_models,
     ModelKnowledgeBaseArticle,
     ModelKnowledgeBaseArticleModelSerializer,
@@ -20,6 +20,10 @@ from django.apps import apps
         summary = 'Create a knowledge base article',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ModelKnowledgeBaseArticleViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ModelKnowledgeBaseArticleViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
         }

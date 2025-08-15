@@ -1,12 +1,10 @@
-from rest_framework.fields import empty
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from core.serializers.ticket_depreciated import Ticket, TicketBaseSerializer
+from core.serializers.ticket_depreciated import TicketBaseSerializer
 
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field

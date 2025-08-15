@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
 from access.serializers.organization import TenantBaseSerializer
@@ -7,11 +6,10 @@ from access.serializers.organization import TenantBaseSerializer
 from api.serializers import common
 
 from core import exceptions as centurion_exception
-from core.fields.badge import Badge, BadgeField
 
 from itam.models.device import Device, DeviceOperatingSystem
 from itam.serializers.device import DeviceBaseSerializer
-from itam.serializers.operating_system_version import OperatingSystem, OperatingSystemVersionBaseSerializer
+from itam.serializers.operating_system_version import OperatingSystemVersionBaseSerializer
 
 
 
@@ -62,7 +60,7 @@ class DeviceOperatingSystemModelSerializer(
 
         get_url = super().get_url( item = item )
 
-        del get_url['history']
+        # del get_url['history']
 
         del get_url['knowledge_base']
 

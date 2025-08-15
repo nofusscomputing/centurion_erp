@@ -1,10 +1,11 @@
+import pytest
 from django.contrib.auth.models import GroupManager
 from django.test import TestCase
 
 
 from access.models.team import Team
 
-from app.tests.unit.test_unit_models import (
+from centurion.tests.unit.test_unit_models import (
     TenancyObjectInheritedCases
 )
 
@@ -19,7 +20,6 @@ class ModelTestCases(
     kwargs_item_create = {
         'name': 'teamone'
     }
-
 
 
 class TeamModelTest(

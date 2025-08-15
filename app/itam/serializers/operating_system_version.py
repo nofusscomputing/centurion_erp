@@ -1,12 +1,8 @@
-from rest_framework.reverse import reverse
-
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-
-from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.serializers.operating_system import OperatingSystemBaseSerializer
@@ -70,7 +66,6 @@ class OperatingSystemVersionModelSerializer(
             'name',
             'operating_system',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

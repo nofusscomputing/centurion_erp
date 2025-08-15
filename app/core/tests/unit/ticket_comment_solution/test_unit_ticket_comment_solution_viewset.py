@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from core.models.ticket_comment_solution import TicketCommentSolution
@@ -5,6 +7,7 @@ from core.tests.unit.ticket_comment_base.test_unit_ticket_comment_base_viewset i
 
 
 
+@pytest.mark.model_ticketcommentsolution
 class TicketCommentSolutionViewsetTestCases(
     TicketCommentBaseViewsetInheritedCases,
 ):
@@ -32,6 +35,7 @@ class TicketCommentSolutionViewsetInheritedCases(
 
 
 
+@pytest.mark.module_core
 class TicketCommentSolutionViewsetTest(
     TicketCommentSolutionViewsetTestCases,
     TestCase,

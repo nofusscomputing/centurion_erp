@@ -10,6 +10,10 @@ class Person(
     Entity
 ):
 
+    _is_submodel = True
+
+    documentation = ''
+
 
     class Meta:
 
@@ -63,10 +67,6 @@ class Person(
 
         return self.f_name + ' ' + self.l_name + f' (DOB: {self.dob})'
 
-    documentation = ''
-
-    history_model_name = 'person'
-
     page_layout: dict = []
 
     table_fields: list = [
@@ -102,7 +102,7 @@ class Person(
 
 
             for entry in duplicate_entry:
-                    
+
                 if(
                     entry.f_name == self.f_name
                     and entry.m_name == self.m_name
@@ -112,8 +112,8 @@ class Person(
 
                     raise ValidationError(
                         detail = {
-                            'dob': f'Person {self.f_name} {self.l_name} already exists with this birthday {entry.dob}'
+                            'dob': f'Person {self.f_name} {self.l_name}' \
+                                f'already exists with this birthday {entry.dob}'
                         },
                         code = 'duplicate_person_on_dob'
                     )
-

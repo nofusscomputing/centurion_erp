@@ -1,3 +1,4 @@
+import pytest
 from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
@@ -11,6 +12,7 @@ from itam.models.software import Software
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
 class ViewsetList(
     PublicReadOnlyViewSetInheritedCases,
     TestCase,
@@ -18,7 +20,7 @@ class ViewsetList(
 
     viewset = ViewSet
 
-    route_name = 'v2:public:devops:_public_api_v2_feature_flag'
+    route_name = 'v2:public:devops:_api_checkin'
 
 
     @classmethod

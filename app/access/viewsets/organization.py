@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 # THis import only exists so that the migrations can be created
 from access.models.organization_history import OrganizationHistory    # pylint: disable=W0611:unused-import
-from access.serializers.organization import (
+from access.serializers.organization import (    # pylint: disable=W0611:unused-import
     Tenant,
     TenantModelSerializer,
     TenantViewSerializer
@@ -18,7 +18,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create an orgnaization',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=OrganizationViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TenantViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TenantViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

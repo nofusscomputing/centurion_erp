@@ -1,446 +1,354 @@
 import datetime
-import django
 import pytest
 
-from django.db.models.query import QuerySet
 from django.db import models
-from django.test import TestCase
+from django.db.models.query import QuerySet
 
-from access.models.entity import Entity
-
-from app.tests.unit.test_unit_models import (
-    PyTestTenancyObjectInheritedCases,
+from core import exceptions as centurion_exceptions
+from core.fields.badge import Badge
+from core.models.ticket_base import TicketBase
+# from core.models.ticket_comment_base import TicketCommentBase
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
 
-from core import exceptions as centurion_exceptions
-from core.classes.badge import Badge
-from core.lib.feature_not_used import FeatureNotUsed
-from core.models.ticket.ticket_category import TicketCategory
-from core.models.ticket_base import TicketBase
-from core.models.ticket_comment_base import TicketCommentBase
 
-from project_management.models.project_milestone import Project, ProjectMilestone
-
-User = django.contrib.auth.get_user_model()
-
-
-
+@pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
-    PyTestTenancyObjectInheritedCases,
+    CenturionAbstractModelInheritedCases
 ):
 
-    base_model = TicketBase
 
-    kwargs_create_item: dict = {
-        'title': 'ticket title',
-        'description': 'the ticket description',
-    }
+    @property
+    def parameterized_class_attributes(self):
 
-    sub_model_type = 'ticket'
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
-    """
-
-
-    parameterized_fields: dict = {
-        "model_notes": {
-            'field_type': None,
-            'field_parameter_verbose_name_type': None
-        },
-        "is_global": {
-            'field_type': None,
-            'field_parameter_default_exists': None,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': None
-        },
-        "external_system": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': str,
-        },
-        "external_ref": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': None,
-            'field_parameter_verbose_name_type': str
-        },
-        "parent_ticket": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "ticket_type": {
-            'field_type': models.fields.CharField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': 'ticket',
-            'field_parameter_verbose_name_type': str
-        },
-        "status": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': TicketBase.TicketStatus.NEW,
-            'field_parameter_verbose_name_type': str
-        },
-        "category": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "title": {
-            'field_type': models.fields.CharField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "description": {
-            'field_type': models.fields.TextField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "private": {
-            'field_type': models.fields.BooleanField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "project": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "milestone": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "urgency": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': TicketBase.TicketUrgency.VERY_LOW,
-            'field_parameter_verbose_name_type': str
-        },
-        "impact": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': TicketBase.TicketImpact.VERY_LOW,
-            'field_parameter_verbose_name_type': str
-        },
-        "priority": {
-            'field_type': models.fields.IntegerField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': TicketBase.TicketPriority.VERY_LOW,
-            'field_parameter_verbose_name_type': str
-        },
-        "opened_by": {
-            'field_type': models.ForeignKey,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "subscribed_to": {
-            'field_type': models.ManyToManyField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "assigned_to": {
-            'field_type': models.ManyToManyField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "planned_start_date": {
-            'field_type': models.fields.DateTimeField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "planned_finish_date": {
-            'field_type': models.fields.DateTimeField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "real_start_date": {
-            'field_type': models.fields.DateTimeField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "real_finish_date": {
-            'field_type': models.fields.DateTimeField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "is_deleted": {
-            'field_type': models.fields.BooleanField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "is_solved": {
-            'field_type': models.fields.BooleanField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "date_solved": {
-            'field_type': models.fields.DateTimeField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "is_closed": {
-            'field_type': models.fields.BooleanField,
-            'field_parameter_default_exists': True,
-            'field_parameter_default_value': False,
-            'field_parameter_verbose_name_type': str
-        },
-        "date_closed": {
-            'field_type': models.fields.DateTimeField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str
-        },
-    }
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': str,
+                'value': 'ticket'
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticketbase'
+            },
+        }
 
 
+    @property
+    def parameterized_model_fields(self):
 
-    @pytest.fixture( scope = 'class')
-    def setup_pre(self,
-        request,
-        model,
-        django_db_blocker,
-        organization_one,
-        organization_two
-    ):
-
-        with django_db_blocker.unblock():
-
-            request.cls.organization = organization_one
-
-            request.cls.different_organization = organization_two
-
-            kwargs_create_item = {}
-
-            for base in reversed(request.cls.__mro__):
-
-                if hasattr(base, 'kwargs_create_item'):
-
-                    if base.kwargs_create_item is None:
-
-                        continue
-
-                    kwargs_create_item.update(**base.kwargs_create_item)
-
-
-            if len(kwargs_create_item) > 0:
-
-                request.cls.kwargs_create_item = kwargs_create_item
-
-
-            if 'organization' not in request.cls.kwargs_create_item:
-
-                request.cls.kwargs_create_item.update({
-                    'organization': request.cls.organization
-                })
-
-
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view", password="password")
-
-        yield
-
-        with django_db_blocker.unblock():
-
-            request.cls.view_user.delete()
-
-            del request.cls.kwargs_create_item
-
-
-    @pytest.fixture( scope = 'class')
-    def setup_model(self, request, django_db_blocker,
-        model,
-    ):
-
-        with django_db_blocker.unblock():
-
-            request.cls.entity_user = Entity.objects.create(
-                organization = request.cls.organization,
-                model_notes = 'asdas'
-            )
-
-            project = Project.objects.create(
-                organization = request.cls.organization,
-                name = 'project'
-            )
-
-            request.cls.project_one = project
-
-            request.cls.project_two = Project.objects.create(
-                organization = request.cls.organization,
-                name = 'project_two'
-            )
-
-            parent_ticket = request.cls.model.objects.create(
-                organization = request.cls.organization,
-                title = 'parent ticket',
-                description = 'bla bla',
-                opened_by = request.cls.view_user,
-            )
-
-            project_milestone = ProjectMilestone.objects.create(
-                organization = request.cls.organization,
-                name = 'project milestone one',
-                project = project
-            )
-
-            request.cls.milestone_two = ProjectMilestone.objects.create(
-                organization = request.cls.organization,
-                name = 'project milestone two',
-                project = request.cls.project_two
-            )
-
-            request.cls.kwargs_create_item.update({
-                'category': TicketCategory.objects.create(
-                organization = request.cls.organization,
-                    name = 'a category'
-                ),
-                'opened_by': request.cls.view_user,
-                'project': project,
-                'milestone': project_milestone,
-                'parent_ticket': parent_ticket,
-                'external_system': int(request.cls.model.Ticket_ExternalSystem.CUSTOM_1),
-                'impact': int(request.cls.model.TicketImpact.MEDIUM),
-                'priority': int(request.cls.model.TicketPriority.HIGH),
-            })
-
-
-        yield
-
-        with django_db_blocker.unblock():
-
-            request.cls.entity_user.delete()
-
-            for comment in parent_ticket.ticketcommentbase_set.all():
-
-                comment.delete()
-
-            parent_ticket.delete()
-
-            project_milestone.delete()
-
-            request.cls.milestone_two.delete()
-
-            request.cls.project_two.delete()
-
-            project.delete()
-
-            request.cls.kwargs_create_item['category'].delete()
-
-
-    @pytest.fixture( scope = 'class')
-    def post_model_create(self, request, django_db_blocker):
-
-        with django_db_blocker.unblock():
-
-            request.cls.item.assigned_to.add(request.cls.entity_user.id)
-            request.cls.item.subscribed_to.add(request.cls.entity_user.id)
-
-
-    @pytest.fixture( scope = 'class', autouse = True)
-    def class_setup(self,
-        setup_pre,
-        setup_model,
-        create_model,
-        post_model_create,
-    ):
-
-        pass
+        return {
+            "model_notes": {
+                'blank': models.fields.NOT_PROVIDED,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.NOT_PROVIDED,
+                'null': models.fields.NOT_PROVIDED,
+                'unique': models.fields.NOT_PROVIDED,
+            },
+            "external_system": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.IntegerField,
+                'null': True,
+                'unique': False,
+            },
+            "external_ref": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.IntegerField,
+                'null': True,
+                'unique': False,
+            },
+            "parent_ticket": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "ticket_type": {
+                'blank': True,
+                'default': 'ticket',
+                'field_type': models.fields.CharField,
+                'max_length': 50,
+                'null': False,
+                'unique': False,
+            },
+            "status": {
+                'blank': False,
+                'default': TicketBase.TicketStatus.NEW,
+                'field_type': models.fields.IntegerField,
+                'null': False,
+                'unique': False,
+            },
+            "category": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "title": {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.CharField,
+                'max_length': 50,
+                'null': False,
+                'unique': True,
+            },
+            "description": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.TextField,
+                'null': True,
+                'unique': False,
+            },
+            "private": {
+                'blank': False,
+                'default': False,
+                'field_type': models.fields.BooleanField,
+                'null': False,
+                'unique': False,
+            },
+            "project": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "milestone": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "urgency": {
+                'blank': True,
+                'default': TicketBase.TicketUrgency.VERY_LOW,
+                'field_type': models.fields.IntegerField,
+                'null': True,
+                'unique': False,
+            },
+            "impact": {
+                'blank': True,
+                'default': TicketBase.TicketImpact.VERY_LOW,
+                'field_type': models.fields.IntegerField,
+                'null': True,
+                'unique': False,
+            },
+            "priority": {
+                'blank': True,
+                'default': TicketBase.TicketPriority.VERY_LOW,
+                'field_type': models.fields.IntegerField,
+                'null': True,
+                'unique': False,
+            },
+            "opened_by": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': True,
+                'unique': False,
+            },
+            "subscribed_to": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ManyToManyField,
+                'null': False,
+                'unique': False,
+            },
+            "assigned_to": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ManyToManyField,
+                'null': False,
+                'unique': False,
+            },
+            "planned_start_date": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.DateTimeField,
+                'null': True,
+                'unique': False,
+            },
+            "planned_finish_date": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.DateTimeField,
+                'null': True,
+                'unique': False,
+            },
+            "real_start_date": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.DateTimeField,
+                'null': True,
+                'unique': False,
+            },
+            "real_finish_date": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.DateTimeField,
+                'null': True,
+                'unique': False,
+            },
+            "is_deleted": {
+                'blank': True,
+                'default': False,
+                'field_type': models.fields.BooleanField,
+                'null': False,
+                'unique': False,
+            },
+            "is_solved": {
+                'blank': True,
+                'default': False,
+                'field_type': models.fields.BooleanField,
+                'null': False,
+                'unique': False,
+            },
+            "date_solved": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.DateTimeField,
+                'null': True,
+                'unique': False,
+            },
+            "is_closed": {
+                'blank': True,
+                'default': False,
+                'field_type': models.fields.BooleanField,
+                'null': False,
+                'unique': False,
+            },
+            "date_closed": {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.fields.DateTimeField,
+                'null': True,
+                'unique': False,
+            }
+        }
 
 
 
-    def test_class_inherits_ticketbase(self):
+    def test_class_inherits_ticketbase(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, TicketBase)
+        assert issubclass(model, TicketBase)
 
 
 
-    def test_milestone_different_project_raises_validationerror(self):
+    def test_milestone_different_project_raises_validationerror(self,
+        model, model_kwargs,
+        model_project, kwargs_project,
+        model_projectmilestone, kwargs_projectmilestone,
+    ):
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs.copy()
         kwargs['title'] = kwargs['title'] + 'a'
+        kwargs['external_ref'] = 123
 
-        ticket = self.model.objects.create( **kwargs )
+        ticket = model.objects.create( **kwargs )
+
+        kwargs_proj = kwargs_project.copy()
+        team_members = kwargs_proj['team_members']
+        del kwargs_proj['team_members']
+        del kwargs_proj['code']
+
+        project_one = model_project.objects.create( **kwargs_proj )
+        project_one.team_members.add( team_members[0] )
+
+
+        kwargs = kwargs_projectmilestone
+        kwargs['project'] = project_one
+        milestone_one = model_projectmilestone.objects.create( **kwargs )
+
+        kwargs = kwargs_project
+        kwargs['name'] = 'project_two'
+        team_members = kwargs['team_members']
+        del kwargs['team_members']
+        del kwargs['code']
+
+        project_two = model_project.objects.create( **kwargs )
+        project_two.team_members.add( team_members[0] )
+
+        kwargs = kwargs_projectmilestone
+        kwargs['name'] = 'two'
+        kwargs['project'] = project_two
+        milestone_two = model_projectmilestone.objects.create( **kwargs )
+
+
 
         with pytest.raises(centurion_exceptions.ValidationError) as err:
 
-            ticket.project = self.project_one
-            ticket.milestone = self.milestone_two
+            ticket.project = project_one
+            ticket.milestone = milestone_two
             ticket.save()
 
         assert err.value.get_codes()['milestone'] == 'milestone_different_project'
 
 
-
-    def test_attribute_type_get_url_kwargs_notes(self):
-        """Test attribute
-
-        This test cases is a overwrite of a test with the same name. This Model
-        and it's children must not use the notes model as it has been deemed as
-        not required by design.
-
-        Attribute `get_url_kwargs_notes` must be FeatureNotUsed
-        """
-
-        assert self.item.get_url_kwargs_notes() is FeatureNotUsed
-
-
-    def test_meta_attribute_exists_sub_model_type(self):
+    def test_meta_attribute_exists_sub_model_type(self, model):
         """Test for existance of field in `<model>.Meta`
 
         Attribute `Meta.sub_model_type` must be defined in `Meta` class.
         """
 
-        assert 'sub_model_type' in self.model._meta.original_attrs
+        assert 'sub_model_type' in model._meta.original_attrs
 
 
-    def test_meta_attribute_type_sub_model_type(self):
+    def test_meta_attribute_type_sub_model_type(self, model):
         """Test for existance of field in `<model>.Meta`
 
         Attribute `Meta.sub_model_type` must be of type str.
         """
 
-        assert type(self.model._meta.original_attrs['sub_model_type']) is str
+        assert type(model._meta.original_attrs['sub_model_type']) is str
 
 
-    def test_meta_attribute_value_sub_model_type(self):
+    def test_meta_attribute_value_sub_model_type(self, model):
         """Test for existance of field in `<model>.Meta`
 
         Attribute `Meta.sub_model_type` must be the correct value (self.sub_model_type).
         """
 
-        assert self.model._meta.original_attrs['sub_model_type'] == self.sub_model_type
+        assert model._meta.original_attrs['sub_model_type'] == self.sub_model_type
 
 
-    def test_function_validate_not_null_is_true(self):
+    def test_function_validate_not_null_is_true(self, model):
         """Function test
 
         Ensure that function `validate_not_null` returns true when the value is
         not null.
         """
 
-        assert self.model.validate_not_null(55) == True
+        assert model.validate_not_null(55) == True
 
 
-    def test_function_validate_not_null_is_false(self):
+    def test_function_validate_not_null_is_false(self, model):
         """Function test
 
         Ensure that function `validate_not_null` returns false when the value
         is null.
         """
 
-        assert self.model.validate_not_null(None) == False
+        assert model.validate_not_null(None) == False
 
 
-    def test_function_get_ticket_type(self):
+
+    def test_function_get_ticket_type(self, model):
         """Function test
 
         As this model is not intended to be used alone.
@@ -449,122 +357,129 @@ class TicketBaseModelTestCases(
         `TicketBase`
         """
 
-        assert self.model().get_ticket_type == None
+        assert model().get_ticket_type == None
 
 
-    def test_function_get_ticket_type_choices(self):
+    def test_function_get_ticket_type_choices(self, model):
         """Function test
 
         Ensure that function `get_ticket_type_choices` returns a tuple of
         the ticket type ( `Model.Meta.sub_ticket_type`, `Model.Meta.verbose_name` )
         """
 
-        assert (self.model()._meta.sub_model_type, self.model()._meta.verbose_name) in self.model.get_ticket_type_choices()
+        assert (model()._meta.sub_model_type, model()._meta.verbose_name) in model.get_ticket_type_choices()
 
 
-    def test_function_status_badge_type(self):
+    def test_function_status_badge_type(self, model):
         """Function test
 
         Ensure that function `status_badge` returns a value of type `Badge`
         """
 
-        assert type(self.model().status_badge) is Badge
+        assert type(model().status_badge) is Badge
 
 
-    def test_function_ticket_duration_type(self):
+    def test_function_ticket_duration_type(self, model):
         """Function test
 
         Ensure that function `ticket_duration` returns a value of type `int`
         """
 
-        assert type(self.model().ticket_duration) is int
+        assert type(model().ticket_duration) is int
 
 
-    def test_function_ticket_duration_value_not_none(self):
+    def test_function_ticket_duration_value_not_none(self, model):
         """Function test
 
         Ensure that function `ticket_duration` returns a value that is not None
         """
 
-        assert self.model().ticket_duration is not None
+        assert model().ticket_duration is not None
 
 
-    def test_function_ticket_estimation_type(self):
+    def test_function_ticket_estimation_type(self, model):
         """Function test
 
         Ensure that function `ticket_estimation` returns a value of type `int`
         """
 
-        assert type(self.model().ticket_estimation) is int
+        assert type(model().ticket_estimation) is int
 
 
-    def test_function_ticket_estimation_value_not_none(self):
+    def test_function_ticket_estimation_value_not_none(self, model):
         """Function test
 
         Ensure that function `ticket_estimation` returns a value that is not None
         """
 
-        assert self.model().ticket_estimation is not None
+        assert model().ticket_estimation is not None
 
 
     @pytest.mark.skip( reason = 'write test')
-    def test_function_get_milestone_choices(self):
+    def test_function_get_milestone_choices(self, model):
         """Function test
 
         Ensure that function `get_ticket_type_choices` returns a tuple of
         each projects milestones
         """
 
-        assert ('project_name', (self.model()._meta.sub_model_type, self.model()._meta.verbose_name)) in self.model.get_milestone_choices()
+        assert ('project_name', (model()._meta.sub_model_type, model()._meta.verbose_name)) in model.get_milestone_choices()
 
 
-    def test_function_urgency_badge_type(self):
+    def test_function_urgency_badge_type(self, model):
         """Function test
 
         Ensure that function `urgency_badge` returns a value of type `Badge`
         """
 
-        assert type(self.model().urgency_badge) is Badge
+        assert type(model().urgency_badge) is Badge
 
 
-    def test_function_impact_badge_type(self):
+    def test_function_impact_badge_type(self, model):
         """Function test
 
         Ensure that function `impact_badge` returns a value of type `Badge`
         """
 
-        assert type(self.model().impact_badge) is Badge
+        assert type(model().impact_badge) is Badge
 
 
-    def test_function_priority_badge_type(self):
+    def test_function_priority_badge_type(self, model):
         """Function test
 
         Ensure that function `priority_badge` returns a value of type `Badge`
         """
 
-        assert type(self.model().priority_badge) is Badge
+        assert type(model().priority_badge) is Badge
 
 
-    def test_function_get_can_close_type(self):
+    def test_function_get_can_close_type(self, model):
         """Function test
 
         Ensure that function `get_can_close` returns a value of type `bool`
         """
 
-        assert type(self.model().get_can_close()) is bool
+        assert type(model().get_can_close()) is bool
 
 
 
     @pytest.fixture( scope = 'function' )
-    def ticket(self, db, model):
+    def ticket(self, db, model, model_kwargs):
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs.copy()
 
         kwargs['title'] = 'can close ticket'
 
-        ticket = self.model.objects.create(
+        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+        random_str = str(random_str).replace(
+                ' ', '').replace(':', '').replace('+', '').replace('.', '')
+
+        kwargs['external_ref'] = int(random_str[len(random_str)-9:])
+        kwargs['status'] = model._meta.get_field('status').default
+
+
+        ticket = model.objects.create(
             **kwargs,
-            status = self.model._meta.get_field('status').default,
         )
 
         yield ticket
@@ -579,12 +494,17 @@ class TicketBaseModelTestCases(
 
 
     @pytest.fixture( scope = 'function' )
-    def ticket_comment(self, db, ticket):
+    def ticket_comment(self, db, ticket,
+        model_ticketcommentbase, kwargs_ticketcommentbase
+    ):
 
-        comment = TicketCommentBase.objects.create(
+        kwargs = kwargs_ticketcommentbase.copy()
+        del kwargs['ticket']
+
+
+        comment = model_ticketcommentbase.objects.create(
+            **kwargs,
             ticket = ticket,
-            body = 'comment body',
-            comment_type = TicketCommentBase._meta.sub_model_type,
         )
 
         yield comment
@@ -700,13 +620,13 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_function_get_can_resolve_type(self):
+    def test_function_get_can_resolve_type(self, model):
         """Function test
 
         Ensure that function `get_can_resolve` returns a value of type `bool`
         """
 
-        assert type(self.model().get_can_resolve()) is bool
+        assert type(model().get_can_resolve()) is bool
 
 
 
@@ -783,49 +703,49 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_function_get_can_resolve_value_true(self):
+    def test_function_get_can_resolve_value_true(self, model):
         """Function test
 
         Ensure that function `get_can_resolve` returns a value of `True` when
         the ticket can be closed
         """
 
-        assert self.model().get_can_resolve() == True
+        assert model().get_can_resolve() == True
 
 
-    def test_function_get_comments_type(self):
+    def test_function_get_comments_type(self, model):
         """Function test
 
         Ensure that function `get_comments` returns a value of type QuerySet
         """
 
-        assert type(self.model().get_comments()) is QuerySet
+        assert type(model().get_comments()) is QuerySet
 
 
 
-    def test_function_get_related_field_name_type(self):
+    def test_function_get_related_field_name_type(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_field_name` returns a value that
         is of type `str`.
         """
 
-        ticket = self.base_model.objects.get(
-            pk = self.item.pk
+        ticket = model.objects.get(
+            pk = ticket.pk
         )
 
         assert type(ticket.get_related_field_name()) is str
 
 
-    def test_function_get_related_field_name_value(self):
+    def test_function_get_related_field_name_value(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_field_name` returns a string that is
         model the attribute the model exists under.
         """
 
-        ticket = self.base_model.objects.get(
-            pk = self.item.pk
+        ticket = model.objects.get(
+            pk = ticket.pk
         )
 
         assert(
@@ -834,33 +754,33 @@ class TicketBaseModelTestCases(
         )
 
 
-    def test_function_get_related_model_type(self):
+    def test_function_get_related_model_type(self, model, ticket):
         """Function test
 
         Ensure that function `get_related_model` returns a value that
         is of type `QuerySet`.
         """
 
-        ticket = self.base_model.objects.get(
-            pk = self.item.pk
+        ticket = model.objects.get(
+            pk = ticket.pk
         )
 
-        assert type(ticket.get_related_model()) is self.model
+        assert type(ticket.get_related_model()) is model
 
 
 
-    def test_meta_attribute_sub_model_type_length(self):
+    def test_meta_attribute_sub_model_type_length(self, model):
         """Meta Attribute Check
 
         Ensure that attribute `Meta.sub_model_type` is not longer than the
         field that stores the value.
         """
 
-        assert len(self.model._meta.sub_model_type) <= int(self.model._meta.get_field('ticket_type').max_length)
+        assert len(model._meta.sub_model_type) <= int(model._meta.get_field('ticket_type').max_length)
 
 
 
-    def test_function_called_clean_ticketbase(self, model, mocker):
+    def test_function_called_clean_ticketbase(self, model, mocker, model_kwargs):
         """Function Check
 
         Ensure function `TicketBase.clean` is called
@@ -868,7 +788,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(TicketBase, 'clean')
 
-        valid_data = self.kwargs_create_item.copy()
+        valid_data = model_kwargs.copy()
 
         valid_data['title'] = 'was clean called'
 
@@ -882,7 +802,7 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_function_called_save_ticketbase(self, model, mocker):
+    def test_function_called_save_ticketbase(self, model, mocker, model_kwargs):
         """Function Check
 
         Ensure function `TicketBase.save` is called
@@ -890,7 +810,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(TicketBase, 'save')
 
-        valid_data = self.kwargs_create_item.copy()
+        valid_data = model_kwargs.copy()
 
         valid_data['title'] = 'was save called'
 
@@ -903,15 +823,15 @@ class TicketBaseModelTestCases(
         assert spy.assert_called_once
 
 
-    def test_function_save_called_slash_command(self, model, mocker, ticket):
+    def test_function_save_called_slash_command(self, model, mocker, ticket, model_kwargs):
         """Function Check
 
         Ensure function `TicketCommentBase.clean` is called
         """
 
-        spy = mocker.spy(self.model, 'slash_command')
+        spy = mocker.spy(model, 'slash_command')
 
-        valid_data = self.kwargs_create_item.copy()
+        valid_data = model_kwargs.copy()
 
         valid_data['title'] = 'was save called'
 
@@ -925,33 +845,24 @@ class TicketBaseModelTestCases(
 
 
 
+
 class TicketBaseModelInheritedCases(
     TicketBaseModelTestCases,
 ):
-    """Sub-Ticket Test Cases
-
-    Test Cases for Ticket models that inherit from model TicketBase
-    """
-
-    kwargs_create_item: dict = None
-
-    model = None
-
 
     sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
 
 
 
+@pytest.mark.module_core
 class TicketBaseModelPyTest(
     TicketBaseModelTestCases,
 ):
 
+    sub_model_type = 'ticket'
 
-    def test_function_get_related_field_name_value(self):
+
+    def test_function_get_related_field_name_value(self, model):
         """Function test
 
         This test case overwrites a test of the same name. This model should
@@ -961,10 +872,10 @@ class TicketBaseModelPyTest(
         model the attribute the model exists under.
         """
 
-        assert self.model().get_related_field_name() == ''
+        assert model().get_related_field_name() == ''
 
 
-    def test_function_get_related_model_type(self):
+    def test_function_get_related_model_type(self, model):
         """Function test
 
         This test case overwrites a test of the same name. This model should
@@ -974,10 +885,10 @@ class TicketBaseModelPyTest(
         is of type `QuerySet`.
         """
 
-        assert type(self.model().get_related_model()) is type(None)
+        assert type(model().get_related_model()) is type(None)
 
 
-    def test_function_save_called_slash_command(self, model, mocker, ticket):
+    def test_function_save_called_slash_command(self, model, mocker, ticket, model_kwargs):
         """Function Check
 
         This test case is a duplicate of a test with the same name. This
@@ -986,9 +897,9 @@ class TicketBaseModelPyTest(
         Ensure function `TicketCommentBase.clean` is called
         """
 
-        spy = mocker.spy(self.model, 'slash_command')
+        spy = mocker.spy(model, 'slash_command')
 
-        valid_data = self.kwargs_create_item.copy()
+        valid_data = model_kwargs.copy()
 
         valid_data['title'] = 'was save called'
 

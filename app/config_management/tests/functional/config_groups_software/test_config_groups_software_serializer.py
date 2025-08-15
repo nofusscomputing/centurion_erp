@@ -13,6 +13,8 @@ from itam.models.software import Software, SoftwareVersion
 
 
 
+@pytest.mark.model_configgroupsoftware
+@pytest.mark.module_config_management
 class ConfigGroupSoftwareValidationAPI(
     TestCase,
 ):
@@ -118,7 +120,7 @@ class ConfigGroupSoftwareValidationAPI(
 
             serializer.is_valid(raise_exception = True)
 
-        assert err.value.get_codes()['software'][0] == 'software_exists'
+        assert err.value.get_codes()['software'][0] == 'unique_software_exists'
 
 
 

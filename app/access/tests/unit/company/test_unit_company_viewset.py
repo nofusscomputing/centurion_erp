@@ -1,4 +1,4 @@
-from django.test import TestCase
+import pytest
 
 from access.models.company_base import Company
 from access.tests.unit.entity.test_unit_entity_viewset import (
@@ -7,11 +7,19 @@ from access.tests.unit.entity.test_unit_entity_viewset import (
 
 
 
+@pytest.mark.model_company
 class ViewsetTestCases(
     EntityViewsetInheritedCases,
 ):
 
-    model: str = Company
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'model': {
+                'value': Company
+            }
+        }
 
 
 
@@ -23,14 +31,13 @@ class CompanyViewsetInheritedCases(
     Test Cases for Entity models that inherit from model Company
     """
 
-    model: str = None
-    """name of the model to test"""
+    pass
 
 
 
-class CompanyViewsetTest(
+@pytest.mark.module_access
+class CompanyViewsetPyTest(
     ViewsetTestCases,
-    TestCase,
 ):
 
     pass

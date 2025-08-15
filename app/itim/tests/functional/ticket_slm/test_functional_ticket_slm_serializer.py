@@ -1,7 +1,10 @@
+import pytest
+
 from core.tests.functional.ticket_base.test_functional_ticket_base_serializer import TicketBaseSerializerInheritedCases
 
 
 
+@pytest.mark.model_slmticket
 class SLMTicketSerializerTestCases(
     TicketBaseSerializerInheritedCases,
 ):
@@ -38,6 +41,7 @@ class SLMTicketSerializerInheritedCases(
 
 
 
+@pytest.mark.module_itim
 class SLMTicketSerializerPyTest(
     SLMTicketSerializerTestCases,
 ):

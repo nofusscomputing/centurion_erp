@@ -1,40 +1,65 @@
-from rest_framework.exceptions import ValidationError
+import pytest
 
 from core.models.ticket_comment_action import TicketCommentAction
+
 from core.tests.unit.ticket_comment_base.test_unit_ticket_comment_base_model import (
     TicketCommentBaseModelInheritedCases
 )
 
 
+
+
+@pytest.mark.model_ticketcommentaction
 class TicketCommentActionModelTestCases(
-    TicketCommentBaseModelInheritedCases,
+    TicketCommentBaseModelInheritedCases
 ):
 
-    sub_model_type = 'action'
-    """Sub Model Type
-    
-    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
-    """
 
-    kwargs_create_item: dict = {
-        'comment_type': sub_model_type,
-    }
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_is_submodel': {
+                'value': True
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': type(None),
+                'value': None
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticket_comment_base'
+            },
+        }
 
 
-    def test_class_inherits_ticketcommentaction(self):
+    @property
+    def parameterized_model_fields(self):
+
+        return {}
+
+
+
+    def test_class_inherits_TicketCommentAction(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, TicketCommentAction)
+        assert issubclass(model, TicketCommentAction)
 
 
 
     def test_function_called_clean_ticketcommentaction(self, model, mocker, ticket):
         """Function Check
 
-        Ensure function `TicketCommentBase.clean` is called
+        Ensure function `TicketCommentAction.clean` is called
         """
 
         spy = mocker.spy(TicketCommentAction, 'clean')
@@ -42,9 +67,6 @@ class TicketCommentActionModelTestCases(
         valid_data = self.kwargs_create_item.copy()
 
         valid_data['ticket'] = ticket
-
-        del valid_data['external_system']
-        del valid_data['external_ref']
 
         comment = model.objects.create(
             **valid_data
@@ -81,31 +103,17 @@ class TicketCommentActionModelTestCases(
 
 
 
-
-
 class TicketCommentActionModelInheritedCases(
     TicketCommentActionModelTestCases,
 ):
-    """Sub-Ticket Test Cases
-
-    Test Cases for Ticket models that inherit from model TicketCommentAction
-    """
-
-    kwargs_create_item: dict = {}
-
-    model = None
-
 
     sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
 
 
 
+@pytest.mark.module_core
 class TicketCommentActionModelPyTest(
     TicketCommentActionModelTestCases,
 ):
 
-    pass
+    sub_model_type = 'action'
