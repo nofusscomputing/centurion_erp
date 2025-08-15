@@ -1,3 +1,9 @@
+## 1.19.1 (2025-08-15)
+
+### Fixes
+
+- **docker**: if not testing dont attempt to import coverage
+
 ## 1.19.0 (2025-08-15)
 
 ### feat
