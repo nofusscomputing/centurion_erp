@@ -1,4 +1,3 @@
-import coverage
 import logging
 import os
 
@@ -11,6 +10,8 @@ from prometheus_client import multiprocess, start_http_server, REGISTRY
 
 
 if bool(os.environ.get("IS_TESTING")):
+
+    import coverage
 
     def post_fork(server, worker):
 
