@@ -5,9 +5,14 @@ from devops.models.git_repository.base import GitRepository
 
 
 class GitLabRepository(
-    GitRepository
+    GitRepository,
 ):
     """GitLab Repository"""
+
+    _is_submodel = True
+
+    documentation = ''
+
 
     class Meta(GitRepository.Meta):
 
@@ -31,8 +36,6 @@ class GitLabRepository(
         verbose_name = 'Visibility',
     )
 
-
-    documentation = ''
 
     page_layout: dict = [
         {
@@ -82,27 +85,3 @@ class GitLabRepository(
             "sections": []
         },
     ]
-
-    def get_url_kwargs_notes(self) -> dict:
-        """Fetch the URL kwargs for model notes
-
-        Returns:
-            dict: notes kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'model_id': self.id
-        }
- 
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from devops.models.git_repository.gitlab_history import GitlabHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = GitlabHistory
-        )
-
-
-        return history

@@ -3,20 +3,17 @@ import pytest
 from django.db import models
 
 from access.models.company_base import Company
-
 from access.tests.unit.entity.test_unit_entity_model import (
     EntityModelInheritedCases
 )
 
 
 
+@pytest.mark.model_company
 class CompanyModelTestCases(
     EntityModelInheritedCases,
 ):
 
-    kwargs_create_item: dict = {
-        'name': 'Ian',
-    }
 
     sub_model_type = 'company'
     """Sub Model Type
@@ -25,49 +22,43 @@ class CompanyModelTestCases(
     """
 
 
-    parameterized_fields: dict = {
-        "name": {
-            'field_type': models.fields.CharField,
-            'field_parameter_default_exists': False,
-            'field_parameter_verbose_name_type': str,
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_is_submodel': {
+                'value': True
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'entity'
+            }
         }
-    }
+
+
+    @property
+    def parameterized_fields(self):
+
+        return {
+            'name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 80,
+                'null': False,
+                'unique': False,
+            }
+        }
 
 
 
-    def test_class_inherits_company(self):
+    def test_class_inherits_company(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, Company)
-
-
-    def test_attribute_value_history_app_label(self):
-        """Attribute Type
-
-        history_app_label has been set, override this test case with the value
-        of attribute `history_app_label`
-        """
-
-        assert self.model.history_app_label == 'access'
-
-
-    def test_attribute_value_history_model_name(self):
-        """Attribute Type
-
-        history_model_name has been set, override this test case with the value
-        of attribute `history_model_name`
-        """
-
-        assert self.model.history_model_name == 'company'
-
-
-
-    def test_function_value_get_url(self):
-
-        assert self.item.get_url() == '/api/v2/access/entity/company/' + str(self.item.id)
+        assert issubclass(model, Company)
 
 
 
@@ -78,28 +69,20 @@ class CompanyModelInheritedCases(
 
     Test Cases for Ticket models that inherit from model Entity
     """
-
-    kwargs_create_item: dict = {}
-
-    model = None
-
-    sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
+    pass
 
 
 
+@pytest.mark.module_access
 class CompanyModelPyTest(
     CompanyModelTestCases,
 ):
 
 
-    def test_function_value_get_related_model(self):
+    def test_function_value_get_related_model(self, model_instance):
         """Function test
 
         Confirm function `get_related_model` is None for base model
         """
 
-        assert self.item.get_related_model() is None
+        assert model_instance.get_related_model() is None

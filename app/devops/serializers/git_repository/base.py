@@ -8,7 +8,7 @@ from api.serializers import common
 
 from core.fields.badge import BadgeField
 
-from devops.models.git_repository.base import GitRepository, GitGroup
+from devops.models.git_repository.base import GitRepository
 from devops.serializers.git_group import BaseSerializer as GitGroupBaseSerializer
 
 
@@ -22,7 +22,7 @@ class BaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:devops:_api_v2_git_repository-detail", format="html"
+        view_name="v2:devops:_api_gitrepository-detail", format="html"
     )
 
 
@@ -88,11 +88,7 @@ class ModelSerializer(
             'id',
             'organization',
             'display_name',
-            'provider',
             'provider_id',
-            'git_group',
-            'path',
-            'name',
             'description',
             'model_notes',
             'created',

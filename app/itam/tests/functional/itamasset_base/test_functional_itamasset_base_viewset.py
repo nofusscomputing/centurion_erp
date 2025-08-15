@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from accounting.tests.functional.asset_base.test_functional_asset_base_viewset import AssetBaseViewSetInheritedCases
@@ -6,11 +8,14 @@ from itam.models.itam_asset_base import ITAMAssetBase
 
 
 
+@pytest.mark.model_itamassetbase
 class ViewSetTestCases(
     AssetBaseViewSetInheritedCases
 ):
 
-    add_data: dict = {}
+    add_data: dict = {
+        'asset_number': '1354'
+    }
 
     kwargs_create_item: dict = {}
 
@@ -19,14 +24,14 @@ class ViewSetTestCases(
     model = ITAMAssetBase
 
     url_kwargs: dict = {
-        'asset_model': 'it_asset',
+        'model_name': 'itamassetbase',
     }
 
     url_view_kwargs: dict = {
-        'asset_model': 'it_asset',
+        'model_name': 'itamassetbase',
     }
 
-    url_name = '_api_v2_itam_asset'
+    url_name = '_api_itamassetbase'
 
 
 
@@ -40,6 +45,7 @@ class ITAMAssetBaseViewSetInheritedCases(
 
 
 
+@pytest.mark.module_accounting
 class ITAMAssetBaseViewSetTest(
     ViewSetTestCases,
     TestCase,

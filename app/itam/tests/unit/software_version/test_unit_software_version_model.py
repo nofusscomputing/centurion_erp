@@ -1,44 +1,77 @@
-from django.test import TestCase
+import pytest
 
-from access.models.tenant import Tenant as Organization
+from django.db import models
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itam.models.software import Software, SoftwareVersion
 
 
-
-class SoftwareVersionModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_softwareversion
+class SoftwareVersionModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = SoftwareVersion
 
+    @property
+    def parameterized_class_attributes(self):
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a device
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
-        """
-
-        self.organization = Organization.objects.create(name='test_org')
-
-        self.software = Software.objects.create(
-            organization = self.organization,
-            name = 'deviceone'
-        )
-
-        self.kwargs_item_create = {
-            'name': '12',
-            'software': self.software
+        return {
+            'model_tag': {
+                'value': 'software_version'
+            },
         }
 
-        super().setUpTestData()
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            'software': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.ForeignKey,
+                'null': False,
+                'unique': False,
+            },
+            'name': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.CharField,
+                'length': 50,
+                'null': False,
+                'unique': False,
+            },
+            'modified': {
+                'blank': False,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.DateTimeField,
+                'null': False,
+                'unique': False,
+            },
+        }
+
+
+
+class SoftwareVersionModelInheritedCases(
+    SoftwareVersionModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_itam
+class SoftwareVersionModelPyTest(
+    SoftwareVersionModelTestCases,
+):
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+        assert model_instance.get_url_kwargs() == { 'pk': model_instance.id, 'software_id': model_instance.software.id }
+

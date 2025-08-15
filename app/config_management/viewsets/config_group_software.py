@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from config_management.serializers.config_group_software import (
+from config_management.serializers.config_group_software import (    # pylint: disable=W0611:unused-import
     ConfigGroupSoftware,
     ConfigGroupSoftwareModelSerializer,
     ConfigGroupSoftwareViewSerializer
@@ -15,7 +15,10 @@ from config_management.serializers.config_group_software import (
         summary = 'Create a config group software',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=ConfigGroupSoftwareViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ConfigGroupSoftwareViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ConfigGroupSoftwareViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),
@@ -62,7 +65,6 @@ class ViewSet( ModelViewSet ):
     filterset_fields = [
         'organization',
         'software',
-        'is_global',
     ]
 
 

@@ -74,34 +74,37 @@ A Model link is a reference to an item within the database. Supported model link
 |:---|:---:|
 | [asset](../accounting/asset.md) | `$asset-<id>` |
 | cluster| `$cluster-<id>` |
-| clustertype| `$-<id>` |
+| clustertype| `$cluster_type-<id>` |
 | config groups| `$config_group-<id>` |
+| contact | `$entity-<id>` |
 | device| `$device-<id>` |
-| devicemodel| `$-<id>` |
-| devicetype| `$-<id>` |
+| devicemodel| `$device_model-<id>` |
+| devicetype| `$device_type-<id>` |
+| employee | `$entity-<id>` |
 | entity | `$entity-<id>` |
-| externallink| `$-<id>` |
+| externallink| `$external_link-<id>` |
 | featureflag| `$feature_flag-<id>` |
 | gitrepository| `$git_repository-<id>` |
+| gitgroup| `$git_group-<id>` |
 | group| `$-<id>` |
-| it_asset | `$it_asset-<id>` |
+| it_asset | `$asset-<id>` or `$it_asset-<id>` |
 | knowledgebase| `$kb-<id>` |
-| knowledgebasecategory| `$-<id>` |
-| manufacturer| `$-<id>` |
+| knowledgebasecategory| `$kb_category-<id>` |
+| manufacturer| `$manufacturer-<id>` |
 | modelnotes| `$-<id>` |
 | operatingsystem| `$operating_system-<id>` |
-| operatingsystemversion| `$-<id>` |
+| operatingsystemversion| `$operating_system_version-<id>` |
 | organization| `$organization-<id>` |
-| port| `$-<id>` |
-| project| `$-<id>` |
-| projectmilestone| `$-<id>` |
+| person | `$entity-<id>` |
+| port| `$port-<id>` |
+| project| `$project-<id>` |
+| projectmilestone| `$project_milestone-<id>` |
 | projectstate| `$project_state-<id>` |
-| projecttask| `$-<id>` |
-| projecttype| `$-<id>` |
+| projecttype| `$project_type-<id>` |
 | [role](../access/role.md)| `$role-<id>` |
 | service| `$service-<id>` |
 | software| `$software-<id>` |
-| softwarecategory| `$-<id>` |
+| softwarecategory| `$software_category-<id>` |
 | softwareversion| `$software_version-<id>` |
 | team| `$team-<id>` |
 | ticketcategory| `$ticket_category-<id>` |

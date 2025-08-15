@@ -3,7 +3,8 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 from access.models.tenant import Tenant as Organization
 # THis import only exists so that the migrations can be created
 from access.models.team_history import TeamHistory    # pylint: disable=W0611:unused-import
-from access.serializers.teams import (
+from access.models.team_notes import TeamNotes    # pylint: disable=W0611:unused-import
+from access.serializers.teams import (    # pylint: disable=W0611:unused-import
     Team,
     TeamModelSerializer,
     TeamViewSerializer
@@ -24,9 +25,12 @@ from api.viewsets.common import ModelViewSet
                 location = 'path',
                 type = int
             ),
-        ], 
+        ],
         responses = {
-            200: OpenApiResponse(description='Allready exists', response=TeamViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = TeamViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=TeamViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

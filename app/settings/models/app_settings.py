@@ -1,37 +1,15 @@
 from django.db import models
 
-from rest_framework.reverse import reverse
-
-from access.fields import *
+from access.fields import AutoLastModifiedField
 from access.models.tenant import Tenant
 
-from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
+from core.models.centurion import CenturionModel
 
 
 
-class AppSettingsCommonFields(models.Model):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        blank=False,
-        help_text = 'Id of this setting',
-        primary_key=True,
-        unique=True,
-        verbose_name = 'ID'
-    )
-
-    slug = None
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
-
-
-
-class AppSettings(AppSettingsCommonFields, SaveHistory):
+class AppSettings(
+    CenturionModel,
+):
     """ Application Settings
 
     This model is for storing settings for the application as a whole
@@ -44,6 +22,8 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         ValidationError: When software set as global and no organization has been specified 
     """
 
+    _notes_enabled = False
+
     class Meta:
 
         ordering = [
@@ -54,14 +34,16 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
 
         verbose_name_plural = 'App Settings'
 
+    model_notes = None
+
+    organization = None
 
     owner_organization = models.ForeignKey(
         Tenant,
         blank= True,
         help_text = 'Tenant the settings belong to',
-        default = None,
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.CASCADE,
         related_name = 'owner_organization'
     )
 
@@ -102,14 +84,15 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
 
     global_organization = models.ForeignKey(
         Tenant,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         blank= True,
-        default = None,
         help_text = 'Tenant global items will be created in',
         null = True,
         related_name = 'global_organization',
         verbose_name = 'Global Tenant'
     )
+
+    modified = AutoLastModifiedField()
 
     table_fields: list = []
 
@@ -142,24 +125,6 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         return self.global_organization
 
 
-
-    def get_url( self, request = None ) -> str:
-
-        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
-
-
-        if request:
-
-            return reverse(f"v2:_api_v2_app_settings-detail", request=request, kwargs = { 'pk': self.pk } )
-
-        return reverse(f"v2:_api_v2_app_settings-detail", kwargs = { 'pk': self.pk } )
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
-
-
-
     def clean(self):
         from django.core.exceptions import ValidationError
 
@@ -175,17 +140,3 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         'software_categories_is_global',
         'global_organization',
     ]
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from settings.models.app_settings_history import AppSettingsHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = AppSettingsHistory,
-        )
-
-
-        return history

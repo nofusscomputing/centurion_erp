@@ -1,3 +1,4 @@
+import pytest
 from datetime import datetime
 from dateutil import tz
 
@@ -21,7 +22,7 @@ class ViewSetBase:
 
     app_namespace = 'v2'
     
-    url_name = 'public:devops:_public_api_v2_feature_flag'
+    url_name = 'public:devops:_api_checkin'
 
 
     @classmethod

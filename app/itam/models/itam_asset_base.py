@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.conf import settings
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -18,9 +19,13 @@ class ITAMAssetBase(
     **Don't** use this model directly, it should be used via a sub-model.
     """
 
+    _is_submodel = True
+
     app_namespace = None
 
-    note_basename = 'accounting:_api_v2_asset_note'
+    model_tag = 'it_asset'
+
+    url_model_name = 'itamassetbase'
 
 
     class Meta:
@@ -69,7 +74,7 @@ class ITAMAssetBase(
 
                 if(
                     ( isinstance(model, ITAMAssetBase) or issubclass(model, ITAMAssetBase) )
-                    and ITAMAssetBase._meta.itam_sub_model_type != 'itam_base'
+                    # and ITAMAssetBase._meta.itam_sub_model_type != 'itam_base'
 
                 ):
 
@@ -89,7 +94,7 @@ class ITAMAssetBase(
     )
 
 
-    
+
     page_layout: list = [
         {
             "name": "Details",
@@ -159,24 +164,9 @@ class ITAMAssetBase(
 
         return self._meta.verbose_name + ' - ' + self.asset_number
 
-    
-
-    def get_url( self, request = None ) -> str:
-
-        kwargs = self.get_url_kwargs()
-
-        url_path_name = '_api_v2_itam_asset'
-
-        if request:
-
-            return reverse(f"v2:{url_path_name}-detail", request=request, kwargs = kwargs )
 
 
-        return reverse(f"v2:{url_path_name}-detail", kwargs = kwargs )
-
-
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def clean_fields(self, exclude = None):
 
         related_model = self.get_related_model()
 
@@ -184,8 +174,56 @@ class ITAMAssetBase(
 
             related_model = self
 
-        if self.itam_type != str(related_model._meta.itam_sub_model_type).lower().replace(' ', '_'):
+        if(
+            self.itam_type != str(related_model._meta.itam_sub_model_type).lower().replace(' ', '_')
+            and str(related_model._meta.sub_model_type).lower().replace(' ', '_') != 'itam_base'
+        ):
 
             self.itam_type = str(related_model._meta.itam_sub_model_type).lower().replace(' ', '_')
 
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        super().clean_fields(exclude = exclude)
+
+
+
+    def get_url(
+        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+    ) -> str:
+
+        namespace = f'v{api_version}'
+
+        if self.get_app_namespace():
+            namespace = namespace + ':' + self.get_app_namespace()
+
+
+        url_basename = f'{namespace}:_api_{self._meta.model_name}'
+
+        if self.url_model_name:
+
+            url_basename = f'{namespace}:_api_{self.url_model_name}'
+
+        if (
+            self._is_submodel
+            and self._meta.sub_model_type != 'it_asset'
+        ):
+
+            url_basename += '_sub'
+
+
+        if many:
+
+            url_basename += '-list'
+
+        else:
+
+            url_basename += '-detail'
+
+
+        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs( many = many ) )
+
+        if not relative:
+
+            url = settings.SITE_URL + url
+
+
+        return url

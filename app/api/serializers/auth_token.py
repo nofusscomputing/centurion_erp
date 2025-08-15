@@ -21,7 +21,7 @@ class AuthTokenBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_cluster-detail",
+        view_name="v2:_api_cluster-detail",
     )
 
     class Meta:
@@ -52,7 +52,7 @@ class AuthTokenModelSerializer(
 
         get_url = super().get_url( item = item )
 
-        del get_url['history']
+        # del get_url['history']
         del get_url['knowledge_base']
 
 

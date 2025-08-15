@@ -1,5 +1,6 @@
 import django
 import pytest
+import random
 
 from rest_framework.exceptions import (
     ValidationError
@@ -19,6 +20,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_ticketbase
 class TicketBaseSerializerTestCases:
 
 
@@ -197,16 +199,19 @@ class TicketBaseSerializerTestCases:
                 })
 
 
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view", password="password")
+            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view" + str(random.randint(1,99999)), password="password")
 
-            request.cls.other_user = User.objects.create_user(username="cafs_test_user_other", password="password")
+            request.cls.other_user = User.objects.create_user(username="cafs_test_user_other" + str(random.randint(1,99999)), password="password")
 
 
         yield
 
         with django_db_blocker.unblock():
 
-            request.cls.view_user.delete()
+            try:
+                request.cls.view_user.delete()
+            except django.db.models.deletion.ProtectedError:
+                pass
             request.cls.other_user.delete()
 
             del request.cls.valid_data
@@ -1087,7 +1092,7 @@ class TicketBaseSerializerInheritedCases(
     """Valid data used by serializer to create object"""
 
 
-
+@pytest.mark.module_core
 class TicketBaseSerializerPyTest(
     TicketBaseSerializerTestCases,
 ):

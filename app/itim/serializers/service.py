@@ -1,4 +1,3 @@
-from rest_framework.fields import empty
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
@@ -23,7 +22,7 @@ class ServiceBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_service-detail", format="html"
+        view_name="v2:_api_service-detail", format="html"
     )
 
     class Meta:
@@ -57,7 +56,7 @@ class ServiceModelSerializer(
         get_url = super().get_url( item = item )
 
         get_url.update({
-            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?service=true',
+            'external_links': reverse("v2:_api_externallink-list", request=self._context['view'].request) + '?service=true',
             'tickets': reverse(
                 "v2:_api_v2_item_tickets-list",
                 request=self._context['view'].request,
@@ -94,7 +93,6 @@ class ServiceModelSerializer(
             'config_key_variable',
             'port',
             'dependent_service',
-            'is_global',
             'created',
             'modified',
             '_urls',
@@ -116,7 +114,7 @@ class ServiceModelSerializer(
 
             if 'device_id' in self._context['view'].kwargs:
 
-                self.Meta.read_only_fields += [ 'cluster', 'device', 'organization', 'is_global' ]
+                self.Meta.read_only_fields += [ 'cluster', 'device', 'organization', ]
 
         fields = super().get_field_names(declared_fields, info)
 

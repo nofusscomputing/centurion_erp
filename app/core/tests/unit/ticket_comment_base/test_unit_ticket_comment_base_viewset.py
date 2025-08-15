@@ -1,4 +1,5 @@
 import django
+import pytest
 
 from django.test import Client, TestCase
 
@@ -17,6 +18,8 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip(reason = 'see #895, tests being refactored')
+@pytest.mark.model_ticketcommentbase
 class TicketCommentBaseViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
@@ -109,10 +112,11 @@ class TicketCommentBaseViewsetInheritedCases(
     model: str = None
     """name of the model to test"""
 
-    route_name = 'v2:_api_v2_ticket_comment_base_sub'
+    route_name = 'v2:_api_ticket_comment_base_sub'
 
 
 
+@pytest.mark.module_core
 class TicketCommentBaseViewsetTest(
     TicketCommentBaseViewsetTestCases,
     TestCase,
@@ -120,6 +124,6 @@ class TicketCommentBaseViewsetTest(
 
     kwargs = {}
 
-    route_name = 'v2:_api_v2_ticket_comment_base'
+    route_name = 'v2:_api_ticket_comment_base'
 
     viewset = NoDocsViewSet

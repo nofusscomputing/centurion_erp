@@ -1,12 +1,18 @@
 from django.db import models
 
-from access.fields import AutoCreatedField
+from access.fields import AutoLastModifiedField
 
-from .projects import Project, ProjectCommonFieldsName, SaveHistory
+from core.models.centurion import CenturionModel
+
+from .projects import Project
 
 
 
-class ProjectMilestone(ProjectCommonFieldsName):
+class ProjectMilestone(
+    CenturionModel
+):
+
+    model_tag = 'project_milestone'
 
 
     class Meta:
@@ -20,9 +26,16 @@ class ProjectMilestone(ProjectCommonFieldsName):
         verbose_name_plural = 'Project Milestones'
 
 
+    name = models.CharField(
+        blank = False,
+        help_text = 'Name of the item',
+        max_length = 100,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
     description = models.TextField(
         blank = True,
-        default = None,
         help_text = 'Description of milestone. Markdown supported',
         null= True,
         verbose_name = 'Description',
@@ -46,16 +59,13 @@ class ProjectMilestone(ProjectCommonFieldsName):
         Project,
         blank= False,
         help_text = 'Project this milestone belongs.',
-        on_delete=models.CASCADE,
+        on_delete = models.CASCADE,
         null = False,
     )
 
     model_notes = None
 
-
-    created = AutoCreatedField(
-        editable = False,
-    )
+    modified = AutoLastModifiedField()
 
 
     # model not intended to be vieable on its own page
@@ -78,7 +88,6 @@ class ProjectMilestone(ProjectCommonFieldsName):
                     ],
                     "right": [
                         'description',
-                        'is_global',
                     ]
                 }
             ]
@@ -124,31 +133,15 @@ class ProjectMilestone(ProjectCommonFieldsName):
         return self.name
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        return {
-            'project_id': self.project.id,
-            'pk': self.id
-        }
+        kwargs = super().get_url_kwargs( many = many )
 
-    def get_url_kwargs_notes(self) -> dict:
-        """Fetch the URL kwargs for model notes
+        kwargs.update({
+            'project_id': self.project.id
+        })
 
-        Returns:
-            dict: notes kwargs required for generating the URL with `reverse`
-        """
-
-        return {
-            'project_id': self.project.id,
-            'model_id': self.id
-        }
-
-
-    # @property
-    # def parent_object(self):
-    #     """ Fetch the parent object """
-        
-    #     return self.project
+        return kwargs
 
 
     @property
@@ -173,4 +166,3 @@ class ProjectMilestone(ProjectCommonFieldsName):
 
 
         return history
-

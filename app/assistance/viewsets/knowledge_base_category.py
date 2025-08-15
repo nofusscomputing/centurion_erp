@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from assistance.serializers.knowledge_base_category import (
+from assistance.serializers.knowledge_base_category import (    # pylint: disable=W0611:unused-import
     KnowledgeBaseCategory,
     KnowledgeBaseCategoryModelSerializer,
     KnowledgeBaseCategoryViewSerializer
@@ -15,7 +15,10 @@ from assistance.serializers.knowledge_base_category import (
         summary = 'Create a knowledge base article',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=KnowledgeBaseCategoryViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = KnowledgeBaseCategoryViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=KnowledgeBaseCategoryViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),
@@ -65,7 +68,6 @@ class ViewSet( ModelViewSet ):
         'parent_category',
         'target_user',
         'target_team',
-        'is_global',
     ]
 
     search_fields = [

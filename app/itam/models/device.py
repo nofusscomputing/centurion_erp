@@ -3,25 +3,19 @@ import re
 
 from datetime import timedelta
 
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
-from django.forms import ValidationError
+from django.utils.timezone import now
 
-from rest_framework import serializers
-from rest_framework.reverse import reverse
+from access.fields import AutoLastModifiedField
 
-from access.fields import *
-from access.models.tenancy import TenancyObject
-
-from app.helpers.merge_software import merge_software
+from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
-from core.lib.feature_not_used import FeatureNotUsed
-from core.mixin.history_save import SaveHistory
-from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
+from core.models.centurion import CenturionModel
 
-from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
 from itam.models.device_models import DeviceModel
 from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
@@ -30,8 +24,11 @@ from settings.models.app_settings import AppSettings
 
 
 
-class DeviceType(DeviceCommonFieldsName, SaveHistory):
+class DeviceType(
+    CenturionModel,
+):
 
+    model_tag = 'device_type'
 
     class Meta:
 
@@ -44,6 +41,16 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
         verbose_name_plural = 'Device Types'
 
 
+    name = models.CharField(
+        blank = False,
+        help_text = 'The items name',
+        max_length = 50,
+        unique = True,
+        verbose_name = 'Name'
+    )
+
+    modified = AutoLastModifiedField()
+
     page_layout: dict = [
         {
             "name": "Details",
@@ -54,7 +61,6 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
                     "left": [
                         'organization',
                         'name',
-                        'is_global',
                     ],
                     "right": [
                         'model_notes',
@@ -97,30 +103,23 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
         if app_settings.device_type_is_global:
 
             self.organization = app_settings.global_organization
-            self.is_global = app_settings.device_type_is_global
 
 
     def __str__(self):
 
         return self.name
 
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_type_history import DeviceTypeHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceTypeHistory,
-        )
 
 
-        return history
+class Device(
+    CenturionModel,
+):
 
+    model_tag = 'device'
 
-
-class Device(DeviceCommonFieldsName, SaveHistory):
-
+    reserved_config_keys: list = [
+        'software'
+    ]
 
     class Meta:
 
@@ -134,46 +133,18 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         verbose_name_plural = 'Devices'
 
 
-    reserved_config_keys: list = [
-        'software'
-    ]
-
-    def validate_config_keys_not_reserved(self):
-
-        if self:
-
-            value: dict = self
-
-            for invalid_key in Device.reserved_config_keys:
-
-                if invalid_key in value.keys():
-                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
-
-
-    def validate_uuid_format(self):
-
-        pattern = r'[0-9|a-f|A-F]{8}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{12}'
-
-        if not re.match(pattern, str(self)):
-
-            raise serializers.ValidationError(
-                f'UUID must be formated to match regex {str(pattern)}',
-                code = 'invalid_uuid'
-            )
-
-
     def validate_hostname_format(self):
 
         pattern = r'^[a-z]{1}[a-z|0-9|\-]+[a-z|0-9]{1}$'
 
         if not re.match(pattern, str(self).lower()):
 
-            raise serializers.ValidationError(
-                '''[RFC1035 2.3.1] A hostname must start with a letter, end with a letter or digit,
-                and have as interior characters only letters, digits, and hyphen.''',
+            raise ValidationError(
+                message = '[RFC1035 2.3.1] A hostname must start with a letter,' \
+                    'end with a letter or digit, and have as interior characters only letters,' \
+                        ' digits, and hyphen.',
                 code = 'invalid_hostname'
             )
-
 
     name = models.CharField(
         blank = False,
@@ -186,16 +157,27 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
     serial_number = models.CharField(
         blank = True,
-        default = None,
         help_text = 'Serial number of the device.',
         max_length = 50,
         null = True,
         unique = True,
         verbose_name = 'Serial Number',
-        
+
     )
 
-    uuid = models.CharField(
+
+    def validate_uuid_format(self):
+
+        pattern = r'[0-9|a-f|A-F]{8}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{12}'
+
+        if not re.match(pattern, str(self)):
+
+            raise ValidationError(
+                message = f'UUID must be formated to match regex {str(pattern)}',
+                code = 'invalid_uuid'
+            )
+
+    uuid = models.UUIDField(
         blank = True,
         help_text = 'System GUID/UUID.',
         max_length = 50,
@@ -207,28 +189,38 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
     device_model = models.ForeignKey(
         DeviceModel,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Model of the device.',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Model'
     )
 
     device_type = models.ForeignKey(
         DeviceType,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Type of device.',
         null = True,
-        on_delete=models.SET_DEFAULT,
+        on_delete = models.PROTECT,
         verbose_name = 'Type'
     )
 
 
+    def validate_config_keys_not_reserved(self):
+
+        if self:
+
+            value: dict = self
+
+            for invalid_key in Device.reserved_config_keys:
+
+                if invalid_key in value.keys():
+                    raise ValidationError(
+                        message = f'json key "{invalid_key}" is a reserved configuration key'
+                    )
+
     config = models.JSONField(
         blank = True,
-        default = None,
         help_text = 'Configuration for this device',
         null = True,
         validators=[ validate_config_keys_not_reserved ],
@@ -249,6 +241,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = False,
         verbose_name = 'Is Virtual',
     )
+
+    modified = AutoLastModifiedField()
 
     table_fields: list = [
         'status_icon',
@@ -283,7 +277,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                     "right": [
                         'model_notes',
                         'is_virtual',
-                        'is_global',
                     ]
                 },
                 {
@@ -354,6 +347,16 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     ]
 
 
+    def clean_fields(self, exclude = None):
+
+        if self.uuid is not None:
+
+            self.uuid = str(self.uuid).lower()
+
+
+        super().clean_fields(exclude = exclude)
+
+
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
         ):
@@ -362,10 +365,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         After saving the device update the related items so that they are a part
         of the same organization as the device.
         """
-
-        if self.uuid is not None:
-
-            self.uuid = str(self.uuid).lower()
 
 
         super().save(
@@ -386,7 +385,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             if obj.exists():
 
                 obj.update(
-                    is_global = False,
                     organization = self.organization,
                 )
 
@@ -395,22 +393,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         ConfigGroupHosts.objects.filter(
             host = self.id,
         ).delete()
-
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_history import DeviceHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceHistory
-        )
-
-
-        return history
-
 
 
     def __str__(self):
@@ -494,7 +476,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                     state = 'absent'
 
                 software_action = {
-                    "name": software.software.slug,
+                    "name": str(Software),
                     "state": state
                 }
 
@@ -551,16 +533,16 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
 
 
-@receiver(post_delete, sender=Device, dispatch_uid='device_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
 
-    deleted_model.send(sender='device_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.DEVICE)
-
-
-
-
-class DeviceSoftware(DeviceCommonFields, SaveHistory):
+class DeviceSoftware(
+    CenturionModel,
+):
     """ A way for the device owner to configure software to install/remove """
+
+    _audit_enabled = False
+
+    _notes_enabled = False
+
 
     class Meta:
         ordering = [
@@ -581,37 +563,35 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
     device = models.ForeignKey(
         Device,
-        blank= False,
+        blank = False,
         help_text = 'Device this software is on',
-        on_delete=models.CASCADE,
+        on_delete = models.CASCADE,
         null = False,
         verbose_name = 'Device'
     )
 
     software = models.ForeignKey(
         Software,
-        blank= False,
+        blank = False,
         help_text = 'Software Name',
         null = False,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Software'
     )
 
     action = models.IntegerField(
         blank = True,
-        choices=Actions,
-        default=None,
+        choices = Actions,
         help_text = 'Action to perform',
-        null=True,
+        null = True,
         verbose_name = 'Action',
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Version to install',
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         null = True,
         verbose_name = 'Desired Version'
     )
@@ -619,11 +599,10 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
     installedversion = models.ForeignKey(
         SoftwareVersion,
-        blank= True,
-        default = None,
+        blank = True,
         help_text = 'Version that is installed',
         null = True,
-        on_delete=models.CASCADE,
+        on_delete = models.PROTECT,
         related_name = 'installedversion',
         verbose_name = 'Installed Version'
     )
@@ -634,6 +613,8 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         null = True,
         verbose_name = 'Date Installed'
     )
+
+    modified = AutoLastModifiedField()
 
 
     page_layout: list = []
@@ -671,54 +652,32 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         )
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        return {
+        kwargs = super().get_url_kwargs( many = many )
+
+        kwargs.update({
             'device_id': self.device.id,
-            'pk': self.id
-        }
+        })
 
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        return kwargs
 
 
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.device
 
 
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-        ):
 
-        self.is_global = False
+class DeviceOperatingSystem(
+    CenturionModel,
+):
 
-        super().save(
-            force_insert=False, force_update=False, using=None, update_fields=None
-        )
+    _audit_enabled = False
 
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_software_history import DeviceSoftwareHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceSoftwareHistory,
-        )
-
-
-        return history
-
-
-class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
-
+    _notes_enabled = False
 
     class Meta:
 
@@ -730,6 +689,7 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
         verbose_name_plural = 'Device Operating Systems'
 
+    model_notes = None
 
     device = models.OneToOneField(
         Device,
@@ -746,9 +706,9 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         blank = False,
         help_text = 'Operating system version',
         null = False,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         verbose_name = 'Operating System/Version',
-        
+
     )
 
     version = models.CharField(
@@ -761,11 +721,12 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
     installdate = models.DateTimeField(
         blank = True,
-        default = None,
         help_text = 'Date and time detected as installed',
         null = True,
         verbose_name = 'Install Date',
     )
+
+    modified = AutoLastModifiedField()
 
     page_layout: list = [
         {
@@ -792,45 +753,19 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
     ]
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url_kwargs(self, many = False) -> dict:
 
-        return {
+        kwargs = super().get_url_kwargs( many = many )
+
+        kwargs.update({
             'device_id': self.device.id,
-            'pk': self.pk
-        }
+        })
 
-
-    def get_url_kwargs_notes(self):
-
-        return FeatureNotUsed
+        return kwargs
 
 
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.device
-
-
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-        ):
-
-        self.is_global = False
-
-        super().save(
-            force_insert=False, force_update=False, using=None, update_fields=None
-        )
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from itam.models.device_operating_system_history import DeviceOperatingSystemHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = DeviceOperatingSystemHistory,
-        )
-
-
-        return history

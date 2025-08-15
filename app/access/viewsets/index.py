@@ -24,20 +24,20 @@ class Index(IndexViewset):
     def list(self, request, pk=None):
 
         response = {
-                "organization": reverse('v2:_api_v2_organization-list', request=request),
+                "organization": reverse('v2:_api_tenant-list', request=request),
             }
 
         if self.request.feature_flag['2025-00002']:
             
             response.update({
-                "directory": reverse( 'v2:_api_v2_entity_sub-list', request=request, kwargs = { 'entity_model': 'contact' } ),
-                "entities": reverse( 'v2:_api_v2_entity-list', request=request ),
+                "directory": reverse( 'v2:_api_entity_sub-list', request=request, kwargs = { 'model_name': 'contact' } ),
+                "entities": reverse( 'v2:_api_entity-list', request=request ),
             })
 
         if self.request.feature_flag['2025-00003']:
             
             response.update({
-                "role": reverse( 'v2:_api_v2_role-list', request=request ),
+                "role": reverse( 'v2:_api_role-list', request=request ),
             })
 
 

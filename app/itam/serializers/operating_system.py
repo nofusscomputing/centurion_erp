@@ -21,7 +21,7 @@ class OperatingSystemBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_operating_system-detail", format="html"
+        view_name="v2:_api_operatingsystem-detail", format="html"
     )
 
     class Meta:
@@ -67,7 +67,7 @@ class OperatingSystemModelSerializer(
                     'item_id': item.pk
                     }
             ),
-            'version': reverse("v2:_api_v2_operating_system_version-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
+            'version': reverse("v2:_api_operatingsystemversion-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
         })
 
         return get_url
@@ -85,7 +85,6 @@ class OperatingSystemModelSerializer(
             'publisher',
             'name',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

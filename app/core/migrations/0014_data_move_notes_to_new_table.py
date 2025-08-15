@@ -8,15 +8,15 @@ from django.db import migrations, models
 
 from django.contrib.auth.models import User, ContentType
 
-from core.models.notes import Notes
+# from core.models.notes import Notes
 
-from config_management.models.config_group_notes import ConfigGroupNotes
+# from config_management.models.config_group_notes import ConfigGroupNotes
 
-from itam.models.device_notes import DeviceNotes
-from itam.models.operating_system_notes import OperatingSystemNotes
-from itam.models.software_notes import SoftwareNotes
+# from itam.models.device_notes import DeviceNotes
+# from itam.models.operating_system_notes import OperatingSystemNotes
+# from itam.models.software_notes import SoftwareNotes
 
-from itim.models.service_notes import ServiceNotes
+# from itim.models.service_notes import ServiceNotes
 
 
 def move_notes(apps, schema_editor):
@@ -26,62 +26,62 @@ def move_notes(apps, schema_editor):
     # )
     print(f"migtating notes data to new notes tables.....")
 
-    model_notes = Notes.objects.all()
+    # model_notes = Notes.objects.all()
 
-    for note in model_notes:
-
-
-        if not note.usercreated:
-
-            print(f"*********************** ERROR ***********************")
-            print(f"    NOT migtating note {note.id}, as no creation user exists.")
-            print(f"    - Note contents: {note.note}")
-            print(f"********************* EoF ERROR *********************")
-
-            continue
-
-        print(f"    migtating note {note.id}")
+    # for note in model_notes:
 
 
-        if note.config_group:
+    #     if not note.usercreated:
 
-            note_item_model = note.config_group
-            note_model = ConfigGroupNotes
+    #         print(f"*********************** ERROR ***********************")
+    #         print(f"    NOT migtating note {note.id}, as no creation user exists.")
+    #         print(f"    - Note contents: {note.note}")
+    #         print(f"********************* EoF ERROR *********************")
 
-        elif note.device:
+    #         continue
 
-            note_item_model = note.device
-            note_model = DeviceNotes
-
-        elif note.operatingsystem:
-
-            note_item_model = note.operatingsystem
-            note_model = OperatingSystemNotes
-
-        elif note.service:
-
-            note_item_model = note.service
-            note_model = ServiceNotes
-
-        elif note.software:
-
-            note_item_model = note.software
-            note_model = SoftwareNotes
+    #     print(f"    migtating note {note.id}")
 
 
-        note_model.objects.create(
-            organization = note.organization,
-            content = note.note,
-            content_type = ContentType.objects.get(
-                app_label = str(note_model._meta.app_label).lower(),
-                model = str(note_model.model.field.related_model.__name__).replace(' ', '').lower(),
-            ),
-            model = note_item_model,
-            created_by = note.usercreated,
-            modified_by = note.usermodified,
-            created = note.created,
-            modified = note.modified
-        )
+    #     if note.config_group:
+
+    #         note_item_model = note.config_group
+    #         note_model = ConfigGroupNotes
+
+    #     elif note.device:
+
+    #         note_item_model = note.device
+    #         note_model = DeviceNotes
+
+    #     elif note.operatingsystem:
+
+    #         note_item_model = note.operatingsystem
+    #         note_model = OperatingSystemNotes
+
+    #     elif note.service:
+
+    #         note_item_model = note.service
+    #         note_model = ServiceNotes
+
+    #     elif note.software:
+
+    #         note_item_model = note.software
+    #         note_model = SoftwareNotes
+
+
+    #     note_model.objects.create(
+    #         organization = note.organization,
+    #         content = note.note,
+    #         content_type = ContentType.objects.get(
+    #             app_label = str(note_model._meta.app_label).lower(),
+    #             model = str(note_model.model.field.related_model.__name__).replace(' ', '').lower(),
+    #         ),
+    #         model = note_item_model,
+    #         created_by = note.usercreated,
+    #         modified_by = note.usermodified,
+    #         created = note.created,
+    #         modified = note.modified
+    #     )
 
 
 

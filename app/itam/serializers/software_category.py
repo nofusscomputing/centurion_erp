@@ -1,11 +1,8 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-
-from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.software import SoftwareCategory
 
@@ -20,7 +17,7 @@ class SoftwareCategoryBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_software_category-detail", format="html"
+        view_name="v2:_api_softwarecategory-detail", format="html"
     )
 
     class Meta:
@@ -68,7 +65,6 @@ class SoftwareCategoryModelSerializer(
             'display_name',
             'name',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',

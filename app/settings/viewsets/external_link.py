@@ -4,7 +4,11 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from settings.models.external_link_history import ExternalLinkHistory    # pylint: disable=W0611:unused-import
-from settings.serializers.external_links import ExternalLink, ExternalLinkModelSerializer, ExternalLinkViewSerializer
+from settings.serializers.external_links import (    # pylint: disable=W0611:unused-import
+    ExternalLink,
+    ExternalLinkModelSerializer,
+    ExternalLinkViewSerializer,
+)
 
 
 
@@ -16,6 +20,10 @@ from settings.serializers.external_links import ExternalLink, ExternalLinkModelS
         is found within the database, it will not re-create it. The device will be returned within the message body.
         """,
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ExternalLinkViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ExternalLinkViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

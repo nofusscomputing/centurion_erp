@@ -2,9 +2,6 @@ import importlib
 
 from django.apps import apps
 from django.db import models
-from django.forms import ValidationError
-
-from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models.tenancy import TenancyObject
@@ -117,7 +114,7 @@ class ModelKnowledgeBaseArticle(TenancyObject):
         blank = False,
         choices = all_models,
         help_text = 'Model type to link to article article',
-        max_length = 50,
+        max_length = 80,
         null = False,
         unique = False,
         verbose_name = 'Model Type',

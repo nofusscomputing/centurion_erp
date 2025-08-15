@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 from devops.models.git_repository.github_history import GitHubHistory    # pylint: disable=W0611:unused-import
 from devops.models.git_repository.gitlab_history import GitlabHistory    # pylint: disable=W0611:unused-import
 from devops.models.git_group import GitGroup
-from devops.serializers.git_repository.base import (
+from devops.serializers.git_repository.base import (    # pylint: disable=W0611:unused-import
     GitRepository,
     ModelSerializer,
     ViewSerializer,
@@ -28,7 +28,9 @@ from devops.serializers.git_repository.gitlab import (
     ViewSerializer as GitLabViewSerializer,
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common import (
+    SubModelViewSet_ReWrite,
+)
 
 
 
@@ -58,6 +60,18 @@ from api.viewsets.common import ModelViewSet
             many = False,
         ),
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response=PolymorphicProxySerializer(
+                    component_name = 'Git Provider',
+                    serializers=[
+                        GitHubViewSerializer,
+                        GitLabViewSerializer,
+                    ],
+                    resource_type_field_name=None,
+                    many = False,
+                ),
+            ),
             201: OpenApiResponse(
                 description='Created. Will be serialized with the serializer matching the provider.',
                 response=PolymorphicProxySerializer(
@@ -181,7 +195,9 @@ from api.viewsets.common import ModelViewSet
         }
     ),
 )
-class ViewSet(ModelViewSet):
+class ViewSet(
+    SubModelViewSet_ReWrite
+):
     """fdgdfgdf"""
 
     filterset_fields = [
@@ -195,7 +211,9 @@ class ViewSet(ModelViewSet):
         'provider_id',
     ]
 
-    model = GitRepository
+    base_model = GitRepository
+
+    model_kwarg = 'model_name'
 
     view_description: str = 'GIT Repositories'
 
@@ -203,7 +221,7 @@ class ViewSet(ModelViewSet):
     def get_back_url(self) -> str:
 
 
-        return reverse('v2:devops:_api_v2_git_repository-list', request = self.request )
+        return reverse('v2:devops:_api_gitrepository-list', request = self.request )
 
 
     def get_page_layout(self):
@@ -214,50 +232,13 @@ class ViewSet(ModelViewSet):
 
                 if self.kwargs.get('pk', None):
 
-                    model = getattr(self.queryset[0], self.kwargs['git_provider'] + 'repository')
+                    model = getattr(self.queryset[0], self.kwargs['model_name'] + 'repository')
 
                     self.page_layout = model.get_page_layout()
 
         return self.page_layout
 
 
-    def get_queryset(self):
-
-        if self.queryset is not None:
-
-            return self.queryset
-
-        
-        if self.kwargs.get('git_provider', '') == 'github':
-
-            self.queryset = GitHubRepository.objects.select_related(
-                'git_group',
-                ).all()
-
-        elif self.kwargs.get('git_provider', '') == 'gitlab':
-
-            self.queryset = GitLabRepository.objects.select_related(
-                'git_group',
-                ).all()
-
-        else:
-
-            self.queryset = self.model.objects.select_related(
-                'git_group',
-                'githubrepository',
-                'gitlabrepository',
-                ).all()
-
-        if 'pk' in self.kwargs:
-
-            if self.kwargs['pk']:
-
-                self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
-
-
-        return self.queryset
-
-    
     def get_return_url(self) -> str:
 
         if 'pk' in self.kwargs:
@@ -271,11 +252,11 @@ class ViewSet(ModelViewSet):
 
         prefix: str = ''
 
-        if self.kwargs.get('git_provider', '') == 'github':
+        if self.kwargs.get('model_name', '') == 'github':
 
             prefix = 'GitHub'
 
-        elif self.kwargs.get('git_provider', '') == 'gitlab':
+        elif self.kwargs.get('model_name', '') == 'gitlab':
 
             prefix = 'GitLab'
 

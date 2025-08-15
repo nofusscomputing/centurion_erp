@@ -1,4 +1,11 @@
-from django.contrib.auth.models import Permission
+from django.apps import apps
+from django.conf import settings
+from django.contrib.auth.models import (
+    ContentType,
+    Permission
+)
+from django.db.models import QuerySet
+
 
 def permission_queryset():
     """Filter Permissions to those used within the application
@@ -7,7 +14,7 @@ def permission_queryset():
         list: Filtered queryset that only contains the used permissions
     """
 
-    apps = [
+    centurion_apps = [
         'access',
         'accounting',
         'assistance',
@@ -52,10 +59,69 @@ def permission_queryset():
         'view_history',
     ]
 
-    return Permission.objects.select_related('content_type').filter(
-            content_type__app_label__in=apps,
-        ).exclude(
-            content_type__model__in=exclude_models
-        ).exclude(
-            codename__in = exclude_permissions
-        )
+
+    if not settings.RUNNING_TESTS:
+
+        try:
+        # This blocks purpose is to cater for fresh install
+        # so that the app does not crash before the DB is setup.
+
+            models = apps.get_models()
+
+            for model in models:
+
+                if(
+                    not str(model._meta.object_name).endswith('AuditHistory')
+                    and not str(model._meta.model_name).lower().endswith('history')
+                ):
+                    # check `endswith('history')` can be removed when the old history models are removed
+                    continue
+
+                content_type = ContentType.objects.get(
+                    app_label = model._meta.app_label,
+                    model = model._meta.model_name
+                )
+
+                permissions = Permission.objects.filter(
+                    content_type = content_type,
+                )
+
+                for permission in permissions:
+
+                    if(
+                        not permission.codename == 'view_' + str(model._meta.model_name)
+                        and str(model._meta.object_name).endswith('AuditHistory')
+                    ):
+                        exclude_permissions += [ permission.codename ]
+
+                    elif(
+                        not str(model._meta.object_name).endswith('AuditHistory')
+                        and str(model._meta.model_name).lower().endswith('history')
+                    ):
+                        # This `elif` can be removed when the old history models are removed
+
+                        exclude_permissions += [ permission.codename ]
+
+
+            return Permission.objects.select_related('content_type').filter(
+                    content_type__app_label__in = centurion_apps,
+                ).exclude(
+                    content_type__model__in = exclude_models
+                ).exclude(
+                    codename__in = exclude_permissions
+                )
+
+        except:
+            pass
+
+        return QuerySet()
+
+    else:
+
+        return Permission.objects.select_related('content_type').filter(
+                content_type__app_label__in = centurion_apps,
+            ).exclude(
+                content_type__model__in = exclude_models
+            ).exclude(
+                codename__in = exclude_permissions
+            )

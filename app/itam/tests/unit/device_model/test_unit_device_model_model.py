@@ -1,48 +1,79 @@
 import pytest
 
-from django.test import TestCase
+from django.db import models
 
-from app.tests.unit.test_unit_models import (
-    TenancyObjectInheritedCases
+
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractModelInheritedCases
 )
 
-from itam.models.device_models import DeviceModel
 
 
-
-class DeviceModelModel(
-    TenancyObjectInheritedCases,
-    TestCase,
+@pytest.mark.model_devicemodel
+class DeviceModelModelTestCases(
+    CenturionAbstractModelInheritedCases
 ):
 
-    model = DeviceModel
 
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            'model_tag': {
+                'type': str,
+                'value': 'device_model'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+        'name': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.CharField,
+            'length': 50,
+            'null': False,
+            'unique': True,
+        },
+        'manufacturer': {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
+    }
 
 
     @pytest.mark.skip(reason="to be written")
-    def test_device_model_software_action(user):
-        """Ensure only software that is from the same organization or is global can be added to the device
+    def test_device_move_organization(user):
+        """Move Organization test
+
+        When a device moves organization, devicesoftware and devicesoftware table data
+        must also move organizations
         """
         pass
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_device_model_must_have_organization(user):
-        """ Device Model must have organization set """
-        pass
+
+class DeviceModelModelInheritedCases(
+    DeviceModelModelTestCases,
+):
+    pass
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_device_model_not_global(user):
-        """Devices are not global items.
-
-            Ensure that a device can't be set to be global.
-        """
-        pass
-
-
-    @pytest.mark.skip(reason="to be written")
-    def test_device_model_operating_system_version_only_one(user):
-        """model deviceoperatingsystem must only contain one value per device
-        """
-        pass
+@pytest.mark.module_itam
+class DeviceModelModelPyTest(
+    DeviceModelModelTestCases,
+):
+    pass

@@ -10,7 +10,11 @@ from access.models.team_user import TeamUsers
 
 User = django.contrib.auth.get_user_model()
 
-
+#
+#
+#           This test suite has been replaced with: test_functional_permissions_api
+#
+#
 
 class APIPermissionAddInheritedCases:
     """ Test Suite for Add API Permission test cases """

@@ -39,35 +39,16 @@ Describe in detail the following:
 
 - [ ] 🔗 URL Route Added
 
-- [ ] 🏷️ Model tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()` function
+- [ ] 🏷️ [Model tag]().
 
     - [ ] 📘 Tag updated in the [docs](https://nofusscomputing.com/projects/centurion_erp/user/core/markdown/#model-reference)
-    - [ ] tag added to `app/core/lib/slash_commands/linked_model.CommandLinkedModel.get_model()`
-    - [ ] ⚒️ Migration _Ticket Linked Item item_type choices update_
 
->[!note]
-> Ensure that when creating the tag the following is adhered to:
-> - Two words are not to contain a space char, `\s`. It is to be replaced with an underscore `_`
-> - As much as practical, keep the tag as close to the model name as possible
-
-- [ ] 📝 New [History model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_history/) created
-
-    - Sub-Models **_ONLY_**
-
-        - [ ] Model class variable [`history_app_label`](https://nofusscomputing.com/projects/centurion_erp/development/models/#history) set to correct application label
-
-        - [ ] Model class variable [`history_model_name`](https://nofusscomputing.com/projects/centurion_erp/development/models/#history) set to correct model label
-
-- [ ] 📓 New [Notes model](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/) created 
-    - [ ] 🆕 Model Created
-    - [ ] 🛠️ Migrations added
-    - [ ] Add `app_label` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().model_apps`
-    - [ ] _(Notes not used/required) -_ Add `model_name` to KB Models `app/assistance/models/model_knowledge_base_article.all_models().excluded_models`
-    - [ ] 🧪 [Unit tested](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/#testing)
-    - [ ] 🧪 [Functional tested](https://nofusscomputing.com/projects/centurion_erp/development/core/model_notes/#testing)
+    - [ ] tag added to class
 
 - [ ] Admin Documentation added/updated _if applicable_
+
 - [ ] Developer Documentation added/updated _if applicable_
+
 - [ ] User Documentation added/updated
 
 ---
@@ -79,14 +60,13 @@ Describe in detail the following:
 ### 🧪 Tests
 
 - Unit Tests
-    - [ ] API Render (fields)
     - [ ] [Model](https://nofusscomputing.com/projects/centurion_erp/development/models/#tests)
     - [ ] ViewSet
+    - [ ] Serializer
 - Function Test
-    - [ ] History API Render (fields)
-    - [ ] History Entries
     - [ ] API Metadata
     - [ ] API Permissions
+    - [ ] API Render (fields)
     - [ ] Model
     - [ ] Serializer
     - [ ] ViewSet

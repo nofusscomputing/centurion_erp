@@ -1,7 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-# THis import only exists so that the migrations can be created
-from access.models.role_history import RoleHistory    # pylint: disable=W0611:unused-import
 from access.serializers.role import (
     Role,
     ModelSerializer,
@@ -17,6 +15,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a Role',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
         }

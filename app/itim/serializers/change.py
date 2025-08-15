@@ -1,7 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import empty
-
-from app.serializers.user import UserBaseSerializer
 
 from core.models.ticket.ticket_category import TicketCategory
 from core.serializers.ticket_depreciated import (

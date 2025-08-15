@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import Organization, TenantBaseSerializer
+from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
-from app.serializers.user import UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 from access.serializers.teams import TeamBaseSerializer
 
@@ -25,7 +25,7 @@ class ProjectBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_project-detail", format="html"
+        view_name="v2:_api_project-detail", format="html"
     )
 
     class Meta:
@@ -60,7 +60,7 @@ class ProjectModelSerializer(
         get_url = super().get_url( item = item )
 
         get_url.update({
-            'milestone': reverse("v2:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
+            'milestone': reverse("v2:_api_projectmilestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'tickets': reverse(
                 "v2:_api_v2_ticket_project_task-list",
                 request=self._context['view'].request,
@@ -103,7 +103,6 @@ class ProjectModelSerializer(
             'manager_team',
             'team_members',
             'is_deleted',
-            'is_global',
             'created',
             'modified',
             '_urls',

@@ -1,41 +1,91 @@
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
+import pytest
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from assistance.viewsets.knowledge_base import ViewSet
+from assistance.viewsets.knowledge_base import (
+    KnowledgeBase,
+    ViewSet,
+)
 
 
 
-class KnowledgeBaseViewsetList(
+@pytest.mark.model_knowledgebase
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_v2_knowledge_base'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'organization',
+                    'category',
+                    'target_user',
+                    'target_team',
+                    'responsible_user',
+                    'responsible_teams',
+                    'public'
+                ]
+            },
+            'model': {
+                'value': KnowledgeBase
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'title',
+                    'summary',
+                    'content'
+                ]
+            },
+            'view_description': {
+                'value': 'Information Management Knowledge Base Article(s)'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
 
-        client.force_login(self.view_user)
+class KnowledgeBaseViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
 
-        self.http_options_response_list = client.options(url)
+
+
+@pytest.mark.module_assistance
+class KnowledgeBaseViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

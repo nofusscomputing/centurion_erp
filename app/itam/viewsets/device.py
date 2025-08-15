@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from itam.serializers.device import (
+from itam.serializers.device import (    # pylint: disable=W0611:unused-import
     Device,
     DeviceModelSerializer,
     DeviceViewSerializer
@@ -18,7 +18,7 @@ from itam.serializers.device import (
         is found within the database, it will not re-create it. The device will be returned within the message body.
         """,
         responses = {
-            200: OpenApiResponse(description='Device allready exists', response=DeviceViewSerializer),
+            200: OpenApiResponse(description='Device already exists', response=DeviceViewSerializer),
             201: OpenApiResponse(description='Device created', response=DeviceViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

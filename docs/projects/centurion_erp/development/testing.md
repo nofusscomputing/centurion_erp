@@ -10,12 +10,6 @@ Unit and functional tests are written to aid in application stability and to ass
 
 We use PyTest as the testing framework. As such, All available features of pytest are available. We have slightly deviated from the standard naming convention wherein test class must be suffixed with `PyTest`. Please [see below](#writing-tests) for more details.
 
-!!! note
-    As of release v1.3, the UI has moved to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui) with the current Django UI feature locked and depreciated.
-
-!!! note
-    These docs are currently undergoing a rewrite as how we write and expect tests to be written has changed.
-
 
 ## Directory Structure
 
@@ -35,7 +29,11 @@ example file system structure showing the layout of the tests directory for a mo
 │   ├── functional
 │   │   ├── __init__.py
 │   │   └── <model name>
-│   │       └── test_<type>_<model name>_<component name>.py
+│           ├── test_functional_<model name>_api_fields.py
+│           ├── test_functional_<model name>_api_permission.py
+│           ├── test_functional_<model name>_api_metadata.py
+│           ├── test_functional_<model name>_model.py
+│   │       └── test_functional_<model name>_serializer.py
 │   ├── __init__.py
 │   ├── integration
 │   │   ├── __init__.py
@@ -48,14 +46,9 @@ example file system structure showing the layout of the tests directory for a mo
 │   └── unit
 │       ├── __init__.py
 │       └── <model name>
-│           ├── test_<type>_<model name>.py
-│           ├── test_<type>_<model name>__api.py
-│           ├── test_<type>_<model name>_history.py
-│           ├── test_<type>_<model name>_history_permission.py
-│           ├── test_<type>_<model name>_notes.py
-│           ├── test_<type>_<model name>_permission_api.py
-│           ├── test_<type>_<model name>_serializer.py
-│           └── test_<type>_<model name>_viewsets.py
+│           ├── test_unit_<model name>_model.py
+│           ├── test_unit_<model name>_serializer.py
+│           └── test_unit_<model name>_viewset.py
 
 ```
 
@@ -150,9 +143,43 @@ Fixtures are used to setup the test and to pass objects to test should they requ
 
 There may also be a requirement that you add additional fixtures, they are:
 
-- `model` This fixture should be defined in `conftest.py` in the test suite files directory. _Only required if the model is required to be worked with._
+- Global Model Fixtures
 
-    ``` py filename="conftest.py"
+    Locatation for the global fixtures is `app/tests/fixtures/`. Each model is to have a global fixture file added with name `model_<model name>` within this file the following fixtures are to be created:
+
+    ``` py title="tests/fixtures/model_centurionmodel.py"
+    import pytest
+
+    from core.models.centurion import CenturionModel
+
+
+
+    @pytest.fixture( scope = 'class')
+    def model_centurionmodel():
+
+        yield CenturionModel
+
+
+    @pytest.fixture( scope = 'class')
+    def kwargs_centurionmodel(kwargs_tenancyabstract):
+
+        kwargs = {
+            **kwargs_tenancyabstract,
+            'model_notes': 'model notes txt',
+            'created': '2025-05-23T00:00',
+        }
+
+        yield kwargs.copy()
+
+    ```
+
+    - `model` is to return the model class un-instantiated
+
+    - `kwargs` the Kwargs required to create the model.
+
+- `model` and `model_kwargs` These fixtures should be defined in `conftest.py` in the test suite files directory. _Only required if the model is required to be worked with._
+
+    ``` py title="conftest.py"
 
     import pytest
 
@@ -163,11 +190,18 @@ There may also be a requirement that you add additional fixtures, they are:
     @pytest.fixture( scope = 'class')
     def model(request):
 
-        request.cls.model = RequestTicket
+        yield RequestTicket
 
-        yield request.cls.model
+    
+    @pytest.fixture( scope = 'class')
+    def model_kwargs(request, kwargs_<model_name>):
 
-        del request.cls.model    # Don't forget to clean-up any objects created.
+        request.cls.kwargs_create_item = kwargs_<model_name>.copy()
+
+        yield kwargs_<model_name>.copy()
+
+        del request.cls.kwargs_create_item
+
 
     ```
 
@@ -196,6 +230,26 @@ Due to how pytest and pytest-django works, there is no method available for clas
     ```
 
     <!-- markdownlint-restore -->
+
+
+### API Permissions Tests
+
+API Permissions tests are automagically created when `pytest collect` runs. Normally there will be nothing that needs to be done for this test suite. However if you find there is a requirement for adding additional API Permission Test Cases add an additional tests file. This file must be placed in path `<app name>/tests/functional/additional_<model name>_permissions_api.py`. The contents of this file is as follows:
+
+``` py
+
+
+
+class AdditionalTestCases:    # You must use this class name
+
+    def test_my_test_case(self, fixture_name):
+
+        # your test case logic.
+
+
+```
+
+Once this file is detected during `collect` the test cases in class `AdditionalTestCases`, will be included in the API Permission Test Suit for the model in question.
 
 
 ## Parameterizing Tests

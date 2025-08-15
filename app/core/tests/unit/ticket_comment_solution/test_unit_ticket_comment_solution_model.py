@@ -1,35 +1,136 @@
 import pytest
 
-from rest_framework.exceptions import ValidationError
+from django.apps import apps
 
 from core.models.ticket_comment_solution import TicketCommentSolution
+
 from core.tests.unit.ticket_comment_base.test_unit_ticket_comment_base_model import (
     TicketCommentBaseModelInheritedCases
 )
 
 
+
+@pytest.mark.model_ticketcommentsolution
 class TicketCommentSolutionModelTestCases(
-    TicketCommentBaseModelInheritedCases,
+    TicketCommentBaseModelInheritedCases
 ):
 
-    sub_model_type = 'solution'
-    """Sub Model Type
-    
-    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
-    """
 
-    kwargs_create_item: dict = {
-        'comment_type': sub_model_type,
-    }
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_is_submodel': {
+                'value': True
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            'model_tag': {
+                'type': type(None),
+                'value': None
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticket_comment_base'
+            },
+        }
 
 
-    def test_class_inherits_ticketcommentsolution(self):
+    @property
+    def parameterized_model_fields(self):
+
+        return {}
+
+    @pytest.fixture( scope = 'function', autouse = True)
+    def model_instance(cls, model_kwarg_data, model, model_kwargs):
+
+        class MockModel(model):
+            class Meta:
+                app_label = 'core'
+                verbose_name = 'mock instance'
+                managed = False
+
+        if 'mockmodel' in apps.all_models['core']:
+
+            del apps.all_models['core']['mockmodel']
+
+        if model._meta.abstract:
+
+            instance = MockModel()
+
+        else:
+
+            kwargs = model_kwargs
+
+            kwargs['ticket'].is_closed = False
+            kwargs['ticket'].date_closed = None
+            kwargs['ticket'].is_solved = False
+            kwargs['ticket'].date_solved = None
+
+            kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+
+            kwargs['ticket'].save()
+
+            instance = model_kwarg_data(
+                model = model,
+                model_kwargs = kwargs,
+                create_instance = True,
+            )
+
+            instance = instance['instance']
+
+
+        yield instance
+
+        if 'mockmodel' in apps.all_models['core']:
+
+            del apps.all_models['core']['mockmodel']
+
+        if type(instance) is dict:
+
+            instance['instance'].delete()
+
+        elif instance.id and type(instance) is not MockModel:
+
+            instance.delete()
+
+        del instance
+
+
+
+    def test_method_centurion_save_called(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `core.mixins.centurion.Centurion.save()` is called
+        when `model.save()` is called.
+        """
+
+        class MockManager:
+
+            def get(*args, **kwargs):
+                return model_instance
+
+        model_instance.objects = MockManager()
+
+        save = mocker.patch('core.mixins.centurion.Centurion.save', return_value = None)
+
+
+        model_instance.save()
+
+        save.assert_called()
+
+
+    def test_class_inherits_ticketcommentsolution(self, model):
         """ Class inheritence
 
         TenancyObject must inherit SaveHistory
         """
 
-        assert issubclass(self.model, TicketCommentSolution)
+        assert issubclass(model, TicketCommentSolution)
 
 
 
@@ -45,8 +146,8 @@ class TicketCommentSolutionModelTestCases(
 
         valid_data['ticket'] = ticket
 
-        del valid_data['external_system']
-        del valid_data['external_ref']
+        # del valid_data['external_system']
+        # del valid_data['external_ref']
 
         comment = model.objects.create(
             **valid_data
@@ -61,26 +162,103 @@ class TicketCommentSolutionModelTestCases(
 class TicketCommentSolutionModelInheritedCases(
     TicketCommentSolutionModelTestCases,
 ):
-    """Sub-Ticket Test Cases
-
-    Test Cases for Ticket models that inherit from model TicketCommentSolution
-    """
-
-    kwargs_create_item: dict = {}
-
-    model = None
-
 
     sub_model_type = None
-    """Ticket Sub Model Type
-    
-    Ticket sub-models must have this attribute defined in `ModelNam.Meta.sub_model_type`
-    """
 
 
 
+@pytest.mark.module_core
 class TicketCommentSolutionModelPyTest(
     TicketCommentSolutionModelTestCases,
 ):
 
-    pass
+    sub_model_type = 'solution'
+
+
+    @pytest.mark.regression
+    def test_method_clean_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `clean` is called once only.
+        """
+
+        clean = mocker.spy(model_instance, 'clean')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_clean_fields_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `clean_fields` is called once only.
+        """
+
+        clean_fields = mocker.spy(model_instance, 'clean_fields')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        clean_fields.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_full_clean_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `full_clean` is called once only.
+        """
+
+        full_clean = mocker.spy(model_instance, 'full_clean')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        full_clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_validate_constraints_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `validate_constraints` is called once only.
+        """
+
+        validate_constraints = mocker.spy(model_instance, 'validate_constraints')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        validate_constraints.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_method_validate_unique_called(self, mocker, model, model_instance):
+        """Test Method
+
+        Ensure method `validate_unique` is called once only.
+        """
+
+        validate_unique = mocker.spy(model_instance, 'validate_unique')
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.save()
+
+        validate_unique.assert_called_once()

@@ -4,7 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from itim.models.cluster_history import ClusterHistory    # pylint: disable=W0611:unused-import
-from itim.serializers.cluster import (
+from itim.serializers.cluster import (    # pylint: disable=W0611:unused-import
     Cluster,
     ClusterModelSerializer,
     ClusterViewSerializer
@@ -17,6 +17,10 @@ from itim.serializers.cluster import (
         summary = 'Create a cluster',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ClusterViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=ClusterViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),

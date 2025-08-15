@@ -1,3 +1,4 @@
+import pytest
 import django
 
 from django.contrib.auth.models import Permission
@@ -18,6 +19,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_role
 class APITestCases(
     APITenancyObject,
 ):
@@ -48,7 +50,7 @@ class APITestCases(
             **self.kwargs_item_create
         )
 
-        
+
         self.url_view_kwargs = {
             'pk': self.item.id
         }
@@ -56,7 +58,7 @@ class APITestCases(
         # if self.model._meta.model_name != 'entity':
 
         #     self.url_view_kwargs.update({
-        #         'entity_model': self.item.entity_type,
+        #         'model_name': self.item.entity_type,
         #     })
 
 
@@ -98,31 +100,31 @@ class APITestCases(
 
 
 
-    def test_api_field_exists_url_history(self):
-        """ Test for existance of API Field
+    # def test_api_field_exists_url_history(self):
+    #     """ Test for existance of API Field
 
-        _urls.history field must exist
-        """
+    #     _urls.history field must exist
+    #     """
 
-        assert 'history' in self.api_data['_urls']
-
-
-    def test_api_field_type_url_history(self):
-        """ Test for type for API Field
-
-        _urls.history field must be str
-        """
-
-        assert type(self.api_data['_urls']['history']) is str
+    #     assert 'history' in self.api_data['_urls']
 
 
-    def test_api_field_type_url_history_value(self):
-        """ Test for url value
+    # def test_api_field_type_url_history(self):
+    #     """ Test for type for API Field
 
-        _urls.history field must use the endpoint for entity model
-        """
+    #     _urls.history field must be str
+    #     """
 
-        assert str(self.api_data['_urls']['history']).endswith('/access/role/' + str(self.item.pk) + '/history')
+    #     assert type(self.api_data['_urls']['history']) is str
+
+
+    # def test_api_field_type_url_history_value(self):
+    #     """ Test for url value
+
+    #     _urls.history field must use the endpoint for entity model
+    #     """
+
+    #     assert str(self.api_data['_urls']['history']).endswith('/access/role/' + str(self.item.pk) + '/history')
 
 
 
@@ -154,6 +156,7 @@ class APITestCases(
 
 
 
+@pytest.mark.model_role
 class RoleAPITest(
     APITestCases,
     TestCase,
@@ -163,7 +166,7 @@ class RoleAPITest(
 
     model = Role
 
-    url_ns_name = '_api_v2_role'
+    url_ns_name = '_api_role'
 
 
     @classmethod

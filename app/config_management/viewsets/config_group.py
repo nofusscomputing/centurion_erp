@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common import ModelViewSet
 
-from config_management.serializers.config_group import (
+from config_management.serializers.config_group import (    # pylint: disable=W0611:unused-import
     ConfigGroups,
     ConfigGroupModelSerializer,
     ConfigGroupViewSerializer
@@ -15,7 +15,10 @@ from config_management.serializers.config_group import (
         summary = 'Create a config group',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=ConfigGroupViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ConfigGroupViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ConfigGroupViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),
@@ -62,7 +65,6 @@ class ViewSet( ModelViewSet ):
     filterset_fields = [
         'organization',
         'parent',
-        'is_global',
     ]
 
     search_fields = [
@@ -72,7 +74,7 @@ class ViewSet( ModelViewSet ):
 
     model = ConfigGroups
 
-    view_description = 'Information Management Knowledge Base Article(s)'
+    view_description = 'Configuration Groups'
 
 
     def get_queryset(self):
@@ -92,7 +94,7 @@ class ViewSet( ModelViewSet ):
         else:
 
             self.queryset = super().get_queryset().filter( parent = None )
-        
+
         return self.queryset
 
 
@@ -103,12 +105,13 @@ class ViewSet( ModelViewSet ):
             or self.action == 'retrieve'
         ):
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
+            self.serializer_class = globals()[str(
+                self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
 
         else:
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
+            self.serializer_class = globals()[str(
+                self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
 
 
         return self.serializer_class
-

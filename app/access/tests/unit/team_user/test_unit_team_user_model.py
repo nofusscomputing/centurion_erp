@@ -5,7 +5,7 @@ from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
-from app.tests.unit.test_unit_models import NonTenancyObjectInheritedCases
+from centurion.tests.unit.test_unit_models import NonTenancyObjectInheritedCases
 
 User = django.contrib.auth.get_user_model()
 

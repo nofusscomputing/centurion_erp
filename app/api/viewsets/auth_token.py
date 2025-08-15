@@ -103,7 +103,7 @@ class ViewSet(
             return self._get_return_url
 
         self._get_return_url = reverse(
-            'v2:_api_v2_user_settings-detail',
+            'v2:_api_usersettings-detail',
             kwargs = {
                 'pk': self.kwargs['model_id']
             },

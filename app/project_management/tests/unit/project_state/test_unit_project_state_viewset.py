@@ -1,40 +1,83 @@
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
+import pytest
 
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
-from project_management.viewsets.project_state import ViewSet
+from project_management.viewsets.project_state import (
+    ProjectState,
+    ViewSet,
+)
 
 
 
-class ProjectStateViewsetList(
+@pytest.mark.model_projectstate
+class ViewsetTestCases(
     ModelViewSetInheritedCases,
-    TestCase,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_v2_project_state'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
-
-        super().setUpTestData()
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'organization'
+                ]
+            },
+            'model': {
+                'value': ProjectState
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'name'
+                ]
+            },
+            'view_description': {
+                'value': 'Physical Devices'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
-        client.force_login(self.view_user)
 
-        self.http_options_response_list = client.options(url)
+
+class ProjectStateViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_project_management
+class ProjectStateViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

@@ -1,40 +1,89 @@
-from django.test import Client, TestCase
+import pytest
 
-from rest_framework.reverse import reverse
+from api.tests.unit.test_unit_common_viewset import (
+    ModelRetrieveUpdateViewSetInheritedCases
+)
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from settings.viewsets.external_link import (
+    ExternalLink,
+    ViewSet,
+)
 
-from settings.viewsets.external_link import ViewSet
 
 
-
-class ExternalLinksViewsetList(
-    ModelViewSetInheritedCases,
-    TestCase,
+@pytest.mark.model_externallink
+class ViewsetTestCases(
+    ModelRetrieveUpdateViewSetInheritedCases,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_v2_external_link'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
-
-        super().setUpTestData()
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_log': {
+                'type': type(None),
+            },
+            '_model_documentation': {
+                'type': type(None),
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'cluster',
+                    'devices',
+                    'service',
+                    'software'
+                ]
+            },
+            'model': {
+                'value': ExternalLink
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': []
+            },
+            'view_description': {
+                'value': 'External Link tags'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
-        client.force_login(self.view_user)
 
-        self.http_options_response_list = client.options(url)
+
+class ExternalLinkViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_settings
+class ExternalLinkViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

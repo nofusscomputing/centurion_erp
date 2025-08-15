@@ -5,13 +5,13 @@ from django.dispatch import receiver
 
 from rest_framework.reverse import reverse
 
-from .ticket_enum_values import TicketValues
-
 from access.models.tenancy import TenancyObject
+
+from assistance.models.knowledge_base import KnowledgeBase
 
 from core.lib.feature_not_used import FeatureNotUsed
 from core.middleware.get_request import get_request
-from core.models.ticket.ticket import Ticket, KnowledgeBase
+from core.models.ticket.ticket import Ticket
 
 deleted_model = dispatch.Signal()
 

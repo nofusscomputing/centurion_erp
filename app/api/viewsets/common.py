@@ -1,18 +1,19 @@
+import django
 import importlib
 import logging
+import rest_framework
 
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets, pagination
-from rest_framework_json_api.metadata import JSONAPIMetadata
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework_json_api.metadata import JSONAPIMetadata
 
 from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import OrganizationPermissionMixin
 
-from api.auth import TokenScheme
 from api.react_ui_metadata import ReactUIMetadata
 
 
@@ -40,63 +41,97 @@ class Create(
         """
 
         response = None
+        instance = None
 
         try:
 
-            response = super().create(request = request, *args, **kwargs)
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
+            try:
+
+                response = super().create(request = request, *args, **kwargs)
+
+            except Exception as e:
+
+                if not isinstance(e, APIException):
+
+                    e = self._django_to_api_exception(e)
+
+                if not isinstance(e, rest_framework.exceptions.ValidationError):
+
+                    raise e
+
+                is_unique = False
+                for field, code in e.get_codes().items():
+
+                    if 'unique' in code[0]:
+                        is_unique = True
+
+
+                if not is_unique:
+                    raise e
+
+
+                instance = self.model.objects.get( organization = request.data['organization'])
 
             # Always return using the ViewSerializer
             serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
             view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-            if response.data['id'] is not None:
+            if(
+                # response.data['id'] is not None
+                response is not None
+                and instance is None
+            ):
 
-                serializer = view_serializer(
-                    self.get_queryset().get( pk = int(response.data['id']) ),
-                    context = {
-                        'request': request,
-                        'view': self,
-                    },
-                )
+                instance = response.data.serializer.instance
 
-                serializer_data = serializer.data
+
+            serializer = view_serializer(
+                instance,
+                context = {
+                    'request': request,
+                    'view': self,
+                },
+            )
+
+            serializer_data = serializer.data
+
+            if response is None:
+
+                headers = self.get_success_headers(serializer.data)
+                status_code = rest_framework.status.HTTP_200_OK
 
             else:
 
-
-                serializer_data = {}
+                headers = response.headers
+                status_code = response.status_code
 
 
             # Mimic ALL details from DRF response except serializer
             response = Response(
                 data = serializer_data,
-                status = response.status_code,
-                template_name = response.template_name,
-                headers = response.headers,
-                exception = response.exception,
-                content_type = response.content_type,
+                status = status_code,
+                # template_name = response.template_name,
+                headers = headers,
+                # exception = response.exception,
+                # content_type = response.content_type,
             )
 
         except Exception as e:
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -128,27 +163,23 @@ class Destroy(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().destroy(request = request, *args, **kwargs)
 
         except Exception as e:
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -181,27 +212,23 @@ class List(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().list(request = request, *args, **kwargs)
 
         except Exception as e:
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -237,27 +264,23 @@ class Retrieve(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().retrieve(request = request, *args, **kwargs)
 
         except Exception as e:
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -289,50 +312,47 @@ class Update(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().partial_update(request = request, *args, **kwargs)
 
-            # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
+            if str(response.status_code).startswith('2'):
+                # Always return using the ViewSerializer
+                serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
-            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+                view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-            serializer = view_serializer(
-                self.queryset.get( pk = int(self.kwargs['pk']) ),
-                context = {
-                    'request': request,
-                    'view': self,
-                },
-            )
+                serializer = view_serializer(
+                    response.data.serializer.instance,
+                    context = {
+                        'request': request,
+                        'view': self,
+                    },
+                )
 
-            # Mimic ALL details from DRF response except serializer
-            response = Response(
-                data = serializer.data,
-                status = response.status_code,
-                template_name = response.template_name,
-                headers = response.headers,
-                exception = response.exception,
-                content_type = response.content_type,
-            )
+                # Mimic ALL details from DRF response except serializer
+                response = Response(
+                    data = serializer.data,
+                    status = response.status_code,
+                    template_name = response.template_name,
+                    headers = response.headers,
+                    exception = response.exception,
+                    content_type = response.content_type,
+                )
 
         except Exception as e:
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -358,50 +378,48 @@ class Update(
 
         try:
 
+            if hasattr(self.model, 'context'):
+
+                self.model.context['user'] = self.request.user
+                self.model.context['logging'] = self.get_log()
+
             response = super().update(request = request, *args, **kwargs)
 
-            # Always return using the ViewSerializer
-            serializer_module = importlib.import_module(self.get_serializer_class().__module__)
+            if str(response.status_code).startswith('2'):
 
-            view_serializer = getattr(serializer_module, self.get_view_serializer_name())
+                # Always return using the ViewSerializer
+                serializer_module = importlib.import_module(self.get_serializer_class().__module__)
 
-            serializer = view_serializer(
-                self.queryset.get( pk = int(self.kwargs['pk']) ),
-                context = {
-                    'request': request,
-                    'view': self,
-                },
-            )
+                view_serializer = getattr(serializer_module, self.get_view_serializer_name())
 
-            # Mimic ALL details from DRF response except serializer
-            response = Response(
-                data = serializer.data,
-                status = response.status_code,
-                template_name = response.template_name,
-                headers = response.headers,
-                exception = response.exception,
-                content_type = response.content_type,
-            )
+                serializer = view_serializer(
+                    response.data.serializer.instance,
+                    context = {
+                        'request': request,
+                        'view': self,
+                    },
+                )
+
+                # Mimic ALL details from DRF response except serializer
+                response = Response(
+                    data = serializer.data,
+                    status = response.status_code,
+                    template_name = response.template_name,
+                    headers = response.headers,
+                    exception = response.exception,
+                    content_type = response.content_type,
+                )
 
         except Exception as e:
 
             if not isinstance(e, APIException):
 
-                response = Response(
-                    data = {
-                        'server_error': str(e)
-                    },
-                    status = 501
-                )
+                e = self._django_to_api_exception(e)
 
-                self.get_log().exception(e)
-
-            else:
-
-                response = Response(
-                    data = e.detail,
-                    status = e.status_code
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
         return response
 
@@ -419,6 +437,51 @@ class CommonViewSet(
         OrganizationMixin (class): Contains the Authorization checks.
         viewsets (class): Django Rest Framework base class.
     """
+
+
+    def _django_to_api_exception( self, exc ):
+        """Convert Django exception to DRF Exception
+
+        Args:
+            exc (Django.core.exceptions.*): Django exception to convert
+
+        Raises:
+            rest_framework.exceptions.ValidationError: Exception to return
+
+        Returns:
+            None: Exception not converted
+        """
+
+        rtn_exception = None
+
+        if isinstance(exc, django.core.exceptions.ObjectDoesNotExist):
+
+            exc = rest_framework.exceptions.NotFound(exc.args)
+
+        elif isinstance(exc, django.core.exceptions.PermissionDenied):
+
+
+            exc = rest_framework.exceptions.PermissionDenied(exc.error_dict)
+
+        elif isinstance(exc, django.core.exceptions.ValidationError):
+
+
+            exc = rest_framework.exceptions.ValidationError(exc.error_dict)
+
+        else:
+
+            exc = ValueError('20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug.')
+
+        try:
+
+            raise exc
+
+        except Exception as e:
+
+            return e
+
+
+
 
     @property
     def allowed_methods(self):
@@ -696,9 +759,25 @@ class ModelViewSetBase(
 
         self.queryset = self.model.objects.all()
 
+        qs_filter = {}
+
         if 'pk' in getattr(self, 'kwargs', {}):
 
-            self.queryset = self.queryset.filter( pk = int( self.kwargs['pk'] ) )
+            qs_filter.update({
+                'pk': int( self.kwargs['pk'] )
+            })
+
+        if(
+            getattr(self.model, '_is_submodel', False)
+            and 'model_id' in self.kwargs
+        ):
+
+            qs_filter.update({
+                'model_id': int( self.kwargs['model_id'] )
+            })
+
+
+        self.queryset = self.queryset.filter( **qs_filter  )
 
 
         return self.queryset
@@ -893,6 +972,156 @@ class SubModelViewSet(
         return self.serializer_class
 
 
+
+class SubModelViewSet_ReWrite(
+    SubModelViewSet,
+):
+    """Temp class for SubModelViewSet
+
+    This class contains the changed objects from parent `SubModelViewSet`. On
+    all models be re-written, this class can be collapsed into its parent
+    and replacing with the objects in this class
+    """
+
+    model_suffix: str = None
+    """Model Suffix
+
+    This Value is added to `<model>._meta.model_name` when locating the models
+    name. This field will normally not be required, except in the case of some
+    sib-models.
+    """
+
+
+    @property
+    def model(self):
+
+
+        if getattr(self, '_model', None) is not None:
+
+            return self._model
+
+        model_kwarg = None
+
+        if hasattr(self, 'kwargs'):
+
+            model_kwarg = self.kwargs.get(self.model_kwarg, None)
+
+        if model_kwarg:
+
+            if self.model_suffix:
+
+                model_kwarg = model_kwarg + self.model_suffix
+
+            self._model = self.related_objects(self.base_model, model_kwarg)
+
+        else:
+
+            self._model = self.base_model
+
+        self._model.context['user'] = self.request.user
+
+        self._model.context['logger'] = self.get_log()
+
+        return self._model
+
+
+    def related_objects(self, model, model_kwarg):
+        """Recursive relate_objects fetch
+
+        Fetch the model where <model>._meta.model_name matches the
+        model_kwarg value.
+
+        Args:
+            model (django.db.models.Model): The model to obtain the 
+                related_model from.
+            model_kwarg (str): The URL Kwarg of the model.
+
+        Returns:
+            Model: The model for the ViewSet
+        """
+
+        related_model = None
+
+        if model_kwarg:
+
+            is_nested_lookup = False
+
+            for related_object in model._meta.related_objects:
+
+                if(
+                    getattr(related_object.related_model._meta,'model_name', '' ) == self.base_model._meta.model_name
+                    or not issubclass(related_object.related_model, self.base_model)
+                ):
+                    continue
+
+
+                related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
+
+                if(
+                    str(
+                        related_object.related_model._meta.model_name
+                    ).lower().replace(' ', '_') == model_kwarg
+                ):
+
+                    related_model = related_object.related_model
+                    break
+                
+                elif related_objects:
+
+                    related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
+
+                    is_nested_lookup = True
+
+                    if not hasattr(related_model, '_meta'):
+
+                        related_model = None
+
+                    elif(
+                        str(
+                            getattr(related_model._meta, 'model_name', '')
+                        ).lower().replace(' ', '_') == model_kwarg
+                    ):
+
+                        break
+
+
+        if related_model is None and not is_nested_lookup:
+
+            related_model = self.base_model
+
+        return related_model
+
+
+
+    def get_serializer_class(self):
+
+        serializer_name = self.base_model._meta.model_name
+
+        if self.base_model != self.model:
+                      
+            serializer_name += '_' + str( self.kwargs[self.model_kwarg] )
+
+
+        serializer_module = importlib.import_module(
+            self.model._meta.app_label + '.serializers.' + str(
+                serializer_name
+            )
+        )
+
+        if (
+            self.action == 'list'
+            or self.action == 'retrieve'
+        ):
+
+            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
+
+
+        else:
+
+            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
+
+
+        return self.serializer_class
 
 
 

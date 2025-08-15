@@ -1,3 +1,4 @@
+import pytest
 import django
 
 from django.contrib.auth.models import Permission
@@ -16,6 +17,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.model_ticketbase
 class MetadataTestCases(
     MetadataAttributesFunctional,
 ):
@@ -78,9 +80,12 @@ class MetadataTestCases(
             'opened_by': self.view_user
         })
 
+
+        kwargs = self.kwargs_create_item.copy()
+        kwargs['organization'] = organization
+
         self.item = self.model.objects.create(
-            organization = organization,
-            **self.kwargs_create_item
+            **kwargs
         )
 
         self.kwargs_create_item_diff_org.update({
@@ -241,7 +246,7 @@ class TicketBaseMetadataInheritedCases(
 
     kwargs_create_item_diff_org: dict = {}
 
-    url_name = '_api_v2_ticket_sub'
+    url_name = '_api_ticketbase_sub'
 
 
     @classmethod
@@ -258,24 +263,24 @@ class TicketBaseMetadataInheritedCases(
         }
 
         self.url_kwargs = {
-            'ticket_model': self.model._meta.sub_model_type
+            'ticket_type': self.model._meta.sub_model_type
         }
 
         self.url_view_kwargs = {
-            'ticket_model': self.model._meta.sub_model_type
+            'ticket_type': self.model._meta.sub_model_type
         }
 
         super().setUpTestData()
 
 
-
+@pytest.mark.module_core
 class TicketBaseMetadataTest(
     MetadataTestCases,
     TestCase,
 
 ):
 
-    url_name = '_api_v2_ticket'
+    url_name = '_api_ticketbase'
 
 
     # def test_method_options_request_detail_data_has_key_urls_back(self):

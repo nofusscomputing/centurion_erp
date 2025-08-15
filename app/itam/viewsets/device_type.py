@@ -4,13 +4,11 @@ from api.viewsets.common import ModelViewSet
 
 # THis import only exists so that the migrations can be created
 from itam.models.device_type_history import DeviceTypeHistory    # pylint: disable=W0611:unused-import
-from itam.serializers.device_type import (
+from itam.serializers.device_type import (    # pylint: disable=W0611:unused-import
     DeviceType,
     DeviceTypeModelSerializer,
     DeviceTypeViewSerializer
 )
-
-from api.views.mixin import OrganizationPermissionAPI
 
 
 
@@ -19,6 +17,10 @@ from api.views.mixin import OrganizationPermissionAPI
         summary = 'Create a device type',
         description='',
         responses = {
+            200: OpenApiResponse(
+                description='Already exists',
+                response = DeviceTypeViewSerializer
+            ),
             201: OpenApiResponse(description='Device created', response=DeviceTypeViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),
@@ -62,7 +64,6 @@ class ViewSet( ModelViewSet ):
     """ Device Type """
 
     filterset_fields = [
-        'is_global',
         'organization',
     ]
 

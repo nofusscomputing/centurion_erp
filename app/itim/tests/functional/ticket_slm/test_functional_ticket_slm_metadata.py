@@ -1,4 +1,4 @@
-from django.test import TestCase
+import pytest
 
 from core.tests.functional.ticket_base.test_functional_ticket_base_metadata import TicketBaseMetadataInheritedCases
 
@@ -6,6 +6,7 @@ from itim.models.slm_ticket_base import SLMTicket
 
 
 
+@pytest.mark.model_slmticket
 class MetadataTestCases(
     TicketBaseMetadataInheritedCases,
 ):

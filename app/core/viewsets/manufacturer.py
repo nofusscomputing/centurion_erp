@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 # THis import only exists so that the migrations can be created
 from core.models.manufacturer_history import ManufacturerHistory    # pylint: disable=W0611:unused-import
-from core.serializers.manufacturer import (
+from core.serializers.manufacturer import (    # pylint: disable=W0611:unused-import
     Manufacturer,
     ManufacturerModelSerializer,
     ManufacturerViewSerializer
@@ -18,7 +18,10 @@ from api.viewsets.common import ModelViewSet
         summary = 'Create a manufacturer',
         description='',
         responses = {
-            # 200: OpenApiResponse(description='Allready exists', response=ConfigGroupViewSerializer),
+            200: OpenApiResponse(
+                description='Already exists',
+                response = ManufacturerViewSerializer
+            ),
             201: OpenApiResponse(description='Created', response=ManufacturerViewSerializer),
             # 400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing add permissions'),

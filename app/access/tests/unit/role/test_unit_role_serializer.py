@@ -1,5 +1,33 @@
 import pytest
 
+from api.tests.unit.test_unit_serializer import (
+    SerializerTestCases
+)
+
+
+@pytest.mark.model_role
+class RoleSerializerTestCases(
+    SerializerTestCases
+):
+    pass
+
+
+
+class RoleSerializerInheritedCases(
+    RoleSerializerTestCases
+):
+    pass
+
+
+
+@pytest.mark.module_access
+class RoleSerializerPyTest(
+    RoleSerializerTestCases
+):
+    pass
+
+
+
 # from pytest import MonkeyPatch
 
 # from unittest.mock import patch
@@ -20,6 +48,8 @@ import pytest
 ###############################################################################
 
 
+@pytest.mark.model_role
+@pytest.mark.model_role
 @pytest.mark.skip( reason = 'figure out how to isolate so entirety of unit tests can run without this test failing' )
 # @pytest.mark.forked
 # @pytest.mark.django_db

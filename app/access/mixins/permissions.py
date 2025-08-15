@@ -1,13 +1,11 @@
 import traceback
 
-from django.core.exceptions import ObjectDoesNotExist
-
-from rest_framework import exceptions
 from rest_framework.permissions import DjangoObjectPermissions
 
-from access.models.tenancy import Tenant, TenancyObject
+from access.models.tenancy import Tenant
 
 from core import exceptions as centurion_exceptions
+from core.mixins.centurion import Centurion
 
 
 
@@ -60,11 +58,11 @@ class OrganizationPermissionMixin(
 
             if hasattr(view, 'model'):
 
-                self._is_tenancy_model = issubclass(view.model, TenancyObject)
+                self._is_tenancy_model = issubclass(view.model, Centurion)
 
                 if view.get_parent_model():
 
-                    self._is_tenancy_model = issubclass(view.get_parent_model(), TenancyObject)
+                    self._is_tenancy_model = issubclass(view.get_parent_model(), Centurion)
 
         return self._is_tenancy_model
 
@@ -113,6 +111,12 @@ class OrganizationPermissionMixin(
 
             raise centurion_exceptions.NotAuthenticated()
 
+
+        if request.method not in view.allowed_methods:
+
+            raise centurion_exceptions.MethodNotAllowed(method = request.method)
+
+
         try:
 
             if (
@@ -156,12 +160,7 @@ class OrganizationPermissionMixin(
                 has_permission_required: bool = permission_required in user_permissions
 
 
-            if request.method not in view.allowed_methods:
-
-                raise centurion_exceptions.MethodNotAllowed(method = request.method)
-
-
-            elif not has_permission_required and not request.user.is_superuser:
+            if not has_permission_required and not request.user.is_superuser:
 
                 raise centurion_exceptions.PermissionDenied()
 
@@ -290,6 +289,11 @@ class OrganizationPermissionMixin(
                 or (
                     view.model.__name__ == 'AuthToken'
                     and request._user.id == int(view.kwargs.get('model_id', 0))
+                )
+                or (    # org=None is the application wide settings.
+                    view.model.__name__ == 'AppSettings'
+                    and request.user.is_superuser
+                    and obj.organization is None
                 )
             ):
 

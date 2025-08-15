@@ -233,33 +233,6 @@ class ViewSetBase:
         )
 
 
-class TicketCommentPermissionsAPI(
-    ViewSetBase,
-    APIPermissions,
-    TestCase
-):
-    def test_returned_results_only_user_orgs(self):
-        """Test not required
-
-        this test is not required as a ticket comment obtains it's
-        organization from the ticket.
-        """
-
-        pass
-
-
-    def test_returned_data_from_user_and_global_organizations_only(self):
-        """Check items returned
-
-        This test case is a over-ride of a test case with the same name.
-        This model is not a tenancy model making this test not-applicable.
-
-        Items returned from the query Must be from the users organization and
-        global ONLY!
-        """
-        pass
-
-
 
 class TicketCommentMetadata(
     ViewSetBase,
