@@ -1,3 +1,9 @@
+## 1.19.2 (2025-08-16)
+
+### Fixes
+
+- **base**: before setting up metrics if enabled, create data dir
+
 ## 1.19.1 (2025-08-15)
 
 ### Fixes
