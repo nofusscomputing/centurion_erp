@@ -59,10 +59,7 @@ timeout = 180
 workers = 4
 
 
-def when_ready(_):
-
-    if not getattr(settings, 'METRICS_ENABLED', False):
-        return
+if getattr(settings, 'METRICS_ENABLED', False):
 
     proc_path = None
 
@@ -77,6 +74,16 @@ def when_ready(_):
         os.environ["PROMETHEUS_MULTIPROC_DIR"] = settings.METRICS_MULTIPROC_DIR
 
         proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
+
+
+    prometheus_dir = Path(os.environ["PROMETHEUS_MULTIPROC_DIR"])
+    prometheus_dir.mkdir(parents=True, exist_ok=True)
+
+
+def when_ready(_):
+
+    if not getattr(settings, 'METRICS_ENABLED', False):
+        return
 
 
     logger.info(f'Setting up prometheus metrics HTTP server on port \
