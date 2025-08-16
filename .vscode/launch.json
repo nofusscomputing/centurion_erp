@@ -92,7 +92,7 @@
             "console": "integratedTerminal",
             "args": [
                 "-A",
-                "app",
+                "centurion",
                 "worker",
                 "-l",
                 "INFO",
