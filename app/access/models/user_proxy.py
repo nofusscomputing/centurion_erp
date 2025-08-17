@@ -1,4 +1,4 @@
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission, AbstractUser
 from django.core.exceptions import PermissionDenied
 
 from access.models.tenant import Tenant
@@ -6,7 +6,7 @@ from access.models.tenant import Tenant
 
 
 class CenturionUser(
-    User,
+    AbstractUser,
 ):
     """Centurion User
 
@@ -43,9 +43,8 @@ class CenturionUser(
     # ]
 
     class Meta:
-        abstract = False
-        proxy = True    # User will be linked to Employee/Customer entity via related_name from the entity.
-                        # ToDo: refactory Employee/Customer to inherit from a new model. entity_user
+
+        swappable = "AUTH_USER_MODEL"
 
         verbose_name = 'Centurion User'
 
