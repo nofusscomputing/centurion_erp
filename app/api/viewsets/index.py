@@ -23,19 +23,24 @@ class Index(IndexViewset):
 
     def list(self, request, *args, **kwargs):
 
-        return Response(
-            {
-                "access": reverse('v2:_api_v2_access_home-list', request=request),
-                "assistance": reverse('v2:_api_v2_assistance_home-list', request=request),
-                "devops": reverse('v2:devops:api-root', request=request),
-                "docs": reverse('v2:_api_v2_docs', request=request),
-                "base": reverse('v2:_api_v2_base_home-list', request=request),
-                "hr": reverse('v2:hr:_api_v2_access_home-list', request=request),
-                "itam": reverse('v2:_api_v2_itam_home-list', request=request),
-                "itim": reverse('v2:_api_v2_itim_home-list', request=request),
-                "config_management": reverse('v2:_api_v2_config_management_home-list', request=request),
-                "project_management": reverse('v2:_api_v2_project_management_home-list', request=request),
-                "public": reverse('v2:public:_public_api_v2-list', request=request),
-                "settings": reverse('v2:_api_v2_settings_home-list', request=request)
-            }
-        )
+        links = {
+            "access": reverse('v2:_api_access_home-list', request=request),
+            "assistance": reverse('v2:_api_v2_assistance_home-list', request=request),
+            "devops": reverse('v2:devops:api-root', request=request),
+            "docs": reverse('v2:_api_v2_docs', request=request),
+            "base": reverse('v2:_api_v2_base_home-list', request=request),
+            "itam": reverse('v2:_api_v2_itam_home-list', request=request),
+            "itim": reverse('v2:_api_v2_itim_home-list', request=request),
+            "config_management": reverse('v2:_api_v2_config_management_home-list', request=request),
+            "project_management": reverse('v2:_api_v2_project_management_home-list', request=request),
+            "public": reverse('v2:public:_public_api_v2-list', request=request),
+            "settings": reverse('v2:_api_v2_settings_home-list', request=request)
+        }
+
+        if request.feature_flag['2025-00005']:
+            links.update({
+                "hr": reverse('v2:hr:_api_human_resources_home-list', request=request),
+
+            })
+
+        return Response( links )

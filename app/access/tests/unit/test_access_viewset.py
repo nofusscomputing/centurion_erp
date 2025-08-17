@@ -17,7 +17,7 @@ class AccessViewset(
 
     viewset = Index
 
-    route_name = 'API:_api_v2_access_home'
+    route_name = 'API:_api_access_home'
 
 
     @classmethod

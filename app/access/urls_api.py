@@ -31,7 +31,7 @@ entity_type_names = str(entity_type_names)[:-1]
 
 router = DefaultRouter(trailing_slash=False)
 
-router.register('', access_v2.Index, basename = '_api_v2_access_home')
+router.register('', access_v2.Index, basename = '_api_access_home')
 
 router.register(
     prefix = '/(?P<model_name>[company]+)', viewset = entity.ViewSet,
