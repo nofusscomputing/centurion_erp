@@ -7,6 +7,6 @@ from human_resources.viewsets import index as HumanResourcesHome
 
 router = DefaultRouter(trailing_slash=False)
 
-router.register('', HumanResourcesHome.Index, feature_flag = '2025-00005', basename='_api_v2_access_home')
+router.register('', HumanResourcesHome.Index, feature_flag = '2025-00005', basename='_api_human_resources_home')
 
 urlpatterns = router.urls
