@@ -1,3 +1,11 @@
+## 1.19.3 (2025-08-17)
+
+### Fixes
+
+- **api**: ensure human_resources is behind its feature flag
+- **human_resources**: correct index route name
+- **access**: correct access route name
+
 ## 1.19.2 (2025-08-16)
 
 ### Fixes
