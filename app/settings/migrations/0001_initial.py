@@ -6,14 +6,14 @@ import django.utils.timezone
 from django.conf import settings
 from django.db import migrations, models
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from settings.models.user_settings import UserSettings
 
 
 def add_user_settings(apps, schema_editor):
 
-    for user in User.objects.all():
+    for user in get_user_model().objects.all():
 
         if not UserSettings.objects.filter(pk=user.id).exists():
 
