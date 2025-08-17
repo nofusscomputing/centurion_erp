@@ -1,5 +1,3 @@
-import django
-
 from django.conf import settings
 from django.db import models
 
@@ -10,7 +8,7 @@ from access.fields import (
 
 from core.mixins.centurion import Centurion
 
-User = django.contrib.auth.get_user_model()
+
 
 class Tenant(
     Centurion,

@@ -1,6 +1,5 @@
 import datetime
 import difflib
-import django
 
 from django.apps import apps
 from django.conf import settings
@@ -18,8 +17,6 @@ from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket.ticket_enum_values import TicketValues
 
 from project_management.models.project_milestone import Project, ProjectMilestone
-
-User = django.contrib.auth.get_user_model()
 
 
 
