@@ -103,9 +103,9 @@ class ViewSet( ModelViewSet ):
 
         if organization:
 
-            if self.request.tenancy.has_organization_permission(
-                organization = organization,
-                permissions_required = 'project_management.import_project'
+            if self.request.user.has_perm(
+                permission = 'project_management.import_project',
+                tenancy = organization
             ) or self.request.user.is_superuser:
 
                 self.serializer_class = globals()[str( self.model._meta.verbose_name) + 'ImportSerializer']

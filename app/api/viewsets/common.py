@@ -133,6 +133,11 @@ class Create(
                 status = e.status_code
             )
 
+        if hasattr(self.model, 'context'):
+
+            self.model.context['user'] = None
+            self.model.context['logging'] = None
+
         return response
 
 
@@ -180,6 +185,11 @@ class Destroy(
                 data = e.get_full_details(),
                 status = e.status_code
             )
+
+        if hasattr(self.model, 'context'):
+
+            self.model.context['user'] = None
+            self.model.context['logging'] = None
 
         return response
 
@@ -229,6 +239,11 @@ class List(
                 data = e.get_full_details(),
                 status = e.status_code
             )
+
+        if hasattr(self.model, 'context'):
+
+            self.model.context['user'] = None
+            self.model.context['logging'] = None
 
         return response
 
@@ -281,6 +296,11 @@ class Retrieve(
                 data = e.get_full_details(),
                 status = e.status_code
             )
+
+        if hasattr(self.model, 'context'):
+
+            self.model.context['user'] = None
+            self.model.context['logging'] = None
 
         return response
 
@@ -354,6 +374,11 @@ class Update(
                 status = e.status_code
             )
 
+        if hasattr(self.model, 'context'):
+
+            self.model.context['user'] = None
+            self.model.context['logging'] = None
+
         return response
 
 
@@ -420,6 +445,11 @@ class Update(
                 data = e.get_full_details(),
                 status = e.status_code
             )
+
+        if hasattr(self.model, 'context'):
+
+            self.model.context['user'] = None
+            self.model.context['logging'] = None
 
         return response
 
