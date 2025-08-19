@@ -2,4 +2,4 @@ from .organization_history import OrganizationHistory    # pylint: disable=W0611
 
 from .organization_notes import OrganizationNotes    # pylint: disable=W0611:unused-import
 
-from .user_proxy import CenturionUser
+from .user_proxy import CenturionUser    # pylint: disable=W0611:unused-import

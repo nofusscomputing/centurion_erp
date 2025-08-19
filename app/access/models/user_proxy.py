@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.contrib.auth.models import Permission, AbstractUser
 from django.core.exceptions import PermissionDenied
 
@@ -34,7 +35,8 @@ class CenturionUser(
     `{ 'tenancy_{id}': [ Permission ] }`
     """
 
-    # EMAIL_FIELD = 'email'    # Update contact email field name so it's different to the user model.
+    # Update contact email field name so it's different to the user model.
+    # EMAIL_FIELD = 'email'
 
     # REQUIRED_FIELDS = [
     #     EMAIL_FIELD,
@@ -57,27 +59,9 @@ class CenturionUser(
 
 
 
-    def get_group_permissions(self, tenancy: bool = True) -> dict[ str, list[ Permission ] ] | list[ Permission ]:
-        """ Get the Users Permissions
-
-        Args:
-            tenancy (bool, optional): Return permission in list. Defaults to True.
-
-        Returns:
-            dict[ str, list[ Permission ] ]: Permissions listed by tenancy
-            list[ Permission ]: All Permissions
-        """
-        
-        for group in self.groups:    # pylint: disable=E1133:not-an-iterable
-
-            for role in group.roles:
-                pass
-
-                # role.get_permissions()
-
-
-
-    def get_permissions(self, tenancy: bool = True) -> dict[ str, list[ Permission ] ] | list[ Permission ]:
+    def get_group_permissions(
+        self, tenancy: bool = True
+    ) -> dict[ str, list[ Permission ] ] | list[ Permission ]:
         """ Get the Users Permissions
 
         Args:
@@ -88,16 +72,87 @@ class CenturionUser(
             list[ Permission ]: All Permissions
         """
 
-        # also get group permissions. self.get_group_permissions()
+        if self._tenancies is None:
+            app_settings = apps.get_model(
+                app_label = 'settings',
+                model_name = 'appsettings',
+            ).objects.select_related('global_organization').filter(
+                owner_organization = None
+            )[0]
 
-        for role in self.roles:
-            pass
+            if app_settings.global_organization:
+                self._tenancies = [ app_settings.global_organization ]
+                self._tenancies_int = [ app_settings.global_organization.id ]
+            else:
+                self._tenancies = []
+                self._tenancies_int = []
 
-            # role.get_permissions()
+            if self._permissions is None:
+                self._permissions = []
 
-            # also populate `self._tenancies` and `self._tenancies_int`
+            if self._permissions_by_tenancy is None:
+                self._permissions_by_tenancy = {}
 
-        return []
+            for group in self.groups.all():    # pylint: disable=E1133:not-an-iterable
+
+                if group.team.organization not in self._tenancies:
+                    self._tenancies += [ group.team.organization ]
+                    self._tenancies_int += [ group.team.organization.id ]
+
+
+                for permission in group.permissions.all():
+
+                    view_permission = permission.content_type.app_label + '.' + permission.codename
+
+                    if(
+                        view_permission in self._permissions
+                    ):
+                        continue
+
+
+                    self._permissions += [ view_permission ]
+
+                    if 'tenancy_' + str(
+                        group.team.organization.id) not in self._permissions_by_tenancy:
+
+                        self._permissions_by_tenancy.update(
+                            { 'tenancy_' + str(group.team.organization.id): []}
+                        )
+
+
+                    self._permissions_by_tenancy['tenancy_' + str(
+                        group.team.organization.id)] += [ view_permission ]
+
+
+        if tenancy:
+            return self._permissions
+        else:
+            return self._permissions_by_tenancy
+
+
+
+
+
+    def get_permissions(
+        self, tenancy: bool = True
+    ) -> dict[ str, list[ Permission ] ] | list[ Permission ]:
+        """ Get the Users Permissions
+
+        Args:
+            tenancy (bool, optional): Return permission as tenancy list. Defaults to True.
+
+        Returns:
+            dict[ str, list[ Permission ] ]: Permissions listed by tenancy
+            list[ Permission ]: All Permissions
+        """
+
+        if self._tenancies is None:
+            self.get_group_permissions()
+
+        if tenancy:
+            return self._permissions_by_tenancy
+
+        return self._permissions
 
 
 
@@ -118,25 +173,10 @@ class CenturionUser(
 
         if self._tenancies is None:
 
-            if self._permissions is None:
-                self.get_permissions
-
-            tenancies: list = []
-            tenancies_int: list = []
-
-            for role in self.roles:
-
-                if role.organization in tenancies:
-                    continue
-
-                tenancies += [ role.organization ]
-                tenancies_int += [ role.organization.id ]
-
-            self._tenancies = tenancies
-            self._tenancies_int = tenancies_int
+            self.get_group_permissions()
 
 
-        if as_int_list:
+        if int_list:
             return self._tenancies_int
 
         return self._tenancies
@@ -151,46 +191,39 @@ class CenturionUser(
 
 
 
-    def has_perm(self, permission: Permission, obj = None, tenancy: Tenant = None) -> bool:
+    def has_perm(
+        self, permission: Permission, obj = None, tenancy: Tenant = None,
+    ) -> bool:
 
-        if(
-            obj is None
-            and tenancy is None
-        ):
-            raise ValueError('Both obj and tenancy cant be None')
+        if tenancy is None and obj is not None:
+            tenancy = obj.get_tenant()
 
-        if tenancy is None:
-            tenancy = obj.organization
+        if tenancy is not None:
 
-        # if self.has_tenancy_permission(perm, tenancy):
-        # for tenancy, permissions in self.get_permissions().items()
-
-        if tenancy is None:
-            raise ValueError('tenancy cant be None')
-
-        permissions = self.get_permissions()
-
-        if f'tenancy_{tenancy.id}' not in permissions:
-            raise PermissionDenied
+            if f'tenancy_{tenancy.id}' not in self.get_permissions():
+                return False
 
 
-        for tenancy, permissions in self.get_permissions().items():
-
-            if(
-                tenancy == f'tenancy_{tenancy.id}'
-                and perm in permissions
-            ):
+            if permission in self.get_permissions()[f'tenancy_{tenancy.id}']:
                 return True
 
 
-        raise PermissionDenied
+        else:
+
+            if permission in self.get_permissions( tenancy = False ):
+                return True
+
+        return False
 
 
 
-    def has_perms(self, permission_list: list[ Permission ], obj = None, tenancy: Tenant = None):
+    def has_perms(
+        self, permission_list: list[ Permission ], obj = None, tenancy: Tenant = None
+    ) -> bool:
 
         for perm in perm_list:
 
-            self.has_perm( perm, obj )
+            if not self.has_perm( perm, obj ):
+                return False
 
         return True
