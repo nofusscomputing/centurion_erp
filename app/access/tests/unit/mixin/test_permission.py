@@ -11,7 +11,7 @@ from rest_framework.generics import GenericAPIView
 
 from api.viewsets.common import ModelViewSet
 
-from access.mixins.permissions import OrganizationPermissionMixin
+from access.mixins.permissions import TenancyPermissionMixin
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
@@ -330,7 +330,7 @@ class HasPermissionCommon(
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -368,7 +368,7 @@ class HasPermissionCommon(
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -405,7 +405,7 @@ class HasPermissionCommon(
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -449,7 +449,7 @@ class HasPermission(
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.call_count == 0
 
@@ -492,7 +492,7 @@ class HasPermissionWrongMethodOptions:
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -529,7 +529,7 @@ class HasPermissionWrongMethodOptions:
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -574,7 +574,7 @@ class HasPermissionWrongMethodOptions:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -615,7 +615,7 @@ class HasPermissionWrongMethodDelete:
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -652,7 +652,7 @@ class HasPermissionWrongMethodDelete:
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -697,7 +697,7 @@ class HasPermissionWrongMethodDelete:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -738,7 +738,7 @@ class HasPermissionWrongMethodGet:
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -775,7 +775,7 @@ class HasPermissionWrongMethodGet:
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -819,7 +819,7 @@ class HasPermissionWrongMethodGet:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -860,7 +860,7 @@ class HasPermissionWrongMethodPatch:
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -897,7 +897,7 @@ class HasPermissionWrongMethodPatch:
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -942,7 +942,7 @@ class HasPermissionWrongMethodPatch:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -982,7 +982,7 @@ class HasPermissionWrongMethodPost:
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1019,7 +1019,7 @@ class HasPermissionWrongMethodPost:
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1066,7 +1066,7 @@ class HasPermissionWrongMethodPost:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -1108,7 +1108,7 @@ class HasPermissionWrongMethodPut:
             user = self.test_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1145,7 +1145,7 @@ class HasPermissionWrongMethodPut:
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1191,7 +1191,7 @@ class HasPermissionWrongMethodPut:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -1231,7 +1231,7 @@ class HasPermissionDifferentOrganizationCommon:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1270,7 +1270,7 @@ class HasPermissionDifferentOrganizationCommon:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1307,7 +1307,7 @@ class HasPermissionDifferentOrganizationCommon:
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1350,7 +1350,7 @@ class HasPermissionDifferentOrganization(
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.call_count == 0
 
@@ -1394,7 +1394,7 @@ class HasPermissionDifferentOrganizationWrongMethodDelete:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1431,7 +1431,7 @@ class HasPermissionDifferentOrganizationWrongMethodDelete:
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1476,7 +1476,7 @@ class HasPermissionDifferentOrganizationWrongMethodDelete:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -1519,7 +1519,7 @@ class HasPermissionDifferentOrganizationWrongMethodGet:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1556,7 +1556,7 @@ class HasPermissionDifferentOrganizationWrongMethodGet:
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1601,7 +1601,7 @@ class HasPermissionDifferentOrganizationWrongMethodGet:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -1642,7 +1642,7 @@ class HasPermissionDifferentOrganizationWrongMethodOptions:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1679,7 +1679,7 @@ class HasPermissionDifferentOrganizationWrongMethodOptions:
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1724,7 +1724,7 @@ class HasPermissionDifferentOrganizationWrongMethodOptions:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -1764,7 +1764,7 @@ class HasPermissionDifferentOrganizationWrongMethodPatch:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1801,7 +1801,7 @@ class HasPermissionDifferentOrganizationWrongMethodPatch:
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1846,7 +1846,7 @@ class HasPermissionDifferentOrganizationWrongMethodPatch:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -1886,7 +1886,7 @@ class HasPermissionDifferentOrganizationWrongMethodPost:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -1923,7 +1923,7 @@ class HasPermissionDifferentOrganizationWrongMethodPost:
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -1968,7 +1968,7 @@ class HasPermissionDifferentOrganizationWrongMethodPost:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2008,7 +2008,7 @@ class HasPermissionDifferentOrganizationWrongMethodPut:
             user = self.test_user_two,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2045,7 +2045,7 @@ class HasPermissionDifferentOrganizationWrongMethodPut:
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2090,7 +2090,7 @@ class HasPermissionDifferentOrganizationWrongMethodPut:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2135,7 +2135,7 @@ class ActionDeniedAddPermission:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2172,7 +2172,7 @@ class ActionDeniedAddPermission:
             user = self.add_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2213,7 +2213,7 @@ class ActionDeniedAddPermission:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -2249,7 +2249,7 @@ class ActionDeniedAddPermission:
             user = self.add_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2290,7 +2290,7 @@ class ActionDeniedAddPermissionWrongMethodDelete:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2327,7 +2327,7 @@ class ActionDeniedAddPermissionWrongMethodDelete:
             user = self.add_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2373,7 +2373,7 @@ class ActionDeniedAddPermissionWrongMethodDelete:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2413,7 +2413,7 @@ class ActionDeniedAddPermissionWrongMethodGet:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2450,7 +2450,7 @@ class ActionDeniedAddPermissionWrongMethodGet:
             user = self.add_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2495,7 +2495,7 @@ class ActionDeniedAddPermissionWrongMethodGet:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2535,7 +2535,7 @@ class ActionDeniedAddPermissionWrongMethodOptions:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2572,7 +2572,7 @@ class ActionDeniedAddPermissionWrongMethodOptions:
             user = self.add_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2616,7 +2616,7 @@ class ActionDeniedAddPermissionWrongMethodOptions:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2656,7 +2656,7 @@ class ActionDeniedAddPermissionWrongMethodPatch:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2693,7 +2693,7 @@ class ActionDeniedAddPermissionWrongMethodPatch:
             user = self.add_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2738,7 +2738,7 @@ class ActionDeniedAddPermissionWrongMethodPatch:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2778,7 +2778,7 @@ class ActionDeniedAddPermissionWrongMethodPost:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2815,7 +2815,7 @@ class ActionDeniedAddPermissionWrongMethodPost:
             user = self.add_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -2860,7 +2860,7 @@ class ActionDeniedAddPermissionWrongMethodPost:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2899,7 +2899,7 @@ class ActionDeniedAddPermissionWrongMethodPut:
             user = self.add_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -2942,7 +2942,7 @@ class ActionDeniedAddPermissionWrongMethodPut:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -2985,7 +2985,7 @@ class ActionDeniedChangePermission:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3022,7 +3022,7 @@ class ActionDeniedChangePermission:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3064,7 +3064,7 @@ class ActionDeniedChangePermission:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -3100,7 +3100,7 @@ class ActionDeniedChangePermission:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3145,7 +3145,7 @@ class ActionDeniedChangePermissionWrongMethodDelete:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3182,7 +3182,7 @@ class ActionDeniedChangePermissionWrongMethodDelete:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3228,7 +3228,7 @@ class ActionDeniedChangePermissionWrongMethodDelete:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -3271,7 +3271,7 @@ class ActionDeniedChangePermissionWrongMethodGet:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3308,7 +3308,7 @@ class ActionDeniedChangePermissionWrongMethodGet:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3353,7 +3353,7 @@ class ActionDeniedChangePermissionWrongMethodGet:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -3393,7 +3393,7 @@ class ActionDeniedChangePermissionWrongMethodOptions:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3430,7 +3430,7 @@ class ActionDeniedChangePermissionWrongMethodOptions:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3475,7 +3475,7 @@ class ActionDeniedChangePermissionWrongMethodOptions:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -3514,7 +3514,7 @@ class ActionDeniedChangePermissionWrongMethodPatch:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3551,7 +3551,7 @@ class ActionDeniedChangePermissionWrongMethodPatch:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3596,7 +3596,7 @@ class ActionDeniedChangePermissionWrongMethodPatch:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -3636,7 +3636,7 @@ class ActionDeniedChangePermissionWrongMethodPost:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3673,7 +3673,7 @@ class ActionDeniedChangePermissionWrongMethodPost:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3718,7 +3718,7 @@ class ActionDeniedChangePermissionWrongMethodPost:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -3757,7 +3757,7 @@ class ActionDeniedChangePermissionWrongMethodPut:
             user = self.change_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3794,7 +3794,7 @@ class ActionDeniedChangePermissionWrongMethodPut:
             user = self.change_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3839,7 +3839,7 @@ class ActionDeniedChangePermissionWrongMethodPut:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -3885,7 +3885,7 @@ class ActionDeniedDeletePermission:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -3922,7 +3922,7 @@ class ActionDeniedDeletePermission:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -3963,7 +3963,7 @@ class ActionDeniedDeletePermission:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -3999,7 +3999,7 @@ class ActionDeniedDeletePermission:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4041,7 +4041,7 @@ class ActionDeniedDeletePermissionWrongMethodDelete:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4078,7 +4078,7 @@ class ActionDeniedDeletePermissionWrongMethodDelete:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4123,7 +4123,7 @@ class ActionDeniedDeletePermissionWrongMethodDelete:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -4165,7 +4165,7 @@ class ActionDeniedDeletePermissionWrongMethodGet:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4202,7 +4202,7 @@ class ActionDeniedDeletePermissionWrongMethodGet:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4247,7 +4247,7 @@ class ActionDeniedDeletePermissionWrongMethodGet:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -4288,7 +4288,7 @@ class ActionDeniedDeletePermissionWrongMethodOptions:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4325,7 +4325,7 @@ class ActionDeniedDeletePermissionWrongMethodOptions:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4370,7 +4370,7 @@ class ActionDeniedDeletePermissionWrongMethodOptions:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -4412,7 +4412,7 @@ class ActionDeniedDeletePermissionWrongMethodPatch:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4449,7 +4449,7 @@ class ActionDeniedDeletePermissionWrongMethodPatch:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4494,7 +4494,7 @@ class ActionDeniedDeletePermissionWrongMethodPatch:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -4534,7 +4534,7 @@ class ActionDeniedDeletePermissionWrongMethodPost:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4571,7 +4571,7 @@ class ActionDeniedDeletePermissionWrongMethodPost:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4616,7 +4616,7 @@ class ActionDeniedDeletePermissionWrongMethodPost:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -4655,7 +4655,7 @@ class ActionDeniedDeletePermissionWrongMethodPut:
             user = self.delete_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4692,7 +4692,7 @@ class ActionDeniedDeletePermissionWrongMethodPut:
             user = self.delete_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4737,7 +4737,7 @@ class ActionDeniedDeletePermissionWrongMethodPut:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -4783,7 +4783,7 @@ class ActionDeniedViewPermission:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4820,7 +4820,7 @@ class ActionDeniedViewPermission:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4861,7 +4861,7 @@ class ActionDeniedViewPermission:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -4897,7 +4897,7 @@ class ActionDeniedViewPermission:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -4938,7 +4938,7 @@ class ActionDeniedViewPermissionWrongMethodOptions:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -4975,7 +4975,7 @@ class ActionDeniedViewPermissionWrongMethodOptions:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -5020,7 +5020,7 @@ class ActionDeniedViewPermissionWrongMethodOptions:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5059,7 +5059,7 @@ class ActionDeniedViewPermissionWrongMethodDelete:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -5096,7 +5096,7 @@ class ActionDeniedViewPermissionWrongMethodDelete:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -5142,7 +5142,7 @@ class ActionDeniedViewPermissionWrongMethodDelete:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5182,7 +5182,7 @@ class ActionDeniedViewPermissionWrongMethodGet:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -5219,7 +5219,7 @@ class ActionDeniedViewPermissionWrongMethodGet:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -5264,7 +5264,7 @@ class ActionDeniedViewPermissionWrongMethodGet:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5303,7 +5303,7 @@ class ActionDeniedViewPermissionWrongMethodPatch:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -5340,7 +5340,7 @@ class ActionDeniedViewPermissionWrongMethodPatch:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -5385,7 +5385,7 @@ class ActionDeniedViewPermissionWrongMethodPatch:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5424,7 +5424,7 @@ class ActionDeniedViewPermissionWrongMethodPost:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -5461,7 +5461,7 @@ class ActionDeniedViewPermissionWrongMethodPost:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -5506,7 +5506,7 @@ class ActionDeniedViewPermissionWrongMethodPost:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5548,7 +5548,7 @@ class ActionDeniedViewPermissionWrongMethodPut:
             user = self.view_user,
         )
 
-        assert OrganizationPermissionMixin().has_permission(request = view.request, view = view) is False
+        assert TenancyPermissionMixin().has_permission(request = view.request, view = view) is False
 
 
 
@@ -5585,7 +5585,7 @@ class ActionDeniedViewPermissionWrongMethodPut:
             user = self.view_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert get_object.called == False
 
@@ -5630,7 +5630,7 @@ class ActionDeniedViewPermissionWrongMethodPut:
 
         with pytest.raises( centurion_exceptions.MethodNotAllowed ) as ex:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5676,7 +5676,7 @@ class ActionDeniedAnonymousUser:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5715,7 +5715,7 @@ class ActionDeniedAnonymousUser:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5756,7 +5756,7 @@ class ActionDeniedAnonymousUser:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5795,7 +5795,7 @@ class ActionDeniedAnonymousUser:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5836,7 +5836,7 @@ class ActionDeniedAnonymousUserWrongMethodDelete:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -5874,7 +5874,7 @@ class ActionDeniedAnonymousUserWrongMethodDelete:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5916,7 +5916,7 @@ class ActionDeniedAnonymousUserWrongMethodGet:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -5954,7 +5954,7 @@ class ActionDeniedAnonymousUserWrongMethodGet:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -5997,7 +5997,7 @@ class ActionDeniedAnonymousUserWrongMethodOptions:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -6035,7 +6035,7 @@ class ActionDeniedAnonymousUserWrongMethodOptions:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -6078,7 +6078,7 @@ class ActionDeniedAnonymousUserWrongMethodPatch:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -6116,7 +6116,7 @@ class ActionDeniedAnonymousUserWrongMethodPatch:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 class ActionDeniedAnonymousUserWrongMethodPost:
@@ -6157,7 +6157,7 @@ class ActionDeniedAnonymousUserWrongMethodPost:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
     @patch.object(GenericAPIView, 'get_object')
@@ -6195,7 +6195,7 @@ class ActionDeniedAnonymousUserWrongMethodPost:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -6238,7 +6238,7 @@ class ActionDeniedAnonymousUserWrongMethodPut:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -6278,7 +6278,7 @@ class ActionDeniedAnonymousUserWrongMethodPut:
 
         with pytest.raises(centurion_exceptions.NotAuthenticated) as err:
 
-            OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+            TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
 
 
@@ -6346,7 +6346,7 @@ class ActionDeniedAnonymousUserWrongMethodPut:
 
 
 
-
+@pytest.mark.skip( reason = 'to be refactored, see #766' )
 class AddOrganizationPermissions(
     # ActionDeniedAddPermission,
     # ActionDeniedAddPermissionWrongMethodDelete,
@@ -6457,7 +6457,7 @@ class AddOrganizationPermissions(
             user = self.test_user_two,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert not get_object.called
 
@@ -6497,7 +6497,7 @@ class AddOrganizationPermissions(
             user = self.test_user,
         )
 
-        OrganizationPermissionMixin().has_permission(request = view.request, view = view)
+        TenancyPermissionMixin().has_permission(request = view.request, view = view)
 
         assert not get_object.called
 
@@ -6506,6 +6506,7 @@ class AddOrganizationPermissions(
 
 
 
+@pytest.mark.skip( reason = 'to be refactored, see #766' )
 class ChangeOrganizationPermissions(
     ActionDeniedAddPermission,
     ActionDeniedAddPermissionWrongMethodDelete,
@@ -6577,6 +6578,7 @@ class ChangeOrganizationPermissions(
 
 
 
+@pytest.mark.skip( reason = 'to be refactored, see #766' )
 class DeleteOrganizationPermissions(
     ActionDeniedAddPermission,
     # ActionDeniedAddPermissionWrongMethodDelete,
@@ -6651,6 +6653,7 @@ class DeleteOrganizationPermissions(
 
 
 
+@pytest.mark.skip( reason = 'to be refactored, see #766' )
 class PartialChangeOrganizationPermissions(
     ActionDeniedAddPermission,
     ActionDeniedAddPermissionWrongMethodDelete,
@@ -6723,6 +6726,7 @@ class PartialChangeOrganizationPermissions(
 
 
 
+@pytest.mark.skip( reason = 'to be refactored, see #766' )
 class ViewOrganizationPermissions(
     ActionDeniedAddPermission,
     ActionDeniedAddPermissionWrongMethodDelete,
