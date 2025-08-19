@@ -128,7 +128,8 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
             else:
 
                 try:
-                    model_obj.delete()
+                    if model_obj.id:
+                        model_obj.delete()
                 except:
                     pass
 

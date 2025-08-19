@@ -26,7 +26,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item )
+        the_model = model_instance( kwargs_create = model_kwargs.copy() )
 
         context_user = mocker.patch.object(
             the_model, 'context'
@@ -54,7 +54,7 @@ class AdditionalTestCases:
 
 
 
-    def test_permission_delete(self, mocker, model_instance, api_request_permissions):
+    def test_permission_delete(self, mocker, model_instance, model_kwargs, api_request_permissions):
         """ Check correct permission for delete
 
         Delete item as user with delete permission
@@ -64,7 +64,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['delete'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -96,7 +96,7 @@ class AdditionalTestCases:
 
 
 
-    def test_permission_view(self, mocker, model_instance, api_request_permissions):
+    def test_permission_view(self, mocker, model_instance, model_kwargs, api_request_permissions):
         """ Check correct permission for view
 
         Attempt to view as user with view permission
@@ -106,7 +106,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })

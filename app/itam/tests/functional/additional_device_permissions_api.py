@@ -107,7 +107,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = self.kwargs_create_item.copy()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317ea1'
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
@@ -117,7 +117,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item
+        kwargs = self.kwargs_create_item.copy()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317ea2'
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
@@ -127,7 +127,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item
+        kwargs = self.kwargs_create_item.copy()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317ea3'
         the_model = model_instance( kwargs_create = kwargs )
 
@@ -144,6 +144,7 @@ class AdditionalTestCases:
 
 
         assert response.status_code == 200
+        assert len(response.data['results']) > 0
 
         contains_different_org: bool = False
 
