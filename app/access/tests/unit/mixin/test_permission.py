@@ -49,7 +49,7 @@ class MyMockView(
         _stream: MockStream = None
 
 
-        def __init__(self, data: dict, method: str, user: User, tenancy: any):
+        def __init__(self, data: dict, method: str, user: User):
 
             self.data = data
 
@@ -91,7 +91,6 @@ class MyMockView(
             data = data,
             method = method,
             user = user,
-            tenancy = tenancy
         )
 
 
