@@ -12,7 +12,7 @@ from access.models.tenancy_abstract import TenancyAbstractModel
 
 
 
-class OrganizationPermissionMixin(
+class TenancyPermissionMixin(
     DjangoObjectPermissions,
 ):
     """Tenant Permission Mixin
