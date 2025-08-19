@@ -1,7 +1,7 @@
 import django
 
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from django.contrib.auth.models import Permission, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -9,11 +9,8 @@ from django.test import TestCase
 
 from rest_framework.generics import GenericAPIView
 
-from access.middleware.request import Tenancy
-
 from api.viewsets.common import ModelViewSet
 
-from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import OrganizationPermissionMixin
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
@@ -22,8 +19,6 @@ from access.models.team_user import TeamUsers
 
 from core import exceptions as centurion_exceptions
 from core.models.manufacturer import Manufacturer
-
-from settings.models.app_settings import AppSettings
 
 User = django.contrib.auth.get_user_model()
 
@@ -54,12 +49,7 @@ class MyMockView(
         _stream: MockStream = None
 
 
-
-        tenancy: Tenancy = None
-
-
-
-        def __init__(self, data: dict, method: str, user: User, tenancy: Tenancy):
+        def __init__(self, data: dict, method: str, user: User, tenancy: any):
 
             self.data = data
 
@@ -70,8 +60,6 @@ class MyMockView(
             # self.stream = self._stream
 
             self.user = user
-
-            self.tenancy = tenancy
 
 
     action: str = None
@@ -98,13 +86,6 @@ class MyMockView(
         self.model = model
 
         self.mocked_object = obj
-
-        tenancy = Tenancy(
-                user = user,
-                app_settings = AppSettings.objects.get(
-                    owner_organization = None
-                )
-            )
 
         self.request = self.MockRequest(
             data = data,
