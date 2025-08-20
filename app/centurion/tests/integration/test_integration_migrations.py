@@ -138,8 +138,8 @@ class MigrationsTestCases:
             - python manage.py migrate
         """
 
-        result = run_command('sh -c "cd test; CENTURION_IMAGE_TAG=$(git rev-list -n 1 $(git describe --tags --abbrev=0)) \
-docker-compose up -d centurion;"')
+        result = run_command("sh -c 'cd test; CENTURION_IMAGE_TAG=$(git rev-list -n 1 $(git describe --tags --abbrev=0)) \
+docker-compose up -d centurion;'")
 
         print( result['stdout'] )
 
@@ -159,8 +159,8 @@ docker-compose up -d centurion;"')
 
         assert result['returncode'] == 0, print( result )
 
-        result = run_command('sh -c "cd test; CENTURION_IMAGE_TAG=$GITHUB_SHA \
-docker-compose up -d centurion;"')
+        result = run_command("sh -c 'cd test; CENTURION_IMAGE_TAG=$GITHUB_SHA \
+docker-compose up -d centurion;'")
 
         print( result['stdout'] )
 
