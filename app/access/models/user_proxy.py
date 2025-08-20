@@ -93,7 +93,7 @@ class CenturionUser(
             if self._permissions_by_tenancy is None:
                 self._permissions_by_tenancy = {}
 
-            for group in self.groups.all():    # pylint: disable=E1133:not-an-iterable
+            for group in self.groups.select_related('team__organization').prefetch_related('permissions__content_type').all():    # pylint: disable=E1133:not-an-iterable
 
                 if group.team.organization not in self._tenancies:
                     self._tenancies += [ group.team.organization ]
