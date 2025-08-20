@@ -1,14 +1,16 @@
 import traceback
 
 from rest_framework.exceptions import (
+    MethodNotAllowed,
+    NotAuthenticated,
     PermissionDenied
 )
 from rest_framework.permissions import DjangoObjectPermissions
 
 from access.models.tenancy import Tenant
+from access.models.tenancy_abstract import TenancyAbstractModel
 
 from core import exceptions as centurion_exceptions
-from access.models.tenancy_abstract import TenancyAbstractModel
 
 
 
@@ -65,7 +67,8 @@ class TenancyPermissionMixin(
 
                 if view.get_parent_model():
 
-                    self._is_tenancy_model = issubclass(view.get_parent_model(), TenancyAbstractModel)
+                    self._is_tenancy_model = issubclass(
+                        view.get_parent_model(), TenancyAbstractModel)
 
         return self._is_tenancy_model
 
@@ -112,12 +115,14 @@ class TenancyPermissionMixin(
 
         if request.user.is_anonymous:
 
-            raise centurion_exceptions.NotAuthenticated()
+            raise NotAuthenticated(
+                code = 'anonymouse_user'
+            )
 
 
         if request.method not in view.allowed_methods:
 
-            raise centurion_exceptions.MethodNotAllowed(method = request.method)
+            raise MethodNotAllowed(method = request.method)
 
 
         try:
@@ -127,7 +132,7 @@ class TenancyPermissionMixin(
                     view.model.__name__ == 'AppSettings'
                     and request.user.is_superuser
                 )
-                or 
+                or
                 (
                     view.model.__name__ == 'UserSettings'
                     and request._user.id == int(view.kwargs.get('pk', 0))
@@ -159,7 +164,9 @@ class TenancyPermissionMixin(
                 permission = view.get_permission_required()
             ):
 
-                raise PermissionDenied()
+                raise PermissionDenied(
+                    code = 'missing_permission'
+                )
 
 
             obj_organization: Tenant = view.get_obj_organization(
@@ -172,7 +179,10 @@ class TenancyPermissionMixin(
                 and view.action not in [ 'list', 'metadata' ]
             ):
 
-                raise PermissionDenied('A tenancy model must specify a tenancy for authorization')
+                raise PermissionDenied(
+                    detail = 'A tenancy model must specify a tenancy for authorization',
+                    code = 'missing_tenancy'
+                )
 
             elif(
                 request.user.has_perm(
@@ -184,6 +194,10 @@ class TenancyPermissionMixin(
 
                 return True
 
+
+            raise PermissionDenied(
+                code = 'default_deny'
+            )
 
         except ValueError as e:
 
@@ -216,7 +230,6 @@ class TenancyPermissionMixin(
 
         try:
 
-
             if request.user.is_anonymous:
 
                 return False
@@ -242,14 +255,15 @@ class TenancyPermissionMixin(
 
             elif self.is_tenancy_model( view ):
 
-                object_organization = view._obj_organization
-
                 if(
-                    request.user.has_perm(
-                        permission = view.get_permission_required(),
-                        obj = obj
+                    (
+                        request.user.has_perm(
+                            permission = view.get_permission_required(),
+                            obj = obj
+                        )
+                        or request.user.is_superuser
                     )
-                    or request.user.is_superuser
+                    and view.get_obj_organization( obj = obj )
                 ):
 
                     return True

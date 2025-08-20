@@ -1104,6 +1104,7 @@ markers = [
     "meta_models: Selects Meta models",
     "mixin: Selects all mixin test cases.",
     "mixin_centurion: Selects all centurion mixin test cases.",
+    "mixin_tenancypermission: Selects all Tenancy Permission mixin test cases.",
     "model_assetbase: Selects tests for model Asset Base.",
     "model_appsettings: Selects tests for model app settings.",
     "model_authtoken: Selects tests for model Auth Token.",

@@ -2,13 +2,12 @@ import datetime
 import django
 import pytest
 
-User = django.contrib.auth.get_user_model()
 
 
 @pytest.fixture( scope = 'class')
 def model_user():
 
-    yield User
+    yield django.contrib.auth.get_user_model()
 
 
 @pytest.fixture( scope = 'class')
