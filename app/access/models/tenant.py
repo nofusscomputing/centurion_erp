@@ -81,6 +81,9 @@ class Tenant(
     def get_organization(self):
         return self
 
+    def get_tenant(self):
+        return self
+
 
     table_fields: list = [
         'nbsp',
