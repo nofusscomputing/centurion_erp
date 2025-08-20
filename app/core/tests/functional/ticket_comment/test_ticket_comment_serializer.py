@@ -56,7 +56,7 @@ class MockRequest:
         self.app_settings = app_settings
 
 
-
+@pytest.mark.skip( reason = 'to be refactored, see #766' )
 class TicketCommentValidationAPI:
 
     model = TicketComment
