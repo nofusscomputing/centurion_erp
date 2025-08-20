@@ -41,7 +41,7 @@ class TenancyManager(
             has_tenant_field = True
 
 
-            if user and getattr(user, 'is_authenticated', False):
+            if getattr(user, 'id', None) and getattr(user, 'is_authenticated', False):
 
                 tenancies = user.get_tenancies(int_list = True)
 
