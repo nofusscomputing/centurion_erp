@@ -105,12 +105,11 @@ class CenturionUser(
                     view_permission = permission.content_type.app_label + '.' + permission.codename
 
                     if(
-                        view_permission in self._permissions
+                        view_permission not in self._permissions
                     ):
-                        continue
 
+                        self._permissions += [ view_permission ]
 
-                    self._permissions += [ view_permission ]
 
                     if 'tenancy_' + str(
                         group.team.organization.id) not in self._permissions_by_tenancy:
@@ -120,8 +119,13 @@ class CenturionUser(
                         )
 
 
-                    self._permissions_by_tenancy['tenancy_' + str(
-                        group.team.organization.id)] += [ view_permission ]
+                    if(
+                        view_permission not in self._permissions_by_tenancy['tenancy_' + str(
+                            group.team.organization.id)]
+                    ):
+
+                        self._permissions_by_tenancy['tenancy_' + str(
+                            group.team.organization.id)] += [ view_permission ]
 
 
         if tenancy:
