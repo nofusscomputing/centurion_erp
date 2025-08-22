@@ -2,6 +2,7 @@
 import pytest
 import re
 import requests
+import time
 
 from django.urls import get_resolver, URLPattern, URLResolver
 
@@ -129,6 +130,10 @@ class URLChecksPyTest:
 
         response = auto_login_client.request("GET", url)
 
+        if response.status_code == 502:    # cater for complete Gunicorn restart
+            time.sleep(10)
+            response = auto_login_client.request("GET", url)
+
         assert response.status_code == 200
 
 
@@ -154,6 +159,10 @@ class URLChecksPyTest:
 
         response = auto_login_client.request("GET", url)
 
+        if response.status_code == 502:    # cater for complete Gunicorn restart
+            time.sleep(10)
+            response = auto_login_client.request("GET", url)
+
         assert response.status_code == 401
 
 
@@ -178,5 +187,9 @@ class URLChecksPyTest:
         url = f"http://127.0.0.1:8003/{url_path}"
 
         response = auto_login_client.request(method = "GET", url = url, auth = True)
+
+        if response.status_code == 502:    # cater for complete Gunicorn restart
+            time.sleep(10)
+            response = auto_login_client.request("GET", url)
 
         assert response.status_code == 200
