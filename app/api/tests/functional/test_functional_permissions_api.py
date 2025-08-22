@@ -57,7 +57,7 @@ class APIPermissionAddInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item )
+        the_model = model_instance( kwargs_create = model_kwargs.copy() )
 
         try:
 
@@ -99,7 +99,7 @@ class APIPermissionAddInheritedCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item )
+        the_model = model_instance( kwargs_create = model_kwargs.copy() )
 
         url = the_model.get_url( many = True )
 
@@ -159,7 +159,9 @@ class APIPermissionChangeInheritedCases:
         argvalues = permission_no_change,
         ids=[test_name for test_name, user, expected in permission_no_change]
     )
-    def test_permission_no_change(self, model_instance, api_request_permissions, test_name, user, expected):
+    def test_permission_no_change(self, model_instance, api_request_permissions, test_name, user, expected,
+        model_kwargs
+    ):
         """ Ensure permission view cant make change
 
         Attempt to make change as user without permissions
@@ -176,7 +178,7 @@ class APIPermissionChangeInheritedCases:
         client = Client()
 
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -203,7 +205,7 @@ class APIPermissionChangeInheritedCases:
 
 
 
-    def test_permission_change(self, model_instance, api_request_permissions):
+    def test_permission_change(self, model_instance, api_request_permissions, model_kwargs):
         """ Check correct permission for change
 
         Make change with user who has change permission
@@ -213,7 +215,7 @@ class APIPermissionChangeInheritedCases:
 
         client.force_login( api_request_permissions['user']['change'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -262,7 +264,9 @@ class APIPermissionDeleteInheritedCases:
         argvalues = permission_no_delete,
         ids=[test_name for test_name, user, expected in permission_no_delete]
     )
-    def test_permission_no_delete(self, model_instance, api_request_permissions, test_name, user, expected):
+    def test_permission_no_delete(self, model_instance, api_request_permissions,
+        test_name, user, expected, model_kwargs
+    ):
         """ Check correct permission for delete
 
         Attempt to delete as user with no permissons
@@ -282,7 +286,7 @@ class APIPermissionDeleteInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -302,7 +306,7 @@ class APIPermissionDeleteInheritedCases:
 
 
 
-    def test_permission_delete(self, model_instance, api_request_permissions):
+    def test_permission_delete(self, model_instance, api_request_permissions, model_kwargs):
         """ Check correct permission for delete
 
         Delete item as user with delete permission
@@ -312,7 +316,7 @@ class APIPermissionDeleteInheritedCases:
 
         client.force_login( api_request_permissions['user']['delete'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -355,7 +359,9 @@ class APIPermissionViewInheritedCases:
         argvalues = permission_no_view,
         ids=[test_name for test_name, user, expected in permission_no_view]
     )
-    def test_permission_no_view(self, model_instance, api_request_permissions, test_name, user, expected):
+    def test_permission_no_view(self, model_instance, api_request_permissions,
+        test_name, user, expected, model_kwargs
+    ):
         """ Check correct permission for view
 
         Attempt to view with user missing permission
@@ -375,7 +381,7 @@ class APIPermissionViewInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -400,7 +406,9 @@ class APIPermissionViewInheritedCases:
 
 
 
-    def test_permission_view(self, model_instance, api_request_permissions):
+    def test_permission_view(self, model_instance, api_request_permissions,
+        model_kwargs, kwargs_api_create
+    ):
         """ Check correct permission for view
 
         Attempt to view as user with view permission
@@ -410,7 +418,7 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -455,7 +463,7 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
@@ -464,7 +472,7 @@ class APIPermissionViewInheritedCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
         })
@@ -473,7 +481,7 @@ class APIPermissionViewInheritedCases:
             kwargs_create = kwargs
         )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item )
+        the_model = model_instance( kwargs_create = model_kwargs.copy() )
 
         response = client.get(
             path = the_model.get_url( many = True )
@@ -488,6 +496,7 @@ class APIPermissionViewInheritedCases:
 
 
         assert response.status_code == 200
+        assert len(response.data['results']) > 0
 
         contains_different_org: bool = False
 
@@ -531,7 +540,7 @@ class APIPermissionViewInheritedCases:
         ]
 
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
@@ -540,7 +549,7 @@ class APIPermissionViewInheritedCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs.copy()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
         })
@@ -552,7 +561,7 @@ class APIPermissionViewInheritedCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item )
+        the_model = model_instance( kwargs_create = model_kwargs.copy() )
 
         response = client.get(
             path = the_model.get_url( many = True )

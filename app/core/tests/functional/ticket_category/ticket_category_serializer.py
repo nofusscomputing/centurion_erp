@@ -1,3 +1,4 @@
+import django
 import pytest
 
 from django.test import TestCase
@@ -6,9 +7,11 @@ from rest_framework.exceptions import ValidationError
 
 from access.models.tenant import Tenant as Organization
 
-from centurion.tests.abstract.mock_view import MockView, User
+from centurion.tests.abstract.mock_view import MockView
 
 from core.serializers.ticket_category import TicketCategory, TicketCategoryModelSerializer
+
+User = django.contrib.auth.get_user_model()
 
 
 

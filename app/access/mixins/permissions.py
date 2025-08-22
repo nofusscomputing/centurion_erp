@@ -1,15 +1,20 @@
 import traceback
 
+from rest_framework.exceptions import (
+    MethodNotAllowed,
+    NotAuthenticated,
+    PermissionDenied
+)
 from rest_framework.permissions import DjangoObjectPermissions
 
 from access.models.tenancy import Tenant
+from access.models.tenancy_abstract import TenancyAbstractModel
 
 from core import exceptions as centurion_exceptions
-from core.mixins.centurion import Centurion
 
 
 
-class OrganizationPermissionMixin(
+class TenancyPermissionMixin(
     DjangoObjectPermissions,
 ):
     """Tenant Permission Mixin
@@ -58,11 +63,12 @@ class OrganizationPermissionMixin(
 
             if hasattr(view, 'model'):
 
-                self._is_tenancy_model = issubclass(view.model, Centurion)
+                self._is_tenancy_model = issubclass(view.model, TenancyAbstractModel)
 
                 if view.get_parent_model():
 
-                    self._is_tenancy_model = issubclass(view.get_parent_model(), Centurion)
+                    self._is_tenancy_model = issubclass(
+                        view.get_parent_model(), TenancyAbstractModel)
 
         return self._is_tenancy_model
 
@@ -109,17 +115,24 @@ class OrganizationPermissionMixin(
 
         if request.user.is_anonymous:
 
-            raise centurion_exceptions.NotAuthenticated()
+            raise NotAuthenticated(
+                code = 'anonymouse_user'
+            )
 
 
         if request.method not in view.allowed_methods:
 
-            raise centurion_exceptions.MethodNotAllowed(method = request.method)
+            raise MethodNotAllowed(method = request.method)
 
 
         try:
 
             if (
+                (
+                    view.model.__name__ == 'AppSettings'
+                    and request.user.is_superuser
+                )
+                or
                 (
                     view.model.__name__ == 'UserSettings'
                     and request._user.id == int(view.kwargs.get('pk', 0))
@@ -147,97 +160,44 @@ class OrganizationPermissionMixin(
                 return False
 
 
-            has_permission_required: bool = False
+            if not request.user.has_perm(
+                permission = view.get_permission_required()
+            ):
 
-            user_permissions = request.tenancy._user_permissions
-
-            permission_required = view.get_permission_required()
-
-            if permission_required and user_permissions:
-                # No permission_required couldnt get permissions
-                # No user_permissions, user missing the required permission
-
-                has_permission_required: bool = permission_required in user_permissions
-
-
-            if not has_permission_required and not request.user.is_superuser:
-
-                raise centurion_exceptions.PermissionDenied()
+                raise PermissionDenied(
+                    code = 'missing_permission'
+                )
 
 
             obj_organization: Tenant = view.get_obj_organization(
                 request = request
             )
 
-            view_action: str = None
-
             if(
-                view.action == 'create'
-                and request.method == 'POST'
+                self.is_tenancy_model(view)
+                and obj_organization is None
+                and view.action not in [ 'list', 'metadata' ]
             ):
 
-                view_action = 'add'
+                raise PermissionDenied(
+                    detail = 'A tenancy model must specify a tenancy for authorization',
+                    code = 'missing_tenancy'
+                )
 
             elif(
-                view.action == 'destroy'
-                and request.method == 'DELETE'
-            ):
-
-                view_action = 'delete'
-
-            elif (
-                view.action == 'list'
-            ):
-
-                view_action = 'view'
-
-            elif (
-                view.action == 'partial_update'
-                and request.method == 'PATCH'
-            ):
-
-                view_action = 'change'
-
-            elif (
-                view.action == 'update'
-                and request.method == 'PUT'
-            ):
-
-                view_action = 'change'
-
-            elif(
-                view.action == 'retrieve'
-                and request.method == 'GET' 
-            ):
-
-                view_action = 'view'
-
-            elif(
-                view.action == 'metadata'
-                and request.method == 'OPTIONS'
+                request.user.has_perm(
+                    permission = view.get_permission_required(),
+                    tenancy = obj_organization
+                )
+                or request.user.is_superuser
             ):
 
                 return True
 
 
-            if view_action is None:
-
-                raise ValueError('view_action could not be defined.')
-
-
-            if obj_organization is None or request.user.is_superuser:
-
-                return True
-
-            elif obj_organization is not None:
-
-                if request.tenancy.has_organization_permission(
-                    organization = obj_organization,
-                    permissions_required = view.get_permission_required()
-                ):
-
-                        return True
-
+            raise PermissionDenied(
+                code = 'default_deny'
+            )
 
         except ValueError as e:
 
@@ -261,20 +221,14 @@ class OrganizationPermissionMixin(
 
             pass
 
-        except centurion_exceptions.PermissionDenied as e:
-            # This Exception will be raised after this function has returned
-            # False.
-
-            pass
-
 
         return False
+
 
 
     def has_object_permission(self, request, view, obj):
 
         try:
-
 
             if request.user.is_anonymous:
 
@@ -299,16 +253,17 @@ class OrganizationPermissionMixin(
 
                 return True
 
-
-            object_organization = view._obj_organization
-
-            if object_organization:
+            elif self.is_tenancy_model( view ):
 
                 if(
-                    int(object_organization)
-                    in view.get_permission_organizations( view.get_permission_required() )
-                    or request.user.is_superuser
-                    or getattr(request.app_settings.global_organization, 'id', 0) == int(object_organization)
+                    (
+                        request.user.has_perm(
+                            permission = view.get_permission_required(),
+                            obj = obj
+                        )
+                        or request.user.is_superuser
+                    )
+                    and view.get_obj_organization( obj = obj )
                 ):
 
                     return True

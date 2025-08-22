@@ -5,10 +5,9 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
-from access.middleware.request import Tenancy
 from access.models.tenant import Tenant as Organization
 
-from itam.serializers.device_software import Device, DeviceSoftware, DeviceSoftwareModelSerializer, SoftwareInstallsModelSerializer
+from itam.serializers.device_software import Device, DeviceSoftware, SoftwareInstallsModelSerializer
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
 
 from settings.models.app_settings import AppSettings
@@ -38,8 +37,6 @@ class MockView:
 
 class MockRequest:
 
-    tenancy: Tenancy = None
-
     user = None
 
     def __init__(self, user: User, app_settings):
@@ -47,11 +44,6 @@ class MockRequest:
         self.user = user
 
         self.app_settings = app_settings
-
-        self.tenancy = Tenancy(
-            user = user,
-            app_settings = app_settings
-        )
 
 
 

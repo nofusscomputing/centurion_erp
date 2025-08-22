@@ -3,9 +3,6 @@ from django.core.exceptions import (
 )
 from django.db import models
 
-from access.models.tenancy import (
-    TenancyManager as TenancyManagerDepreciated
-)
 from access.models.tenant import Tenant
 
 
@@ -37,23 +34,22 @@ class TenancyManager(
 
 
         has_tenant_field = False
-        if getattr(self.model, 'organization', None) is not None:
+        if(
+            getattr(self.model, 'organization', None) is not None
+            or getattr(self.model, 'tenant', None) is not None
+        ):
             has_tenant_field = True
 
 
-        if user:
+            if getattr(user, 'id', None) and getattr(user, 'is_authenticated', False):
 
-            tenancies = user.get_tenancies(int_list = True)
+                tenancies = user.get_tenancies(int_list = True)
 
-            if len(tenancies) > 0 and not request.user.is_superuser:
+                if len(tenancies) > 0 and not user.is_superuser:
 
-                if has_tenant_field:
                     return super().get_queryset().select_related('organization').filter(
                         models.Q(organization__in = tenancies)
                     )
-
-
-                return super().get_queryset().filter()
 
 
         if has_tenant_field:
@@ -77,7 +73,7 @@ class TenancyAbstractModel(
         ValidationError: User failed to supply organization
     """
 
-    objects = TenancyManagerDepreciated()
+    objects = TenancyManager()
     """ ~~Multi-Tenant Manager~~
 
     **Note:** ~~This manager relies upon the model class having `context['user']`

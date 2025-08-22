@@ -1,6 +1,7 @@
+import django
 import pytest
 
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
@@ -10,12 +11,13 @@ from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_permissions_viewset import APIPermissionView
 from api.tests.abstract.api_serializer_viewset import SerializerView
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from itim.models.clusters import Cluster
 from itim.models.services import Service, Port
 
 from itam.models.device import Device
+
+User = django.contrib.auth.get_user_model()
 
 
 

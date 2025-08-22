@@ -25,7 +25,8 @@
 
 <br>
 
- ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/nofusscomputing/centurion_erp?style=plastic&logo=github&label=Open%20Issues&color=000) ![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/nofusscomputing/centurion_erp/type%3A%3Abug?style=plastic&logo=github&label=Bug%20Fixes%20Required&color=000)
+ ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/nofusscomputing/centurion_erp?style=plastic&logo=github&label=Open%20Issues&color=000) !![GitHub issue bugs](https://img.shields.io/github/issues-search?query=repo%3Anofusscomputing%2Fcenturion_erp%20type%3A%22Bug%22%20is%3Aopen%20&style=plastic&logo=github&label=Bug%20fixes%20required&color=000)
+
 
 
 This project is hosted on [Github](https://github.com/NofussComputing/centurion_erp) and has a read-only copy hosted on [gitlab](https://gitlab.com/nofusscomputing/projects/centurion_erp).

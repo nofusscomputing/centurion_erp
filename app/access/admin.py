@@ -45,7 +45,6 @@ class TeamUserInline(admin.TabularInline):
     fk_name = 'user'
 
 
-admin.site.unregister(User)
 class UsrAdmin(UserAdmin):
 
     fieldsets = (

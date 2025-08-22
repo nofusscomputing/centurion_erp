@@ -21,7 +21,7 @@ import django.db.models.options as options
 options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type', 'itam_sub_model_type')
 
 APPEND_SLASH = False
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = 'access.CenturionUser'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

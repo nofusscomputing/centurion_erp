@@ -122,7 +122,7 @@ class AppSettings(
 
     def get_organization(self):
 
-        return self.global_organization
+        return self.owner_organization
 
 
     def clean(self):

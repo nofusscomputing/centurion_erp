@@ -49,12 +49,16 @@ fixtures:
 		--natural-primary \
 		--exclude=contenttypes \
 		--exclude=auth.permission \
+		--exclude=access.centurionuser \
+		--exclude=settings.usersettings \
 		--indent 2 > app/fixtures/fresh_db.json;
 	sqlite3 app/db.sqlite3 .dump | \
 		grep -a -v 'INSERT INTO django_migrations' | \
 		grep -a -v 'INSERT INTO django_content_type' | \
 		grep -a -v 'INSERT INTO auth_permission' | \
 		grep -a -v 'INSERT INTO settings_appsettings' | \
+		grep -a -v 'INSERT INTO access_centurionuser' | \
+		grep -a -v 'INSERT INTO settings_usersettings' | \
 		grep -a -v 'CREATE UNIQUE INDEX' | \
 		grep -a -v 'CREATE INDEX' \
 		> app/fixtures/fresh_db.sql;
