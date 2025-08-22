@@ -1,3 +1,33 @@
+## 1.20.0 (2025-08-22)
+
+### feat
+
+- **access**: Switch Tenancy Object to use refactord Tenancy Manager
+- Switch authorization object from request.tenancy -> request.user
+- **base**: Switch user model to CenturionUser
+- **access**: CenturionUser model migrations
+
+### Fixes
+
+- **access**: When checking for user within TenancyManager, ensure it has an id
+- **settings**: AppSettings model should return `owner_organization` for `get_organization`
+- **access**: CenturionUser model must inherit from Abstract User
+- dont load user object during app load
+
+### Refactoring
+
+- **access**: do prefetch user orgs, permissions and content_types
+- **access**: rename mixin OrganizationPermissionMixin -> TenancyPermissionMixin
+- **api**: ensure kwargs are copied for api perm test cases
+- **core**: when deleting a model dont re-fetch from db, use current data
+
+### Tests
+
+- **functional**: Add Token Authentication Functional Test Suite
+- **integration**: Test to ensure that migrations run successfully
+- **access**: Correct TenantModelNote userOrgs fetch test case to use correct model
+- **access**: Updated Test Suite for mixin TenancyPermission
+
 ## 1.19.3 (2025-08-17)
 
 ### Fixes
