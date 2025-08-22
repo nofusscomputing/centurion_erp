@@ -1098,6 +1098,7 @@ log_cli_date_format = '%Y-%m-%d %H:%M:%S'
 markers = [
     "api: Selects all API related tests.",
     "audit_models: Selects Audit models.",
+    "authentication: Selects all authentication tests.",
     "centurion_models: Selects Centurion models",
     "functional: Selects all Functional tests.",
     "integration: Selects all Integration tests.",

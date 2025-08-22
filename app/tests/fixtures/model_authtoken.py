@@ -2,6 +2,8 @@ import datetime
 import pytest
 import random
 
+from dateutil.relativedelta import relativedelta
+
 from api.models.tokens import AuthToken
 from api.serializers.auth_token import (
     AuthTokenBaseSerializer,
@@ -37,7 +39,7 @@ def kwargs_authtoken(django_db_blocker,
         'note': 'a note',
         'token': model_authtoken().generate,
         'user': user,
-        'expires': '2025-02-25T23:14Z'
+        'expires': (datetime.datetime.now() + relativedelta(months=1)).isoformat(timespec='seconds') + 'Z'
     }
 
     yield kwargs
