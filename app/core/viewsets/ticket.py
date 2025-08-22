@@ -272,21 +272,21 @@ class ViewSet( SubModelViewSet ):
 
         import_permission = self.model._meta.app_label + '.import_' + self.model._meta.model_name
 
-        if(import_permission in self.request.tenancy._user_permissions):
+        if(import_permission in self.request.user.get_permissions( tenancy = False )):
 
             self._has_import = True
 
 
         purge_permission = self.model._meta.app_label + '.purge_' + self.model._meta.model_name
 
-        if(purge_permission in self.request.tenancy._user_permissions):
+        if(purge_permission in self.request.user.get_permissions( tenancy = False )):
 
             self._has_purge = True
 
 
         triage_permission = self.model._meta.app_label + '.triage_' + self.model._meta.model_name
 
-        if(triage_permission in self.request.tenancy._user_permissions):
+        if(triage_permission in self.request.user.get_permissions( tenancy = False )):
 
             self._has_triage = True
 

@@ -57,15 +57,6 @@ class ModelTestCases:
                         })
 
 
-                context_user = mocker.patch.object(
-                    model, 'context'
-                )
-                user = model_user.objects.create( **kwargs_user )
-                context_user.__getitem__.side_effect = {
-                    'logger': None,
-                    'user': user
-                }.__getitem__
-
                 item = model.objects.create(
                     **kwargs
                 )
@@ -87,8 +78,6 @@ class ModelTestCases:
             with django_db_blocker.unblock():
 
                 item.delete()
-
-                user.delete()
 
 
 

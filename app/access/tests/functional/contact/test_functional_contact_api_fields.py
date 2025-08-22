@@ -11,7 +11,7 @@ class ContactAPITestCases(
     PersonAPIInheritedCases,
 ):
 
-    property
+    @property
     def parameterized_api_fields(self): 
 
         return {

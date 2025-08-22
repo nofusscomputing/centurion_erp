@@ -1,5 +1,3 @@
-import django
-
 from django.conf import settings
 from django.db import models
 
@@ -15,8 +13,6 @@ from itam.models.software import Software
 from itam.models.operating_system import OperatingSystem
 
 from itim.models.services import Service
-
-User = django.contrib.auth.get_user_model()
 
 
 

@@ -1,10 +1,6 @@
-import django
-
 from django.db import models
 
 from access.models.tenant import Tenant as Organization
-
-User = django.contrib.auth.get_user_model()
 
 
 
@@ -38,7 +34,7 @@ class OrganizationMixin:
 
             raise ValueError('Missing Parameter. obj or request must be supplied')
 
-        
+
         if self._obj_organization:
 
             return self._obj_organization
@@ -89,7 +85,7 @@ class OrganizationMixin:
 
             if getattr(obj, 'organization', None):
 
-                self._obj_organization = obj.organization
+                self._obj_organization = obj.get_organization()
 
             elif str(self.model._meta.verbose_name).lower() == 'tenant':
 
@@ -133,36 +129,6 @@ class OrganizationMixin:
         """
 
         return self.get_parent_model().objects.get(pk=self.kwargs[self.parent_model_pk_kwarg])
-
-
-
-    def get_permission_organizations(self, permission: str ) -> list([ int ]):
-        """Return Organization(s) the permission belongs to
-
-        Searches the users organizations for the required permission, if found
-        the organization is added to the list to return.
-
-        Args:
-            permission (str): Permission to search users organizations for
-
-        Returns:
-            Organizations (list): All Organizations where the permission was found.
-        """
-
-        _permission_organizations: list = []
-
-        for team in self.request.tenancy._user_teams:
-
-            for team_permission in team.permissions.all():
-
-                permission_value = str( team_permission.content_type.app_label + '.' + team_permission.codename )
-
-                if permission_value == permission:
-
-                    _permission_organizations += [ team.organization.id ]
-
-
-        return _permission_organizations
 
 
     _permission_required: str = None

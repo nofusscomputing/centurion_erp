@@ -238,9 +238,9 @@ class ViewSet(ModelViewSet):
 
         if organization:
 
-            if self.request.tenancy.has_organization_permission(
-                organization = organization,
-                permissions_required = 'core.import_ticketcomment'
+            if self.request.user.has_perm(
+                permission = 'core.import_ticketcomment',
+                tenancy = organization
             ) and not self.request.user.is_superuser:
 
                 if (
@@ -300,9 +300,9 @@ class ViewSet(ModelViewSet):
 
             if self.action == 'create':
 
-                if self.request.tenancy.has_organization_permission(
-                    organization = ticket.organization,
-                    permissions_required = 'core.triage_ticket_' + ticket_type,
+                if self.request.user.has_perm(
+                    permission = 'core.triage_ticket_' + ticket_type,
+                    tenancy = ticket.organization
                 ) and not self.request.user.is_superuser:
 
                     serializer_prefix = serializer_prefix + 'Triage'
@@ -317,9 +317,9 @@ class ViewSet(ModelViewSet):
                 or self.action == 'update'
             ):
 
-                if self.request.tenancy.has_organization_permission(
-                    organization = ticket.organization,
-                    permissions_required = 'core.triage_ticket_'+ ticket_type,
+                if self.request.user.has_perm(
+                    permission = 'core.triage_ticket_' + ticket_type,
+                    tenancy = ticket.organization
                 ) and not self.request.user.is_superuser:
 
                     serializer_prefix = serializer_prefix + 'Triage'

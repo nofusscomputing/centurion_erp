@@ -1,3 +1,10 @@
+## Version 1.20.0
+
+- New User model added.
+
+    New model adds no end user features. Its intent is to consolidate the custom tenancy authorization for Centurion.
+
+
 ## Version 1.19.0
 
 - Added new model for History

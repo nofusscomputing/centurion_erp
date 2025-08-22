@@ -1,5 +1,3 @@
-import django
-
 from django.conf import settings
 from django.contrib.auth.models import ContentType
 from django.db import models
@@ -8,8 +6,6 @@ from access.fields import *
 from access.models.tenancy import TenancyObject
 
 from core.lib.feature_not_used import FeatureNotUsed
-
-User = django.contrib.auth.get_user_model()
 
 
 

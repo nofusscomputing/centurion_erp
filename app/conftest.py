@@ -30,6 +30,9 @@ def load_sqlite_fixture(django_db_setup, django_db_blocker):
     db_path = settings.DATABASES['default']['NAME']
     sql_file_path = os.path.join('app/fixtures', 'fresh_db.sql')
 
+    if not os.path.isfile(sql_file_path):
+        sql_file_path = os.path.join('fixtures', 'fresh_db.sql')
+
 
     with django_db_blocker.unblock():
         with open(sql_file_path, 'r') as f:

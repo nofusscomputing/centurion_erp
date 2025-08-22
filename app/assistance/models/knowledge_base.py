@@ -1,4 +1,4 @@
-import django
+from django.conf import settings
 from django.db import models
 
 from access.fields import *
@@ -7,8 +7,6 @@ from access.models.team import Team
 from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
 from core.models.centurion import CenturionModel
-
-User = django.contrib.auth.get_user_model()
 
 
 
@@ -92,7 +90,7 @@ class KnowledgeBase(
 
 
     target_user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         help_text = 'User(s) to grant access to the article',
         null = True,
@@ -102,7 +100,7 @@ class KnowledgeBase(
 
 
     responsible_user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         help_text = 'User(s) whom is considered the articles owner.',
         null = True,

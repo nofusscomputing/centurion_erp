@@ -99,6 +99,77 @@ class AdditionalTestCases:
         assert response.status_code == 200, response.content
 
 
+
+    def test_returned_results_only_user_orgs(self,
+        model_instance, model_kwargs, api_request_permissions
+    ):
+        """Returned results check
+
+        Ensure that a query to the viewset endpoint does not return
+        items that are not part of the users organizations.
+        """
+
+        client = Client()
+
+        viewable_organizations = [
+            api_request_permissions['tenancy']['user'].id,
+        ]
+
+        client.force_login( api_request_permissions['user']['view'] )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'model': api_request_permissions['tenancy']['different']
+        })
+
+        model_instance(
+            kwargs_create = kwargs
+        )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'model': api_request_permissions['tenancy']['global']
+        })
+
+        model_instance(
+            kwargs_create = kwargs
+        )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'model': api_request_permissions['tenancy']['user']
+        })
+
+        the_model = model_instance( kwargs_create = kwargs )
+
+        response = client.get(
+            path = the_model.get_url( many = True )
+        )
+
+
+        assert response.status_code == 200
+        assert len(response.data['results']) > 0
+
+        contains_different_org: bool = False
+
+        for item in response.data['results']:
+
+            if 'organization' not in item:
+                pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
+
+            if(
+                int(item['organization']['id']) not in viewable_organizations
+                and
+                int(item['organization']['id']) != api_request_permissions['tenancy']['global'].id
+            ):
+
+                contains_different_org = True
+                print(f'Failed returned row was: {item}')
+
+        assert not contains_different_org
+
+
+
     @pytest.mark.xfail( reason = 'model is not global based')
     def test_returned_data_from_user_and_global_organizations_only(self ):
         assert False

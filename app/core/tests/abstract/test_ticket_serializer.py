@@ -3,9 +3,7 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
 
-from access.middleware.request import Tenancy
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
@@ -52,8 +50,6 @@ class MockView:
 
 class MockRequest:
 
-    tenancy: Tenancy = None
-
     user = None
 
     def __init__(self, user: User, app_settings):
@@ -61,11 +57,6 @@ class MockRequest:
         self.user = user
 
         self.app_settings = app_settings
-
-        self.tenancy = Tenancy(
-            user = user,
-            app_settings = app_settings
-        )
 
 
 

@@ -98,7 +98,7 @@ class Centurion(
 
             self._after = {}
 
-            self._before = type(self).objects.get( id = self.id ).get_audit_values()
+            self._before = self.get_audit_values()
 
 
         super().delete(using = using, keep_parents = keep_parents)

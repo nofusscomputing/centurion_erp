@@ -22,8 +22,6 @@ from core.models.ticket.ticket_category import TicketCategory
 
 from project_management.models.project_milestone import Project, ProjectMilestone
 
-User = django.contrib.auth.get_user_model()
-
 
 
 class TicketCommonFields(models.Model):
@@ -1287,6 +1285,8 @@ class Ticket(
         """
 
         pk: int = 0
+
+        User = django.contrib.auth.get_user_model()
 
         user: list(User) = None
         comment_field_value: str = None

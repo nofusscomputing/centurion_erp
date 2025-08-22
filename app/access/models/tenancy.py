@@ -52,7 +52,10 @@ class TenancyManager(models.Manager):
         user_organizations: list(str()) = []
 
         has_tenant_field = False
-        if getattr(self.model, 'organization', None) is not None:
+        if(
+            getattr(self.model, 'organization', None) is not None
+            or getattr(self.model, 'tenant', None) is not None
+        ):
             has_tenant_field = True
 
 
@@ -68,16 +71,7 @@ class TenancyManager(models.Manager):
 
             if user.is_authenticated:
 
-                for team in request.tenancy._user_teams:
-
-
-                    if team.organization.id not in user_organizations:
-
-                        # if not user_organizations:
-
-                        #     self.user_organizations = []
-
-                        user_organizations += [ team.organization.id ]
+                user_organizations += request.user.get_tenancies( int_list = True)
 
 
                 if len(user_organizations) > 0 and not user.is_superuser:

@@ -11,9 +11,8 @@ from rest_framework.permissions import (
 )
 from rest_framework_json_api.metadata import JSONAPIMetadata
 
-from access.middleware.request import Tenancy
 from access.mixins.organization import OrganizationMixin
-from access.mixins.permissions import OrganizationPermissionMixin
+from access.mixins.permissions import TenancyPermissionMixin
 from access.models.tenant import Tenant as Organization, Tenant
 from access.models.team import Team
 from access.models.team_user import TeamUsers
@@ -65,8 +64,6 @@ class MockRequest:
 
     kwargs = {}
 
-    tenancy: Tenancy = None
-
     user: User = None
 
     def __init__(self, user: User, organization: Organization, viewset, model = None):
@@ -105,11 +102,6 @@ class MockRequest:
 
         self.app_settings = AppSettings.objects.select_related('global_organization').get(
             owner_organization = None
-        )
-
-        self.tenancy = Tenancy(
-            user = user,
-            app_settings = self.app_settings
         )
 
 
@@ -433,7 +425,7 @@ class CommonViewSetTestCases(
             'permission_classes': {
                 'type': list,
                 'value': [
-                    OrganizationPermissionMixin,
+                    TenancyPermissionMixin,
                 ]
             },
             'table_fields': {
