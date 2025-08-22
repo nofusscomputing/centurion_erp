@@ -1,3 +1,10 @@
+## 1.20.1 (2025-08-22)
+
+### Fixes
+
+- **access**: Check both permissions and permissions by tenancy seperatly
+- **access**: Ensure superuser check is done
+
 ## 1.20.0 (2025-08-22)
 
 ### feat
