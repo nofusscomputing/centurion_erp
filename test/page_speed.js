@@ -14,7 +14,7 @@ const BASE_URL = String(__ENV.BASE_URL) + '/api/v2';
 const AUTH_TOKEN = __ENV.AUTH_TOKEN
 
 
-const iterations = Number(100)
+const iterations = Number(200)
 
 
 export const options = {
