@@ -183,17 +183,21 @@ class CenturionUser(
 
 
 
-    def has_module_perms(self, app_label):    # is this needed?
+    # def has_module_perms(self, app_label):    # is this needed?
 
-        # if has app_label in perms
+    #     # if has app_label in perms
 
-        raise PermissionDenied
+    #     # raise PermissionDenied
+    #     return True
 
 
 
     def has_perm(
         self, permission: Permission, obj = None, tenancy: Tenant = None,
     ) -> bool:
+
+        if self.is_superuser:
+            return True
 
         if tenancy is None and obj is not None:
             tenancy = obj.get_tenant()
@@ -221,7 +225,7 @@ class CenturionUser(
         self, permission_list: list[ Permission ], obj = None, tenancy: Tenant = None
     ) -> bool:
 
-        for perm in perm_list:
+        for perm in permission_list:
 
             if not self.has_perm( perm, obj ):
                 return False
