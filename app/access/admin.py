@@ -1,48 +1,66 @@
 import django
 from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 
 
 from access.models.tenant import Tenant as Organization
-from access.models.team import Team
-from access.models.team_user import TeamUsers
+from access.models.role import Role
 
-User = django.contrib.auth.get_user_model()
 
-admin.site.unregister(Group)
 
-class TeamInline(admin.TabularInline):
-    model = Team
+class RoleGroupsInline(admin.TabularInline):
+    model = Role.groups.through
     extra = 0
 
-    readonly_fields = ['name', 'created', 'modified']
-    fields = ['team_name']
+    fields = ['group']
+
+    fk_name = 'role'
+
+    verbose_name = "Group"
+    verbose_name_plural = "Groups"
+
+
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    inlines = [RoleGroupsInline]
+    fields = ['name', 'organization', 'created', 'modified']  #
+    readonly_fields = [ 'name', 'created', 'modified' ]
+
+
+
+class OrganizationRoleInline(admin.TabularInline):
+    model = Role
+    extra = 0
+
+    fields = [ 'name' ]
 
     fk_name = 'organization'
 
 
+
+@admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {"fields": ["name", 'manager', "slug"]}),
-        #("Date information", {"fields": ["slug"], "classes": ["collapse"]}),
+        (None, {"fields": ["name", 'manager']}),
     ]
-    inlines = [TeamInline]
+    inlines = [OrganizationRoleInline]
     list_display = ["name", "created", "modified"]
     list_filter = ["created"]
-    search_fields = ["team_name"]
-
-admin.site.register(Organization,OrganizationAdmin)
+    search_fields = ["role"]
 
 
-class TeamUserInline(admin.TabularInline):
-    model = TeamUsers
+
+class RoleUsersInline(admin.TabularInline):
+    model = Role.users.through
+    fk_name = "centurionuser"
     extra = 0
 
-    readonly_fields = ['created', 'modified']
-    fields = ['team']
+    fields = ['centurionuser', 'role' ]
 
-    fk_name = 'user'
+    verbose_name = "Role"
+    verbose_name_plural = "Roles"
+
 
 
 class UsrAdmin(UserAdmin):
@@ -58,13 +76,13 @@ class UsrAdmin(UserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
+                    "groups",
+                    "user_permissions"
                 ),
-                
             },
         ),
     )
 
-    inlines = [TeamUserInline]
+    inlines = [RoleUsersInline]
 
-admin.site.register(User,UsrAdmin)
-
+admin.site.register(django.contrib.auth.get_user_model(),UsrAdmin)
