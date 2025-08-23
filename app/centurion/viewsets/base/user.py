@@ -1,9 +1,9 @@
+from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from api.viewsets.common import AuthUserReadOnlyModelViewSet
 
 from centurion.serializers.user import (
-    User,
     UserBaseSerializer
 )
 
@@ -39,7 +39,7 @@ class ViewSet(
         'is_active'
     ]
 
-    model = User
+    model = get_user_model()
 
     search_fields = [
         'username',

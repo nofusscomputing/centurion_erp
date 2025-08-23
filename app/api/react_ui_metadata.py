@@ -1,3 +1,4 @@
+import django
 import re
 
 from django.conf import settings
@@ -12,7 +13,8 @@ from rest_framework_json_api.utils import get_related_resource_type
 
 from access.models.tenant import Tenant
 
-from centurion.serializers.user import User, UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
+User = django.contrib.auth.get_user_model()
 
 from core import fields as centurion_field
 from core.fields.badge import BadgeField
