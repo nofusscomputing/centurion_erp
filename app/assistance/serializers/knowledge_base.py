@@ -84,7 +84,7 @@ class KnowledgeBaseModelSerializer(
                 }
             ),
             'user': reverse(
-                'v2:_api_v2_user-list',
+                'v2:_api_user-list',
                 request=self.context['view'].request,
             )
         })

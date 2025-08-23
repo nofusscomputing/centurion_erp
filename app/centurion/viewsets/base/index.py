@@ -26,6 +26,6 @@ class Index(IndexViewset):
             {
                 "content_type": reverse('v2:_api_v2_content_type-list', request=request),
                 "permission": reverse('v2:_api_permission-list', request=request),
-                "user": reverse('v2:_api_v2_user-list', request=request)
+                "user": reverse('v2:_api_user-list', request=request)
             }
         )
