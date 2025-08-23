@@ -50,6 +50,7 @@ class UsrAdmin(UserAdmin):
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         ("Personal info", {"fields": ("first_name", "last_name", "email")}),
+        ("Important dates", {"fields": ("last_login", "date_joined")}),
         (
             "Permissions",
             {
@@ -61,7 +62,6 @@ class UsrAdmin(UserAdmin):
                 
             },
         ),
-        ("Important dates", {"fields": ("last_login", "date_joined")}),
     )
 
     inlines = [TeamUserInline]
