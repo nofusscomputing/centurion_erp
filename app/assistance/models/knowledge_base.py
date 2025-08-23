@@ -1,8 +1,8 @@
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.db import models
 
 from access.fields import *
-from access.models.team import Team
 
 from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 
@@ -82,10 +82,11 @@ class KnowledgeBase(
 
 
     target_team = models.ManyToManyField(
-        Team,
+        Group,
         blank = True,
-        help_text = 'Team(s) to grant access to the article',
-        verbose_name = 'Target Team(s)',
+        help_text = 'Group(s) to grant access to the article',
+        related_name = '+',
+        verbose_name = 'Target Group(s)',
     )
 
 
@@ -105,17 +106,17 @@ class KnowledgeBase(
         help_text = 'User(s) whom is considered the articles owner.',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'responsible_user',
+        related_name = '+',
         verbose_name = 'Responsible User',
     )
 
 
     responsible_teams = models.ManyToManyField(
-        Team,
+        Group,
         blank = True,
-        help_text = 'Team(s) whom is considered the articles owner.',
-        related_name = 'responsible_teams',
-        verbose_name = 'Responsible Team(s)',
+        help_text = 'Group(s) whom is considered the articles owner.',
+        related_name = '+',
+        verbose_name = 'Responsible Group(s)',
     )
 
 
