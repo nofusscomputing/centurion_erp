@@ -1,4 +1,5 @@
-from django.contrib.auth.models import Permission
+from django.conf import settings
+from django.contrib.auth.models import Permission, Group
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -50,6 +51,24 @@ class Role(
         verbose_name = 'Permissions'
     )
 
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank = True,
+        help_text = 'Users assigned to this role.',
+        related_name = 'roles',
+        symmetrical = False,
+        verbose_name = 'Users'
+    )
+
+    groups = models.ManyToManyField(
+        Group,
+        blank = True,
+        help_text = 'Users assigned to this role.',
+        related_name = 'roles',
+        symmetrical = False,
+        verbose_name = 'Groups'
+    )
+
     modified = AutoLastModifiedField()
 
 
@@ -81,6 +100,16 @@ class Role(
                     "name": "Permissions",
                     "fields": [
                         "permissions",
+                    ]
+                },
+                {
+                    "layout": "double",
+                    "name": "Users / Groups",
+                    "left": [
+                        "users",
+                    ],
+                    "right": [
+                        'groups',
                     ]
                 },
             ]
