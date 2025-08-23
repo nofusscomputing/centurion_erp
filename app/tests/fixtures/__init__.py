@@ -179,6 +179,11 @@ from .model_gitrepository import (
     serializer_gitrepository,
 )
 
+from .model_group import (
+    model_group,
+    kwargs_group,
+)
+
 from .model_instance import (
     model_instance
 )
