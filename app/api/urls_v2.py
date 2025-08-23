@@ -13,7 +13,7 @@ from centurion.viewsets.base import (
     index as base_index_v2,
     content_type as content_type_v2,
     permisson,
-    user as user_v2
+    user
 )
 
 from core.viewsets import (
@@ -64,7 +64,7 @@ router.register('', v2.Index, basename='_api_v2_home')
 router.register('/base', base_index_v2.Index, basename='_api_v2_base_home')
 router.register('/base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
 router.register('/base/permission', permission.ViewSet, basename='_api_permission')
-router.register('/base/user', user_v2.ViewSet, basename='_api_v2_user')
+router.register('/base/user', user.ViewSet, basename='_api_user')
 
 
 
