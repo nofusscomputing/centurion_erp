@@ -12,7 +12,7 @@ from api.viewsets import (
 from centurion.viewsets.base import (
     index as base_index_v2,
     content_type as content_type_v2,
-    permisson,
+    permission,
     user
 )
 
