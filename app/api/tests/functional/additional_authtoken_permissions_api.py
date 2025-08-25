@@ -138,6 +138,49 @@ class AdditionalTestCases:
 
 
 
+    def test_permission_metdata(self,
+        mocker, model_instance, model_kwargs, api_request_permissions
+    ):
+        """ Check correct permission for view metadata
+
+        Attempt to view as user with view permission
+        """
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['view'] )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        view_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        context_user = mocker.patch.object(
+            view_item, 'context'
+        )
+
+        context_user.__getitem__.side_effect = {
+            'logger': None,
+            'user': api_request_permissions['user']['view']
+        }.__getitem__
+
+        view_item.user = api_request_permissions['user']['view']
+
+
+        response = client.options(
+            path = view_item.get_url( many = False )
+        )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == 200, response.content
+
+
 
     def test_returned_results_only_user_orgs(self):
         pytest.mark.xfail( reason = 'This model is not tenancy based. It is user based.' )
