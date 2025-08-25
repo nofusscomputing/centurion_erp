@@ -78,6 +78,34 @@ class AdditionalTestCases:
 
 
 
+    def test_permission_metdata(self, model_instance, api_request_permissions,
+        model_kwargs
+    ):
+        """ Check correct permission for view metadata
+
+        Attempt to view as user with view permission
+        """
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['view'] )
+
+        view_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            }
+        )
+
+        view_item.id = api_request_permissions['user']['view'].id
+
+        response = client.options(
+            path = view_item.get_url( many = False )
+        )
+
+        assert response.status_code == 200, response.content
+
+
+
     def test_returned_results_only_user_orgs(self):
         """Returned results check
 

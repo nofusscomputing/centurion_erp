@@ -21,6 +21,13 @@ class SaveHistory(models.Model):
         return [ f.name for f in self._meta.fields + self._meta.many_to_many ]
 
 
+    def get_tenant(self):
+
+        if getattr(self, 'organization', False):
+            return self.organization
+        return None
+
+
     def save_history(self, before: dict, after: dict, history_model = None) -> bool:
         """Save Model History
 

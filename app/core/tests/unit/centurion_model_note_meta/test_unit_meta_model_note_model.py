@@ -79,6 +79,12 @@ class ModelNotesMetaModelTestCases(
     during pytest discover.
     """
 
+    @pytest.fixture( scope = 'class', autouse = True)
+    def setup_organization(cls, request, organization_one):
+
+        request.cls.organization = organization_one
+
+
     @pytest.fixture( scope = 'class' )
     def note_model(self, request):
 

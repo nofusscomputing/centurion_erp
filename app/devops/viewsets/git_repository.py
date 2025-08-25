@@ -224,20 +224,6 @@ class ViewSet(
         return reverse('v2:devops:_api_gitrepository-list', request = self.request )
 
 
-    def get_page_layout(self):
-
-        if len(self.page_layout) < 1:
-
-            if hasattr(self, 'model'):
-
-                if self.kwargs.get('pk', None):
-
-                    model = getattr(self.queryset[0], self.kwargs['model_name'] + 'repository')
-
-                    self.page_layout = model.get_page_layout()
-
-        return self.page_layout
-
 
     def get_return_url(self) -> str:
 
