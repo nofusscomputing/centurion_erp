@@ -27,7 +27,7 @@ class Team(Group, TenancyObject):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
-        if self.organization_id:
+        if self.organization_id and not self.name.startswith('migrated-team-'):
 
             self.name = self.organization.name.lower().replace(' ', '_') + '_' + self.team_name.lower().replace(' ', '_')
 
@@ -179,12 +179,12 @@ class Team(Group, TenancyObject):
 
     def save_history(self, before: dict, after: dict) -> bool:
 
-        from access.models.team_history import TeamAuditHistory
+        from access.models.team_history import TeamHistory
 
         history = super().save_history(
             before = before,
             after = after,
-            history_model = TeamAuditHistory
+            history_model = TeamHistory
         )
 
 

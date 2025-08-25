@@ -1,61 +1,101 @@
 import pytest
 
-from django.test import Client, TestCase
+from access.viewsets.role import (
+    Role,
+    ViewSet,
+)
 
-from rest_framework.reverse import reverse
-
-
-from access.viewsets.role import ViewSet
-
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.test_unit_common_viewset import (
+    ModelViewSetInheritedCases
+)
 
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_role
 class ViewsetTestCases(
     ModelViewSetInheritedCases,
 ):
 
-    kwargs = None
 
-    viewset = None
-
-    route_name = None
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'back_url': {
+                'type': type(None),
+            },
+            'documentation': {
+                'type': type(None),
+            },
+            'filterset_fields': {
+                'value': [
+                   'organization',
+                   'permissions'
+                ]
+            },
+            'model': {
+                'value': Role
+            },
+            'model_documentation': {
+                'type': type(None),
+            },
+            'queryset': {
+                'type': type(None),
+            },
+            'serializer_class': {
+                'type': type(None),
+            },
+            'search_fields': {
+                'value': [
+                    'model_notes',
+                    'name'
+                ]
+            },
+            'view_description': {
+                'value': 'Available Roles'
+            },
+            'view_name': {
+                'type': type(None),
+            },
+            'view_serializer_name': {
+                'type': type(None),
+            }
+        }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
 
-        client.force_login(self.view_user)
+        qs = mocker.spy(viewset_mock_request.model, 'objects')
 
-        self.http_options_response_list = client.options(url)
+        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
+
+        assert len(qs.method_calls) == 1       # one call to .all()
+        assert len(qs.mock_calls) == 1         # calls = .all(), all().filter()
+
+        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
+
+        assert len(qs.method_calls) == 1
+        assert len(qs.mock_calls) == 1
 
 
 
-@pytest.mark.model_role
-class RoleViewsetTest(
+class RoleViewsetInheritedCases(
     ViewsetTestCases,
-    TestCase,
 ):
+    pass
 
-    kwargs = {}
 
-    route_name = 'v2:_api_role'
 
-    viewset = ViewSet
+@pytest.mark.module_access
+class RoleViewsetPyTest(
+    ViewsetTestCases,
+):
+    pass

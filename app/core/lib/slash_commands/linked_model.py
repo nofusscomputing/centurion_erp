@@ -249,14 +249,6 @@ For this command to process the following conditions must be met:
 
             item_type = TicketLinkedItem.Modules.SOFTWARE_VERSION
 
-        elif model_type == 'team':
-
-            from access.models.team import Team
-
-            model = Team
-
-            item_type = TicketLinkedItem.Modules.TEAM
-
         elif model_type == 'project_state':
 
             from project_management.models.project_states import ProjectState

@@ -16,7 +16,7 @@ class UserPermissionsAPI(TestCase):
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_user'
+    url_name = '_api_user'
 
     @classmethod
     def setUpTestData(self):

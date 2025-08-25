@@ -1,8 +1,8 @@
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.db import models
 
 from access.fields import *
-from access.models.team import Team
 
 from core.models.centurion import CenturionModel
 
@@ -45,10 +45,11 @@ class KnowledgeBaseCategory(
     )
 
     target_team = models.ManyToManyField(
-        Team,
+        Group,
         blank = True,
-        help_text = 'Team(s) to grant access to the article',
-        verbose_name = 'Target Team(s)',
+        help_text = 'Group(s) to grant access to the article',
+        related_name = '+',
+        verbose_name = 'Target Group(s)',
     )
 
 

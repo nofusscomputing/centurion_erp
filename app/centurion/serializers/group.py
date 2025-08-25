@@ -1,10 +1,12 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 from rest_framework import serializers
 
+from centurion.serializers.permission import PermissionBaseSerializer
 
 
-class UserBaseSerializer(serializers.ModelSerializer):
+
+class GroupBaseSerializer(serializers.ModelSerializer):
 
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -13,32 +15,28 @@ class UserBaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
+
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_user-detail", format="html"
+        view_name="v2:_api_group-detail", format="html"
     )
+
+    permissions = PermissionBaseSerializer( many=True, read_only=True )
+
 
     class Meta:
 
-        model = get_user_model()
-
-        fields = '__all__'
+        model = Group
 
         fields = [
             'id',
             'display_name',
-            'first_name',
-            'last_name',
-            'username',
-            'is_active',
+            'name',
+            'permissions',
             'url'
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            'first_name',
-            'last_name',
-            'username',
-            'is_active',
             'url'
         ]

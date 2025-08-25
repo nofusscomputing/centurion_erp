@@ -93,39 +93,41 @@ class CenturionUser(
             if self._permissions_by_tenancy is None:
                 self._permissions_by_tenancy = {}
 
-            for group in self.groups.select_related('team__organization').prefetch_related('permissions__content_type').all():    # pylint: disable=E1133:not-an-iterable
+            for group in self.groups.prefetch_related('roles__permissions__content_type', 'roles__organization'):
 
-                if group.team.organization not in self._tenancies:
-                    self._tenancies += [ group.team.organization ]
-                    self._tenancies_int += [ group.team.organization.id ]
+                for role in group.roles.all():
 
-
-                for permission in group.permissions.all():
-
-                    view_permission = permission.content_type.app_label + '.' + permission.codename
-
-                    if(
-                        view_permission not in self._permissions
-                    ):
-
-                        self._permissions += [ view_permission ]
+                    if role.organization not in self._tenancies:
+                        self._tenancies += [ role.organization ]
+                        self._tenancies_int += [ role.organization.id ]
 
 
-                    if 'tenancy_' + str(
-                        group.team.organization.id) not in self._permissions_by_tenancy:
+                    for permission in role.permissions.all():
 
-                        self._permissions_by_tenancy.update(
-                            { 'tenancy_' + str(group.team.organization.id): []}
-                        )
+                        view_permission = permission.content_type.app_label + '.' + permission.codename
+
+                        if(
+                            view_permission not in self._permissions
+                        ):
+
+                            self._permissions += [ view_permission ]
 
 
-                    if(
-                        view_permission not in self._permissions_by_tenancy['tenancy_' + str(
-                            group.team.organization.id)]
-                    ):
+                        if 'tenancy_' + str(
+                            role.organization.id) not in self._permissions_by_tenancy:
 
-                        self._permissions_by_tenancy['tenancy_' + str(
-                            group.team.organization.id)] += [ view_permission ]
+                            self._permissions_by_tenancy.update(
+                                { 'tenancy_' + str(role.organization.id): []}
+                            )
+
+
+                        if(
+                            view_permission not in self._permissions_by_tenancy['tenancy_' + str(
+                                role.organization.id)]
+                        ):
+
+                            self._permissions_by_tenancy['tenancy_' + str(
+                                role.organization.id)] += [ view_permission ]
 
 
         if tenancy:

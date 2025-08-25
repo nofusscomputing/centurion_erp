@@ -1,8 +1,8 @@
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.db import models
 
 from access.fields import AutoLastModifiedField
-from access.models.team import Team
 
 from core.models.centurion import CenturionModel
 from core.models.ticket.ticket_enum_values import TicketValues
@@ -182,12 +182,12 @@ class Project(
     )
 
     manager_team =  models.ForeignKey(
-        Team,
+        Group,
         blank = True,
-        help_text = 'Team which contains the Project Managers',
+        help_text = 'Group which contains the Project Managers',
         on_delete = models.PROTECT,
         null = True,
-        verbose_name = 'Project Manager Team'
+        verbose_name = 'Project Manager Group'
     )
 
     model_notes = None

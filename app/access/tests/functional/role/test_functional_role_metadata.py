@@ -3,26 +3,19 @@ import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
+from django.test import TestCase
 
 from access.models.role import Role
-from access.models.tenant import Tenant as Organization
+from access.models.tenant import Tenant
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
-from api.tests.abstract.api_permissions_viewset import APIPermissions
-from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from settings.models.app_settings import AppSettings
 
-User = django.contrib.auth.get_user_model()
 
 
-
-@pytest.mark.model_role
 @pytest.mark.model_role
 class ViewSetBase:
 
@@ -60,13 +53,15 @@ class ViewSetBase:
         4. create a user per team
         """
 
-        organization = Organization.objects.create(name='test_org')
+        User = django.contrib.auth.get_user_model()
+
+        organization = Tenant.objects.create(name='test_org')
 
         self.organization = organization
 
-        self.different_organization = Organization.objects.create(name='test_different_organization')
+        self.different_organization = Tenant.objects.create(name='test_different_organization')
 
-        self.global_organization = Organization.objects.create(name='test_global_organization')
+        self.global_organization = Tenant.objects.create(name='test_global_organization')
 
         app_settings = AppSettings.objects.get(
             owner_organization = None
@@ -76,23 +71,30 @@ class ViewSetBase:
 
         app_settings.save()
 
+        kwargs = self.kwargs_create_item
+        kwargs['organization'] = organization
+        kwargs['model_notes'] = 'some notes'
 
         self.item = self.model.objects.create(
-            organization = organization,
-            model_notes = 'some notes',
-            **self.kwargs_create_item
+            **kwargs
         )
+
+
+        kwargs = self.kwargs_create_item
+        kwargs['organization'] = self.different_organization
+        kwargs['model_notes'] = 'some more notes'
 
         self.other_org_item = self.model.objects.create(
-            organization = self.different_organization,
-            model_notes = 'some more notes',
-            **self.kwargs_create_item_diff_org
+            **kwargs
         )
 
+
+        kwargs = self.kwargs_create_item
+        kwargs['organization'] = self.global_organization
+        kwargs['model_notes'] = 'some more notes'
+
         self.global_org_item = self.model.objects.create(
-            organization = self.global_organization,
-            model_notes = 'some more notes',
-            **self.kwargs_create_item_global_org_org
+            **kwargs
         )
 
 
@@ -222,52 +224,7 @@ class ViewSetBase:
 
 
 
-class RolePermissionsAPITest(
-    ViewSetBase,
-    APIPermissions,
-    TestCase,
-):
-
-    add_data: dict = { 'name': 'added model note' }
-
-    kwargs_create_item: dict = { 'name': 'create item' }
-
-    kwargs_create_item_diff_org: dict = { 'name': 'diff org create' }
-
-    kwargs_create_item_global_org_org: dict = { 'name': 'global org create' }
-
-    model = Role
-
-    url_kwargs: dict = {}
-
-    url_view_kwargs: dict = {}
-
-    url_name = '_api_role'
-
-
-
-class RoleViewSetTest(
-    ViewSetBase,
-    SerializersTestCases,
-    TestCase,
-):
-
-    kwargs_create_item: dict = { 'name': 'create item' }
-
-    kwargs_create_item_diff_org: dict = { 'name': 'diff org create' }
-
-    kwargs_create_item_global_org_org: dict = { 'name': 'global org create' }
-
-    model = Role
-
-    url_kwargs: dict = {}
-
-    url_view_kwargs: dict = {}
-
-    url_name = '_api_role'
-
-
-
+@pytest.mark.module_access
 class RoleMetadataTest(
     ViewSetBase,
     MetadataAttributesFunctional,
