@@ -6,7 +6,7 @@ from access.serializers.organization import TenantBaseSerializer
 from api.serializers import common
 from centurion.serializers.user import UserBaseSerializer
 
-from access.serializers.teams import TeamBaseSerializer
+from centurion.serializers.group import GroupBaseSerializer
 
 from core import fields as centurion_field
 
@@ -142,7 +142,7 @@ class ProjectImportSerializer(ProjectModelSerializer):
 
 class ProjectViewSerializer(ProjectModelSerializer):
 
-    manager_team = TeamBaseSerializer( many = False, read_only = True )
+    manager_team = GroupBaseSerializer( many = False, read_only = True )
 
     manager_user = UserBaseSerializer( many = False, read_only = True )
 
