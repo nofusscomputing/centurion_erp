@@ -16,5 +16,6 @@ def kwargs_centurionmodelnotemeta(request, kwargs_centurionmodelnote):
     kwargs = {
         **kwargs_centurionmodelnote.copy(),
     }
+    del kwargs['organization']
 
     yield kwargs
