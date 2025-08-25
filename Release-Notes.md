@@ -1,5 +1,17 @@
 ## Version 1.21.0
 
+- New model [Roles](https://nofusscomputing.com/projects/centurion_erp/user/access/role/) Added
+
+- Model Teams **Removed**
+
+    TL;DR
+    _Teams were moved to roles so as to give the same authorization as was assigned under the teams based authorization._
+
+    Teams moved to roles. As part of the migration, Each Teams permissions were moved to a role using the same name as the team the permissions came from. Notes from an team that contained them were also moved to the role. Users assigned to teams were added to a group that shares the name of the team and prefixed with `migrated-team-`. The group was also assigned to the role of the same name.
+
+    !!! danger
+        You are advised to conduct a thorough audit of the roles and groups to ensure they only provide the authorization that you intend to have assigned. Care was taking during development of the migration to assist with this, it may still be possible that the migration of authorization from teams to roles has made an error.
+
 
 ## Version 1.20.0
 

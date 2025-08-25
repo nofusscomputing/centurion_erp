@@ -32,66 +32,65 @@ Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurio
 
 ## Features
 
-Centurion ERP contains the following modules:
+Feature table uses the following keys:
 
-- [Accounting](./user/accounting/index.md)
+- :white_check_mark: Feature available.
+- :recycle: Under development. Some features may be available.
+- :x: Planned feature, development has not started.
 
-- Change Management
+| Module | Feature | Status | Notes |
+|:---|:---|:---:|:---|
+| [Accounting](./user/accounting/index.md) ||| _[see #88](https://github.com/nofusscomputing/centurion_erp/issues/88)_ |
+|  | Asset Management | :recycle: | _[see #89](https://github.com/nofusscomputing/centurion_erp/issues/88)_ |
+|  | General Ledger | :x: | [see #116](https://github.com/nofusscomputing/centurion_erp/issues/116) |
+|  | Order Management | :x: | _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_ |
+|  | Supplier Management | :x: | _[see #123](https://github.com/nofusscomputing/centurion_erp/issues/123)_ |
+| Core |  |  |  |
+|  | [API](./user/api.md) | :white_check_mark: |  |
+|  | [Application wide settings](./user/settings/app_settings.md) | :white_check_mark: |  |
+|  | [Audit History](./user/core/audit_history.md) | :white_check_mark: |  |
+|  | [Corporate Directory (contacts)](./user/access/contact.md) | :recycle: | _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_ |
+|  | Location Management (Regions, Sites and Locations) | :x: | _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_ |
+|  | [Markdown](./user/core/markdown.md) | :white_check_mark: |  |
+|  | [Multi-Tenant](./user/access/tenant.md) | :white_check_mark: |  |
+|  | [Single Sign-On {SSO}](./user/configuration.md#single-sign-on) | :white_check_mark: |  |
+| Customer Relationship Management (CRM) || :x: | _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_  |
+| [Development Operations (DevOps)](./user/devops/index.md)  ||| _[see #68](https://github.com/nofusscomputing/centurion_erp/issues/58)_ |
+|  | [Feature Flags](./user/devops/feature_flags.md) | :white_check_mark: |  |
+|  | [Repository Management](./user/devops/git_repository.md) | :recycle: | _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_ |
+| [Human Resource Management](./user/human_resources/index.md)  || :recycle: | [see #92](https://github.com/nofusscomputing/centurion_erp/issues/92) |
+| DCIM / ITIL / ITIM / ITSM ||  |  |
+|  | Bare Metal Provisioning | :x: |  |
+|  | Certificate Management | :x: |  |
+|  | Change Management | :recycle: |  |
+|  | [Cluster Management](./user/itim/cluster.md) | :recycle: |  |
+|  | [Configuration Management](./user/config_management/index.md) | :white_check_mark: |  |
+|  | Database Management | :x: | _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_ |
+|  | Incident Management | :recycle: |  |
+|  | [IT Asset Management (ITAM)](./user/itam/index.md) | :white_check_mark: |  |
+|  | [Knowledge Base](./user/assistance/knowledge_base.md) | :white_check_mark: |  |
+|  | Licence Management | :x: | _[see #4](https://github.com/nofusscomputing/centurion_erp/issues/4)_ |
+|  | Problem Management | :recycle: |  |
+|  | Release and Deployment Management | :x: | _[see #462](https://github.com/nofusscomputing/centurion_erp/issues/462)_ |
+|  | Request Management | :recycle: |  |
+|  | Role Management | :x: | _[see #70](https://github.com/nofusscomputing/centurion_erp/issues/70)_ |
+|  | Service Catalog | :x: | _[see #384](https://github.com/nofusscomputing/centurion_erp/issues/384)_ |
+|  | Service level management | :recycle: | _[see #396](https://github.com/nofusscomputing/centurion_erp/issues/396)_ |
+|  | [Service Management](./user/itim/service.md) | :white_check_mark: |  |
+|  | Software Package Management | :x: | _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_ |
+|  | Virtual Machine Management | :x: | _[see #73](https://github.com/nofusscomputing/centurion_erp/issues/73)_ |
+|  | Vulnerability Management | :x: | _[see #3](https://github.com/nofusscomputing/centurion_erp/issues/3)_ |
+| [Project Management](./user/project_management/index.md) || :white_check_mark: |  |
+| Third party Integrations ||  |  |
+| | ArgoCD | :x: | [ArgoCD](https://github.com/argoproj-labs) is a Continuous Deployment system for ensuring objects deployed to kubernetes remain in the desired state. _[see #77](https://github.com/nofusscomputing/centurion_erp/issues/77)_ |
+| | AWX | :x: | [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration. _[see #113](https://github.com/nofusscomputing/centurion_erp/issues/113)_ |
+|  | [Companion Ansible Collection](../ansible/collection/centurion/index.md) | :recycle: |  |
+|  | Gitea | :x: |  |
+|  | Github | :x: |  |
+|  | Gitlab | :x: |  |
+|  | Kubernetes | :x: |  |
 
-- [Cluster Management](./user/itim/cluster.md)
-
-- [Companion Ansible Collection](../ansible/collection/centurion/index.md)
-
-- [Configuration Management](./user/config_management/index.md)
-
-- **Core Features:**
-
-    - [API](./user/api.md)
-
-    - [Application wide settings](./user/settings/app_settings.md)
-
-    - [Audit History](./user/core/audit_history.md)
-
-    - [Markdown](./user/core/markdown.md)
-
-    - [Multi-Tenant](./user/access/tenant.md)
-
-    - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)
-
-- [Corporate Directory (contacts)](./user/access/contact.md)
-
-    !!! info
-        This feature is still under active development _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_ for more details.
-
-- [Development Operations (DevOps)](./user/devops/index.md)
-
-    - [Feature Flags](./user/devops/feature_flags.md)
-
-    - [Repository Management](./user/devops/git_repository.md)
-
-        !!! info
-            This feature is still under active development _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_ for more details.
-
-- [Human Resource Management](./user/human_resources/index.md)
-
-    !!! info
-        This feature is still under active development _[see #92](https://github.com/nofusscomputing/centurion_erp/issues/92)_ for more details.
-
-- Incident Management
-
-- [IT Asset Management (ITAM)](./user/itam/index.md)
-
-- **Knowledge Management:**
-
-    - [Knowledge Base](./user/assistance/knowledge_base.md)
-
-- Problem Management
-
-- [Project Management](./user/project_management/index.md)
-
-- Request Management
-
-- [Service Management](./user/itim/service.md)
+To find out what we are working on now please view the [Milestones](https://github.com/nofusscomputing/centurion_erp/milestones) on Github.
 
 
 ## Documentation
@@ -113,69 +112,3 @@ It's important to us that Centurion ERP remaining stable. To assist with this we
 
 !!! info
     If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
-
-
-## Roadmap / Planned Features
-
-Below is a list of modules/features we intend to add to Centurion. To find out what we are working on now please view the [Milestones](https://github.com/nofusscomputing/centurion_erp/milestones) on Github.
-
-- **Planned Modules:**
-
-    - Accounting _[see #88](https://github.com/nofusscomputing/centurion_erp/issues/88)_
-
-        General Ledger - _[see #116](https://github.com/nofusscomputing/centurion_erp/issues/116)_
-
-    - Asset Management _[see #89](https://github.com/nofusscomputing/centurion_erp/issues/88)_
-
-    - Core
-
-        - Location Management (Regions, Sites and Locations) _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_
-
-    - Customer Relationship Management (CRM) _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_
-
-    - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_
-
-    - Development Operations (DevOPS) _[see #68](https://github.com/nofusscomputing/centurion_erp/issues/58)_
-
-    - IT Asset Management (ITAM)
-
-        - Licence Management _[see #4](https://github.com/nofusscomputing/centurion_erp/issues/4)_
-
-        - Certificate Management
-
-    - IT Infrastructure Management (ITIM) _[see #61](https://github.com/nofusscomputing/centurion_erp/issues/61)_
-
-        - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_
-
-        - Software Package Management _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_
-
-        - Role Management _[see #70](https://github.com/nofusscomputing/centurion_erp/issues/70)_
-
-        - Virtual Machine Management _[see #73](https://github.com/nofusscomputing/centurion_erp/issues/73)_
-
-        - Vulnerability Management
-
-            - Software _[see #3](https://github.com/nofusscomputing/centurion_erp/issues/3)_
-
-    - IT Operations _[see #493](https://github.com/nofusscomputing/centurion_erp/issues/493)_
-
-        - Release and Deployment Management _[see #462](https://github.com/nofusscomputing/centurion_erp/issues/462)_
-
-        - Service level management _[see #396](https://github.com/nofusscomputing/centurion_erp/issues/396)_
-
-    - Order Management _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_
-
-        - Supplier Management _[see #123](https://github.com/nofusscomputing/centurion_erp/issues/123)_
-
-    - Service Catalog _[see #384](https://github.com/nofusscomputing/centurion_erp/issues/384)_
-
-
-- **Planned Integrations:**
-
-    - ArgoCD _[see #77](https://github.com/nofusscomputing/centurion_erp/issues/77)_
-
-        [ArgoCD](https://github.com/argoproj-labs) is a Continuous Deployment system for ensuring objects deployed to kubernetes remain in the desired state.
-
-    - AWX  _[see #113](https://github.com/nofusscomputing/centurion_erp/issues/113)_
-
-        [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration.

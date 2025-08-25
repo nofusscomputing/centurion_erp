@@ -108,6 +108,16 @@ class AdditionalTestCases:
         client.force_login( api_request_permissions['user']['view'] )
 
         kwargs = self.kwargs_create_item.copy()
+        kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317eb1'
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        model_instance(
+            kwargs_create = kwargs
+        )
+
+        kwargs = self.kwargs_create_item.copy()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317ea1'
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
@@ -153,11 +163,10 @@ class AdditionalTestCases:
             if 'organization' not in item:
                 pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
-            if(
-                int(item['organization']['id']) not in viewable_organizations
-                and
-                int(item['organization']['id']) != api_request_permissions['tenancy']['global'].id
-            ):
+            if int(item['organization']['id']) == api_request_permissions['tenancy']['global'].id:
+                continue
+
+            if int(item['organization']['id']) not in viewable_organizations:
 
                 contains_different_org = True
                 print(f'Failed returned row was: {item}')

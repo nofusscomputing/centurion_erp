@@ -2,8 +2,8 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
-from access.serializers.teams import TeamBaseSerializer
 
+from centurion.serializers.group import GroupBaseSerializer
 from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
@@ -340,7 +340,7 @@ class TicketModelSerializer(
 
 class TicketViewSerializer(TicketModelSerializer):
 
-    assigned_teams = TeamBaseSerializer(many=True)
+    assigned_teams = GroupBaseSerializer(many=True)
 
     assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
 
@@ -356,6 +356,6 @@ class TicketViewSerializer(TicketModelSerializer):
 
     milestone = ProjectMilestoneBaseSerializer(many=False, read_only=True)
 
-    subscribed_teams = TeamBaseSerializer(many=True)
+    subscribed_teams = GroupBaseSerializer(many=True)
 
     subscribed_users = UserBaseSerializer(many=True)

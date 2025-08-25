@@ -4,8 +4,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from access.serializers.organization import TenantBaseSerializer
-from access.serializers.teams import TeamBaseSerializer
 
+from centurion.serializers.group import GroupBaseSerializer
 from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
@@ -189,10 +189,10 @@ class KnowledgeBaseViewSerializer(KnowledgeBaseModelSerializer):
 
     organization = TenantBaseSerializer( many=False, read_only=True )
 
-    responsible_teams = TeamBaseSerializer( read_only = True, many = True)
+    responsible_teams = GroupBaseSerializer( read_only = True, many = True)
 
     responsible_user = UserBaseSerializer( read_only = True )
 
-    target_team = TeamBaseSerializer( read_only = True, many = True)
+    target_team = GroupBaseSerializer( read_only = True, many = True)
 
     target_user = UserBaseSerializer( read_only = True )
