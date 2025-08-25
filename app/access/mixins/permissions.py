@@ -59,7 +59,10 @@ class TenancyPermissionMixin(
             False (bool): Model is not a Tenancy model.
         """
 
-        if not self._is_tenancy_model:
+        if(
+            isinstance(self._is_tenancy_model, type(None))
+            and isinstance(getattr(view, '_is_tenancy_model', None), type(None))
+        ):
 
             if hasattr(view, 'model'):
 
@@ -69,6 +72,13 @@ class TenancyPermissionMixin(
 
                     self._is_tenancy_model = issubclass(
                         view.get_parent_model(), TenancyAbstractModel)
+
+        elif(
+            isinstance(self._is_tenancy_model, type(None))
+            and not isinstance(getattr(view, '_is_tenancy_model', None), type(None))
+        ):
+
+            self._is_tenancy_model = getattr(view, '_is_tenancy_model')
 
         return self._is_tenancy_model
 
@@ -176,13 +186,23 @@ class TenancyPermissionMixin(
             if(
                 self.is_tenancy_model(view)
                 and obj_organization is None
-                and view.action not in [ 'list', 'metadata' ]
+                and view.action not in [ 'create', 'list', 'metadata' ]
             ):
 
                 raise PermissionDenied(
                     detail = 'A tenancy model must specify a tenancy for authorization',
                     code = 'missing_tenancy'
                 )
+
+            elif(
+                request.user.has_perm(
+                    permission = view.get_permission_required(),
+                    tenancy = obj_organization
+                )
+                and view.action in [ 'metadata' ]
+            ):
+
+                return True
 
             elif(
                 request.user.has_perm(
