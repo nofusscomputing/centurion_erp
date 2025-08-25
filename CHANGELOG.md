@@ -1,3 +1,14 @@
+## 1.20.2 (2025-08-25)
+
+### Fixes
+
+- **access**: When creating an item and tenancy not required, cater for this within authorization
+- **access**: Update old models for new permssion check methods
+
+### Tests
+
+- **api**: Test case to confirm MetaData can be fetch for list action
+
 ## 1.20.1 (2025-08-22)
 
 ### Fixes
