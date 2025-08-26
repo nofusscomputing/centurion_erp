@@ -1,7 +1,46 @@
+from contextvars import ContextVar
+
+from contextlib import contextmanager
+
 from django.conf import settings
 from django.db import models
 
 from rest_framework.reverse import reverse
+
+
+
+MODEL_CONTEXTS = ContextVar("MODEL_CONTEXTS", default=None)
+DEFAULT_CONTEXT = {"user": None, "logging": None}
+
+
+
+class PerRequestModelContext:
+
+    def __get__(self, instance, owner):
+        contexts = MODEL_CONTEXTS.get()
+
+        if contexts is None:
+            contexts = {}
+            MODEL_CONTEXTS.set(contexts)
+
+        ctx = contexts.get(owner)
+
+        if ctx is None:
+            # seed with default keys/values
+            ctx = DEFAULT_CONTEXT.copy()
+            contexts[owner] = ctx
+
+        return ctx
+
+
+
+@contextmanager
+def model_context_layer():
+    token = MODEL_CONTEXTS.set({})
+    try:
+        yield
+    finally:
+        MODEL_CONTEXTS.reset(token)
 
 
 
@@ -13,16 +52,6 @@ class Centurion(
     class Meta:
 
         abstract = True
-
-
-    def __init__(self, *args, **kwargs):
-
-        self.context: dict = {
-            'logger': None,
-            'user': None,
-        }
-
-        super().__init__(*args, **kwargs)
 
 
     _audit_enabled: bool = True
@@ -41,11 +70,7 @@ class Centurion(
     to their own `urls.py` file from `api/urls_v2.py`.
     """
 
-
-    context: dict = {
-        'logger': None,
-        'user': None,
-    }
+    context = PerRequestModelContext()
     """ Model Context
 
     Generally model usage will be from an API serializer, Admin Site or

@@ -1082,7 +1082,7 @@ redefining-builtins-modules = ["six.moves", "past.builtins", "future.builtins", 
 
 [tool.pytest.ini_options]
 
-addopts = '--no-migrations --cov --cov-branch --cov-report term --tb=long --verbosity=2 --full-trace --showlocals app'
+addopts = '--no-migrations --cov --cov-branch --cov-report term --tb=long --verbosity=2 --showlocals app'
 
 
 DJANGO_SETTINGS_MODULE = 'centurion.settings'

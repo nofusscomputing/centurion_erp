@@ -4,11 +4,11 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 
 from access.serializers.organization import TenantBaseSerializer
-from access.serializers.teams import TeamBaseSerializer
 
 from api.serializers import common
 from api.exceptions import UnknownTicketType
 
+from centurion.serializers.group import GroupBaseSerializer
 from centurion.serializers.user import UserBaseSerializer
 
 from core import exceptions as centurion_exceptions
@@ -691,4 +691,4 @@ class TicketCommentViewSerializer(TicketCommentModelSerializer):
 
     responsible_user = UserBaseSerializer()
 
-    responsible_team = TeamBaseSerializer()
+    responsible_team = GroupBaseSerializer()

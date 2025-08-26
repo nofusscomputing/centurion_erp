@@ -53,6 +53,9 @@ class CenturionUser(
         verbose_name_plural = 'Centurion Users'
 
 
+    def __int__(self) -> int:
+        return int(self.id)
+
 
     def get_full_name(self) -> str:
         return f'{self.entity_user.f_name} {self.entity_user.l_name}'

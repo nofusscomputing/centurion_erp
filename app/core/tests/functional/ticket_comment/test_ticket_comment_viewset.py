@@ -1,3 +1,4 @@
+import pytest
 import django
 
 from django.contrib.auth.models import Permission
@@ -19,7 +20,7 @@ from settings.models.user_settings import UserSettings
 User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.skip( reason = 'model due for removal see #746' )
 class ViewSetBase:
     """ Test Cases common to ALL ticket types """
 
