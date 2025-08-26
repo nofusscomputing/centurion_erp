@@ -9,7 +9,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 )
 
 
-
+@pytest.mark.skip( reason = 'behind ff, see #887' )
 @pytest.mark.model_assetbase
 class AssetBaseModelTestCases(
     CenturionAbstractModelInheritedCases
