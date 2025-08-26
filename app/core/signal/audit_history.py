@@ -31,13 +31,17 @@ def audit_history(sender, instance, **kwargs):
             audit_action = audit_model.Actions.DELETE
 
 
-        history = audit_model.objects.create(
-            organization = instance.organization,
-            content_type = ContentType.objects.get(
-                app_label = instance._meta.app_label,
-                model = instance._meta.model_name,
-            ),
-            action = audit_action,
-            user = instance.context['user'],
-            model = instance,
-        )
+        try:
+            audit_model.objects.create(
+                organization = instance.get_tenant(),
+                content_type = ContentType.objects.get(
+                    app_label = instance._meta.app_label,
+                    model = instance._meta.model_name,
+                ),
+                action = audit_action,
+                user = instance.context['user'],
+                model = instance,
+            )
+
+        except Exception as e:
+            instance.context['logging'].error("unable to save audit log for model", exc_info=True)
