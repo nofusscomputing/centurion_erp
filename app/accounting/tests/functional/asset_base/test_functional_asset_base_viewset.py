@@ -16,7 +16,7 @@ from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.skip( reason = 'behind ff. see #887' )
 @pytest.mark.model_assetbase
 class ViewSetBase:
 
