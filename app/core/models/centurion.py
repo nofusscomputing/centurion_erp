@@ -43,6 +43,10 @@ class CenturionModel(
     )
 
 
+    def __int__(self) -> int:
+        return int(self.id)
+
+
     @staticmethod
     def validate_field_not_none(value):
 

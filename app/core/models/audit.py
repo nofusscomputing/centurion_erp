@@ -192,7 +192,7 @@ class CenturionAudit(
             if hasattr(model, field_name + '_id') and value is not None:
 
                 serializable_before.update({
-                    field_name + '_id': value.id
+                    field_name + '_id': int(value)
                 })
                 continue
 
@@ -210,7 +210,7 @@ class CenturionAudit(
             if hasattr(model, field_name + '_id') and value is not None:
 
                 serializable_after.update({
-                    field_name + '_id': value.id
+                    field_name + '_id': int(value)
                 })
                 continue
 
