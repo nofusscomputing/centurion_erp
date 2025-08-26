@@ -120,7 +120,7 @@ class AppSettings(
     ]
 
 
-    def get_organization(self):
+    def get_tenant(self):
 
         return self.owner_organization
 
