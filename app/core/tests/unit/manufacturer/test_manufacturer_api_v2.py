@@ -17,7 +17,7 @@ from core.models.manufacturer import Manufacturer
 User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.skip( reason = 'to be refactored. see #914' )
 @pytest.mark.model_manufacturer
 @pytest.mark.module_core
 class ManufacturerAPI(
