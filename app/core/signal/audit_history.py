@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.models import ContentType
 from django.db.models.signals import (
     post_save
@@ -17,7 +18,9 @@ def audit_history(sender, instance, **kwargs):
         else:
             trace_var_for_testing = instance.context.get('user', None)
 
-        audit_model = apps.get_model( 
+        log = settings.CENTURION_LOG.getChild('audit_history')
+
+        audit_model = apps.get_model(
             instance._meta.app_label,
             instance._meta.object_name + 'AuditHistory'
         )
@@ -46,4 +49,13 @@ def audit_history(sender, instance, **kwargs):
             )
 
         except Exception as e:
-            instance.context['logging'].error("unable to save audit log for model", exc_info=True)
+            log.error(
+                msg = str(
+                    'unable to save audit log for model '
+                    'vars: '
+                    f"model={instance._meta.model_name} "
+                    f"app_label={instance._meta.app_label} "
+                    f"context={instance.context}"
+                ),
+                exc_info=True
+            )
