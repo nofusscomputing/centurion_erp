@@ -175,17 +175,3 @@ class Team(Group, TenancyObject):
 
     def __str__(self):
         return self.organization.name + ', ' + self.team_name
-
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from access.models.team_history import TeamHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = TeamHistory
-        )
-
-
-        return history
