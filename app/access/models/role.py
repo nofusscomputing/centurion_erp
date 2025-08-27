@@ -37,7 +37,7 @@ class Role(
     name = models.CharField(
         blank = False,
         help_text = 'Name of this role',
-        max_length = 30,
+        max_length = 50,
         unique = False,
         verbose_name = 'Name'
     )
