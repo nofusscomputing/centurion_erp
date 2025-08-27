@@ -332,15 +332,6 @@ from .model_ticketcommentsolution import (
     model_ticketcommentsolution,
 )
 
-from .model_team import (
-    kwargs_team,
-    model_team,
-)
-
-from .model_teamuser import (
-    model_teamusers,
-)
-
 from .model_tenant import (
     kwargs_tenant,
     model_tenant,

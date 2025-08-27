@@ -82,7 +82,7 @@ class ModelHistory(
         blank= False,
         help_text = 'User whom performed the action this history relates to',
         null = True,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.PROTECT,
         verbose_name = 'User'
     )
 

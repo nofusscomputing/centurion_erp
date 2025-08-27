@@ -475,7 +475,7 @@ class Ticket(
         blank= False,
         help_text = 'Who is the ticket for',
         null = False,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.PROTECT,
         related_name = 'opened_by',
         verbose_name = 'Opened By',
     )

@@ -1,11 +1,10 @@
 import django
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.test import Client, TestCase
+from django.test import TestCase
 
+from access.models.role import Role
 from access.models.tenant import Tenant as Organization
-from access.models.team import Team
-from access.models.team_user import TeamUsers
 
 from api.react_ui_metadata import ReactUIMetadata
 
@@ -20,6 +19,8 @@ class MockRequst:
     def __init__(self, user ):
 
         self.user = user
+
+
 
 class NavigationMenu(
     TestCase
@@ -155,18 +156,20 @@ class NavigationMenu(
         }
 
 
-        # app_label = 'access'
-        # model_name = 'organization'
-
         for app_label, model_names in users_to_create.items():
 
             for model_name in model_names:
 
-                setattr(self, app_label + "_" + model_name['permission_model'], MockRequst( user = User.objects.create_user(username= app_label + "_" + model_name['permission_model'], password="password")))
+                setattr(
+                    self, app_label + "_" + model_name['permission_model'],
+                    MockRequst( user = User.objects.create_user(
+                        username= app_label + "_" + model_name['permission_model'],
+                        password="password"
+                    ))
+                )
 
-                team = Team.objects.create(
-                    team_name = app_label + "_" + model_name['permission_model'],
-                    organization = organization,
+                group = Group.objects.create(
+                    name = app_label + "_" + model_name['permission_model'],
                 )
 
                 permission = Permission.objects.get(
@@ -177,12 +180,16 @@ class NavigationMenu(
                         )
                     )
 
-                team.permissions.set( [ permission ] )
-
-                team_user = TeamUsers.objects.create(
-                    team = team,
-                    user = getattr(self, app_label + "_" + model_name['permission_model']).user
+                role = Role.objects.create(
+                    name = app_label + "_" + model_name['permission_model'],
+                    organization = organization,
                 )
+
+                role.permissions.set( [ permission ] )
+                role.groups.set( [ group ] )
+                getattr(
+                    self, app_label + "_" + model_name['permission_model']
+                ).user.groups.set( [ group ] )
 
         self.metadata = ReactUIMetadata()
 

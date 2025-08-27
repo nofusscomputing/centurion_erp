@@ -137,8 +137,9 @@ class AuthToken(
 
 
     def __str__(self):
+        """NOTE: DO NOT OUTPUT TOKEN"""
 
-        return self.token
+        return 'users token'
 
     page_layout = []
 

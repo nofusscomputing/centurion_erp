@@ -10,7 +10,7 @@ from rest_framework.reverse import reverse
 
 
 MODEL_CONTEXTS = ContextVar("MODEL_CONTEXTS", default=None)
-DEFAULT_CONTEXT = {"user": None, "logging": None}
+DEFAULT_CONTEXT = {"user": None, "logger": None}
 
 
 

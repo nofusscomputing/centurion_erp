@@ -18,7 +18,7 @@ class ProjectAPITestCases(
     @pytest.fixture( scope = 'class')
     def second_model(self, request, django_db_blocker,
         model, model_kwargs,
-        model_team, kwargs_team
+        model_group, kwargs_group
     ):
 
         item = None
@@ -53,7 +53,7 @@ class ProjectAPITestCases(
 
             # kwargs.update({ 'parent_project': self.item})
             del kwargs['manager_user']
-            manager_team = model_team.objects.create( **kwargs_team )
+            manager_team = model_group.objects.create( **kwargs_group )
             kwargs['manager_team'] = manager_team
             kwargs['external_ref'] = 1
             kwargs['external_system'] = 1
@@ -178,7 +178,7 @@ class ProjectAPITestCases(
                 'expected': str
             },
             'manager_team.url': {
-                'expected': str
+                'expected': Hyperlink
             },
             'team_members': {
                 'expected': list

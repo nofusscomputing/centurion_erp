@@ -98,7 +98,7 @@ class knowledgebaseCategorySerializerTestCases(
 
     def test_serializer_validation_both_target_team_target_user(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_team, kwargs_team
+        model_group, kwargs_group
     ):
         """Serializer Validation Check
 
@@ -112,9 +112,9 @@ class knowledgebaseCategorySerializerTestCases(
         )
 
         kwargs = kwargs_api_create.copy()
-        team = model_team.objects.create( **kwargs_team )
+        group = model_group.objects.create( **kwargs_group )
         kwargs.update({
-            'target_team': [ team ]
+            'target_team': [ group.id ]
         })
 
         with pytest.raises(ValidationError) as err:
@@ -129,7 +129,7 @@ class knowledgebaseCategorySerializerTestCases(
 
             serializer.is_valid(raise_exception = True)
 
-        team.delete()
+        group.delete()
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
 
 
@@ -170,7 +170,7 @@ class knowledgebaseCategorySerializerTestCases(
     def test_serializer_validation_update_existing_target_team(self,
         created_model,
         model, model_serializer, request_user,
-        model_team, kwargs_team
+        model_group, kwargs_group
     ):
         """Serializer Validation Check
 
@@ -184,7 +184,7 @@ class knowledgebaseCategorySerializerTestCases(
             action = 'create',
         )
 
-        team = model_team.objects.create( **kwargs_team )
+        group = model_group.objects.create( **kwargs_group )
 
         with pytest.raises(ValidationError) as err:
 
@@ -195,14 +195,14 @@ class knowledgebaseCategorySerializerTestCases(
                     'view': mock_view,
                 },
                 data={
-                    "target_team": [ team.id ]
+                    "target_team": [ group.id ]
                 },
                 partial=True,
             )
 
             serializer.is_valid(raise_exception = True)
 
-        team.delete()
+        group.delete()
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
 
@@ -210,7 +210,7 @@ class knowledgebaseCategorySerializerTestCases(
     def test_serializer_validation_update_existing_target_user(self,
         created_model,
         model, model_serializer, request_user,
-        model_team, kwargs_team
+        model_group, kwargs_group
     ):
         """Serializer Validation Check
 
@@ -224,9 +224,9 @@ class knowledgebaseCategorySerializerTestCases(
             action = 'create',
         )
 
-        team = model_team.objects.create( **kwargs_team )
+        group = model_group.objects.create( **kwargs_group )
         created_model.target_user = None
-        created_model.target_team.add( team )
+        created_model.target_team.add( group )
         created_model.save()
 
         with pytest.raises(ValidationError) as err:
@@ -245,7 +245,7 @@ class knowledgebaseCategorySerializerTestCases(
 
             serializer.is_valid(raise_exception = True)
 
-        team.delete()
+        group.delete()
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
 
