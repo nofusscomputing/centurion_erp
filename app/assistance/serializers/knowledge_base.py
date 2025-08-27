@@ -76,13 +76,6 @@ class KnowledgeBaseModelSerializer(
                 'v2:_api_tenant-list',
                 request=self.context['view'].request,
             ),
-            'team': reverse(
-                'v2:_api_v2_organization_team-list',
-                request=self.context['view'].request,
-                kwargs={
-                    'organization_id': item.organization.id,
-                }
-            ),
             'user': reverse(
                 'v2:_api_user-list',
                 request=self.context['view'].request,
