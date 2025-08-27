@@ -3,6 +3,7 @@ import importlib
 import logging
 import rest_framework
 
+from django.conf import settings
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets, pagination
@@ -48,7 +49,7 @@ class Create(
             if hasattr(self.model, 'context'):
 
                 self.model.context['user'] = self.request.user
-                self.model.context['logging'] = self.get_log()
+                self.model.context['logger'] = self.get_log()
 
             try:
 
@@ -136,7 +137,7 @@ class Create(
         if hasattr(self.model, 'context'):
 
             self.model.context['user'] = None
-            self.model.context['logging'] = None
+            self.model.context['logger'] = None
 
         return response
 
@@ -171,7 +172,7 @@ class Destroy(
             if hasattr(self.model, 'context'):
 
                 self.model.context['user'] = self.request.user
-                self.model.context['logging'] = self.get_log()
+                self.model.context['logger'] = self.get_log()
 
             response = super().destroy(request = request, *args, **kwargs)
 
@@ -189,7 +190,7 @@ class Destroy(
         if hasattr(self.model, 'context'):
 
             self.model.context['user'] = None
-            self.model.context['logging'] = None
+            self.model.context['logger'] = None
 
         return response
 
@@ -225,7 +226,7 @@ class List(
             if hasattr(self.model, 'context'):
 
                 self.model.context['user'] = self.request.user
-                self.model.context['logging'] = self.get_log()
+                self.model.context['logger'] = self.get_log()
 
             response = super().list(request = request, *args, **kwargs)
 
@@ -243,7 +244,7 @@ class List(
         if hasattr(self.model, 'context'):
 
             self.model.context['user'] = None
-            self.model.context['logging'] = None
+            self.model.context['logger'] = None
 
         return response
 
@@ -282,7 +283,7 @@ class Retrieve(
             if hasattr(self.model, 'context'):
 
                 self.model.context['user'] = self.request.user
-                self.model.context['logging'] = self.get_log()
+                self.model.context['logger'] = self.get_log()
 
             response = super().retrieve(request = request, *args, **kwargs)
 
@@ -300,7 +301,7 @@ class Retrieve(
         if hasattr(self.model, 'context'):
 
             self.model.context['user'] = None
-            self.model.context['logging'] = None
+            self.model.context['logger'] = None
 
         return response
 
@@ -335,7 +336,7 @@ class Update(
             if hasattr(self.model, 'context'):
 
                 self.model.context['user'] = self.request.user
-                self.model.context['logging'] = self.get_log()
+                self.model.context['logger'] = self.get_log()
 
             response = super().partial_update(request = request, *args, **kwargs)
 
@@ -377,7 +378,7 @@ class Update(
         if hasattr(self.model, 'context'):
 
             self.model.context['user'] = None
-            self.model.context['logging'] = None
+            self.model.context['logger'] = None
 
         return response
 
@@ -406,7 +407,7 @@ class Update(
             if hasattr(self.model, 'context'):
 
                 self.model.context['user'] = self.request.user
-                self.model.context['logging'] = self.get_log()
+                self.model.context['logger'] = self.get_log()
 
             response = super().update(request = request, *args, **kwargs)
 
@@ -449,7 +450,7 @@ class Update(
         if hasattr(self.model, 'context'):
 
             self.model.context['user'] = None
-            self.model.context['logging'] = None
+            self.model.context['logger'] = None
 
         return response
 
@@ -544,7 +545,7 @@ class CommonViewSet(
 
         if self._log is None:
 
-            self._log = logging.getLogger('centurion.' + self.model._meta.app_label)
+            self._log = settings.CENTURION_LOG.getChild( suffix = self.model._meta.app_label)
 
         return self._log
 
@@ -1048,9 +1049,6 @@ class SubModelViewSet_ReWrite(
 
             self._model = self.base_model
 
-        self._model.context['user'] = self.request.user
-
-        self._model.context['logger'] = self.get_log()
 
         return self._model
 
