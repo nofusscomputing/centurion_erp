@@ -68,12 +68,6 @@ router.register(
     basename = '_api_v2_organization_team'
 )
 
-# router.register(
-#     prefix = 'tenant/(?P<organization_id>[0-9]+)/team/(?P<model_id>[0-9]+)/notes',
-#     viewset = team_notes.ViewSet,
-#     basename = '_api_v2_team_note'
-# )
-
 router.register(
     prefix = '/access/tenant/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user',
     viewset = team_user_v2.ViewSet,
