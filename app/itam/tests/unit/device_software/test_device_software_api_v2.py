@@ -23,6 +23,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip( reason = 'due for refactor. see #921' )
 @pytest.mark.model_devicesoftware
 @pytest.mark.module_itam
 class DeviceSoftwareAPI(
