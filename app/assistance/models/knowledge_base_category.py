@@ -58,7 +58,7 @@ class KnowledgeBaseCategory(
         blank = True,
         help_text = 'User(s) to grant access to the article',
         null = True,
-        on_delete = models.SET_NULL,
+        on_delete = models.PROTECT,
         verbose_name = 'Target Users(s)',
     )
 

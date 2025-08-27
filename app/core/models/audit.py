@@ -106,7 +106,7 @@ class CenturionAudit(
         blank = False,
         help_text = 'User whom performed the action',
         null = False,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.PROTECT,
         validators = [
             CenturionModel.validate_field_not_none,
         ],
