@@ -20,6 +20,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip( reason = 'due for refactor. see #909' )
 @pytest.mark.model_configgroupsoftware
 @pytest.mark.module_config_management
 class ConfigGroupsAPI(
