@@ -14,6 +14,8 @@ def audit_history(sender, instance, **kwargs):
 
         if instance.context.get('user', None) is None:
             return
+        else:
+            trace_var_for_testing = instance.context.get('user', None)
 
         audit_model = apps.get_model( 
             instance._meta.app_label,
