@@ -40,7 +40,7 @@ def api_request_permissions( django_db_blocker,
             )
 
         add_user = model_user.objects.create_user(
-            username="test_user_add" + str(random_str), password="password"
+            username="api_rp_user_add" + str(random_str), password="password"
         )
 
 
@@ -68,7 +68,7 @@ def api_request_permissions( django_db_blocker,
             )
 
         change_user = model_user.objects.create_user(
-            username="test_user_change" + str(random_str), password="password"
+            username="api_rp_user_change" + str(random_str), password="password"
         )
 
         change_group = model_group.objects.create(
@@ -96,7 +96,7 @@ def api_request_permissions( django_db_blocker,
             )
 
         delete_user = model_user.objects.create_user(
-            username="test_user_delete" + str(random_str), password="password"
+            username="api_rp_user_delete" + str(random_str), password="password"
         )
 
         delete_group = model_group.objects.create(
@@ -144,7 +144,7 @@ def api_request_permissions( django_db_blocker,
 
 
         different_organization_user = model_user.objects.create_user(
-            username="test_diff_org_user" + str(random_str), password="password"
+            username="api_rp_diff_org_user" + str(random_str), password="password"
         )
 
 
@@ -172,7 +172,7 @@ def api_request_permissions( django_db_blocker,
 
 
         no_permission_user = model_user.objects.create_user(
-            username="nil_permissions" + str(random_str), password="password"
+            username="api_rp_nil_permissions" + str(random_str), password="password"
         )
 
 

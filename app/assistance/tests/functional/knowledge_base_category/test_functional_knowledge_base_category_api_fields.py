@@ -17,7 +17,7 @@ class knowledgeBaseCategoryAPITestCases(
 
     @pytest.fixture( scope = 'class')
     def second_model(self, request, django_db_blocker,
-        model, model_kwargs, model_team, kwargs_team
+        model, model_kwargs, model_group, kwargs_group
     ):
 
         item = None
@@ -46,8 +46,8 @@ class knowledgeBaseCategoryAPITestCases(
 
 
             # Switch model fields so all fields can be checked
-            team = model_team.objects.create( **kwargs_team )
-            kwargs_many_to_many.update({ 'target_team': [ team ]})
+            group = model_group.objects.create( **kwargs_group )
+            kwargs_many_to_many.update({ 'target_team': [ group ]})
             del kwargs['target_user']
 
             kwargs['parent_category'] = request.cls.item
@@ -75,7 +75,7 @@ class knowledgeBaseCategoryAPITestCases(
 
             item_two.delete()
 
-            team.delete()
+            group.delete()
 
             del request.cls.item_two
 

@@ -611,6 +611,7 @@ class APIPermissionViewInheritedCases:
 
             pytest.xfail( reason = 'ViewSet is public viewable, test is N/A' )
 
+        assert response.status_code == 200    # must be successful for test to pass
         assert len(response.data['results']) >= 2    # fail if only one item extist.
 
 
