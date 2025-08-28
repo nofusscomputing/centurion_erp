@@ -1,6 +1,5 @@
 from django.apps import apps
 from django.contrib.auth.models import Permission, AbstractUser
-from django.core.exceptions import PermissionDenied
 
 from access.models.tenant import Tenant
 
@@ -59,10 +58,6 @@ class CenturionUser(
 
     def __int__(self) -> int:
         return int(self.id)
-
-
-    def get_full_name(self) -> str:
-        return f'{self.entity_user.f_name} {self.entity_user.l_name}'
 
 
 
@@ -186,11 +181,6 @@ class CenturionUser(
 
 
 
-    def get_short_name() -> str:
-        return self.entity_user.f_name
-
-
-
     def get_tenancies(self, int_list = False) -> list[ Tenant ] | list[ int ]:
         """Get the Tenancies the user is in.
 
@@ -216,12 +206,7 @@ class CenturionUser(
 
 
 
-    # def has_module_perms(self, app_label):    # is this needed?
 
-    #     # if has app_label in perms
-
-    #     # raise PermissionDenied
-    #     return True
     def get_user_permissions(
         self, tenancy: bool = True
     ) -> dict[ str, list[ Permission ] ] | list[ Permission ]:
