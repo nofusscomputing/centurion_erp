@@ -44,7 +44,7 @@ def audit_history(sender, instance, **kwargs):
                     model = instance._meta.model_name,
                 ),
                 action = audit_action,
-                user = instance.context['user'],
+                user = instance.context.get(instance._meta.model_name, None),
                 model = instance,
             )
 

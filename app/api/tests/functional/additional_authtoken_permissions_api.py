@@ -41,7 +41,7 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': user
+            the_model._meta.model_name: user
         }.__getitem__
 
         # the_model.user = api_request_permissions['user']['add']
@@ -89,7 +89,7 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': user
+            delete_item._meta.model_name: user
         }.__getitem__
 
         # delete_item.user = api_request_permissions['user']['delete']
@@ -134,7 +134,7 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': user
+            view_item._meta.model_name: user
         }.__getitem__
 
         # view_item.user = api_request_permissions['user']['view']
@@ -178,7 +178,7 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': api_request_permissions['user']['view']
+            view_item._meta.model_name: api_request_permissions['user']['view']
         }.__getitem__
 
         view_item.user = api_request_permissions['user']['view']
@@ -233,7 +233,7 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': user
+            view_item._meta.model_name: user
         }.__getitem__
 
 

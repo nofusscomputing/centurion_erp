@@ -18,8 +18,10 @@ class TenancyManager(
     def get_queryset(self):
         """ Fetch the data
 
-        When the model contains the user data, the query is filtered to their
-        and the globally defined Tenancy only.
+        It's assumed that the query method from the view/ViewSet has added the user object
+        to the model under attribute `.context[<_meta.model_name>]` as that's the model the user is
+        fetching for their query. It's done like this so that within code, a full query can
+        be done without the data being filtered to the user in question.
 
         Returns:
             (queryset): **super user**: return unfiltered data.
@@ -30,10 +32,11 @@ class TenancyManager(
 
         if hasattr(self.model, 'context'):
 
-            user = self.model.context['user']
+            user = self.model.context.get(self.model._meta.model_name, None)
 
 
         has_tenant_field = False
+
         if(
             getattr(self.model, 'organization', None) is not None
             or getattr(self.model, 'tenant', None) is not None
