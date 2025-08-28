@@ -702,7 +702,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                     for setting_permission in view_settings:
 
-                        if request.user.has_perm(permission = setting_permission):
+                        if request.user.has_perm(permission = setting_permission, tenancy_permission = False):
 
                             new_pages += [ page ]
                             break
@@ -710,14 +710,14 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 elif '.' in permission:
 
-                    if request.user.has_perm(permission = permission):
+                    if request.user.has_perm(permission = permission, tenancy_permission = False):
 
                         new_pages += [ page ]
 
 
                 else:
 
-                    if request.user.has_perm(permission = app + '.' + permission):
+                    if request.user.has_perm(permission = app + '.' + permission, tenancy_permission = False):
 
                         new_pages += [ page ]
 

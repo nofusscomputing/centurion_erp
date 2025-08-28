@@ -171,7 +171,8 @@ class TenancyPermissionMixin(
 
 
             if not request.user.has_perm(
-                permission = view.get_permission_required()
+                permission = view.get_permission_required(),
+                tenancy_permission = False
             ):
 
                 raise PermissionDenied(
@@ -197,9 +198,18 @@ class TenancyPermissionMixin(
             elif(
                 request.user.has_perm(
                     permission = view.get_permission_required(),
+                    tenancy_permission = False
+                )
+                and view.action in [ 'metadata', 'list' ]
+            ):
+
+                return True
+
+            elif(
+                request.user.has_perm(
+                    permission = view.get_permission_required(),
                     tenancy = obj_organization
                 )
-                and view.action in [ 'metadata' ]
             ):
 
                 return True
