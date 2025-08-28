@@ -208,8 +208,9 @@ class TenancyPermissionMixin(
             elif(
                 request.user.has_perm(
                     permission = view.get_permission_required(),
-                    tenancy = obj_organization
+                    tenancy_permission = False
                 )
+                and not self.is_tenancy_model(view)
             ):
 
                 return True
@@ -219,6 +220,17 @@ class TenancyPermissionMixin(
                     permission = view.get_permission_required(),
                     tenancy = obj_organization
                 )
+                and self.is_tenancy_model(view)
+            ):
+
+                return True
+
+            elif(
+                request.user.has_perm(
+                    permission = view.get_permission_required(),
+                    tenancy = obj_organization
+                )
+                and self.is_tenancy_model(view)
                 or request.user.is_superuser
             ):
 
