@@ -55,6 +55,11 @@ from .model_centurionmodelnotemeta import (
     model_centurionmodelnotemeta,
 )
 
+from .model_centurionuser import (
+    kwargs_centurionuser,
+    model_centurionuser,
+)
+
 from .model_checkin import (
     kwargs_checkin,
     model_checkin,
