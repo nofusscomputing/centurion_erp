@@ -63,7 +63,7 @@ router.register(
 
 router.register(
     prefix = '/role', viewset = role.ViewSet,
-    feature_flag = '2025-00003', basename = '_api_role'
+    basename = '_api_role'
 )
 
 urlpatterns = router.urls

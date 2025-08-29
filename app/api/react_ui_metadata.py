@@ -387,6 +387,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "icon": "organization",
                         "link": "/access/tenant"
                     },
+                    'view_role': {
+                        "display_name": "Roles",
+                        "name": "roles",
+                        "icon": 'roles',
+                        "link": "/access/role"
+                    },
                 }
             },
             'accounting': {
@@ -577,19 +583,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 })
 
             if request.feature_flag['2025-00002']:
-
-
-                if request.feature_flag['2025-00003']:
-
-                    nav['access']['pages'].update({
-                        'view_role': {
-                            "display_name": "Roles",
-                            "name": "roles",
-                            "icon": 'roles',
-                            "link": "/access/role"
-                        }
-                    })
-
 
                 if request.feature_flag['2025-00008']:
 
