@@ -6,12 +6,7 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-An tenant is how multi-tenancy is conducted within this application. All data within the application is tied to an tenant and only users whom are members of the tenant with the correct permission can view that item within an tenant.
-
-!!! warning
-    Any object within any tenant that has been marked as `global`. Any user whom has the correct `view` permission will be able to see the global object. 
-    
-    _**Note:**: This does not include other items that may be attached to the global object that is itself not marked as global._
+An tenant is how multi-tenancy is conducted within this application. All data within the application is tied to an tenant and only users whom are members of the tenancy with the correct permission can view that item within an tenancy.
 
 
 ## Tenant Manager
