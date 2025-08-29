@@ -384,13 +384,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     'view_tenant': {
                         "display_name": "Tenancy",
                         "name": "tenant",
-                        "icon": "organization",
                         "link": "/access/tenant"
                     },
                     'view_role': {
                         "display_name": "Roles",
                         "name": "roles",
-                        "icon": 'roles',
+                        "icon": 'role',
                         "link": "/access/role"
                     },
                 }
