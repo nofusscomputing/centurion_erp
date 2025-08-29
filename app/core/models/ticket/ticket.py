@@ -2,6 +2,7 @@ import difflib
 import django
 
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models import Q, signals, Sum
 from django.forms import ValidationError
@@ -11,7 +12,6 @@ from rest_framework.reverse import reverse
 from .ticket_enum_values import TicketValues
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.team import Team
 from access.models.tenancy import TenancyObject
 
 from core import exceptions as centurion_exceptions
@@ -475,7 +475,7 @@ class Ticket(
         blank= False,
         help_text = 'Who is the ticket for',
         null = False,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.PROTECT,
         related_name = 'opened_by',
         verbose_name = 'Opened By',
     )
@@ -492,12 +492,12 @@ class Ticket(
 
 
     subscribed_teams = models.ManyToManyField(
-        Team,
+        Group,
         blank= True,
-        help_text = 'Subscribe a Team(s) to the ticket to receive updates',
-        related_name = 'subscribed_teams',
+        help_text = 'Subscribe a Group(s) to the ticket to receive updates',
+        related_name = '+',
         symmetrical = False,
-        verbose_name = 'Subscribed Team(s)',
+        verbose_name = 'Subscribed Group(s)',
     )
 
     assigned_users = models.ManyToManyField(
@@ -510,12 +510,12 @@ class Ticket(
     )
 
     assigned_teams = models.ManyToManyField(
-        Team,
+        Group,
         blank= True,
-        help_text = 'Assign the ticket to a Team(s)',
-        related_name = 'assigned_teams',
+        help_text = 'Assign the ticket to a Group(s)',
+        related_name = '+',
         symmetrical = False,
-        verbose_name = 'Assigned Team(s)',
+        verbose_name = 'Assigned Group(s)',
     )
 
     is_deleted = models.BooleanField(
@@ -1365,7 +1365,7 @@ class Ticket(
 
         pk: int = 0
 
-        team: list(Team) = None
+        team: list(Group) = None
         comment_field_value: str = None
 
         if pk_set:
@@ -1376,7 +1376,7 @@ class Ticket(
 
             if pk:
 
-                team = Team.objects.get(pk = pk)
+                team = Group.objects.get(pk = pk)
 
             if sender.__name__ == 'Ticket_assigned_teams':
 

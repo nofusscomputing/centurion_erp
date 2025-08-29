@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import hashlib
+import logging
 import os
 import sys
 
@@ -92,6 +93,8 @@ LOG_FILES = {    # defaults for devopment. docker includes settings has correct 
     "catch_all":"log/catch-all.log"
 }
 
+CENTURION_LOG = logging.getLogger( name = 'centurion')
+
 CENTURION_LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -153,6 +156,11 @@ CENTURION_LOGGING = {
             "django.server": {
                 "handlers": ["file_weblog", 'console'],
                 "level": "INFO",
+                "propagate": False,
+            },
+            "django.request": {
+                "handlers": ["file_weblog", 'console'],
+                "level": "DEBUG",
                 "propagate": False,
             },
             "django": {
@@ -496,11 +504,18 @@ CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api
 CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_all']
 
 
-if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log') and not RUNNING_TESTS:
+if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log'):
 
     if not os.path.exists(os.path.join(BASE_DIR, 'log')): # Create log dir
 
         os.makedirs(os.path.join(BASE_DIR, 'log'))
+
+    if RUNNING_TESTS:
+
+        if not os.path.exists(os.path.join(BASE_DIR.parent, 'log')): # Create log dir
+
+            os.makedirs(os.path.join(BASE_DIR.parent, 'log'))
+
 
 if DEBUG:
 
@@ -517,9 +532,7 @@ if DEBUG:
     ]
 
 
-if not RUNNING_TESTS:
-    # Setup Logging
-    LOGGING = CENTURION_LOGGING
+LOGGING = CENTURION_LOGGING
 
 
 if METRICS_ENABLED:
@@ -640,15 +653,6 @@ if FEATURE_FLAGGING_ENABLED:
                 "2025-00002": {
                     "name": "Entities",
                     "description": "Entities see https://github.com/nofusscomputing/centurion_erp/issues/704",
-                    "enabled": True,
-                    "created": "",
-                    "modified": ""
-                }
-            },
-            {
-                "2025-00003": {
-                    "name": "Role Based Access Control (RBAC)",
-                    "description": "Refactor of authentication and authorization to be RBAC based. see https://github.com/nofusscomputing/centurion_erp/issues/551",
                     "enabled": True,
                     "created": "",
                     "modified": ""

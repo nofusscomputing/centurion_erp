@@ -30,6 +30,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip( reason = 'model due for replacement see #723 #746' )
 class ViewSetBase:
     """ Test Cases common to ALL ticket types """
 

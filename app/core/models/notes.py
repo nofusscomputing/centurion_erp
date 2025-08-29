@@ -70,7 +70,7 @@ class Notes(NotesCommonFields):
         default = None,
         help_text = 'User whom added Note',
         null = True,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.PROTECT,
         related_name = 'usercreated',
         verbose_name = 'Added By',
     )
@@ -81,7 +81,7 @@ class Notes(NotesCommonFields):
         default = None,
         help_text = 'User whom modified the note',
         null = True,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.PROTECT,
         related_name = 'usermodified',
         verbose_name = 'Edited By',
     )

@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from settings.models.app_settings import AppSettings
 
@@ -8,9 +8,9 @@ from settings.models.app_settings import AppSettings
 @pytest.fixture( scope = 'class')
 def api_request_permissions( django_db_blocker,
     model_contenttype,
+    model_group,
     model_permission,
-    model_team,
-    model_teamusers,
+    model_role,
     model_user,
     model,
     organization_one,
@@ -20,8 +20,7 @@ def api_request_permissions( django_db_blocker,
 
     with django_db_blocker.unblock():
 
-
-        random_str = datetime.datetime.now(tz=datetime.timezone.utc)
+        random_str = str(random.randint(1, 99999))
 
         app_settings = AppSettings.objects.get(
             owner_organization = None
@@ -32,7 +31,6 @@ def api_request_permissions( django_db_blocker,
         app_settings.save()
 
 
-
         add_permissions = model_permission.objects.get(
                 codename = 'add_' + model._meta.model_name,
                 content_type = model_contenttype.objects.get(
@@ -41,22 +39,24 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        add_team = model_team.objects.create(
-            team_name = 'add_team' + str(random_str),
-            organization = organization_one,
-        )
-
-        add_team.permissions.set([add_permissions])
-
         add_user = model_user.objects.create_user(
-            username="test_user_add" + str(random_str), password="password"
+            username="api_rp_user_add" + str(random_str), password="password"
         )
 
-        model_teamusers.objects.create(
-            team = add_team,
-            user = add_user
+
+        add_group = model_group.objects.create(
+            name = 'add_team' + str(random_str),
         )
 
+        add_user.groups.set( [ add_group ])
+
+        add_role = model_role.objects.create(
+            organization = organization_one,
+            name = 'add_role' + str(random_str),
+        )
+
+        add_role.groups.set( [ add_group ] )
+        add_role.permissions.set( [ add_permissions ] )
 
 
         change_permissions = model_permission.objects.get(
@@ -67,21 +67,23 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        change_team = model_team.objects.create(
-            team_name = 'change_team' + str(random_str),
-            organization = organization_one,
-        )
-
-        change_team.permissions.set([change_permissions])
-
         change_user = model_user.objects.create_user(
-            username="test_user_change" + str(random_str), password="password"
+            username="api_rp_user_change" + str(random_str), password="password"
         )
 
-        model_teamusers.objects.create(
-            team = change_team,
-            user = change_user
+        change_group = model_group.objects.create(
+            name = 'change_team' + str(random_str),
         )
+
+        change_user.groups.set( [ change_group ])
+
+        change_role = model_role.objects.create(
+            organization = organization_one,
+            name = 'change_role' + str(random_str),
+        )
+
+        change_role.groups.set( [ change_group ] )
+        change_role.permissions.set( [ change_permissions ] )
 
 
 
@@ -93,20 +95,23 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        delete_team = model_team.objects.create(
-            team_name = 'delete_team' + str(random_str),
-            organization = organization_one,
-        )
-
-        delete_team.permissions.set([delete_permissions])
-
         delete_user = model_user.objects.create_user(
-            username="test_user_delete" + str(random_str), password="password"
+            username="api_rp_user_delete" + str(random_str), password="password"
         )
-        model_teamusers.objects.create(
-            team = delete_team,
-            user = delete_user
+
+        delete_group = model_group.objects.create(
+            name = 'delete_team' + str(random_str),
         )
+
+        delete_user.groups.set( [ delete_group ])
+
+        delete_role = model_role.objects.create(
+            organization = organization_one,
+            name = 'delete_role' + str(random_str),
+        )
+
+        delete_role.groups.set( [ delete_group ] )
+        delete_role.permissions.set( [ delete_permissions ] )
 
 
 
@@ -118,49 +123,56 @@ def api_request_permissions( django_db_blocker,
                 )
             )
 
-        view_team = model_team.objects.create(
-            team_name = 'view_team' + str(random_str),
-            organization = organization_one,
-        )
-
-        view_team.permissions.set([view_permissions])
-
         view_user = model_user.objects.create_user(
             username="api_r_perm_user_view" + str(random_str), password="password"
         )
 
-        model_teamusers.objects.create(
-            team = view_team,
-            user = view_user
+        view_group = model_group.objects.create(
+            name = 'view_team' + str(random_str),
         )
+
+        view_user.groups.set( [ view_group ])
+
+        view_role = model_role.objects.create(
+            organization = organization_one,
+            name = 'view_role' + str(random_str),
+        )
+
+        view_role.groups.set( [ view_group ] )
+        view_role.permissions.set( [ view_permissions ] )
 
 
 
         different_organization_user = model_user.objects.create_user(
-            username="test_diff_org_user" + str(random_str), password="password"
+            username="api_rp_diff_org_user" + str(random_str), password="password"
         )
 
 
-        different_organization_team = model_team.objects.create(
-            team_name = 'diff_org_team' + str(random_str),
+        different_organization_group = model_group.objects.create(
+            name = 'diff_org_team' + str(random_str),
+        )
+
+        different_organization_user.groups.set( [ different_organization_group ])
+
+        different_organization_role = model_role.objects.create(
             organization = organization_two,
+            name = 'diff_org_team' + str(random_str),
         )
 
-        different_organization_team.permissions.set([
+        different_organization_role.groups.set( [ different_organization_group ] )
+        different_organization_role.permissions.set( [
             view_permissions,
             add_permissions,
             change_permissions,
             delete_permissions,
         ])
 
-        model_teamusers.objects.create(
-            team = different_organization_team,
-            user = different_organization_user
-        )
+
+
 
 
         no_permission_user = model_user.objects.create_user(
-            username="nil_permissions" + str(random_str), password="password"
+            username="api_rp_nil_permissions" + str(random_str), password="password"
         )
 
 
@@ -187,17 +199,22 @@ def api_request_permissions( django_db_blocker,
         # Commented out as meta class tests fail due to fixture being cleaned before test is 
         # completed.
         #
-        # add_team.delete()
-        # add_user.delete()
+        add_role.delete()
+        add_group.delete()
+        add_user.delete()
 
-        # change_team.delete()
-        # change_user.delete()
+        change_role.delete()
+        change_group.delete()
+        change_user.delete()
 
-        # delete_team.delete()
-        # delete_user.delete()
+        delete_role.delete()
+        delete_group.delete()
+        delete_user.delete()
 
-        # view_team.delete()
-        # view_user.delete()
+        view_role.delete()
+        view_group.delete()
+        view_user.delete()
 
-        # different_organization_team.delete()
-        # different_organization_user.delete()
+        different_organization_role.delete()
+        different_organization_group.delete()
+        different_organization_user.delete()

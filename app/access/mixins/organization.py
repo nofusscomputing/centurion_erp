@@ -47,7 +47,7 @@ class OrganizationMixin:
 
             if not self._obj_organization:
 
-                self._obj_organization = getattr(obj, 'get_organization', lambda: None)()
+                self._obj_organization = getattr(obj, 'get_tenant', lambda: None)()
 
         elif (
             request
@@ -85,7 +85,7 @@ class OrganizationMixin:
 
             if getattr(obj, 'organization', None):
 
-                self._obj_organization = obj.get_organization()
+                self._obj_organization = obj.get_tenant()
 
             elif str(self.model._meta.verbose_name).lower() == 'tenant':
 
@@ -96,7 +96,7 @@ class OrganizationMixin:
 
             parent_obj = self.get_parent_obj()
 
-            self._obj_organization = parent_obj.get_organization()
+            self._obj_organization = parent_obj.get_tenant()
 
 
         return self._obj_organization

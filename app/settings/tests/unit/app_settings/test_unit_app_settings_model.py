@@ -127,6 +127,7 @@ class AppSettingsModelPyTest(
 
         pytest.xfail( reason = 'Model does not require tag' )
 
+
     def test_method_value_not_default___str__(self, model, model_instance ):
         """Test Method
 
@@ -134,3 +135,17 @@ class AppSettingsModelPyTest(
         """
 
         pytest.xfail( reason = 'Model does not require this function' )
+
+
+    def test_method_get_tenant_returns_tenant(self, mocker, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_history_model_name` returns the value of the models
+        audit name `<Model Class name>AuditHistory`
+        """
+
+        test_value = self.organization
+        model_instance.owner_organization = test_value
+
+
+        assert model_instance.get_tenant() == test_value

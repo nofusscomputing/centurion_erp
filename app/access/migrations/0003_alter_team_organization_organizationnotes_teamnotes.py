@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='team',
             name='organization',
-            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.team.Team.validatate_organization_exists], verbose_name='Organization'),
+            field=models.ForeignKey(help_text='Organization this belongs to', on_delete=django.db.models.deletion.CASCADE, to='access.organization', verbose_name='Organization'),
         ),
         migrations.CreateModel(
             name='OrganizationNotes',

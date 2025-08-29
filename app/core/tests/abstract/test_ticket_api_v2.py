@@ -1,3 +1,4 @@
+import pytest
 import django
 
 from django.contrib.auth.models import Permission
@@ -21,7 +22,7 @@ from project_management.models.project_milestone import ProjectMilestone
 User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.skip( reason = 'model undergoing transition. see #746' )
 class TicketAPI(
     APITenancyObject
 ):

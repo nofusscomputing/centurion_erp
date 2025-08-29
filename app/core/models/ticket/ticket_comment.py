@@ -1,13 +1,13 @@
 import django
 
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.db import models
 from django.forms import ValidationError
 
 from rest_framework.reverse import reverse
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
-from access.models.team import Team
 from access.models.tenancy import TenancyObject
 
 from core.lib.feature_not_used import FeatureNotUsed
@@ -126,7 +126,7 @@ class TicketComment(
         default = None,
         help_text = 'Parent ID for creating discussion threads',
         null = True,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.PROTECT,
         verbose_name = 'Parent Comment',
     )
 
@@ -249,21 +249,21 @@ class TicketComment(
         blank= True,
         default = None,
         help_text = 'User whom is responsible for the completion of comment',
-        on_delete = models.DO_NOTHING,
+        on_delete = models.PROTECT,
         related_name = 'comment_responsible_user',
         null = True,
         verbose_name = 'Responsible User',
     )
 
     responsible_team = models.ForeignKey(
-        Team,
+        Group,
         blank= True,
         default = None,
-        help_text = 'Team whom is responsible for the completion of comment',
-        on_delete = models.DO_NOTHING,
-        related_name = 'comment_responsible_team',
+        help_text = 'Group whom is responsible for the completion of comment',
+        on_delete = models.PROTECT,
+        related_name = '+',
         null = True,
-        verbose_name = 'Responsible Team',
+        verbose_name = 'Responsible Group',
     )
 
     user = models.ForeignKey(
@@ -271,7 +271,7 @@ class TicketComment(
         blank= False,
         help_text = 'Who made the comment',
         null = True,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.PROTECT,
         related_name = 'comment_user',
         verbose_name = 'User',
     )

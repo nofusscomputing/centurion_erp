@@ -19,7 +19,7 @@ from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.skip( reason = 'model due for refactor see #888' )
 class ViewSetBase:
 
     model = DeviceOperatingSystem

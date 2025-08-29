@@ -1,9 +1,18 @@
+import django
 import pytest
 
 from django.conf import settings
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+
 from django.test import Client
 
 from rest_framework.reverse import reverse
+
+from access.models.role import Role
+from access.models.tenant import Tenant
+
+from settings.models.app_settings import AppSettings
 
 
 
@@ -21,6 +30,196 @@ class MetadataAttributesFunctionalBase:
     url_name: str = None
 
     viewset_type: str = 'list'
+
+    @classmethod
+    def presetUpTestData(self):
+        """Setup Test
+
+        1. Create an organization for user and item
+        . create an organization that is different to item
+        2. Create a team
+        3. create teams with each permission: view, add, change, delete
+        4. create a user per team
+        """
+
+        User = django.contrib.auth.get_user_model()
+
+        self.organization = Tenant.objects.create(name='test_org')
+
+        # self.organization = organization
+
+        self.different_organization = Tenant.objects.create(name='test_different_organization')
+
+        self.global_organization = Tenant.objects.create(name='test_global_organization')
+
+        self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
+
+        self.add_user = User.objects.create_user(username="test_user_add", password="password")
+
+        self.change_user = User.objects.create_user(username="test_user_change", password="password")
+
+        self.delete_user = User.objects.create_user(username="test_user_delete", password="password")
+
+        self.different_organization_user = User.objects.create_user(username="test_different_organization_user", password="password")
+
+        self.view_user = User.objects.create_user(username="test_user_view", password="password")
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
+        app_settings.global_organization = self.global_organization
+
+        app_settings.save()
+
+
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
+
+        1. Create an organization for user and item
+        . create an organization that is different to item
+        2. Create a team
+        3. create teams with each permission: view, add, change, delete
+        4. create a user per team
+        """
+
+        try:
+            if hasattr(self, 'kwargs_create_item'):
+                self.item = self.model.objects.create(
+                    # organization = organization,
+                    **self.kwargs_create_item
+                )
+        except TypeError:
+            pass    # m2m field error, create item in model test case
+
+        if hasattr(self, 'kwargs_create_item_diff_org'):
+
+            self.other_org_item = self.model.objects.create(
+                # organization = self.different_organization,
+                **self.kwargs_create_item_diff_org
+            )
+
+
+        if hasattr(self, 'url_view_kwargs'):
+            self.url_view_kwargs.update({ 'pk': self.item.id })
+
+
+        view_permissions = Permission.objects.get(
+                codename = 'view_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+
+        view_group = Group.objects.create(
+            name = 'view_team',
+        )
+
+
+        view_role = Role.objects.create(
+            name = 'view_team',
+            organization = self.organization,
+        )
+
+        view_role.permissions.set([view_permissions])
+        view_role.groups.set([view_group])
+
+        self.view_user.groups.set([view_group])
+
+
+        add_permissions = Permission.objects.get(
+                codename = 'add_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+
+        add_group = Group.objects.create(
+            name = 'add_team',
+        )
+
+        add_role = Role.objects.create(
+            name = 'add_team',
+            organization = self.organization,
+        )
+
+        add_role.permissions.set([add_permissions])
+        add_role.groups.set([add_group])
+
+        self.add_user.groups.set([add_group])
+
+
+        change_permissions = Permission.objects.get(
+                codename = 'change_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+
+        change_group = Group.objects.create(
+            name = 'change_team',
+        )
+
+        change_role = Role.objects.create(
+            name = 'change_team',
+            organization = self.organization,
+        )
+
+        change_role.permissions.set([change_permissions])
+        change_role.groups.set([change_group])
+
+        self.change_user.groups.set([change_group])
+
+
+        delete_permissions = Permission.objects.get(
+                codename = 'delete_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+
+        delete_group = Group.objects.create(
+            name = 'delete_team',
+        )
+
+        delete_role = Role.objects.create(
+            name = 'delete_team',
+            organization = self.organization,
+        )
+
+        delete_role.permissions.set([delete_permissions])
+        delete_role.groups.set([delete_group])
+
+        self.delete_user.groups.set([delete_group])
+
+
+        diff_org_group = Group.objects.create(
+            name = 'diff_org_team',
+        )
+
+        diff_org_role = Role.objects.create(
+            name = 'diff_org_team',
+            organization = self.different_organization,
+        )
+
+        diff_org_role.permissions.set([
+            view_permissions,
+            add_permissions,
+            change_permissions,
+            delete_permissions,
+        ])
+        diff_org_role.groups.set([diff_org_group])
+
+        self.different_organization_user.groups.set([diff_org_group])
 
 
     def test_method_options_request_list_ok(self):
@@ -317,12 +516,6 @@ class MetadataAttributesFunctionalBase:
 
 
 
-
-
-
-
-
-
 class MetadataAttributesFunctionalTable:
     """Test cases for Metadata
     
@@ -610,12 +803,14 @@ class MetadataAttributesFunctionalEndpoint:
 
 
 
+@pytest.mark.api
+@pytest.mark.functional
+@pytest.mark.metadata
 class MetadataAttributesFunctional(
     MetadataAttributesFunctionalEndpoint,
     MetadataAttributesFunctionalTable,
     MetadataAttributesFunctionalBase,
 ):
-
     pass
 
 
@@ -834,5 +1029,3 @@ class MetaDataNavigationEntriesFunctional:
                 no_empty_menu_found = False
 
         assert no_empty_menu_found
-
-
