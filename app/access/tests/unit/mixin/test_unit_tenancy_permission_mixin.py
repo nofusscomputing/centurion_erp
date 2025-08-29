@@ -49,10 +49,13 @@ class MockUser:
         self.tenancy = tenancy
 
 
-    def has_perm( self, permission, tenancy = None, obj = None ):
+    def has_perm( self, permission, tenancy = None, obj = None, tenancy_permission = True ):
 
         if tenancy is None and obj is not None:
             tenancy = obj.get_tenant()
+
+        if tenancy is None and obj is None and tenancy_permission:
+            raise ValueError('tenancy must be supplied')
 
         if tenancy:
             if tenancy != self.tenancy:
@@ -265,7 +268,7 @@ class TenancyPermissionMixinTestCases(
 
         return {
             # SoF object_tenancy has a value to test API request containing tenancy ID
-            'same_tenancy_has_permission_tenancy_model': {
+            'same_tenancy_has_permission_tenancy_model': {    # List
                 'request_method': 'GET',
                 'raised_exception': None,
                 'exec_code': '',
@@ -277,7 +280,7 @@ class TenancyPermissionMixinTestCases(
                 'user_permissions': [ 'boo' ],
                 'kwargs': {}
             },
-            'has_permission_not_tenancy_model': {
+            'has_permission_not_tenancy_model': {    # List
                 'request_method': 'GET',
                 'raised_exception': None,
                 'exec_code': '',
@@ -290,10 +293,10 @@ class TenancyPermissionMixinTestCases(
                 'kwargs': {}
             },
 
-            'different_tenancy_has_permission_tenancy_model': {
+            'different_tenancy_has_permission_tenancy_model': {    # List
                 'request_method': 'GET',
-                'raised_exception': PermissionDenied,
-                'exec_code': 'default_deny',
+                'raised_exception': None,
+                'exec_code': '',
                 'is_superuser': False,
                 'is_tenancy_model': True,
                 'object_tenancy': 1,
@@ -303,7 +306,7 @@ class TenancyPermissionMixinTestCases(
                 'kwargs': {}
             },
 
-            'same_tenancy_no_permission_tenancy_model': {
+            'same_tenancy_no_permission_tenancy_model': {    # List
                 'request_method': 'GET',
                 'raised_exception': PermissionDenied,
                 'exec_code': 'missing_permission',
@@ -315,7 +318,7 @@ class TenancyPermissionMixinTestCases(
                 'user_permissions': [ 'who' ],
                 'kwargs': {}
             },
-            'no_permission_not_tenancy_model': {
+            'no_permission_not_tenancy_model': {    # List
                 'request_method': 'GET',
                 'raised_exception': PermissionDenied,
                 'exec_code': 'missing_permission',
@@ -327,7 +330,7 @@ class TenancyPermissionMixinTestCases(
                 'user_permissions': [ 'who' ],
                 'kwargs': {}
             },
-            'different_tenancy_no_permission_tenancy_model': {
+            'different_tenancy_no_permission_tenancy_model': {    # List
                 'request_method': 'GET',
                 'raised_exception': PermissionDenied,
                 'exec_code': 'missing_permission',
@@ -342,7 +345,7 @@ class TenancyPermissionMixinTestCases(
             # EoF object_tenancy has a value to test API request containing tenancy ID
 
             # SoF object_tenancy no value to test API request not containing tenancy ID
-            'unknown_tenancy_has_permission_tenancy_model': {
+            'unknown_tenancy_has_permission_tenancy_model': {    # List
                 'request_method': 'GET',
                 'raised_exception': None,
                 'exec_code': 'missing_tenancy',
@@ -354,7 +357,7 @@ class TenancyPermissionMixinTestCases(
                 'user_permissions': [ 'boo' ],
                 'kwargs': {}
             },
-            'unknown_tenancy_no_permission_tenancy_model': {
+            'unknown_tenancy_no_permission_tenancy_model': {    # List
                 'request_method': 'GET',
                 'raised_exception': PermissionDenied,
                 'exec_code': 'missing_permission',
@@ -372,7 +375,7 @@ class TenancyPermissionMixinTestCases(
             # SoF Single item
 
                 # SoF object_tenancy has a value to test API request containing tenancy ID
-                'same_tenancy_has_permission_tenancy_model_retrieve': {
+                'same_tenancy_has_permission_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': None,
                     'exec_code': '',
@@ -384,7 +387,7 @@ class TenancyPermissionMixinTestCases(
                     'user_permissions': [ 'boo' ],
                     'kwargs': { 'pk': 1 }
                 },
-                'has_permission_not_tenancy_model_retrieve': {
+                'has_permission_not_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': None,
                     'exec_code': '',
@@ -397,7 +400,7 @@ class TenancyPermissionMixinTestCases(
                     'kwargs': { 'pk': 1 }
                 },
 
-                'different_tenancy_has_permission_tenancy_model_retrieve': {
+                'different_tenancy_has_permission_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': PermissionDenied,
                     'exec_code': 'default_deny',
@@ -410,7 +413,7 @@ class TenancyPermissionMixinTestCases(
                     'kwargs': { 'pk': 1 }
                 },
 
-                'same_tenancy_no_permission_tenancy_model_retrieve': {
+                'same_tenancy_no_permission_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': PermissionDenied,
                     'exec_code': 'missing_permission',
@@ -422,7 +425,7 @@ class TenancyPermissionMixinTestCases(
                     'user_permissions': [ 'who' ],
                     'kwargs': { 'pk': 1 }
                 },
-                'no_permission_not_tenancy_model_retrieve': {
+                'no_permission_not_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': PermissionDenied,
                     'exec_code': 'missing_permission',
@@ -434,7 +437,7 @@ class TenancyPermissionMixinTestCases(
                     'user_permissions': [ 'who' ],
                     'kwargs': { 'pk': 1 }
                 },
-                'different_tenancy_no_permission_tenancy_model_retrieve': {
+                'different_tenancy_no_permission_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': PermissionDenied,
                     'exec_code': 'missing_permission',
@@ -449,7 +452,7 @@ class TenancyPermissionMixinTestCases(
                 # EoF object_tenancy has a value to test API request containing tenancy ID
 
                 # SoF object_tenancy no value to test API request not containing tenancy ID
-                'unknown_tenancy_has_permission_tenancy_model_retrieve': {
+                'unknown_tenancy_has_permission_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': PermissionDenied,
                     'exec_code': 'missing_tenancy',
@@ -461,7 +464,7 @@ class TenancyPermissionMixinTestCases(
                     'user_permissions': [ 'boo' ],
                     'kwargs': { 'pk': 1 }
                 },
-                'unknown_tenancy_no_permission_tenancy_model_retrieve': {
+                'unknown_tenancy_no_permission_tenancy_model_retrieve': {    # Retrieve
                     'request_method': 'GET',
                     'raised_exception': PermissionDenied,
                     'exec_code': 'missing_permission',

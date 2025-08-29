@@ -48,7 +48,9 @@ class Create(
 
             if hasattr(self.model, 'context'):
 
-                self.model.context['user'] = self.request.user
+                self.model.context.update({
+                    self.model._meta.model_name: self.request.user
+                })
                 self.model.context['logger'] = self.get_log()
 
             try:
@@ -136,8 +138,7 @@ class Create(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context['user'] = None
-            self.model.context['logger'] = None
+            self.model.context = { 'logger': None }
 
         return response
 
@@ -171,7 +172,9 @@ class Destroy(
 
             if hasattr(self.model, 'context'):
 
-                self.model.context['user'] = self.request.user
+                self.model.context.update({
+                    self.model._meta.model_name: self.request.user
+                })
                 self.model.context['logger'] = self.get_log()
 
             response = super().destroy(request = request, *args, **kwargs)
@@ -189,8 +192,7 @@ class Destroy(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context['user'] = None
-            self.model.context['logger'] = None
+            self.model.context = { 'logger': None }
 
         return response
 
@@ -225,7 +227,9 @@ class List(
 
             if hasattr(self.model, 'context'):
 
-                self.model.context['user'] = self.request.user
+                self.model.context.update({
+                    self.model._meta.model_name: self.request.user
+                })
                 self.model.context['logger'] = self.get_log()
 
             response = super().list(request = request, *args, **kwargs)
@@ -243,8 +247,7 @@ class List(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context['user'] = None
-            self.model.context['logger'] = None
+            self.model.context = { 'logger': None }
 
         return response
 
@@ -282,7 +285,9 @@ class Retrieve(
 
             if hasattr(self.model, 'context'):
 
-                self.model.context['user'] = self.request.user
+                self.model.context.update({
+                    self.model._meta.model_name: self.request.user
+                })
                 self.model.context['logger'] = self.get_log()
 
             response = super().retrieve(request = request, *args, **kwargs)
@@ -300,8 +305,7 @@ class Retrieve(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context['user'] = None
-            self.model.context['logger'] = None
+            self.model.context = { 'logger': None }
 
         return response
 
@@ -335,7 +339,9 @@ class Update(
 
             if hasattr(self.model, 'context'):
 
-                self.model.context['user'] = self.request.user
+                self.model.context.update({
+                    self.model._meta.model_name: self.request.user
+                })
                 self.model.context['logger'] = self.get_log()
 
             response = super().partial_update(request = request, *args, **kwargs)
@@ -377,8 +383,7 @@ class Update(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context['user'] = None
-            self.model.context['logger'] = None
+            self.model.context = { 'logger': None }
 
         return response
 
@@ -406,7 +411,9 @@ class Update(
 
             if hasattr(self.model, 'context'):
 
-                self.model.context['user'] = self.request.user
+                self.model.context.update({
+                    self.model._meta.model_name: self.request.user
+                })
                 self.model.context['logger'] = self.get_log()
 
             response = super().update(request = request, *args, **kwargs)
@@ -449,8 +456,8 @@ class Update(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context['user'] = None
             self.model.context['logger'] = None
+            del self.model.context[self.model._meta.model_name]
 
         return response
 

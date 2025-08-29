@@ -384,8 +384,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     'view_tenant': {
                         "display_name": "Tenancy",
                         "name": "tenant",
-                        "icon": "organization",
                         "link": "/access/tenant"
+                    },
+                    'view_role': {
+                        "display_name": "Roles",
+                        "name": "roles",
+                        "icon": 'role',
+                        "link": "/access/role"
                     },
                 }
             },
@@ -578,19 +583,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             if request.feature_flag['2025-00002']:
 
-
-                if request.feature_flag['2025-00003']:
-
-                    nav['access']['pages'].update({
-                        'view_role': {
-                            "display_name": "Roles",
-                            "name": "roles",
-                            "icon": 'roles',
-                            "link": "/access/role"
-                        }
-                    })
-
-
                 if request.feature_flag['2025-00008']:
 
                     nav['access']['pages'].update({
@@ -702,7 +694,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                     for setting_permission in view_settings:
 
-                        if request.user.has_perm(permission = setting_permission):
+                        if request.user.has_perm(permission = setting_permission, tenancy_permission = False):
 
                             new_pages += [ page ]
                             break
@@ -710,14 +702,14 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 elif '.' in permission:
 
-                    if request.user.has_perm(permission = permission):
+                    if request.user.has_perm(permission = permission, tenancy_permission = False):
 
                         new_pages += [ page ]
 
 
                 else:
 
-                    if request.user.has_perm(permission = app + '.' + permission):
+                    if request.user.has_perm(permission = app + '.' + permission, tenancy_permission = False):
 
                         new_pages += [ page ]
 

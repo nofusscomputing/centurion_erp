@@ -659,15 +659,6 @@ if FEATURE_FLAGGING_ENABLED:
                 }
             },
             {
-                "2025-00003": {
-                    "name": "Role Based Access Control (RBAC)",
-                    "description": "Refactor of authentication and authorization to be RBAC based. see https://github.com/nofusscomputing/centurion_erp/issues/551",
-                    "enabled": True,
-                    "created": "",
-                    "modified": ""
-                }
-            },
-            {
                 "2025-00004": {
                     "name": "Accounting Module",
                     "description": "Accounting related functions. see https://github.com/nofusscomputing/centurion_erp/issues/88",

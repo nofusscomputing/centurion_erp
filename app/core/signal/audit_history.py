@@ -13,7 +13,7 @@ def audit_history(sender, instance, **kwargs):
 
     if getattr(instance, '_audit_enabled', False):
 
-        if instance.context.get('user', None) is None:
+        if type(instance).context.get(instance._meta.model_name, None) is None:
             return
         else:
             trace_var_for_testing = instance.context.get('user', None)
@@ -44,7 +44,7 @@ def audit_history(sender, instance, **kwargs):
                     model = instance._meta.model_name,
                 ),
                 action = audit_action,
-                user = instance.context['user'],
+                user = type(instance).context.get(instance._meta.model_name, None),
                 model = instance,
             )
 

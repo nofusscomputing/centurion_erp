@@ -52,6 +52,7 @@ if apps.models_ready:
                                 'app_label': model._meta.app_label,
                                 'db_table': model._meta.db_table + '_audithistory',
                                 'managed': True,
+                                'ordering': [ '-created' ],
                                 'verbose_name': model._meta.verbose_name + ' History',
                                 'verbose_name_plural': model._meta.verbose_name + ' Histories',
                             }),

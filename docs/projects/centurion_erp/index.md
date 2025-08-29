@@ -30,6 +30,27 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurion ERP is being developed to provide an open source option with a large emphasis on the IT Service Management (ITSM) modules. The goal is to provide a system that is not only an IT Information Library (ITIL), but that of which will connect to other ITSM systems, i.e. AWX for automation orchestration. Other common modules that form part of or are normally found within an ERP system, will be added if they relate specifically to any ITSM workflow. We welcome contributions should you desire a feature that does not yet exist.
 
 
+## Documentation
+
+Documentation is broken down into three areas, they are:
+
+- [Administration](./administration/index.md)
+
+- [Development](./development/index.md)
+
+- [User](./user/index.md)
+
+Specific features for a module can be found on the module's documentation un the features heading
+
+
+## Development
+
+It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Github](https://github.com/nofusscomputing/centurion_erp/actions/workflows/ci.yaml).
+
+!!! info
+    If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
+
+
 ## Features
 
 Feature table uses the following keys:
@@ -40,12 +61,12 @@ Feature table uses the following keys:
 
 | Module | Feature | Status | Notes |
 |:---|:---|:---:|:---|
-| [Accounting](./user/accounting/index.md) ||| _[see #88](https://github.com/nofusscomputing/centurion_erp/issues/88)_ |
+| **[Accounting](./user/accounting/index.md)** ||| _[see #88](https://github.com/nofusscomputing/centurion_erp/issues/88)_ |
 |  | Asset Management | :recycle: | _[see #89](https://github.com/nofusscomputing/centurion_erp/issues/88)_ |
 |  | General Ledger | :x: | [see #116](https://github.com/nofusscomputing/centurion_erp/issues/116) |
 |  | Order Management | :x: | _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_ |
 |  | Supplier Management | :x: | _[see #123](https://github.com/nofusscomputing/centurion_erp/issues/123)_ |
-| Core |  |  |  |
+| **Core** |  |  |  |
 |  | [API](./user/api.md) | :white_check_mark: |  |
 |  | [Application wide settings](./user/settings/app_settings.md) | :white_check_mark: |  |
 |  | [Audit History](./user/core/audit_history.md) | :white_check_mark: |  |
@@ -53,13 +74,15 @@ Feature table uses the following keys:
 |  | Location Management (Regions, Sites and Locations) | :x: | _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_ |
 |  | [Markdown](./user/core/markdown.md) | :white_check_mark: |  |
 |  | [Multi-Tenant](./user/access/tenant.md) | :white_check_mark: |  |
+|  | [Roles (RBAC)](./user/access/role.md) | :white_check_mark: |  |
 |  | [Single Sign-On {SSO}](./user/configuration.md#single-sign-on) | :white_check_mark: |  |
-| Customer Relationship Management (CRM) || :x: | _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_  |
-| [Development Operations (DevOps)](./user/devops/index.md)  ||| _[see #68](https://github.com/nofusscomputing/centurion_erp/issues/58)_ |
+| **Customer Relationship Management (CRM)** || :x: | _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_  |
+| **[Development Operations (DevOps)](./user/devops/index.md)**  ||| _[see #68](https://github.com/nofusscomputing/centurion_erp/issues/58)_ |
 |  | [Feature Flags](./user/devops/feature_flags.md) | :white_check_mark: |  |
 |  | [Repository Management](./user/devops/git_repository.md) | :recycle: | _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_ |
-| [Human Resource Management](./user/human_resources/index.md)  || :recycle: | [see #92](https://github.com/nofusscomputing/centurion_erp/issues/92) |
-| DCIM / ITIL / ITIM / ITSM ||  |  |
+| **[Human Resource Management](./user/human_resources/index.md)**  || :recycle: | [see #92](https://github.com/nofusscomputing/centurion_erp/issues/92) |
+|  | [Employee Management](./user/human_resources/employee.md) | :x: |  |
+| **DCIM / ITIL / ITIM / ITSM** ||  |  |
 |  | Bare Metal Provisioning | :x: |  |
 |  | Certificate Management | :x: |  |
 |  | Change Management | :recycle: |  |
@@ -80,8 +103,10 @@ Feature table uses the following keys:
 |  | Software Package Management | :x: | _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_ |
 |  | Virtual Machine Management | :x: | _[see #73](https://github.com/nofusscomputing/centurion_erp/issues/73)_ |
 |  | Vulnerability Management | :x: | _[see #3](https://github.com/nofusscomputing/centurion_erp/issues/3)_ |
-| [Project Management](./user/project_management/index.md) || :white_check_mark: |  |
-| Third party Integrations ||  |  |
+| **[Project Management](./user/project_management/index.md)** || :white_check_mark: |  |
+|  | [Milestones](./user/project_management/project.md#milestones) | :white_check_mark: |  |
+|  | Roadmap | :x: |  |
+| **Third party Integrations** ||  |  |
 | | ArgoCD | :x: | [ArgoCD](https://github.com/argoproj-labs) is a Continuous Deployment system for ensuring objects deployed to kubernetes remain in the desired state. _[see #77](https://github.com/nofusscomputing/centurion_erp/issues/77)_ |
 | | AWX | :x: | [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration. _[see #113](https://github.com/nofusscomputing/centurion_erp/issues/113)_ |
 |  | [Companion Ansible Collection](../ansible/collection/centurion/index.md) | :recycle: |  |
@@ -91,24 +116,3 @@ Feature table uses the following keys:
 |  | Kubernetes | :x: |  |
 
 To find out what we are working on now please view the [Milestones](https://github.com/nofusscomputing/centurion_erp/milestones) on Github.
-
-
-## Documentation
-
-Documentation is broken down into three areas, they are:
-
-- [Administration](./administration/index.md)
-
-- [Development](./development/index.md)
-
-- [User](./user/index.md)
-
-Specific features for a module can be found on the module's documentation un the features heading
-
-
-## Development
-
-It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Github](https://github.com/nofusscomputing/centurion_erp/actions/workflows/ci.yaml).
-
-!!! info
-    If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
