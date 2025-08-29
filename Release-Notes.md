@@ -1,6 +1,6 @@
 ## Version 1.21.0
 
-- New model [Roles](https://nofusscomputing.com/projects/centurion_erp/user/access/role/) Added
+- Model [Roles](https://nofusscomputing.com/projects/centurion_erp/user/access/role/) now available, as feature flag `2025-00003` has been removed from Centurion ERPs feature flag checks.
 
 - Model Teams **Removed**
 
