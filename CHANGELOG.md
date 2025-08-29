@@ -1,3 +1,70 @@
+## 1.21.0 (2025-08-29)
+
+### feat
+
+- **access**: remove feature flag 2025-00003
+- **access**: Ensure for Centurion user that direct assignement of permissions are ignored
+- **api**: Add logging to token authentication
+- **core**: log failed audit history creation
+- Models that have a User field to ensure it's protecteed
+- **access**: extend rol model field name length 30 -> 50
+- **core**: log ALL errors from audithistory
+- **core**: Remove teams from Linked Model
+- **access**: Remove teams form Tenancy page
+- **admin**: Add roles and groups for webmaster
+- **access**: Tsers and groups field migrations for model Role
+- **access**: Add users and groups field to model Role
+- **base**: Add Group model ViewSet
+- **base**: Add Group model serializer
+
+### Fixes
+
+- **core**: Audit history to be sorted by created DESC
+- **core**: when checking for context check the class not the model
+- **access**: Correct tenancy model detection to Centurion Mixin
+- **api**: Only return the authenticated users tokens
+- **access**: remove org_team url from serializers
+- **api**: ensure the correct key is used for context.logger
+
+### Refactoring
+
+- **access**: Corrections to Permission Unit model test suite
+- **access**: Corrections to CenturionUser Auth methods
+- model context for user moved keys user -> <_meta.model_name>
+- setup logging so it always runs, inc for tests
+- switch test suites to from model Team -> Group
+- **access**: Migrations for team model cleanup
+- **access**: remove Team ViewSet
+- **access**: remove TeamUser ViewSet
+- **access**: remove TeamUser Serializer
+- **access**: remove Team Serializer
+- **access**: remove model TeamNotes
+- **access**: remove model TeamHistory
+- **base**: rename function get_organization -> get_tenant
+- **base**: enable casting models to int to rtn its id
+- **core**: Use context manager for model context
+- migrate serializers from TeamBaseSerializer -> GroupBaseSerializer
+- Adjust fields Team -> Group
+- api_request_permissions fixture updated to obtain permissions from roles
+- **api**: Nav menu permissions moved to obtain from user object
+- **access**: Migrate Centurion User to obtain permissions from roles
+- dont root load user model
+- remove v2 from user url basename
+- remove v2 from url basename
+- **access**: Remove old test suites no longer required model Role
+- **access**: ViewSet Unit Test Suite re-written to Pytest for model Role
+- **access**: Serializer Unit Test Suite re-written to Pytest for model Role
+- **access**: API Fields render Functional Test Suite re-written to Pytest for model Role
+- **access**: Model Functional Test Suite re-written to Pytest for model Role
+- **access**: API Metadata Functional Test Suite re-written to Pytest for model Role
+
+### Tests
+
+- **access**: Unit model test suite for model CenturionUser
+- **api**: Ensure that when cheking perms items returned contains an item from users org
+- **access**: Remove all tests model TeamUser
+- **access**: Remove all tests model Team
+
 ## 1.20.2 (2025-08-25)
 
 ### Fixes
