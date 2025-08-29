@@ -8,9 +8,9 @@ from rest_framework.exceptions import (
 from rest_framework.permissions import DjangoObjectPermissions
 
 from access.models.tenancy import Tenant
-from access.models.tenancy_abstract import TenancyAbstractModel
 
 from core import exceptions as centurion_exceptions
+from core.mixins.centurion import Centurion
 
 
 
@@ -66,12 +66,12 @@ class TenancyPermissionMixin(
 
             if hasattr(view, 'model'):
 
-                self._is_tenancy_model = issubclass(view.model, TenancyAbstractModel)
+                self._is_tenancy_model = issubclass(view.model, Centurion)
 
                 if view.get_parent_model():
 
                     self._is_tenancy_model = issubclass(
-                        view.get_parent_model(), TenancyAbstractModel)
+                        view.get_parent_model(), Centurion)
 
         elif(
             isinstance(self._is_tenancy_model, type(None))
