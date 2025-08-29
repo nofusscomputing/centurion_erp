@@ -1,7 +1,7 @@
 import datetime
 import pytest
 
-from access.models.user_proxy import CenturionUser
+from access.models.centurion_user import CenturionUser
 
 
 
