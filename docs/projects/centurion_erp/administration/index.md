@@ -11,7 +11,7 @@ This documentation is targeted towards those whom administer the applications de
 
 ## Contents
 
-- [Authentication](./authentication.md)
+- [Authentication](./auth.md)
 
 - [Backup](./backup.md)
 
