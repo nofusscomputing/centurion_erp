@@ -117,7 +117,7 @@ class CenturionAuditModelPyTest(
 
 
 
-    history_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket' ] )
+    history_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket', 'team', 'teamusers' ] )
 
 
     @pytest.mark.parametrize(
