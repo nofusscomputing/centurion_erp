@@ -150,8 +150,6 @@ nav:
 
         - projects/centurion_erp/user/access/role.md
 
-        - projects/centurion_erp/user/access/team.md
-
         - projects/centurion_erp/user/access/tenant.md
 
       - Accounting:

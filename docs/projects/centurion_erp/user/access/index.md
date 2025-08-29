@@ -6,7 +6,7 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-The Access module provides the multi-tenancy for this application. Tenancy is organized into tenants, which contain teams which contain users. As part of this module, application permission checking is also conducted.
+The Access module provides the multi-tenancy for this application. Tenancy is organized into tenants, which contain roles which contain users or groups. As part of this module, application permission checking is also conducted.
 
 
 ## Components
@@ -18,8 +18,6 @@ The Access module provides the multi-tenancy for this application. Tenancy is or
 - [Tenant](./tenant.md)
 
 - [Roles](./role.md)
-
-- [Team](./team.md)
 
 
 ### Gloabl Organization
