@@ -94,8 +94,7 @@ class KnowledgeBaseSerializerTestCases(
 
 
     def test_serializer_validation_both_target_team_target_user(self,
-        kwargs_api_create, model, model_serializer, request_user,
-        model_team, kwargs_team
+        kwargs_api_create, model, model_serializer, request_user
     ):
         """Serializer Validation Check
 
@@ -130,8 +129,7 @@ class KnowledgeBaseSerializerTestCases(
 
 
     def test_serializer_validation_no_target_team_target_user(self,
-        kwargs_api_create, model, model_serializer, request_user,
-        model_team, kwargs_team
+        kwargs_api_create, model, model_serializer, request_user
     ):
         """Serializer Validation Check
 
@@ -164,8 +162,7 @@ class KnowledgeBaseSerializerTestCases(
 
 
     def test_serializer_validation_update_existing_target_user(self,
-        kwargs_api_create, model, model_serializer, request_user,
-        model_team, kwargs_team
+        kwargs_api_create, model, model_serializer, request_user
     ):
         """Serializer Validation Check
 
@@ -202,7 +199,7 @@ class KnowledgeBaseSerializerTestCases(
     def test_serializer_validation_update_existing_target_user(self,
         created_model,
         kwargs_api_create, model, model_serializer, request_user,
-        model_team, kwargs_team
+        model_group, kwargs_group
     ):
         """Serializer Validation Check
 
@@ -217,9 +214,9 @@ class KnowledgeBaseSerializerTestCases(
         )
 
         kwargs = kwargs_api_create.copy()
-        team = model_team.objects.create( **kwargs_team )
+        group = model_group.objects.create( **kwargs_group )
         kwargs.update({
-            'target_team': [ team ]
+            'target_team': [ group ]
         })
 
         with pytest.raises(ValidationError) as err:
@@ -238,7 +235,7 @@ class KnowledgeBaseSerializerTestCases(
 
             serializer.is_valid(raise_exception = True)
 
-        team.delete()
+        group.delete()
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
 

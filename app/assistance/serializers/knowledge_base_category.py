@@ -5,8 +5,8 @@ from rest_framework.exceptions import ValidationError
 
 
 from access.serializers.organization import TenantBaseSerializer
-from access.serializers.teams import TeamBaseSerializer
 
+from centurion.serializers.group import GroupBaseSerializer
 from centurion.serializers.user import UserBaseSerializer
 
 from api.serializers import common
@@ -68,15 +68,8 @@ class KnowledgeBaseCategoryModelSerializer(
                 'v2:_api_tenant-list',
                 request=self.context['view'].request,
             ),
-            'team': reverse(
-                'v2:_api_v2_organization_team-list',
-                request=self.context['view'].request,
-                kwargs={
-                    'organization_id': item.organization.id,
-                }
-            ),
             'user': reverse(
-                'v2:_api_v2_user-list',
+                'v2:_api_user-list',
                 request=self.context['view'].request,
             )
         })
@@ -185,6 +178,6 @@ class KnowledgeBaseCategoryViewSerializer(KnowledgeBaseCategoryModelSerializer):
     
     parent_category = KnowledgeBaseCategoryBaseSerializer( many = False, read_only = True)
 
-    target_team = TeamBaseSerializer( read_only = True, many = True)
+    target_team = GroupBaseSerializer( read_only = True, many = True)
 
     target_user = UserBaseSerializer( read_only = True )

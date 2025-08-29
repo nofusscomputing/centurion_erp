@@ -1,19 +1,19 @@
 {
     "urls_list": [
-        "/access/organization",
+        "/access/tenant",
 
         "/assistance/knowledge_base",
-        "/assistance/ticket/request",
+
+        "/core/history",
+
+        "/devops/feature_flag",
 
         "/itam/device",
         "/itam/operating_system",
         "/itam/software",
 
-        "/itim/ticket/change",
         "/itim/cluster",
         "/itim/service",
-        "/itim/ticket/incident",
-        "/itim/ticket/problem",
 
         "/project_management/project",
 

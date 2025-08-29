@@ -83,9 +83,12 @@ class AdditionalTestCases:
             },
         )
 
+        kwargs = self.change_data.copy()
+        kwargs.update({ 'device_model_is_global': True })
+
         response = client.patch(
             path = change_item.get_url( many = False ),
-            data = self.change_data,
+            data = kwargs,
             content_type = 'application/json'
         )
 

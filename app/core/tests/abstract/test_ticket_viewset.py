@@ -1,4 +1,5 @@
 import django
+import pytest
 
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -21,7 +22,7 @@ from settings.models.user_settings import UserSettings
 User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.skip( reason = 'ticketing models undergoing refactor. see #723 #746' )
 class TicketViewSetBase:
     """ Test Cases common to ALL ticket types """
 

@@ -6,7 +6,7 @@ from django.test import Client
 from rest_framework.relations import Hyperlink
 
 
-
+@pytest.mark.functional
 class APIFieldsTestCases:
     """ API field Rendering Test Suite
 
@@ -232,7 +232,7 @@ class APIFieldsTestCases:
             )
 
 
-
+@pytest.mark.api
 class APIFieldsInheritedCases(
     APIFieldsTestCases
 ):

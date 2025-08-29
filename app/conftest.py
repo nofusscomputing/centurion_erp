@@ -1,8 +1,8 @@
 import datetime
-from typing import Any
-import django
-import pytest
+import logging
 import os
+import pytest
+import random
 import sqlite3
 import sys
 
@@ -12,12 +12,73 @@ from django.db import models
 from django.test import (
     TestCase
 )
+from django.utils.log import configure_logging
 
 from tests.fixtures import *
 
 from access.models.tenant import Tenant
 
-User = django.contrib.auth.get_user_model()
+
+
+def pytest_configure(config):
+
+    config = settings.LOGGING.copy()
+    del config['handlers']['console']
+
+    for config_logger, vals in config['loggers'].items():
+
+        new_handlers = []
+
+        for handler in vals['handlers']:
+
+            if handler != 'console':
+                new_handlers += [ handler ]
+
+        vals['handlers'] = new_handlers
+
+    logging.config.dictConfig(config)
+    configure_logging(settings.LOGGING_CONFIG, config)
+    global logger
+    logger = settings.CENTURION_LOG.getChild("pytest")
+
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_protocol(item, nextitem):
+    logger.info("START test: %s", item.nodeid)
+    outcome = yield
+    result = outcome.get_result()
+    if result is None:
+        logger.warning("No result recorded for %s", item.nodeid)
+
+
+
+def pytest_runtest_logreport(report):
+    if report.when == "call":
+        if report.failed:
+            logger.error("FAILED: %s", report.nodeid)
+        elif report.skipped:
+            logger.warning("SKIPPED: %s", report.nodeid)
+        else:
+            logger.info("PASSED: %s", report.nodeid)
+
+
+
+def pytest_fixture_setup(fixturedef, request):
+    logger.getChild("fixture").info(
+        "SETUP: fixture %s for %s",
+        fixturedef.argname,
+        request.node.nodeid,
+    )
+
+
+
+def pytest_fixture_post_finalizer(fixturedef, request):
+    logger.getChild("fixture").info(
+        "TEARDOWN: fixture %s for %s",
+        fixturedef.argname,
+        request.node.nodeid,
+    )
 
 
 
@@ -301,24 +362,24 @@ def pytest_generate_tests(metafunc):
 
 
 
-@pytest.fixture( scope = 'class')
-def create_model(request, django_db_blocker):
+# @pytest.fixture( scope = 'class')
+# def create_model(request, django_db_blocker):
 
-    item = None
+#     item = None
 
-    with django_db_blocker.unblock():
+#     with django_db_blocker.unblock():
 
-        item = request.cls.model.objects.create(
-            **request.cls.kwargs_create_item
-        )
+#         item = request.cls.model.objects.create(
+#             **request.cls.kwargs_create_item
+#         )
 
-        request.cls.item = item
+#         request.cls.item = item
 
-    yield item
+#     yield item
 
-    with django_db_blocker.unblock():
+#     with django_db_blocker.unblock():
 
-        item.delete()
+#         item.delete()
 
 
 
@@ -801,8 +862,11 @@ def user(django_db_blocker, model_user, kwargs_user):
 
     with django_db_blocker.unblock():
 
+        kwargs = kwargs_user.copy()
+        kwargs['username'] = 'gl_usr_' + str(random.randint(999,9999))
+
         user = model_user.objects.create(
-            **kwargs_user
+            **kwargs
         )
 
     yield user

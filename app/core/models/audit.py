@@ -106,7 +106,7 @@ class CenturionAudit(
         blank = False,
         help_text = 'User whom performed the action',
         null = False,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.PROTECT,
         validators = [
             CenturionModel.validate_field_not_none,
         ],
@@ -192,7 +192,7 @@ class CenturionAudit(
             if hasattr(model, field_name + '_id') and value is not None:
 
                 serializable_before.update({
-                    field_name + '_id': value.id
+                    field_name + '_id': int(value)
                 })
                 continue
 
@@ -210,7 +210,7 @@ class CenturionAudit(
             if hasattr(model, field_name + '_id') and value is not None:
 
                 serializable_after.update({
-                    field_name + '_id': value.id
+                    field_name + '_id': int(value)
                 })
                 continue
 

@@ -9,7 +9,9 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
+from centurion.serializers.group import GroupBaseSerializer
 from centurion.serializers.permission import PermissionBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
 
 
 
@@ -76,7 +78,9 @@ class ModelSerializer(
         return get_url
 
 
-    permissions = serializers.PrimaryKeyRelatedField(many = True, queryset=permission_queryset(), required = False)
+    permissions = serializers.PrimaryKeyRelatedField(
+        many = True, queryset=permission_queryset(), required = False
+    )
 
 
     class Meta:
@@ -89,6 +93,8 @@ class ModelSerializer(
             'display_name',
             'name',
             'permissions',
+            'users',
+            'groups',
             'model_notes',
             'created',
             'modified',
@@ -109,6 +115,10 @@ class ModelSerializer(
 class ViewSerializer(ModelSerializer):
     """Role Base View Model"""
 
+    groups = GroupBaseSerializer( many=True, read_only=True )
+
     organization = TenantBaseSerializer( many=False, read_only=True )
 
     permissions = PermissionBaseSerializer( many=True, read_only=True )
+
+    users = UserBaseSerializer( many=True, read_only=True )

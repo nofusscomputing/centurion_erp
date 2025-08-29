@@ -14,6 +14,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
+@pytest.mark.skip( reason = 'work to be completed in #889' )
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
     CenturionAbstractModelInheritedCases

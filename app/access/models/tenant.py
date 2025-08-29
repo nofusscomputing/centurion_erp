@@ -113,16 +113,6 @@ class Tenant(
             ]
         },
         {
-            "name": "Teams",
-            "slug": "teams",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "teams"
-                }
-            ]
-        },
-        {
             "name": "Knowledge Base",
             "slug": "kb_articles",
             "sections": [

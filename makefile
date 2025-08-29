@@ -109,7 +109,7 @@ test-integration:
 			fi;
 
 			docker logs centurion-erp;
-			pytest --override-ini addopts= --no-migrations --tb=long --verbosity=2 --full-trace --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
+			pytest --override-ini addopts= --no-migrations --tb=long --verbosity=2 --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
 			docker exec -i centurion-erp supervisorctl restart gunicorn;
 			docker exec -i centurion-erp sh -c 'coverage combine; coverage report --skip-covered; coverage html -d artifacts/html/;';
 			docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;

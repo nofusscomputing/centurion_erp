@@ -1,4 +1,5 @@
-from django.contrib.auth.models import Permission
+from django.conf import settings
+from django.contrib.auth.models import Permission, Group
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -36,7 +37,7 @@ class Role(
     name = models.CharField(
         blank = False,
         help_text = 'Name of this role',
-        max_length = 30,
+        max_length = 50,
         unique = False,
         verbose_name = 'Name'
     )
@@ -48,6 +49,24 @@ class Role(
         related_name = 'roles',
         symmetrical = False,
         verbose_name = 'Permissions'
+    )
+
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank = True,
+        help_text = 'Users assigned to this role.',
+        related_name = 'roles',
+        symmetrical = False,
+        verbose_name = 'Users'
+    )
+
+    groups = models.ManyToManyField(
+        Group,
+        blank = True,
+        help_text = 'Users assigned to this role.',
+        related_name = 'roles',
+        symmetrical = False,
+        verbose_name = 'Groups'
     )
 
     modified = AutoLastModifiedField()
@@ -81,6 +100,16 @@ class Role(
                     "name": "Permissions",
                     "fields": [
                         "permissions",
+                    ]
+                },
+                {
+                    "layout": "double",
+                    "name": "Users / Groups",
+                    "left": [
+                        "users",
+                    ],
+                    "right": [
+                        'groups',
                     ]
                 },
             ]
@@ -119,31 +148,3 @@ class Role(
         'created',
         'modified',
     ]
-
-
-    _permissions: list[ Permission ] = None
-
-    _permissions_int: list[ int ] = None
-
-    def get_permissions(self, as_int_list = False ):
-
-        if self._permissions is None:
-
-            permissions = []
-            permissions_int = []
-
-            for permission in self.permissions:    # pylint: disable=E1133:not-an-iterable
-
-                if permission in _permissions:
-                    continue
-
-                permissions += [ permission ]
-                permissions_int += [ permission.id ]
-
-            self._permissions = permissions
-            self._permissions_int = permissions_int
-
-        if as_int_list:
-            return self._permissions_int
-
-        return self._permissions_int

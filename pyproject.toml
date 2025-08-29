@@ -1082,7 +1082,7 @@ redefining-builtins-modules = ["six.moves", "past.builtins", "future.builtins", 
 
 [tool.pytest.ini_options]
 
-addopts = '--no-migrations --cov --cov-branch --cov-report term --tb=long --verbosity=2 --full-trace --showlocals app'
+addopts = '--no-migrations --cov --cov-branch --cov-report term --tb=long --verbosity=2 --showlocals app'
 
 
 DJANGO_SETTINGS_MODULE = 'centurion.settings'
@@ -1090,8 +1090,8 @@ DJANGO_SETTINGS_MODULE = 'centurion.settings'
 junit_family = 'xunit2'
 # -- recommended but optional:
 # python_files = 'tests.py test_*.py *_tests.py'
-log_cli = true
-log_cli_level = 'INFO'
+log_cli = false
+log_cli_level = 'DEBUG'
 log_cli_format = '%(asctime)s %(levelname)s %(message)s'
 log_cli_date_format = '%Y-%m-%d %H:%M:%S'
 
@@ -1103,6 +1103,7 @@ markers = [
     "functional: Selects all Functional tests.",
     "integration: Selects all Integration tests.",
     "meta_models: Selects Meta models",
+    "metadata: Selects all tests for api OPTIONS requests.",
     "mixin: Selects all mixin test cases.",
     "mixin_centurion: Selects all centurion mixin test cases.",
     "mixin_tenancypermission: Selects all Tenancy Permission mixin test cases.",

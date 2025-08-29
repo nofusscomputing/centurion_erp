@@ -55,6 +55,11 @@ from .model_centurionmodelnotemeta import (
     model_centurionmodelnotemeta,
 )
 
+from .model_centurionuser import (
+    kwargs_centurionuser,
+    model_centurionuser,
+)
+
 from .model_checkin import (
     kwargs_checkin,
     model_checkin,
@@ -177,6 +182,11 @@ from .model_gitrepository import (
     kwargs_gitrepository,
     model_gitrepository,
     serializer_gitrepository,
+)
+
+from .model_group import (
+    model_group,
+    kwargs_group,
 )
 
 from .model_instance import (
@@ -325,15 +335,6 @@ from .model_ticketcommentbase import (
 from .model_ticketcommentsolution import (
     kwargs_ticketcommentsolution,
     model_ticketcommentsolution,
-)
-
-from .model_team import (
-    kwargs_team,
-    model_team,
-)
-
-from .model_teamuser import (
-    model_teamusers,
 )
 
 from .model_tenant import (

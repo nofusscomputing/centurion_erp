@@ -27,7 +27,7 @@ from core.models.ticket.ticket import Ticket, RelatedTickets
 User = django.contrib.auth.get_user_model()
 
 
-
+@pytest.mark.skip( reason = 'model due for replacement see #723 #746' )
 class ViewSetBase:
 
     model = RelatedTickets

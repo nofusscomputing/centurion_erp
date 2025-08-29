@@ -69,6 +69,15 @@ class ViewSet(
 
     view_description = 'User Authentication Tokens'
 
+
+    def get_queryset(self):
+
+        if self.queryset is None:
+            self.queryset = super().get_queryset().filter(user = self.request.user)
+
+        return self.queryset
+
+
     def get_serializer_class(self):
 
         if (

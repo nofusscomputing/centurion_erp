@@ -7,7 +7,7 @@ from accounting.tests.functional.asset_base.test_functional_asset_base_viewset i
 from itam.models.itam_asset_base import ITAMAssetBase
 
 
-
+@pytest.mark.skip( reason = 'behind ff, see #888' )
 @pytest.mark.model_itamassetbase
 class ViewSetTestCases(
     AssetBaseViewSetInheritedCases

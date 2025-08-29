@@ -1,3 +1,4 @@
+import django
 import re
 
 from django.conf import settings
@@ -12,7 +13,8 @@ from rest_framework_json_api.utils import get_related_resource_type
 
 from access.models.tenant import Tenant
 
-from centurion.serializers.user import User, UserBaseSerializer
+from centurion.serializers.user import UserBaseSerializer
+User = django.contrib.auth.get_user_model()
 
 from core import fields as centurion_field
 from core.fields.badge import BadgeField
@@ -382,8 +384,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     'view_tenant': {
                         "display_name": "Tenancy",
                         "name": "tenant",
-                        "icon": "organization",
                         "link": "/access/tenant"
+                    },
+                    'view_role': {
+                        "display_name": "Roles",
+                        "name": "roles",
+                        "icon": 'role',
+                        "link": "/access/role"
                     },
                 }
             },
@@ -576,19 +583,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             if request.feature_flag['2025-00002']:
 
-
-                if request.feature_flag['2025-00003']:
-
-                    nav['access']['pages'].update({
-                        'view_role': {
-                            "display_name": "Roles",
-                            "name": "roles",
-                            "icon": 'roles',
-                            "link": "/access/role"
-                        }
-                    })
-
-
                 if request.feature_flag['2025-00008']:
 
                     nav['access']['pages'].update({
@@ -675,23 +669,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         nav: list = []
 
-        processed_permissions: dict = {}
-
-        for group in request.user.groups.all():
-
-            for permission in group.permissions.all():
-
-                if str(permission.codename).startswith('view_'):
-
-
-                    if not processed_permissions.get(permission.content_type.app_label, None):
-
-                        processed_permissions.update({permission.content_type.app_label: {}})
-
-                    if permission.codename not in processed_permissions[permission.content_type.app_label]:
-
-                        processed_permissions[permission.content_type.app_label].update({str(permission.codename): '_'})
-
         view_settings: list = [
             'assistance.view_knowledgebasecategory',
             'core.view_manufacturer',
@@ -705,20 +682,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         ]
 
 
-        # user = view.request.user
-
-        user_orgainzations = Tenant.objects.filter(
-            manager = request.user
-        )
-
-
         for app, entry in self.get_nav_items(request).items():
 
             new_menu_entry: dict = {}
 
             new_pages: list = []
-
-            # if processed_permissions.get(app, None):    # doesn't cater for `.` in perm
 
             for permission, page in entry['pages'].items():
 
@@ -726,40 +694,30 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                     for setting_permission in view_settings:
 
-                        app_permission = str(setting_permission).split('.')
+                        if request.user.has_perm(permission = setting_permission, tenancy_permission = False):
 
-                        if processed_permissions.get(app_permission[0], None):
-
-                            if processed_permissions[app_permission[0]].get(app_permission[1], None):
-
-                                new_pages += [ page ]
-
-                                break
+                            new_pages += [ page ]
+                            break
 
 
                 elif '.' in permission:
 
-                    app_permission = str(permission).split('.')
+                    if request.user.has_perm(permission = permission, tenancy_permission = False):
 
-                    if processed_permissions.get(app_permission[0], None):
+                        new_pages += [ page ]
 
-                        if processed_permissions[app_permission[0]].get(app_permission[1], None):
-
-                            new_pages += [ page ]
 
                 else:
 
-                    if processed_permissions.get(app, None):
+                    if request.user.has_perm(permission = app + '.' + permission, tenancy_permission = False):
 
-                        if processed_permissions[app].get(permission, None):
-
-                            new_pages += [ page ]
+                        new_pages += [ page ]
 
 
                 if(
                     app == 'access'
                     and permission == 'view_organization'
-                    and len(user_orgainzations) > 0
+                    and len(request.user.get_tenancies()) > 0
                 ):
 
                     if page not in new_pages:

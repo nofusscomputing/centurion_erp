@@ -17,6 +17,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip(reason = 'behind ff, work to be completed in #723' )
 @pytest.mark.model_ticketbase
 class MetadataTestCases(
     MetadataAttributesFunctional,

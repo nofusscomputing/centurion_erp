@@ -35,6 +35,15 @@ class ViewSet(
     view_description = 'Centurion Permissions'
 
 
+    def get_queryset(self):
+
+        if self.queryset is None:
+
+            self.queryset = self.model.objects.select_related('content_type')
+
+        return self.queryset
+
+
     def get_serializer_class(self):
 
         return PermissionViewSerializer

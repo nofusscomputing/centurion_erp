@@ -9,20 +9,19 @@ class Centurion(
     models.Model
 ):
 
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.context = {
+            'logger': None,
+            self._meta.model_name: None
+        }
+
 
     class Meta:
 
         abstract = True
-
-
-    def __init__(self, *args, **kwargs):
-
-        self.context: dict = {
-            'logger': None,
-            'user': None,
-        }
-
-        super().__init__(*args, **kwargs)
 
 
     _audit_enabled: bool = True
@@ -41,11 +40,7 @@ class Centurion(
     to their own `urls.py` file from `api/urls_v2.py`.
     """
 
-
-    context: dict = {
-        'logger': None,
-        'user': None,
-    }
+    context = { 'logger': None }
     """ Model Context
 
     Generally model usage will be from an API serializer, Admin Site or
@@ -59,7 +54,7 @@ class Centurion(
 
     returns:
         logger (logging.Logger): Instance of a logger for logging.
-        user (User): The user that is logged into the system
+        model_name (User): The user that is logged into the system
 
     Context for actions within the model.
     """
@@ -309,7 +304,7 @@ class Centurion(
             validate_constraints = True
         )
 
-        if self._audit_enabled and self.context['user']:
+        if self._audit_enabled and type(self).context.get(self._meta.model_name, None):
 
             self._after = self.get_audit_values()
 

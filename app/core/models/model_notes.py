@@ -58,7 +58,7 @@ class ModelNotes(TenancyObject):
         blank = True,
         help_text = 'User whom added the Note',
         null = False,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.PROTECT,
         related_name = 'created_notes',
         verbose_name = 'Created By',
     )
@@ -69,7 +69,7 @@ class ModelNotes(TenancyObject):
         default = None,
         help_text = 'User whom modified the note',
         null = True,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.PROTECT,
         related_name = 'modified_notes',
         verbose_name = 'Edited By',
     )

@@ -493,6 +493,15 @@ class APIPermissionViewInheritedCases:
 
         kwargs = model_kwargs.copy()
         kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        model_instance(
+            kwargs_create = kwargs
+        )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
 
@@ -533,11 +542,10 @@ class APIPermissionViewInheritedCases:
             if 'organization' not in item:
                 pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
-            if(
-                int(item['organization']['id']) not in viewable_organizations
-                and
-                int(item['organization']['id']) != api_request_permissions['tenancy']['global'].id
-            ):
+            if int(item['organization']['id']) == api_request_permissions['tenancy']['global'].id:
+                continue
+
+            if int(item['organization']['id']) not in viewable_organizations:
 
                 contains_different_org = True
                 print(f'Failed returned row was: {item}')
@@ -603,6 +611,7 @@ class APIPermissionViewInheritedCases:
 
             pytest.xfail( reason = 'ViewSet is public viewable, test is N/A' )
 
+        assert response.status_code == 200    # must be successful for test to pass
         assert len(response.data['results']) >= 2    # fail if only one item extist.
 
 

@@ -24,9 +24,16 @@ class AdditionalTestCases:
 
         client = Client()
 
-        client.force_login( api_request_permissions['user']['add'] )
+        user = api_request_permissions['user']['add']
 
-        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+        client.force_login( user )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'user': user
+        })
+
+        the_model = model_instance( kwargs_create = kwargs )
 
         context_user = mocker.patch.object(
             the_model, 'context'
@@ -34,10 +41,10 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': api_request_permissions['user']['add']
+            the_model._meta.model_name: user
         }.__getitem__
 
-        the_model.user = api_request_permissions['user']['add']
+        # the_model.user = api_request_permissions['user']['add']
 
 
         url = the_model.get_url( many = True )
@@ -62,11 +69,14 @@ class AdditionalTestCases:
 
         client = Client()
 
-        client.force_login( api_request_permissions['user']['delete'] )
+        user = api_request_permissions['user']['delete']
+
+        client.force_login( user )
 
         kwargs = model_kwargs.copy()
         kwargs.update({
-            'organization': api_request_permissions['tenancy']['user']
+            'organization': api_request_permissions['tenancy']['user'],
+            'user': user
         })
 
         delete_item = model_instance(
@@ -79,10 +89,10 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': api_request_permissions['user']['delete']
+            delete_item._meta.model_name: user
         }.__getitem__
 
-        delete_item.user = api_request_permissions['user']['delete']
+        # delete_item.user = api_request_permissions['user']['delete']
 
 
         response = client.delete(
@@ -104,11 +114,14 @@ class AdditionalTestCases:
 
         client = Client()
 
-        client.force_login( api_request_permissions['user']['view'] )
+        user = api_request_permissions['user']['view'] 
+
+        client.force_login( user )
 
         kwargs = model_kwargs.copy()
         kwargs.update({
-            'organization': api_request_permissions['tenancy']['user']
+            'organization': api_request_permissions['tenancy']['user'],
+            'user': user
         })
 
         view_item = model_instance(
@@ -121,10 +134,10 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': api_request_permissions['user']['view']
+            view_item._meta.model_name: user
         }.__getitem__
 
-        view_item.user = api_request_permissions['user']['view']
+        # view_item.user = api_request_permissions['user']['view']
 
 
         response = client.get(
@@ -165,7 +178,7 @@ class AdditionalTestCases:
 
         context_user.__getitem__.side_effect = {
             'logger': None,
-            'user': api_request_permissions['user']['view']
+            view_item._meta.model_name: api_request_permissions['user']['view']
         }.__getitem__
 
         view_item.user = api_request_permissions['user']['view']
@@ -181,9 +194,68 @@ class AdditionalTestCases:
         assert response.status_code == 200, response.content
 
 
+    def test_only_users_tokens_returned(self,
+        mocker, model_instance, model_kwargs, api_request_permissions
+    ):
+        """Test returned tokens
+
+        All tokens that are returned must only be the authenticated user.
+        """
+
+        client = Client()
+
+        user = api_request_permissions['user']['view']
+
+        client.force_login( user )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user'],
+            'user': user
+        })
+
+        view_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'user': api_request_permissions['user']['add']
+        })
+
+        different_user_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        context_user = mocker.patch.object(
+            view_item, 'context'
+        )
+
+        context_user.__getitem__.side_effect = {
+            'logger': None,
+            view_item._meta.model_name: user
+        }.__getitem__
+
+
+        response = client.get(
+            path = view_item.get_url( many = True )
+        )
+
+        only_users_tokens_returned = True
+
+        for token in response.data['results']:
+
+            if token['user'] != int(user):
+                only_users_tokens_returned = False
+
+        assert only_users_tokens_returned, response.content
+
+
 
     def test_returned_results_only_user_orgs(self):
-        pytest.mark.xfail( reason = 'This model is not tenancy based. It is user based.' )
+        pytest.xfail( reason = 'This model is not tenancy based. It is user based.' )
+        assert False
 
     def test_returned_data_from_user_and_global_organizations_only(self):
-        pytest.mark.xfail( reason = 'This model is not tenancy based. It is user based.' )
+        pytest.xfail( reason = 'This model is not tenancy based. It is user based.' )
+        assert False

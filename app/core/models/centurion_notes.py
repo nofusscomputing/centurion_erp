@@ -133,11 +133,11 @@ class NoteMetaModel(
 
         if not self.id and self.created_by is None:
 
-            self.created_by = self.context['user']
+            self.created_by = self.model.context.get(self._meta.model_name, None)
 
         elif self.id:
 
-            self.modified_by = self.context['user']
+            self.modified_by = self.model.context.get(self.model._meta.model_name, None)
 
         self.content_type = ContentType.objects.get(
             app_label = self.model._meta.app_label,
