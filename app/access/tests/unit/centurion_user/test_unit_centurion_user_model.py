@@ -134,6 +134,48 @@ class CenturionUserModelTestCases(
 
 
 
+
+    @pytest.fixture( scope = 'function' )
+    def user_no_roles_direct_permissions(self,
+        django_db_blocker,
+        centurion_user, model_permission,
+        model_group, kwargs_group,
+    ):
+
+        with django_db_blocker.unblock():
+
+            role_permission = model_permission.objects.get(
+                codename = 'view_role',
+                content_type = ContentType.objects.get(
+                    app_label = 'access',
+                    model = 'role',
+                )
+            )
+
+            centurion_user.user_permissions.set([ role_permission ])
+
+
+            kwargs = kwargs_group.copy()
+            kwargs['name'] = 'grp_1'
+            group_1 = model_group.objects.create( **kwargs )
+
+            org_permission = model_permission.objects.get(
+                codename = 'view_tenant',
+                content_type = ContentType.objects.get(
+                    app_label = 'access',
+                    model = 'tenant',
+                )
+            )
+
+            group_1.permissions.set([ org_permission ])
+
+
+            yield centurion_user
+
+            group_1.delete()
+
+
+
     @pytest.fixture( scope = 'class')
     def test_class(cls, model):
 
@@ -767,6 +809,88 @@ class CenturionUserModelTestCases(
 
 
 
+
+
+
+    def test_function_has_perm_no_role_user_permissions_ignored(self,
+        user_no_roles_direct_permissions
+    ):
+        """Test function has_perm
+
+        when calling with no args, return the permissions by tenancy
+        """
+
+        try:
+            has_perm = user_no_roles_direct_permissions.has_perm(
+                permission = 'access.view_role',
+                obj = None,
+                tenancy = None
+            )
+        except:
+            has_perm = None
+
+        assert not has_perm
+
+
+    def test_function_has_perm_no_role_group_permissions_ignored(self,
+        user_no_roles_direct_permissions
+    ):
+        """Test function has_perm
+
+        when calling with no args, return the permissions by tenancy
+        """
+
+        try:
+            has_perm = user_no_roles_direct_permissions.has_perm(
+                permission = 'access.view_tenant',
+                obj = None,
+                tenancy = None
+            )
+        except:
+            has_perm = None
+
+        assert not has_perm
+
+
+
+    def test_function_has_perm_no_role_user_permissions_ignored_reandom_org(self,
+        user_no_roles_direct_permissions, organization_one,
+    ):
+        """Test function has_perm
+
+        when calling with no args, return the permissions by tenancy
+        """
+
+        try:
+            has_perm = user_no_roles_direct_permissions.has_perm(
+                permission = 'access.view_role',
+                obj = None,
+                tenancy = organization_one
+            )
+        except:
+            has_perm = None
+
+        assert not has_perm
+
+
+    def test_function_has_perm_no_role_group_permissions_ignored_reandom_org(self,
+        user_no_roles_direct_permissions
+    ):
+        """Test function has_perm
+
+        when calling with no args, return the permissions by tenancy
+        """
+
+        try:
+            has_perm = user_no_roles_direct_permissions.has_perm(
+                permission = 'access.view_tenant',
+                obj = None,
+                tenancy = organization_one
+            )
+        except:
+            has_perm = None
+
+        assert not has_perm
 
 
 
