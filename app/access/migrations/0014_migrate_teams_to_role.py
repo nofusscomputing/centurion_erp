@@ -112,9 +112,9 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("access", "0013_role_groups_role_users"),
-        ("assistance", "0008_alter_knowledgebase_responsible_teams_and_more"),
-        ("core", "0025_alter_ticket_assigned_teams_and_more"),
-        ("project_management", "0008_alter_project_manager_team"),
+        ("assistance", "0008_alter_knowledgebaseaudithistory_options_and_more"),
+        ("core", "0025_alter_manufactureraudithistory_options_and_more"),
+        ("project_management", "0008_alter_projectaudithistory_options_and_more"),
     ]
 
     operations = [
