@@ -7,7 +7,7 @@ from django.urls import include, path, re_path
 from rest_framework import urls
 
 urlpatterns = [
-    path('admin', admin.site.urls, name='_administration'),
+    path('admin/', admin.site.urls, name='_administration'),
 
     path('account/password_change', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"), name="change_password"),
 
