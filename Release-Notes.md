@@ -1,3 +1,6 @@
+## Version 1.23.0
+
+
 ## Version 1.22.0
 
 This release is an out of band release targeting the audit in [#980](https://github.com/nofusscomputing/centurion_erp/issues/980)
