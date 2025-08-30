@@ -1,3 +1,9 @@
+## 1.21.1 (2025-08-30)
+
+### Fixes
+
+- **base**: add trailing slant to admin url
+
 ## 1.21.0 (2025-08-29)
 
 ### feat
