@@ -1,4 +1,3 @@
-import datetime
 import pytest
 
 from django.db import models
@@ -22,10 +21,6 @@ def model_projectmilestone():
 def kwargs_projectmilestone(django_db_blocker,
     kwargs_centurionmodel, kwargs_project, model_project
 ):
-
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
     with django_db_blocker.unblock():
 
@@ -53,7 +48,7 @@ def kwargs_projectmilestone(django_db_blocker,
                 })
 
         kwargs.update({
-            'name': 'pm' + random_str
+            'name': 'pm' + str( random.randint(1,999) )
         })
         del kwargs['code']
 
@@ -67,7 +62,7 @@ def kwargs_projectmilestone(django_db_blocker,
 
     kwargs = {
         **kwargs,
-        'name': 'pm_' + random_str,
+        'name': 'pm_' + str( random.randint(1,999) ),
         'project': project,
         'start_date': '2025-08-04T00:00:01Z',
         'finish_date': '2025-08-04T00:00:02Z',
