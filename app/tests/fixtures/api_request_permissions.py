@@ -20,9 +20,7 @@ def api_request_permissions( django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        random_str = str(random.randint(1, 99999))
-
-        app_settings = AppSettings.objects.filter(
+        app_settings = AppSettings.objects.get(
             owner_organization = None
         )[0]
 
@@ -40,19 +38,19 @@ def api_request_permissions( django_db_blocker,
             )
 
         add_user = model_user.objects.create_user(
-            username="api_rp_user_add" + str(random_str), password="password"
+            username="api_rp_user_add" + str( random.randint(1,999) ), password="password"
         )
 
 
         add_group = model_group.objects.create(
-            name = 'add_team' + str(random_str),
+            name = 'add_team' + str( random.randint(1,999) ),
         )
 
         add_user.groups.set( [ add_group ])
 
         add_role = model_role.objects.create(
             organization = organization_one,
-            name = 'add_role' + str(random_str),
+            name = 'add_role' + str( random.randint(1,999) ),
         )
 
         add_role.groups.set( [ add_group ] )
@@ -75,18 +73,18 @@ def api_request_permissions( django_db_blocker,
             )
 
         change_user = model_user.objects.create_user(
-            username="api_rp_user_change" + str(random_str), password="password"
+            username="api_rp_user_change" + str( random.randint(1,999) ), password="password"
         )
 
         change_group = model_group.objects.create(
-            name = 'change_team' + str(random_str),
+            name = 'change_team' + str( random.randint(1,999) ),
         )
 
         change_user.groups.set( [ change_group ])
 
         change_role = model_role.objects.create(
             organization = organization_one,
-            name = 'change_role' + str(random_str),
+            name = 'change_role' + str( random.randint(1,999) ),
         )
 
         role_diff_org.groups.set( [ change_group ] )
@@ -104,18 +102,18 @@ def api_request_permissions( django_db_blocker,
             )
 
         delete_user = model_user.objects.create_user(
-            username="api_rp_user_delete" + str(random_str), password="password"
+            username="api_rp_user_delete" + str( random.randint(1,999) ), password="password"
         )
 
         delete_group = model_group.objects.create(
-            name = 'delete_team' + str(random_str),
+            name = 'delete_team' + str( random.randint(1,999) ),
         )
 
         delete_user.groups.set( [ delete_group ])
 
         delete_role = model_role.objects.create(
             organization = organization_one,
-            name = 'delete_role' + str(random_str),
+            name = 'delete_role' + str( random.randint(1,999) ),
         )
 
         role_diff_org.groups.set( [ delete_group ] )
@@ -133,18 +131,18 @@ def api_request_permissions( django_db_blocker,
             )
 
         view_user = model_user.objects.create_user(
-            username="api_r_perm_user_view" + str(random_str), password="password"
+            username="api_r_perm_user_view" + str( random.randint(1,999) ), password="password"
         )
 
         view_group = model_group.objects.create(
-            name = 'view_team' + str(random_str),
+            name = 'view_team' + str( random.randint(1,999) ),
         )
 
         view_user.groups.set( [ view_group ])
 
         view_role = model_role.objects.create(
             organization = organization_one,
-            name = 'view_role' + str(random_str),
+            name = 'view_role' + str( random.randint(1,999) ),
         )
 
         role_diff_org.groups.set( [ view_group ] )
@@ -154,19 +152,19 @@ def api_request_permissions( django_db_blocker,
 
 
         different_organization_user = model_user.objects.create_user(
-            username="api_rp_diff_org_user" + str(random_str), password="password"
+            username="api_rp_diff_org_user" + str( random.randint(1,999) ), password="password"
         )
 
 
         different_organization_group = model_group.objects.create(
-            name = 'diff_org_team' + str(random_str),
+            name = 'diff_org_team' + str( random.randint(1,999) ),
         )
 
         different_organization_user.groups.set( [ different_organization_group ])
 
         different_organization_role = model_role.objects.create(
             organization = organization_two,
-            name = 'diff_org_team' + str(random_str),
+            name = 'diff_org_team' + str( random.randint(1,999) ),
         )
 
         different_organization_role.groups.set( [ different_organization_group ] )
@@ -182,7 +180,7 @@ def api_request_permissions( django_db_blocker,
 
 
         no_permission_user = model_user.objects.create_user(
-            username="api_rp_nil_permissions" + str(random_str), password="password"
+            username="api_rp_nil_permissions" + str( random.randint(1,999) ), password="password"
         )
 
 

@@ -1,4 +1,3 @@
-import datetime
 import pytest
 import random
 
@@ -27,10 +26,6 @@ def kwargs_project(kwargs_centurionmodel, django_db_blocker,
     model_user, kwargs_user,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
-
     with django_db_blocker.unblock():
 
         state = model_projectstate.objects.create( **kwargs_projectstate )
@@ -51,7 +46,7 @@ def kwargs_project(kwargs_centurionmodel, django_db_blocker,
     kwargs = {
         **kwargs,
         'code': 'aCODE',
-        'name': 'project_' + random_str,
+        'name': 'project_' + str( random.randint(1,999) ),
         'description': 'a description',
         'priority': Project.Priority.LOW,
         'state': state,

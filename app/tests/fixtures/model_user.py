@@ -1,6 +1,6 @@
-import datetime
 import django
 import pytest
+import random
 
 
 
@@ -15,10 +15,8 @@ def kwargs_user():
 
     kwargs = {}
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-
     kwargs = {
-        'username': "test_user-" + random_str,
+        'username': "test_user-" + str( random.randint(1,999) ),
         'password': "password"
     }
 
