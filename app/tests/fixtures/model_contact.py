@@ -26,7 +26,8 @@ def kwargs_contact( kwargs_person ):
     kwargs = {
         **kwargs_person.copy(),
         'entity_type': 'contact',
-        'email': 'p' + random_str + '@domain.tld'
+        'email': 'p' + random_str + '@domain.tld',
+        'directory': True,
     }
 
     yield kwargs.copy()
