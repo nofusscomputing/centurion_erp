@@ -226,3 +226,5 @@ def api_request_permissions( django_db_blocker,
         different_organization_role.delete()
         different_organization_group.delete()
         different_organization_user.delete()
+
+        no_permission_user.delete()
