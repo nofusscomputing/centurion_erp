@@ -110,7 +110,9 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
 
             return self.queryset
 
-        self.queryset = RelatedTickets.objects.filter(
+        self.queryset = RelatedTickets.user(
+                    user = self.request.user, permission = self._permission_required
+        ).objects.filter(
             Q(from_ticket_id_id=self.kwargs['ticket_id'])
                 |
             Q(to_ticket_id_id=self.kwargs['ticket_id'])

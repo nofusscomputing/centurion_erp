@@ -76,7 +76,7 @@ class TenancyMixin:
 
             self.queryset = self.model.objects.user(
                 user = self.request.user,
-                action = self._permission_required
+                permission = self._permission_required
             ).all()
         
         else:

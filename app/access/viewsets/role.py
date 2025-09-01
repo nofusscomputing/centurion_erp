@@ -78,13 +78,17 @@ class ViewSet(ModelViewSet):
 
         if self.queryset is None:
 
-            self.queryset = self.model.objects.prefetch_related(
+            self.queryset = self.model.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).prefetch_related(
                 'groups','permissions__content_type', 'users'
             )
 
             if 'pk' in getattr(self, 'kwargs', {}):
 
-                self.queryset = self.model.objects.prefetch_related(
+                self.queryset = self.model.objects.user(
+                    user = self.request.user, permission = self._permission_required
+                ).prefetch_related(
                     'groups','permissions__content_type', 'users'
                 ).filter(
                     pk = int( self.kwargs['pk'] )

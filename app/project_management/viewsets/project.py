@@ -90,10 +90,12 @@ class ViewSet( ModelViewSet ):
 
             organization = int(self.request.data['organization'])
 
-            organization = Tenant.objects.get( pk = organization )
+            organization = Tenant.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).get( pk = organization )
 
         elif self.queryset:
-        
+
             if list(self.queryset) == 1:
 
                 obj = list(self.queryset)[0]

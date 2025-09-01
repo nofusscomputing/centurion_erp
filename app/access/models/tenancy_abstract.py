@@ -15,6 +15,48 @@ class TenancyManager(
     This manager specifically caters for the multi-tenancy features of Centurion ERP.
     """
 
+    _permission = None
+
+    _tenancies = None
+
+    _user = None
+
+    def user(self, user, permission):
+        """Set-up for Tenancy Queryset
+
+        This method sets up the manager with the users details so that the queryset
+        only contains the data the user has access to.
+
+        Args:
+            user (CenturionUser): The user the Queryset is for
+            permission (str): The ViewSet permission. use get_permission function.
+
+        Returns:
+            TenancyManager: Fresh TenancyManager instance
+        """
+        manager = self.__class__()
+        manager._permission = permission
+        manager._user = user
+
+        manager.model = self.model
+        manager._db = self._db
+
+        manager._tenancies = []
+        if getattr(manager._user, 'global_organization', None):
+            manager._tenancies = [ int(manager._user.global_organization) ]
+
+
+        for tenancy in manager._user.get_tenancies(int_list = False):
+            if manager._user.has_perm(
+                permission = manager._permission,
+                tenancy = tenancy
+            ):
+
+                manager._tenancies += [ int(tenancy) ]
+
+        return manager
+
+
     def get_queryset(self):
         """ Fetch the data
 
@@ -28,13 +70,6 @@ class TenancyManager(
             (queryset): **not super user**: return data from the stored unique organizations.
         """
 
-        user = None    # When CenturionUser in use
-
-        if hasattr(self.model, 'context'):
-
-            user = self.model.context.get(self.model._meta.model_name, None)
-
-
         has_tenant_field = False
 
         if(
@@ -44,14 +79,13 @@ class TenancyManager(
             has_tenant_field = True
 
 
-            if getattr(user, 'id', None) and getattr(user, 'is_authenticated', False):
+            if getattr(self._user, 'id', None) and getattr(self._user, 'is_authenticated', False):
 
-                tenancies = user.get_tenancies(int_list = True)
 
-                if len(tenancies) > 0 and not user.is_superuser:
+                if not self._user.is_superuser and self._tenancies:
 
                     return super().get_queryset().select_related('organization').filter(
-                        models.Q(organization__in = tenancies)
+                        models.Q(organization__in = self._tenancies)
                     )
 
 
