@@ -476,23 +476,8 @@ class CommonViewSet(
         viewsets (class): Django Rest Framework base class.
     """
 
-    parent_model: models.Model = None
-    """ Parent Model
-
-    This attribute defines the parent model for the model in question. The parent model when defined
-    will be used as the object to obtain the permissions from.
-    """
-
-    parent_model_pk_kwarg: str = 'pk'
-    """Parent Model kwarg
-
-    This value is used to define the kwarg that is used as the parent objects primary key (pk).
-    """
-
     _permission_required: str = None
     """Cached Permissions required"""
-
-    _obj_tenancy: Tenant = None
 
 
     def _django_to_api_exception( self, exc ):
@@ -694,35 +679,6 @@ class CommonViewSet(
 
 
 
-    def get_parent_model(self):
-        """Get the Parent Model
-
-        This function exists so that dynamic parent models can be defined.
-        They are defined by overriding this method.
-
-        Returns:
-            Model: Parent Model
-        """
-
-        return self.parent_model
-
-
-
-    def get_parent_obj(self):
-        """ Get the Parent Model Object
-
-        Use in views where the the model has no organization and the organization should be fetched from the parent model.
-
-        Requires attribute `parent_model` within the view with the value of the parent's model class
-
-        Returns:
-            parent_model (Model): with PK from kwargs['pk']
-        """
-
-        return self.get_parent_model().objects.get(pk=self.kwargs[self.parent_model_pk_kwarg])
-
-
-
     def get_permission_required(self) -> str:
         """ Get / Generate Permission Required
 
@@ -905,10 +861,10 @@ class ModelViewSetBase(
     _Mandatory_, Django model used for this view.
     """
 
-    queryset: object = None
+    _queryset: models.QuerySet = None
     """View Queryset
 
-    _Optional_, View model Query
+    Cached queryset
     """
 
     search_fields:list = []
@@ -996,6 +952,7 @@ class ModelViewSetBase(
 
 
 class ModelViewSet(
+    TenancyMixin,
     ModelViewSetBase,
     Create,
     Retrieve,

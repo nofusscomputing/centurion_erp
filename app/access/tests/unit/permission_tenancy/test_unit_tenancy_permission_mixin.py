@@ -7,7 +7,7 @@ from rest_framework.exceptions import (
     PermissionDenied,
 )
 
-from access.mixins.permissions import TenancyPermissionMixin
+from access.permissions.tenancy import TenancyPermissions
 
 from centurion.tests.unit_class import ClassTestCases
 
@@ -156,7 +156,7 @@ class MyMockView:
 
 @pytest.mark.mixin
 @pytest.mark.mixin_tenancypermission
-class TenancyPermissionMixinTestCases(
+class TenancyPermissionsTestCases(
     ClassTestCases
 ):
 
@@ -177,10 +177,10 @@ class TenancyPermissionMixinTestCases(
     def test_class_inherits_mixin_tenancy_permission(self, viewset):
         """Class Inheritence check
 
-        Class must inherit from `access.mixins.permissions.TenancyPermissionMixin`
+        Class must inherit from `access.mixins.permissions.TenancyPermissions`
         """
 
-        assert issubclass(viewset.permission_classes[0], TenancyPermissionMixin)
+        assert issubclass(viewset.permission_classes[0], TenancyPermissions)
 
 
 
@@ -767,16 +767,16 @@ class TenancyPermissionMixinTestCases(
 
 
 
-class TenancyPermissionMixinInheritedCases(
-    TenancyPermissionMixinTestCases
+class TenancyPermissionsInheritedCases(
+    TenancyPermissionsTestCases
 ):
     pass
 
 
 
 @pytest.mark.module_access
-class TenancyPermissionMixinPyTest(
-    TenancyPermissionMixinTestCases
+class TenancyPermissionsPyTest(
+    TenancyPermissionsTestCases
 ):
 
     @pytest.fixture( scope = 'function' )

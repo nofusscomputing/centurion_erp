@@ -15,7 +15,7 @@ from core.mixins.centurion import Centurion
 
 
 
-class TenancyPermissionMixin(
+class TenancyPermissions(
     DjangoObjectPermissions,
 ):
     """Tenant Permission Mixin
@@ -161,7 +161,7 @@ class TenancyPermissionMixin(
 
             elif pk:
 
-                obj = view.model.objects.get( pk = int( view.kwargs.get['pk'] ) )
+                obj = view.model.objects.get( pk = int( pk ) )
 
                 if self.is_tenancy_model( view = view ):
 
