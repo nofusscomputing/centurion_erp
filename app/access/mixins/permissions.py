@@ -105,16 +105,19 @@ class TenancyPermissionMixin(
 
         if obj:
 
-            tenant = obj.get_tenancy()
+            tenant = obj.get_tenant()
 
         elif view.request:
 
-            if not view.kwargs.get('pk', None):
+            pk = view.kwargs.get('pk', None)
+
+            if not pk:
 
                 data = getattr(view.request, 'data', None)
 
                 tenant_kwarg = view.kwargs.get('organization_id', None)
-
+                tenant_id = tenant_kwarg
+                tenant_data = None
 
                 if data:
 
@@ -126,13 +129,15 @@ class TenancyPermissionMixin(
                         tenant_data = data.get('organization', None)
 
 
+                    tenant_id = tenant_data
+
                 if tenant_kwarg and tenant_data:
 
                     if int(tenant_kwarg) != int(tenant_data):
 
                         view.get_log().getChild('authorization').warn(
                             msg = str(
-                                'Tenat within supplied path and tenant within user supplied'
+                                'Tenant within supplied path and tenant within user supplied'
                                 'data do not match'
                             )
                         )
@@ -147,16 +152,16 @@ class TenancyPermissionMixin(
                         )
 
 
-                if tenant:
+                if tenant_id:
 
                     tenant = Tenant.objects.get(
-                        pk = int( tenant )
+                        pk = int( tenant_id )
                     )
 
 
-            elif self.kwargs.get('pk', None):
+            elif pk:
 
-                obj = view.model.objects.get( pk = view.kwargs.get['pk'] )
+                obj = view.model.objects.get( pk = int( view.kwargs.get['pk'] ) )
 
                 if self.is_tenancy_model( view = view ):
 
@@ -264,8 +269,7 @@ class TenancyPermissionMixin(
 
 
             obj_organization: Tenant = self.get_tenancy(
-                view = view,
-                request = request
+                view = view
             )
 
             if(
