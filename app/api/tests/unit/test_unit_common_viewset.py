@@ -397,11 +397,11 @@ class CommonViewSetTestCases(
                 'value': None
             },
             '_obj_tenancy': {
-                'type': str,
+                'type': type(None),
                 'value': None
             },
             '_permission_required': {
-                'type': str,
+                'type': type(None),
                 'value': None
             },
             'back_url': {
@@ -429,12 +429,11 @@ class CommonViewSetTestCases(
                 'value': []
             },
             'parent_model': {
-                'type': str,
                 'value': None
             },
             'parent_model_pk_kwarg': {
                 'type': str,
-                'value': None
+                'value': 'pk'
             },
             'permission_classes': {
                 'type': list,

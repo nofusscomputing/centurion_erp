@@ -263,7 +263,7 @@ class TenancyPermissionMixin(
                 )
 
 
-            obj_organization: Tenant = view.get_tenancy(
+            obj_organization: Tenant = self.get_tenancy(
                 view = view,
                 request = request
             )
@@ -389,7 +389,7 @@ class TenancyPermissionMixin(
                         )
                         or request.user.is_superuser
                     )
-                    and view.get_tenancy( view = view, obj = obj )
+                    and self.get_tenancy( view = view, obj = obj )
                 ):
 
                     return True

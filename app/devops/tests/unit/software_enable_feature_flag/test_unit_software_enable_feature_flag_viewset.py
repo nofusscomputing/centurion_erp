@@ -3,6 +3,7 @@ import pytest
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 from devops.viewsets.software_enable_feature_flag import (
+    Software,
     SoftwareEnableFeatureFlag,
     ViewSet,
 )
@@ -45,6 +46,13 @@ class ViewsetTestCases(
             },
             'model_documentation': {
                 'type': type(None),
+            },
+            'parent_model': {
+                'value': Software
+            },
+            'parent_model_pk_kwarg': {
+                'type': str,
+                'value': 'software_id'
             },
             'queryset': {
                 'type': type(None),

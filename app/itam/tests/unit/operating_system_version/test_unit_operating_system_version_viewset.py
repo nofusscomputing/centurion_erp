@@ -3,6 +3,7 @@ import pytest
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 from itam.viewsets.operating_system_version import (
+    OperatingSystem,
     OperatingSystemVersion,
     ViewSet,
 )
@@ -43,6 +44,13 @@ class ViewsetTestCases(
             },
             'model_documentation': {
                 'type': type(None),
+            },
+            'parent_model': {
+                'value': OperatingSystem
+            },
+            'parent_model_pk_kwarg': {
+                'type': str,
+                'value': 'operating_system_id'
             },
             'queryset': {
                 'type': type(None),
