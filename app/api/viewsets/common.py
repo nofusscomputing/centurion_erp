@@ -4,6 +4,7 @@ import logging
 import rest_framework
 
 from django.conf import settings
+from django.db import models
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets, pagination
@@ -476,6 +477,12 @@ class CommonViewSet(
         viewsets (class): Django Rest Framework base class.
     """
 
+    parent_model: models.Model = None
+    """ Parent Model
+
+    This attribute defines the parent model for the model in question. The parent model when defined
+    will be used as the object to obtain the permissions from.
+    """
 
     def _django_to_api_exception( self, exc ):
         """Convert Django exception to DRF Exception
@@ -673,6 +680,20 @@ class CommonViewSet(
                     self.page_layout = []
 
         return self.page_layout
+
+
+
+    def get_parent_model(self):
+        """Get the Parent Model
+
+        This function exists so that dynamic parent models can be defined.
+        They are defined by overriding this method.
+
+        Returns:
+            Model: Parent Model
+        """
+
+        return self.parent_model
 
 
     def get_return_url(self) -> str:

@@ -12,20 +12,6 @@ class OrganizationMixin:
 
 
 
-    def get_parent_model(self):
-        """Get the Parent Model
-
-        This function exists so that dynamic parent models can be defined.
-        They are defined by overriding this method.
-
-        Returns:
-            Model: Parent Model
-        """
-
-        return self.parent_model
-
-
-
     def get_parent_obj(self):
         """ Get the Parent Model Object
 
@@ -131,15 +117,6 @@ class OrganizationMixin:
         self._permission_required = permission_required
 
         return self._permission_required
-
-
-
-    parent_model: models.Model = None
-    """ Parent Model
-
-    This attribute defines the parent model for the model in question. The parent model when defined
-    will be used as the object to obtain the permissions from.
-    """
 
 
     parent_model_pk_kwarg: str = 'pk'

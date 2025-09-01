@@ -430,6 +430,10 @@ class CommonViewSetTestCases(
                 'type': list,
                 'value': []
             },
+            'parent_model': {
+                'type': str,
+                'value': None
+            },
             'permission_classes': {
                 'type': list,
                 'value': [
