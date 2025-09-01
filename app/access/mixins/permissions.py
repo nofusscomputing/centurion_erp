@@ -45,8 +45,6 @@ class TenancyPermissionMixin(
 
     _is_tenancy_model: bool = None
 
-    _obj_tenancy: Tenant = None
-
 
 
     def is_tenancy_model(self, view) -> bool:

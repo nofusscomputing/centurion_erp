@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework_json_api.metadata import JSONAPIMetadata
 
 from access.mixins.permissions import TenancyPermissionMixin
+from access.models.tenancy import Tenant
 from access.models.tenancy_abstract import TenancyAbstractModel
 
 from api.react_ui_metadata import ReactUIMetadata
@@ -490,6 +491,8 @@ class CommonViewSet(
 
     _permission_required: str = None
     """Cached Permissions required"""
+
+    _obj_tenancy: Tenant = None
 
 
     def _django_to_api_exception( self, exc ):
