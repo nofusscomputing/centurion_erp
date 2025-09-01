@@ -139,7 +139,7 @@ class MyMockView:
             user = user,
         )
 
-    def get_obj_organization( self, **kwargs ):
+    def get_tenancy( self, **kwargs ):
         return self._obj_organization
 
     def get_permission_required( self ):

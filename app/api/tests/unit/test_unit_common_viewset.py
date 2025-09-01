@@ -398,6 +398,14 @@ class CommonViewSetTestCases(
                 'type': str,
                 'value': None
             },
+            '_obj_tenancy': {
+                'type': str,
+                'value': None
+            },
+            '_permission_required': {
+                'type': str,
+                'value': None
+            },
             'back_url': {
                 'type': str,
                 'value': None

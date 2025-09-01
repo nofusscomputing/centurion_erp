@@ -3,6 +3,7 @@ import traceback
 from rest_framework.exceptions import (
     MethodNotAllowed,
     NotAuthenticated,
+    ParseError,
     PermissionDenied
 )
 from rest_framework.permissions import DjangoObjectPermissions
@@ -44,6 +45,10 @@ class TenancyPermissionMixin(
 
     _is_tenancy_model: bool = None
 
+    _obj_tenancy: Tenant = None
+
+
+
     def is_tenancy_model(self, view) -> bool:
         """Determin if the Model is a `Tenancy` Model
 
@@ -81,6 +86,86 @@ class TenancyPermissionMixin(
             self._is_tenancy_model = getattr(view, '_is_tenancy_model')
 
         return self._is_tenancy_model
+
+
+
+    def get_tenancy(self, view, obj = None) -> Tenant:
+        """Fetch the objects Tenancy
+
+        Args:
+            view (ViewSet): The viewset for this request
+            obj (Model, optional): The model to obtain the tenancy from. Defaults to None.
+
+        Raises:
+            ParseError: The URL kwarg for tenancy and the user supplied tenancy does not match,
+
+        Returns:
+            Tenant: Tenancy the object belongs or will belong to.
+        """
+
+        tenant = None
+
+        if obj:
+
+            tenant = obj.get_tenancy()
+
+        elif view.request:
+
+            if not view.kwargs.get('pk', None):
+
+                data = getattr(view.request, 'data', None)
+
+                tenant_kwarg = view.kwargs.get('organization_id', None)
+
+
+                if data:
+
+                    tenant_data = data.get('organization_id', None)
+
+
+                    if not tenant_data:
+
+                        tenant_data = data.get('organization', None)
+
+
+                if tenant_kwarg and tenant_data:
+
+                    if int(tenant_kwarg) != int(tenant_data):
+
+                        view.get_log().getChild('authorization').warn(
+                            msg = str(
+                                'Tenat within supplied path and tenant within user supplied'
+                                'data do not match'
+                            )
+                        )
+
+                        # if tenancy in path and user supplied data they should match.
+                        # if not, could indicate something untoward.
+                        raise ParseError(
+                            detail = (
+                                'tenancy mismatch. both path and supplied tenancy must match'
+                            ),
+                            code = 'tenancy_mismatch'
+                        )
+
+
+                if tenant:
+
+                    tenant = Tenant.objects.get(
+                        pk = int( tenant )
+                    )
+
+
+            elif self.kwargs.get('pk', None):
+
+                obj = view.model.objects.get( pk = view.kwargs.get['pk'] )
+
+                if self.is_tenancy_model( view = view ):
+
+                    tenant = obj.get_tenant()
+
+
+        return tenant
 
 
 
@@ -180,7 +265,8 @@ class TenancyPermissionMixin(
                 )
 
 
-            obj_organization: Tenant = view.get_obj_organization(
+            obj_organization: Tenant = view.get_tenancy(
+                view = view,
                 request = request
             )
 
@@ -305,7 +391,7 @@ class TenancyPermissionMixin(
                         )
                         or request.user.is_superuser
                     )
-                    and view.get_obj_organization( obj = obj )
+                    and view.get_tenancy( view = view, obj = obj )
                 ):
 
                     return True

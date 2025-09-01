@@ -1,7 +1,5 @@
 from django.db import models
 
-from access.models.tenant import Tenant as Organization
-
 
 
 class OrganizationMixin:
@@ -11,95 +9,6 @@ class OrganizationMixin:
     it contains the functions/methods required to conduct the permission
     checking.
     """
-
-
-    _obj_organization: int = None
-    """Cached Object Organization"""
-
-    def get_obj_organization(self, obj = None, request = None) -> Organization:
-        """Fetch the objects Organization
-
-        Args:
-            obj (Model): Model of object
-
-        Raises:
-            ValueError: When `obj` and `request` are both missing
-
-        Returns:
-            Organization: Organization the object is from
-            None: No Organization was found
-        """
-
-        if obj is None and request is None:
-
-            raise ValueError('Missing Parameter. obj or request must be supplied')
-
-
-        if self._obj_organization:
-
-            return self._obj_organization
-
-
-        if obj:
-
-            self._obj_organization = getattr(obj, 'organization', None)
-
-
-            if not self._obj_organization:
-
-                self._obj_organization = getattr(obj, 'get_tenant', lambda: None)()
-
-        elif (
-            request
-            and not self.kwargs.get('pk', None)
-        ):
-
-            if getattr(request.stream, 'method', '') != 'DELETE':
-
-                data = getattr(request, 'data', None)
-
-                if data:
-
-                    data_organization = self.kwargs.get('organization_id', None)
-
-                    if not data_organization:
-
-                        data_organization = request.data.get('organization_id', None)
-
-
-                    if not data_organization:
-
-                        data_organization = request.data.get('organization', None)
-
-
-                    if data_organization:
-
-                        self._obj_organization = Organization.objects.get(
-                            pk = int( data_organization )
-                        )
-
-        elif self.kwargs.get('pk', None):
-
-
-            obj = self.model.objects.get( pk = self.kwargs.get('pk', None) )
-
-            if getattr(obj, 'organization', None):
-
-                self._obj_organization = obj.get_tenant()
-
-            elif str(self.model._meta.verbose_name).lower() == 'tenant':
-
-                self._obj_organization = obj
-
-
-        if self.get_parent_model():    # if defined is to overwrite object organization
-
-            parent_obj = self.get_parent_obj()
-
-            self._obj_organization = parent_obj.get_tenant()
-
-
-        return self._obj_organization
 
 
 
