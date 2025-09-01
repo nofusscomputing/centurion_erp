@@ -13,10 +13,9 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework_json_api.metadata import JSONAPIMetadata
 
-from access.mixins.permissions import TenancyPermissionMixin
-from access.models.tenancy import Tenant
-from access.models.tenancy_abstract import TenancyAbstractModel
+from access.mixins.tenancy import TenancyMixin
 
+from api.permissions.default import DefaultDenyPermission
 from api.react_ui_metadata import ReactUIMetadata
 
 
@@ -589,7 +588,7 @@ class CommonViewSet(
     for detail view, Enables the UI can setup the page layout.
     """
 
-    permission_classes = [ TenancyPermissionMixin ]
+    permission_classes = [ DefaultDenyPermission ]
     """Permission Class
 
     _Mandatory_, Permission check class
