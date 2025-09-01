@@ -15,6 +15,7 @@ from rest_framework_json_api.metadata import JSONAPIMetadata
 
 from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import TenancyPermissionMixin
+from access.models.tenancy_abstract import TenancyAbstractModel
 
 from api.react_ui_metadata import ReactUIMetadata
 
@@ -484,6 +485,10 @@ class CommonViewSet(
     will be used as the object to obtain the permissions from.
     """
 
+    _permission_required: str = None
+    """Cached Permissions required"""
+
+
     def _django_to_api_exception( self, exc ):
         """Convert Django exception to DRF Exception
 
@@ -694,6 +699,97 @@ class CommonViewSet(
         """
 
         return self.parent_model
+
+
+
+    def get_permission_required(self) -> str:
+        """ Get / Generate Permission Required
+
+        If there is a requirement that there be custom/dynamic permissions,
+        this function can be safely overridden.
+
+        Raises:
+            ValueError: Unable to determin the view action
+
+        Returns:
+            str: Permission in format `<app_name>.<action>_<model_name>`
+        """
+
+        if self._permission_required:
+
+            return self._permission_required
+
+
+        if hasattr(self, 'get_dynamic_permissions'):
+
+            self._permission_required = self.get_dynamic_permissions()
+
+            if type(self._permission_required) is list:
+
+                self._permission_required = self._permission_required[0]
+
+            return self._permission_required
+
+
+        view_action: str = None
+
+        if(
+            self.action == 'create'
+            or getattr(self.request._stream, 'method', '') == 'POST'
+        ):
+
+            view_action = 'add'
+
+        elif (
+            self.action == 'partial_update'
+            or self.action == 'update'
+            or getattr(self.request._stream, 'method', '') == 'PATCH'
+            or getattr(self.request._stream, 'method', '') == 'PUT'
+        ):
+
+            view_action = 'change'
+
+        elif(
+            self.action == 'destroy'
+            or getattr(self.request._stream, 'method', '') == 'DELETE'
+        ):
+
+            view_action = 'delete'
+
+        elif (
+            self.action == 'list'
+        ):
+
+            view_action = 'view'
+
+        elif self.action == 'retrieve':
+
+            view_action = 'view'
+
+        elif self.action == 'metadata':
+
+            view_action = 'view'
+
+        elif self.action is None:
+
+            return False
+
+
+
+        if view_action is None:
+
+            raise ValueError('view_action could not be defined.')
+
+
+        permission = self.model._meta.app_label + '.' + view_action + '_' + self.model._meta.model_name
+
+        permission_required = permission
+
+
+        self._permission_required = permission_required
+
+        return self._permission_required
+
 
 
     def get_return_url(self) -> str:
