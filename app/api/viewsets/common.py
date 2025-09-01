@@ -13,7 +13,6 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework_json_api.metadata import JSONAPIMetadata
 
-from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import TenancyPermissionMixin
 from access.models.tenancy_abstract import TenancyAbstractModel
 
@@ -466,7 +465,6 @@ class Update(
 
 
 class CommonViewSet(
-    OrganizationMixin,
     viewsets.ViewSet
 ):
     """Common ViewSet class
@@ -474,7 +472,6 @@ class CommonViewSet(
     This class is to be inherited by ALL viewsets.
 
     Args:
-        OrganizationMixin (class): Contains the Authorization checks.
         viewsets (class): Django Rest Framework base class.
     """
 
@@ -483,6 +480,12 @@ class CommonViewSet(
 
     This attribute defines the parent model for the model in question. The parent model when defined
     will be used as the object to obtain the permissions from.
+    """
+
+    parent_model_pk_kwarg: str = 'pk'
+    """Parent Model kwarg
+
+    This value is used to define the kwarg that is used as the parent objects primary key (pk).
     """
 
     _permission_required: str = None
@@ -699,6 +702,21 @@ class CommonViewSet(
         """
 
         return self.parent_model
+
+
+
+    def get_parent_obj(self):
+        """ Get the Parent Model Object
+
+        Use in views where the the model has no organization and the organization should be fetched from the parent model.
+
+        Requires attribute `parent_model` within the view with the value of the parent's model class
+
+        Returns:
+            parent_model (Model): with PK from kwargs['pk']
+        """
+
+        return self.get_parent_model().objects.get(pk=self.kwargs[self.parent_model_pk_kwarg])
 
 
 

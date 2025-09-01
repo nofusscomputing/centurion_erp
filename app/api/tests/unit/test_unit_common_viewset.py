@@ -11,7 +11,6 @@ from rest_framework.permissions import (
 )
 from rest_framework_json_api.metadata import JSONAPIMetadata
 
-from access.mixins.organization import OrganizationMixin
 from access.mixins.permissions import TenancyPermissionMixin
 from access.models.tenant import Tenant as Organization, Tenant
 from access.models.team import Team
@@ -341,7 +340,6 @@ class UpdatePyTest(
 
 
 class CommonViewSetTestCases(
-    # OrganizationMixinTest,    # ToDo: Add `OrganizationMixin` test suit
     ClassTestCases,
 ):
     """Test Suite for class CommonViewSet"""
@@ -434,6 +432,10 @@ class CommonViewSetTestCases(
                 'type': str,
                 'value': None
             },
+            'parent_model_pk_kwarg': {
+                'type': str,
+                'value': None
+            },
             'permission_classes': {
                 'type': list,
                 'value': [
@@ -454,14 +456,6 @@ class CommonViewSetTestCases(
             }
         }
 
-
-    def test_class_inherits_organizationmixin(self, viewset):
-        """Class Inheritence check
-
-        Class must inherit from `OrganizationMixin`
-        """
-
-        assert issubclass(viewset, OrganizationMixin)
 
 
     def test_class_inherits_viewsets_viewset(self, viewset):
