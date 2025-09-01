@@ -886,11 +886,11 @@ class ModelViewSetBase(
 
     def get_queryset(self):
 
-        if self.queryset is not None:
+        if self._queryset is not None:
 
-            return self.queryset
+            return self._queryset
 
-        self.queryset = self.model.objects.all()
+        self._queryset = self.model.objects.all()
 
         qs_filter = {}
 
@@ -910,10 +910,10 @@ class ModelViewSetBase(
             })
 
 
-        self.queryset = self.queryset.filter( **qs_filter  )
+        self._queryset = self._queryset.filter( **qs_filter  )
 
 
-        return self.queryset
+        return self._queryset
 
 
 

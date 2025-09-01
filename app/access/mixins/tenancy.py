@@ -11,6 +11,12 @@ class TenancyMixin:
 
     _obj_tenancy: Tenant = None
 
+    _queryset: models.QuerySet = None
+    """View Queryset
+
+    Cached queryset
+    """
+
     parent_model: models.Model = None
     """ Parent Model
 
@@ -28,12 +34,6 @@ class TenancyMixin:
     """Permission Class
 
     _Mandatory_, Permission check class
-    """
-
-    _queryset: models.QuerySet = None
-    """View Queryset
-
-    Cached queryset
     """
 
 
@@ -54,7 +54,8 @@ class TenancyMixin:
     def get_parent_obj(self):
         """ Get the Parent Model Object
 
-        Use in views where the the model has no organization and the organization should be fetched from the parent model.
+        Use in views where the the model has no organization and the organization should be fetched
+        from the parent model.
 
         Requires attribute `parent_model` within the view with the value of the parent's model class
 
@@ -78,7 +79,7 @@ class TenancyMixin:
                 user = self.request.user,
                 permission = self._permission_required
             ).all()
-        
+
         else:
 
             self.queryset = self.model.objects.all()

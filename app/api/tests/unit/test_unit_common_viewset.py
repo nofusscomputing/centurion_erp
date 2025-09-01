@@ -15,6 +15,9 @@ from api.permissions.default import DefaultDenyPermission
 from access.models.tenant import Tenant as Organization, Tenant
 from access.models.team import Team
 from access.models.team_user import TeamUsers
+from access.tests.unit.mixin_tenancy.test_unit_tenancy_permission_mixin import (
+    TenancyMixinInheritedCases
+)
 
 from api.react_ui_metadata import ReactUIMetadata
 from api.viewsets.common import (
@@ -396,10 +399,6 @@ class CommonViewSetTestCases(
                 'type': str,
                 'value': None
             },
-            '_obj_tenancy': {
-                'type': type(None),
-                'value': None
-            },
             '_permission_required': {
                 'type': type(None),
                 'value': None
@@ -427,13 +426,6 @@ class CommonViewSetTestCases(
             'page_layout': {
                 'type': list,
                 'value': []
-            },
-            'parent_model': {
-                'value': None
-            },
-            'parent_model_pk_kwarg': {
-                'type': str,
-                'value': 'pk'
             },
             'permission_classes': {
                 'type': list,
@@ -677,7 +669,7 @@ class ModelViewSetBaseCases(
                 'type': django.db.models.base.ModelBase,
                 'value': None
             },
-            'queryset': {
+            '_queryset': {
                 'type': object,
                 'value': None
             },
@@ -711,25 +703,25 @@ class ModelViewSetBaseCases(
         """Viewset Test
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         view_set = viewset_mock_request
 
-        assert view_set.queryset is None    # Must be empty before init
+        assert view_set._queryset is None    # Must be empty before init
 
         q = view_set.get_queryset()
 
-        assert view_set.queryset is not None    # Must not be empty after init
+        assert view_set._queryset is not None    # Must not be empty after init
 
-        assert q == view_set.queryset
+        assert q == view_set._queryset
 
 
     def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
         """Viewset Test
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         qs = mocker.spy(viewset_mock_request.model, 'objects')
@@ -815,7 +807,7 @@ class ModelViewSetBasePyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -828,7 +820,7 @@ class ModelViewSetBasePyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -836,6 +828,7 @@ class ModelViewSetBasePyTest(
 
 
 class ModelViewSetTestCases(
+    TenancyMixinInheritedCases,
     ModelViewSetBaseCases,
     CreateCases,
     RetrieveCases,
@@ -981,7 +974,7 @@ class ModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -994,7 +987,7 @@ class ModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1192,7 +1185,7 @@ class SubModelViewSetPyTest(
         has inherited from this or parent classes.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1206,7 +1199,7 @@ class SubModelViewSetPyTest(
         has inherited from this or parent classes.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1298,7 +1291,7 @@ class ModelCreateViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1311,7 +1304,7 @@ class ModelCreateViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1406,7 +1399,7 @@ class ModelListRetrieveDeleteViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1419,7 +1412,7 @@ class ModelListRetrieveDeleteViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1512,7 +1505,7 @@ class ModelRetrieveUpdateViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1525,7 +1518,7 @@ class ModelRetrieveUpdateViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1619,7 +1612,7 @@ class ReadOnlyModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1632,7 +1625,7 @@ class ReadOnlyModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1726,7 +1719,7 @@ class ReadOnlyListModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1739,7 +1732,7 @@ class ReadOnlyListModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1834,7 +1827,7 @@ class AuthUserReadOnlyModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1847,7 +1840,7 @@ class AuthUserReadOnlyModelViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1942,7 +1935,7 @@ class IndexViewsetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -1955,7 +1948,7 @@ class IndexViewsetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -2058,7 +2051,7 @@ class PublicReadOnlyViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -2071,7 +2064,7 @@ class PublicReadOnlyViewSetPyTest(
         is not required for this test suite.
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -2105,7 +2098,7 @@ class IndexViewsetInheritedCases(
         This view does not use a queryset
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
@@ -2117,7 +2110,7 @@ class IndexViewsetInheritedCases(
         This view does not use a queryset
 
         Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
+        attribute `<viewset>._queryset`
         """
 
         assert True
