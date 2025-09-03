@@ -58,6 +58,13 @@ def api_request_permissions( django_db_blocker,
         add_role.groups.set( [ add_group ] )
         add_role.permissions.set( [ add_permissions ] )
 
+        # add user to different org, however no perms
+        role_diff_org = model_role.objects.create(
+            organization = organization_two,
+            name = 'add_role' + str( random.randint(1,999) ),
+        )
+
+        role_diff_org.groups.set( [ add_group ] )
 
         change_permissions = model_permission.objects.get(
                 codename = 'change_' + model._meta.model_name,
@@ -82,6 +89,7 @@ def api_request_permissions( django_db_blocker,
             name = 'change_role' + str(random_str),
         )
 
+        role_diff_org.groups.set( [ change_group ] )
         change_role.groups.set( [ change_group ] )
         change_role.permissions.set( [ change_permissions ] )
 
@@ -110,6 +118,7 @@ def api_request_permissions( django_db_blocker,
             name = 'delete_role' + str(random_str),
         )
 
+        role_diff_org.groups.set( [ delete_group ] )
         delete_role.groups.set( [ delete_group ] )
         delete_role.permissions.set( [ delete_permissions ] )
 
@@ -138,6 +147,7 @@ def api_request_permissions( django_db_blocker,
             name = 'view_role' + str(random_str),
         )
 
+        role_diff_org.groups.set( [ view_group ] )
         view_role.groups.set( [ view_group ] )
         view_role.permissions.set( [ view_permissions ] )
 
