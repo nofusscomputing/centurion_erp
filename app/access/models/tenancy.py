@@ -71,10 +71,16 @@ class TenancyManager(models.Manager):
 
             if user.is_authenticated:
 
-                user_organizations += request.user.get_tenancies( int_list = True)
+                for tenancy in user.get_tenancies(int_list = False):
+                    if user.has_perm(
+                        permission = self.model._meta.app_label + '.view_' + self.model._meta.model_name,
+                        tenancy = tenancy
+                    ):
+
+                        user_organizations += [ int(tenancy) ]
 
 
-                if len(user_organizations) > 0 and not user.is_superuser:
+                if not user.is_superuser:
 
                     if has_tenant_field:
 
