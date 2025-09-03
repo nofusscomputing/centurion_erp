@@ -52,9 +52,6 @@ class ViewsetTestCases(
                 'type': str,
                 'value': 'operating_system_id'
             },
-            'queryset': {
-                'type': type(None),
-            },
             'serializer_class': {
                 'type': type(None),
             },

@@ -53,9 +53,6 @@ class ViewsetTestCases(
                 'type': str,
                 'value': 'software_id'
             },
-            'queryset': {
-                'type': type(None),
-            },
             'serializer_class': {
                 'type': type(None),
             },

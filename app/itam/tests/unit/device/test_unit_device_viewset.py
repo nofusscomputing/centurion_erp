@@ -49,9 +49,6 @@ class ViewsetTestCases(
             'model_documentation': {
                 'type': type(None),
             },
-            'queryset': {
-                'type': type(None),
-            },
             'serializer_class': {
                 'type': type(None),
             },
