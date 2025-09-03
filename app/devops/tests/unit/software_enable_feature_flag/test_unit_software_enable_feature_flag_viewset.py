@@ -76,6 +76,20 @@ class ViewsetTestCases(
 
 
 
+    def test_function_get_parent_model(self, mocker, viewset):
+        """Test class function
+
+        Ensure that when function `get_parent_model` is called it returns the value
+        of `viewset.parent_model`.
+
+        For all models that dont have attribute `viewset.parent_model` set, it should
+        return None
+        """
+
+        assert viewset().get_parent_model() is not None
+
+
+
 class SoftwareEnableFeatureFlagViewsetInheritedCases(
     ViewsetTestCases,
 ):

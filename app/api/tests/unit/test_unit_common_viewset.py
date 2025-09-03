@@ -472,12 +472,12 @@ class CommonViewSetTestCases(
         attribute `<viewset>._queryset`
         """
 
+        view_set = viewset_mock_request
+
         from django.db import connection
         from django.test.utils import CaptureQueriesContext
-        
-        with CaptureQueriesContext(connection) as queries:
 
-            view_set = viewset_mock_request
+        with CaptureQueriesContext(connection) as queries:
 
             assert view_set._queryset is None    # Must be empty before init
 
@@ -572,6 +572,12 @@ class CommonViewSetPyTest(
             }
         }
 
+
+    def test_view_func_get_queryset_cache_result(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
+
+    def test_view_func_get_queryset_cache_result_used(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 @pytest.mark.api
@@ -809,30 +815,11 @@ class ModelViewSetBasePyTest(
         }
 
 
-    def test_view_func_get_queryset_cache_result(self, viewset):
-        """Viewset Test
+    def test_view_func_get_queryset_cache_result(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self, viewset):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+    def test_view_func_get_queryset_cache_result_used(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -969,30 +956,11 @@ class ModelViewSetPyTest(
         }
 
 
-    def test_view_func_get_queryset_cache_result(self, viewset):
-        """Viewset Test
+    def test_view_func_get_queryset_cache_result(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self, viewset):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+    def test_view_func_get_queryset_cache_result_used(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1173,32 +1141,12 @@ class SubModelViewSetPyTest(
 
         assert viewset().model_kwarg is None
 
+
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1275,29 +1223,10 @@ class ModelCreateViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1377,29 +1306,10 @@ class ModelListRetrieveDeleteViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1477,29 +1387,10 @@ class ModelRetrieveUpdateViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1578,29 +1469,10 @@ class ReadOnlyModelViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1679,29 +1551,10 @@ class ReadOnlyListModelViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1781,29 +1634,10 @@ class AuthUserReadOnlyModelViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1883,29 +1717,10 @@ class IndexViewsetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1993,29 +1808,10 @@ class PublicReadOnlyViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -2041,27 +1837,10 @@ class IndexViewsetInheritedCases(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This view does not use a queryset
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This view does not use a queryset
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
