@@ -86,6 +86,38 @@ class ViewsetTestCases(
 
 
 
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request,
+        model_kwargs,
+    ):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>._queryset`
+        """
+
+        view_set = viewset_mock_request
+
+        view_set.kwargs = {
+            'project_id': model_kwargs['project'].id
+        }
+
+        qs = mocker.spy(view_set.model, 'objects')
+
+        view_set.get_queryset()    # Initial QuerySet fetch/filter and cache
+
+        initial_method_calls = len(qs.method_calls)
+        initial_mock_calls = len(qs.mock_calls)
+
+        assert initial_method_calls > 0       # one call to .all()
+        assert initial_mock_calls > 0         # calls = .user( ...), .user().all(), .user().all().filter()
+
+        view_set.get_queryset()    # Use Cached results, dont re-fetch QuerySet
+
+        assert len(qs.method_calls) == initial_method_calls
+        assert len(qs.mock_calls) == initial_mock_calls
+
+
+
 class ProjectMilestoneViewsetInheritedCases(
     ViewsetTestCases,
 ):
