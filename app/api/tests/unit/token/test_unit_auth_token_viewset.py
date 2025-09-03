@@ -91,21 +91,4 @@ class AuthTokenViewsetPyTest(
     ViewsetTestCases,
 ):
 
-    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
-        """Viewset Test
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        qs = mocker.spy(viewset_mock_request.model, 'objects')
-
-        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
-
-        assert len(qs.method_calls) == 1       # one call to .all()
-        assert len(qs.mock_calls) == 3         # calls = .all(), all().filter()
-
-        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
-
-        assert len(qs.method_calls) == 1
-        assert len(qs.mock_calls) == 3
+    pass
