@@ -480,6 +480,12 @@ class CommonViewSet(
     _permission_required: str = None
     """Cached Permissions required"""
 
+    _queryset: models.QuerySet = None
+    """View Queryset
+
+    Cached queryset
+    """
+
 
     def _django_to_api_exception( self, exc ):
         """Convert Django exception to DRF Exception
@@ -680,6 +686,39 @@ class CommonViewSet(
 
 
 
+    def get_queryset(self):
+
+        if self._queryset is not None:
+
+            return self._queryset
+
+        self._queryset = self.model.objects.all()
+
+        qs_filter = {}
+
+        if 'pk' in getattr(self, 'kwargs', {}):
+
+            qs_filter.update({
+                'pk': int( self.kwargs['pk'] )
+            })
+
+        if(
+            getattr(self.model, '_is_submodel', False)
+            and 'model_id' in self.kwargs
+        ):
+
+            qs_filter.update({
+                'model_id': int( self.kwargs['model_id'] )
+            })
+
+
+        self._queryset = self._queryset.filter( **qs_filter  )
+
+
+        return self._queryset
+
+
+
     def get_permission_required(self) -> str:
         """ Get / Generate Permission Required
 
@@ -844,6 +883,7 @@ class CommonViewSet(
 
 
 class ModelViewSetBase(
+    TenancyMixin,
     CommonViewSet
 ):
 
@@ -862,12 +902,6 @@ class ModelViewSetBase(
     _Mandatory_, Django model used for this view.
     """
 
-    _queryset: models.QuerySet = None
-    """View Queryset
-
-    Cached queryset
-    """
-
     search_fields:list = []
     """ Search Fields
 
@@ -882,39 +916,6 @@ class ModelViewSetBase(
 
     view_serializer_name: str = None
     """Cached model view Serializer name"""
-
-
-    def get_queryset(self):
-
-        if self._queryset is not None:
-
-            return self._queryset
-
-        self._queryset = self.model.objects.all()
-
-        qs_filter = {}
-
-        if 'pk' in getattr(self, 'kwargs', {}):
-
-            qs_filter.update({
-                'pk': int( self.kwargs['pk'] )
-            })
-
-        if(
-            getattr(self.model, '_is_submodel', False)
-            and 'model_id' in self.kwargs
-        ):
-
-            qs_filter.update({
-                'model_id': int( self.kwargs['model_id'] )
-            })
-
-
-        self._queryset = self._queryset.filter( **qs_filter  )
-
-
-        return self._queryset
-
 
 
     def get_serializer_class(self):
@@ -953,7 +954,6 @@ class ModelViewSetBase(
 
 
 class ModelViewSet(
-    TenancyMixin,
     ModelViewSetBase,
     Create,
     Retrieve,

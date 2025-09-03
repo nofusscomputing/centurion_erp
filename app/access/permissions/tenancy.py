@@ -230,32 +230,9 @@ class TenancyPermissions(
                     view.model.__name__ == 'AppSettings'
                     and request.user.is_superuser
                 )
-                or
-                (
-                    view.model.__name__ == 'UserSettings'
-                    and request._user.id == int(view.kwargs.get('pk', 0))
-                )
-                or (
-                    view.model.__name__ == 'AuthToken'
-                    and request._user.id == int(view.kwargs.get('model_id', 0))
-                )
             ):
 
                 return True
-
-            elif (
-                (
-                    view.model.__name__ == 'UserSettings'
-                    and request._user.id != int(view.kwargs.get('pk', 0))
-                )
-                or (
-                    view.model.__name__ == 'AuthToken'
-                    and request._user.id != int(view.kwargs.get('model_id', 0))
-                )
-            ):
-
-
-                return False
 
 
             if not request.user.has_perm(
@@ -365,25 +342,7 @@ class TenancyPermissions(
                 return False
 
 
-            if (
-                (
-                    view.model.__name__ == 'UserSettings'
-                    and request._user.id == int(view.kwargs.get('pk', 0))
-                )
-                or (
-                    view.model.__name__ == 'AuthToken'
-                    and request._user.id == int(view.kwargs.get('model_id', 0))
-                )
-                or (    # org=None is the application wide settings.
-                    view.model.__name__ == 'AppSettings'
-                    and request.user.is_superuser
-                    and obj.organization is None
-                )
-            ):
-
-                return True
-
-            elif self.is_tenancy_model( view ):
+            if self.is_tenancy_model( view ):
 
                 if(
                     (

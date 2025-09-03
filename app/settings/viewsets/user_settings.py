@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from access.permissions.user import UserPermissions
+
 from api.viewsets.common import ModelRetrieveUpdateViewSet
 
 from settings.serializers.user_settings import (    # pylint: disable=W0611:unused-import
@@ -66,6 +68,8 @@ class ViewSet(ModelRetrieveUpdateViewSet):
     #     'devices',
     #     'software',
     # ]
+
+    permission_classes = [ UserPermissions ]
 
     view_description = 'Your Settings'
 

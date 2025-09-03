@@ -403,6 +403,10 @@ class CommonViewSetTestCases(
                 'type': type(None),
                 'value': None
             },
+            '_queryset': {
+                'type': type(None),
+                'value': None
+            },
             'back_url': {
                 'type': str,
                 'value': None
@@ -457,6 +461,43 @@ class CommonViewSetTestCases(
 
         assert issubclass(viewset, viewsets.ViewSet)
 
+
+    def test_view_func_get_queryset_cache_result(self, viewset_mock_request):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>._queryset`
+        """
+
+        view_set = viewset_mock_request
+
+        assert view_set._queryset is None    # Must be empty before init
+
+        q = view_set.get_queryset()
+
+        assert view_set._queryset is not None    # Must not be empty after init
+
+        assert q == view_set._queryset
+
+
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>._queryset`
+        """
+
+        qs = mocker.spy(viewset_mock_request.model, 'objects')
+
+        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
+
+        assert len(qs.method_calls) == 1       # one call to .all()
+        assert len(qs.mock_calls) == 3         # calls = .user( ...), .user().all(), .user().all().filter()
+
+        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
+
+        assert len(qs.method_calls) == 1
+        assert len(qs.mock_calls) == 3
 
     # ToDo: get_back_url
 
@@ -649,6 +690,7 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 class ModelViewSetBaseCases(
+    TenancyMixinInheritedCases,
     CommonViewSetTestCases,
 ):
     """Test Suite for class ModelViewSetBase"""
@@ -667,10 +709,6 @@ class ModelViewSetBaseCases(
             },
             'model': {
                 'type': django.db.models.base.ModelBase,
-                'value': None
-            },
-            '_queryset': {
-                'type': object,
                 'value': None
             },
             'search_fields': {
@@ -695,46 +733,6 @@ class ModelViewSetBaseCases(
         """
 
         assert issubclass(viewset, CommonViewSet)
-
-
-
-
-    def test_view_func_get_queryset_cache_result(self, viewset_mock_request):
-        """Viewset Test
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        view_set = viewset_mock_request
-
-        assert view_set._queryset is None    # Must be empty before init
-
-        q = view_set.get_queryset()
-
-        assert view_set._queryset is not None    # Must not be empty after init
-
-        assert q == view_set._queryset
-
-
-    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
-        """Viewset Test
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>._queryset`
-        """
-
-        qs = mocker.spy(viewset_mock_request.model, 'objects')
-
-        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
-
-        assert len(qs.method_calls) == 1       # one call to .all()
-        assert len(qs.mock_calls) == 2         # calls = .all(), all().filter()
-
-        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
-
-        assert len(qs.method_calls) == 1
-        assert len(qs.mock_calls) == 2
 
 
 
@@ -774,10 +772,6 @@ class ModelViewSetBasePyTest(
                 'value': None
             },
             'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
                 'type': type(None),
                 'value': None
             },
@@ -828,7 +822,6 @@ class ModelViewSetBasePyTest(
 
 
 class ModelViewSetTestCases(
-    TenancyMixinInheritedCases,
     ModelViewSetBaseCases,
     CreateCases,
     RetrieveCases,
@@ -941,10 +934,6 @@ class ModelViewSetPyTest(
                 'value': None
             },
             'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
                 'type': type(None),
                 'value': None
             },
@@ -1116,10 +1105,6 @@ class SubModelViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1261,10 +1246,6 @@ class ModelCreateViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1369,10 +1350,6 @@ class ModelListRetrieveDeleteViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1472,10 +1449,6 @@ class ModelRetrieveUpdateViewSetPyTest(
                 'value': None
             },
             'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
                 'type': type(None),
                 'value': None
             },
@@ -1582,10 +1555,6 @@ class ReadOnlyModelViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1685,10 +1654,6 @@ class ReadOnlyListModelViewSetPyTest(
                 'value': None
             },
             'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
                 'type': type(None),
                 'value': None
             },
@@ -1797,10 +1762,6 @@ class AuthUserReadOnlyModelViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1902,10 +1863,6 @@ class IndexViewsetPyTest(
                 'value': None
             },
             'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
                 'type': type(None),
                 'value': None
             },
@@ -2018,10 +1975,6 @@ class PublicReadOnlyViewSetPyTest(
                 'value': None
             },
             'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
                 'type': type(None),
                 'value': None
             },
