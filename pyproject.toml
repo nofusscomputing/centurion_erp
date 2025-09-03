@@ -1106,6 +1106,7 @@ markers = [
     "metadata: Selects all tests for api OPTIONS requests.",
     "mixin: Selects all mixin test cases.",
     "mixin_centurion: Selects all centurion mixin test cases.",
+    "mixin_tenancy: Selects all Tenancy mixin test cases.",
     "mixin_tenancypermission: Selects all Tenancy Permission mixin test cases.",
     "model_assetbase: Selects tests for model Asset Base.",
     "model_appsettings: Selects tests for model app settings.",

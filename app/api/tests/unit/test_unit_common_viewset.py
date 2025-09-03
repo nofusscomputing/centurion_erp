@@ -108,6 +108,8 @@ class MockRequest:
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class CreateCases:
 
 
@@ -139,8 +141,7 @@ class CreateCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
+
 class CreatePyTest(
     CreateCases,
 ):
@@ -151,6 +152,8 @@ class CreatePyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class DestroyCases:
 
 
@@ -182,8 +185,6 @@ class DestroyCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class DestroyPyTest(
     DestroyCases,
 ):
@@ -194,6 +195,8 @@ class DestroyPyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ListCases:
 
 
@@ -225,8 +228,6 @@ class ListCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ListPyTest(
     ListCases,
 ):
@@ -237,6 +238,8 @@ class ListPyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class RetrieveCases:
 
 
@@ -268,8 +271,6 @@ class RetrieveCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class RetrievePyTest(
     RetrieveCases,
 ):
@@ -280,6 +281,8 @@ class RetrievePyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class UpdateCases:
 
 
@@ -329,8 +332,6 @@ class UpdateCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class UpdatePyTest(
     UpdateCases,
 ):
@@ -342,6 +343,8 @@ class UpdatePyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class CommonViewSetTestCases(
     ClassTestCases,
 ):
@@ -527,8 +530,6 @@ class CommonViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class CommonViewSetPyTest(
     CommonViewSetTestCases,
 ):
@@ -573,6 +574,8 @@ class CommonViewSetPyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class CommonViewSetAPIRenderOptionsCases:    # ToDo
     """Test Cases for ViewSets that inherit from CommonViewSet
     
@@ -701,6 +704,8 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ModelViewSetBaseCases(
     TenancyMixinInheritedCases,
     CommonViewSetTestCases,
@@ -748,8 +753,6 @@ class ModelViewSetBaseCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ModelViewSetBasePyTest(
     ModelViewSetBaseCases,
 ):
@@ -911,8 +914,6 @@ class ModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ModelViewSetPyTest(
     ModelViewSetTestCases,
 ):
@@ -1067,8 +1068,6 @@ class SubModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class SubModelViewSetPyTest(
     SubModelViewSetTestCases,
 ):
@@ -1219,8 +1218,6 @@ class ModelCreateViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ModelCreateViewSetPyTest(
     ModelCreateViewSetTestCases,
 ):
@@ -1323,8 +1320,6 @@ class ModelListRetrieveDeleteViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ModelListRetrieveDeleteViewSetPyTest(
     ModelListRetrieveDeleteViewSetTestCases,
 ):
@@ -1425,8 +1420,6 @@ class ModelRetrieveUpdateViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ModelRetrieveUpdateViewSetPyTest(
     ModelRetrieveUpdateViewSetTestCases,
 ):
@@ -1528,8 +1521,6 @@ class ReadOnlyModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ReadOnlyModelViewSetPyTest(
     ReadOnlyModelViewSetTestCases,
 ):
@@ -1630,8 +1621,6 @@ class ReadOnlyListModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class ReadOnlyListModelViewSetPyTest(
     ReadOnlyListModelViewSetTestCases,
 ):
@@ -1735,8 +1724,6 @@ class AuthUserReadOnlyModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class AuthUserReadOnlyModelViewSetPyTest(
     AuthUserReadOnlyModelViewSetTestCases,
 ):
@@ -1839,8 +1826,6 @@ class IndexViewsetCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class IndexViewsetPyTest(
     IndexViewsetCases,
 ):
@@ -1951,8 +1936,6 @@ class PublicReadOnlyViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class PublicReadOnlyViewSetPyTest(
     PublicReadOnlyViewSetTestCases,
 ):
