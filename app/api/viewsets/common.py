@@ -134,10 +134,19 @@ class Create(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -188,10 +197,20 @@ class Destroy(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
+
 
         if hasattr(self.model, 'context'):
 
@@ -243,10 +262,19 @@ class List(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -301,10 +329,19 @@ class Retrieve(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -379,10 +416,19 @@ class Update(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -452,10 +498,19 @@ class Update(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -502,7 +557,10 @@ class CommonViewSet(
 
         rtn_exception = None
 
-        if isinstance(exc, django.core.exceptions.ObjectDoesNotExist):
+        if(
+            isinstance(exc, django.core.exceptions.ObjectDoesNotExist)
+            or isinstance(exc, django.http.Http404)
+        ):
 
             exc = rest_framework.exceptions.NotFound(exc.args)
 
