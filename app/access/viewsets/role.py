@@ -76,26 +76,14 @@ class ViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        if self.queryset is None:
+        if self._queryset is None:
 
-            self.queryset = self.model.objects.user(
-                user = self.request.user, permission = self._permission_required
-            ).prefetch_related(
+            self._queryset = super().get_queryset().prefetch_related(
                 'groups','permissions__content_type', 'users'
             )
 
-            if 'pk' in getattr(self, 'kwargs', {}):
 
-                self.queryset = self.model.objects.user(
-                    user = self.request.user, permission = self._permission_required
-                ).prefetch_related(
-                    'groups','permissions__content_type', 'users'
-                ).filter(
-                    pk = int( self.kwargs['pk'] )
-                )
-
-
-        return self.queryset
+        return self._queryset
 
 
     def get_serializer_class(self):
