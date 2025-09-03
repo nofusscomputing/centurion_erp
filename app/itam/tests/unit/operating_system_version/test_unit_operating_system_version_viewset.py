@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import models
+
 from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
 
 from itam.viewsets.operating_system_version import (
@@ -46,6 +48,7 @@ class ViewsetTestCases(
                 'type': type(None),
             },
             'parent_model': {
+                'type': models.base.ModelBase,
                 'value': OperatingSystem
             },
             'parent_model_pk_kwarg': {
