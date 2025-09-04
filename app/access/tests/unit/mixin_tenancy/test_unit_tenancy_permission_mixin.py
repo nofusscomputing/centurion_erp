@@ -81,6 +81,81 @@ class TenancyMixinInheritedCases(
 
 
 
+    def test_function_get_queryset_manager_calls_user(self, mocker, model, viewset):
+        """Test class function
+
+        Ensure that when function `get_queryset` the manager is first called with
+        `.user()` so as to ensure that the queryset returns only data the user has
+        access to.
+        """
+
+        manager = mocker.patch.object(model, 'objects' )
+
+        view_set = viewset()
+        view_set.request = mocker.Mock()
+        view_set.kwargs =  {}
+
+        if model._is_submodel:
+            view_set.kwargs =  {
+                view_set.model_kwarg: model._meta.model_name
+            }
+
+        view_set.get_queryset()
+
+        manager.user.assert_called()
+
+
+    def test_function_get_queryset_manager_filters_by_pk(self, mocker, model, viewset):
+        """Test class function
+
+        Ensure that when function `get_queryset` the queryset is filtered by `pk` kwarg
+        """
+
+        manager = mocker.patch.object(model, 'objects' )
+
+        view_set = viewset()
+
+        view_set.request = mocker.Mock()
+
+        view_set.kwargs =  {
+            'pk': 1
+        }
+
+        if model._is_submodel:
+            view_set.kwargs.update({
+                view_set.model_kwarg: model._meta.model_name
+            })
+
+        view_set.get_queryset()
+
+        manager.user.return_value.all.return_value.filter.assert_called_once_with(pk=1)
+
+
+    def test_function_get_queryset_manager_filters_by_model_id(self, mocker, model, viewset):
+        """Test class function
+
+        Ensure that when function `get_queryset` the queryset is filtered by `.model_kwarg` kwarg
+        """
+
+        if not model._is_submodel:
+            pytest.xfail( reason = 'test case only applicable to sub-models' )
+
+        manager = mocker.patch.object(model, 'objects' )
+
+        view_set = viewset()
+
+        view_set.request = mocker.Mock()
+
+        view_set.kwargs =  {
+            'model_id': 1,
+            view_set.model_kwarg: model._meta.model_name
+        }
+
+        view_set.get_queryset()
+
+        manager.user.return_value.all.return_value.filter.assert_called_once_with(model_id=1)
+
+
 
 @pytest.mark.module_access
 class TenancyMixinPyTest(
