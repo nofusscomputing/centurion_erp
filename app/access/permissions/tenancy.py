@@ -225,15 +225,6 @@ class TenancyPermissions(
 
         try:
 
-            if (
-                (
-                    view.model.__name__ == 'AppSettings'
-                    and request.user.is_superuser
-                )
-            ):
-
-                return True
-
 
             if not request.user.has_perm(
                 permission = view.get_permission_required(),
