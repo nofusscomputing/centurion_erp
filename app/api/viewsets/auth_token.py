@@ -2,9 +2,7 @@ from rest_framework.reverse import reverse
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from access.permissions.user import UserPermissions
-
-from api.viewsets.common import (
+from api.viewsets.common.user import (
     ModelCreateViewSet,
     ModelListRetrieveDeleteViewSet,
 )
@@ -62,8 +60,6 @@ class ViewSet(
     filterset_fields = [
         'expires',
     ]
-
-    permission_classes = [ UserPermissions ]
 
     search_fields = [
         'note',

@@ -12,7 +12,7 @@ from devops.serializers.git_group import (
     ViewSerializer,
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

@@ -2,7 +2,7 @@ import pytest
 
 from access.permissions.user import UserPermissions
 
-from api.tests.unit.test_unit_common_viewset import (
+from api.tests.unit.viewset.test_unit_user_viewset import (
     ModelCreateViewSetInheritedCases,
     ModelListRetrieveDeleteViewSetInheritedCases,
 )

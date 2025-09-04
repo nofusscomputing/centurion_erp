@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from rest_framework.response import Response
 
-from api.viewsets.common import ModelCreateViewSet
+from api.viewsets.common.tenancy import ModelCreateViewSet
 
 from core import exceptions as centurion_exception
 from core.http.common import Http

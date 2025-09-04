@@ -4,7 +4,7 @@ from django.apps import apps
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, PolymorphicProxySerializer
 
-from api.viewsets.common import SubModelViewSet
+from api.viewsets.common.tenancy import SubModelViewSet
 
 from core.models.ticket_comment_base import (
     TicketBase,

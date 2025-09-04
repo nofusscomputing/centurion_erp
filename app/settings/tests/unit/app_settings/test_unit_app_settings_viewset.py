@@ -2,7 +2,7 @@ import pytest
 
 from access.permissions.super_user import SuperUserPermissions
 
-from api.tests.unit.test_unit_common_viewset import (
+from api.tests.unit.viewset.test_unit_super_user_viewset import (
     ModelRetrieveUpdateViewSetInheritedCases
 )
 

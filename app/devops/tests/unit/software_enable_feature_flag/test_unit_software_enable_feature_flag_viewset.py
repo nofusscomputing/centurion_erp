@@ -2,7 +2,7 @@ import pytest
 
 from django.db import models
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from devops.viewsets.software_enable_feature_flag import (
     Software,

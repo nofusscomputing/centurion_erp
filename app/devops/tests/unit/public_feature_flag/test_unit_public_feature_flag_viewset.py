@@ -3,7 +3,7 @@ from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from api.tests.unit.test_unit_common_viewset import PublicReadOnlyViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_public_viewset import PublicReadOnlyViewSetInheritedCases
 
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from devops.viewsets.public_feature_flag import ViewSet

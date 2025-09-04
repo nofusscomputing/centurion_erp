@@ -1,6 +1,6 @@
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from project_management.viewsets.project_milestone import (
     ProjectMilestone,
@@ -115,6 +115,59 @@ class ViewsetTestCases(
 
         assert len(qs.method_calls) == initial_method_calls
         assert len(qs.mock_calls) == initial_mock_calls
+
+
+
+    def test_function_get_queryset_manager_calls_user(self, mocker, model, viewset,
+        model_kwargs,
+    ):
+        """Test class function
+
+        Ensure that when function `get_queryset` the manager is first called with
+        `.user()` so as to ensure that the queryset returns only data the user has
+        access to.
+        """
+
+        manager = mocker.patch.object(model, 'objects' )
+
+        view_set = viewset()
+        view_set.request = mocker.Mock()
+        view_set.kwargs =  {
+                'project_id': model_kwargs['project'].id
+        }
+
+        view_set.get_queryset()
+
+        manager.user.assert_called()
+
+
+    def test_function_get_queryset_manager_filters_by_pk(self, mocker, model, viewset,
+        model_kwargs,
+    ):
+        """Test class function
+
+        Ensure that when function `get_queryset` the queryset is filtered by `pk` kwarg
+        """
+
+        manager = mocker.patch.object(model, 'objects' )
+
+        view_set = viewset()
+
+        view_set.request = mocker.Mock()
+
+        view_set.kwargs =  {
+            'pk': 1,
+            'project_id': model_kwargs['project'].id
+        }
+
+        if model._is_submodel:
+            view_set.kwargs.update({
+                view_set.model_kwarg: model._meta.model_name
+            })
+
+        view_set.get_queryset()
+
+        manager.user.return_value.all.return_value.filter.assert_called_once_with(pk=1)
 
 
 

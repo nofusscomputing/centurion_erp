@@ -2,7 +2,7 @@ from datetime import datetime
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import PublicReadOnlyViewSet
+from api.viewsets.common.public import PublicReadOnlyViewSet
 
 from devops.models.check_ins import CheckIn
 from devops.serializers.public_feature_flag import (

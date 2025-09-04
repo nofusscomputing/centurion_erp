@@ -6,7 +6,7 @@ from access.serializers.role import (
     ViewSerializer,
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

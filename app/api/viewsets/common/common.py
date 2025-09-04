@@ -7,13 +7,9 @@ from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
 
-from rest_framework import viewsets, pagination
 from rest_framework.exceptions import APIException
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework_json_api.metadata import JSONAPIMetadata
-
-from access.mixins.tenancy import TenancyMixin
+from rest_framework import viewsets
 
 from api.permissions.default import DefaultDenyPermission
 from api.react_ui_metadata import ReactUIMetadata
@@ -941,7 +937,6 @@ class CommonViewSet(
 
 
 class ModelViewSetBase(
-    TenancyMixin,
     CommonViewSet
 ):
 
@@ -1011,7 +1006,7 @@ class ModelViewSetBase(
 
 
 
-class ModelViewSet(
+class CommonModelViewSet(
     ModelViewSetBase,
     Create,
     Retrieve,
@@ -1025,8 +1020,8 @@ class ModelViewSet(
 
 
 
-class SubModelViewSet(
-    ModelViewSet,
+class CommonSubModelViewSet(
+    CommonModelViewSet,
 ):
 
     base_model = None
@@ -1165,8 +1160,8 @@ class SubModelViewSet(
 
 
 
-class SubModelViewSet_ReWrite(
-    SubModelViewSet,
+class CommonSubModelViewSet_ReWrite(
+    CommonSubModelViewSet,
 ):
     """Temp class for SubModelViewSet
 
@@ -1314,7 +1309,7 @@ class SubModelViewSet_ReWrite(
 
 
 
-class ModelCreateViewSet(
+class CommonModelCreateViewSet(
     ModelViewSetBase,
     Create,
     viewsets.GenericViewSet,
@@ -1324,7 +1319,7 @@ class ModelCreateViewSet(
 
 
 
-class ModelListRetrieveDeleteViewSet(
+class CommonModelListRetrieveDeleteViewSet(
     ModelViewSetBase,
     List,
     Retrieve,
@@ -1337,7 +1332,7 @@ class ModelListRetrieveDeleteViewSet(
 
 
 
-class ModelRetrieveUpdateViewSet(
+class CommonModelRetrieveUpdateViewSet(
     ModelViewSetBase,
     Retrieve,
     Update,
@@ -1349,7 +1344,7 @@ class ModelRetrieveUpdateViewSet(
 
 
 
-class ReadOnlyModelViewSet(
+class CommonReadOnlyModelViewSet(
     ModelViewSetBase,
     Retrieve,
     List,
@@ -1361,7 +1356,7 @@ class ReadOnlyModelViewSet(
 
 
 
-class ReadOnlyListModelViewSet(
+class CommonReadOnlyListModelViewSet(
     ModelViewSetBase,
     List,
     viewsets.GenericViewSet,
@@ -1372,65 +1367,65 @@ class ReadOnlyListModelViewSet(
 
 
 
-class AuthUserReadOnlyModelViewSet(
-    ReadOnlyModelViewSet
-):
-    """Authenticated User Read-Only Viewset
+# class AuthUserReadOnlyModelViewSet(
+#     CommonReadOnlyModelViewSet
+# ):
+#     """Authenticated User Read-Only Viewset
 
-    Use this class if the model only requires that the user be authenticated
-    to obtain view permission.
+#     Use this class if the model only requires that the user be authenticated
+#     to obtain view permission.
 
-    Args:
-        ReadOnlyModelViewSet (class): Read-Only base class
-    """
+#     Args:
+#         ReadOnlyModelViewSet (class): Read-Only base class
+#     """
 
-    permission_classes = [
-        IsAuthenticated,
-    ]
-
-
-class IndexViewset(
-    ModelViewSetBase,
-):
-
-    permission_classes = [
-        IsAuthenticated,
-    ]
+#     permission_classes = [
+#         IsAuthenticated,
+#     ]
 
 
-class StaticPageNumbering(
-    pagination.PageNumberPagination
-):
-    """Enforce Page Numbering
+# class IndexViewset(
+#     ModelViewSetBase,
+# ):
 
-    Enfore results per page min/max to static value that cant be changed.
-    """
-
-    page_size = 20
-
-    max_page_size = 20
+#     permission_classes = [
+#         IsAuthenticated,
+#     ]
 
 
+# class StaticPageNumbering(
+#     pagination.PageNumberPagination
+# ):
+#     """Enforce Page Numbering
 
-class PublicReadOnlyViewSet(
-    ReadOnlyListModelViewSet
-):
-    """Public Viewable ViewSet
+#     Enfore results per page min/max to static value that cant be changed.
+#     """
 
-    User does not need to be authenticated. This viewset is intended to be
-    inherited by viewsets that are intended to be consumed by unauthenticated
-    public users.
+#     page_size = 20
 
-    URL **must** be prefixed with `public`
+#     max_page_size = 20
 
-    Args:
-        ReadOnlyModelViewSet (ViewSet): Common Read-Only Viewset
-    """
 
-    pagination_class = StaticPageNumbering
 
-    permission_classes = [
-        IsAuthenticatedOrReadOnly,
-    ]
+# class PublicReadOnlyViewSet(
+#     ReadOnlyListModelViewSet
+# ):
+#     """Public Viewable ViewSet
 
-    metadata_class = JSONAPIMetadata
+#     User does not need to be authenticated. This viewset is intended to be
+#     inherited by viewsets that are intended to be consumed by unauthenticated
+#     public users.
+
+#     URL **must** be prefixed with `public`
+
+#     Args:
+#         ReadOnlyModelViewSet (ViewSet): Common Read-Only Viewset
+#     """
+
+#     pagination_class = StaticPageNumbering
+
+#     permission_classes = [
+#         IsAuthenticatedOrReadOnly,
+#     ]
+
+#     metadata_class = JSONAPIMetadata

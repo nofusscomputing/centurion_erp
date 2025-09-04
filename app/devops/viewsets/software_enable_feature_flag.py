@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 from devops.serializers.software_enable_feature_flag import (
     SoftwareEnableFeatureFlag,

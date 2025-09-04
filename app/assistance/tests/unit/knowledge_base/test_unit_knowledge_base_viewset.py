@@ -1,6 +1,6 @@
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from assistance.viewsets.knowledge_base import (
     KnowledgeBase,

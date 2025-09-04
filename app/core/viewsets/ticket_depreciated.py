@@ -1,5 +1,5 @@
 from api.exceptions import UnknownTicketType
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 from access.models.tenant import Tenant as Organization
 

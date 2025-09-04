@@ -1,7 +1,6 @@
 from django.db import models
 
 from access.models.tenancy import Tenant
-from access.models.tenancy_abstract import TenancyAbstractModel
 from access.permissions.tenancy import TenancyPermissions
 
 from core.mixins.centurion import Centurion

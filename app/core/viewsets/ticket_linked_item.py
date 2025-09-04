@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 from assistance.models.knowledge_base import KnowledgeBase
 

@@ -28,7 +28,7 @@ from devops.serializers.git_repository.gitlab import (
     ViewSerializer as GitLabViewSerializer,
 )
 
-from api.viewsets.common import (
+from api.viewsets.common.tenancy import (
     SubModelViewSet_ReWrite,
 )
 

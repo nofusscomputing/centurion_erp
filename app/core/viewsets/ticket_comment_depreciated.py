@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, PolymorphicProxySerializer
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 from core import exceptions as centurion_exceptions
 from core.serializers.ticket_comment_depreciated import (    # pylint: disable=W0611:unused-import

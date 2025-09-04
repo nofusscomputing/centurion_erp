@@ -5,7 +5,7 @@ from access.viewsets.organization import (
     ViewSet,
 )
 
-from api.tests.unit.test_unit_common_viewset import (
+from api.tests.unit.viewset.test_unit_tenancy_viewset import (
     ModelViewSetInheritedCases
 )
 

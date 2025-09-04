@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 
 from rest_framework.reverse import reverse
 
-from api.viewsets.common import SubModelViewSet
+from api.viewsets.common.tenancy import SubModelViewSet
 
 from core.models.ticket_base import TicketBase
 

@@ -2,7 +2,7 @@ from django.db.models import Q
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from api.viewsets.common import ModelListRetrieveDeleteViewSet
+from api.viewsets.common.tenancy import ModelListRetrieveDeleteViewSet
 
 from core.models.ticket.ticket import Ticket
 from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-import
