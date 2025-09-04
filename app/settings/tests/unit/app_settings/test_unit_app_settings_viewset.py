@@ -1,5 +1,7 @@
 import pytest
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.tests.unit.test_unit_common_viewset import (
     ModelRetrieveUpdateViewSetInheritedCases
 )
@@ -49,6 +51,9 @@ class ViewsetTestCases(
             },
             'serializer_class': {
                 'type': type(None),
+            },
+            'permission_classes': {
+                'value': [ SuperUserPermissions ],
             },
             'search_fields': {
                 'value': []

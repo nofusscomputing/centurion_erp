@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.viewsets.common import ModelRetrieveUpdateViewSet
 
 # This import only exists so that the migrations can be created
@@ -63,11 +65,7 @@ class ViewSet(ModelRetrieveUpdateViewSet):
 
     model = AppSettings
 
-    # filterset_fields = [
-    #     'cluster',
-    #     'devices',
-    #     'software',
-    # ]
+    permission_classes = [ SuperUserPermissions ]
 
     view_description = 'Centurion Settings'
 
