@@ -540,7 +540,7 @@ class CommonViewSet(
     """
 
 
-    def _django_to_api_exception( self, exc ):
+    def _django_to_api_exception( self, ex ):
         """Convert Django exception to DRF Exception
 
         Args:
@@ -556,25 +556,28 @@ class CommonViewSet(
         rtn_exception = None
 
         if(
-            isinstance(exc, django.core.exceptions.ObjectDoesNotExist)
-            or isinstance(exc, django.http.Http404)
+            isinstance(ex, django.core.exceptions.ObjectDoesNotExist)
+            or isinstance(ex, django.http.Http404)
         ):
 
-            exc = rest_framework.exceptions.NotFound(exc.args)
+            exc = rest_framework.exceptions.NotFound(ex.args)
 
-        elif isinstance(exc, django.core.exceptions.PermissionDenied):
-
-
-            exc = rest_framework.exceptions.PermissionDenied(exc.error_dict)
-
-        elif isinstance(exc, django.core.exceptions.ValidationError):
+        elif isinstance(ex, django.core.exceptions.PermissionDenied):
 
 
-            exc = rest_framework.exceptions.ValidationError(exc.error_dict)
+            exc = rest_framework.exceptions.PermissionDenied(ex.error_dict)
+
+        elif isinstance(ex, django.core.exceptions.ValidationError):
+
+
+            exc = rest_framework.exceptions.ValidationError(ex.error_dict)
 
         else:
 
-            exc = ValueError('20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug.')
+            exc = APIException(
+                detail = f'20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug. msg was {ex.msg}',
+                code = 'unknown_exception'
+            )
 
         try:
 
