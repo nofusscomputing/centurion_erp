@@ -11,6 +11,8 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework import viewsets
 
+from core.mixins.centurion import Centurion
+
 from api.permissions.default import DefaultDenyPermission
 from api.react_ui_metadata import ReactUIMetadata
 
@@ -742,31 +744,41 @@ class CommonViewSet(
 
     def get_queryset(self):
 
-        if self._queryset is not None:
+        if self._queryset is None:
 
-            return self._queryset
+            if(
+                issubclass(self.model, Centurion)
+                and hasattr(self.model.objects, 'user')
+            ):
 
-        self._queryset = self.model.objects.all()
+                self._queryset = self.model.objects.user(
+                    user = self.request.user,
+                    permission = self._permission_required
+                ).all()
 
-        qs_filter = {}
+            else:
 
-        if 'pk' in getattr(self, 'kwargs', {}):
+                self._queryset = self.model.objects.all()
 
-            qs_filter.update({
-                'pk': int( self.kwargs['pk'] )
-            })
+            qs_filter = {}
 
-        if(
-            getattr(self.model, '_is_submodel', False)
-            and 'model_id' in self.kwargs
-        ):
+            if 'pk' in getattr(self, 'kwargs', {}):
 
-            qs_filter.update({
-                'model_id': int( self.kwargs['model_id'] )
-            })
+                qs_filter.update({
+                    'pk': int( self.kwargs['pk'] )
+                })
+
+            if(
+                getattr(self.model, '_is_submodel', False)
+                and 'model_id' in self.kwargs
+            ):
+
+                qs_filter.update({
+                    'model_id': int( self.kwargs['model_id'] )
+                })
 
 
-        self._queryset = self._queryset.filter( **qs_filter  )
+            self._queryset = self._queryset.filter( **qs_filter  )
 
 
         return self._queryset

@@ -3,8 +3,6 @@ from django.db import models
 from access.models.tenancy import Tenant
 from access.permissions.tenancy import TenancyPermissions
 
-from core.mixins.centurion import Centurion
-
 
 
 class TenancyMixin:
@@ -65,43 +63,3 @@ class TenancyMixin:
         """
 
         return self.get_parent_model().objects.get(pk=self.kwargs[self.parent_model_pk_kwarg])
-
-
-
-    def get_queryset(self):
-
-        if self._queryset is None:
-
-            if issubclass(self.model, Centurion):
-
-                self._queryset = self.model.objects.user(
-                    user = self.request.user,
-                    permission = self._permission_required
-                ).all()
-
-            else:
-
-                self._queryset = self.model.objects.all()
-
-            qs_filter = {}
-
-            if 'pk' in getattr(self, 'kwargs', {}):
-
-                qs_filter.update({
-                    'pk': int( self.kwargs['pk'] )
-                })
-
-            if(
-                getattr(self.model, '_is_submodel', False)
-                and 'model_id' in self.kwargs
-            ):
-
-                qs_filter.update({
-                    'model_id': int( self.kwargs['model_id'] )
-                })
-
-
-            self._queryset = self._queryset.filter( **qs_filter  )
-
-
-        return self._queryset
