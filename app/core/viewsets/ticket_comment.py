@@ -22,13 +22,11 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
         if issubclass(model, TicketCommentBase):
 
-            if model._meta.model_name == 'ticketcommentbase':
-                
-                serializer_name = 'ticket_comment'
+            serializer_name = 'ticketcommentbase'
 
-            else :
+            if model._meta.model_name != 'ticketcommentbase':
                 
-                serializer_name = 'ticket_comment' + '_' + model._meta.sub_model_type
+                serializer_name += '_' + model._meta.sub_model_type
 
 
             serializer_module = importlib.import_module(

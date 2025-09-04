@@ -18,7 +18,7 @@ def model(request):
 @pytest.fixture(scope='function')
 def create_serializer():
 
-    from core.serializers.ticket import ModelSerializer
+    from core.serializers.ticketbase import ModelSerializer
 
 
     yield ModelSerializer

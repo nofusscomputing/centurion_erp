@@ -27,7 +27,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
         if issubclass(model, TicketBase):
 
-            serializer_name = 'ticket'
+            serializer_name = 'ticketbase'
 
             if model._meta.sub_model_type != 'ticket':
                 
