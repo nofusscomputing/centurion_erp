@@ -5,7 +5,7 @@ from rest_framework.permissions import (
 )
 
 from api.tests.unit.test_unit_common_viewset import (
-    CommonReadOnlyModelViewSet,
+    CommonReadOnlyModelViewSetInheritedCases,
     ModelViewSetBaseCases,
 )
 
@@ -20,7 +20,7 @@ from api.viewsets.common.authenticated import (
 @pytest.mark.permissions_authenticated_user
 @pytest.mark.permissions
 class AuthUserReadOnlyModelViewSetTestCases(
-    CommonReadOnlyModelViewSet
+    CommonReadOnlyModelViewSetInheritedCases
 ):
 
     @property

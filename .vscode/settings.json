@@ -5,7 +5,7 @@
         "!python"
     ],
     "python.testing.pytestArgs": [
-        "--override-ini", "addopts=",
+        "--override-ini", "addopts=", "--capture=no",
         "--no-migrations",
         "--tb=long", "--verbosity=2", "--showlocals",
         "app",
