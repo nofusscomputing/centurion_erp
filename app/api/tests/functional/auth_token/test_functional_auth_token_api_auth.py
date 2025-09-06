@@ -22,6 +22,7 @@ class TokenAuthenticationTestCases:
 
         the_model = model_instance( kwargs_create = kwargs )
         the_model.token = model().token_hash(kwargs['token'])
+        the_model.expires = (datetime.datetime.now() + relativedelta(months=1)).isoformat(timespec='seconds') + 'Z'
         the_model.save()
 
         yield {
