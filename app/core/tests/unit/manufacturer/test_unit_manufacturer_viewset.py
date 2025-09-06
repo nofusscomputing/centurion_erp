@@ -66,7 +66,7 @@ class ViewsetTestCases(
 
 
 
-class KnowledgeBaseViewsetInheritedCases(
+class ManufacturerViewsetInheritedCases(
     ViewsetTestCases,
 ):
     pass
@@ -74,7 +74,7 @@ class KnowledgeBaseViewsetInheritedCases(
 
 
 @pytest.mark.module_core
-class KnowledgeBaseViewsetPyTest(
+class ManufacturerViewsetPyTest(
     ViewsetTestCases,
 ):
 
