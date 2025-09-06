@@ -6,7 +6,7 @@ from django.test import Client, TestCase
 
 from access.models.tenant import Tenant as Organization
 
-from api.tests.unit.test_unit_common_viewset import IndexViewsetInheritedCases
+from api.tests.unit.viewset.test_unit_authenticated_viewset import IndexViewsetInheritedCases
 
 from api.viewsets.index import Index
 

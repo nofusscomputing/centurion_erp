@@ -73,3 +73,6 @@ class AppSettingsMetadata(
 
         self.url_kwargs = self.url_view_kwargs
 
+        self.view_user.is_superuser = True
+        self.view_user.save()
+

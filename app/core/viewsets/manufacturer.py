@@ -8,7 +8,7 @@ from core.serializers.manufacturer import (    # pylint: disable=W0611:unused-im
     ManufacturerViewSerializer
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

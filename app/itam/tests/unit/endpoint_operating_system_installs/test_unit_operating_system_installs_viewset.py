@@ -4,7 +4,7 @@ from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from itam.models.operating_system import OperatingSystem
 from itam.viewsets.device_operating_system import ViewSet

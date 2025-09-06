@@ -102,6 +102,41 @@ class AdditionalTestCases:
 
 
 
+    def test_permission_metdata(self, model_instance, api_request_permissions,
+        model_kwargs
+    ):
+        """ Check correct permission for view metadata
+
+        Attempt to view as user with view permission
+        """
+
+        client = Client()
+
+        api_request_permissions['user']['view'].is_superuser = True
+        api_request_permissions['user']['view'].save()
+
+        client.force_login( api_request_permissions['user']['view'] )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        view_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        response = client.options(
+            path = view_item.get_url( many = False )
+        )
+
+        api_request_permissions['user']['view'].is_superuser = False
+        api_request_permissions['user']['view'].save()
+
+        assert response.status_code == 200, response.content
+
+
+
     def test_permission_view(self, model_instance, api_request_permissions):
         """ Check correct permission for view
 

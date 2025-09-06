@@ -28,7 +28,7 @@ from devops.serializers.git_repository.gitlab import (
     ViewSerializer as GitLabViewSerializer,
 )
 
-from api.viewsets.common import (
+from api.viewsets.common.tenancy import (
     SubModelViewSet_ReWrite,
 )
 
@@ -229,7 +229,7 @@ class ViewSet(
 
         if 'pk' in self.kwargs:
 
-            return self.queryset[0].get_url( request = self.request )
+            return self._queryset[0].get_url( request = self.request )
 
         return None
 

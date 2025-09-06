@@ -5,7 +5,7 @@ from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import SubModelViewSetInheritedCases
 
 from core.viewsets.ticket_comment import (
     NoDocsViewSet,

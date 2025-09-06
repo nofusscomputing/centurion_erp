@@ -10,7 +10,7 @@ from itam.serializers.operating_system_version import (    # pylint: disable=W06
     OperatingSystemVersionModelSerializer,
     OperatingSystemVersionViewSerializer
 )
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

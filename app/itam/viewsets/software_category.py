@@ -7,7 +7,7 @@ from itam.serializers.software_category import (    # pylint: disable=W0611:unus
     SoftwareCategoryModelSerializer,
     SoftwareCategoryViewSerializer
 )
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

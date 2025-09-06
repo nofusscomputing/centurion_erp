@@ -129,7 +129,7 @@ class NoteMetaModel(
             )
 
 
-        self.organization = self.model.organization
+        self.organization = self.model.get_tenant()
 
         if not self.id and self.created_by is None:
 

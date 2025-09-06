@@ -10,7 +10,7 @@ from drf_spectacular.utils import (
     PolymorphicProxySerializer
 )
 
-from api.viewsets.common import SubModelViewSet_ReWrite
+from api.viewsets.common.tenancy import SubModelViewSet_ReWrite
 
 from core.models.centurion_notes import CenturionModelNote
 

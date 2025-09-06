@@ -4,98 +4,11 @@ from django.db import models
 
 from rest_framework.reverse import reverse
 
+from access.managers.tenancy import TenancyManager
 from access.models.tenant import Tenant
 
 from core import exceptions as centurion_exceptions
-from core.middleware.get_request import get_request
 from core.mixins.history_save import SaveHistory
-
-
-
-class TenancyManager(models.Manager):
-    """Multi-Tennant Object Manager
-
-    This manager specifically caters for the multi-tenancy features of Centurion ERP.
-    """
-
-
-    def get_queryset(self):
-        """ Fetch the data
-
-        This function filters the data fetched from the database to that which is from the organizations
-        the user is a part of.
-
-        !!! danger "Requirement"
-            This method may be overridden however must still be called from the overriding function. i.e. `super().get_queryset()`
-
-        ## Workflow
-
-        This functions workflow is as follows:
-
-        - Fetch the user from the request
-
-        - Check if the user is authenticated
-
-        - Iterate over the users teams
-
-        - Store unique organizations from users teams
-
-        - return results
-
-        Returns:
-            (queryset): **super user**: return unfiltered data.
-            (queryset): **not super user**: return data from the stored unique organizations.
-        """
-
-        request = get_request()
-
-        user_organizations: list(str()) = []
-
-        has_tenant_field = False
-        if(
-            getattr(self.model, 'organization', None) is not None
-            or getattr(self.model, 'tenant', None) is not None
-        ):
-            has_tenant_field = True
-
-
-        if request:
-
-            if request.app_settings.global_organization:
-
-                user_organizations += [ request.app_settings.global_organization.id ]
-
-
-            user = request.user
-
-
-            if user.is_authenticated:
-
-                user_organizations += request.user.get_tenancies( int_list = True)
-
-
-                if len(user_organizations) > 0 and not user.is_superuser:
-
-                    if has_tenant_field:
-
-                        return super().get_queryset().select_related('organization').filter(
-                            models.Q(organization__in=user_organizations)
-                        )
-
-                    else:
-
-                        # return super().get_queryset().filter(
-                        #     models.Q(organization__in=user_organizations)
-                        # )
-
-                        return super().get_queryset().filter()
-
-
-        if has_tenant_field:
-            return super().get_queryset().select_related('organization')
-
-
-        return super().get_queryset()
 
 
 
@@ -194,7 +107,7 @@ class TenancyObject(SaveHistory):
     """
 
     _log: logging.Logger = None
-    
+
     def get_log(self):
 
         if self._log is None:
@@ -284,7 +197,7 @@ class TenancyObject(SaveHistory):
         return {
             'model_id': self.id
         }
- 
+
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 

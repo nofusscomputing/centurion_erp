@@ -13,6 +13,10 @@ from .mixin_centurion import (
     mixin_centurion,
 )
 
+from .mixin_tenancy import (
+    mixin_tenancy,
+)
+
 from .model_appsettings import (
     kwargs_appsettings,
     model_appsettings,

@@ -2,7 +2,7 @@ from django.db.models import Q
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from api.viewsets.common import ModelListRetrieveDeleteViewSet
+from api.viewsets.common.tenancy import ModelListRetrieveDeleteViewSet
 
 from core.models.ticket.ticket import Ticket
 from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-import
@@ -110,7 +110,9 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
 
             return self.queryset
 
-        self.queryset = RelatedTickets.objects.filter(
+        self.queryset = RelatedTickets.user(
+                    user = self.request.user, permission = self._permission_required
+        ).objects.filter(
             Q(from_ticket_id_id=self.kwargs['ticket_id'])
                 |
             Q(to_ticket_id_id=self.kwargs['ticket_id'])

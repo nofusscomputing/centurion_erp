@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_serializer
 
 from core.models.ticket_comment_solution import TicketCommentSolution
-from core.serializers.ticket_comment import (
+from core.serializers.ticketcommentbase import (
     BaseSerializer,
     ModelSerializer as TicketCommentBaseModelSerializer,
     ViewSerializer as TicketCommentBaseViewSerializer

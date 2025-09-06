@@ -5,7 +5,7 @@ from access.viewsets.role import (
     ViewSet,
 )
 
-from api.tests.unit.test_unit_common_viewset import (
+from api.tests.unit.viewset.test_unit_tenancy_viewset import (
     ModelViewSetInheritedCases
 )
 
@@ -47,9 +47,6 @@ class ViewsetTestCases(
             'model_documentation': {
                 'type': type(None),
             },
-            'queryset': {
-                'type': type(None),
-            },
             'serializer_class': {
                 'type': type(None),
             },
@@ -69,21 +66,6 @@ class ViewsetTestCases(
                 'type': type(None),
             }
         }
-
-
-    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
-
-        qs = mocker.spy(viewset_mock_request.model, 'objects')
-
-        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
-
-        assert len(qs.method_calls) == 1       # one call to .all()
-        assert len(qs.mock_calls) == 1         # calls = .all(), all().filter()
-
-        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
-
-        assert len(qs.method_calls) == 1
-        assert len(qs.mock_calls) == 1
 
 
 

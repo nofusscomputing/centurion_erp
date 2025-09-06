@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 from assistance.models.knowledge_base import KnowledgeBase
 
@@ -260,12 +260,16 @@ class ViewSet(ModelViewSet):
 
         if 'ticket_id' in self.kwargs:
 
-            self.queryset = TicketLinkedItem.objects.filter(ticket=self.kwargs['ticket_id']).order_by('id')
+            self.queryset = TicketLinkedItem.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).filter(ticket=self.kwargs['ticket_id']).order_by('id')
 
         elif 'item_id' in self.kwargs:
 
 
-            self.queryset = TicketLinkedItem.objects.filter(
+            self.queryset = TicketLinkedItem.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).filter(
                 item=int(self.kwargs['item_id']),
                 item_type = self.item_type
             )

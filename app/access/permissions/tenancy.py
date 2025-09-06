@@ -3,6 +3,7 @@ import traceback
 from rest_framework.exceptions import (
     MethodNotAllowed,
     NotAuthenticated,
+    ParseError,
     PermissionDenied
 )
 from rest_framework.permissions import DjangoObjectPermissions
@@ -14,7 +15,7 @@ from core.mixins.centurion import Centurion
 
 
 
-class TenancyPermissionMixin(
+class TenancyPermissions(
     DjangoObjectPermissions,
 ):
     """Tenant Permission Mixin
@@ -44,6 +45,8 @@ class TenancyPermissionMixin(
 
     _is_tenancy_model: bool = None
 
+
+
     def is_tenancy_model(self, view) -> bool:
         """Determin if the Model is a `Tenancy` Model
 
@@ -59,28 +62,107 @@ class TenancyPermissionMixin(
             False (bool): Model is not a Tenancy model.
         """
 
-        if(
-            isinstance(self._is_tenancy_model, type(None))
-            and isinstance(getattr(view, '_is_tenancy_model', None), type(None))
-        ):
+        if isinstance(self._is_tenancy_model, type(None)):
 
-            if hasattr(view, 'model'):
+            self._is_tenancy_model = getattr(view, '_is_tenancy_model', None)
+
+            if isinstance(self._is_tenancy_model, type(None)):
 
                 self._is_tenancy_model = issubclass(view.model, Centurion)
 
-                if view.get_parent_model():
 
-                    self._is_tenancy_model = issubclass(
-                        view.get_parent_model(), Centurion)
+            if view.get_parent_model():
 
-        elif(
-            isinstance(self._is_tenancy_model, type(None))
-            and not isinstance(getattr(view, '_is_tenancy_model', None), type(None))
-        ):
+                self._is_tenancy_model = issubclass(
+                    view.get_parent_model(), Centurion)
 
-            self._is_tenancy_model = getattr(view, '_is_tenancy_model')
 
         return self._is_tenancy_model
+
+
+
+    def get_tenancy(self, view, obj = None) -> Tenant:
+        """Fetch the objects Tenancy
+
+        Args:
+            view (ViewSet): The viewset for this request
+            obj (Model, optional): The model to obtain the tenancy from. Defaults to None.
+
+        Raises:
+            ParseError: The URL kwarg for tenancy and the user supplied tenancy does not match,
+
+        Returns:
+            Tenant: Tenancy the object belongs or will belong to.
+        """
+
+        tenant = None
+
+        if obj:
+
+            tenant = obj.get_tenant()
+
+        elif view.request:
+
+            pk = view.kwargs.get('pk', None)
+
+            if not pk:
+
+                data = getattr(view.request, 'data', None)
+
+                tenant_kwarg = view.kwargs.get('organization_id', None)
+                tenant_id = tenant_kwarg
+                tenant_data = None
+
+                if data:
+
+                    tenant_data = data.get('organization_id', None)
+
+
+                    if not tenant_data:
+
+                        tenant_data = data.get('organization', None)
+
+
+                    tenant_id = tenant_data
+
+                if tenant_kwarg and tenant_data:
+
+                    if int(tenant_kwarg) != int(tenant_data):
+
+                        view.get_log().getChild('authorization').warn(
+                            msg = str(
+                                'Tenant within supplied path and tenant within user supplied'
+                                'data do not match'
+                            )
+                        )
+
+                        # if tenancy in path and user supplied data they should match.
+                        # if not, could indicate something untoward.
+                        raise ParseError(
+                            detail = (
+                                'tenancy mismatch. both path and supplied tenancy must match'
+                            ),
+                            code = 'tenancy_mismatch'
+                        )
+
+
+                if tenant_id:
+
+                    tenant = Tenant.objects.get(
+                        pk = int( tenant_id )
+                    )
+
+
+            elif pk:
+
+                obj = view.model.objects.get( pk = int( pk ) )
+
+                if self.is_tenancy_model( view = view ):
+
+                    tenant = obj.get_tenant()
+
+
+        return tenant
 
 
 
@@ -137,38 +219,6 @@ class TenancyPermissionMixin(
 
         try:
 
-            if (
-                (
-                    view.model.__name__ == 'AppSettings'
-                    and request.user.is_superuser
-                )
-                or
-                (
-                    view.model.__name__ == 'UserSettings'
-                    and request._user.id == int(view.kwargs.get('pk', 0))
-                )
-                or (
-                    view.model.__name__ == 'AuthToken'
-                    and request._user.id == int(view.kwargs.get('model_id', 0))
-                )
-            ):
-
-                return True
-
-            elif (
-                (
-                    view.model.__name__ == 'UserSettings'
-                    and request._user.id != int(view.kwargs.get('pk', 0))
-                )
-                or (
-                    view.model.__name__ == 'AuthToken'
-                    and request._user.id != int(view.kwargs.get('model_id', 0))
-                )
-            ):
-
-
-                return False
-
 
             if not request.user.has_perm(
                 permission = view.get_permission_required(),
@@ -180,8 +230,8 @@ class TenancyPermissionMixin(
                 )
 
 
-            obj_organization: Tenant = view.get_obj_organization(
-                request = request
+            obj_organization: Tenant = self.get_tenancy(
+                view = view
             )
 
             if(
@@ -277,25 +327,7 @@ class TenancyPermissionMixin(
                 return False
 
 
-            if (
-                (
-                    view.model.__name__ == 'UserSettings'
-                    and request._user.id == int(view.kwargs.get('pk', 0))
-                )
-                or (
-                    view.model.__name__ == 'AuthToken'
-                    and request._user.id == int(view.kwargs.get('model_id', 0))
-                )
-                or (    # org=None is the application wide settings.
-                    view.model.__name__ == 'AppSettings'
-                    and request.user.is_superuser
-                    and obj.organization is None
-                )
-            ):
-
-                return True
-
-            elif self.is_tenancy_model( view ):
+            if self.is_tenancy_model( view ):
 
                 if(
                     (
@@ -305,7 +337,7 @@ class TenancyPermissionMixin(
                         )
                         or request.user.is_superuser
                     )
-                    and view.get_obj_organization( obj = obj )
+                    and self.get_tenancy( view = view, obj = obj )
                 ):
 
                     return True

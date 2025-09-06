@@ -1,3 +1,8 @@
+## Version 1.22.0
+
+This release is an out of band release targeting the audit in [#980](https://github.com/nofusscomputing/centurion_erp/issues/980)
+
+
 ## Version 1.21.0
 
 - Model [Roles](https://nofusscomputing.com/projects/centurion_erp/user/access/role/) now available, as feature flag `2025-00003` has been removed from Centurion ERPs feature flag checks.

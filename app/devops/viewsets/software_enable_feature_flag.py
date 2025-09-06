@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 from devops.serializers.software_enable_feature_flag import (
     SoftwareEnableFeatureFlag,
@@ -84,7 +84,9 @@ class ViewSet(ModelViewSet):
             getattr(self, '_back_url', None) is None
         ):
 
-            return_model = Software.objects.get(
+            return_model = Software.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).get(
                 pk = self.kwargs['software_id']
             )
 
@@ -99,7 +101,9 @@ class ViewSet(ModelViewSet):
 
         if getattr(self, '_return_url', None) is None:
 
-            return_model = Software.objects.get(
+            return_model = Software.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).get(
                 pk = self.kwargs['software_id']
             )
 

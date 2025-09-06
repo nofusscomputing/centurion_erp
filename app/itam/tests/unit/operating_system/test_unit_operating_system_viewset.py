@@ -1,6 +1,6 @@
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from itam.viewsets.operating_system import (
     OperatingSystem,
@@ -43,9 +43,6 @@ class ViewsetTestCases(
                 'value': OperatingSystem
             },
             'model_documentation': {
-                'type': type(None),
-            },
-            'queryset': {
                 'type': type(None),
             },
             'serializer_class': {

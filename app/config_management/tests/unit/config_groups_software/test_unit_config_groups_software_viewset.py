@@ -1,6 +1,6 @@
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 
 from config_management.viewsets.config_group_software import (
@@ -44,9 +44,6 @@ class ViewsetTestCases(
                 'value': ConfigGroupSoftware
             },
             'model_documentation': {
-                'type': type(None),
-            },
-            'queryset': {
                 'type': type(None),
             },
             'serializer_class': {

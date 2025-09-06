@@ -7,7 +7,7 @@ from itam.serializers.operating_system import (    # pylint: disable=W0611:unuse
     OperatingSystemModelSerializer,
     OperatingSystemViewSerializer
 )
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

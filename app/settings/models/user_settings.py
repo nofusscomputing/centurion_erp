@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from access.fields import AutoLastModifiedField
+from access.managers.user import UserManager
 from access.models.tenant import Tenant
 
 from core.models.centurion import CenturionModel
@@ -26,6 +27,8 @@ class UserSettings(
     _audit_enabled = False
 
     _notes_enabled = False
+
+    objects = UserManager()
 
 
     class Meta:
@@ -124,9 +127,31 @@ class UserSettings(
         return self.default_organization
 
 
+
+    def get_url(
+        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+    ) -> str:
+
+        return super().get_url( relative = relative, api_version = api_version, many = False, request = request)
+
+
+
+    def get_url_kwargs(self, many = False) -> dict:
+
+        kwargs = {
+            'pk': self.id
+        }
+
+        return kwargs
+
+
     @receiver(post_save, sender=settings.AUTH_USER_MODEL)
     def new_user_callback(sender, **kwargs):
-        settings = UserSettings.objects.filter(user=kwargs['instance'])
+
+        settings = UserSettings.objects.user(
+            user = kwargs['instance'],
+            permission = None
+        ).filter(user=kwargs['instance'])
 
         if not settings.exists():
 

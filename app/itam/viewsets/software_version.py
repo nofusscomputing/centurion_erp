@@ -10,7 +10,7 @@ from itam.serializers.software_version import (    # pylint: disable=W0611:unuse
     SoftwareVersionModelSerializer,
     SoftwareVersionViewSerializer
 )
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

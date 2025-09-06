@@ -1,36 +1,35 @@
 from drf_spectacular.utils import extend_schema_serializer
 
-from itim.serializers.ticket_slm import (
-    BaseSerializer as SLMTicketBaseSerializer,
-    ModelSerializer as SLMTicketModelSerializer,
-    ViewSerializer as SLMTicketViewSerializer
+from core.serializers.ticketbase import (
+    BaseSerializer as TicketBaseSerializer,
+    ModelSerializer as TicketModelSerializer,
+    ViewSerializer as TicketViewSerializer
 )
 
-from itim.models.request_ticket import RequestTicket
+from itim.models.slm_ticket_base import SLMTicket
 
 
 
-@extend_schema_serializer(component_name = 'RequestTicketBaseSerializer')
+@extend_schema_serializer(component_name = 'SLMTicketBaseBaseSerializer')
 class BaseSerializer(
-    SLMTicketBaseSerializer
+    TicketBaseSerializer
 ):
     pass
 
 
-@extend_schema_serializer(component_name = 'RequestTicketModelSerializer')
+@extend_schema_serializer(component_name = 'SLMTicketBaseModelSerializer')
 class ModelSerializer(
-    SLMTicketModelSerializer,
-    BaseSerializer,
+    TicketModelSerializer,
+    BaseSerializer
 ):
-    """Service Request Ticket"""
+    """SLM Ticket Base Model"""
 
     class Meta:
 
-        model = RequestTicket
+        model = SLMTicket
 
         fields = [
             'id',
-            'display_name',
             'organization',
             'external_system',
             'external_ref',
@@ -88,11 +87,11 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'RequestTicketViewSerializer')
+@extend_schema_serializer(component_name = 'SLMTicketBaseViewSerializer')
 class ViewSerializer(
-    SLMTicketViewSerializer,
+    TicketViewSerializer,
     ModelSerializer,
     ):
-    """Service Request Ticket View Model"""
+    """SLM Ticket Base View Model"""
 
     pass

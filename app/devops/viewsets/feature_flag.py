@@ -8,7 +8,7 @@ from devops.serializers.feature_flag import (
     ViewSerializer,
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

@@ -15,7 +15,7 @@ from core.models.ticket_comment_base import (
 )
 
 
-
+@pytest.mark.skip( reason = 'behind Feature flag. see #884' )
 @pytest.mark.model_ticketcommentbase
 class TicketCommentBaseAPIFieldsTestCases(
     APIFieldsInheritedCases,

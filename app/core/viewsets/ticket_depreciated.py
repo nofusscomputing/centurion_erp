@@ -1,5 +1,5 @@
 from api.exceptions import UnknownTicketType
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 from access.models.tenant import Tenant as Organization
 
@@ -102,7 +102,9 @@ class TicketViewSet(ModelViewSet):
 
             if 'organization' in self.request.data:
 
-                organization = Organization.objects.get(
+                organization = Organization.objects.user(
+                    user = self.request.user, permission = self._permission_required
+                ).get(
                     pk = int(self.request.data['organization'])
                 )
 
@@ -201,7 +203,9 @@ class TicketViewSet(ModelViewSet):
 
         if self.kwargs.get('pk', None):
 
-            queryset = self.model.objects.select_related(
+            queryset = self.model.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).select_related(
                 'organization',
                 'category',
                 'project',
@@ -216,7 +220,9 @@ class TicketViewSet(ModelViewSet):
 
         else:
 
-            queryset = self.model.objects.select_related(
+            queryset = self.model.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).select_related(
                 'organization',
                 'category',
                 'project',

@@ -6,7 +6,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from rest_framework.response import Response
 
-from api.viewsets.common import ModelCreateViewSet
+from api.viewsets.common.tenancy import ModelCreateViewSet
 
 from core import exceptions as centurion_exception
 from core.http.common import Http
@@ -103,7 +103,9 @@ class ViewSet( ModelCreateViewSet ):
             obj_organaization_id = getattr(self.default_organization, 'id', None)
 
 
-            obj = Device.objects.filter(
+            obj = Device.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).filter(
                 Q(
                     name=str(data.validated_data['details']['name']).lower(),
                     serial_number = str(data.validated_data['details']['serial_number']).lower()

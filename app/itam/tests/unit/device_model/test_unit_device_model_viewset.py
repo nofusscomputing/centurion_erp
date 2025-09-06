@@ -1,6 +1,6 @@
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from itam.viewsets.device_model import (
     DeviceModel,
@@ -44,9 +44,6 @@ class ViewsetTestCases(
                 'value': DeviceModel
             },
             'model_documentation': {
-                'type': type(None),
-            },
-            'queryset': {
                 'type': type(None),
             },
             'serializer_class': {

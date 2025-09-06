@@ -17,7 +17,7 @@ def model(request):
 @pytest.fixture
 def create_serializer():
 
-    from itim.serializers.ticket_request import ModelSerializer
+    from itim.serializers.ticketbase_request import ModelSerializer
 
     serializer = ModelSerializer
 

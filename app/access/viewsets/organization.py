@@ -8,7 +8,7 @@ from access.serializers.organization import (    # pylint: disable=W0611:unused-
     TenantViewSerializer
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 
