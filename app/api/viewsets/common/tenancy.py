@@ -7,7 +7,6 @@ from .common import (
     CommonModelViewSet,
     CommonReadOnlyListModelViewSet,
     CommonReadOnlyModelViewSet,
-    CommonSubModelViewSet,
     CommonSubModelViewSet_ReWrite,
 )
 

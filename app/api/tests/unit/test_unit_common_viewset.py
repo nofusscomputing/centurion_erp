@@ -5,19 +5,11 @@ import pytest
 from django.contrib.auth.models import ContentType, Permission
 
 from rest_framework import viewsets
-from rest_framework.permissions import (
-    IsAuthenticated,
-    # IsAuthenticatedOrReadOnly,
-)
-# from rest_framework_json_api.metadata import JSONAPIMetadata
 
 from api.permissions.default import DefaultDenyPermission
 from access.models.tenant import Tenant as Organization, Tenant
 from access.models.team import Team
 from access.models.team_user import TeamUsers
-# from access.tests.unit.mixin_tenancy.test_unit_tenancy_permission_mixin import (
-#     TenancyMixinInheritedCases
-# )
 
 from api.react_ui_metadata import ReactUIMetadata
 from api.viewsets.common.common import (
@@ -32,7 +24,6 @@ from api.viewsets.common.common import (
 
     CommonViewSet,
     CommonModelViewSet,
-    CommonSubModelViewSet,
     CommonSubModelViewSet_ReWrite,
 
     CommonModelCreateViewSet,
@@ -992,7 +983,7 @@ class CommonSubModelViewSetTestCases(
         Class must inherit from `SubModelViewSet`
         """
 
-        assert issubclass(viewset, CommonSubModelViewSet)
+        assert issubclass(viewset, CommonSubModelViewSet_ReWrite)
 
 
 
