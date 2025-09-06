@@ -365,7 +365,6 @@ class CommonViewSetTestCases(
 
         view_set.request = request
         view_set.kwargs = {}
-        view_set.action = 'list'
 
         yield view_set
 
@@ -457,7 +456,7 @@ class CommonViewSetTestCases(
         assert issubclass(viewset, viewsets.ViewSet)
 
 
-    def test_view_func_get_queryset_cache_result(self, viewset_mock_request):
+    def test_view_func_get_queryset_cache_result(self, mocker, viewset_mock_request):
         """Viewset Test
 
         Ensure that the `get_queryset` function caches the result under
@@ -465,6 +464,7 @@ class CommonViewSetTestCases(
         """
 
         view_set = viewset_mock_request
+        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         from django.db import connection
         from django.test.utils import CaptureQueriesContext
@@ -491,9 +491,12 @@ class CommonViewSetTestCases(
         attribute `<viewset>._queryset`
         """
 
-        qs = mocker.spy(viewset_mock_request.model, 'objects')
+        view_set = viewset_mock_request
+        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
-        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
+        qs = mocker.spy(view_set.model, 'objects')
+
+        view_set.get_queryset()    # Initial QuerySet fetch/filter and cache
 
         initial_method_calls = len(qs.method_calls)
         initial_mock_calls = len(qs.mock_calls)
@@ -501,7 +504,7 @@ class CommonViewSetTestCases(
         assert initial_method_calls > 0       # one call to .all()
         assert initial_mock_calls > 0         # calls = .user( ...), .user().all(), .user().all().filter()
 
-        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
+        view_set.get_queryset()    # Use Cached results, dont re-fetch QuerySet
 
         assert len(qs.method_calls) == initial_method_calls
         assert len(qs.mock_calls) == initial_mock_calls
