@@ -105,6 +105,8 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
 
                     obj = org
 
+            if not obj:
+                raise ValueError('no model created')
 
             return obj
 

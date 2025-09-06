@@ -1,22 +1,25 @@
 import datetime
 import pytest
 import random
+import logging
 
+from django.conf import settings
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from django.db import models
 
-
 @pytest.fixture( scope = 'class' )
-def model_kwarg_data():
+def model_kwarg_data(django_db_blocker):
 
-    def data(model, model_kwargs, model_instance = None, create_instance = False) -> dict:
+    instances = []
+
+    def data(model, model_kwargs, model_instance = None, create_instance = False, instances = instances) -> dict:
 
         random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
         random_str = str(random_str).replace(
             ' ', '').replace(':', '').replace('+', '').replace('.', '').replace('-', '')
 
-
+        log:logging.Logger = settings.CENTURION_LOG.getChild('fixture').getChild('model_kwarg_data')
         kwargs = {}
 
         many_field = {}
@@ -24,7 +27,7 @@ def model_kwarg_data():
         for field, value in model_kwargs.items():
 
             is_unique_together_field = False
-            
+
             if not hasattr(model, field):
                 continue
 
@@ -81,7 +84,7 @@ def model_kwarg_data():
 
             ):
 
-                value = 'a' + str(random.randint(1,999))
+                value = str('a' + str(random.randint(133,999)))
 
                 if isinstance(getattr(model, field).field, models.IntegerField):
 
@@ -124,6 +127,11 @@ def model_kwarg_data():
 
             except ValidationError as e:
 
+                log.exception(
+                    msg = f'{e}\n\n{kwargs}\n\n',
+                    stack_info = True
+                )
+
                 if '__all__' in e.error_dict:
 
                     if 'unique' in e.error_dict['__all__'][0].code:
@@ -135,6 +143,11 @@ def model_kwarg_data():
                             )
 
                         except ObjectDoesNotExist as e:
+
+                            log.exception(
+                                msg = f'{e}\n\n{kwargs}\n\n',
+                                stack_info = True,
+                            )
 
                             if 'modified' in kwargs:
 
@@ -152,7 +165,11 @@ def model_kwarg_data():
 
                     getattr(instance, field).add( value )
 
+        if not instance:
+            raise ValueError('no instance created')
 
+
+        instances += [ instance ]
         return {
             'instance': instance,
             'kwargs': kwargs,
@@ -161,3 +178,11 @@ def model_kwarg_data():
 
 
     yield data
+
+    with django_db_blocker.unblock():
+
+        for created_instance in instances:
+            try:
+                created_instance.delete()
+            except:
+                pass
