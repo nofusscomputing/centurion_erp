@@ -48,5 +48,11 @@ class TenancyManager(
         if has_tenant_field:
             return super().get_queryset().select_related('organization')
 
+        elif getattr(self, '_user') and getattr(self.model._meta, 'model_name', None) == 'tenant':
+
+            return super().get_queryset().filter(
+                        models.Q(id__in = self._tenancies)
+                    )
+
 
         return super().get_queryset()
