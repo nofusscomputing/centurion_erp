@@ -189,12 +189,24 @@ class CommonViewSetTestCases:
 
             user = model_user.objects.create( **kwargs_user )
 
+            kwargs = kwargs_user.copy()
+            kwargs['username'] = 'username.two'
+            user2 = model_user.objects.create( **kwargs )
+
+            self.user = user
+
             kwargs = model_kwargs.copy()
-            kwargs['organization'] = organization_one
+            if 'organization' in kwargs:
+                kwargs['organization'] = organization_one
+            if 'user' in kwargs:
+                kwargs['user'] = user2
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
             kwargs = model_kwargs.copy()
-            kwargs['organization'] = organization_two
+            if 'organization' in kwargs:
+                kwargs['organization'] = organization_two
+            if 'user' in kwargs:
+                kwargs['user'] = user
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
         view_set = viewset()
@@ -218,6 +230,7 @@ class CommonViewSetTestCases:
 
         del view_set.request
         del view_set
+        del self.user
 
         with django_db_blocker.unblock():
 
@@ -228,10 +241,11 @@ class CommonViewSetTestCases:
 
                 group.delete()
 
-            user.delete()
-
             user_tenancy_item.delete()
             other_tenancy_item.delete()
+
+            user.delete()
+            user2.delete
 
 
     # parmeterize to view action
