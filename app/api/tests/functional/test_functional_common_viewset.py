@@ -254,7 +254,7 @@ class CommonViewSetTestCases:
 
         queryset = viewset.get_queryset()
 
-        assert len(model.objects.all()) == 2, 'multiple objects must exist for test to work'
+        assert len(model.objects.all()) >= 2, 'multiple objects must exist for test to work'
         assert len( queryset ) > 0, 'Empty queryset returned. Test not possible'
 
         for result in queryset:
