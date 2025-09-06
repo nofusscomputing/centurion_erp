@@ -272,6 +272,9 @@ class CommonViewSetPyTest(
     def viewset(self):
         return CommonViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.api
@@ -291,6 +294,9 @@ class CommonModelViewSetBasePyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return ModelViewSetBase
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
 
 
 
@@ -313,6 +319,9 @@ class CommonModelViewSetPyTest(
     def viewset(self):
         return CommonModelViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 class CommonSubModelViewSetTestCases(
@@ -328,6 +337,9 @@ class CommonSubModelViewSetPyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return CommonSubModelViewSet_ReWrite
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
 
 
 
@@ -346,6 +358,9 @@ class CommonModelCreateViewSetPyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return CommonModelCreateViewSet
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
 
 
 
@@ -367,6 +382,9 @@ class CommonModelListRetrieveDeleteViewSetPyTest(
     def viewset(self):
         return CommonModelListRetrieveDeleteViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 class ModelRetrieveUpdateViewSetTestCases(
@@ -385,6 +403,9 @@ class CommonModelRetrieveUpdateViewSetPyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return CommonModelRetrieveUpdateViewSet
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
 
 
 
@@ -405,6 +426,9 @@ class CommonReadOnlyModelViewSetPyTest(
     def viewset(self):
         return CommonReadOnlyModelViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 class ReadOnlyListModelViewSetTestCases(
@@ -421,6 +445,9 @@ class CommonReadOnlyListModelViewSetPyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return CommonReadOnlyListModelViewSet
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
 
 
 

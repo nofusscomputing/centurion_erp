@@ -62,6 +62,9 @@ class TenancyPermissionsModelViewSetPyTest(
     def viewset(self):
         return ModelViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -85,6 +88,9 @@ class TenancyPermissionsModelCreateViewSetPyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return ModelCreateViewSet
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
 
 
 
@@ -110,6 +116,9 @@ class TenancyPermissionsModelListRetrieveDeleteViewSetPyTest(
     def viewset(self):
         return ModelListRetrieveDeleteViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -134,6 +143,9 @@ class TenancyPermissionsModelRetrieveUpdateViewSetPyTest(
     def viewset(self):
         return ModelRetrieveUpdateViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -157,6 +169,9 @@ class TenancyPermissionsSubModelViewSetPyTest(
     def viewset(self):
         return SubModelViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -179,6 +194,9 @@ class TenancyPermissionsReadOnlyModelViewSetPyTest(
     def viewset(self):
         return ReadOnlyModelViewSet
 
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -200,3 +218,6 @@ class TenancyPermissionsReadOnlyListModelViewSetPyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return ReadOnlyListModelViewSet
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
