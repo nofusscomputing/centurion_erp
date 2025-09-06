@@ -231,7 +231,7 @@ The following Unit test suites exists for models:
     - Serializer `api.tests.unit.test_unit_serializer.SerializerTestCases`
 
     - ViewSet
-    
+
         - Tenancy Permissions `api.tests.unit.viewset.test_unit_tenancy_viewset.*`
 
 - Functional Tests
@@ -241,7 +241,7 @@ The following Unit test suites exists for models:
     - API Fields Render `api.tests.functional.test_functional_api_fields.APIFieldsInheritedCases`
 
     - ViewSet
-    
+
         - Tenancy Permissions `api.tests.functional.viewset.test_functional_tenancy_viewset.*`
 
 !!! info
