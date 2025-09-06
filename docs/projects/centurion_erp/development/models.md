@@ -230,8 +230,9 @@ The following Unit test suites exists for models:
 
     - Serializer `api.tests.unit.test_unit_serializer.SerializerTestCases`
 
-    - ViewSet `api.tests.unit.test_unit_common_viewset.*`
-
+    - ViewSet
+    
+        - Tenancy Permissions `api.tests.unit.viewset.test_unit_tenancy_viewset.*`
 
 - Functional Tests
 
@@ -239,6 +240,9 @@ The following Unit test suites exists for models:
 
     - API Fields Render `api.tests.functional.test_functional_api_fields.APIFieldsInheritedCases`
 
+    - ViewSet
+    
+        - Tenancy Permissions `api.tests.functional.viewset.test_functional_tenancy_viewset.*`
 
 !!! info
     If you add a feature you will have to [write the test cases](./testing.md) for that feature if they are not covered by existing test cases.

@@ -756,7 +756,7 @@ class CommonViewSet(
 
                 self._queryset = self.model.objects.user(
                     user = self.request.user,
-                    permission = self._permission_required
+                    permission = self.get_permission_required()
                 ).all()
 
             else:
@@ -821,7 +821,7 @@ class CommonViewSet(
 
         if(
             self.action == 'create'
-            or getattr(self.request._stream, 'method', '') == 'POST'
+            or getattr(self.request, 'method', '') == 'POST'
         ):
 
             view_action = 'add'
@@ -829,15 +829,15 @@ class CommonViewSet(
         elif (
             self.action == 'partial_update'
             or self.action == 'update'
-            or getattr(self.request._stream, 'method', '') == 'PATCH'
-            or getattr(self.request._stream, 'method', '') == 'PUT'
+            or getattr(self.request, 'method', '') == 'PATCH'
+            or getattr(self.request, 'method', '') == 'PUT'
         ):
 
             view_action = 'change'
 
         elif(
             self.action == 'destroy'
-            or getattr(self.request._stream, 'method', '') == 'DELETE'
+            or getattr(self.request, 'method', '') == 'DELETE'
         ):
 
             view_action = 'delete'
