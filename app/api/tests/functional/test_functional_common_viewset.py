@@ -211,7 +211,8 @@ class CommonViewSetTestCases:
         )
 
         view_set.request = request
-        view_set.kwargs = {}
+        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
+
 
         yield view_set
 
@@ -235,7 +236,7 @@ class CommonViewSetTestCases:
 
     # parmeterize to view action
     def test_function_get_queryset_filtered_results_action_list(self,
-        viewset_mock_request, organization_one
+        viewset_mock_request, organization_one, model
     ):
         """Test class function
 
@@ -253,6 +254,7 @@ class CommonViewSetTestCases:
 
         queryset = viewset.get_queryset()
 
+        assert len(model.objects.all()) == 2, 'multiple objects must exist for test to work'
         assert len( queryset ) > 0, 'Empty queryset returned. Test not possible'
 
         for result in queryset:

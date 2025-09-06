@@ -81,7 +81,7 @@ def model_kwarg_data():
 
             ):
 
-                value = 'a' + random_str
+                value = 'a' + str(random.randint(1,999))
 
                 if isinstance(getattr(model, field).field, models.IntegerField):
 
@@ -91,7 +91,12 @@ def model_kwarg_data():
                 elif isinstance(getattr(model, field).field, models.EmailField):
 
 
-                    value = str(random_str) + '@instance.tld'
+                    value = str(random.randint(1,999)) + '@instance.tld'
+
+            elif isinstance(getattr(model, field).field, models.UUIDField):
+
+
+                value = '6318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(20000, 99999) )
 
 
             kwargs.update({
