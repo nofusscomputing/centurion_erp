@@ -40,16 +40,19 @@ class CommonManager(
         if manager._permission:
 
             manager._tenancies = []
-            if getattr(manager._user, 'global_organization', None):
-                manager._tenancies = [ int(manager._user.global_organization) ]
+
+            if not user.is_anonymous:
+
+                if getattr(manager._user, 'global_organization', None):
+                    manager._tenancies = [ int(manager._user.global_organization) ]
 
 
-            for tenancy in manager._user.get_tenancies(int_list = False):
-                if manager._user.has_perm(
-                    permission = manager._permission,
-                    tenancy = tenancy
-                ):
+                for tenancy in manager._user.get_tenancies(int_list = False):
+                    if manager._user.has_perm(
+                        permission = manager._permission,
+                        tenancy = tenancy
+                    ):
 
-                    manager._tenancies += [ int(tenancy) ]
+                        manager._tenancies += [ int(tenancy) ]
 
         return manager
