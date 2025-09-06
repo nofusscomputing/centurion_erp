@@ -365,6 +365,7 @@ class CommonViewSetTestCases(
 
         view_set.request = request
         view_set.kwargs = {}
+        view_set.action = 'list'
 
         yield view_set
 
