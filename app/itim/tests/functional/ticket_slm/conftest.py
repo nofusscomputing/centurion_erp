@@ -1,7 +1,7 @@
 import pytest
 
 from itim.models.slm_ticket_base import SLMTicket
-from itim.serializers.ticket_slm import ModelSerializer
+from itim.serializers.ticketbase_slm import ModelSerializer
 
 
 @pytest.fixture( scope = 'class')

@@ -5,6 +5,7 @@ from access.fields import (
     AutoCreatedField,
     AutoLastModifiedField,
 )
+from access.managers.tenancy import TenancyManager
 
 from core.mixins.centurion import Centurion
 
@@ -14,11 +15,9 @@ class Tenant(
     Centurion,
 ):
 
-    @property
-    def organization(self):
-        return self
-
     model_tag = 'tenant'
+
+    objects = TenancyManager()
 
     class Meta:
 

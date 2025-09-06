@@ -4,17 +4,16 @@ import logging
 import rest_framework
 
 from django.conf import settings
+from django.db import models
 from django.utils.safestring import mark_safe
 
-from rest_framework import viewsets, pagination
 from rest_framework.exceptions import APIException
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework_json_api.metadata import JSONAPIMetadata
+from rest_framework import viewsets
 
-from access.mixins.organization import OrganizationMixin
-from access.mixins.permissions import TenancyPermissionMixin
+from core.mixins.centurion import Centurion
 
+from api.permissions.default import DefaultDenyPermission
 from api.react_ui_metadata import ReactUIMetadata
 
 
@@ -78,7 +77,9 @@ class Create(
                     raise e
 
 
-                instance = self.model.objects.get( organization = request.data['organization'])
+                instance = self.model.objects.user(
+                    user = self.request.user, permission = self._permission_required
+                ).get( organization = request.data['organization'])
 
             # Always return using the ViewSerializer
             serializer_module = importlib.import_module(self.get_serializer_class().__module__)
@@ -131,10 +132,19 @@ class Create(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -185,10 +195,20 @@ class Destroy(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
+
 
         if hasattr(self.model, 'context'):
 
@@ -240,10 +260,19 @@ class List(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -298,10 +327,19 @@ class Retrieve(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -376,10 +414,19 @@ class Update(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -449,10 +496,19 @@ class Update(
 
                 e = self._django_to_api_exception(e)
 
-            response = Response(
-                data = e.get_full_details(),
-                status = e.status_code
-            )
+            if hasattr(e, 'status_code'):
+                response = Response(
+                    data = e.get_full_details(),
+                    status = e.status_code
+                )
+
+            else:
+                response = Response(
+                    data = {
+                        e.__class__.__name__: str(e)
+                    },
+                    status = 500
+                )
 
         if hasattr(self.model, 'context'):
 
@@ -464,7 +520,6 @@ class Update(
 
 
 class CommonViewSet(
-    OrganizationMixin,
     viewsets.ViewSet
 ):
     """Common ViewSet class
@@ -472,12 +527,20 @@ class CommonViewSet(
     This class is to be inherited by ALL viewsets.
 
     Args:
-        OrganizationMixin (class): Contains the Authorization checks.
         viewsets (class): Django Rest Framework base class.
     """
 
+    _permission_required: str = None
+    """Cached Permissions required"""
 
-    def _django_to_api_exception( self, exc ):
+    _queryset: models.QuerySet = None
+    """View Queryset
+
+    Cached queryset
+    """
+
+
+    def _django_to_api_exception( self, ex ):
         """Convert Django exception to DRF Exception
 
         Args:
@@ -492,23 +555,29 @@ class CommonViewSet(
 
         rtn_exception = None
 
-        if isinstance(exc, django.core.exceptions.ObjectDoesNotExist):
+        if(
+            isinstance(ex, django.core.exceptions.ObjectDoesNotExist)
+            or isinstance(ex, django.http.Http404)
+        ):
 
-            exc = rest_framework.exceptions.NotFound(exc.args)
+            exc = rest_framework.exceptions.NotFound(ex.args)
 
-        elif isinstance(exc, django.core.exceptions.PermissionDenied):
-
-
-            exc = rest_framework.exceptions.PermissionDenied(exc.error_dict)
-
-        elif isinstance(exc, django.core.exceptions.ValidationError):
+        elif isinstance(ex, django.core.exceptions.PermissionDenied):
 
 
-            exc = rest_framework.exceptions.ValidationError(exc.error_dict)
+            exc = rest_framework.exceptions.PermissionDenied(ex.error_dict)
+
+        elif isinstance(ex, django.core.exceptions.ValidationError):
+
+
+            exc = rest_framework.exceptions.ValidationError(ex.error_dict)
 
         else:
 
-            exc = ValueError('20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug.')
+            exc = APIException(
+                detail = f'20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug. msg was {ex.msg}',
+                code = 'unknown_exception'
+            )
 
         try:
 
@@ -586,7 +655,7 @@ class CommonViewSet(
     for detail view, Enables the UI can setup the page layout.
     """
 
-    permission_classes = [ TenancyPermissionMixin ]
+    permission_classes = [ DefaultDenyPermission ]
     """Permission Class
 
     _Mandatory_, Permission check class
@@ -673,6 +742,140 @@ class CommonViewSet(
                     self.page_layout = []
 
         return self.page_layout
+
+
+
+    def get_queryset(self):
+
+        if self._queryset is None:
+
+            if(
+                issubclass(self.model, Centurion)
+                and hasattr(self.model.objects, 'user')
+            ):
+
+                self._queryset = self.model.objects.user(
+                    user = self.request.user,
+                    permission = self.get_permission_required()
+                ).all()
+
+            else:
+
+                self._queryset = self.model.objects.all()
+
+            qs_filter = {}
+
+            if 'pk' in getattr(self, 'kwargs', {}):
+
+                qs_filter.update({
+                    'pk': int( self.kwargs['pk'] )
+                })
+
+            if(
+                getattr(self.model, '_is_submodel', False)
+                and 'model_id' in self.kwargs
+            ):
+
+                qs_filter.update({
+                    'model_id': int( self.kwargs['model_id'] )
+                })
+
+
+            self._queryset = self._queryset.filter( **qs_filter  )
+
+
+        return self._queryset
+
+
+
+    def get_permission_required(self) -> str:
+        """ Get / Generate Permission Required
+
+        If there is a requirement that there be custom/dynamic permissions,
+        this function can be safely overridden.
+
+        Raises:
+            ValueError: Unable to determin the view action
+
+        Returns:
+            str: Permission in format `<app_name>.<action>_<model_name>`
+        """
+
+        if self._permission_required:
+
+            return self._permission_required
+
+
+        if hasattr(self, 'get_dynamic_permissions'):
+
+            self._permission_required = self.get_dynamic_permissions()
+
+            if type(self._permission_required) is list:
+
+                self._permission_required = self._permission_required[0]
+
+            return self._permission_required
+
+
+        view_action: str = None
+
+        if(
+            self.action == 'create'
+            or getattr(self.request, 'method', '') == 'POST'
+        ):
+
+            view_action = 'add'
+
+        elif (
+            self.action == 'partial_update'
+            or self.action == 'update'
+            or getattr(self.request, 'method', '') == 'PATCH'
+            or getattr(self.request, 'method', '') == 'PUT'
+        ):
+
+            view_action = 'change'
+
+        elif(
+            self.action == 'destroy'
+            or getattr(self.request, 'method', '') == 'DELETE'
+        ):
+
+            view_action = 'delete'
+
+        elif (
+            self.action == 'list'
+        ):
+
+            view_action = 'view'
+
+        elif self.action == 'retrieve':
+
+            view_action = 'view'
+
+        elif self.action == 'metadata':
+
+            view_action = 'view'
+
+        elif self.action is None:
+
+            return False
+
+
+
+        if view_action is None:
+
+            raise ValueError('view_action could not be defined.')
+
+
+        permission = self.model._meta.app_label + '.' + view_action + '_' + self.model._meta.model_name
+
+        permission_required = permission
+
+
+        self._permission_required = permission_required
+
+        return self._permission_required
+
 
 
     def get_return_url(self) -> str:
@@ -767,12 +970,6 @@ class ModelViewSetBase(
     _Mandatory_, Django model used for this view.
     """
 
-    queryset: object = None
-    """View Queryset
-
-    _Optional_, View model Query
-    """
-
     search_fields:list = []
     """ Search Fields
 
@@ -787,39 +984,6 @@ class ModelViewSetBase(
 
     view_serializer_name: str = None
     """Cached model view Serializer name"""
-
-
-    def get_queryset(self):
-
-        if self.queryset is not None:
-
-            return self.queryset
-
-        self.queryset = self.model.objects.all()
-
-        qs_filter = {}
-
-        if 'pk' in getattr(self, 'kwargs', {}):
-
-            qs_filter.update({
-                'pk': int( self.kwargs['pk'] )
-            })
-
-        if(
-            getattr(self.model, '_is_submodel', False)
-            and 'model_id' in self.kwargs
-        ):
-
-            qs_filter.update({
-                'model_id': int( self.kwargs['model_id'] )
-            })
-
-
-        self.queryset = self.queryset.filter( **qs_filter  )
-
-
-        return self.queryset
-
 
 
     def get_serializer_class(self):
@@ -857,7 +1021,7 @@ class ModelViewSetBase(
 
 
 
-class ModelViewSet(
+class CommonModelViewSet(
     ModelViewSetBase,
     Create,
     Retrieve,
@@ -871,148 +1035,8 @@ class ModelViewSet(
 
 
 
-class SubModelViewSet(
-    ModelViewSet,
-):
-
-    base_model = None
-    """Model that is the base of this sub-model"""
-
-    model_kwarg: str = None
-    """Kwarg name for the sub-model"""
-
-
-    @property
-    def model(self):
-
-
-        if getattr(self, '_model', None) is not None:
-
-            return self._model
-
-        model_kwarg = None
-
-        if hasattr(self, 'kwargs'):
-
-            model_kwarg = self.kwargs.get(self.model_kwarg, None)
-
-        if model_kwarg:
-
-            self._model = self.related_objects(self.base_model, model_kwarg)
-
-        else:
-
-            self._model = self.base_model
-
-        return self._model
-
-
-    def related_objects(self, model, model_kwarg):
-        """Recursive relate_objects fetch
-
-        Fetch the model where <model>._meta.sub_model_type matches the
-        model_kwarg value.
-
-        Args:
-            model (django.db.models.Model): The model to obtain the 
-                related_model from.
-            model_kwarg (str): The URL Kwarg of the model.
-
-        Returns:
-            Model: The model for the ViewSet
-        """
-
-        related_model = None
-
-        if model_kwarg:
-
-            is_nested_lookup = False
-
-            for related_object in model._meta.related_objects:
-
-                if(
-                    getattr(related_object.related_model._meta,'sub_model_type', '' ) == self.base_model._meta.sub_model_type
-                    or not issubclass(related_object.related_model, self.base_model)
-                ):
-
-                    continue
-
-
-                related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
-
-                if(
-                    str(
-                        related_object.related_model._meta.sub_model_type
-                    ).lower().replace(' ', '_') == model_kwarg
-                ):
-
-                    related_model = related_object.related_model
-                    break
-                
-                elif related_objects:
-
-                    related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
-
-                    is_nested_lookup = True
-
-
-
-                    if not hasattr(related_model, '_meta'):
-
-                        related_model = None
-
-                    elif(
-                        str(
-                            getattr(related_model._meta, 'sub_model_type', '')
-                        ).lower().replace(' ', '_') == model_kwarg
-                    ):
-
-                        break
-
-
-
-        if related_model is None and not is_nested_lookup:
-
-            related_model = self.base_model
-
-        return related_model
-
-
-
-    def get_serializer_class(self):
-
-        serializer_name = self.base_model._meta.verbose_name.lower().replace(' ', '_')
-
-        if self.base_model != self.model:
-                      
-            serializer_name += '_' + self.model._meta.sub_model_type
-
-
-        serializer_module = importlib.import_module(
-            self.model._meta.app_label + '.serializers.' + str(
-                serializer_name
-            )
-        )
-
-        if (
-            self.action == 'list'
-            or self.action == 'retrieve'
-        ):
-
-            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
-
-
-        else:
-
-            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
-
-
-        return self.serializer_class
-
-
-
-class SubModelViewSet_ReWrite(
-    SubModelViewSet,
+class CommonSubModelViewSet_ReWrite(
+    CommonModelViewSet,
 ):
     """Temp class for SubModelViewSet
 
@@ -1020,6 +1044,12 @@ class SubModelViewSet_ReWrite(
     all models be re-written, this class can be collapsed into its parent
     and replacing with the objects in this class
     """
+
+    base_model = None
+    """Model that is the base of this sub-model"""
+
+    model_kwarg: str = None
+    """Kwarg name for the sub-model"""
 
     model_suffix: str = None
     """Model Suffix
@@ -1084,8 +1114,13 @@ class SubModelViewSet_ReWrite(
             for related_object in model._meta.related_objects:
 
                 if(
-                    getattr(related_object.related_model._meta,'model_name', '' ) == self.base_model._meta.model_name
+                    getattr(
+                            related_object.related_model._meta,'model_name', ''
+                        ) == self.base_model._meta.model_name
                     or not issubclass(related_object.related_model, self.base_model)
+                    or getattr(
+                            related_object.related_model._meta,'sub_model_type', ''
+                        ) == getattr(self.base_model._meta,'sub_model_type', '-not-exist')
                 ):
                     continue
 
@@ -1096,14 +1131,19 @@ class SubModelViewSet_ReWrite(
                     str(
                         related_object.related_model._meta.model_name
                     ).lower().replace(' ', '_') == model_kwarg
+                    or str(
+                        getattr(related_object.related_model._meta, 'sub_model_type', '-not-exist')
+                    ).lower().replace(' ', '_') == model_kwarg
                 ):
 
                     related_model = related_object.related_model
                     break
-                
+
                 elif related_objects:
 
-                    related_model = self.related_objects(model = related_object.related_model, model_kwarg = model_kwarg)
+                    related_model = self.related_objects(
+                        model = related_object.related_model, model_kwarg = model_kwarg
+                    )
 
                     is_nested_lookup = True
 
@@ -1114,6 +1154,9 @@ class SubModelViewSet_ReWrite(
                     elif(
                         str(
                             getattr(related_model._meta, 'model_name', '')
+                        ).lower().replace(' ', '_') == model_kwarg
+                        or str(
+                            getattr(related_model._meta, 'sub_model_type', '')
                         ).lower().replace(' ', '_') == model_kwarg
                     ):
 
@@ -1160,7 +1203,7 @@ class SubModelViewSet_ReWrite(
 
 
 
-class ModelCreateViewSet(
+class CommonModelCreateViewSet(
     ModelViewSetBase,
     Create,
     viewsets.GenericViewSet,
@@ -1170,7 +1213,7 @@ class ModelCreateViewSet(
 
 
 
-class ModelListRetrieveDeleteViewSet(
+class CommonModelListRetrieveDeleteViewSet(
     ModelViewSetBase,
     List,
     Retrieve,
@@ -1183,7 +1226,7 @@ class ModelListRetrieveDeleteViewSet(
 
 
 
-class ModelRetrieveUpdateViewSet(
+class CommonModelRetrieveUpdateViewSet(
     ModelViewSetBase,
     Retrieve,
     Update,
@@ -1195,7 +1238,7 @@ class ModelRetrieveUpdateViewSet(
 
 
 
-class ReadOnlyModelViewSet(
+class CommonReadOnlyModelViewSet(
     ModelViewSetBase,
     Retrieve,
     List,
@@ -1207,7 +1250,7 @@ class ReadOnlyModelViewSet(
 
 
 
-class ReadOnlyListModelViewSet(
+class CommonReadOnlyListModelViewSet(
     ModelViewSetBase,
     List,
     viewsets.GenericViewSet,
@@ -1218,65 +1261,65 @@ class ReadOnlyListModelViewSet(
 
 
 
-class AuthUserReadOnlyModelViewSet(
-    ReadOnlyModelViewSet
-):
-    """Authenticated User Read-Only Viewset
+# class AuthUserReadOnlyModelViewSet(
+#     CommonReadOnlyModelViewSet
+# ):
+#     """Authenticated User Read-Only Viewset
 
-    Use this class if the model only requires that the user be authenticated
-    to obtain view permission.
+#     Use this class if the model only requires that the user be authenticated
+#     to obtain view permission.
 
-    Args:
-        ReadOnlyModelViewSet (class): Read-Only base class
-    """
+#     Args:
+#         ReadOnlyModelViewSet (class): Read-Only base class
+#     """
 
-    permission_classes = [
-        IsAuthenticated,
-    ]
-
-
-class IndexViewset(
-    ModelViewSetBase,
-):
-
-    permission_classes = [
-        IsAuthenticated,
-    ]
+#     permission_classes = [
+#         IsAuthenticated,
+#     ]
 
 
-class StaticPageNumbering(
-    pagination.PageNumberPagination
-):
-    """Enforce Page Numbering
+# class IndexViewset(
+#     ModelViewSetBase,
+# ):
 
-    Enfore results per page min/max to static value that cant be changed.
-    """
-
-    page_size = 20
-
-    max_page_size = 20
+#     permission_classes = [
+#         IsAuthenticated,
+#     ]
 
 
+# class StaticPageNumbering(
+#     pagination.PageNumberPagination
+# ):
+#     """Enforce Page Numbering
 
-class PublicReadOnlyViewSet(
-    ReadOnlyListModelViewSet
-):
-    """Public Viewable ViewSet
+#     Enfore results per page min/max to static value that cant be changed.
+#     """
 
-    User does not need to be authenticated. This viewset is intended to be
-    inherited by viewsets that are intended to be consumed by unauthenticated
-    public users.
+#     page_size = 20
 
-    URL **must** be prefixed with `public`
+#     max_page_size = 20
 
-    Args:
-        ReadOnlyModelViewSet (ViewSet): Common Read-Only Viewset
-    """
 
-    pagination_class = StaticPageNumbering
 
-    permission_classes = [
-        IsAuthenticatedOrReadOnly,
-    ]
+# class PublicReadOnlyViewSet(
+#     ReadOnlyListModelViewSet
+# ):
+#     """Public Viewable ViewSet
 
-    metadata_class = JSONAPIMetadata
+#     User does not need to be authenticated. This viewset is intended to be
+#     inherited by viewsets that are intended to be consumed by unauthenticated
+#     public users.
+
+#     URL **must** be prefixed with `public`
+
+#     Args:
+#         ReadOnlyModelViewSet (ViewSet): Common Read-Only Viewset
+#     """
+
+#     pagination_class = StaticPageNumbering
+
+#     permission_classes = [
+#         IsAuthenticatedOrReadOnly,
+#     ]
+
+#     metadata_class = JSONAPIMetadata

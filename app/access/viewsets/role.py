@@ -6,7 +6,7 @@ from access.serializers.role import (
     ViewSerializer,
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 
@@ -76,22 +76,14 @@ class ViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        if self.queryset is None:
+        if self._queryset is None:
 
-            self.queryset = self.model.objects.prefetch_related(
+            self._queryset = super().get_queryset().prefetch_related(
                 'groups','permissions__content_type', 'users'
             )
 
-            if 'pk' in getattr(self, 'kwargs', {}):
 
-                self.queryset = self.model.objects.prefetch_related(
-                    'groups','permissions__content_type', 'users'
-                ).filter(
-                    pk = int( self.kwargs['pk'] )
-                )
-
-
-        return self.queryset
+        return self._queryset
 
 
     def get_serializer_class(self):

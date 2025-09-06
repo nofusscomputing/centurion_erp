@@ -2,7 +2,7 @@ from django.test import Client, TestCase
 
 from rest_framework.reverse import reverse
 
-from api.tests.unit.test_unit_common_viewset import ModelListRetrieveDeleteViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelListRetrieveDeleteViewSetInheritedCases
 
 from core.models.ticket.ticket import Ticket
 from core.viewsets.related_ticket import ViewSet

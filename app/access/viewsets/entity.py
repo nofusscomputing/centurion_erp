@@ -24,7 +24,7 @@ from access.models.entity import (
     Entity,
 )
 
-from api.viewsets.common import (
+from api.viewsets.common.tenancy import (
     SubModelViewSet_ReWrite,
 )
 

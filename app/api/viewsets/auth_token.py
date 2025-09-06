@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import (
+from api.viewsets.common.user import (
     ModelCreateViewSet,
     ModelListRetrieveDeleteViewSet,
 )
@@ -68,14 +68,6 @@ class ViewSet(
     model = AuthToken
 
     view_description = 'User Authentication Tokens'
-
-
-    def get_queryset(self):
-
-        if self.queryset is None:
-            self.queryset = super().get_queryset().filter(user = self.request.user)
-
-        return self.queryset
 
 
     def get_serializer_class(self):

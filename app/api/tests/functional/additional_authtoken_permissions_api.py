@@ -13,6 +13,121 @@ from django.urls.exceptions import NoReverseMatch
 class AdditionalTestCases:
 
 
+    permission_no_delete = [
+            ('add_user_forbidden', 'add', 404),
+            ('anon_user_auth_required', 'anon', 401),
+            ('change_user_forbidden', 'change', 404),
+            ('different_organization_user_forbidden', 'different_tenancy', 404),
+            ('no_permission_user_forbidden', 'no_permissions', 404),
+            ('view_user_forbidden', 'view', 404),
+        ]
+
+
+    @pytest.mark.parametrize(
+        argnames = "test_name, user, expected",
+        argvalues = permission_no_delete,
+        ids=[test_name for test_name, user, expected in permission_no_delete]
+    )
+    def test_permission_no_delete(self, model_instance, api_request_permissions,
+        test_name, user, expected, model_kwargs
+    ):
+        """ Check correct permission for delete
+
+        Attempt to delete as user with no permissons
+        """
+
+        if hasattr(self, 'exclude_permission_no_delete'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_delete'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
+
+        client = Client()
+
+        if user != 'anon':
+
+            client.force_login( api_request_permissions['user'][user] )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        delete_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        response = client.delete(
+            path = delete_item.get_url( many = False ),
+        )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == int(expected), response.content
+
+
+    permission_no_view = [
+        ('add_user_forbidden', 'add', 404),
+        ('anon_user_auth_required', 'anon', 401),
+        ('change_user_forbidden', 'change', 404),
+        ('delete_user_forbidden', 'delete', 404),
+        ('different_organization_user_forbidden', 'different_tenancy', 404),
+        ('no_permission_user_forbidden', 'no_permissions', 404),
+    ]
+
+
+
+    @pytest.mark.parametrize(
+        argnames = "test_name, user, expected",
+        argvalues = permission_no_view,
+        ids=[test_name for test_name, user, expected in permission_no_view]
+    )
+    def test_permission_no_view(self, model_instance, api_request_permissions,
+        test_name, user, expected, model_kwargs
+    ):
+        """ Check correct permission for view
+
+        Attempt to view with user missing permission
+        """
+
+        if hasattr(self, 'exclude_permission_no_view'):
+
+            for name, reason in getattr(self, 'exclude_permission_no_view'):
+
+                if name == test_name:
+
+                    pytest.xfail( reason = reason )
+
+        client = Client()
+
+        if user != 'anon':
+
+            client.force_login( api_request_permissions['user'][user] )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        view_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        response = client.get(
+            path = view_item.get_url( many = False )
+        )
+
+        if response.status_code == 405:
+
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == int(expected), response.content
+
+
+
     def test_permission_add(self, mocker,
         model_instance, api_request_permissions,
         model_kwargs, kwargs_api_create

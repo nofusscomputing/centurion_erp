@@ -8,7 +8,7 @@ from core.serializers.ticket_comment_category import (    # pylint: disable=W061
     TicketCommentCategoryViewSerializer
 )
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 
 

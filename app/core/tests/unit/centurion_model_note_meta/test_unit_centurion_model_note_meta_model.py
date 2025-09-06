@@ -179,8 +179,7 @@ class MetaAbstractModelInheritedCases(
 
         instance = note_model()
         instance.id = 1
-        if type(note_model.organization) is not property:
-            instance.organization = organization_one
+        instance.organization = organization_one
 
         model_instance.model = instance
 
