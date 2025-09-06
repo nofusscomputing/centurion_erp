@@ -98,6 +98,15 @@ def model_kwarg_data():
 
                 value = '6318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(20000, 99999) )
 
+            elif(
+                isinstance(getattr(model, field).field, models.DateField)
+                and field not in [ 'created', 'modified' ]
+            ):
+
+
+                value = str(random.randint(1972, 2037)) + '-' + str(
+                    random.randint(1, 12)) + '-' + str(random.randint(1, 28))
+
 
             kwargs.update({
                 field: value
