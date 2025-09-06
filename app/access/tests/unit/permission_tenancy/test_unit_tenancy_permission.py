@@ -11,6 +11,8 @@ from access.permissions.tenancy import TenancyPermissions
 
 from centurion.tests.unit_class import ClassTestCases
 
+from core.mixins.centurion import Centurion
+
 
 
 class MockObj:
@@ -138,7 +140,7 @@ class MyMockView:
         if model:
             self.model = model
         else:
-            self.model = self.MockModel()
+            self.model = self.MockModel
 
         self._obj_organization = obj_organization
 
@@ -626,6 +628,11 @@ class TenancyPermissionsTestCases(
     def test_function_get_tenancy_param_obj(self, viewset,
         organization_one, organization_two
     ):
+        """Test Class Function
+
+        when calling function `get_tenancy` with view and obj ensure correct tenancy
+        is returned.
+        """
 
 
         view = viewset(
@@ -657,6 +664,11 @@ class TenancyPermissionsTestCases(
     def test_function_get_tenancy_param_request_org_kwarg(self, viewset,
         organization_one, organization_two
     ):
+        """Test Class Function
+
+        when calling function `get_tenancy` with view where only user org is known
+        and tenancy is from kwargs.
+        """
 
         view = viewset(
             kwargs = {
@@ -679,9 +691,14 @@ class TenancyPermissionsTestCases(
 
 
 
-    def test_function_get_tenancy_param_request_data_no_kwarg(self, viewset,
+    def test_function_get_tenancy_param_request_data_kwarg_id_suffix(self, viewset,
         organization_one, organization_two
     ):
+        """Test Class Function
+
+        when calling function `get_tenancy` with view where only user org is known
+        and tenancy is from kwargs.
+        """
 
         view = viewset(
             data = {
@@ -708,6 +725,11 @@ class TenancyPermissionsTestCases(
     def test_function_get_tenancy_param_request_data_plus_kwarg_match(self, viewset,
         organization_one, organization_two
     ):
+        """Test Class Function
+
+        when calling function `get_tenancy` with view where only user org is known
+        and tenancy is from kwargs inc _id suffix.
+        """
 
         view = viewset(
             data = {
@@ -736,6 +758,11 @@ class TenancyPermissionsTestCases(
     def test_function_get_tenancy_param_request_data_plus_kwarg_no_match(self, viewset, mocker,
         organization_one, organization_two
     ):
+        """Test Class Function
+
+        when calling function `get_tenancy` with view where only user org is known
+        and tenancy is from kwargs different values.
+        """
 
         if not hasattr(viewset, 'get_log'):
             viewset.get_log = MockLogger
@@ -763,6 +790,107 @@ class TenancyPermissionsTestCases(
             view.permission_classes[0]().get_tenancy(
                 view = view,
             ) == organization_one
+
+
+    def test_function_is_tenancy_model(self,
+        mocker, viewset, organization_one,
+    ):
+        """Test Class Function
+
+        when calling function `is_tenancy_model` and model is not a sub model,
+        ensure models tenancy is returned
+        """
+
+
+        view = viewset(
+            kwargs = {},
+            method = 'GET',
+            obj_organization = organization_one,
+            permission_required = 'n/a',
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = False,
+                tenancy = organization_one,
+                permissions = 'n/a',
+            ),
+            model = Centurion
+        )
+
+        if not hasattr(view, 'get_parent_model'):
+            view.get_parent_model = None
+
+
+        mocker.patch.object(view, 'get_parent_model', return_value = None)
+
+        assert view.permission_classes[0]().is_tenancy_model(view = view)
+
+
+    def test_function_is_tenancy_model_is_sub_model(self,
+        mocker, viewset, organization_one,
+    ):
+        """Test Class Function
+
+        when calling function `is_tenancy_model` and model is a sub model,
+        ensure parent models tenancy is returned
+        """
+
+
+        view = viewset(
+            kwargs = {},
+            method = 'GET',
+            obj_organization = organization_one,
+            permission_required = 'n/a',
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = False,
+                tenancy = organization_one,
+                permissions = 'n/a',
+            )
+        )
+
+        view.model._is_sub_model = True
+
+        if not hasattr(view, 'get_parent_model'):
+            view.get_parent_model = None
+
+
+        mocker.patch.object(view, 'get_parent_model', return_value = Centurion)
+
+        assert view.permission_classes[0]().is_tenancy_model(view = view)
+
+
+    def test_function_is_tenancy_model_not_tenancy_model(self,
+        mocker, viewset, organization_one,
+    ):
+        """Test Class Function
+
+        when calling function `is_tenancy_model` and the model or parent model
+        is not a tenancy model, `False` is returned.
+        """
+
+
+        view = viewset(
+            kwargs = {},
+            method = 'GET',
+            obj_organization = organization_one,
+            permission_required = 'n/a',
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = False,
+                tenancy = organization_one,
+                permissions = 'n/a',
+            )
+        )
+
+        view.model._is_sub_model = True
+
+        if not hasattr(view, 'get_parent_model'):
+            view.get_parent_model = None
+
+
+        mocker.patch.object(view, 'get_parent_model', return_value = view.model)
+
+        assert view.permission_classes[0]().is_tenancy_model(view = view) == False
 
 
 

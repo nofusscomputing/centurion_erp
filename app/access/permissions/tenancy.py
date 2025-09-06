@@ -62,26 +62,20 @@ class TenancyPermissions(
             False (bool): Model is not a Tenancy model.
         """
 
-        if(
-            isinstance(self._is_tenancy_model, type(None))
-            and isinstance(getattr(view, '_is_tenancy_model', None), type(None))
-        ):
+        if isinstance(self._is_tenancy_model, type(None)):
 
-            if hasattr(view, 'model'):
+            self._is_tenancy_model = getattr(view, '_is_tenancy_model', None)
+
+            if isinstance(self._is_tenancy_model, type(None)):
 
                 self._is_tenancy_model = issubclass(view.model, Centurion)
 
-                if view.get_parent_model():
 
-                    self._is_tenancy_model = issubclass(
-                        view.get_parent_model(), Centurion)
+            if view.get_parent_model():
 
-        elif(
-            isinstance(self._is_tenancy_model, type(None))
-            and not isinstance(getattr(view, '_is_tenancy_model', None), type(None))
-        ):
+                self._is_tenancy_model = issubclass(
+                    view.get_parent_model(), Centurion)
 
-            self._is_tenancy_model = getattr(view, '_is_tenancy_model')
 
         return self._is_tenancy_model
 

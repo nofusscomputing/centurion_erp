@@ -59,10 +59,6 @@ class TenancyMixinTestCases(
 
 
 
-    # queryset does cache
-
-
-
 class TenancyMixinInheritedCases(
     TenancyMixinTestCases
 ):
