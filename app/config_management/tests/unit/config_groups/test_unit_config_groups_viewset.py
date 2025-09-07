@@ -67,7 +67,7 @@ class ViewsetTestCases(
 
 
 
-class KnowledgeBaseViewsetInheritedCases(
+class ConfigGroupViewsetInheritedCases(
     ViewsetTestCases,
 ):
     pass
@@ -75,7 +75,7 @@ class KnowledgeBaseViewsetInheritedCases(
 
 
 @pytest.mark.module_config_management
-class KnowledgeBaseViewsetPyTest(
+class ConfigGroupViewsetPyTest(
     ViewsetTestCases,
 ):
 

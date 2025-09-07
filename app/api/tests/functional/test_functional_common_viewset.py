@@ -189,12 +189,24 @@ class CommonViewSetTestCases:
 
             user = model_user.objects.create( **kwargs_user )
 
+            kwargs = kwargs_user.copy()
+            kwargs['username'] = 'username.two'
+            user2 = model_user.objects.create( **kwargs )
+
+            self.user = user
+
             kwargs = model_kwargs.copy()
-            kwargs['organization'] = organization_one
+            if 'organization' in kwargs:
+                kwargs['organization'] = organization_one
+            if 'user' in kwargs:
+                kwargs['user'] = user2
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
             kwargs = model_kwargs.copy()
-            kwargs['organization'] = organization_two
+            if 'organization' in kwargs:
+                kwargs['organization'] = organization_two
+            if 'user' in kwargs:
+                kwargs['user'] = user
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
         view_set = viewset()
@@ -211,12 +223,14 @@ class CommonViewSetTestCases:
         )
 
         view_set.request = request
-        view_set.kwargs = {}
+        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
+
 
         yield view_set
 
         del view_set.request
         del view_set
+        del self.user
 
         with django_db_blocker.unblock():
 
@@ -227,15 +241,16 @@ class CommonViewSetTestCases:
 
                 group.delete()
 
-            user.delete()
-
             user_tenancy_item.delete()
             other_tenancy_item.delete()
+
+            user.delete()
+            user2.delete
 
 
     # parmeterize to view action
     def test_function_get_queryset_filtered_results_action_list(self,
-        viewset_mock_request, organization_one
+        viewset_mock_request, organization_one, model
     ):
         """Test class function
 
@@ -253,6 +268,7 @@ class CommonViewSetTestCases:
 
         queryset = viewset.get_queryset()
 
+        assert len(model.objects.all()) >= 2, 'multiple objects must exist for test to work'
         assert len( queryset ) > 0, 'Empty queryset returned. Test not possible'
 
         for result in queryset:

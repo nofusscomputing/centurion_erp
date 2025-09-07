@@ -133,7 +133,7 @@ class ModelTestCases(
 
             instance['instance'].delete()
 
-        elif instance.id and type(instance) is not MockModel:
+        elif getattr(instance, 'id', None) and type(instance) is not MockModel:
 
             instance.delete()
 
