@@ -1,15 +1,39 @@
 ---
 title: Views
-description: Views development Documentation for Centurion ERP
+description: Views/viewset development Documentation for Centurion ERP
 date: 2024-07-12
 template: project.html
-about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
+about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-Viewsets are used by Centurion ERP for each of the API views.
+A view within Centurion ERP are the objects that are both the ingress and egress of data in relation to the user. As Centurion ERP is an API application, we use specifically use ViewSets as our type of view.
+
+There are many viewsets available within Centurion. Our viewsets are setup based off of the authorization the user should have, they are:
+
+- `tenancy.py` Tenancy based objects
+
+    Filter objects to and only allow access based off of the users tenancy.
+
+- `user.py` User based objects
+
+    Filter objects to and only allow access to the current authenticated user.
+
+- `super_user.py` Super User objects
+
+    Only allows access to a user whom has super user access.
+
+- `public` Anonymous / Public User
+
+    Unauthenticated users can access.
+
+The authorization based viewsets can be located at path `app/api/viewsets/common/`
+
+Within each authorization based viewset, the viewsets are further broken down into viewsets based off of features. i.e. Can view, can edit etc. These are derived from the common viewset (`common.py`) classes.
 
 
 ## Requirements
+
+When working with viewsets the following requirements must be met:
 
 - Views are class based
 
@@ -19,66 +43,19 @@ Viewsets are used by Centurion ERP for each of the API views.
 
 - views are documented at the class level for the swagger UI.
 
-- Index Viewsets must be tested against tests `from api.tests.abstract.viewsets import ViewSetCommon`
+- ViewSets must be tested both unit and functional:
 
-- Model VieSets must be tested against the following tests:
-
-    - _Unit Test Cases_ `app/api/tests/unit/test_unit_common_viewset.py`
+    - _Unit Test Cases_ `app/api/tests/unit/test_unit_common_viewset.py` and `app/api/tests/unit/viewset/`
 
         Within this file you'll find test cases that are suffixed with `InheritedCases`. The test case you should use is the one thats name begins with the class you inherited. for example, if the viewset inherits common ViewSet base class `ModelViewSet`, the class name of the pre-written test cases would be `ModelViewSetInheritedCases`.
 
-    - _Functional test cases_ `from api.tests.abstract.api_serializer_viewset import SerializersTestCases`
+    - _Functional test cases_ `app/api/tests/functional/test_functional_common_viewset.py` and `app/api/tests/functional/viewset/`
 
-    - _Functional test cases_ `from api.tests.abstract.api_permissions_viewset import APIPermission`
-
-    - _Functional test cases_ (Only required if model has an API endpoint)_`from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional`
-
-    - _Functional test cases_ _(Only required if model has nav menu entry)_`from api.tests.abstract.test_metadata_functional import MetaDataNavigationEntriesFunctional`
-
-- View Added to Navigation
+- View Added to Navigation `app/api/react_ui_metadata.py`
 
 - ViewSets that are used to expose data that is publicly available **must** have it's filename prefixed with `public_`
 
-
-## Creating a ViewSet
-
-All ViewSets are to be saved under the django app they belong to and within a directory called `viewsets`. Serializers are broken down to match the [model types](./models.md#creating-a-model):
-
-
-### Standard Model ViewSet
-
-
-<!-- markdownlint-disable -->
-#### Requirements
-<!-- markdownlint-restore -->
-
-- Inherits from one of the following base class':
-
-    - Index ViewSet `api.viewsets.common.CommonViewSet`
-
-    - Model ViewSet that are to be Read-Only `api.viewsets.common.ReadOnlyModelViewSet`
-
-    - If not any of the above, `api.viewsets.common.ModelViewSet`
-
-
-### Sub-Model ViewSet
-
-Unless you are creating a new base sub-model, you will not need to create a ViewSet. This is because the sub-model Viewset that is used is the lowest base model in the inheritance chain.
-
-
-<!-- markdownlint-disable -->
-#### Requirements
-<!-- markdownlint-restore -->
-
-- Attribute 'base_model' must be specified within the ViewSet
-
-- ViewSet must inherit from `api.viewsets.common.SubModelViewSet`
-
-- Tested against:
-
-    - Unit Tests:
-
-        - `api.tests.unit.test_unit_common_viewset.SubModelViewSetInheritedCases`
+- No viewset inherits from the common viewset classes. ONLY inherit from the permission bassed classes.
 
 
 ## Permissions

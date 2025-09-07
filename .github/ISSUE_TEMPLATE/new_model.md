@@ -39,7 +39,7 @@ Describe in detail the following:
 
 - [ ] 🔗 URL Route Added
 
-- [ ] 🏷️ [Model tag]().
+- [ ] 🏷️ Model tag
 
     - [ ] 📘 Tag updated in the [docs](https://nofusscomputing.com/projects/centurion_erp/user/core/markdown/#model-reference)
 
@@ -61,15 +61,14 @@ Describe in detail the following:
 
 - Unit Tests
     - [ ] [Model](https://nofusscomputing.com/projects/centurion_erp/development/models/#tests)
-    - [ ] ViewSet
+    - [ ] [ViewSet](https://nofusscomputing.com/projects/centurion_erp/development/views/#requirements)
     - [ ] Serializer
 - Function Test
     - [ ] API Metadata
-    - [ ] API Permissions
     - [ ] API Render (fields)
     - [ ] Model
     - [ ] Serializer
-    - [ ] ViewSet
+    - [ ] [ViewSet](https://nofusscomputing.com/projects/centurion_erp/development/views/#requirements)
 
 
 ## ✅ Requirements
