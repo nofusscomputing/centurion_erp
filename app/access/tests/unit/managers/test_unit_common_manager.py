@@ -4,6 +4,7 @@ import pytest
 
 @pytest.mark.manager
 @pytest.mark.manager_common
+@pytest.mark.unit
 class CommonManagerTestCases:
     pass
 

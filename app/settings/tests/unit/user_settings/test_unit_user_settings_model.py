@@ -104,6 +104,12 @@ class UserSettingsModelTestCases(
 
             reverse('v2:' + model._meta.model_name + '-list')
 
+    def test_manager_tenancy_filter_tenant(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_manager_tenancy_select_related(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
 
 
 class UserSettingsModelInheritedCases(

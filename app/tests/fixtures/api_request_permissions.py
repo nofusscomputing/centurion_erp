@@ -22,9 +22,9 @@ def api_request_permissions( django_db_blocker,
 
         random_str = str(random.randint(1, 99999))
 
-        app_settings = AppSettings.objects.get(
+        app_settings = AppSettings.objects.filter(
             owner_organization = None
-        )
+        )[0]
 
         app_settings.global_organization = organization_three
 
