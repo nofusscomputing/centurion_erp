@@ -4,6 +4,9 @@ from django.db import models
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
+from access.tests.unit.managers.test_unit_user_manager import (
+    UserManagerInheritedCases
+)
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractModelInheritedCases
@@ -15,7 +18,8 @@ from settings.models.user_settings import UserSettings
 
 @pytest.mark.model_usersettings
 class UserSettingsModelTestCases(
-    CenturionAbstractModelInheritedCases
+    UserManagerInheritedCases,
+    CenturionAbstractModelInheritedCases,
 ):
 
 
