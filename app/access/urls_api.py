@@ -38,18 +38,13 @@ router.register(
 
 router.register(
     prefix=f'/entity/(?P<model_name>[{entity_type_names}]+)?', viewset = entity.ViewSet,
-    feature_flag = '2025-00002', basename = '_api_entity_sub'
+    basename = '_api_entity_sub'
 )
 
 router.register(
     prefix = '/entity', viewset = entity.NoDocsViewSet,
-    feature_flag = '2025-00002', basename = '_api_entity'
+    basename = '_api_entity'
 )
-
-# router.register(
-#     prefix = 'access/entity/(?P<model_id>[0-9]+)/notes', viewset = entity_notes.ViewSet,
-#     feature_flag = '2025-00002', basename = '_api_v2_entity_note'
-# )
 
 router.register(
     prefix = '/tenant', viewset = organization.ViewSet,

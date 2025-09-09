@@ -392,6 +392,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "icon": 'role',
                         "link": "/access/role"
                     },
+                    'view_contact': {
+                        "display_name": "Directory",
+                        "name": "directory",
+                        "link": "/access/entity/contact"
+                    }
                 }
             },
             'accounting': {
@@ -581,39 +586,28 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
-            if request.feature_flag['2025-00002']:
-
-                if request.feature_flag['2025-00008']:
-
-                    nav['access']['pages'].update({
-                        'view_company': {
-                            "display_name": "Companies",
-                            "name": "organization",
-                            "icon": 'organization',
-                            "link": "/access/company"
-                        }
-                    })
-
+            if request.feature_flag['2025-00008']:
 
                 nav['access']['pages'].update({
-                    'view_contact': {
-                        "display_name": "Directory",
-                        "name": "directory",
-                        "link": "/access/entity/contact"
+                    'view_company': {
+                        "display_name": "Companies",
+                        "name": "organization",
+                        "icon": 'organization',
+                        "link": "/access/company"
                     }
                 })
 
 
-                if request.feature_flag['2025-00005']:
+            if request.feature_flag['2025-00005']:
 
-                    nav['human_resources']['pages'].update({
-                        'view_employee': {
-                            "display_name": "Employees",
-                            "name": "employees",
-                            "icon": "employees",
-                            "link": "/access/entity/employee"
-                        }
-                    })
+                nav['human_resources']['pages'].update({
+                    'view_employee': {
+                        "display_name": "Employees",
+                        "name": "employees",
+                        "icon": "employees",
+                        "link": "/access/entity/employee"
+                    }
+                })
 
 
             if request.feature_flag['2025-00004']:
