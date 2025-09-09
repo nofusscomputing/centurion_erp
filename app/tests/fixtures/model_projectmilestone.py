@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from django.db import models
 
@@ -13,19 +13,24 @@ from project_management.serializers.project_milestone import (
 
 
 @pytest.fixture( scope = 'class')
-def model_projectmilestone():
+def model_projectmilestone(django_db_blocker):
 
     yield ProjectMilestone
+
+    with django_db_blocker.unblock():
+
+        for db_obj in ProjectMilestone.objects.all():
+
+            try:
+                db_obj.delete()
+            except models.deletion.ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')
 def kwargs_projectmilestone(django_db_blocker,
     kwargs_centurionmodel, kwargs_project, model_project
 ):
-
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
     with django_db_blocker.unblock():
 
@@ -53,7 +58,7 @@ def kwargs_projectmilestone(django_db_blocker,
                 })
 
         kwargs.update({
-            'name': 'pm' + random_str
+            'name': 'pm' + str( random.randint(1,999) )
         })
         del kwargs['code']
 
@@ -67,7 +72,7 @@ def kwargs_projectmilestone(django_db_blocker,
 
     kwargs = {
         **kwargs,
-        'name': 'pm_' + random_str,
+        'name': 'pm_' + str( random.randint(1,999) ),
         'project': project,
         'start_date': '2025-08-04T00:00:01Z',
         'finish_date': '2025-08-04T00:00:02Z',

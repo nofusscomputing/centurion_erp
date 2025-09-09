@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.db.models.deletion import ProtectedError
+
 from access.models.entity import Entity
 from access.serializers.entity import (
     BaseSerializer,
@@ -11,9 +13,18 @@ from access.serializers.entity import (
 
 
 @pytest.fixture( scope = 'class')
-def model_entity():
+def model_entity(django_db_blocker):
 
     yield Entity
+
+    with django_db_blocker.unblock():
+
+        for db_obj in Entity.objects.all():
+
+            try:
+                db_obj.delete()
+            except ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')

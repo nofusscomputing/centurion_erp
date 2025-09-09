@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.db.models.deletion import ProtectedError
+
 from itam.models.software import SoftwareVersion
 from itam.serializers.software_version import (
     SoftwareVersionBaseSerializer,
@@ -11,9 +13,18 @@ from itam.serializers.software_version import (
 
 
 @pytest.fixture( scope = 'class')
-def model_softwareversion(request):
+def model_softwareversion(django_db_blocker):
 
     yield SoftwareVersion
+
+    with django_db_blocker.unblock():
+
+        for db_obj in SoftwareVersion.objects.all():
+
+            try:
+                db_obj.delete()
+            except ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')

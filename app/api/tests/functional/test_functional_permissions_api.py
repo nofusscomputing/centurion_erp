@@ -581,7 +581,7 @@ class APIPermissionViewInheritedCases:
             'organization': api_request_permissions['tenancy']['different']
         })
 
-        the_model = model_instance(
+        the_model1 = model_instance(
             kwargs_create = kwargs
         )
 
@@ -590,17 +590,17 @@ class APIPermissionViewInheritedCases:
             'organization': api_request_permissions['tenancy']['global']
         })
 
-        model_instance(
+        the_model2 =model_instance(
             kwargs_create = kwargs
         )
 
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+        the_model3 = model_instance( kwargs_create = model_kwargs.copy() )
 
         response = client.get(
-            path = the_model.get_url( many = True )
+            path = the_model3.get_url( many = True )
         )
 
         if response.status_code == 405:
@@ -629,6 +629,18 @@ class APIPermissionViewInheritedCases:
                 print(f'Failed returned row was: {row}')
 
         assert only_from_user_org
+        try:
+            the_model1.delete()
+        except:
+            pass
+        try:
+            the_model2.delete()
+        except:
+            pass
+        try:
+            the_model3.delete()
+        except:
+            pass
 
 
 

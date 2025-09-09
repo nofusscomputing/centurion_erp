@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.db.models.deletion import ProtectedError
+
 from access.models.role import Role
 from access.serializers.role import (
     BaseSerializer,
@@ -11,9 +13,18 @@ from access.serializers.role import (
 
 
 @pytest.fixture( scope = 'class')
-def model_role():
+def model_role(django_db_blocker):
 
     yield Role
+
+    with django_db_blocker.unblock():
+
+        for db_obj in Role.objects.all():
+
+            try:
+                db_obj.delete()
+            except ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')

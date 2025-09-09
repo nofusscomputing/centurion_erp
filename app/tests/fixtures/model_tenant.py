@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.db.models.deletion import ProtectedError
+
 from access.models.tenant import Tenant
 from access.serializers.organization import (
     TenantBaseSerializer,
@@ -10,9 +12,18 @@ from access.serializers.organization import (
 
 
 @pytest.fixture( scope = 'class')
-def model_tenant():
+def model_tenant(django_db_blocker):
 
     yield Tenant
+
+    with django_db_blocker.unblock():
+
+        for db_obj in Tenant.objects.all():
+
+            try:
+                db_obj.delete()
+            except ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')

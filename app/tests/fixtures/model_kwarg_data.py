@@ -115,6 +115,8 @@ def model_kwarg_data(django_db_blocker):
                 field: value
             })
 
+            del value
+
         instance = None
 
         if create_instance:
@@ -132,31 +134,31 @@ def model_kwarg_data(django_db_blocker):
                     stack_info = True
                 )
 
-                if '__all__' in e.error_dict:
+                # if '__all__' in e.error_dict:
 
-                    if 'unique' in e.error_dict['__all__'][0].code:
+                #     if 'unique' in e.error_dict['__all__'][0].code:
 
-                        try:
+                try:
 
-                            instance = model.objects.get(
-                                **kwargs
-                            )
+                    instance = model.objects.get(
+                        **kwargs
+                    )
 
-                        except ObjectDoesNotExist as e:
+                except ObjectDoesNotExist as e:
 
-                            log.exception(
-                                msg = f'{e}\n\n{kwargs}\n\n',
-                                stack_info = True,
-                            )
+                    log.exception(
+                        msg = f'{e}\n\n{kwargs}\n\n',
+                        stack_info = True,
+                    )
 
-                            if 'modified' in kwargs:
+                    if 'modified' in kwargs:
 
-                                no_modified_in_kwargs = kwargs.copy()
-                                del no_modified_in_kwargs['modified']
+                        no_modified_in_kwargs = kwargs.copy()
+                        del no_modified_in_kwargs['modified']
 
-                                instance = model.objects.get(
-                                    **no_modified_in_kwargs
-                                )
+                        instance = model.objects.get(
+                            **no_modified_in_kwargs
+                        )
 
 
             for field, values in many_field.items():

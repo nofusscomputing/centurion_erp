@@ -650,15 +650,6 @@ if FEATURE_FLAGGING_ENABLED:
                 }
             },
             {
-                "2025-00002": {
-                    "name": "Entities",
-                    "description": "Entities see https://github.com/nofusscomputing/centurion_erp/issues/704",
-                    "enabled": True,
-                    "created": "",
-                    "modified": ""
-                }
-            },
-            {
                 "2025-00004": {
                     "name": "Accounting Module",
                     "description": "Accounting related functions. see https://github.com/nofusscomputing/centurion_erp/issues/88",

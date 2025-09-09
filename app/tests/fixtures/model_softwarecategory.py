@@ -1,6 +1,8 @@
 import datetime
 import pytest
 
+from django.db.models.deletion import ProtectedError
+
 from itam.models.software import SoftwareCategory
 from itam.serializers.software_category import (
     SoftwareCategoryBaseSerializer,
@@ -11,9 +13,18 @@ from itam.serializers.software_category import (
 
 
 @pytest.fixture( scope = 'class')
-def model_softwarecategory(request):
+def model_softwarecategory(django_db_blocker):
 
     yield SoftwareCategory
+
+    with django_db_blocker.unblock():
+
+        for db_obj in SoftwareCategory.objects.all():
+
+            try:
+                db_obj.delete()
+            except ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')

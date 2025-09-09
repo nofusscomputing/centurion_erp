@@ -1,7 +1,7 @@
 import datetime
 import pytest
 
-from django.db import models
+from django.db.models.deletion import ProtectedError
 
 from project_management.models.project_types import ProjectType
 from project_management.serializers.project_type import (
@@ -13,9 +13,18 @@ from project_management.serializers.project_type import (
 
 
 @pytest.fixture( scope = 'class')
-def model_projecttype():
+def model_projecttype(django_db_blocker):
 
     yield ProjectType
+
+    with django_db_blocker.unblock():
+
+        for db_obj in ProjectType.objects.all():
+
+            try:
+                db_obj.delete()
+            except ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')

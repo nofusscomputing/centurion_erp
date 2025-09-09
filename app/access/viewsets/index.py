@@ -25,19 +25,12 @@ class Index(IndexViewset):
 
         response = {
                 "organization": reverse('v2:_api_tenant-list', request=request),
-            }
-
-        if self.request.feature_flag['2025-00002']:
-            
-            response.update({
+                "role": reverse( 'v2:_api_role-list', request=request ),
                 "directory": reverse(
                     'v2:_api_entity_sub-list',
                     request=request,
                     kwargs = { 'model_name': 'contact' }
                 ),
-                "entities": reverse( 'v2:_api_entity-list', request=request ),
-                "role": reverse( 'v2:_api_role-list', request=request ),
-            })
-
+            }
 
         return Response(response)
