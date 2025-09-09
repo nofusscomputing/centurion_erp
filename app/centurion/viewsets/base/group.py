@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import AuthUserReadOnlyModelViewSet
+from api.viewsets.common.authenticated import AuthUserReadOnlyModelViewSet
 
 from centurion.serializers.group import (
     GroupBaseSerializer

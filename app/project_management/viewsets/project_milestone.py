@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from project_management.models.project_milestone_history import ProjectMilestoneHistory    # pylint: disable=W0611:unused-import

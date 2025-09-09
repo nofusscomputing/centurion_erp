@@ -4,6 +4,9 @@ from django.db import models
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
+from access.tests.unit.managers.test_unit_user_manager import (
+    UserManagerInheritedCases
+)
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractModelInheritedCases
@@ -15,7 +18,8 @@ from settings.models.user_settings import UserSettings
 
 @pytest.mark.model_usersettings
 class UserSettingsModelTestCases(
-    CenturionAbstractModelInheritedCases
+    UserManagerInheritedCases,
+    CenturionAbstractModelInheritedCases,
 ):
 
 
@@ -103,6 +107,24 @@ class UserSettingsModelTestCases(
         with pytest.raises( NoReverseMatch ) as e:
 
             reverse('v2:' + model._meta.model_name + '-list')
+
+    def test_manager_tenancy_filter_tenant(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_manager_tenancy_select_related(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == { 'user_id': model_instance.user.id }
 
 
 

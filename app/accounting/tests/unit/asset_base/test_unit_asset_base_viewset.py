@@ -11,7 +11,7 @@ from accounting.viewsets.asset import (
     ViewSet,
 )
 
-from api.tests.unit.test_unit_common_viewset import SubModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import SubModelViewSetInheritedCases
 
 from centurion.tests.abstract.mock_view import MockRequest
 

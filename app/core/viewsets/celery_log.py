@@ -6,7 +6,7 @@ from core.serializers.celery_log import (    # pylint: disable=W0611:unused-impo
     TaskResultViewSerializer
 )
 
-from api.viewsets.common import AuthUserReadOnlyModelViewSet
+from api.viewsets.common.authenticated import AuthUserReadOnlyModelViewSet
 
 
 

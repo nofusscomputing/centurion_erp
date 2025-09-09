@@ -179,8 +179,7 @@ class MetaAbstractModelInheritedCases(
 
         instance = note_model()
         instance.id = 1
-        if type(note_model.organization) is not property:
-            instance.organization = organization_one
+        instance.organization = organization_one
 
         model_instance.model = instance
 
@@ -251,3 +250,9 @@ class MetaAbstractModelPyTest(
         assert(
             exclude == None
         )
+
+    def test_manager_tenancy_filter_tenant(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_manager_tenancy_select_related(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )

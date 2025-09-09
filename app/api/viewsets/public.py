@@ -3,7 +3,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from api.viewsets.common import IndexViewset
+from api.viewsets.common.authenticated import IndexViewset
 
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 

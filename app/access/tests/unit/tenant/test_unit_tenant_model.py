@@ -2,6 +2,11 @@ import pytest
 
 from django.db import models
 
+from access.tests.unit.managers.test_unit_tenancy_manager import (
+    has_arg_kwarg,
+    TenancyManagerInheritedCases
+)
+
 from core.tests.unit.mixin_centurion.test_unit_centurion_mixin import (
     CenturionMixnInheritedCases,
 )
@@ -10,6 +15,7 @@ from core.tests.unit.mixin_centurion.test_unit_centurion_mixin import (
 @pytest.mark.module_access
 @pytest.mark.model_tenant
 class TenantModelTestCases(
+    TenancyManagerInheritedCases,
     CenturionMixnInheritedCases
 ):
 
@@ -73,6 +79,34 @@ class TenantModelTestCases(
             'unique': False,
         },
     }
+
+
+    def test_manager_tenancy_filter_tenant(self, mocker,
+        model_instance, model, api_request_permissions
+    ):
+
+        filter = mocker.spy(models.QuerySet, 'filter')
+
+        obj = model_instance
+
+        if hasattr(model, 'organization'):
+            obj.organization = api_request_permissions['tenancy']['user']
+            obj.save()
+
+        filter.reset_mock()
+
+        model.objects.user(
+            user = api_request_permissions['user']['view'],
+            permission = str( model._meta.app_label + '.view_' + model._meta.model_name )
+        ).all()
+
+        assert any(
+            has_arg_kwarg(call = c, key = 'id__in') 
+            and c.args[0].model is model for c in filter.call_args_list
+        )
+
+    def test_manager_tenancy_select_related(self):
+        pytest.xfail( reason = 'Model is the Tenant model, cant select itself.' )
 
 
 

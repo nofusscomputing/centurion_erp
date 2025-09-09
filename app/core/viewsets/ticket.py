@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 
 from rest_framework.reverse import reverse
 
-from api.viewsets.common import SubModelViewSet
+from api.viewsets.common.tenancy import SubModelViewSet
 
 from core.models.ticket_base import TicketBase
 
@@ -27,7 +27,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
         if issubclass(model, TicketBase):
 
-            serializer_name = 'ticket'
+            serializer_name = 'ticketbase'
 
             if model._meta.sub_model_type != 'ticket':
                 

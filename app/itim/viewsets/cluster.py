@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from itim.models.cluster_history import ClusterHistory    # pylint: disable=W0611:unused-import

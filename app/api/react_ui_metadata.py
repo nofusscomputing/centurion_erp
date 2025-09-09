@@ -93,7 +93,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 app_namespace = view.model().get_app_namespace() + ':'
 
 
-        if view.kwargs.get('pk', None) is not None:
+        if view.kwargs.get(getattr(view, 'lookup_field', 'pk'), None) is not None:
 
             qs = view.get_queryset()[0]
 

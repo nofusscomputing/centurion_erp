@@ -17,7 +17,7 @@ class UserSettingsBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_usersettings-detail", format="html"
+        view_name="v2:_api_usersettings-detail", format="html", lookup_field="user_id"
     )
 
     class Meta:
@@ -47,7 +47,7 @@ class UserSettingsModelSerializer(UserSettingsBaseSerializer):
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse("v2:_api_usersettings-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("v2:_api_usersettings-detail", request=self._context['view'].request, kwargs={'user_id': item.user.id}),
             'tokens': reverse(
                 "v2:_api_authtoken-list",
                 request=self._context['view'].request,

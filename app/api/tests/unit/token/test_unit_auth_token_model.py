@@ -4,6 +4,10 @@ from django.db import models
 
 from django.utils.timezone import now
 
+from access.tests.unit.managers.test_unit_user_manager import (
+    UserManagerInheritedCases
+)
+
 from api.models.tokens import AuthToken
 
 from core.tests.unit.mixin_centurion.test_unit_centurion_mixin import CenturionMixnInheritedCases
@@ -12,6 +16,7 @@ from core.tests.unit.mixin_centurion.test_unit_centurion_mixin import CenturionM
 
 @pytest.mark.model_authtoken
 class AuthTokenModelTestCases(
+    UserManagerInheritedCases,
     CenturionMixnInheritedCases,
 ):
 
