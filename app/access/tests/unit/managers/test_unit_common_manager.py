@@ -14,7 +14,7 @@ class CommonManagerInheritedCases(
     pass
 
 @pytest.mark.module_access
-class CommonManagerPytest(
+class CommonManagerPyTest(
     CommonManagerTestCases
 ):
     pass

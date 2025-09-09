@@ -56,7 +56,7 @@ class UserManagerInheritedCases(
 
 
 @pytest.mark.module_access
-class UserManagerPytest(
+class UserManagerPyTest(
     UserManagerTestCases
 ):
     def test_manager_user_filter_user(self):

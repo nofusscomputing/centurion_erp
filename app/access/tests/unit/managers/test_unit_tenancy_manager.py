@@ -90,7 +90,7 @@ class TenancyManagerInheritedCases(
 
 
 @pytest.mark.module_access
-class TenancyManagerPytest(
+class TenancyManagerPyTest(
     TenancyManagerTestCases
 ):
     def test_manager_tenancy_filter_tenant(self):
