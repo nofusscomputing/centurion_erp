@@ -20,7 +20,7 @@ def api_request_permissions( django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        app_settings = AppSettings.objects.get(
+        app_settings = AppSettings.objects.filter(
             owner_organization = None
         )[0]
 
