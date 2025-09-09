@@ -1,24 +1,6 @@
-import django
 import pytest
 
-from access.tests.unit.mixin_tenancy.test_unit_tenancy_permission_mixin import (
-    TenancyMixinInheritedCases
-)
-
-# from api.tests.unit.test_unit_common_viewset import (
-#     CommonModelViewSetInheritedCases,
-#     CommonModelCreateViewSetInheritedCases,
-#     CommonModelListRetrieveDeleteViewSetInheritedCases,
-#     CommonModelRetrieveUpdateViewSetInheritedCases,
-#     CommonSubModelViewSetTestCases,
-#     CommonSubModelViewSetInheritedCases,
-#     CommonReadOnlyModelViewSetInheritedCases,
-#     CommonReadOnlyListModelViewSetInheritedCases,
-
-# )
 from api.tests.functional.test_functional_common_viewset import (
-    # CommonViewSetInheritedCases
-    # CommonViewSetTestCases
     CommonModelViewSetInheritedCases,
     CommonModelCreateViewSetInheritedCases,
     CommonModelListRetrieveDeleteViewSetInheritedCases,
@@ -43,7 +25,6 @@ from api.viewsets.common.tenancy import (
 @pytest.mark.permissions_tenancy
 @pytest.mark.permissions
 class ModelViewSetTestCases(
-    # TenancyMixinInheritedCases,
     CommonModelViewSetInheritedCases,
 ):
 
