@@ -101,7 +101,7 @@ class AdditionalTestCases:
             },
         )
 
-        change_item.id = api_request_permissions['user']['change'].id
+        change_item.user_id = api_request_permissions['user']['change'].id
 
         response = client.patch(
             path = change_item.get_url( many = False ),
@@ -193,7 +193,7 @@ class AdditionalTestCases:
             }
         )
 
-        view_item.id = api_request_permissions['user']['view'].id
+        view_item.user_id = api_request_permissions['user']['view'].id
 
         response = client.get(
             path = view_item.get_url( many = False )

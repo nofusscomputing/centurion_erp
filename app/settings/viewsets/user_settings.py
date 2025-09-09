@@ -67,6 +67,10 @@ class ViewSet(ModelRetrieveUpdateViewSet):
     #     'software',
     # ]
 
+    lookup_field = 'user_id'
+
+    lookup_url_kwarg = 'user_id'
+
     view_description = 'Your Settings'
 
 

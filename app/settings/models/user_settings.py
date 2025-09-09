@@ -139,7 +139,7 @@ class UserSettings(
     def get_url_kwargs(self, many = False) -> dict:
 
         kwargs = {
-            'pk': self.id
+            'user_id': self.user.id
         }
 
         return kwargs

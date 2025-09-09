@@ -106,7 +106,7 @@ class ViewSet(
         self._get_return_url = reverse(
             'v2:_api_usersettings-detail',
             kwargs = {
-                'pk': self.kwargs['model_id']
+                'user_id': self.kwargs['model_id']
             },
             request = self.request,
         )

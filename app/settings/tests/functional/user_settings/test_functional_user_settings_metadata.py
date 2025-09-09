@@ -51,7 +51,7 @@ class ViewSetBase(
         self.item.save()
 
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.url_view_kwargs = {'user_id': self.item.id}
 
         self.add_data = {
             'name': 'team-post',

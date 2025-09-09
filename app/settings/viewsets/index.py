@@ -125,7 +125,7 @@ class Index(IndexViewset):
                     'v2:_api_usersettings-detail',
                     request=request,
                     kwargs={
-                        'pk': request.user.id 
+                        'user_id': request.user.id 
                     }
                 ),
             }

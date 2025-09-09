@@ -115,6 +115,18 @@ class UserSettingsModelTestCases(
         pytest.xfail( reason = 'base model, test is n/a.' )
 
 
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+        """Test Class Method
+        
+        Ensure method `get_url_kwargs` returns the correct value.
+        """
+
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == { 'user_id': model_instance.user.id }
+
+
 
 class UserSettingsModelInheritedCases(
     UserSettingsModelTestCases,

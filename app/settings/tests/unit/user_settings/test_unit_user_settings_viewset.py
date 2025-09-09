@@ -43,6 +43,14 @@ class ViewsetTestCases(
             'filterset_fields': {
                 'value': []
             },
+            'lookup_field': {
+                'type': str,
+                'value': 'user_id'
+            },
+            'lookup_url_kwarg': {
+                'type': str,
+                'value': 'user_id'
+            },
             'model': {
                 'value': UserSettings
             },

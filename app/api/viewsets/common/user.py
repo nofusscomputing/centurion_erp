@@ -10,14 +10,14 @@ from .common import (
 
 
 
-class UserPermissions:
+class Permissions:
 
     permission_classes = [ UserPermissions ]
 
 
 
 class ModelCreateViewSet(
-    UserPermissions,
+    Permissions,
     CommonModelCreateViewSet,
 ):
 
@@ -26,7 +26,7 @@ class ModelCreateViewSet(
 
 
 class ModelListRetrieveDeleteViewSet(
-    UserPermissions,
+    Permissions,
     CommonModelListRetrieveDeleteViewSet,
 ):
     """ Use for models that you wish to delete and view ONLY!"""
@@ -36,7 +36,7 @@ class ModelListRetrieveDeleteViewSet(
 
 
 class ModelRetrieveUpdateViewSet(
-    UserPermissions,
+    Permissions,
     CommonModelRetrieveUpdateViewSet,
 ):
     """ Use for models that you wish to update and view ONLY!"""
