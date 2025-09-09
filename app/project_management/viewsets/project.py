@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from access.models.tenant import Tenant
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common.tenancy import ModelViewSet
 
 # This import only exists so that the migrations can be created
 from project_management.models.project_history import ProjectHistory    # pylint: disable=W0611:unused-import
@@ -90,10 +90,12 @@ class ViewSet( ModelViewSet ):
 
             organization = int(self.request.data['organization'])
 
-            organization = Tenant.objects.get( pk = organization )
+            organization = Tenant.objects.user(
+                user = self.request.user, permission = self._permission_required
+            ).get( pk = organization )
 
         elif self.queryset:
-        
+
             if list(self.queryset) == 1:
 
                 obj = list(self.queryset)[0]

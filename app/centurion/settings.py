@@ -93,7 +93,7 @@ LOG_FILES = {    # defaults for devopment. docker includes settings has correct 
     "catch_all":"log/catch-all.log"
 }
 
-CENTURION_LOG = logging.getLogger( name = 'centurion')
+CENTURION_LOG:logging.Logger = logging.getLogger( name = 'centurion')
 
 CENTURION_LOGGING = {
         "version": 1,

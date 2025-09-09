@@ -1,7 +1,7 @@
 
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from itim.viewsets.service import (
     Service,
@@ -46,9 +46,6 @@ class ViewsetTestCases(
                 'value': Service
             },
             'model_documentation': {
-                'type': type(None),
-            },
-            'queryset': {
                 'type': type(None),
             },
             'serializer_class': {

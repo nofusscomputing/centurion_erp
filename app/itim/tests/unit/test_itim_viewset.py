@@ -3,7 +3,7 @@ import pytest
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
-from api.tests.unit.test_unit_common_viewset import IndexViewsetInheritedCases
+from api.tests.unit.viewset.test_unit_authenticated_viewset import IndexViewsetInheritedCases
 
 from itim.viewsets.index import Index
 

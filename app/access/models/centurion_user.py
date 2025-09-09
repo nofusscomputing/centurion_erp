@@ -21,6 +21,8 @@ class CenturionUser(
         User (Model): Django Base User
     """
 
+    _global_organization = None
+
     _group_permissions: bool = False
 
     _tenancies: list[Tenant] = None
@@ -102,6 +104,7 @@ class CenturionUser(
             if app_settings.global_organization:
                 self._tenancies = [ app_settings.global_organization ]
                 self._tenancies_int = [ app_settings.global_organization.id ]
+                self.global_organization = app_settings.global_organization
 
 
             for group in self.groups.prefetch_related(

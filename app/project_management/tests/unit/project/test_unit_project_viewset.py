@@ -1,6 +1,6 @@
 import pytest
 
-from api.tests.unit.test_unit_common_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from project_management.viewsets.project import (
     Project,
@@ -46,9 +46,6 @@ class ViewsetTestCases(
                 'value': Project
             },
             'model_documentation': {
-                'type': type(None),
-            },
-            'queryset': {
                 'type': type(None),
             },
             'serializer_class': {

@@ -5,20 +5,14 @@ import pytest
 from django.contrib.auth.models import ContentType, Permission
 
 from rest_framework import viewsets
-from rest_framework.permissions import (
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
-from rest_framework_json_api.metadata import JSONAPIMetadata
 
-from access.mixins.organization import OrganizationMixin
-from access.mixins.permissions import TenancyPermissionMixin
+from api.permissions.default import DefaultDenyPermission
 from access.models.tenant import Tenant as Organization, Tenant
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from api.react_ui_metadata import ReactUIMetadata
-from api.viewsets.common import (
+from api.viewsets.common.common import (
     Create,
     Destroy,
     List,
@@ -26,21 +20,20 @@ from api.viewsets.common import (
     Update,
 
     ModelViewSetBase,
-    StaticPageNumbering,
+    # StaticPageNumbering,
 
     CommonViewSet,
-    ModelViewSet,
-    SubModelViewSet,
-    SubModelViewSet_ReWrite,
+    CommonModelViewSet,
+    CommonSubModelViewSet_ReWrite,
 
-    ModelCreateViewSet,
-    ModelListRetrieveDeleteViewSet,
-    ModelRetrieveUpdateViewSet,
-    ReadOnlyModelViewSet,
-    ReadOnlyListModelViewSet,
-    AuthUserReadOnlyModelViewSet,
-    IndexViewset,
-    PublicReadOnlyViewSet,
+    CommonModelCreateViewSet,
+    CommonModelListRetrieveDeleteViewSet,
+    CommonModelRetrieveUpdateViewSet,
+    CommonReadOnlyModelViewSet,
+    CommonReadOnlyListModelViewSet,
+    # CommonAuthUserReadOnlyModelViewSet,
+    # CommonIndexViewset,
+    # CommonPublicReadOnlyViewSet,
 )
 
 from centurion.tests.unit_class import ClassTestCases
@@ -106,6 +99,8 @@ class MockRequest:
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class CreateCases:
 
 
@@ -137,9 +132,8 @@ class CreateCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class CreatePyTest(
+
+class CommonCreatePyTest(
     CreateCases,
 ):
 
@@ -149,6 +143,8 @@ class CreatePyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class DestroyCases:
 
 
@@ -180,9 +176,7 @@ class DestroyCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class DestroyPyTest(
+class CommonDestroyPyTest(
     DestroyCases,
 ):
 
@@ -192,6 +186,8 @@ class DestroyPyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ListCases:
 
 
@@ -223,9 +219,7 @@ class ListCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class ListPyTest(
+class CommonListPyTest(
     ListCases,
 ):
 
@@ -235,6 +229,8 @@ class ListPyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class RetrieveCases:
 
 
@@ -266,9 +262,7 @@ class RetrieveCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class RetrievePyTest(
+class CommonRetrievePyTest(
     RetrieveCases,
 ):
 
@@ -278,6 +272,8 @@ class RetrievePyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class UpdateCases:
 
 
@@ -327,9 +323,7 @@ class UpdateCases:
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class UpdatePyTest(
+class CommonUpdatePyTest(
     UpdateCases,
 ):
 
@@ -340,8 +334,9 @@ class UpdatePyTest(
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class CommonViewSetTestCases(
-    # OrganizationMixinTest,    # ToDo: Add `OrganizationMixin` test suit
     ClassTestCases,
 ):
     """Test Suite for class CommonViewSet"""
@@ -398,6 +393,14 @@ class CommonViewSetTestCases(
                 'type': str,
                 'value': None
             },
+            '_permission_required': {
+                'type': type(None),
+                'value': None
+            },
+            '_queryset': {
+                'type': type(None),
+                'value': None
+            },
             'back_url': {
                 'type': str,
                 'value': None
@@ -425,7 +428,7 @@ class CommonViewSetTestCases(
             'permission_classes': {
                 'type': list,
                 'value': [
-                    TenancyPermissionMixin,
+                    DefaultDenyPermission,
                 ]
             },
             'table_fields': {
@@ -443,14 +446,6 @@ class CommonViewSetTestCases(
         }
 
 
-    def test_class_inherits_organizationmixin(self, viewset):
-        """Class Inheritence check
-
-        Class must inherit from `OrganizationMixin`
-        """
-
-        assert issubclass(viewset, OrganizationMixin)
-
 
     def test_class_inherits_viewsets_viewset(self, viewset):
         """Class Inheritence check
@@ -460,6 +455,59 @@ class CommonViewSetTestCases(
 
         assert issubclass(viewset, viewsets.ViewSet)
 
+
+    def test_view_func_get_queryset_cache_result(self, mocker, viewset_mock_request):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>._queryset`
+        """
+
+        view_set = viewset_mock_request
+        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
+
+        from django.db import connection
+        from django.test.utils import CaptureQueriesContext
+
+        with CaptureQueriesContext(connection) as queries:
+
+            assert view_set._queryset is None    # Must be empty before init
+
+            q = view_set.get_queryset()
+
+            evaluate = len(view_set.get_queryset())
+
+            initial_db_queries = len(queries)
+
+            assert view_set._queryset is not None    # Must not be empty after init
+
+            assert len(queries) == initial_db_queries
+
+
+    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
+        """Viewset Test
+
+        Ensure that the `get_queryset` function caches the result under
+        attribute `<viewset>._queryset`
+        """
+
+        view_set = viewset_mock_request
+        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
+
+        qs = mocker.spy(view_set.model, 'objects')
+
+        view_set.get_queryset()    # Initial QuerySet fetch/filter and cache
+
+        initial_method_calls = len(qs.method_calls)
+        initial_mock_calls = len(qs.mock_calls)
+
+        assert initial_method_calls > 0       # one call to .all()
+        assert initial_mock_calls > 0         # calls = .user( ...), .user().all(), .user().all().filter()
+
+        view_set.get_queryset()    # Use Cached results, dont re-fetch QuerySet
+
+        assert len(qs.method_calls) == initial_method_calls
+        assert len(qs.mock_calls) == initial_mock_calls
 
     # ToDo: get_back_url
 
@@ -477,8 +525,6 @@ class CommonViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
 class CommonViewSetPyTest(
     CommonViewSetTestCases,
 ):
@@ -522,7 +568,15 @@ class CommonViewSetPyTest(
         }
 
 
+    def test_view_func_get_queryset_cache_result(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
+    def test_view_func_get_queryset_cache_result_used(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
+
+
+@pytest.mark.api
+@pytest.mark.viewset
 class CommonViewSetAPIRenderOptionsCases:    # ToDo
     """Test Cases for ViewSets that inherit from CommonViewSet
     
@@ -651,6 +705,8 @@ class CommonViewSetAPIRenderOptionsCases:    # ToDo
 
 
 
+@pytest.mark.api
+@pytest.mark.viewset
 class ModelViewSetBaseCases(
     CommonViewSetTestCases,
 ):
@@ -670,10 +726,6 @@ class ModelViewSetBaseCases(
             },
             'model': {
                 'type': django.db.models.base.ModelBase,
-                'value': None
-            },
-            'queryset': {
-                'type': object,
                 'value': None
             },
             'search_fields': {
@@ -701,49 +753,7 @@ class ModelViewSetBaseCases(
 
 
 
-
-    def test_view_func_get_queryset_cache_result(self, viewset_mock_request):
-        """Viewset Test
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        view_set = viewset_mock_request
-
-        assert view_set.queryset is None    # Must be empty before init
-
-        q = view_set.get_queryset()
-
-        assert view_set.queryset is not None    # Must not be empty after init
-
-        assert q == view_set.queryset
-
-
-    def test_view_func_get_queryset_cache_result_used(self, mocker, viewset, viewset_mock_request):
-        """Viewset Test
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        qs = mocker.spy(viewset_mock_request.model, 'objects')
-
-        viewset_mock_request.get_queryset()    # Initial QuerySet fetch/filter and cache
-
-        assert len(qs.method_calls) == 1       # one call to .all()
-        assert len(qs.mock_calls) == 2         # calls = .all(), all().filter()
-
-        viewset_mock_request.get_queryset()    # Use Cached results, dont re-fetch QuerySet
-
-        assert len(qs.method_calls) == 1
-        assert len(qs.mock_calls) == 2
-
-
-
-@pytest.mark.api
-@pytest.mark.viewset
-class ModelViewSetBasePyTest(
+class CommonModelViewSetBasePyTest(
     ModelViewSetBaseCases,
 ):
 
@@ -780,10 +790,6 @@ class ModelViewSetBasePyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -803,30 +809,11 @@ class ModelViewSetBasePyTest(
         }
 
 
-    def test_view_func_get_queryset_cache_result(self, viewset):
-        """Viewset Test
+    def test_view_func_get_queryset_cache_result(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self, viewset):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+    def test_view_func_get_queryset_cache_result_used(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -908,15 +895,13 @@ class ModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class ModelViewSetPyTest(
+class CommonModelViewSetPyTest(
     ModelViewSetTestCases,
 ):
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return ModelViewSet
+        return CommonModelViewSet
 
 
     @property
@@ -946,10 +931,6 @@ class ModelViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -969,34 +950,15 @@ class ModelViewSetPyTest(
         }
 
 
-    def test_view_func_get_queryset_cache_result(self, viewset):
-        """Viewset Test
+    def test_view_func_get_queryset_cache_result(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self, viewset):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+    def test_view_func_get_queryset_cache_result_used(self):
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
-class SubModelViewSetTestCases(
+class CommonSubModelViewSetTestCases(
     ModelViewSetTestCases
 ):
 
@@ -1025,7 +987,7 @@ class SubModelViewSetTestCases(
         Class must inherit from `SubModelViewSet`
         """
 
-        assert issubclass(viewset, SubModelViewSet)
+        assert issubclass(viewset, CommonSubModelViewSet_ReWrite)
 
 
 
@@ -1068,16 +1030,14 @@ class SubModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class SubModelViewSetPyTest(
-    SubModelViewSetTestCases,
+class CommonSubModelViewSetPyTest(
+    CommonSubModelViewSetTestCases,
 ):
 
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return SubModelViewSet_ReWrite
+        return CommonSubModelViewSet_ReWrite
 
 
     @property
@@ -1115,10 +1075,6 @@ class SubModelViewSetPyTest(
                 'value': None
             },
             'model_kwarg': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
                 'type': type(None),
                 'value': None
             },
@@ -1179,32 +1135,12 @@ class SubModelViewSetPyTest(
 
         assert viewset().model_kwarg is None
 
+
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. As this test is
-        checking the base classes, it's return is different to a class that
-        has inherited from this or parent classes.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1224,16 +1160,14 @@ class ModelCreateViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class ModelCreateViewSetPyTest(
+class CommonModelCreateViewSetPyTest(
     ModelCreateViewSetTestCases,
 ):
 
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return ModelCreateViewSet
+        return CommonModelCreateViewSet
 
 
     @property
@@ -1263,10 +1197,6 @@ class ModelCreateViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1287,29 +1217,10 @@ class ModelCreateViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1332,16 +1243,14 @@ class ModelListRetrieveDeleteViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class ModelListRetrieveDeleteViewSetPyTest(
+class CommonModelListRetrieveDeleteViewSetPyTest(
     ModelListRetrieveDeleteViewSetTestCases,
 ):
 
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return ModelListRetrieveDeleteViewSet
+        return CommonModelListRetrieveDeleteViewSet
 
 
     @property
@@ -1371,10 +1280,6 @@ class ModelListRetrieveDeleteViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1395,29 +1300,10 @@ class ModelListRetrieveDeleteViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1438,16 +1324,14 @@ class ModelRetrieveUpdateViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class ModelRetrieveUpdateViewSetPyTest(
+class CommonModelRetrieveUpdateViewSetPyTest(
     ModelRetrieveUpdateViewSetTestCases,
 ):
 
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return ModelRetrieveUpdateViewSet
+        return CommonModelRetrieveUpdateViewSet
 
 
     @property
@@ -1477,10 +1361,6 @@ class ModelRetrieveUpdateViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1501,29 +1381,10 @@ class ModelRetrieveUpdateViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1545,16 +1406,14 @@ class ReadOnlyModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class ReadOnlyModelViewSetPyTest(
+class CommonReadOnlyModelViewSetPyTest(
     ReadOnlyModelViewSetTestCases,
 ):
 
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return ReadOnlyModelViewSet
+        return CommonReadOnlyModelViewSet
 
 
     @property
@@ -1584,10 +1443,6 @@ class ReadOnlyModelViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1608,29 +1463,10 @@ class ReadOnlyModelViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
 
 
@@ -1651,16 +1487,14 @@ class ReadOnlyListModelViewSetTestCases(
 
 
 
-@pytest.mark.api
-@pytest.mark.viewset
-class ReadOnlyListModelViewSetPyTest(
+class CommonReadOnlyListModelViewSetPyTest(
     ReadOnlyListModelViewSetTestCases,
 ):
 
 
     @pytest.fixture( scope = 'function' )
     def viewset(self):
-        return ReadOnlyListModelViewSet
+        return CommonReadOnlyListModelViewSet
 
 
     @property
@@ -1690,10 +1524,6 @@ class ReadOnlyListModelViewSetPyTest(
                 'type': type(None),
                 'value': None
             },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
             'serializer_class': {
                 'type': type(None),
                 'value': None
@@ -1715,361 +1545,151 @@ class ReadOnlyListModelViewSetPyTest(
 
 
     def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
+        pytest.xfail( reason = 'base class is abstract with no model' )
 
     def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-
-class AuthUserReadOnlyModelViewSetTestCases(
-    ReadOnlyModelViewSetTestCases,
-):
-    """Test Suite for class AuthUserReadOnlyModelViewSet"""
-
-
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'permission_classes': {
-                'type': list,
-                'value': [
-                    IsAuthenticated,
-                ]
-            }
-        }
-
-
-
-@pytest.mark.api
-@pytest.mark.viewset
-class AuthUserReadOnlyModelViewSetPyTest(
-    AuthUserReadOnlyModelViewSetTestCases,
-):
-
-
-    @pytest.fixture( scope = 'function' )
-    def viewset(self):
-        return AuthUserReadOnlyModelViewSet
-
-
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            '_log': {
-                'type': type(None),
-                'value': None
-            },
-            '_model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'back_url': {
-                'type': type(None),
-                'value': None
-            },
-            'documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'model': {
-                'type': type(None),
-                'value': None
-            },
-            'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
-            'serializer_class': {
-                'type': type(None),
-                'value': None
-            },
-            'view_description': {
-                'type': type(None),
-                'value': None
-            },
-            'view_name': {
-                'type': type(None),
-                'value': None
-            },
-            'view_serializer_name': {
-                'type': type(None),
-                'value': None
-            }
-        }
-
-
-    def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-
-class IndexViewsetCases(
-    ModelViewSetBaseCases,
-):
-    """Test Suite for class IndexViewset"""
-
-
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'permission_classes': {
-                'type': list,
-                'value': [
-                    IsAuthenticated,
-                ]
-            }
-        }
-
-
-
-@pytest.mark.api
-@pytest.mark.viewset
-class IndexViewsetPyTest(
-    IndexViewsetCases,
-):
-
-
-    @pytest.fixture( scope = 'function' )
-    def viewset(self):
-        return IndexViewset
-
-
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            '_log': {
-                'type': type(None),
-                'value': None
-            },
-            '_model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'back_url': {
-                'type': type(None),
-                'value': None
-            },
-            'documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'model': {
-                'type': type(None),
-                'value': None
-            },
-            'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
-            'serializer_class': {
-                'type': type(None),
-                'value': None
-            },
-            'view_description': {
-                'type': type(None),
-                'value': None
-            },
-            'view_name': {
-                'type': type(None),
-                'value': None
-            },
-            'view_serializer_name': {
-                'type': type(None),
-                'value': None
-            }
-        }
-
-
-    def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-
-class PublicReadOnlyViewSetTestCases(
-    ReadOnlyListModelViewSetTestCases,
-):
-    """Test Suite for class PublicReadOnlyViewSet"""
-
-
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            'pagination_class': {
-                'type': type,
-                'value': StaticPageNumbering
-            },
-            'permission_classes': {
-                'type': list,
-                'value': [
-                    IsAuthenticatedOrReadOnly,
-                ]
-            },
-            'metadata_class': {
-                'type': type,
-                'value': JSONAPIMetadata
-            }
-        }
-
-
-
-@pytest.mark.api
-@pytest.mark.viewset
-class PublicReadOnlyViewSetPyTest(
-    PublicReadOnlyViewSetTestCases,
-):
-
-
-    @pytest.fixture( scope = 'function' )
-    def viewset(self):
-        return PublicReadOnlyViewSet
-
-
-    @property
-    def parameterized_class_attributes(self):
-        return {
-            '_log': {
-                'type': type(None),
-                'value': None
-            },
-            '_model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'back_url': {
-                'type': type(None),
-                'value': None
-            },
-            'documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'model': {
-                'type': type(None),
-                'value': None
-            },
-            'model_documentation': {
-                'type': type(None),
-                'value': None
-            },
-            'queryset': {
-                'type': type(None),
-                'value': None
-            },
-            'serializer_class': {
-                'type': type(None),
-                'value': None
-            },
-            'view_description': {
-                'type': type(None),
-                'value': None
-            },
-            'view_name': {
-                'type': type(None),
-                'value': None
-            },
-            'view_serializer_name': {
-                'type': type(None),
-                'value': None
-            }
-        }
-
-
-    def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This test case overrides a test case of the same name. This test case
-        is not required for this test suite.
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+        pytest.xfail( reason = 'base class is abstract with no model' )
+
+
+
+# class AuthUserReadOnlyModelViewSetTestCases(
+#     ReadOnlyModelViewSetTestCases,
+# ):
+#     """Test Suite for class AuthUserReadOnlyModelViewSet"""
+
+
+#     @property
+#     def parameterized_class_attributes(self):
+#         return {
+#             'permission_classes': {
+#                 'type': list,
+#                 'value': [
+#                     IsAuthenticated,
+#                 ]
+#             }
+#         }
+
+
+
+# class AuthUserReadOnlyModelViewSetPyTest(
+#     AuthUserReadOnlyModelViewSetTestCases,
+# ):
+
+
+#     @pytest.fixture( scope = 'function' )
+#     def viewset(self):
+#         return AuthUserReadOnlyModelViewSet
+
+
+
+#     def test_view_func_get_queryset_cache_result(self):
+#         pytest.xfail( reason = 'base class is abstract with no model' )
+
+#     def test_view_func_get_queryset_cache_result_used(self):
+#         pytest.xfail( reason = 'base class is abstract with no model' )
+
+
+
+# class IndexViewsetCases(
+#     ModelViewSetBaseCases,
+# ):
+#     """Test Suite for class IndexViewset"""
+
+
+#     @property
+#     def parameterized_class_attributes(self):
+#         return {
+#             'permission_classes': {
+#                 'type': list,
+#                 'value': [
+#                     IsAuthenticated,
+#                 ]
+#             }
+#         }
+
+
+
+# class IndexViewsetPyTest(
+#     IndexViewsetCases,
+# ):
+
+
+#     @pytest.fixture( scope = 'function' )
+#     def viewset(self):
+#         return IndexViewset
+
+
+#     @property
+#     def parameterized_class_attributes(self):
+#         return {
+#             '_log': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             '_model_documentation': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'back_url': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'documentation': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'model': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'model_documentation': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'serializer_class': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'view_description': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'view_name': {
+#                 'type': type(None),
+#                 'value': None
+#             },
+#             'view_serializer_name': {
+#                 'type': type(None),
+#                 'value': None
+#             }
+#         }
+
+
+#     def test_view_func_get_queryset_cache_result(self):
+#         pytest.xfail( reason = 'base class is abstract with no model' )
+
+#     def test_view_func_get_queryset_cache_result_used(self):
+#         pytest.xfail( reason = 'base class is abstract with no model' )
+
+
+
+# class PublicReadOnlyViewSetTestCases(
+#     ReadOnlyListModelViewSetTestCases,
+# ):
+#     """Test Suite for class PublicReadOnlyViewSet"""
+
+
+
+
+# class PublicReadOnlyViewSetPyTest(
+#     PublicReadOnlyViewSetTestCases,
+# ):
+
+
+#     @pytest.fixture( scope = 'function' )
+#     def viewset(self):
+#         return PublicReadOnlyViewSet
+
 
 
 
@@ -2081,45 +1701,28 @@ class PublicReadOnlyViewSetPyTest(
 
 
 
-class AuthUserReadOnlyModelViewSetInheritedCases(
-    AuthUserReadOnlyModelViewSetTestCases,
-):
+# class AuthUserReadOnlyModelViewSetInheritedCases(
+#     AuthUserReadOnlyModelViewSetTestCases,
+# ):
 
-    pass
-
-
-
-class IndexViewsetInheritedCases(
-    IndexViewsetCases,
-):
-
-
-    def test_view_func_get_queryset_cache_result(self):
-        """Viewset Test
-
-        This view does not use a queryset
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
-
-
-    def test_view_func_get_queryset_cache_result_used(self):
-        """Viewset Test
-
-        This view does not use a queryset
-
-        Ensure that the `get_queryset` function caches the result under
-        attribute `<viewset>.queryset`
-        """
-
-        assert True
+#     pass
 
 
 
-class ModelCreateViewSetInheritedCases(
+# class IndexViewsetInheritedCases(
+#     IndexViewsetCases,
+# ):
+
+
+#     def test_view_func_get_queryset_cache_result(self):
+#         pytest.xfail( reason = 'base class is abstract with no model' )
+
+#     def test_view_func_get_queryset_cache_result_used(self):
+#         pytest.xfail( reason = 'base class is abstract with no model' )
+
+
+
+class CommonModelCreateViewSetInheritedCases(
     ModelCreateViewSetTestCases,
 ):
 
@@ -2127,7 +1730,7 @@ class ModelCreateViewSetInheritedCases(
 
 
 
-class ModelListRetrieveDeleteViewSetInheritedCases(
+class CommonModelListRetrieveDeleteViewSetInheritedCases(
     ModelListRetrieveDeleteViewSetTestCases,
 ):
 
@@ -2135,7 +1738,7 @@ class ModelListRetrieveDeleteViewSetInheritedCases(
 
 
 
-class ModelRetrieveUpdateViewSetInheritedCases(
+class CommonModelRetrieveUpdateViewSetInheritedCases(
     ModelRetrieveUpdateViewSetTestCases,
 ):
 
@@ -2143,7 +1746,7 @@ class ModelRetrieveUpdateViewSetInheritedCases(
 
 
 
-class ModelViewSetInheritedCases(
+class CommonModelViewSetInheritedCases(
     ModelViewSetTestCases,
     CommonViewSetAPIRenderOptionsCases,
 ):
@@ -2168,8 +1771,8 @@ class ModelViewSetInheritedCases(
 
 
 
-class SubModelViewSetInheritedCases(
-    SubModelViewSetTestCases,
+class CommonSubModelViewSetInheritedCases(
+    CommonSubModelViewSetTestCases,
     CommonViewSetAPIRenderOptionsCases,
 ):
     """Test Suite for classes that inherit SubModelViewSet
@@ -2245,15 +1848,20 @@ class SubModelViewSetInheritedCases(
 
 
 
-class PublicReadOnlyViewSetInheritedCases(
-    PublicReadOnlyViewSetTestCases,
-):
+# class PublicReadOnlyViewSetInheritedCases(
+#     PublicReadOnlyViewSetTestCases,
+# ):
 
+#     pass
+
+
+
+class CommonReadOnlyListModelViewSetInheritedCases(
+    ReadOnlyListModelViewSetTestCases,
+):
     pass
 
-
-
-class ReadOnlyModelViewSetInheritedCases(
+class CommonReadOnlyModelViewSetInheritedCases(
     ReadOnlyModelViewSetTestCases,
 ):
 

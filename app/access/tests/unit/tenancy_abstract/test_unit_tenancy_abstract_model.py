@@ -2,27 +2,31 @@ import pytest
 
 from django.db import models
 
-from centurion.tests.unit_models import ModelTestCases
-
 from access.models.tenancy_abstract import TenancyAbstractModel
+from access.tests.unit.managers.test_unit_tenancy_manager import (
+    TenancyManagerInheritedCases
+)
+
+from centurion.tests.unit_models import ModelTestCases
 
 
 @pytest.mark.unit
 @pytest.mark.tenancy_models
 class TenancyAbstractModelTestCases(
-    ModelTestCases
+    TenancyManagerInheritedCases,
+    ModelTestCases,
 ):
 
 
     @property
     def parameterized_class_attributes(self):
-        
+
         return {}
 
 
     @property
     def parameterized_model_fields(self):
-        
+
         return {
         'organization': {
             'blank': False,
@@ -111,3 +115,9 @@ class TenancyAbstractModelPyTest(
 
 
         assert model_instance.get_tenant() == test_value
+
+    def test_manager_tenancy_filter_tenant(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_manager_tenancy_select_related(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )

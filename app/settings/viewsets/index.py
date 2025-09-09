@@ -3,7 +3,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from api.viewsets.common import IndexViewset
+from api.viewsets.common.authenticated import IndexViewset
 
 
 
@@ -125,7 +125,7 @@ class Index(IndexViewset):
                     'v2:_api_usersettings-detail',
                     request=request,
                     kwargs={
-                        'pk': request.user.id 
+                        'user_id': request.user.id 
                     }
                 ),
             }

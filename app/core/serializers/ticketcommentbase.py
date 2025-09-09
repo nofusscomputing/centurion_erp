@@ -14,7 +14,7 @@ from api.exceptions import UnknownTicketType
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field
 from core.models.ticket_comment_base import TicketCommentBase
-from core.serializers.ticket import BaseSerializer as TicketBaseBaseSerializer
+from core.serializers.ticketbase import BaseSerializer as TicketBaseBaseSerializer
 from core.serializers.ticket_comment_category import TicketCommentCategoryBaseSerializer
 
 

@@ -10,6 +10,7 @@ from access.fields import (
     AutoCreatedField,
     AutoLastModifiedField
 )
+from access.managers.user import UserManager
 
 from core.mixins.centurion import Centurion
 
@@ -22,6 +23,8 @@ class AuthToken(
     _audit_enabled = False
 
     _notes_enabled = False
+
+    objects = UserManager()
 
 
     class Meta:

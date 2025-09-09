@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 
 from accounting.models.asset_base import AssetBase
 
-from api.viewsets.common import SubModelViewSet_ReWrite
+from api.viewsets.common.tenancy import SubModelViewSet_ReWrite
 
 
 

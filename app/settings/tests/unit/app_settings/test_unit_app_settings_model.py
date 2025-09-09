@@ -105,6 +105,12 @@ class AppSettingsModelTestCases(
             },
         }
 
+    def test_manager_tenancy_filter_tenant(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_manager_tenancy_select_related(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
 
 
 class AppSettingsModelInheritedCases(
