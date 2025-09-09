@@ -1,3 +1,92 @@
+## 1.22.0 (2025-09-09)
+
+### feat
+
+- **access**: Add global tenancy to user object
+- **access**: Add superuser viewset permissions
+- **access**: Add tenancy manager to Tenant model
+- **access**: User based model permissions and model Manager
+- **api**: TenancyManager set to limit scope of returned date IAW user authorization
+- **api**: Adjust permissions for common viewset to use defaultdeny
+
+### Fixes
+
+- **access**: dont filter by id for tenant if no tenancies are defined
+- **access**: Dont collect user tenancies for anon user
+- **core**: use function get_tenant when fetching a models tenancy
+- **api**: Return HTTP/500 if exception unknown
+- **api**: add missing obj `_obj_tenancy` to common viewset
+
+### Refactoring
+
+- when fetching user settings, pk must be user_id
+- **api**: Support url kwargs that uses attr sub_model_type
+- **core**: rename ticket related serializers to use new way of doing business
+- **api**: API exception always to convert to drf APIException
+- **access**: move function `get_queryset` from tenancy mixin to common ViewSet
+- **api**: Split Common ViewSet based off of permissions
+- **access**: role queryset to use parent mthod for `get_queryset`
+- **access**: Move manager to own dir
+- **access**: migrate tenancy permissions to own ViewSetMixin
+- **access**: refactor tenancy permission mixin
+- **access**: move function get_parent_obj to common viewset
+- **access**: move function get_permission_required to common viewset
+- **access**: move function get_parent_model to common viewset
+- **access**: get_tenancy function moved mixin organization -> permissions
+
+### Tests
+
+- **api**: Unit Test suite for DefaultDeny Permissions
+- **access**: Unit Test suite for User Permissions
+- **access**: Unit Test suite for SuperUser Permissions
+- **access**: Add User Manager Unit Test Suite with test cases
+- **access**: Tenancy Manager Unit Test cases for filtering and select_related
+- **access**: Add tenancy Manager Unit Test Suite
+- **access**: Add common Manager Unit Test Suite
+- **settings**: Add Functional TestSuite for model AppSettings ViewSet
+- **settings**: Add Functional TestSuite for model ExternalLinks ViewSet
+- **itam**: Add Functional TestSuite for model SoftwareVersion ViewSet
+- **itam**: Add Functional TestSuite for model SoftwareCategory ViewSet
+- **settings**: Add Functional TestSuite for model UserSettings ViewSet
+- **api**: Add Functional TestSuite for model AuthToken ViewSet
+- **human_resources**: Add Functional TestSuite for model Employee ViewSet
+- **access**: Add Functional TestSuite for model Tenant ViewSet
+- **access**: Add Functional TestSuite for model Role ViewSet
+- **access**: Add Functional TestSuite for model Person ViewSet
+- **access**: Add Functional TestSuite for model Entity ViewSet
+- **access**: Add Functional TestSuite for model Contact ViewSet
+- **access**: Add Functional TestSuite for model Company ViewSet
+- **project_management**: Add Functional TestSuite for model ProjectType ViewSet
+- **project_management**: Add Functional TestSuite for model ProjectState ViewSet
+- **project_management**: Add Functional TestSuite for model ProjectMilestone ViewSet
+- **project_management**: Add Functional TestSuite for model Project ViewSet
+- **itim**: Add Functional TestSuite for model Service ViewSet
+- **itim**: Add Functional TestSuite for model Port ViewSet
+- **itim**: Add Functional TestSuite for model ClusterType ViewSet
+- **itim**: Add Functional TestSuite for model Cluster ViewSet
+- **itam**: Add Functional TestSuite for model Software ViewSet
+- **itam**: Add Functional TestSuite for model OperatingSystemVersion ViewSet
+- **itam**: Add Functional TestSuite for model OperatingSystem ViewSet
+- **itam**: Add Functional TestSuite for model DeviceType ViewSet
+- **itam**: Add Functional TestSuite for model DeviceModel ViewSet
+- **itam**: Add Functional TestSuite for model Device ViewSet
+- **devops**: Add Functional TestSuite for model SoftwareEnabledFeatureFlag ViewSet
+- **devops**: Add Functional TestSuite for model FeaturFlag ViewSet
+- **core**: Add Functional TestSuite for model Manufacturer ViewSet
+- **config_management**: Add Functional TestSuite for model ConfigGroupSoftware ViewSet
+- **config_management**: Add Functional TestSuite for model ConfigGroup ViewSet
+- **assistance**: Add Functional TestSuite for model KnowledgeBaseCategory ViewSet
+- **api**: Ensure mocked request within Functional ViewSet test suite includes kwargs and data objects
+- **assistance**: Functional Test suite for KnowledgeBase ViewSet
+- **api**: Common Functional Test suite for Common ViewSet
+- **access**: Test cases for permission function is_tenancy_model
+- **access**: ensure queryset sets up Tenancy model manager with user data
+- **project_management**: to check viewset queryset cached results, kwargs must be populated
+- **api**: Common ViewSet test suites should not pass test not required. instead xfail
+- **api**: Add missing `parent_model` type for class attribute check of `parent_model`
+- **api**: make queryset cache result test cases truely dynamic
+- **access**: Add initial Tenancy mixin Unit test suite
+
 ## 1.21.1 (2025-08-30)
 
 ### Fixes
