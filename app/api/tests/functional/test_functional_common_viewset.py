@@ -247,6 +247,12 @@ class CommonViewSetTestCases:
             user.delete()
             user2.delete
 
+            for db_obj in model_user.objects.all():
+                try:
+                    db_obj.delete()
+                except:
+                    pass
+
 
     # parmeterize to view action
     def test_function_get_queryset_filtered_results_action_list(self,
