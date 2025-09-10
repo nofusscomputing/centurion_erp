@@ -6,9 +6,11 @@ from core.models.audit import CenturionAudit
 
 
 @pytest.fixture( scope = 'class')
-def model_centurionaudit():
+def model_centurionaudit(clean_model_from_db):
 
     yield CenturionAudit
+
+    clean_model_from_db(CenturionAudit)
 
 
 @pytest.fixture( scope = 'class')

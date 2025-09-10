@@ -11,9 +11,11 @@ from itam.serializers.software_category import (
 
 
 @pytest.fixture( scope = 'class')
-def model_softwarecategory(request):
+def model_softwarecategory(clean_model_from_db):
 
     yield SoftwareCategory
+
+    clean_model_from_db(SoftwareCategory)
 
 
 @pytest.fixture( scope = 'class')

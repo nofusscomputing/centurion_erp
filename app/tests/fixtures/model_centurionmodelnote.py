@@ -6,9 +6,11 @@ from core.models.centurion_notes import CenturionModelNote
 
 
 @pytest.fixture( scope = 'class')
-def model_centurionmodelnote():
+def model_centurionmodelnote(clean_model_from_db):
 
     yield CenturionModelNote
+
+    clean_model_from_db(CenturionModelNote)
 
 
 @pytest.fixture( scope = 'class')

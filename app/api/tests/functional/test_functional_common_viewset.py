@@ -1,5 +1,6 @@
 import django
 import pytest
+import random
 
 from django.contrib.auth.models import ContentType, Group, Permission
 
@@ -187,10 +188,14 @@ class CommonViewSetTestCases:
 
         with django_db_blocker.unblock():
 
-            user = model_user.objects.create( **kwargs_user )
+            kwargs = kwargs_user.copy()
+            kwargs['username'] = 'username.one' + str(
+                random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
+            user = model_user.objects.create( **kwargs )
 
             kwargs = kwargs_user.copy()
-            kwargs['username'] = 'username.two'
+            kwargs['username'] = 'username.two' + str(
+                random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
             user2 = model_user.objects.create( **kwargs )
 
             self.user = user
@@ -246,6 +251,12 @@ class CommonViewSetTestCases:
 
             user.delete()
             user2.delete
+
+            for db_obj in model_user.objects.all():
+                try:
+                    db_obj.delete()
+                except:
+                    pass
 
 
     # parmeterize to view action

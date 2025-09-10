@@ -12,9 +12,11 @@ from itam.serializers.software import (
 
 
 @pytest.fixture( scope = 'class')
-def model_software(request):
+def model_software(clean_model_from_db):
 
     yield Software
+
+    clean_model_from_db(Software)
 
 
 @pytest.fixture( scope = 'class')

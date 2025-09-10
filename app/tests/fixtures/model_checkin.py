@@ -1,4 +1,3 @@
-import datetime
 import pytest
 
 from devops.models.check_ins import CheckIn
@@ -6,9 +5,11 @@ from devops.models.check_ins import CheckIn
 
 
 @pytest.fixture( scope = 'class')
-def model_checkin():
+def model_checkin(clean_model_from_db):
 
     yield CheckIn
+
+    clean_model_from_db(CheckIn)
 
 
 @pytest.fixture( scope = 'class')

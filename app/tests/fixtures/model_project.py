@@ -1,4 +1,3 @@
-import datetime
 import pytest
 import random
 
@@ -15,9 +14,11 @@ from project_management.serializers.project import (
 
 
 @pytest.fixture( scope = 'class')
-def model_project():
+def model_project(clean_model_from_db):
 
     yield Project
+
+    clean_model_from_db(Project)
 
 
 @pytest.fixture( scope = 'class')
@@ -26,10 +27,6 @@ def kwargs_project(kwargs_centurionmodel, django_db_blocker,
     model_projecttype, kwargs_projecttype,
     model_user, kwargs_user,
 ):
-
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
     with django_db_blocker.unblock():
 
@@ -51,7 +48,7 @@ def kwargs_project(kwargs_centurionmodel, django_db_blocker,
     kwargs = {
         **kwargs,
         'code': 'aCODE',
-        'name': 'project_' + random_str,
+        'name': 'project_' + str( random.randint(1,999) ),
         'description': 'a description',
         'priority': Project.Priority.LOW,
         'state': state,

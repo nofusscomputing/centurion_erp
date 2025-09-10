@@ -11,9 +11,11 @@ from settings.serializers.user_settings import (
 
 
 @pytest.fixture( scope = 'class')
-def model_usersettings():
+def model_usersettings(clean_model_from_db):
 
     yield UserSettings
+
+    clean_model_from_db(UserSettings)
 
 
 

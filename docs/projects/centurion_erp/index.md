@@ -70,13 +70,14 @@ Feature table uses the following keys:
 |  | [API](./user/api.md) | :white_check_mark: |  |
 |  | [Application wide settings](./user/settings/app_settings.md) | :white_check_mark: |  |
 |  | [Audit History](./user/core/audit_history.md) | :white_check_mark: |  |
-|  | [Corporate Directory (contacts)](./user/access/contact.md) | :recycle: | _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_ |
+|  | [Corporate Directory (contacts)](./user/access/contact.md) | :white_check_mark: | _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_ |
 |  | Location Management (Regions, Sites and Locations) | :x: | _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_ |
 |  | [Markdown](./user/core/markdown.md) | :white_check_mark: |  |
 |  | [Multi-Tenant](./user/access/tenant.md) | :white_check_mark: |  |
 |  | [Roles (RBAC)](./user/access/role.md) | :white_check_mark: |  |
 |  | [Single Sign-On {SSO}](./user/configuration.md#single-sign-on) | :white_check_mark: |  |
 | **Customer Relationship Management (CRM)** || :x: | _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_  |
+|  | Customers | :x: |  |
 | **[Development Operations (DevOps)](./user/devops/index.md)**  ||| _[see #68](https://github.com/nofusscomputing/centurion_erp/issues/58)_ |
 |  | [Feature Flags](./user/devops/feature_flags.md) | :white_check_mark: |  |
 |  | [Repository Management](./user/devops/git_repository.md) | :recycle: | _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_ |

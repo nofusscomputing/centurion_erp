@@ -8,6 +8,9 @@ about: https://github.com/nofusscomputing/centurion_erp
 
 Git Groups are analogs to GitHub Organizations and GitLab Groups. To create a Git repository you will first need to create a git group.
 
+!!! info
+    This Feature is currently not available as it's still under development.
+
 
 ## Fields
 

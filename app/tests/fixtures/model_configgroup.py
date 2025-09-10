@@ -11,9 +11,11 @@ from config_management.serializers.config_group import  (
 
 
 @pytest.fixture( scope = 'class')
-def model_configgroups():
+def model_configgroups(clean_model_from_db):
 
     yield ConfigGroups
+
+    clean_model_from_db(ConfigGroups)
 
 
 @pytest.fixture( scope = 'class')

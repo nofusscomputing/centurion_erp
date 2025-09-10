@@ -8,6 +8,9 @@ about: https://github.com/nofusscomputing/centurion_erp
 
 This component within HR is for the management of an organizations employee(s).
 
+!!! info
+    This Feature is currently not available as it's still under development.
+
 
 ## Fields
 

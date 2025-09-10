@@ -13,9 +13,11 @@ from assistance.serializers.knowledge_base import (
 
 
 @pytest.fixture( scope = 'class')
-def model_knowledgebase():
+def model_knowledgebase(clean_model_from_db):
 
     yield KnowledgeBase
+
+    clean_model_from_db(KnowledgeBase)
 
 
 @pytest.fixture( scope = 'class')

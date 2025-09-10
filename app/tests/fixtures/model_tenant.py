@@ -10,9 +10,11 @@ from access.serializers.organization import (
 
 
 @pytest.fixture( scope = 'class')
-def model_tenant():
+def model_tenant(clean_model_from_db):
 
     yield Tenant
+
+    clean_model_from_db(Tenant)
 
 
 @pytest.fixture( scope = 'class')

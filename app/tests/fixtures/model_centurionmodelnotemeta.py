@@ -5,9 +5,11 @@ from core.models.centurion_notes import NoteMetaModel
 
 
 @pytest.fixture( scope = 'class')
-def model_centurionmodelnotemeta(request):
+def model_centurionmodelnotemeta(clean_model_from_db):
 
     yield NoteMetaModel
+
+    clean_model_from_db(NoteMetaModel)
 
 
 @pytest.fixture( scope = 'class')

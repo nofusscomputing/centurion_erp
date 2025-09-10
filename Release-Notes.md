@@ -1,3 +1,8 @@
+## Version 1.23.0
+
+- Model Entity now available, as feature flag `2025-00002` has been removed from Centurion ERPs feature flag checks. The assosciated end user feature is [Contact Directory](https://nofusscomputing.com/projects/centurion_erp/user/access/contact/).
+
+
 ## Version 1.22.0
 
 This release is an out of band release targeting the audit in [#980](https://github.com/nofusscomputing/centurion_erp/issues/980)
