@@ -10,9 +10,11 @@ from devops.serializers.software_enable_feature_flag import (
 
 
 @pytest.fixture( scope = 'class')
-def model_softwareenablefeatureflag(request):
+def model_softwareenablefeatureflag(clean_model_from_db):
 
     yield SoftwareEnableFeatureFlag
+
+    clean_model_from_db(SoftwareEnableFeatureFlag)
 
 
 @pytest.fixture( scope = 'class')

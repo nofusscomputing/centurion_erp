@@ -2,22 +2,14 @@ import django
 import pytest
 import random
 
-from django.db.models.deletion import ProtectedError
 
 
 @pytest.fixture( scope = 'class')
-def model_user(django_db_blocker):
+def model_user(clean_model_from_db):
 
     yield django.contrib.auth.get_user_model()
 
-    with django_db_blocker.unblock():
-
-        for db_obj in django.contrib.auth.get_user_model().objects.all():
-
-            try:
-                db_obj.delete()
-            except ProtectedError:
-                pass
+    clean_model_from_db(django.contrib.auth.get_user_model())
 
 
 @pytest.fixture( scope = 'class')
@@ -26,7 +18,8 @@ def kwargs_user():
     kwargs = {}
 
     kwargs = {
-        'username': "test_user-" + str( random.randint(1,999) ),
+        'username': "test_user-" + str(
+            random.randint(1,99) + random.randint(1,99) + random.randint(1,99) ),
         'password': "password"
     }
 

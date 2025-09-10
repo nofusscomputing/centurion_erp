@@ -1,8 +1,6 @@
 import datetime
 import pytest
 
-from django.db.models.deletion import ProtectedError
-
 from itim.models.services import Service
 from itim.serializers.service import (
     ServiceBaseSerializer,
@@ -13,18 +11,11 @@ from itim.serializers.service import (
 
 
 @pytest.fixture( scope = 'class')
-def model_service(django_db_blocker):
+def model_service(clean_model_from_db):
 
     yield Service
 
-    with django_db_blocker.unblock():
-
-        for db_obj in Service.objects.all():
-
-            try:
-                db_obj.delete()
-            except ProtectedError:
-                pass
+    clean_model_from_db(Service)
 
 
 @pytest.fixture( scope = 'class')

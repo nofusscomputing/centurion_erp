@@ -11,9 +11,11 @@ from itim.serializers.port import (
 
 
 @pytest.fixture( scope = 'class')
-def model_port():
+def model_port(clean_model_from_db):
 
     yield Port
+
+    clean_model_from_db(Port)
 
 
 @pytest.fixture( scope = 'class')

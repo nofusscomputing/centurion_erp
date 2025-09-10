@@ -11,9 +11,11 @@ from itam.serializers.device_type import (
 
 
 @pytest.fixture( scope = 'class')
-def model_devicetype():
+def model_devicetype(clean_model_from_db):
 
     yield DeviceType
+
+    clean_model_from_db(DeviceType)
 
 
 @pytest.fixture( scope = 'class')

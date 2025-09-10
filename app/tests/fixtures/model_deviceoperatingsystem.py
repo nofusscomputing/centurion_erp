@@ -8,9 +8,11 @@ from itam.models.device import DeviceOperatingSystem
 
 
 @pytest.fixture( scope = 'class')
-def model_deviceoperatingsystem():
+def model_deviceoperatingsystem(clean_model_from_db):
 
     yield DeviceOperatingSystem
+
+    clean_model_from_db(DeviceOperatingSystem)
 
 
 @pytest.fixture( scope = 'class')

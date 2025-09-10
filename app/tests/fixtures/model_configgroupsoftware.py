@@ -7,9 +7,11 @@ from itam.models.device import DeviceSoftware
 
 
 @pytest.fixture( scope = 'class')
-def model_configgroupsoftware():
+def model_configgroupsoftware(clean_model_from_db):
 
     yield ConfigGroupSoftware
+
+    clean_model_from_db(ConfigGroupSoftware)
 
 
 @pytest.fixture( scope = 'class')

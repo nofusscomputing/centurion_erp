@@ -11,9 +11,11 @@ from itam.serializers.operating_system_version import (
 
 
 @pytest.fixture( scope = 'class')
-def model_operatingsystemversion():
+def model_operatingsystemversion(clean_model_from_db):
 
     yield OperatingSystemVersion
+
+    clean_model_from_db(OperatingSystemVersion)
 
 
 @pytest.fixture( scope = 'class')

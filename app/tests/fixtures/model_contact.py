@@ -11,9 +11,11 @@ from access.serializers.entity_contact import (
 
 
 @pytest.fixture( scope = 'class')
-def model_contact():
+def model_contact(clean_model_from_db):
 
     yield Contact
+
+    clean_model_from_db(Contact)
 
 
 @pytest.fixture( scope = 'class')

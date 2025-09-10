@@ -8,9 +8,11 @@ from devops.serializers.git_group import (
 
 
 @pytest.fixture( scope = 'class')
-def model_gitgroup(request):
+def model_gitgroup(clean_model_from_db):
 
     yield GitGroup
+
+    clean_model_from_db(GitGroup)
 
 
 @pytest.fixture( scope = 'class')

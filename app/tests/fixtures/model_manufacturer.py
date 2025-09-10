@@ -6,9 +6,11 @@ from core.models.manufacturer import Manufacturer
 
 
 @pytest.fixture( scope = 'class')
-def model_manufacturer():
+def model_manufacturer(clean_model_from_db):
 
     yield Manufacturer
+
+    clean_model_from_db(Manufacturer)
 
 
 @pytest.fixture( scope = 'class')

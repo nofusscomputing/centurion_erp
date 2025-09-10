@@ -9,9 +9,11 @@ from settings.serializers.app_settings import (
 )
 
 @pytest.fixture( scope = 'class')
-def model_appsettings():
+def model_appsettings(clean_model_from_db):
 
     yield AppSettings
+
+    clean_model_from_db(AppSettings)
 
 
 @pytest.fixture( scope = 'class')

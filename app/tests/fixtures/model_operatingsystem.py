@@ -1,8 +1,6 @@
 import datetime
 import pytest
 
-from django.db.models.deletion import ProtectedError
-
 from itam.models.operating_system import OperatingSystem
 from itam.serializers.operating_system import (
     OperatingSystemBaseSerializer,
@@ -13,18 +11,11 @@ from itam.serializers.operating_system import (
 
 
 @pytest.fixture( scope = 'class')
-def model_operatingsystem(django_db_blocker):
+def model_operatingsystem(clean_model_from_db):
 
     yield OperatingSystem
 
-    with django_db_blocker.unblock():
-
-        for db_obj in OperatingSystem.objects.all():
-
-            try:
-                db_obj.delete()
-            except ProtectedError:
-                pass
+    clean_model_from_db(OperatingSystem)
 
 
 @pytest.fixture( scope = 'class')

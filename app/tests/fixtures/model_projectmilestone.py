@@ -13,18 +13,11 @@ from project_management.serializers.project_milestone import (
 
 
 @pytest.fixture( scope = 'class')
-def model_projectmilestone(django_db_blocker):
+def model_projectmilestone(clean_model_from_db):
 
     yield ProjectMilestone
 
-    with django_db_blocker.unblock():
-
-        for db_obj in ProjectMilestone.objects.all():
-
-            try:
-                db_obj.delete()
-            except models.deletion.ProtectedError:
-                pass
+    clean_model_from_db(ProjectMilestone)
 
 
 @pytest.fixture( scope = 'class')

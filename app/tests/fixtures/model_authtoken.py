@@ -14,9 +14,11 @@ from api.serializers.auth_token import (
 
 
 @pytest.fixture( scope = 'class')
-def model_authtoken():
+def model_authtoken(clean_model_from_db):
 
     yield AuthToken
+
+    clean_model_from_db(AuthToken)
 
 
 @pytest.fixture( scope = 'class')

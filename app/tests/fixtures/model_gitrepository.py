@@ -11,9 +11,11 @@ from devops.serializers.git_repository.base import (
 
 
 @pytest.fixture( scope = 'class')
-def model_gitrepository(request):
+def model_gitrepository(clean_model_from_db):
 
     yield GitRepository
+
+    clean_model_from_db(GitRepository)
 
 
 @pytest.fixture( scope = 'class')

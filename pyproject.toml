@@ -22,19 +22,28 @@ omit = [
     # Depreciated Code Scheduled to be removed
     ##############################################
     #
+    # Depreciated Models
+    #
+    "app/access/models/team.py",
+    "app/access/models/team_user.py",
+    #
     # Organization rename to Tenant
     #
     "app/access/models/organization.py",
     #
+    # Old Tenancy Manager and model
+    #
+    "app/access/models/tenancy.py",
+    #
     # Old History Model
     #
     "app/core/models/model_history.py",
-    "/models/*_history.py",
+    "app/*/models/*_history.py",
     #
     # Old Notes model
     #
     "app/core/models/notes.py",
-    "/models/*_notes.py",
+    "app/*/models/*_notes.py",
     #
     # Old Ticketing Model
     #

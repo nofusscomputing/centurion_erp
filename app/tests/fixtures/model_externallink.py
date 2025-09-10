@@ -11,9 +11,11 @@ from settings.serializers.external_links import (
 
 
 @pytest.fixture( scope = 'class')
-def model_externallink():
+def model_externallink(clean_model_from_db):
 
     yield ExternalLink
+
+    clean_model_from_db(ExternalLink)
 
 
 @pytest.fixture( scope = 'class')

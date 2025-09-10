@@ -84,7 +84,7 @@ def model_kwarg_data(django_db_blocker):
 
             ):
 
-                value = str('a' + str(random.randint(133,999)))
+                value = str('a' + str(random.randint(133,499)) + str(random.randint(500,999)))
 
                 if isinstance(getattr(model, field).field, models.IntegerField):
 
