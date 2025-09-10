@@ -1,3 +1,19 @@
+## 1.23.0 (2025-09-10)
+
+### feat
+
+- **base**: Upgrade Django 5.1.10 -> 5.1.12
+- **access**: Remove feature flag 2025-00002
+
+### Tests
+
+- **access**: Add Model functional test suit for model Person
+- **access**: Add Model functional test suit for model Entity
+- **access**: Add Model functional test suit for model Contact
+- **access**: Add Serializer unit test suit for model Contact
+- **access**: Add Serializer unit test suit for model Person
+- **access**: Add Serializer unit test suit for model Entity
+
 ## 1.22.0 (2025-09-09)
 
 ### feat
