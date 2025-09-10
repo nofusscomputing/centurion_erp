@@ -7,3 +7,6 @@ about: https://github.com/nofusscomputing/centurion_erp
 ---
 
 Asset Management provides the ability to manage the lifecycle of an asset. 
+
+!!! info
+    This Feature is currently not available as it's still under development.

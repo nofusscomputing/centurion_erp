@@ -1,8 +1,6 @@
 import datetime
 import pytest
 
-from django.db import models
-
 from project_management.models.project_types import ProjectType
 from project_management.serializers.project_type import (
     ProjectTypeBaseSerializer,
@@ -13,9 +11,11 @@ from project_management.serializers.project_type import (
 
 
 @pytest.fixture( scope = 'class')
-def model_projecttype():
+def model_projecttype(clean_model_from_db):
 
     yield ProjectType
+
+    clean_model_from_db(ProjectType)
 
 
 @pytest.fixture( scope = 'class')

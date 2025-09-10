@@ -4,9 +4,11 @@ import pytest
 from accounting.models.asset_base import AssetBase
 
 @pytest.fixture( scope = 'class')
-def model_assetbase():
+def model_assetbase(clean_model_from_db):
 
     yield AssetBase
+
+    clean_model_from_db(AssetBase)
 
 
 @pytest.fixture( scope = 'class')

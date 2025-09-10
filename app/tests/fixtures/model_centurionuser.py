@@ -6,9 +6,11 @@ from access.models.centurion_user import CenturionUser
 
 
 @pytest.fixture( scope = 'class')
-def model_centurionuser():
+def model_centurionuser(clean_model_from_db):
 
     yield CenturionUser
+
+    clean_model_from_db(CenturionUser)
 
 
 @pytest.fixture( scope = 'class')

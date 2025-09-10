@@ -11,9 +11,11 @@ from itim.serializers.service import (
 
 
 @pytest.fixture( scope = 'class')
-def model_service():
+def model_service(clean_model_from_db):
 
     yield Service
+
+    clean_model_from_db(Service)
 
 
 @pytest.fixture( scope = 'class')

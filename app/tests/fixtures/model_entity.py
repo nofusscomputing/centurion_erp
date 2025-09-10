@@ -11,9 +11,11 @@ from access.serializers.entity import (
 
 
 @pytest.fixture( scope = 'class')
-def model_entity():
+def model_entity(clean_model_from_db):
 
     yield Entity
+
+    clean_model_from_db(Entity)
 
 
 @pytest.fixture( scope = 'class')

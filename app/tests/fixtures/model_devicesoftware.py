@@ -8,9 +8,11 @@ from itam.models.device import DeviceSoftware
 
 
 @pytest.fixture( scope = 'class')
-def model_devicesoftware():
+def model_devicesoftware(clean_model_from_db):
 
     yield DeviceSoftware
+
+    clean_model_from_db(DeviceSoftware)
 
 
 @pytest.fixture( scope = 'class')

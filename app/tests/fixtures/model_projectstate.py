@@ -1,8 +1,6 @@
 import datetime
 import pytest
 
-from django.db import models
-
 from project_management.models.project_states import ProjectState
 from project_management.serializers.project_states import (
     ProjectStateBaseSerializer,
@@ -12,9 +10,11 @@ from project_management.serializers.project_states import (
 
 
 @pytest.fixture( scope = 'class')
-def model_projectstate():
+def model_projectstate(clean_model_from_db):
 
     yield ProjectState
+
+    clean_model_from_db(ProjectState)
 
 
 @pytest.fixture( scope = 'class')

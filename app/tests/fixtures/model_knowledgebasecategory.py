@@ -11,9 +11,11 @@ from assistance.serializers.knowledge_base_category import (
 
 
 @pytest.fixture( scope = 'class')
-def model_knowledgebasecategory():
+def model_knowledgebasecategory(clean_model_from_db):
 
     yield KnowledgeBaseCategory
+
+    clean_model_from_db(KnowledgeBaseCategory)
 
 
 @pytest.fixture( scope = 'class')

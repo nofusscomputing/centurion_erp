@@ -11,9 +11,11 @@ from itam.serializers.operating_system import (
 
 
 @pytest.fixture( scope = 'class')
-def model_operatingsystem():
+def model_operatingsystem(clean_model_from_db):
 
     yield OperatingSystem
+
+    clean_model_from_db(OperatingSystem)
 
 
 @pytest.fixture( scope = 'class')

@@ -8,9 +8,11 @@ from core.models.ticket_comment_base import TicketCommentBase
 
 
 @pytest.fixture( scope = 'class')
-def model_ticketcommentbase(request):
+def model_ticketcommentbase(clean_model_from_db):
 
     yield TicketCommentBase
+
+    clean_model_from_db(TicketCommentBase)
 
 
 @pytest.fixture( scope = 'class')

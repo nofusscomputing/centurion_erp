@@ -11,9 +11,11 @@ from itim.serializers.cluster import (
 
 
 @pytest.fixture( scope = 'class')
-def model_cluster():
+def model_cluster(clean_model_from_db):
 
     yield Cluster
+
+    clean_model_from_db(Cluster)
 
 
 @pytest.fixture( scope = 'class')

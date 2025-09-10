@@ -11,9 +11,11 @@ from access.serializers.entity_contact import (
 
 
 @pytest.fixture( scope = 'class')
-def model_contact():
+def model_contact(clean_model_from_db):
 
     yield Contact
+
+    clean_model_from_db(Contact)
 
 
 @pytest.fixture( scope = 'class')
@@ -26,7 +28,8 @@ def kwargs_contact( kwargs_person ):
     kwargs = {
         **kwargs_person.copy(),
         'entity_type': 'contact',
-        'email': 'p' + random_str + '@domain.tld'
+        'email': 'p' + random_str + '@domain.tld',
+        'directory': True,
     }
 
     yield kwargs.copy()

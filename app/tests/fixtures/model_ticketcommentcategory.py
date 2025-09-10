@@ -6,9 +6,11 @@ from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
 
 @pytest.fixture( scope = 'class')
-def model_ticketcommentcategory():
+def model_ticketcommentcategory(clean_model_from_db):
 
     yield TicketCommentCategory
+
+    clean_model_from_db(TicketCommentCategory)
 
 
 @pytest.fixture( scope = 'class')

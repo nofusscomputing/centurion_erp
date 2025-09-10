@@ -10,9 +10,11 @@ from devops.serializers.git_repository.github import (
 
 
 @pytest.fixture( scope = 'class')
-def model_githubrepository(request):
+def model_githubrepository(clean_model_from_db):
 
     yield GitHubRepository
+
+    clean_model_from_db(GitHubRepository)
 
 
 @pytest.fixture( scope = 'class')

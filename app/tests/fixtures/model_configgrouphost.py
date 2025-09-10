@@ -5,9 +5,11 @@ from config_management.models.groups import ConfigGroupHosts
 
 
 @pytest.fixture( scope = 'class')
-def model_configgrouphosts():
+def model_configgrouphosts(clean_model_from_db):
 
     yield ConfigGroupHosts
+
+    clean_model_from_db(ConfigGroupHosts)
 
 
 @pytest.fixture( scope = 'class')

@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from access.models.role import Role
 from access.serializers.role import (
@@ -11,9 +11,12 @@ from access.serializers.role import (
 
 
 @pytest.fixture( scope = 'class')
-def model_role():
+def model_role(clean_model_from_db):
 
     yield Role
+
+    clean_model_from_db(Role)
+
 
 
 @pytest.fixture( scope = 'class')
@@ -21,13 +24,9 @@ def kwargs_role(
     kwargs_centurionmodel
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('-', '').replace('+', '').replace('.', '')
-
     kwargs = {
         **kwargs_centurionmodel.copy(),
-        'name': 'r_' + random_str,
+        'name': 'r_' + str( random.randint(1,99) + random.randint(1,99) + random.randint(1,99) ),
         'modified': '2024-06-03T23:00:00Z',
     }
 

@@ -11,9 +11,11 @@ from itam.serializers.software_version import (
 
 
 @pytest.fixture( scope = 'class')
-def model_softwareversion(request):
+def model_softwareversion(clean_model_from_db):
 
     yield SoftwareVersion
+
+    clean_model_from_db(SoftwareVersion)
 
 
 @pytest.fixture( scope = 'class')

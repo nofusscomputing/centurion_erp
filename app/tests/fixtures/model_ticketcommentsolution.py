@@ -5,9 +5,11 @@ from core.models.ticket_comment_solution import TicketCommentSolution
 
 
 @pytest.fixture( scope = 'class')
-def model_ticketcommentsolution():
+def model_ticketcommentsolution(clean_model_from_db):
 
     yield TicketCommentSolution
+
+    clean_model_from_db(TicketCommentSolution)
 
 
 @pytest.fixture( scope = 'class')
