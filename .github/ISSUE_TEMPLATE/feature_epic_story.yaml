@@ -1,0 +1,148 @@
+---
+name: "Major Feature / Group of Features Epic"
+description: "Capture multiple features as part of an epic."
+title: "<Feature group title>"
+labels: 
+  - "triage"
+type: feature
+
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 Major Feature / Group of Features
+
+        Use this template to define a a group of features that may span multiple ERP modules or business processes.  
+        This feature epic should provide enough context to plan, estimate, and track progress of all associated Features and Stories.
+
+        tip: If you dont know how to complete a field, leave it blank with a short note so a developer has the understnding
+        if the reason/issue with completing the field.
+
+  - type: input
+    id: summary
+    attributes:
+      label: "Summary"
+      description: "One-sentence overview of the epic."
+      placeholder: "e.g., Implement Global Multi-Currency Support across Accounting and Procurement"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: |
+        Provide a detailed description:  
+        - What business problem does this epic solve?  
+        - Why is it needed now?  
+        - What processes, modules, or workflows are impacted?  
+      placeholder: "Detailed explanation including business context and scope."
+    validations:
+      required: true
+
+  - type: textarea
+    id: erp_modules
+    attributes:
+      label: "ERP Modules Impacted"
+      description: |
+        List all ERP modules/submodules touched by this epic.  
+        Be as specific as possible. Examples:  
+        - Accounting → General Ledger, Accounts Payable  
+        - Procurement → Purchase Orders, Vendor Management  
+      placeholder: "e.g., Accounting → AP/AR, Procurement → Vendor Management"
+    validations:
+      required: true
+
+  - type: textarea
+    id: business_value
+    attributes:
+      label: "Business Value / Objectives"
+      description: |
+        Describe the strategic objectives and value delivered by this epic:  
+        - Efficiency gains, compliance, revenue, risk reduction  
+        - Key performance indicators (KPIs)  
+      placeholder: "Enable accurate multi-currency reporting, reduce manual reconciliation, ensure SOX compliance"
+    validations:
+      required: true
+
+  - type: textarea
+    id: success_criteria
+    attributes:
+      label: "Success Criteria"
+      description: |
+        Define how you will know the epic is successful.  
+        Should be measurable and observable:  
+        - Business metrics  
+        - User adoption  
+        - Compliance milestones  
+      placeholder: "- 100% of invoices posted correctly in multiple currencies\n- Finance team adoption > 90%\n- Regulatory compliance validated in audit"
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: "Scope"
+      description: |
+        Define what is **in scope** and **out of scope** for this epic.  
+        Helps prevent scope creep.  
+      placeholder: "In scope: Accounts Payable, Accounts Receivable, GL. Out of scope: Payroll, Tax Reporting."
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: "Dependencies"
+      description: |
+        List dependencies on other epics, features, external systems, or ERP modules.  
+        Include internal and external dependencies if relevant.  
+      placeholder: "Depends on exchange rate API service, ERP core finance module updates, Procurement module integration."
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: "Risks & Mitigations"
+      description: |
+        Identify potential risks associated with delivering this epic and mitigation strategies.  
+        Include technical, business, and compliance risks.  
+      placeholder: "Risk: Incorrect exchange rates. Mitigation: nightly validation against central bank feed; automated alerts."
+
+  - type: textarea
+    id: stakeholders
+    attributes:
+      label: "Stakeholders / Roles"
+      description: |
+        List all key stakeholders involved: business owners, module leads, IT/Dev teams, auditors, etc.  
+      placeholder: |
+        - CFO
+        - Finance Ops Manager
+        - IT Infrastructure Lead
+        - Compliance Officer"
+
+  - type: textarea
+    id: milestones
+    attributes:
+      label: "Milestones / Timeline"
+      description: |
+        Key deliverables or phases for the epic. Include estimated dates or sprints if available.  
+      placeholder: "- Phase 1: AP multi-currency setup (Sprint 5)\n- Phase 2: AR reporting enhancements (Sprint 6)\n- Phase 3: Integration testing & rollout (Sprint 8)"
+
+  - type: textarea
+    id: linked_features
+    attributes:
+      label: "Linked Features / Stories (Task List)"
+      description: |
+        **This should be a task list,** _as it makes it clear which features are sub-tickets of the epic and allows adding as a sub-ticket._
+        List each feature or story that is part of this epic should be added as a checklist item.
+        - Use `- [ ]` followed by a short description.
+      placeholder: |
+        - [ ] #123
+        - [ ] Multi-currency Accounts Receivable
+        - [ ] Multi-currency General Ledger
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: "Additional Notes / References"
+      description: "Any extra context, links to regulatory documents, architecture diagrams, or mockups."
+      placeholder: "Link to ERD diagram, regulatory compliance documents, mockups. other notes."
