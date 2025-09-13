@@ -47,7 +47,7 @@ bind = 'unix:/run/gunicorn.sock'
 forwarded_allow_ips = "*"
 forwarder_headers = "X-REAL-IP,X-FORWARDED-FOR,X-FORWARDED-PROTO"
 
-logger = logging.getLogger(__name__)
+logger = settings.CENTURION_LOG.getChild('gunicorn')
 
 max_requests = 100
 max_requests_jitter = 30

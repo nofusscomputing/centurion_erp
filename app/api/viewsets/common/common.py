@@ -1,6 +1,5 @@
 import django
 import importlib
-import logging
 import rest_framework
 
 from django.conf import settings
@@ -11,6 +10,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework import viewsets
 
+from centurion.logging import CenturionLogger
 from core.mixins.centurion import Centurion
 
 from api.permissions.default import DefaultDenyPermission
@@ -615,7 +615,7 @@ class CommonViewSet(
     _Optional_, if specified will be add to list view metadata
     """
 
-    _log: logging.Logger = None
+    _log: CenturionLogger = None
     
     def get_log(self):
 

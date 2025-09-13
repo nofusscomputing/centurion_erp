@@ -19,6 +19,8 @@ from pathlib import Path
 from split_settings.tools import optional, include
 import django.db.models.options as options
 
+from centurion.logging import CenturionLogger
+
 options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type', 'itam_sub_model_type')
 
 APPEND_SLASH = False
@@ -87,12 +89,14 @@ FIXTURE_DIRS = [
 ]
 
 LOG_FILES = {    # defaults for devopment. docker includes settings has correct locations
+    "centurion_trace": "log/trace.log",
     "centurion": "log/centurion.log",
     "weblog": "log/weblog.log",
     "rest_api": "log/rest_api.log",
     "catch_all":"log/catch-all.log"
 }
 
+logging.setLoggerClass(CenturionLogger)
 CENTURION_LOG:logging.Logger = logging.getLogger( name = 'centurion')
 
 CENTURION_LOGGING = {
@@ -128,6 +132,12 @@ CENTURION_LOGGING = {
                 "filename": "centurion.log",
                 'formatter': 'verbose',
             },
+            "file_centurion_trace": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "trace.log",
+                'formatter': 'verbose',
+            },
             "file_weblog": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
@@ -148,9 +158,14 @@ CENTURION_LOGGING = {
             }
         },
         "loggers": {
+            "centurion.trace": {
+                "handlers": ['file_centurion_trace'],
+                "level": CenturionLogger.INFO,
+                "propagate": False,
+            },
             "centurion": {
                 "handlers": ['console', 'file_centurion'],
-                "level": "INFO",
+                "level": CenturionLogger.INFO,
                 "propagate": False,
             },
             "django.server": {
@@ -261,9 +276,11 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'access.middleware.request.RequestTenancy',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'centurion.middleware.trace_calls.TraceCallsMiddleware',
+    'access.middleware.request.RequestTenancy',
     'core.middleware.get_request.RequestMiddleware',
     'centurion.middleware.timezone.TimezoneMiddleware',
     'centurion_feature_flag.middleware.feature_flag.FeatureFlagMiddleware',
@@ -498,6 +515,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # Add the user specified log files
+CENTURION_LOGGING['handlers']['file_centurion_trace']['filename'] = LOG_FILES['centurion_trace']
 CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
 CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
@@ -519,17 +537,24 @@ if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('
 
 if DEBUG:
 
+    # from debug_toolbar.toolbar
+
     INSTALLED_APPS += [
         'debug_toolbar',
+        # 'debug_toolbar_line_profiler',
     ]
 
-    MIDDLEWARE += [
+    MIDDLEWARE = [
+        *MIDDLEWARE,
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
 
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
+    DEBUG_TOOLBAR_CONFIG = {
+        'TOOLBAR_STORE_CLASS': 'debug_toolbar.store.DatabaseStore',
+    }
 
 
 LOGGING = CENTURION_LOGGING
