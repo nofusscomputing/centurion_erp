@@ -1,12 +1,13 @@
 import datetime
 
 from django.conf import settings
-from logging import Logger
 
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 
 from api.models.tokens import AuthToken
+
+from centurion.logging import CenturionLogger
 
 # scheme.py
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
@@ -15,7 +16,7 @@ class TokenScheme(OpenApiAuthenticationExtension):
     target_class = "api.auth.TokenAuthentication"
     name = "TokenAuthentication"
 
-    def get_security_definition(self, auto_schema):        
+    def get_security_definition(self, auto_schema):
         return {
             "type": "apiKey",
             "in": "header",
@@ -52,7 +53,7 @@ class TokenAuthentication(BaseAuthentication):
 
         auth = get_authorization_header(request).split()
 
-        log: Logger = settings.CENTURION_LOG.getChild('authentication')
+        log: CenturionLogger = settings.CENTURION_LOG.getChild('authentication')
 
         if not auth:
             return None
