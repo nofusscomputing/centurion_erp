@@ -112,10 +112,7 @@ test-integration:
 			pytest --override-ini addopts= --no-migrations --tb=long --verbosity=2 --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
 			docker exec -i centurion-erp supervisorctl restart gunicorn;
 			docker exec -i centurion-erp sh -c 'coverage combine; coverage report --skip-covered; coverage html -d artifacts/html/;';
-			docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
-			docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
-			docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
-			docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
+			
 			cd test;
 
 		else
@@ -127,6 +124,10 @@ test-integration:
 	else
 
 		echo 'Error: Failed to launch containers';
+		docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
+		docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
+		docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
+		docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
 		export exit_code=20;
 
 	fi;

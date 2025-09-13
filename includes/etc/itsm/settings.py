@@ -35,6 +35,7 @@ FEATURE_FLAG_OVERRIDES = []    # Feature Flag Overrides. Takes preceedence over 
 
 
 LOG_FILES = {    # Location where log files will be created
+    "centurion_trace": "/var/log/trace.log",
     "centurion": "/var/log/centurion.log",
     "weblog": "/var/log/weblog.log",
     "rest_api": "/var/log/rest_api.log",
@@ -45,5 +46,8 @@ LOG_FILES = {    # Location where log files will be created
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SECURE_SSL_REDIRECT = True
+
+# TRACE_LOGGING = True                                                                # Enable Trace Logging.
+# CENTURION_LOGGING['loggers']['centurion.trace']['level'] = CenturionLogger.TRACE    # Set Trace Logging level. normally not required
 
 USE_X_FORWARDED_HOST = True
