@@ -1,3 +1,9 @@
+## 1.24.0 (2025-09-13)
+
+### feat
+
+- **base**: Add Optional Trace Debugging to Centurion
+
 ## 1.23.0 (2025-09-10)
 
 ### feat
