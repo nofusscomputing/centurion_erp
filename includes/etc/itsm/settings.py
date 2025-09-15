@@ -39,6 +39,7 @@ LOG_FILES = {    # Location where log files will be created
     "centurion_trace": "/var/log/trace.log",
     "centurion": "/var/log/centurion.log",
     "error": "/var/log/error.log",
+    "gunicorn": "/var/log/gunicorn.log",
     "rest_api": "/var/log/rest_api.log",
     "weblog": "/var/log/weblog.log",
 }

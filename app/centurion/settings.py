@@ -93,6 +93,7 @@ LOG_FILES = {    # defaults for devopment. docker includes settings has correct 
     "centurion_trace": "log/trace.log",
     "centurion": "log/centurion.log",
     "error": "log/error.log",
+    "gunicorn": "log/gunicorn.log",
     "rest_api": "log/rest_api.log",
     "weblog": "log/weblog.log",
 }
@@ -128,12 +129,18 @@ CENTURION_LOGGING = {
         },
         "handlers": {
             'console': {
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'class': 'logging.StreamHandler',
                 'formatter': 'console',
             },
+            "file_catch_all": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "catch-all.log",
+                'formatter': 'verbose',
+            },
             "file_centurion": {
-                "level": 'DEBUG',
+                "level": 'INFO',
                 "class": "logging.FileHandler",
                 "filename": "centurion.log",
                 'formatter': 'verbose',
@@ -144,11 +151,17 @@ CENTURION_LOGGING = {
                 "filename": "trace.log",
                 'formatter': 'verbose',
             },
-            "file_weblog": {
-                "level": "INFO",
+            "file_error": {
+                "level": "ERROR",
                 "class": "logging.FileHandler",
-                "filename": "weblog.log",
-                'formatter': 'web_log',
+                "filename": "error.log",
+                "formatter": "verbose",
+            },
+            "file_gunicorn": {
+                "level": "DEBUG",
+                "class": "logging.FileHandler",
+                "filename": "gunicorn.log",
+                "formatter": "verbose",
             },
             "file_rest_api": {
                 "level": "INFO",
@@ -156,17 +169,11 @@ CENTURION_LOGGING = {
                 "filename": "rest_api.log",
                 'formatter': 'verbose',
             },
-            "file_catch_all": {
+            "file_weblog": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": "catch-all.log",
-                'formatter': 'verbose',
-            },
-            "file_error": {
-                "level": "ERROR",
-                "class": "logging.FileHandler",
-                "filename": "error.log",
-                "formatter": "verbose",
+                "filename": "weblog.log",
+                'formatter': 'web_log',
             },
         },
         "loggers": {
@@ -197,8 +204,8 @@ CENTURION_LOGGING = {
             },
             "gunicorn": {
                 # "handlers": ['console', 'file_centurion', 'file_error'],
-                "handlers": ['file_centurion', 'file_error'],
-                "level": "DEBUG",
+                "handlers": ['file_gunicorn', 'file_error'],
+                "level": "NOTICE",
                 "propagate": False,
             },
             'rest_framework': {
@@ -533,12 +540,13 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # Add the user specified log files
-CENTURION_LOGGING['handlers']['file_centurion_trace']['filename'] = LOG_FILES['centurion_trace']
-CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
-CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
-CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
 CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_all']
+CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
+CENTURION_LOGGING['handlers']['file_centurion_trace']['filename'] = LOG_FILES['centurion_trace']
 CENTURION_LOGGING['handlers']['file_error']['filename'] = LOG_FILES['error']
+CENTURION_LOGGING['handlers']['file_gunicorn']['filename'] = LOG_FILES['gunicorn']
+CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
+CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 
 
 if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log'):
