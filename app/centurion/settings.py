@@ -89,11 +89,12 @@ FIXTURE_DIRS = [
 ]
 
 LOG_FILES = {    # defaults for devopment. docker includes settings has correct locations
+    "catch_all":"log/catch-all.log",
     "centurion_trace": "log/trace.log",
     "centurion": "log/centurion.log",
-    "weblog": "log/weblog.log",
+    "error": "log/error.log",
     "rest_api": "log/rest_api.log",
-    "catch_all":"log/catch-all.log"
+    "weblog": "log/weblog.log",
 }
 
 logging.setLoggerClass(CenturionLogger)
@@ -122,18 +123,18 @@ CENTURION_LOGGING = {
         },
         "handlers": {
             'console': {
-                'level': 'INFO',
+                'level': 'DEBUG',
                 'class': 'logging.StreamHandler',
                 'formatter': 'console',
             },
             "file_centurion": {
-                "level": CenturionLogger.INFO,
+                "level": 'DEBUG',
                 "class": "logging.FileHandler",
                 "filename": "centurion.log",
                 'formatter': 'verbose',
             },
             "file_centurion_trace": {
-                "level": CenturionLogger.INFO,
+                "level": 'TRACE',
                 "class": "logging.FileHandler",
                 "filename": "trace.log",
                 'formatter': 'verbose',
@@ -155,7 +156,13 @@ CENTURION_LOGGING = {
                 "class": "logging.FileHandler",
                 "filename": "catch-all.log",
                 'formatter': 'verbose',
-            }
+            },
+            "file_error": {
+                "level": "ERROR",
+                "class": "logging.FileHandler",
+                "filename": "error.log",
+                "formatter": "verbose",
+            },
         },
         "loggers": {
             "centurion.trace": {
@@ -520,6 +527,7 @@ CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centuri
 CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
 CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_all']
+CENTURION_LOGGING['handlers']['file_error']['filename'] = LOG_FILES['error']
 
 
 if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log'):

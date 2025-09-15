@@ -50,11 +50,12 @@ FEATURE_FLAGGING_ENABLED = True    # Turn Feature Flagging on/off
 FEATURE_FLAG_OVERRIDES = []    # Feature Flag Overrides. Takes preceedence over downloaded feature flags.
 
 LOG_FILES = {    # Location where log files will be created
+    "catch_all":"/var/log/catch-all.log",
     "centurion_trace": "/var/log/trace.log",
     "centurion": "/var/log/centurion.log",
-    "weblog": "/var/log/weblog.log",
+    "error": "/var/log/error.log",
     "rest_api": "/var/log/rest_api.log",
-    "catch_all":"/var/log/catch-all.log"
+    "weblog": "/var/log/weblog.log",
 }
 
 METRICS_ENABLED = True
