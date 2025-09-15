@@ -172,38 +172,44 @@ CENTURION_LOGGING = {
         "loggers": {
             "centurion.trace": {
                 "handlers": ['file_centurion_trace'],
-                "level": CenturionLogger.INFO,
+                "level": 'INFO',
                 "propagate": False,
             },
             "centurion": {
-                "handlers": ['console', 'file_centurion'],
-                "level": CenturionLogger.INFO,
+                "handlers": ['console', 'file_centurion', 'file_error'],
+                "level": 'INFO',
                 "propagate": False,
             },
             "django.server": {
-                "handlers": ["file_weblog", 'console'],
+                "handlers": ["file_weblog", 'console', 'file_error'],
                 "level": "INFO",
                 "propagate": False,
             },
             "django.request": {
-                "handlers": ["file_weblog", 'console'],
+                "handlers": ["file_weblog", 'console', 'file_error'],
                 "level": "DEBUG",
                 "propagate": False,
             },
             "django": {
-                "handlers": ['console', 'file_catch_all'],
+                "handlers": ['console', 'file_catch_all', 'file_error'],
                 "level": "INFO",
                 "propagate": False,
             },
+            "gunicorn": {
+                # "handlers": ['console', 'file_centurion', 'file_error'],
+                "handlers": ['file_centurion', 'file_error'],
+                "level": "DEBUG",
+                "propagate": False,
+            },
             'rest_framework': {
-                'handlers': ['file_rest_api', 'console'],
+                'handlers': ['file_rest_api', 'console', 'file_error'],
                 'level': 'INFO',
                 'propagate': False,
             },
             '': {
-                'handlers': ['file_catch_all'],
+                'handlers': ['file_catch_all', 'file_error'],
                 'level': 'INFO',
-                'propagate': True,
+                'propagate': False,
                 },
         },
     }
