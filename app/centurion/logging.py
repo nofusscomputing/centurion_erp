@@ -32,6 +32,11 @@ class CenturionLogger(logging.Logger):
 
     _nameToLevel = {name: level for level, name in _levelToName.items()}
 
+    # After class CenturionLogger definition
+    for level, name in _levelToName.items():
+        logging.addLevelName(level, name)
+
+
     def __init__(self, name="centurion", level=DEBUG, address = None):
         super().__init__(name, level)
 
@@ -91,10 +96,3 @@ class CenturionLogger(logging.Logger):
         if self.isEnabledFor(self.NOTICE):
             self._log(self.NOTICE, msg, args, **kwargs)
 
-    def makeRecord(
-        self, name, level, fn, lno, msg, args, exc_info, func=None, extra=None, sinfo=None
-    ):
-        record = super().makeRecord(name, level, fn, lno, msg, args, exc_info, func, extra, sinfo)
-        # Override record.levelname from instance _levelToName
-        record.levelname = self._levelToName.get(record.levelno, str(record.levelno))
-        return record
