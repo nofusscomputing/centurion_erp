@@ -103,6 +103,11 @@ CENTURION_LOG:logging.Logger = logging.getLogger( name = 'centurion')
 CENTURION_LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
+        "root":{
+            "handlers" : ["file_centurion"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
         "formatters": {
             "console": {
                 "format": "{asctime} {levelname} {message}",
