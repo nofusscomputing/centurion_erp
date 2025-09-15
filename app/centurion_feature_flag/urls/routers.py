@@ -25,7 +25,7 @@ class BaseRouter(
 
         if feature_flag is not None:
 
-            if not self._feature_flagging[feature_flag]:
+            if not self._feature_flagging.get('feature_flag', None):
 
                 enabled = False
 
