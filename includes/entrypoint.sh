@@ -4,6 +4,7 @@ set -e
 
 mkdir -p /etc/supervisor/conf.d;
 mkdir -p /var/log/nginx;
+mkdir -p /var/log/supervisor;
 
 if [ "$1" == "" ]; then
 
