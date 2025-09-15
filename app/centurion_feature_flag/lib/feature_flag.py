@@ -5,6 +5,9 @@ from datetime import datetime
 from dateutil.parser import parse
 from pathlib import Path
 
+from django.conf import settings
+
+from centurion.logging import CenturionLogger
 from centurion_feature_flag.lib.serializer import FeatureFlag
 
 
@@ -75,6 +78,8 @@ class CenturionFeatureFlagging:
 
     _last_modified: datetime = None
     """ Last modified date/time of the feature flags"""
+
+    _log: CenturionLogger = settings.CENTURION_LOG.getChild('feature_flagging')
 
     _over_rides: dict = None
     """Feature Flag Over rides."""
@@ -191,13 +196,21 @@ class CenturionFeatureFlagging:
             dict: A complete Feature Flag.
         """
         if(
-            self._feature_flags is None
+            settings.FEATURE_FLAGGING_ENABLED
+            and (
+                not self._disable_downloading
+                and self._feature_flags is None
+            )
             and self._over_rides.get(key, None) is None
         ):
 
-            print('Feature Flagging has not been completly initialized.')
-            print('    please ensure that the feature flags have been downloaded.')
+            self._log.debug( msg = 'No Feature flags available')
 
+
+            return False
+
+
+        if not settings.FEATURE_FLAGGING_ENABLED:
             return False
 
 
@@ -207,6 +220,7 @@ class CenturionFeatureFlagging:
             and raise_exceptions
         ):
 
+            self._log.debug( msg = f'Feature flag {key} is not available')
             raise KeyError(f'Feature Flag "{key}" does not exist')
 
         elif(
@@ -215,6 +229,7 @@ class CenturionFeatureFlagging:
             and self._over_rides.get(key, None) is None
         ):
 
+            self._log.info( msg = f'Feature flag {key} is not available')
             return False
 
         elif(
@@ -224,7 +239,7 @@ class CenturionFeatureFlagging:
 
             return  self._over_rides[key]
 
-        
+
         return self._feature_flags[key]
 
 
@@ -260,7 +275,8 @@ class CenturionFeatureFlagging:
         if feature_flag_file.is_file():
 
             if(
-                feature_flag_file.lstat().st_mtime > datetime.now().timestamp() - (4 * 3580)    # -20 second buffer
+                feature_flag_file.lstat().st_mtime 
+                    > datetime.now().timestamp() - (4 * 3580)    # -20 second buffer
                 or self._disable_downloading
             ):
                 # Only open file if less than 4 hours old
@@ -270,7 +286,7 @@ class CenturionFeatureFlagging:
                     fetched_flags = json.loads(saved_feature_flags.read())
 
                     self._cache_date = datetime.fromtimestamp(feature_flag_file.lstat().st_mtime)
-                    
+
                     url = None
 
 
@@ -314,13 +330,13 @@ class CenturionFeatureFlagging:
 
             except requests.exceptions.ConnectionError as err:
 
-                print(f'Error Connecting to {url}')
+                self._log.info( msg = f'Error Connecting to {url}')
 
                 url = None
 
             except requests.exceptions.ReadTimeout as err:
 
-                print(f'Connection Timed Out connecting to {url}')
+                self._log.info( msg = f'Connection Timed Out connecting to {url}')
 
                 url = None
 
@@ -346,7 +362,9 @@ class CenturionFeatureFlagging:
 
                 if response.headers.get('last-modified', None) is not None:
 
-                    self._last_modified = datetime.strptime(response.headers['last-modified'], '%a, %d %b %Y %H:%M:%S %z')
+                    self._last_modified = datetime.strptime(
+                        response.headers['last-modified'], '%a, %d %b %Y %H:%M:%S %z'
+                    )
 
             else:
 
