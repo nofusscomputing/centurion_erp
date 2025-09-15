@@ -41,6 +41,7 @@ class CenturionLogger(logging.Logger):
         super().__init__(name, level)
 
         if address:
+            self.info( msg = f'syslog address has been supplied, adding handler.' )
             # Attach SysLogHandler
             handler = logging.handlers.SysLogHandler(address=address)
             handler.priority_map.update({

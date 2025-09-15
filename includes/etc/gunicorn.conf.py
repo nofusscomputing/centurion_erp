@@ -55,6 +55,8 @@ max_requests_jitter = 30
 
 preload_app = True
 
+syslog_addr = None
+
 timeout = 180
 
 workers = 4
