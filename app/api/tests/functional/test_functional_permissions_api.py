@@ -1,4 +1,3 @@
-import datetime
 import pytest
 
 from django.urls.exceptions import NoReverseMatch
@@ -7,6 +6,8 @@ from django.test import Client
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly
 )
+
+from centurion_feature_flag.lib.feature_flag import CenturionFeatureFlagging
 
 
 
@@ -338,8 +339,50 @@ class APIPermissionDeleteInheritedCases:
 
 @pytest.mark.api
 @pytest.mark.functional
+@pytest.mark.model_featureflag
+@pytest.mark.regression
+class APIRegression:
+
+    def test_function_fetch_feature_flag_not_called(self, mocker, model_instance,
+        api_request_permissions, model_kwargs
+    ):
+        """ Check function calls durin api request
+
+        Feature flags must not be requested durin HTTP request from user
+        """
+
+        ff_get = mocker.spy(CenturionFeatureFlagging, 'get')
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['view'] )
+
+        kwargs = model_kwargs.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        view_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        response = client.get(
+            path = view_item.get_url( many = False )
+        )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        ff_get.assert_not_called()
+
+
+
+@pytest.mark.api
+@pytest.mark.functional
 @pytest.mark.permissions
-class APIPermissionViewInheritedCases:
+class APIPermissionViewInheritedCases(
+    APIRegression
+):
     """ Test Suite for View API Permission test cases """
 
 
@@ -641,6 +684,7 @@ class APIPermissionViewInheritedCases:
             the_model3.delete()
         except:
             pass
+
 
 
 

@@ -7,6 +7,8 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly
 )
 
+from centurion_feature_flag.lib.feature_flag import CenturionFeatureFlagging
+
 
 
 class AdditionalTestCases:
@@ -314,6 +316,39 @@ class AdditionalTestCases:
         )
 
         assert response.status_code == 200, response.content
+
+
+    def test_function_fetch_feature_flag_not_called(self, mocker, model_instance,
+        api_request_permissions, model_kwargs
+    ):
+        """ Check function calls durin api request
+
+        Feature flags must not be requested durin HTTP request from user
+        """
+
+        ff_get = mocker.spy(CenturionFeatureFlagging, 'get')
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['view'] )
+
+        kwargs = self.kwargs_create_item.copy()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        self.kwargs_create_item['ticket'].status = 2
+        self.kwargs_create_item['ticket'].save()
+
+        view_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        response = client.get(
+            path = view_item.get_url( many = False )
+        )
+
+        ff_get.assert_not_called()
 
 
 
