@@ -2,9 +2,13 @@
 
 set -e
 
-docker exec -i centurion-erp pip install -r /requirements_test.txt
+echo "Installing python test requirements......";
+docker exec -i centurion-erp pip install -r /requirements_test.txt;
+echo "Complete: Installing python test requirements.";
 
-docker exec -i centurion-erp supervisorctl restart gunicorn
+echo "Restarting Gunicorn";
+docker exec -i centurion-erp supervisorctl restart gunicorn;
+echo "Complete: Restarting Gunicorn";
 
 
 CONTAINER_NAME="centurion-erp-init"
@@ -56,10 +60,13 @@ while [ "$STATUS" != "healthy" ]; do
   ELAPSED=$((ELAPSED + INTERVAL))
 done
 
+echo "Creating centurion super user.";
 docker exec -i centurion-erp python manage.py createsuperuser --username admin --email admin@localhost --noinput
 
+echo "Installing application expect.";
 docker exec -i centurion-erp apk add expect
 
+echo "Setting super user password.";
 docker exec -i centurion-erp expect -c "
     spawn python manage.py changepassword admin
     expect \"Password:\"
@@ -67,4 +74,4 @@ docker exec -i centurion-erp expect -c "
     expect \"Password (again):\"
     send \"admin\r\"
     expect eof
-    "
+"

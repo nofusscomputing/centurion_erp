@@ -86,14 +86,25 @@ test-integration:
 
 		chmod +x setup-integration.sh;
 
+	
+		if [ "0${GITHUB_SHA}"!="0" ]; then
+
+			sudo chmod 777 -R ../test
+
+		fi;
+
+
 		if ./setup-integration.sh; then
 
 			cd ..;
 
 			ls -laR test/;
 
+			echo 'Stoping Gunicorn.';
 			docker exec -i centurion-erp supervisorctl stop gunicorn;
+			echo 'Cleaning artifacts dir.';
 			docker exec -i centurion-erp sh -c 'rm -rf /app/artifacts/* /app/artifacts/.[!.]*';
+			echo 'Starting Gunicorn.';
 			docker exec -i centurion-erp supervisorctl start gunicorn;
 			sleep 60;
 			docker ps -a;
@@ -102,28 +113,48 @@ test-integration:
 			curl --trace-ascii - http://127.0.0.1:8003/api;
 
 
-			if [ "0${GITHUB_SHA}"!="0" ]; then
-
-				sudo chmod 777 -R ./test
-
-			fi;
-
 			docker logs centurion-erp;
+			echo 'Starting integration tests.';
 			pytest --override-ini addopts= --no-migrations --tb=long --verbosity=2 --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
+			echo 'Restarting Gunicorn.';
 			docker exec -i centurion-erp supervisorctl restart gunicorn;
+			echo 'Creating Coverage reports.';
 			docker exec -i centurion-erp sh -c 'coverage combine; coverage report --skip-covered; coverage html -d artifacts/html/;';
-			
-			cd test;
 
 		else
 
+			cd ..;
+			ls -la;
+
 			echo 'Error: could not setup containers for testing';
+			echo '';
+			echo '';
+			ls -lar ./test;
+			echo '';
+			docker ps -a;
+			docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
+			docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
+			docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
+			docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
 			export exit_code=10;
 
 		fi;
 	else
 
-		echo 'Error: Failed to launch containers';
+		cd ..;
+
+		if [ "0${GITHUB_SHA}"!="0" ]; then
+
+			sudo chmod 777 -R ./test
+
+		fi;
+
+		echo 'Error: Failed to launch containers.';
+		echo '';
+		echo '';
+		ls -lar ./test;
+		echo '';
+		docker ps -a;
 		docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
 		docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
 		docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
@@ -132,6 +163,7 @@ test-integration:
 
 	fi;
 	cd test;
+	echo 'REmoving containers.';
 	docker-compose down -v;
 	cd ..;
 	exit ${exit_code};
