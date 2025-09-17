@@ -1,3 +1,11 @@
+## Version 1.24.1
+
+- Fixed excessive query response times
+
+## Version 1.24.0
+
+- This release offered no and user feature, just middleware to enable optional tracing of Centurion Code for Administrators.
+
 ## Version 1.23.0
 
 - Model Entity now available, as feature flag `2025-00002` has been removed from Centurion ERPs feature flag checks. The assosciated end user feature is [Contact Directory](https://nofusscomputing.com/projects/centurion_erp/user/access/contact/).
