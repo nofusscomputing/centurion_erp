@@ -27,8 +27,6 @@ if getattr(settings,'feature_flag', None):
             over_rides = settings.feature_flag.get('over_rides', None),
         )
 
-    _feature_flagging.get()
-
 
 
 def _path(route, view, kwargs=None, name=None, Pattern=None, feature_flag: str =None):

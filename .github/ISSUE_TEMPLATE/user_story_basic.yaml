@@ -1,0 +1,142 @@
+---
+name: "Simple Feature Request (User Story)"
+description: "Request a new feature for the ERP system"
+title: "[Feature]: <short summary>"
+labels: 
+  - "triage"
+type: story
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 Basic Feature Request (User Story)
+
+        Use this template to propose a new **ERP Feature**.  
+        Provide as much detail as possible so it can be planned, estimated, and linked to the correct ERP modules.
+
+        If you dont know how to complete a field, leave it blank with a short note so a developer has the understnding
+        if the reason/issue with completing the field.
+
+  - type: input
+    id: summary
+    attributes:
+      label: "Summary"
+      description: "One sentence overview of the feature. Keep it concise but clear."
+      placeholder: "e.g., Add multi-currency support to Accounts Payable"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: |
+        Provide a detailed description of the feature.  
+        - What problem does it solve?  
+        - Who will use it?  
+        - Where in the ERP workflow does it fit?  
+        - What are the key capabilities it introduces?  
+      placeholder: "Detailed explanation of the feature and its purpose."
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_story
+    attributes:
+      label: "User Story"
+      description: |
+        Capture the feature from the user’s perspective. Use the format:  
+        *As a [role], I want [capability], so that [benefit].*  
+        Multiple user stories can be listed if the feature impacts different roles.
+      placeholder: "As a CFO, I want to generate consolidated financial reports in multiple currencies, so that I can comply with international accounting standards."
+    validations:
+      required: true
+
+  - type: textarea
+    id: erp_module
+    attributes:
+      label: "ERP Modules"
+      description: |
+        Specify the ERP module(s) this feature touches.  
+        Be explicit about sub-modules if relevant. Examples:  
+        - Accounting → General Ledger, Accounts Payable  
+        - ITIM → Asset Lifecycle, Monitoring  
+        - HRM → Payroll, Recruitment  
+      placeholder: "e.g., Accounting → Accounts Receivable, ITIM → Asset Discovery"
+
+  - type: textarea
+    id: business_value
+    attributes:
+      label: "Business Value"
+      description: |
+        Explain the business impact of this feature.  
+        - What measurable value does it deliver?  
+        - Is it compliance-driven, efficiency-driven, or revenue-driven?  
+        - What KPIs or business processes are improved?  
+      placeholder: "Improves compliance with local tax laws, reduces manual reconciliation effort, increases reporting accuracy."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Acceptance Criteria"
+      description: |
+        Define the conditions that must be true for this feature to be considered complete.  
+        These should be testable and unambiguous.  
+        - Functional outcomes (what must the system do?)  
+        - Non-functional outcomes (performance, security, compliance).  
+      placeholder: |
+        - [ ] User can configure multiple currency rates.  
+        - [ ] Transactions automatically convert to base currency.  
+        - [ ] Reports display both local and base currency values.  
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: "Dependencies & Impact"
+      description: |
+        List any technical, business, or process dependencies.  
+        - Does this rely on another feature or ERP module?  
+        - Will it affect existing integrations, APIs, or data flows?  
+      placeholder: "Depends on exchange rate service API. Impacts Accounting → GL and Procurement → Invoicing."
+
+  - type: textarea
+    id: technical_notes
+    attributes:
+      label: "Technical Notes"
+      description: |
+        Capture any known technical considerations, constraints, or architectural notes.  
+        Examples:  
+        - Database schema changes  
+        - Required new API endpoints  
+        - Security/compliance constraints  
+        - Performance requirements  
+      placeholder: "Requires new currency table in DB, new API for exchange rates, audit logging for rate changes."
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: "Risks & Mitigations"
+      description: |
+        Identify risks introduced by this feature and how they will be mitigated.  
+        Risks may be technical, business, or compliance-related.  
+      placeholder: "Risk: Incorrect exchange rates cause reporting errors. Mitigation: nightly validation against central bank feed."
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: "Testing Strategy"
+      description: |
+        Describe how the feature will be tested.  
+        - Unit, functional integration, performance etc
+        - Specific test scenarios tied to acceptance criteria  
+      placeholder: "Unit tests for conversion logic, integration tests with API, UAT with Finance team, regression suite run."
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: "Additional Notes"
+      description: "Any extra information, links, mockups, or references."
+      placeholder: "Links to regulatory docs, mockups, architectural diagrams, related issues."
