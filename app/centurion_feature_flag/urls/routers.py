@@ -81,8 +81,6 @@ class SimpleRouter(
                 over_rides = settings.feature_flag.get('over_rides', None),
             )
 
-            self._feature_flagging.get()
-
 
 
 class DefaultRouter(
@@ -107,5 +105,3 @@ class DefaultRouter(
                 version = settings.feature_flag.get('version', None),
                 over_rides = settings.feature_flag.get('over_rides', None),
             )
-
-            self._feature_flagging.get()

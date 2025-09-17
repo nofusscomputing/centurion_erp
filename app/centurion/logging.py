@@ -32,29 +32,36 @@ class CenturionLogger(logging.Logger):
 
     _nameToLevel = {name: level for level, name in _levelToName.items()}
 
-    def __init__(self, name, level=DEBUG, address="/dev/log"):
+    # After class CenturionLogger definition
+    for level, name in _levelToName.items():
+        logging.addLevelName(level, name)
+
+
+    def __init__(self, name="centurion", level=DEBUG, address = None):
         super().__init__(name, level)
 
-        # Attach SysLogHandler
-        handler = logging.handlers.SysLogHandler(address=address)
-        handler.priority_map.update({
-            "EMERG":    "emerg",
-            "ALERT":    "alert",
-            "CRITICAL": "crit",
-            "ERROR":    "err",
-            "WARNING":  "warning",
-            "NOTICE":   "notice",
-            "INFO":     "info",
-            "DEBUG":    "debug",
-            "TRACE":    "debug",
-        })
+        if address:
+            self.info( msg = f'syslog address has been supplied, adding handler.' )
+            # Attach SysLogHandler
+            handler = logging.handlers.SysLogHandler(address=address)
+            handler.priority_map.update({
+                "EMERG":    "emerg",
+                "ALERT":    "alert",
+                "CRITICAL": "crit",
+                "ERROR":    "err",
+                "WARNING":  "warning",
+                "NOTICE":   "notice",
+                "INFO":     "info",
+                "DEBUG":    "debug",
+                "TRACE":    "debug",
+            })
 
-        # Use a custom Formatter that maps numeric levels to names from this instance only
-        formatter = logging.Formatter(fmt="%(levelname)s: %(message)s")
-        formatter.format = lambda record: self._levelToName.get(record.levelno, record.levelno) + ": " + record.getMessage()
-        handler.setFormatter(formatter)
+            # Use a custom Formatter that maps numeric levels to names from this instance only
+            formatter = logging.Formatter(fmt="%(levelname)s: %(message)s")
+            formatter.format = lambda record: self._levelToName.get(record.levelno, record.levelno) + ": " + record.getMessage()
+            handler.setFormatter(formatter)
 
-        self.addHandler(handler)
+            self.addHandler(handler)
 
     # --- Override base class methods ---
     def critical(self, msg, *args, **kwargs):
@@ -90,10 +97,3 @@ class CenturionLogger(logging.Logger):
         if self.isEnabledFor(self.NOTICE):
             self._log(self.NOTICE, msg, args, **kwargs)
 
-    def makeRecord(
-        self, name, level, fn, lno, msg, args, exc_info, func=None, extra=None, sinfo=None
-    ):
-        record = super().makeRecord(name, level, fn, lno, msg, args, exc_info, func, extra, sinfo)
-        # Override record.levelname from instance _levelToName
-        record.levelname = self._levelToName.get(record.levelno, str(record.levelno))
-        return record

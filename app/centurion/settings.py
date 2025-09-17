@@ -89,11 +89,13 @@ FIXTURE_DIRS = [
 ]
 
 LOG_FILES = {    # defaults for devopment. docker includes settings has correct locations
+    "catch_all":"log/catch-all.log",
     "centurion_trace": "log/trace.log",
     "centurion": "log/centurion.log",
-    "weblog": "log/weblog.log",
+    "error": "log/error.log",
+    "gunicorn": "log/gunicorn.log",
     "rest_api": "log/rest_api.log",
-    "catch_all":"log/catch-all.log"
+    "weblog": "log/weblog.log",
 }
 
 logging.setLoggerClass(CenturionLogger)
@@ -102,6 +104,11 @@ CENTURION_LOG:logging.Logger = logging.getLogger( name = 'centurion')
 CENTURION_LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
+        "root":{
+            "handlers" : ["file_centurion"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
         "formatters": {
             "console": {
                 "format": "{asctime} {levelname} {message}",
@@ -126,16 +133,40 @@ CENTURION_LOGGING = {
                 'class': 'logging.StreamHandler',
                 'formatter': 'console',
             },
+            "file_catch_all": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "catch-all.log",
+                'formatter': 'verbose',
+            },
             "file_centurion": {
-                "level": CenturionLogger.INFO,
+                "level": 'INFO',
                 "class": "logging.FileHandler",
                 "filename": "centurion.log",
                 'formatter': 'verbose',
             },
             "file_centurion_trace": {
-                "level": CenturionLogger.INFO,
+                "level": 'TRACE',
                 "class": "logging.FileHandler",
                 "filename": "trace.log",
+                'formatter': 'verbose',
+            },
+            "file_error": {
+                "level": "ERROR",
+                "class": "logging.FileHandler",
+                "filename": "error.log",
+                "formatter": "verbose",
+            },
+            "file_gunicorn": {
+                "level": "DEBUG",
+                "class": "logging.FileHandler",
+                "filename": "gunicorn.log",
+                "formatter": "verbose",
+            },
+            "file_rest_api": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "rest_api.log",
                 'formatter': 'verbose',
             },
             "file_weblog": {
@@ -144,54 +175,48 @@ CENTURION_LOGGING = {
                 "filename": "weblog.log",
                 'formatter': 'web_log',
             },
-            "file_rest_api": {
-                "level": "INFO",
-                "class": "logging.FileHandler",
-                "filename": "rest_api.log",
-                'formatter': 'verbose',
-            },
-            "file_catch_all": {
-                "level": "INFO",
-                "class": "logging.FileHandler",
-                "filename": "catch-all.log",
-                'formatter': 'verbose',
-            }
         },
         "loggers": {
             "centurion.trace": {
                 "handlers": ['file_centurion_trace'],
-                "level": CenturionLogger.INFO,
+                "level": 'INFO',
                 "propagate": False,
             },
             "centurion": {
-                "handlers": ['console', 'file_centurion'],
-                "level": CenturionLogger.INFO,
+                "handlers": ['console', 'file_centurion', 'file_error'],
+                "level": 'INFO',
                 "propagate": False,
             },
             "django.server": {
-                "handlers": ["file_weblog", 'console'],
+                "handlers": ["file_weblog", 'console', 'file_error'],
                 "level": "INFO",
                 "propagate": False,
             },
             "django.request": {
-                "handlers": ["file_weblog", 'console'],
+                "handlers": ["file_weblog", 'console', 'file_error'],
                 "level": "DEBUG",
                 "propagate": False,
             },
             "django": {
-                "handlers": ['console', 'file_catch_all'],
+                "handlers": ['console', 'file_catch_all', 'file_error'],
                 "level": "INFO",
                 "propagate": False,
             },
+            "gunicorn": {
+                # "handlers": ['console', 'file_centurion', 'file_error'],
+                "handlers": ['file_gunicorn', 'file_error'],
+                "level": "NOTICE",
+                "propagate": False,
+            },
             'rest_framework': {
-                'handlers': ['file_rest_api', 'console'],
+                'handlers': ['file_rest_api', 'console', 'file_error'],
                 'level': 'INFO',
                 'propagate': False,
             },
             '': {
-                'handlers': ['file_catch_all'],
+                'handlers': ['file_catch_all', 'file_error'],
                 'level': 'INFO',
-                'propagate': True,
+                'propagate': False,
                 },
         },
     }
@@ -515,11 +540,13 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # Add the user specified log files
-CENTURION_LOGGING['handlers']['file_centurion_trace']['filename'] = LOG_FILES['centurion_trace']
-CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
-CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
-CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
 CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_all']
+CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
+CENTURION_LOGGING['handlers']['file_centurion_trace']['filename'] = LOG_FILES['centurion_trace']
+CENTURION_LOGGING['handlers']['file_error']['filename'] = LOG_FILES['error']
+CENTURION_LOGGING['handlers']['file_gunicorn']['filename'] = LOG_FILES['gunicorn']
+CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
+CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 
 
 if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log'):

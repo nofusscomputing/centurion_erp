@@ -32,8 +32,6 @@ class FeatureFlagMiddleware:
             and self._feature_flagging is not None
         ):
 
-            self._feature_flagging.get()
-
             setattr(request, 'feature_flag', self._feature_flagging)
 
         return self.get_response(request)
