@@ -1,3 +1,25 @@
+## 1.24.1 (2025-09-17)
+
+### Fixes
+
+- **base**: remove gunicorn syslog address
+- **feature_flag**: when fetching a feature flag and it's not enabled, ALWAYS return false
+- **base**: gunicorn logging config setup
+- **feature_flag**: use get to fetch a potentially empty dict
+- **base**: Dont add syslog handler when no address is supplied
+
+### Refactoring
+
+- **base**: set gunicorn to only log errors
+- **base**: configure handlers for error log
+- **base**: Move supervisor app logs to own dir for clarity
+- **base**: Log ALL errors to own file in addition to specified log
+- **base**: Add logging levels to base class
+
+### Tests
+
+- **devops**: Ensure that feature flags are not obtained during HTTP request processing
+
 ## 1.24.0 (2025-09-13)
 
 ### feat
