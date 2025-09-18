@@ -282,6 +282,7 @@ from .model_projecttype import (
 from .model_requestticket import (
     kwargs_requestticket,
     model_requestticket,
+    serializer_requestticket,
 )
 
 from .model_role import (
