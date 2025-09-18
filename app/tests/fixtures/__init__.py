@@ -328,6 +328,7 @@ from .model_softwareversion import (
 from .model_ticketbase import (
     kwargs_ticketbase,
     model_ticketbase,
+    serializer_ticketbase,
 )
 
 from .model_ticketcommentaction import (
