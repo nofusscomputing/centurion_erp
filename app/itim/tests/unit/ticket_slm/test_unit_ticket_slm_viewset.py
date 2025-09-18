@@ -1,7 +1,5 @@
 import pytest
 
-from types import NoneType
-
 from core.tests.unit.ticket_base.test_unit_ticket_base_viewset import (
     TicketBaseViewsetInheritedCases
 )
@@ -35,9 +33,6 @@ class ViewsetTestCases(
             },
             'model': {
                 'value': SLMTicket
-            },
-            'model_suffix': {
-                'type': NoneType,
             },
         }
 

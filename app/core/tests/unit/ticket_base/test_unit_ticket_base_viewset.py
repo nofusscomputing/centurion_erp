@@ -1,5 +1,6 @@
-from types import NoneType
 import pytest
+
+from types import NoneType
 
 from api.tests.unit.viewset.test_unit_tenancy_viewset import (
     SubModelViewSetInheritedCases
@@ -64,6 +65,9 @@ class ViewsetTestCases(
             },
             'model_kwarg': {
                 'value':'ticket_type',
+            },
+            'model_suffix': {
+                'type': NoneType,
             },
             'search_fields': {
                 'value': [
