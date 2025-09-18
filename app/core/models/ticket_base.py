@@ -127,9 +127,15 @@ class TicketBase(
             'id'
         ]
 
-        unique_together = ('external_system', 'external_ref',)
+        permissions = [
+            ('import_ticketbase', 'Can import a ticket base'),
+            ('purge_ticketbase', 'Can purge a ticket base'),
+            ('triage_ticketbase', 'Can triage a ticket base'),
+        ]
 
         sub_model_type = 'ticket'
+
+        unique_together = ('external_system', 'external_ref',)
 
         verbose_name = "Ticket"
 
