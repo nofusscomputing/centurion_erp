@@ -282,6 +282,7 @@ from .model_projecttype import (
 from .model_requestticket import (
     kwargs_requestticket,
     model_requestticket,
+    serializer_requestticket,
 )
 
 from .model_role import (
@@ -299,6 +300,7 @@ from .model_service import (
 from .model_slmticket import (
     kwargs_slmticket,
     model_slmticket,
+    serializer_slmticket,
 )
 
 from .model_software import (
@@ -328,6 +330,7 @@ from .model_softwareversion import (
 from .model_ticketbase import (
     kwargs_ticketbase,
     model_ticketbase,
+    serializer_ticketbase,
 )
 
 from .model_ticketcommentaction import (

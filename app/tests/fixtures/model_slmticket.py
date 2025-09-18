@@ -1,6 +1,11 @@
 import pytest
 
 from itim.models.slm_ticket_base import SLMTicket
+from itim.serializers.ticketbase_slm import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -24,3 +29,14 @@ def kwargs_slmticket(kwargs_ticketbase,
     }
 
     yield kwargs.copy()
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_slmticket():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

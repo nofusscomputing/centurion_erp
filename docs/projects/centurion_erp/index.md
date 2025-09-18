@@ -67,22 +67,25 @@ Feature table uses the following keys:
 | | Asset Management | :recycle: | _[see #89](https://github.com/nofusscomputing/centurion_erp/issues/88)_ |
 | | Budgeting & Forecasting | :x: |  |
 | | Cash Management | :x: |  |
+| | Cost Center Management | :x: |  |
 | | Expense Management | :x: |  |
 | | Financial Reporting & Analytics | :x: |  |
 | | General Ledger | :x: | [see #116](https://github.com/nofusscomputing/centurion_erp/issues/116) |
 | | Income Management | :x: |  |
+| | Investment Management | :x: |  |
 | | Tax Management | :x: |  |
-| **Core** |||  |
-|  | [API](./user/api.md) | :white_check_mark: |  |
-|  | [Application wide settings](./user/settings/app_settings.md) | :white_check_mark: |  |
-|  | [Audit History](./user/core/audit_history.md) | :white_check_mark: |  |
-|  | [Corporate Directory (contacts)](./user/access/contact.md) | :white_check_mark: | _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_ |
-|  | Location Management (Regions, Sites and Locations) | :x: | _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_ |
-|  | [Markdown](./user/core/markdown.md) | :white_check_mark: |  |
-|  | [Multi-Tenant](./user/access/tenant.md) | :white_check_mark: |  |
-|  | [Roles (RBAC)](./user/access/role.md) | :white_check_mark: |  |
-|  | [Single Sign-On {SSO}](./user/configuration.md#single-sign-on) | :white_check_mark: |  |
-| **Customer Relationship Management (CRM)** ||| _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_  |
+| **Core** |  |  |  |
+| | [API](./user/api.md) | :white_check_mark: |  |
+| | [Application wide settings](./user/settings/app_settings.md) | :white_check_mark: |  |
+| | [Audit History](./user/core/audit_history.md) | :white_check_mark: |  |
+| | [Corporate Directory (contacts)](./user/access/contact.md) | :white_check_mark: | _[see #705](https://github.com/nofusscomputing/centurion_erp/issues/705)_ |
+| | Location Management (Regions, Sites and Locations) | :x: | _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_ |
+| | [Markdown](./user/core/markdown.md) | :white_check_mark: |  |
+| | [Multi-Tenant](./user/access/tenant.md) | :white_check_mark: |  |
+| | [Roles (RBAC)](./user/access/role.md) | :white_check_mark: |  |
+| | [Single Sign-On {SSO}](./user/configuration.md#single-sign-on) | :white_check_mark: |  |
+| | Soft Deleting | :x: |  |
+| **Customer Relationship Management (CRM)** || :x: | _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_  |
 | | Customers | :x: |  |
 | | Field Service Management | :x: |  |
 | | Invoice Management | :x: |  |
@@ -97,18 +100,23 @@ Feature table uses the following keys:
 | | [Repository Management](./user/devops/git_repository.md) | :recycle: | _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_ |
 | | Requirements Management | :x: |  |
 | | Version Control / Source Code Management | :x: |  |
-| Facilities Management || :x: |  |
+| | Public Repository Management | :x: | _[see #998](https://github.com/nofusscomputing/centurion_erp/issues/998)_ |
+| Facilities Management ||| _[see #574](https://github.com/nofusscomputing/centurion_erp/issues/574)_ |
 | | Building Management | :x: |  |
+| | Maintenence Management | :x: |  |
 | | Room Management | :x: |  |
-| Fleet Management || :x: |  |
-| **[Human Resource Management](./user/human_resources/index.md)**  ||| [see #92](https://github.com/nofusscomputing/centurion_erp/issues/92) |
+| Fleet Management |||  |
+| | Vehicle Management | :x: |  |
+| **[Human Resource Management](./user/human_resources/index.md)**  || :recycle: | [see #92](https://github.com/nofusscomputing/centurion_erp/issues/92) |
 | | [Employee Records](./user/human_resources/employee.md) | :x: |  |
+| | Maintenence Management | :x: |  |
 | | Onboarding / Offboarding | :x: |  |
 | | Self-Service | :x: |  |
 | Idea & Innovation Management || :x: |  |
 | | Idea Capture / Submission | :x: |  |
-| [IT Infrastructure Management (ITIM)<br>Data Center Infrastructure Management (DCIM)](./user/itim/index.md) |||  |
+| IT Infrastructure Management (ITIM)<br>Data Center Infrastructure Management (DCIM) |||  |
 | | Bare Metal Provisioning | :x: |  |
+| | BMC Server Management | :x: |  |
 | | Cable Management | :x: |  |
 | | Capacity Planning | :x: |  |
 | | [Cluster Management](./user/itim/cluster.md) | :recycle: |  |
@@ -118,19 +126,19 @@ Feature table uses the following keys:
 | | Virtual Machine Management | :x: | _[see #73](https://github.com/nofusscomputing/centurion_erp/issues/73)_ |
 | IT Service Management (ITSM / ITIL) |||  |
 | | Certificate Management | :x: |  |
-| | Change Management | :recycle: |  |
+| | Change Management | :recycle: | _[see #90](https://github.com/nofusscomputing/centurion_erp/issues/90)_ |
 | | [Configuration Management](./user/config_management/index.md) | :white_check_mark: |  |
 | | Database Management | :x: | _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_ |
-| | Incident Management | :recycle: |  |
+| | Incident Management | :recycle: | _[see #93](https://github.com/nofusscomputing/centurion_erp/issues/93)_ |
 | | [IT Asset Management (ITAM)](./user/itam/index.md) | :white_check_mark: |  |
 | | [Knowledge Base](./user/assistance/knowledge_base.md) | :white_check_mark: |  |
 | | Licence Management | :x: | _[see #4](https://github.com/nofusscomputing/centurion_erp/issues/4)_ |
 | | [OS Asset Management (OAM)](./user/itam/operating_system.md) | :white_check_mark: | |
-| | Problem Management | :recycle: |  |
+| | Problem Management | :recycle: | _[see #95](https://github.com/nofusscomputing/centurion_erp/issues/95)_ |
 | | Release and Deployment Management | :x: | _[see #462](https://github.com/nofusscomputing/centurion_erp/issues/462)_ |
 | | Service Catalog | :x: | _[see #384](https://github.com/nofusscomputing/centurion_erp/issues/384)_ |
 | | Service Level Management  | :x: | _[see #396](https://github.com/nofusscomputing/centurion_erp/issues/396)_ |
-| | Service Request Management | :recycle: |  |
+| | Service Request Management | :recycle: | _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_ |
 | | [Software Asset Management (SAM)](./user/itam/software.md) | :white_check_mark: |  |
 | | Software Package Management | :x: | _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_ |
 | | User Access & Roles | :x: |  _[see #70](https://github.com/nofusscomputing/centurion_erp/issues/70)_ |
@@ -154,6 +162,6 @@ Feature table uses the following keys:
 | | Gitea | :x: |  |
 | | Github | :recycle: |  |
 | | Gitlab | :recycle: |  |
-| | Kubernetes | :x: |  |
+| | Kubernetes | :x: |  _[see #999](https://github.com/nofusscomputing/centurion_erp/issues/999)_ |
 
 To find out what we are working on now please view the [Milestones](https://github.com/nofusscomputing/centurion_erp/milestones) on Github.

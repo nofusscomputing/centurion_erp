@@ -18,3 +18,10 @@ def model_kwargs(request, kwargs_requestticket):
     request.cls.kwargs_create_item = kwargs_requestticket.copy()
 
     yield kwargs_requestticket.copy()
+
+
+@pytest.fixture( scope = 'class')
+def model_serializer(serializer_requestticket):
+
+    yield serializer_requestticket
+
