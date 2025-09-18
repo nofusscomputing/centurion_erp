@@ -1,3 +1,6 @@
+## Verrsion 1.25.0
+
+
 ## Version 1.24.1
 
 - Fixed excessive query response times
