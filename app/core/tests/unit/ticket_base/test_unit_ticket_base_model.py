@@ -7,14 +7,13 @@ from django.db.models.query import QuerySet
 from core import exceptions as centurion_exceptions
 from core.fields.badge import Badge
 from core.models.ticket_base import TicketBase
-# from core.models.ticket_comment_base import TicketCommentBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractModelInheritedCases
 )
 
 
 
-@pytest.mark.skip( reason = 'work to be completed in #889' )
+# @pytest.mark.skip( reason = 'work to be completed in #889' )
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
     CenturionAbstractModelInheritedCases
