@@ -300,6 +300,7 @@ from .model_service import (
 from .model_slmticket import (
     kwargs_slmticket,
     model_slmticket,
+    serializer_slmticket,
 )
 
 from .model_software import (
