@@ -240,6 +240,92 @@ class TicketBaseModelTestCases(
 
 
 
+    @pytest.fixture( scope = 'function' )
+    def ticket_projects(self, django_db_blocker,
+        model_project, kwargs_project,
+        model_projectmilestone, kwargs_projectmilestone,
+    ):
+
+
+        with django_db_blocker.unblock():
+
+            kwargs = {}
+
+            for key, value in kwargs_project.items():
+
+                field = model_project._meta.get_field(key)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    continue
+
+                kwargs.update({
+                    key: value
+                })
+
+            # del kwargs['code']
+            kwargs['name'] = 'p1'
+
+            project_one = model_project.objects.create( **kwargs )
+
+            kwargs = kwargs_projectmilestone.copy()
+            kwargs['name'] = 'p1_m1'
+            kwargs['project'] = project_one
+
+            # project_one = kwargs['project']
+
+            project_milestone_one = model_projectmilestone.objects.create( **kwargs )
+
+
+            # kwargs = kwargs_project.copy()
+
+            kwargs = {}
+
+            for key, value in kwargs_project.items():
+
+                field = model_project._meta.get_field(key)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    continue
+
+                kwargs.update({
+                    key: value
+                })
+
+            # del kwargs['code']
+
+            project_two = model_project.objects.create( **kwargs )
+
+            kwargs = kwargs_projectmilestone.copy()
+            kwargs['name'] = 'p2_m1'
+            kwargs['project'] = project_two
+
+            project_milestone_two = model_projectmilestone.objects.create( **kwargs )
+
+
+        yield {
+            'one': {
+                'project': project_one,
+                'milestone': project_milestone_one
+            },
+            'two':  {
+                'project': project_two,
+                'milestone': project_milestone_two
+            },
+        }
+
+
+        with django_db_blocker.unblock():
+
+            project_milestone_one.delete()
+            project_milestone_two.delete()
+
+            project_two.delete()
+            project_one.delete()
+
+
+
     def test_class_inherits_ticketbase(self, model):
         """ Class inheritence
 
@@ -415,15 +501,49 @@ class TicketBaseModelTestCases(
         assert model().ticket_estimation is not None
 
 
-    @pytest.mark.skip( reason = 'write test')
-    def test_function_get_milestone_choices(self, model):
+    def test_function_get_milestone_choices(self, mocker, model,
+        ticket_projects,
+    ):
         """Function test
 
         Ensure that function `get_ticket_type_choices` returns a tuple of
         each projects milestones
         """
 
-        assert ('project_name', (model()._meta.sub_model_type, model()._meta.verbose_name)) in model.get_milestone_choices()
+        mocker.patch.object(model, 'project', return_value = ticket_projects['one']['project'] )
+
+        choices = model.get_milestone_choices()
+
+        for project, milestones in choices:
+
+            if project != ticket_projects['one']['project'].name:
+                continue
+
+            assert (
+                ticket_projects['one']['milestone'].id, ticket_projects['one']['milestone'].name
+            ) in milestones
+
+
+    def test_function_get_milestone_choices_wrong_milesone_not_containd(self, mocker, model,
+        ticket_projects,
+    ):
+        """Function test
+
+        Ensure that function `get_ticket_type_choices` returns the correct milestones per project
+        """
+
+        mocker.patch.object(model, 'project', return_value = ticket_projects['one']['project'] )
+
+        choices = model.get_milestone_choices()
+
+        for project, milestones in choices:
+
+            if project != ticket_projects['one']['project'].name:
+                continue
+
+            assert (
+                ticket_projects['two']['milestone'].id, ticket_projects['two']['milestone'].name
+            ) not in milestones
 
 
     def test_function_urgency_badge_type(self, model):
