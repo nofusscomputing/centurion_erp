@@ -5,12 +5,12 @@ from itim.tests.unit.ticket_slm.test_unit_ticket_slm_serializer import (
 )
 
 
+
 @pytest.mark.model_requestticket
 class RequestTicketSerializerTestCases(
     SLMTicketSerializerInheritedCases
 ):
     pass
-
 
 
 class RequestTicketSerializerInheritedCases(
@@ -20,7 +20,7 @@ class RequestTicketSerializerInheritedCases(
 
 
 
-@pytest.mark.module_itim
+@pytest.mark.module_assistance
 class RequestTicketSerializerPyTest(
     RequestTicketSerializerTestCases
 ):
