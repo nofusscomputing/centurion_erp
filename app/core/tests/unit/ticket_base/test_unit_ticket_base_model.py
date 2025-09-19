@@ -10,13 +10,16 @@ from core.models.ticket_base import TicketBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractModelInheritedCases
 )
+from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model import (
+    CenturionSubAbstractModelInheritedCases
+)
 
 
 
-# @pytest.mark.skip( reason = 'work to be completed in #889' )
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionSubAbstractModelInheritedCases,
+    CenturionAbstractModelInheritedCases,
 ):
 
 
@@ -25,6 +28,9 @@ class TicketBaseModelTestCases(
 
         return {
             '_audit_enabled': {
+                'value': False
+            },
+            '_is_submodel': {
                 'value': False
             },
             '_notes_enabled': {
@@ -965,12 +971,69 @@ class TicketBaseModelTestCases(
 
 
 
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+
+        model_instance.model = model_instance
+
+        app_namespace = ''
+        if model_instance.app_namespace:
+            app_namespace = model_instance.app_namespace + ':'
+
+        url_model_name = model_instance._meta.model_name
+        if model_instance.url_model_name:
+            url_model_name = model_instance.url_model_name
+
+        url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
+        if model_instance._meta.sub_model_type != 'ticket':
+            url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        reverse.assert_called_with(
+            url_basename,
+            None,
+            {
+                'ticket_type': model_instance._meta.sub_model_type,
+                'pk': model_instance.id,
+            },
+            None,
+            None
+        )
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'ticket_type': model_instance._meta.sub_model_type,
+            'pk': model_instance.id,
+        }
+
+
+
 
 class TicketBaseModelInheritedCases(
     TicketBaseModelTestCases,
 ):
 
     sub_model_type = None
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_is_submodel': {
+                'value': True
+            },
+        }
 
 
 
@@ -1030,3 +1093,50 @@ class TicketBaseModelPyTest(
         )
 
         spy.assert_called_with(item, valid_data['description'])
+
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+
+        model_instance.model = model_instance
+
+        app_namespace = ''
+        if model_instance.app_namespace:
+            app_namespace = model_instance.app_namespace + ':'
+
+        url_model_name = model_instance._meta.model_name
+        if model_instance.url_model_name:
+            url_model_name = model_instance.url_model_name
+
+        url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
+        if model_instance._meta.sub_model_type != 'ticket':
+            url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        reverse.assert_called_with(
+            url_basename,
+            None,
+            {
+                # 'ticket_type': model_instance._meta.sub_model_type,
+                'pk': model_instance.id,
+            },
+            None,
+            None
+        )
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            # 'ticket_type': model_instance._meta.sub_model_type,
+            'pk': model_instance.id,
+        }
+

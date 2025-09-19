@@ -1844,7 +1844,7 @@ class SlashCommandsFixtures:
     """
 
     @pytest.fixture(scope = 'class')
-    def setup_class(self, request, 
+    def setup_class(self, request,
         organization_one,
         django_db_blocker,
     ):

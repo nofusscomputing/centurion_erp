@@ -1,12 +1,13 @@
-from django.test import TestCase
+import pytest
 
-# from core.tests.functional.ticket_base.test_functional_ticket_base_metadata import TicketBaseMetadataInheritedCases
+from django.test import TestCase
 
 from itim.models.request_ticket import RequestTicket
 from itim.tests.functional.ticket_slm.test_functional_ticket_slm_metadata import SLMTicketMetadataInheritedCases
 
 
 
+@pytest.mark.model_requestticket
 class MetadataTestCases(
     SLMTicketMetadataInheritedCases,
 ):
@@ -44,6 +45,7 @@ class RequestTicketInheritedCases(
 
 
 
+@pytest.mark.module_itim
 class RequestTicketTest(
     MetadataTestCases,
     TestCase,
