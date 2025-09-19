@@ -1,4 +1,3 @@
-import django
 import pytest
 import random
 
@@ -11,7 +10,7 @@ from api.tests.functional.test_functional_api_fields import (
 )
 
 
-@pytest.mark.skip( reason = 'behind featureflag see #889')
+
 @pytest.mark.model_ticketbase
 class APITestCases(
     APIFieldsInheritedCases,
