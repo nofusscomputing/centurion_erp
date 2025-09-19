@@ -71,6 +71,9 @@ class MetadataTestCases(
             'organization': self.different_organization
         })
 
+        if self.model._meta.sub_model_type != 'ticket':
+            self.url_view_kwargs.update({ 'ticket_type': self.model._meta.sub_model_type })
+
         super().setUpTestData()
 
 
