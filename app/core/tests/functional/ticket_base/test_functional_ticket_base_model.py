@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import models
+
 from core.models.ticket_base import (
     TicketBase
 )
@@ -57,7 +59,10 @@ class TicketBaseModelTestCases(
 
             request.cls.existing_ticket.delete()
 
-            request.cls.ticket_user.delete()
+            try:
+                request.cls.ticket_user.delete()
+            except models.ProtectedError:
+                pass
 
             request.cls.entity_user.delete()
 
