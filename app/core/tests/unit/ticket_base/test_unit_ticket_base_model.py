@@ -269,7 +269,6 @@ class TicketBaseModelTestCases(
                     key: value
                 })
 
-            # del kwargs['code']
             kwargs['name'] = 'p1'
 
             project_one = model_project.objects.create( **kwargs )
@@ -278,12 +277,9 @@ class TicketBaseModelTestCases(
             kwargs['name'] = 'p1_m1'
             kwargs['project'] = project_one
 
-            # project_one = kwargs['project']
 
             project_milestone_one = model_projectmilestone.objects.create( **kwargs )
 
-
-            # kwargs = kwargs_project.copy()
 
             kwargs = {}
 
@@ -299,7 +295,6 @@ class TicketBaseModelTestCases(
                     key: value
                 })
 
-            # del kwargs['code']
 
             project_two = model_project.objects.create( **kwargs )
 
@@ -1121,7 +1116,6 @@ class TicketBaseModelPyTest(
             url_basename,
             None,
             {
-                # 'ticket_type': model_instance._meta.sub_model_type,
                 'pk': model_instance.id,
             },
             None,
@@ -1136,7 +1130,6 @@ class TicketBaseModelPyTest(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            # 'ticket_type': model_instance._meta.sub_model_type,
             'pk': model_instance.id,
         }
 
