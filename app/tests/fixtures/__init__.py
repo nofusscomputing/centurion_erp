@@ -341,6 +341,7 @@ from .model_ticketcommentaction import (
 from .model_ticketcommentbase import (
     kwargs_ticketcommentbase,
     model_ticketcommentbase,
+    serializer_ticketcommentbase,
 )
 
 from .model_ticketcommentsolution import (

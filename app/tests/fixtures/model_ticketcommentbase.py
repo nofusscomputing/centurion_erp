@@ -4,6 +4,11 @@ import pytest
 from django.db import models
 
 from core.models.ticket_comment_base import TicketCommentBase
+from core.serializers.ticketcommentbase import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
+)
 
 
 
@@ -71,3 +76,14 @@ def kwargs_ticketcommentbase(django_db_blocker, kwargs_centurionmodel,
             category.delete()
         except models.deletion.ProtectedError:
             pass
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_ticketcommentbase():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }
