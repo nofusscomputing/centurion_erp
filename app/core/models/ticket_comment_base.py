@@ -304,6 +304,11 @@ class TicketCommentBase(
 
 
 
+    def delete(self, using = None, keep_parents = False):
+        return super().delete(using = using, keep_parents = False)
+
+
+
     def get_related_model(self):
         """Recursive model Fetch
 
