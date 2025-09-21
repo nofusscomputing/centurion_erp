@@ -275,6 +275,8 @@ class Software(
 
             self.organization = app_settings.global_organization
 
+        super().clean()
+
 
 
 class SoftwareVersion(
