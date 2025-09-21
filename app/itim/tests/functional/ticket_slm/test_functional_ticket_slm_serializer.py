@@ -47,4 +47,3 @@ class SLMTicketSerializerPyTest(
 ):
 
     parameterized_test_data: dict = None
-
