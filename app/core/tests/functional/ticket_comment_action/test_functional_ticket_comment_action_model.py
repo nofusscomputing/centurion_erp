@@ -7,8 +7,12 @@ from core.tests.functional.ticket_comment_base.test_functional_ticket_comment_ba
 class TicketCommentActionModelTestCases(
     TicketCommentBaseModelInheritedTestCases
 ):
-    pass
 
+    def test_thread_parent_status_is_closed(self):
+        pytest.xfail( reason = 'this model must not be able to create thread on itself' )
+
+    def test_thread_parent_status_is_closed_date_closed_not_set(self):
+        pytest.xfail( reason = 'this model must not be able to create thread on itself' )
 
     # check comment status is closed
 
