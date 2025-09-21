@@ -5,6 +5,7 @@ from itim.tests.unit.ticket_slm.test_unit_ticket_slm_serializer import (
 )
 
 
+
 @pytest.mark.model_requestticket
 class RequestTicketSerializerTestCases(
     SLMTicketSerializerInheritedCases
