@@ -196,6 +196,80 @@ class CenturionMixnTestCases(
 
     #     assert model.validate_field_not_none('a value') == None
 
+    def test_method_clean_fields_calls_super_centurion_mixin(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean_fields` calls `super().clean_fields`
+        """
+
+        super_clean_fields = mocker.patch(
+            'django.db.models.base.Model.clean_fields', return_value = None
+        )
+
+        model_instance.clean_fields()
+
+        super_clean_fields.assert_called_once()
+
+
+    def test_method_clean_calls_super_centurion_mixin(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch('django.db.models.base.Model.clean', return_value = None)
+
+        model_instance.clean()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_validate_constraints_calls_super_centurion_mixin(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `validate_constraints` calls `super().validate_constraints`
+        """
+
+        super_validate_constraints = mocker.patch(
+            'django.db.models.base.Model.validate_constraints', return_value = None
+        )
+
+        model_instance.validate_constraints()
+
+
+        super_validate_constraints.assert_called_once()
+
+
+    def test_method_validate_unique_calls_super_centurion_mixin(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `validate_unique` calls `super().validate_unique`
+        """
+
+        super_validate_unique = mocker.patch(
+            'django.db.models.base.Model.validate_unique', return_value = None
+        )
+
+        model_instance.validate_unique()
+
+        super_validate_unique.assert_called_once()
+
+
+    def test_method_full_clean_calls_super_centurion_mixin(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `validafull_cleante_unique` calls `super().full_clean`
+        """
+
+        super_validate_unique = mocker.patch(
+            'django.db.models.base.Model.full_clean', return_value = None
+        )
+
+        model_instance.full_clean()
+
+        super_validate_unique.assert_called_once()
+
 
 
 class CenturionMixnInheritedCases(
@@ -280,32 +354,7 @@ class CenturionMixnPyTest(
 
 
 
-    def test_method_clean_calls_super_clean(self, mocker, model_instance):
-        """Test Class Method
 
-        Ensure method `clean` calls `super().clean`
-        """
-
-        super_clean = mocker.patch('django.db.models.base.Model.clean', return_value = None)
-
-        model_instance.clean()
-
-
-        super_clean.assert_called_once()
-
-
-
-    def test_method_clean_fields_calls_super_clean_fields(self, mocker, model_instance):
-        """Test Class Method
-
-        Ensure method `clean_fields` calls `super().clean_fields`
-        """
-
-        super_clean_fields = mocker.patch('django.db.models.base.Model.clean_fields', return_value = None)
-
-        model_instance.clean_fields()
-
-        super_clean_fields.assert_called_once()
 
 
 
@@ -1049,32 +1098,3 @@ class CenturionMixnPyTest(
         model_instance.save()
 
         get_audit_values.assert_called_with()
-
-
-
-    def test_method_validate_constraints_calls_super_validate_constraints(self, mocker, model_instance):
-        """Test Class Method
-
-        Ensure method `validate_constraints` calls `super().validate_constraints`
-        """
-
-        super_validate_constraints = mocker.patch('django.db.models.base.Model.validate_constraints', return_value = None)
-
-        model_instance.validate_constraints()
-
-
-        super_validate_constraints.assert_called_once()
-
-
-
-    def test_method_validate_unique_fields_calls_super_validate_unique(self, mocker, model_instance):
-        """Test Class Method
-
-        Ensure method `validate_unique` calls `super().validate_unique`
-        """
-
-        super_validate_unique = mocker.patch('django.db.models.base.Model.validate_unique', return_value = None)
-
-        model_instance.validate_unique()
-
-        super_validate_unique.assert_called_once()
