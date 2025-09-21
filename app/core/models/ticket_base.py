@@ -674,6 +674,8 @@ class TicketBase(
         except Exception:
             pass
 
+        super().clean()
+
 
 
     def clean_fields(self, exclude = None):
