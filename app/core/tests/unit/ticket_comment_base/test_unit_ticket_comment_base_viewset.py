@@ -15,7 +15,7 @@ from core.viewsets.ticket_comment import (
 )
 
 
-@pytest.mark.model_ticketbase
+@pytest.mark.model_ticketcommentbase
 class ViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
