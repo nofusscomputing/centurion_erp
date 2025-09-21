@@ -851,13 +851,16 @@ class TicketBase(
 
         kwargs = super().get_url_kwargs( many = many )
 
-        if self._is_submodel:
+        if 'model_name' in kwargs:
 
             del kwargs['model_name']
+
+        if str(self._meta.sub_model_type) != 'ticket':
 
             kwargs.update({
                 'ticket_type': str(self._meta.sub_model_type),
             })
+
 
         return kwargs
 

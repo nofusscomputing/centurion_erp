@@ -94,9 +94,10 @@ class ModelSerializer(
             })
 
 
-        url_dict.update({
-            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
-        })
+        # feature requires re-write
+        # url_dict.update({
+        #     'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+        # })
 
 
         return url_dict

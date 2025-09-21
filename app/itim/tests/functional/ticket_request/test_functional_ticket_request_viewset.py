@@ -1,50 +1,29 @@
-from django.test import TestCase
+import pytest
 
-# from core.tests.functional.ticket_base.test_functional_ticket_base_viewset import TicketBaseViewSetInheritedCases
+from itim.tests.functional.ticket_slm.test_functional_ticket_slm_viewset import (
+    SLMTicketViewsetInheritedCases
+)
 
-from itim.models.request_ticket import RequestTicket
-from itim.tests.functional.ticket_slm.test_functional_ticket_slm_viewset import SLMTicketViewSetInheritedCases
 
 
-class ViewSetTestCases(
-    SLMTicketViewSetInheritedCases,
+@pytest.mark.model_requestticket
+class ViewsetTestCases(
+    SLMTicketViewsetInheritedCases,
 ):
-
-    kwargs_create_item: dict = {}
-
-    kwargs_create_item_diff_org: dict = {}
-
-    model = RequestTicket
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs_create_item = {
-            **super().kwargs_create_item,
-            **self.kwargs_create_item
-        }
-
-        self.kwargs_create_item_diff_org = {
-            **super().kwargs_create_item_diff_org,
-            **self.kwargs_create_item_diff_org
-        }
-
-        super().setUpTestData()
+    pass
 
 
 
-class RequestTicketInheritedCases(
-    ViewSetTestCases,
+class RequestTicketViewsetInheritedCases(
+    ViewsetTestCases,
 ):
-
-    model = None
-
+    pass
 
 
-class RequestTicketTest(
-    ViewSetTestCases,
-    TestCase,
+
+@pytest.mark.module_itim
+class RequestTicketViewsetPyTest(
+    ViewsetTestCases,
 ):
 
     pass
