@@ -8,11 +8,11 @@ from api.tests.unit.viewset.test_unit_tenancy_viewset import (
 )
 
 from core.viewsets.ticket_comment import (
-    # NoDocsViewSet,
     TicketBase,
     TicketCommentBase,
     ViewSet
 )
+
 
 
 @pytest.mark.model_ticketcommentbase

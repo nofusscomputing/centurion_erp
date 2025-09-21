@@ -452,9 +452,6 @@ class TicketCommentBaseModelTestCases(
 
         valid_data['ticket'] = ticket
 
-        # del valid_data['external_system']
-        # del valid_data['external_ref']
-
         comment = model.objects.create(
             **valid_data
         )
@@ -475,9 +472,6 @@ class TicketCommentBaseModelTestCases(
         valid_data = self.kwargs_create_item.copy()
 
         valid_data['ticket'] = ticket
-
-        # del valid_data['external_system']
-        # del valid_data['external_ref']
 
         item = model.objects.create(
             **valid_data
@@ -541,9 +535,6 @@ class TicketCommentBaseModelPyTest(
         valid_data = self.kwargs_create_item.copy()
 
         valid_data['ticket'] = ticket
-
-        # del valid_data['external_system']
-        # del valid_data['external_ref']
 
         item = model.objects.create(
             **valid_data

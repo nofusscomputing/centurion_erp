@@ -71,7 +71,6 @@ class TicketCommentBaseAPIFieldsTestCases(
             kwargs['body'] = 'the child comment'
             kwargs['comment_type'] = model._meta.sub_model_type
             kwargs['parent'] = request.cls.item
-            # kwargs['ticket'] = request.cls.item.ticket
 
             del kwargs['external_ref']
             del kwargs['external_system']
