@@ -239,23 +239,14 @@ class ModelSerializer(
                 comment = self.Meta.model.objects.filter( id = attrs['parent_id'] )
 
 
-                if list(comment)[0].parent_id:
-
-                    raise centurion_exceptions.ValidationError(
-                        detail = {
-                            'parent': 'Replying to a discussion reply is not possible'
-                        },
-                        code = 'single_discussion_replies_only'
-                    )
-
         else:
 
-                    raise centurion_exceptions.ValidationError(
-                        detail = {
-                            'parent': 'Replying to a discussion reply is not possible'
-                        },
-                        code = 'single_discussion_replies_only'
-                    )
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'parent': 'Replying to a discussion reply is not possible'
+                },
+                code = 'single_discussion_replies_only'
+            )
 
         return attrs
 

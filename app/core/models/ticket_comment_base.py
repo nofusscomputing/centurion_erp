@@ -2,6 +2,7 @@ import datetime
 
 from django.apps import apps
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -273,6 +274,18 @@ class TicketCommentBase(
                     },
                     code = 'comment_type_wrong_endpoint'
                 )
+
+
+            if self.parent:
+
+                if self.parent.parent:
+
+                    raise ValidationError(
+                        message = {
+                            'parent': 'Replying to a discussion reply is not possible'
+                        },
+                        code = 'single_level_discussion_replies_only'
+                    )
 
         super().clean()
 
