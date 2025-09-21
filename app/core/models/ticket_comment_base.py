@@ -274,6 +274,8 @@ class TicketCommentBase(
                     code = 'comment_type_wrong_endpoint'
                 )
 
+        super().clean()
+
 
 
     def clean_fields(self, exclude=None):
