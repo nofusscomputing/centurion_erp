@@ -487,6 +487,37 @@ class TicketCommentBaseModelInheritedCases(
 
     sub_model_type = None
 
+    def test_method_delete_calls_super_keep_parent_matches_is_sub_model(self, mocker, model_instance):
+        """Test Class Method
+        
+        Ensure when method `delete` calls `super().delete` attribute
+        `keep_parents` is `False` so that entire chain is deleted
+        """
+
+        class MockManager:
+
+            def get(*args, **kwargs):
+                return model_instance
+
+        mocker.patch(
+            'django.db.models.query.QuerySet.get', return_value = model_instance
+        )
+
+        super_delete = mocker.patch(
+            'django.db.models.base.Model.delete', return_value = None
+        )
+
+        mocker.patch(
+            'core.mixins.centurion.Centurion.get_audit_values',
+            return_value = {'key': 'value'}
+        )
+
+        model_instance.delete()
+
+
+        super_delete.assert_called_with(using = None, keep_parents = False)
+
+
 
 
 @pytest.mark.module_core
