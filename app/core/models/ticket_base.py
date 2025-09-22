@@ -906,6 +906,11 @@ class TicketBase(
 
         for field in changed_fields:
 
+            if not request:
+                # exit if no request obj.
+                # this clause is temp until action commenting is setup/refactored
+                return
+
             comment_text: str = None
 
             if field == 'category_id':
