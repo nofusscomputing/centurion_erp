@@ -18,3 +18,9 @@ def model_kwargs(request, kwargs_ticketcommentaction):
     request.cls.kwargs_create_item = kwargs_ticketcommentaction.copy()
 
     yield kwargs_ticketcommentaction.copy()
+
+
+@pytest.fixture( scope = 'class')
+def model_serializer(serializer_ticketcommentaction):
+
+    yield serializer_ticketcommentaction

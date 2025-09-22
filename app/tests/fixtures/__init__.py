@@ -336,6 +336,7 @@ from .model_ticketbase import (
 from .model_ticketcommentaction import (
     kwargs_ticketcommentaction,
     model_ticketcommentaction,
+    serializer_ticketcommentaction,
 )
 
 from .model_ticketcommentbase import (
