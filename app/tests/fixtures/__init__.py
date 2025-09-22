@@ -347,6 +347,7 @@ from .model_ticketcommentbase import (
 from .model_ticketcommentsolution import (
     kwargs_ticketcommentsolution,
     model_ticketcommentsolution,
+    serializer_ticketcommentsolution,
 )
 
 from .model_tenant import (
