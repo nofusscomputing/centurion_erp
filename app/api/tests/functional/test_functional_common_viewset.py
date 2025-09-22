@@ -183,7 +183,7 @@ class CommonViewSetTestCases:
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset,
         model_user, kwargs_user, organization_one, organization_two,
-        model_instance, model_kwargs, model
+        model_instance, model_kwargs, model, model_ticketcommentbase
     ):
 
         with django_db_blocker.unblock():
@@ -203,14 +203,14 @@ class CommonViewSetTestCases:
             kwargs = model_kwargs.copy()
             if 'organization' in kwargs:
                 kwargs['organization'] = organization_one
-            if 'user' in kwargs and model._meta.model_name != 'ticketcommentbase':
+            if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user2
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
             kwargs = model_kwargs.copy()
             if 'organization' in kwargs:
                 kwargs['organization'] = organization_two
-            if 'user' in kwargs and model._meta.model_name != 'ticketcommentbase':
+            if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
