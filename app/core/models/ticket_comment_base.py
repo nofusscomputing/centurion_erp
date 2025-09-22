@@ -81,6 +81,7 @@ class TicketCommentBase(
         help_text = 'Parent ID for creating discussion threads',
         null = True,
         on_delete = models.PROTECT,
+        related_name = 'threads',
         verbose_name = 'Parent Comment',
     )
 
@@ -305,6 +306,14 @@ class TicketCommentBase(
 
 
     def delete(self, using = None, keep_parents = False):
+
+        if len(self.threads.all()):
+            raise models.ProtectedError(
+                msg = 'Can not delete a comment that has threads',
+                protected_objects = self
+            )
+
+
         return super().delete(using = using, keep_parents = False)
 
 

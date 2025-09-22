@@ -481,6 +481,48 @@ class TicketCommentBaseModelTestCases(
 
 
 
+    def test_method_delete_prevent_when_threads(self, mocker,
+        model, model_ticketcommentbase, kwargs_ticketcommentbase, model_kwargs,
+    ):
+
+        mocker.patch(
+            'core.models.centurion.CenturionModel.delete', return_value = None
+        )
+
+        kwargs = model_kwargs.copy()
+        del kwargs['external_ref']
+        del kwargs['external_system']
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
+
+        ticket = kwargs['ticket']
+
+        parent_obj = model.objects.create( **kwargs )
+
+        kwargs = kwargs_ticketcommentbase.copy()
+        del kwargs['external_ref']
+        del kwargs['external_system']
+        kwargs['parent'] = parent_obj
+        kwargs['ticket'] = ticket
+
+        model_ticketcommentbase.objects.create( **kwargs )
+        model_ticketcommentbase.objects.create( **kwargs )
+        model_ticketcommentbase.objects.create( **kwargs )
+        model_ticketcommentbase.objects.create( **kwargs )
+
+        assert len(parent_obj.threads.all()) > 0, 'Test requires there be threads.'
+
+        with pytest.raises(models.ProtectedError):
+
+            parent_obj.delete()
+
+
+
 class TicketCommentBaseModelInheritedCases(
     TicketCommentBaseModelTestCases,
 ):

@@ -86,7 +86,7 @@ class TicketCommentBaseModelTestCases(
 
         with django_db_blocker.unblock():
 
-            for thread in ticket_comment.ticketcommentbase_set.all():
+            for thread in ticket_comment.threads.all():
                 thread.delete()
 
             ticket_comment.delete()
