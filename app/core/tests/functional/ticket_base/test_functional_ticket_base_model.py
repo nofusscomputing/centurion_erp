@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import models
+
 from core.models.ticket_base import (
     TicketBase
 )
@@ -46,7 +48,6 @@ class TicketBaseModelTestCases(
                 organization = organization_one,
                 title = 'an existing ticket',
                 description = "the ticket body",
-                # ticket_type = TicketBase.TicketType.REQUEST,
                 opened_by = request.cls.ticket_user,
             )
 
@@ -58,7 +59,10 @@ class TicketBaseModelTestCases(
 
             request.cls.existing_ticket.delete()
 
-            request.cls.ticket_user.delete()
+            try:
+                request.cls.ticket_user.delete()
+            except models.ProtectedError:
+                pass
 
             request.cls.entity_user.delete()
 
@@ -110,9 +114,6 @@ class TicketBaseModelTestCases(
         ('is_solved_is_closed_status_invalid_pending', True, True, TicketBase.TicketStatus.INVALID, TicketBase.TicketStatus.PENDING),
         ('is_solved_not_closed_status_solved_pending', True, False, TicketBase.TicketStatus.SOLVED, TicketBase.TicketStatus.PENDING),
 
-        # ('is_solved_is_closed_status_closed_assigned', True, True, TicketBase.TicketStatus.CLOSED, TicketBase.TicketStatus.ASSIGNED),
-        # ('is_solved_is_closed_status_invalid_assigned', True, True, TicketBase.TicketStatus.INVALID, TicketBase.TicketStatus.ASSIGNED),
-        # ('is_solved_not_closed_status_solved_assigned', True, False, TicketBase.TicketStatus.SOLVED, TicketBase.TicketStatus.ASSIGNED),
     ]
 
     @pytest.mark.parametrize(

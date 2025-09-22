@@ -1,6 +1,11 @@
 import pytest
 
 from core.models.ticket_comment_solution import TicketCommentSolution
+from core.serializers.ticketcommentbase_solution import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -23,3 +28,14 @@ def kwargs_ticketcommentsolution(
     }
 
     yield kwargs.copy()
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_ticketcommentsolution():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

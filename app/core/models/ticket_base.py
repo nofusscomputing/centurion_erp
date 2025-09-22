@@ -674,6 +674,8 @@ class TicketBase(
         except Exception:
             pass
 
+        super().clean()
+
 
 
     def clean_fields(self, exclude = None):
@@ -870,7 +872,8 @@ class TicketBase(
 
         from core.models.ticket_comment_action import TicketCommentAction
 
-        request = get_request()
+        # request = get_request()
+        request = None
 
         excluded_fields: list = [
             'created',
@@ -889,13 +892,24 @@ class TicketBase(
             if (
                 self._before[field] != self._after[field]
                 and field not in excluded_fields
-                and field in fields
+                and (
+                    field in fields
+                    or (
+                        str( field )[0:len(field)-3] in fields
+                        and str( field ).endswith('_id')
+                    )
+                )
             ):
 
                 changed_fields = changed_fields + [ field ]
 
 
         for field in changed_fields:
+
+            if not request:
+                # exit if no request obj.
+                # this clause is temp until action commenting is setup/refactored
+                return
 
             comment_text: str = None
 
@@ -1083,20 +1097,14 @@ class TicketBase(
 
                     comment_user = None
 
-                # comment = TicketCommentAction.objects.create(
+                # User requires entity to be usable for ticket comment
+                # TicketCommentAction.objects.create(
                 #     organization = self.organization,
                 #     ticket = self,
                 #     comment_type = TicketCommentAction._meta.sub_model_type,
                 #     body = comment_text,
                 #     # user = user
                 # )
-
-                # comment.save()
-                a = 'b'
-
-
-
-
 
         # return None
 

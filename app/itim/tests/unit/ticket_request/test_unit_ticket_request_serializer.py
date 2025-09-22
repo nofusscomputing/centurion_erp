@@ -20,7 +20,7 @@ class RequestTicketSerializerInheritedCases(
 
 
 
-@pytest.mark.module_assistance
+@pytest.mark.module_itim
 class RequestTicketSerializerPyTest(
     RequestTicketSerializerTestCases
 ):

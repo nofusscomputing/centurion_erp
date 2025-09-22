@@ -85,6 +85,88 @@ class CenturionAbstractModelTestCases(
 
 
 
+    def test_method_clean_fields_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.clean_fields', return_value = None
+        )
+
+        model_instance.clean_fields()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_clean_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.clean', return_value = None
+        )
+
+        model_instance.clean()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_validate_constraints_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.validate_constraints', return_value = None
+        )
+
+        model_instance.validate_constraints()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_validate_unique_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.validate_unique', return_value = None
+        )
+
+        model_instance.validate_unique()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_full_clean_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `full_clean` calls `super().full_clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.full_clean', return_value = None
+        )
+
+        model_instance.full_clean()
+
+
+        super_clean.assert_called_once()
+
+
+
+
 class CenturionAbstractModelInheritedCases(
     CenturionAbstractModelTestCases,
 ):

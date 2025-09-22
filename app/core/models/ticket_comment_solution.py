@@ -1,6 +1,8 @@
 import datetime
 
-
+from django.core.exceptions import (
+    ValidationError
+)
 from core import exceptions as centurion_exception
 from core.models.ticket_comment_base import TicketCommentBase
 
@@ -37,23 +39,20 @@ class TicketCommentSolution(
 
         if self.ticket.is_solved:
 
-            raise centurion_exception.ValidationError(
-                detail = 'Ticket is already solved',
+            raise ValidationError(
+                message = 'Ticket is already solved',
                 code = 'ticket_already_solved'
             )
 
+        self.ticket.get_can_resolve(raise_exceptions = True)
 
-        try:
+        if self.parent:
 
-            self.ticket.get_can_resolve(raise_exceptions = True)
-
-        except centurion_exception.ValidationError as err:
-
-            raise centurion_exception.ValidationError(
-                detail = {
-                    'body': err.detail['status']
+            raise ValidationError(
+                message = {
+                    'parent': 'solution comment cant be added as a threaded comment'
                 },
-                code = err.code
+                code = 'solution_comment_not_threadable'
             )
 
 
@@ -70,10 +69,6 @@ class TicketCommentSolution(
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         super().save(force_insert = force_insert, force_update = force_update, using = using, update_fields = update_fields)
-
-        self.ticket.is_solved = self.is_closed
-
-        self.ticket.date_solved = self.date_closed
 
         self.ticket.status = self.ticket.TicketStatus.SOLVED
 

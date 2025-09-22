@@ -336,16 +336,19 @@ from .model_ticketbase import (
 from .model_ticketcommentaction import (
     kwargs_ticketcommentaction,
     model_ticketcommentaction,
+    serializer_ticketcommentaction,
 )
 
 from .model_ticketcommentbase import (
     kwargs_ticketcommentbase,
     model_ticketcommentbase,
+    serializer_ticketcommentbase,
 )
 
 from .model_ticketcommentsolution import (
     kwargs_ticketcommentsolution,
     model_ticketcommentsolution,
+    serializer_ticketcommentsolution,
 )
 
 from .model_tenant import (

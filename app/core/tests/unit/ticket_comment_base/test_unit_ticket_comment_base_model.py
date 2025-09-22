@@ -12,7 +12,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 )
 
 
-@pytest.mark.skip( reason = 'behind ff. see #726' )
+
 @pytest.mark.model_ticketcommentbase
 class TicketCommentBaseModelTestCases(
     CenturionAbstractModelInheritedCases
@@ -452,9 +452,6 @@ class TicketCommentBaseModelTestCases(
 
         valid_data['ticket'] = ticket
 
-        # del valid_data['external_system']
-        # del valid_data['external_ref']
-
         comment = model.objects.create(
             **valid_data
         )
@@ -476,9 +473,6 @@ class TicketCommentBaseModelTestCases(
 
         valid_data['ticket'] = ticket
 
-        # del valid_data['external_system']
-        # del valid_data['external_ref']
-
         item = model.objects.create(
             **valid_data
         )
@@ -487,11 +481,84 @@ class TicketCommentBaseModelTestCases(
 
 
 
+    def test_method_delete_prevent_when_threads(self, mocker,
+        model, model_ticketcommentbase, kwargs_ticketcommentbase, model_kwargs,
+    ):
+
+        mocker.patch(
+            'core.models.centurion.CenturionModel.delete', return_value = None
+        )
+
+        kwargs = model_kwargs.copy()
+        del kwargs['external_ref']
+        del kwargs['external_system']
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
+
+        ticket = kwargs['ticket']
+
+        parent_obj = model.objects.create( **kwargs )
+
+        kwargs = kwargs_ticketcommentbase.copy()
+        del kwargs['external_ref']
+        del kwargs['external_system']
+        kwargs['parent'] = parent_obj
+        kwargs['ticket'] = ticket
+
+        model_ticketcommentbase.objects.create( **kwargs )
+        model_ticketcommentbase.objects.create( **kwargs )
+        model_ticketcommentbase.objects.create( **kwargs )
+        model_ticketcommentbase.objects.create( **kwargs )
+
+        assert len(parent_obj.threads.all()) > 0, 'Test requires there be threads.'
+
+        with pytest.raises(models.ProtectedError):
+
+            parent_obj.delete()
+
+
+
 class TicketCommentBaseModelInheritedCases(
     TicketCommentBaseModelTestCases,
 ):
 
     sub_model_type = None
+
+    def test_method_delete_calls_super_keep_parent_matches_is_sub_model(self, mocker, model_instance):
+        """Test Class Method
+        
+        Ensure when method `delete` calls `super().delete` attribute
+        `keep_parents` is `False` so that entire chain is deleted
+        """
+
+        class MockManager:
+
+            def get(*args, **kwargs):
+                return model_instance
+
+        mocker.patch(
+            'django.db.models.query.QuerySet.get', return_value = model_instance
+        )
+
+        super_delete = mocker.patch(
+            'django.db.models.base.Model.delete', return_value = None
+        )
+
+        mocker.patch(
+            'core.mixins.centurion.Centurion.get_audit_values',
+            return_value = {'key': 'value'}
+        )
+
+        model_instance.delete()
+
+
+        super_delete.assert_called_with(using = None, keep_parents = False)
+
 
 
 
@@ -541,9 +608,6 @@ class TicketCommentBaseModelPyTest(
         valid_data = self.kwargs_create_item.copy()
 
         valid_data['ticket'] = ticket
-
-        # del valid_data['external_system']
-        # del valid_data['external_ref']
 
         item = model.objects.create(
             **valid_data

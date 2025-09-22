@@ -132,6 +132,8 @@ class AppSettings(
 
             raise ValidationError("Global Software must have a global organization")
 
+        super().clean()
+
     __all__ = [
         'device_model_is_global',
         'device_type_is_global',
