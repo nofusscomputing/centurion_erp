@@ -26,20 +26,4 @@ When creating your sub-model, do not re-define any field that is already specifi
 
 ## Testing
 
-As with any other object within Centurion, the addition of a feature requires it be tested. The following Test Suites are available:
-
-- `Unit` Test Cases
-
-    - `core.tests.unit.ticket_comment_base.<*>.<Inherited class name>InheritedCases` _(if inheriting from `TicketCommentBase`)_ Test cases for sub-models
-
-    - ViewSet `core.tests.unit.ticket_comment_base.test_unit_ticket_comment_base_viewset.TicketCommentBaseViewsetInheritedCases`
-
-- `Functional` Test Cases
-
-    - `core.tests.functional.ticket_comment_base.<*>.<Inherited class name>InheritedCases` _(if inheriting from `TicketCommentBase`)_ Test cases for sub-models
-
-    - API Permissions `core.tests.functional.ticket_comment_base.test_functional_ticket_comment_base_permission.TicketCommentBasePermissionsAPIInheritedCases`
-
-    - Model `app.core.tests.functional.ticket_comment_base.test_functional_ticket_comment_base_model.TicketCommentBaseModelInheritedTestCases` _(if inheriting from `TicketCommentBase`)_ Test cases for sub-models
-
-The above listed test cases cover **all** tests for objects that are inherited from the base class. To complete the tests, you will need to add test cases for the differences your model introduces.
+As with any other object within Centurion, the addition of a feature requires it be tested. Test for ticket comments follows the [model](../models.md#tests) test suites, however the source for the inherited tests are the ticket tests that your model inherits from. for instance if you extend `TicketCommentBase`, your test suits will inherit from `TicketCommentBase` model tests.
