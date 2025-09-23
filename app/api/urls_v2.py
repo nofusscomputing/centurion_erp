@@ -20,6 +20,7 @@ from centurion.viewsets.base import (
 from core.viewsets import (
     audit_history,
     centurion_model_notes,
+    ticket_model_link,
 )
 
 app_name = "API"
@@ -29,6 +30,8 @@ history_type_names = ''
 history_app_labels = ''
 notes_type_names = ''
 notes_app_labels = ''
+ticket_model_links_app_labels = ''
+ticket_model_links_type_names = ''
 
 for model in apps.get_models():
 
@@ -49,12 +52,23 @@ for model in apps.get_models():
 
             notes_app_labels += model._meta.app_label + '|'
 
+    if getattr(model, '_notes_enabled', False):
+
+        ticket_model_links_type_names += model._meta.model_name + '|'
+
+        if model._meta.app_label not in ticket_model_links_app_labels:
+
+            ticket_model_links_app_labels += model._meta.app_label + '|'
+
 
 history_app_labels = str(history_app_labels)[:-1]
 history_type_names = str(history_type_names)[:-1]
 
 notes_app_labels = str(notes_app_labels)[:-1]
 notes_type_names = str(notes_type_names)[:-1]
+
+ticket_model_links_app_labels = str(ticket_model_links_app_labels)[:-1]
+ticket_model_links_type_names = str(ticket_model_links_type_names)[:-1]
 
 router = DefaultRouter(trailing_slash=False)
 
@@ -77,11 +91,18 @@ router.register(
     basename = '_api_centurionaudit_sub'
 )
 
+# router.register(
+#     prefix = f'/(?P<app_label>[{notes_app_labels}]+)/(?P<model_name>[{notes_type_names} \
+#         ]+)/(?P<model_id>[0-9]+)/notes',
+#     viewset = centurion_model_notes.ViewSet,
+#     basename = '_api_centurionmodelnote_sub'
+# )
+
 router.register(
-    prefix = f'/(?P<app_label>[{notes_app_labels}]+)/(?P<model_name>[{notes_type_names} \
-        ]+)/(?P<model_id>[0-9]+)/notes',
-    viewset = centurion_model_notes.ViewSet,
-    basename = '_api_centurionmodelnote_sub'
+    prefix = f'/(?P<app_label>[{ticket_model_links_app_labels} \
+        ]+)/(?P<model_name>[{ticket_model_links_type_names}]+)/(?P<model_id>[0-9]+)/tickets',
+    viewset = ticket_model_link.ViewSet,
+    basename = '_api_ticketlinkedmodel_sub'
 )
 
 
