@@ -51,14 +51,19 @@ def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
 
     for model in apps.get_models():
 
-        if model._meta.app_label not in model_apps:
+        model_name = str(model._meta.model_name)
+
+        if(
+            model._meta.app_label not in model_apps
+            or model_name.endswith('ticket') and len(model_name) > 6
+        ):
             continue
 
         skip = False
 
         for exclude in excludes:
 
-            if exclude in str(model._meta.model_name):
+            if exclude in model_name:
                 skip = True
                 break
 
