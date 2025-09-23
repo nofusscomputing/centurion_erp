@@ -337,6 +337,8 @@ class ConfigGroupHosts(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
 
     def validate_host_no_parent_group(self):
         """ Ensure that the host is not within any parent group
@@ -393,6 +395,8 @@ class ConfigGroupSoftware(
     """ A way to configure software to install/remove per config group """
 
     _notes_enabled = False
+
+    _ticket_linkable = False
 
     class Meta:
 

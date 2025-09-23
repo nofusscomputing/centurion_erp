@@ -14,6 +14,8 @@ class CheckIn(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
     app_namespace = 'public:devops'
 
     documentation = ''

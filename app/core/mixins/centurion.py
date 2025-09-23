@@ -33,6 +33,9 @@ class Centurion(
     _notes_enabled: bool = True
     """Should a table for notes be created for this model"""
 
+    _ticket_linkable: bool = True
+    """Should this model be linkable to a ticket"""
+
     app_namespace: str = None
     """URL Application namespace.
 
