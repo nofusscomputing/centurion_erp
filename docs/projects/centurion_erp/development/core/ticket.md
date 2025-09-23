@@ -11,7 +11,12 @@ Ticketing is a base model within Centurion ERP. This base provides the core feat
 
 ## Core Features
 
-- ...
+- Centurion Object assosiate to ticket
+
+
+## Assosiate object to ticket
+
+All models within Centruion ERP can be assosiated to a ticket unless otherwise stated. Whenever the model is created, a meta model is created and used at runtime.
 
 
 ## History
