@@ -91,12 +91,12 @@ router.register(
     basename = '_api_centurionaudit_sub'
 )
 
-# router.register(
-#     prefix = f'/(?P<app_label>[{notes_app_labels}]+)/(?P<model_name>[{notes_type_names} \
-#         ]+)/(?P<model_id>[0-9]+)/notes',
-#     viewset = centurion_model_notes.ViewSet,
-#     basename = '_api_centurionmodelnote_sub'
-# )
+router.register(
+    prefix = f'/(?P<app_label>[{notes_app_labels}]+)/(?P<model_name>[{notes_type_names} \
+        ]+)/(?P<model_id>[0-9]+)/notes',
+    viewset = centurion_model_notes.ViewSet,
+    basename = '_api_centurionmodelnote_sub'
+)
 
 router.register(
     prefix = f'/(?P<app_label>[{ticket_model_links_app_labels} \
