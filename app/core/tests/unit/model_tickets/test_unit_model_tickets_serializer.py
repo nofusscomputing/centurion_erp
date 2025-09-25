@@ -17,6 +17,35 @@ class ModelTicketSerializerTestCases(
         pytest.xfail( reason = 'must be a sub-model. test is N/A.' )
 
 
+    def test_serializer_is_valid(self, kwargs_api_create, model, model_kwargs, model_serializer, request_user):
+        """ Serializer Check
+
+        Confirm that using valid data the object validates without exceptions.
+        """
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'create',
+        )
+
+        mock_view.kwargs = {
+            'ticket_type': model_kwargs['ticket']._meta.sub_model_type,
+            'ticket_id': kwargs_api_create['ticket']
+        }
+
+        serializer = model_serializer['model'](
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        assert serializer.is_valid(raise_exception = True)
+
+
+
 class ModelTicketSerializerInheritedCases(
     ModelTicketSerializerTestCases
 ):
