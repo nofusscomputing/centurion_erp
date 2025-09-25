@@ -6,11 +6,17 @@ from api.tests.unit.test_unit_serializer import (
 
 from centurion.tests.abstract.mock_view import MockView
 
+from core.models.model_tickets import (
+    ModelTicket
+)
+
 
 @pytest.mark.model_modelticket
 class ModelTicketSerializerTestCases(
     SerializerTestCases
 ):
+
+    base_model = ModelTicket
 
     @pytest.mark.regression
     def test_serializer_create_calls_model_full_clean(self):
@@ -22,6 +28,9 @@ class ModelTicketSerializerTestCases(
 
         Confirm that using valid data the object validates without exceptions.
         """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         mock_view = MockView(
             user = request_user,
@@ -54,6 +63,9 @@ class ModelTicketSerializerInheritedCases(
     def test_serializer_create_calls_model_full_clean(self,
         kwargs_api_create, mocker, model, model_kwargs, model_serializer, request_user
     ):
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         mock_view = MockView(
             user = request_user,
