@@ -99,7 +99,7 @@ class ModelTicketModelInheritedCases(
 
 
 
-@pytest.mark.model_role
+@pytest.mark.module_core
 class ModelTicketModelPyTest(
     ModelTicketModelTestCases,
 ):

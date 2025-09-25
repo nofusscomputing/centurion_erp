@@ -65,8 +65,6 @@ class ModelSerializer(
 
         model = ModelTicket
 
-        # fields = '__all__'
-
         fields = [
             'id',
             'organization',
@@ -79,6 +77,14 @@ class ModelSerializer(
         ]
 
         read_only_fields = fields
+
+
+    def validate(self, attrs):
+
+        attrs['ticket_id'] = self.context['view'].kwargs['ticket_id']
+        attrs = super().validate(attrs)
+
+        return attrs
 
 
 

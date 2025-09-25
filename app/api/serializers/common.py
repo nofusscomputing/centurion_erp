@@ -175,7 +175,7 @@ class CommonModelSerializer(CommonBaseSerializer):
             )
 
 
-        if not self.context['request'].feature_flag['2025-00006']:
+        if self.context['request'].feature_flag['2025-00006']:
 
             if getattr(item, '_ticket_linkable', False):
                 get_url['tickets'] = reverse(
