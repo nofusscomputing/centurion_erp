@@ -102,7 +102,7 @@ router.register(
     prefix = f'/(?P<app_label>[{ticket_model_links_app_labels} \
         ]+)/(?P<model_name>[{ticket_model_links_type_names}]+)/(?P<model_id>[0-9]+)/tickets',
     viewset = ticket_model_link.ViewSet,
-    basename = '_api_ticketlinkedmodel_sub'
+    feature_flag = '2025-00006', basename = '_api_modelticket_sub'
 )
 
 
