@@ -18,21 +18,24 @@ class CenturionNoteModelTestCases(
     def parameterized_class_attributes(self):
         
         return {
-        '_audit_enabled': {
-            'value': False,
-        },
-        '_notes_enabled': {
-            'value': False,
-        },
-        'model_tag': {
-            'type': type(None),
-            'value': None,
-        },
-        'url_model_name': {
-            'type': str,
-            'value': 'centurionmodelnote',
+            '_audit_enabled': {
+                'value': False,
+            },
+            '_notes_enabled': {
+                'value': False,
+            },
+            '_ticket_linkable': {
+                'value': False,
+            },
+            'model_tag': {
+                'type': type(None),
+                'value': None,
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'centurionmodelnote',
+            }
         }
-    }
 
 
     @property

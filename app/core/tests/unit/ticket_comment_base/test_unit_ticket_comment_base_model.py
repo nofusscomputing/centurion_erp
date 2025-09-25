@@ -32,6 +32,9 @@ class TicketCommentBaseModelTestCases(
             '_is_submodel': {
                 'value': False
             },
+            '_ticket_linkable': {
+                'value': False,
+            },
             'model_tag': {
                 'type': type(None),
                 'value': None

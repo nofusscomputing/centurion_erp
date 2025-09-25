@@ -37,6 +37,9 @@ class AuthTokenModelTestCases(
                 'type': bool,
                 'value': False,
             },
+            '_ticket_linkable': {
+                'value': False,
+            },
             'model_tag': {
                 'type': models.fields.NOT_PROVIDED,
                 'value': models.fields.NOT_PROVIDED,

@@ -19,6 +19,9 @@ class ProjectMilestoneModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_ticket_linkable': {
+                'value': False,
+            },
             'model_tag': {
                 'type': str,
                 'value': 'project_milestone'

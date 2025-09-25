@@ -25,6 +25,9 @@ class SoftwareEnableFeatureFlagModelTestCases(
             '_notes_enabled': {
                 'value': False
             },
+            '_ticket_linkable': {
+                'value': False,
+            },
             'model_tag': {
                 'type': models.NOT_PROVIDED,
                 'value': models.NOT_PROVIDED

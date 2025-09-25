@@ -5,11 +5,9 @@ from django.core.exceptions import (
     ValidationError
 )
 
-from centurion.tests.unit_class import ClassTestCases
 from centurion.tests.unit_models import ModelTestCases
 
 from core.mixins.centurion import Centurion
-
 
 
 
@@ -31,6 +29,10 @@ class CenturionMixnTestCases(
             '_is_submodel': {
                 'type': bool,
                 'value': False,
+            },
+            '_ticket_linkable': {
+                'type': bool,
+                'value': True,
             },
             '_notes_enabled': {
                 'type': bool,
