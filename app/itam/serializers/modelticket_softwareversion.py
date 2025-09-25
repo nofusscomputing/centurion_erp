@@ -32,13 +32,24 @@ class ModelSerializer(
             'organization',
             'display_name',
             'content_type',
+            'model',
             'ticket',
             'created',
             'modified',
             '_urls',
         ]
 
-        read_only_fields = fields
+        read_only_fields = [
+            'id',
+            'organization',
+            'display_name',
+            'content_type',
+            'ticket',
+            'created',
+            'modified',
+            '_urls',
+        ]
+
 
 
 
