@@ -67,12 +67,6 @@ class ModelTicket(
     modified = AutoLastModifiedField()
 
 
-
-    def __str__(self) -> str:
-
-        return ''
-
-
     page_layout: dict = []
 
 
@@ -82,6 +76,29 @@ class ModelTicket(
         'created',
     ]
 
+
+
+    def __str__(self) -> str:
+
+        return ''
+
+
+
+    def get_url_kwargs(self, many = False):
+
+        kwargs = super().get_url_kwargs( many = many )
+
+        if not self._is_submodel:
+
+            if kwargs.get('model_name', None):
+                del kwargs['model_name']
+
+            kwargs.update({
+                'ticket_type': self.ticket._meta.sub_model_type,
+                'model_id': self.ticket.id,
+            })
+
+        return kwargs
 
 
 class ModelTicketMetaModel(
@@ -116,15 +133,14 @@ class ModelTicketMetaModel(
 
     def get_url_kwargs(self, many = False):
 
-        kwargs = {}
+        kwargs = super().get_url_kwargs( many = many )
 
         model_name = str(self._meta.model_name)
         if model_name.endswith('ticket') and len(model_name) > 6:
             model_name = str(model_name)[0:len(model_name)-len(str('ticket'))]
 
         kwargs.update({
-            **super().get_url_kwargs( many = many ),
-            'app_label': self._meta.app_label,
+            'app_label': self.model._meta.app_label,
             'model_name': str( model_name ),
             'model_id': self.model.id,
         })
