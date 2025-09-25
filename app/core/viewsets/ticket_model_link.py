@@ -171,12 +171,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
 
     model_suffix = 'ticket'
 
-    # search_fields = [
-    #     'after',
-    #     'before',
-    # ]
-
-    view_description = 'Audit History entries'
+    view_description = 'Models linked to ticket'
 
 
 
