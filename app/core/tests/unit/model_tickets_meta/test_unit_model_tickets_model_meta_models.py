@@ -92,7 +92,9 @@ class ModelTicketMetaModelsModelTestCases(
 
         with django_db_blocker.unblock():
 
-            ticket_model = request.cls.ticket_model_class
+            ticket_model = request.getfixturevalue(
+                'model_' + request.cls.ticket_model_class._meta.model_name
+            )
 
             ticket_model_kwargs = request.getfixturevalue(
                 'kwargs_' + ticket_model._meta.model_name

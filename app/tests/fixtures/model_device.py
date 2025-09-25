@@ -28,9 +28,15 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
 
     with django_db_blocker.unblock():
 
-        device_model = model_devicemodel.objects.create( **kwargs_devicemodel )
+        kwargs = kwargs_devicemodel.copy()
+        kwargs['name'] = 'dev_model-' + str( random.randint(10000, 99999) )
 
-        device_type = model_devicetype.objects.create( **kwargs_devicetype )
+        device_model = model_devicemodel.objects.create( **kwargs )
+
+        kwargs = kwargs_devicetype.copy()
+        kwargs['name'] = 'dev_model-' + str( random.randint(10000, 99999) )
+
+        device_type = model_devicetype.objects.create( **kwargs )
 
     kwargs = {
         **kwargs_centurionmodel.copy(),
