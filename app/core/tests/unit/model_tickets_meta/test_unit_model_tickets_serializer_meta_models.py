@@ -104,7 +104,37 @@ class ModelTicketMetaModelsSerializerTestCases(
             if callable(ticket_model_kwargs):
                 ticket_model_kwargs = ticket_model_kwargs()
 
-            model = ticket_model.objects.create( **ticket_model_kwargs )
+
+            kwargs_many_to_many = {}
+
+            kwargs = {}
+
+            for key, value in ticket_model_kwargs.items():
+
+                field = ticket_model._meta.get_field(key)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    kwargs_many_to_many.update({
+                        key: value
+                    })
+
+                else:
+
+                    kwargs.update({
+                        key: value
+                    })
+
+
+            model = ticket_model.objects.create( **kwargs )
+
+            for key, value in kwargs_many_to_many.items():
+
+                field = getattr(model, key)
+
+                for entry in value:
+
+                    field.add(entry)
 
         #     kwargs = {}
 

@@ -80,11 +80,3 @@ class ModelTicketViewsetInheritedCases(
     ViewsetTestCases,
 ):
     pass
-
-
-
-@pytest.mark.module_core
-class ModelTicketViewsetPyTest(
-    ViewsetTestCases,
-):
-    pass
