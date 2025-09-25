@@ -117,6 +117,11 @@ class ModelTicketMetaModel(
 
         proxy = False
 
+        unique_together = (
+            'ticket',
+            'model'
+        )
+
 
     def clean_fields(self, exclude = None):
 
