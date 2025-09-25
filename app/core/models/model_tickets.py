@@ -31,6 +31,10 @@ class ModelTicket(
 
     class Meta:
 
+        ordering = [
+            'created'
+        ]
+
         verbose_name = 'Ticket Linked Model'
 
         verbose_name_plural = 'Ticket Linked Models'
@@ -87,7 +91,13 @@ class ModelTicketMetaModel(
     _is_submodel = True
 
     class Meta:
+
         abstract = True
+
+        ordering = [
+            'created'
+        ]
+
         proxy = False
 
 
