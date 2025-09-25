@@ -30,7 +30,7 @@ def kwargs_cluster(kwargs_centurionmodel, django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        kwargs = kwargs_device.copy()
+        kwargs = kwargs_device()
         kwargs['serial_number'] = 'clu-123-654'
         kwargs['uuid'] = '1cf3a2d4-1776-418b-86eb-00404a43d60e'
 

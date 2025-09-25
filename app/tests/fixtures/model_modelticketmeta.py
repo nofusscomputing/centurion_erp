@@ -27,7 +27,7 @@ def kwargs_modelticketmetamodel(django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        kwargs = kwargs_device.copy()
+        kwargs = kwargs_device()
         kwargs['name'] = 'model-ticket-' + str( random.randint(1, 99999))
 
         device = model_device.objects.create( **kwargs )

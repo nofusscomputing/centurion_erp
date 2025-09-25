@@ -99,7 +99,10 @@ class ModelTicketMetaModelsSerializerTestCases(
 
             ticket_model_kwargs = request.getfixturevalue(
                 'kwargs_' + ticket_model._meta.model_name
-            ).copy()
+            )
+
+            if callable(ticket_model_kwargs):
+                ticket_model_kwargs = ticket_model_kwargs()
 
             model = ticket_model.objects.create( **ticket_model_kwargs )
 

@@ -105,9 +105,13 @@ def model(self, model__model_name):
 
 def model_kwargs(self, request, kwargs__model_name):
 
-    request.cls.kwargs_create_item = kwargs__model_name.copy()
+    kwargs = kwargs__model_name
+    if callable(kwargs__model_name):
+        kwargs = kwargs()
 
-    yield kwargs__model_name.copy()
+    request.cls.kwargs_create_item = kwargs
+
+    yield kwargs
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

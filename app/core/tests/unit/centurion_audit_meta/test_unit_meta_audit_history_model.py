@@ -101,6 +101,9 @@ class AuditHistoryMetaModelTestCases(
 
             audit_model_kwargs = request.getfixturevalue('kwargs_' + audit_model._meta.model_name)
 
+            if callable(audit_model_kwargs):
+                audit_model_kwargs = audit_model_kwargs()
+
             kwargs = {}
 
             many_field = {}

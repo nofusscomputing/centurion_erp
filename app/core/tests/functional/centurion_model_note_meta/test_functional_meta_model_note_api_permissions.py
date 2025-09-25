@@ -94,9 +94,15 @@ class ModelNotesMetaAPIPermissionsTestCases(
 
         model_kwargs = kwargs_centurionmodelnotemeta.copy()
 
+        if callable(model_kwargs):
+            model_kwargs = model_kwargs()
+
         with django_db_blocker.unblock():
 
             note_model_kwargs = request.getfixturevalue('kwargs_' + note_model._meta.model_name)
+
+            if callable(note_model_kwargs):
+                note_model_kwargs = note_model_kwargs()
 
             kwargs = {}
 
