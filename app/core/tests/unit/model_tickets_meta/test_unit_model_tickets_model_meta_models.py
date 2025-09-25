@@ -4,9 +4,10 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
-from core.models.centurion_notes import CenturionModelNote
-from core.tests.unit.centurion_model_note_meta.test_unit_centurion_model_note_meta_model import (
-    MetaAbstractModelInheritedCases
+# from core.models.centurion_notes import CenturionModelNote
+from core.models.model_tickets import ModelTicket
+from core.tests.unit.model_tickets_meta.test_unit_model_tickets_model_meta import (
+    ModelTicketMetaModelInheritedCases,
 )
 
 
@@ -52,10 +53,7 @@ def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
 
         model_name = str(model._meta.model_name)
 
-        if(
-            model._meta.app_label not in model_apps
-            or model_name.endswith('ticket') and len(model_name) > 6
-        ):
+        if not issubclass(model, ModelTicket):
             continue
 
         skip = False
@@ -75,8 +73,8 @@ def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
 
 
 
-class ModelNotesMetaModelTestCases(
-    MetaAbstractModelInheritedCases
+class ModelTicketMetaModelsModelTestCases(
+    ModelTicketMetaModelInheritedCases
 ):
     """AuditHistory Meta Model Test Cases
 
@@ -84,85 +82,31 @@ class ModelNotesMetaModelTestCases(
     during pytest discover.
     """
 
-    @pytest.fixture( scope = 'class', autouse = True)
-    def setup_organization(cls, request, organization_one):
-
-        request.cls.organization = organization_one
-
-
-    @pytest.fixture( scope = 'class' )
-    def note_model(self, request):
-
-        return request.cls.note_model_class
-
 
     @pytest.fixture( scope = 'class', autouse = True)
     def model_kwargs(self, django_db_blocker,
-        request, note_model, kwargs_centurionmodelnotemeta
+        request, kwargs_modelticketmetamodel
     ):
 
-        model_kwargs = kwargs_centurionmodelnotemeta.copy()
+        model_kwargs = kwargs_modelticketmetamodel.copy()
 
         with django_db_blocker.unblock():
 
-            note_model_kwargs = request.getfixturevalue('kwargs_' + note_model._meta.model_name)
+            ticket_model = request.cls.ticket_model_class
 
-            kwargs = {}
+            ticket_model_kwargs = request.getfixturevalue(
+                'kwargs_' + ticket_model._meta.model_name
+            ).copy()
 
-            many_field = {}
+            model = ticket_model.objects.create( **ticket_model_kwargs )
 
-            for field, value in note_model_kwargs.items():
-
-                if not hasattr(getattr(note_model, field), 'field'):
-                    continue
-
-                if isinstance(getattr(note_model, field).field, models.ManyToManyField):
-
-                    if field in many_field:
-
-                        many_field[field] += [ value ]
-
-                    elif isinstance(value, list):
-
-                        value_list = []
-
-                        for list_value in value:
-
-                            value_list += [ list_value ]
-
-
-                        value = value_list
-
-                    else:
-
-                        many_field.update({
-                            field: [
-                                value
-                            ]
-                        })
-
-                    continue
-
-                kwargs.update({
-                    field: value
-                })
-
-
-            model = note_model.objects.create(
-                **kwargs
-            )
-
-
-            for field, values in many_field.items():
-
-                for value in values:
-
-                    getattr(model, field).add( value )
+        #     kwargs = {}
 
 
         model_kwargs.update({
             'model': model
         })
+
         request.cls.kwargs_create_item = model_kwargs
 
         yield model_kwargs
@@ -187,8 +131,9 @@ class ModelNotesMetaModelTestCases(
 for model in get_models():
 
     if(
-        not issubclass(model, CenturionModelNote)
-        or model == CenturionModelNote
+        not issubclass(model, ModelTicket)
+        or model == ModelTicket
+        # or not model.model._ticket_linkable
     ):
         continue
 
@@ -197,18 +142,18 @@ for model in get_models():
 
     dynamic_class = type(
         cls_name,
-        (ModelNotesMetaModelTestCases,),
+        (ModelTicketMetaModelsModelTestCases,),
         {
-            'note_model_class': apps.get_model(
+            'ticket_model_class': apps.get_model(
                 app_label = model._meta.app_label,
-                model_name = str( model._meta.object_name ).replace('CenturionModelNote', '')
+                model_name = str( model._meta.object_name )[0:len(model._meta.object_name)-6]
             ),
             'model_class': model
         }
     )
 
     dynamic_class = pytest.mark.__getattr__(
-        'model_' + str(model._meta.model_name).replace('centurionmodelnote', ''))(dynamic_class)
+        'model_' + str(model._meta.model_name)[0:len(model._meta.model_name)-6])(dynamic_class)
     dynamic_class = pytest.mark.__getattr__('module_' + model._meta.app_label)(dynamic_class)
 
     globals()[cls_name] = dynamic_class

@@ -231,21 +231,22 @@ def api_request_permissions( django_db_blocker,
             no_permission_user.delete()
 
 
-        yield {
-            'app_settings': app_settings,
-            'tenancy': {
-                'different': organization_two,
-                'global': organization_three,
-                'user': organization_one
-            },
-            # 'user': {
-            #     'add': add_user,
-            #     'anon': None,
-            #     'change': change_user,
-            #     'delete': delete_user,
-            #     'different_tenancy': different_organization_user,
-            #     'no_permissions': no_permission_user,
-            #     'view': view_user,
-            # }
+        else:
+            yield {
+                'app_settings': app_settings,
+                'tenancy': {
+                    'different': organization_two,
+                    'global': organization_three,
+                    'user': organization_one
+                },
+                # 'user': {
+                #     'add': add_user,
+                #     'anon': None,
+                #     'change': change_user,
+                #     'delete': delete_user,
+                #     'different_tenancy': different_organization_user,
+                #     'no_permissions': no_permission_user,
+                #     'view': view_user,
+                # }
 
-        }
+            }
