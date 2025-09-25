@@ -36,6 +36,9 @@ class TicketBaseModelTestCases(
             '_notes_enabled': {
                 'value': False
             },
+            '_ticket_linkable': {
+                'value': False,
+            },
             'model_tag': {
                 'type': str,
                 'value': 'ticket'

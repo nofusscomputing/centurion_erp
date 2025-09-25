@@ -31,7 +31,7 @@ def kwargs_service(django_db_blocker,
 
     with django_db_blocker.unblock():
 
-        kwargs = kwargs_device.copy()
+        kwargs = kwargs_device()
         kwargs.update({
             'name': 'svc' + random_str
         })

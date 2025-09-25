@@ -28,6 +28,9 @@ class ConfigGroupHostModelTestCases(
             '_notes_enabled': {
                 'value': False,
             },
+            '_ticket_linkable': {
+                'value': False,
+            },
         }
 
 

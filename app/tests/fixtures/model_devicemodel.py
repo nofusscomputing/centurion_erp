@@ -36,8 +36,7 @@ def kwargs_devicemodel(kwargs_centurionmodel, django_db_blocker,
 
     kwargs = {
         **kwargs_centurionmodel.copy(),
-        'name': 'dev' + str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', ''),
+        'name': 'devmodel' + str( random.randint(1, 99999) ),
         'manufacturer': manufacturer,
     }
 

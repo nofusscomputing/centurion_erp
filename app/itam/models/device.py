@@ -545,6 +545,8 @@ class DeviceSoftware(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
 
     class Meta:
         ordering = [
@@ -680,6 +682,8 @@ class DeviceOperatingSystem(
     _audit_enabled = False
 
     _notes_enabled = False
+
+    _ticket_linkable = False
 
     class Meta:
 

@@ -80,11 +80,14 @@ class TenancyAbstractModelTestCases(
 
         assert model_instance.get_tenant() == test_value
 
-    def test_method_clean_fields_calls_super_tenancy_abstract(self, mocker, model_instance):
+    def test_method_clean_fields_calls_super_tenancy_abstract(self, mocker, model, model_instance):
         """Test Class Method
 
         Ensure method `clean_fields` calls `super().clean_fields`
         """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         super_clean_fields = mocker.patch(
             'django.db.models.base.Model.clean_fields', return_value = None

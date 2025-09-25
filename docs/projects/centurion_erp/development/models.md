@@ -106,6 +106,10 @@ A Sub-model specifically inherits from a normal model with the purpose of using 
 
 All models must contain the core features, being:
 
+- [Assosiate model to ticket](./core/ticket.md#assosiate-object-to-ticket)
+
+    _Link an item to a ticket_
+
 - [Audit History](./core/model_history.md)
 
     _Every change that occurs to a model is recorded_

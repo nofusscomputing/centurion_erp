@@ -26,36 +26,47 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
     model_devicetype, kwargs_devicetype,
 ):
 
+
+    instances = []
+
+    def kwargs(instances = instances):
+
+        with django_db_blocker.unblock():
+
+            kwargs = kwargs_devicemodel.copy()
+            kwargs['name'] = 'dev_model-' + str( random.randint(10000, 99999) )
+
+            device_model = model_devicemodel.objects.create( **kwargs )
+
+            kwargs = kwargs_devicetype.copy()
+            kwargs['name'] = 'dev_model-' + str( random.randint(10000, 99999) )
+
+            device_type = model_devicetype.objects.create( **kwargs )
+
+        kwargs = {
+            **kwargs_centurionmodel.copy(),
+            'name': 'dev-' + str( random.randint(10000, 99999) ),
+            'serial_number': 'dev-' + str( random.randint(1, 99999) ),
+            'uuid': '7318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(10000, 99999) ),
+            'device_model': device_model,
+            'device_type': device_type,
+            'config':  { 'a_dev_config_key': 'a_dev_config_value'},
+            'inventorydate': '2025-07-31T11:51:00Z',
+        }
+
+        instances += [device_model, device_type ]
+
+        return kwargs
+
+    yield kwargs
+
     with django_db_blocker.unblock():
 
-        device_model = model_devicemodel.objects.create( **kwargs_devicemodel )
-
-        device_type = model_devicetype.objects.create( **kwargs_devicetype )
-
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'dev-' + str( random.randint(10000, 99999) ),
-        'serial_number': 'dev-' + str( random.randint(1, 99999) ),
-        'uuid': '7318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(10000, 99999) ),
-        'device_model': device_model,
-        'device_type': device_type,
-        'config':  { 'a_dev_config_key': 'a_dev_config_value'},
-        'inventorydate': '2025-07-31T11:51:00Z',
-    }
-
-    yield kwargs.copy()
-
-    with django_db_blocker.unblock():
-
-        try:
-            device_model.delete()
-        except models.deletion.ProtectedError:
-            pass
-
-        try:
-            device_type.delete()
-        except models.deletion.ProtectedError:
-            pass
+        for obj in instances:
+            try:
+                obj.delete()
+            except models.deletion.ProtectedError:
+                pass
 
 
 @pytest.fixture( scope = 'class')

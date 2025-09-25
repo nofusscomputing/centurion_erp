@@ -36,6 +36,8 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
             org = None
 
             kwargs = model_kwargs
+            if callable(kwargs):
+                kwargs = kwargs()
 
             if kwargs_create:
 

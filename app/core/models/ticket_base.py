@@ -39,6 +39,8 @@ class TicketBase(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
     model_notes = None
 
     model_tag = 'ticket'

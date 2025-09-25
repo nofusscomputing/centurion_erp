@@ -71,25 +71,44 @@ class ModelSerializer(
 
         ticket_type = str(item.ticket_type)
 
+        model_name = str(item._meta.model_name)
+        if model_name.endswith('ticket') and len(model_name) > 6:
+            model_name = str(model_name)[0:len(model_name)-len(str('ticket'))]
+
         url_dict: dict = {
             '_self': item.get_url( request = self._context['view'].request ),
-            'comments': reverse('v2:_api_ticket_comment_base-list', request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
-            'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            'comments': reverse(
+                viewname = 'v2:_api_ticket_comment_base-list',
+                request = self._context['view'].request,
+                kwargs = {'ticket_id': item.pk}
+            ),
+            'linked_models': reverse(
+                viewname = "v2:_api_modelticket-list",
+                request = self._context['view'].request,
+                kwargs = {
+                    'ticket_type': item._meta.sub_model_type,
+                    'model_id': item.pk,
+                }
+            ),
         }
 
         if item.project:
 
             url_dict.update({
-                'project': reverse("v2:_api_project-list", request=self._context['view'].request, kwargs={}),
+                'project': reverse(
+                    viewname = "v2:_api_project-list",
+                    request = self._context['view'].request,
+                    kwargs = {}
+                ),
             })
 
         if item.category:
 
             url_dict.update({
             'ticketcategory': reverse(
-                'v2:_api_ticketcategory-list',
-                request=self._context['view'].request,
-                kwargs={},
+                viewname = 'v2:_api_ticketcategory-list',
+                request = self._context['view'].request,
+                kwargs = {},
             ) + '?' + ticket_type + '=true',
             })
 

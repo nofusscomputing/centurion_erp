@@ -50,7 +50,12 @@ def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
 
     for model in apps.get_models():
 
-        if model._meta.app_label not in model_apps:
+        model_name = str(model._meta.model_name)
+
+        if(
+            model._meta.app_label not in model_apps
+            or model_name.endswith('ticket') and len(model_name) > 6
+        ):
             continue
 
         skip = False
@@ -95,6 +100,9 @@ class AuditHistoryMetaModelTestCases(
         with django_db_blocker.unblock():
 
             audit_model_kwargs = request.getfixturevalue('kwargs_' + audit_model._meta.model_name)
+
+            if callable(audit_model_kwargs):
+                audit_model_kwargs = audit_model_kwargs()
 
             kwargs = {}
 

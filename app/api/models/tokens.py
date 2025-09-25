@@ -24,6 +24,8 @@ class AuthToken(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
     objects = UserManager()
 
 

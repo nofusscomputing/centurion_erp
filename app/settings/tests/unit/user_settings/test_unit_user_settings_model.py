@@ -33,6 +33,9 @@ class UserSettingsModelTestCases(
             '_notes_enabled': {
                 'value': False
             },
+            '_ticket_linkable': {
+                'value': False,
+            },
             'model_tag': {
                 'type': models.fields.NOT_PROVIDED,
                 'value': models.fields.NOT_PROVIDED

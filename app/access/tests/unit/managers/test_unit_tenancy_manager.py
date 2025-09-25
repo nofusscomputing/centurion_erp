@@ -41,6 +41,9 @@ class TenancyManagerTestCases(
         model_instance, model, api_request_permissions
     ):
 
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
         filter = mocker.spy(models.QuerySet, 'filter')
 
         obj = model_instance
@@ -65,6 +68,9 @@ class TenancyManagerTestCases(
     def test_manager_tenancy_select_related(self, mocker,
         model_instance, model, api_request_permissions
     ):
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         select_related = mocker.spy(QuerySet, "select_related")
 

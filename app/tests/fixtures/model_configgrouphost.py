@@ -25,7 +25,7 @@ def kwargs_configgrouphosts(django_db_blocker,
 
         random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
 
-        host_kwargs = kwargs_device.copy()
+        host_kwargs = kwargs_device()
         host_kwargs.update({
             'name': 'cgh' + str(random_str).replace(
                 ' ', '').replace(':', '').replace('+', '').replace('.', ''),

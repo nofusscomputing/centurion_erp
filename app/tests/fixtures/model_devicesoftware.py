@@ -29,7 +29,7 @@ def kwargs_devicesoftware(django_db_blocker,
     with django_db_blocker.unblock():
 
         device = model_device.objects.create(
-            **kwargs_device.copy()
+            **kwargs_device()
         )
 
         softwareversion = model_softwareversion.objects.create(

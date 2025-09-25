@@ -227,6 +227,18 @@ from .model_manufacturer import (
     model_manufacturer,
 )
 
+from .model_modelticket import (
+    kwargs_modelticket,
+    model_modelticket,
+    serializer_modelticket,
+)
+
+from .model_modelticketmeta import (
+    kwargs_modelticketmetamodel,
+    model_modelticketmetamodel,
+    serializer_modelticketmetamodel,
+)
+
 from .model_operatingsystem import (
     kwargs_operatingsystem,
     model_operatingsystem,
