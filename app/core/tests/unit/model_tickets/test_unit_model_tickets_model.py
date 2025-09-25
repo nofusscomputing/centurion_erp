@@ -82,7 +82,10 @@ class ModelTicketModelTestCases(
         pytest.xfail( reason = 'model is for linking to ticket, test is N/A.')
 
 
-    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+    def test_method_get_url_kwargs(self, mocker, model, model_instance, settings):
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         assert model_instance.get_url_kwargs() == {
             'ticket_type': model_instance.ticket._meta.sub_model_type,

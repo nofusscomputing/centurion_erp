@@ -85,11 +85,14 @@ class CenturionAbstractModelTestCases(
 
 
 
-    def test_method_clean_fields_calls_super_centurion_abstract(self, mocker, model_instance):
+    def test_method_clean_fields_calls_super_centurion_abstract(self, mocker, model, model_instance):
         """Test Class Method
 
         Ensure method `clean` calls `super().clean`
         """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         super_clean = mocker.patch(
             'core.models.centurion.CenturionModel.clean_fields', return_value = None

@@ -1149,6 +1149,7 @@ markers = [
     "model_knowledgebasecategory: Selects Knowledge base category tests.",
     "model_manufacturer: Select all manufacturer tests.",
     "model_modelticket: Select all tests for model Model Tickets",
+    "model_modelticketmetamodel: Select all tests for model Model Tickets Meta",
     "model_operatingsystem: Select tests for model Operating System.",
     "model_operatingsystemversion: Select tests for model Operating System Version.",
     "model_person: Selects test for model Person.",

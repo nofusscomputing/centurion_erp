@@ -198,11 +198,14 @@ class CenturionMixnTestCases(
 
     #     assert model.validate_field_not_none('a value') == None
 
-    def test_method_clean_fields_calls_super_centurion_mixin(self, mocker, model_instance):
+    def test_method_clean_fields_calls_super_centurion_mixin(self, mocker, model, model_instance):
         """Test Class Method
 
         Ensure method `clean_fields` calls `super().clean_fields`
         """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         super_clean_fields = mocker.patch(
             'django.db.models.base.Model.clean_fields', return_value = None

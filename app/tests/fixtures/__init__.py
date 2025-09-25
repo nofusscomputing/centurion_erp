@@ -233,6 +233,12 @@ from .model_modelticket import (
     serializer_modelticket,
 )
 
+from .model_modelticketmeta import (
+    kwargs_modelticketmetamodel,
+    model_modelticketmetamodel,
+    serializer_modelticketmetamodel,
+)
+
 from .model_operatingsystem import (
     kwargs_operatingsystem,
     model_operatingsystem,
