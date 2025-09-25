@@ -158,6 +158,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
     allowed_methods = [
         'GET',
         'OPTIONS',
+        'POST',
     ]
 
     base_model = ModelTicket
