@@ -574,8 +574,12 @@ class CommonViewSet(
 
         else:
 
+            msg = getattr(ex, 'msg', None)
+            if not msg:
+                msg = str(ex)
+
             exc = APIException(
-                detail = f'20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug. msg was {ex.msg}',
+                detail = f'20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug. msg was {msg}',
                 code = 'unknown_exception'
             )
 
