@@ -201,6 +201,61 @@ class ModelTicketMetaModelsAPITestCases(
         return request.cls.model_class
 
 
+    @pytest.fixture( scope = 'class')
+    def create_model(self, request, django_db_blocker,
+        model, model_kwargs, organization_one
+    ):
+
+
+        item = None
+
+        with django_db_blocker.unblock():
+
+            kwargs_many_to_many = {}
+
+            kwargs = {}
+
+            for key, value in model_kwargs.items():
+
+                field = model._meta.get_field(key)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    kwargs_many_to_many.update({
+                        key: value
+                    })
+
+                else:
+
+                    kwargs.update({
+                        key: value
+                    })
+
+            if request.cls.ticket_model_class._meta.model_name == 'tenant':
+                kwargs['organization'] = organization_one
+                kwargs['model'] = organization_one
+
+            item = model.objects.create(
+                **kwargs
+            )
+
+            for key, value in kwargs_many_to_many.items():
+
+                field = getattr(item, key)
+
+                for entry in value:
+
+                    field.add(entry)
+
+            request.cls.item = item
+
+        yield item
+
+        with django_db_blocker.unblock():
+
+            item.delete()
+
+
     # @pytest.fixture( scope = 'class')
     # def model_serializer(self, request):
 
