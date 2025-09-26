@@ -170,6 +170,8 @@ class ViewSet( SubModelViewSet_ReWrite ):
 
     model_kwarg = 'model_name'
 
+    model_suffix = 'ticket'
+
     view_description = 'Models linked to ticket'
 
 

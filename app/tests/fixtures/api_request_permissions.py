@@ -60,7 +60,7 @@ def api_request_permissions( django_db_blocker,
             # add user to different org, however no perms
             role_diff_org = model_role.objects.create(
                 organization = organization_two,
-                name = 'add_role' + str( random.randint(1,999) ),
+                name = 'role_diff_org' + str( random.randint(1,999) ),
             )
 
             role_diff_org.groups.set( [ add_group ] )
