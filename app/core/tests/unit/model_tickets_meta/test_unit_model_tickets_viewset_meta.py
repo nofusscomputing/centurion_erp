@@ -1,13 +1,17 @@
 import pytest
+import random
 
+from api.tests.unit.test_unit_common_viewset import MockRequest
+
+from core.tests.unit.model_tickets.test_unit_model_tickets_viewset import (
+    ModelTicketViewsetInheritedCases
+)
 from core.viewsets.ticket_model_link import (
     ModelTicket,
     ViewSet,
 )
 
-from core.tests.unit.model_tickets.test_unit_model_tickets_viewset import (
-    ModelTicketViewsetInheritedCases
-)
+
 
 
 @pytest.mark.tickets
