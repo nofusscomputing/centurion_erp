@@ -40,6 +40,13 @@ The ticketing system within Centurion ERP is common to all ticket types. The dif
     - Project Task
 
 
+## Linking items to a ticket
+
+Nearly all items within Centurion ERP can be linked to a ticket. To find out if an item can be linked to a ticket nevigate to its details page and if you see a tickets tab, the model can be linked to a ticket.
+
+To link an object to a ticket use slash command `/link` with the objects [model tag](./markdown.md#model-reference--model-tag).
+
+
 ## Ticket Status'
 
 Tickets have status' which are a simple way of denoting the stage a ticket is at. The common status' available are:
