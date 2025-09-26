@@ -1034,6 +1034,53 @@ class TicketBaseModelInheritedCases(
         }
 
 
+    def test_method_get_url_kwargs(self, model_instance):
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'app_label': model_instance._meta.app_label,
+            'ticket_type': model_instance._meta.sub_model_type,
+            'pk': model_instance.id
+        }
+
+
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+
+        model_instance.model = model_instance
+
+        app_namespace = ''
+        if model_instance.app_namespace:
+            app_namespace = model_instance.app_namespace + ':'
+
+        url_model_name = model_instance._meta.model_name
+        if model_instance.url_model_name:
+            url_model_name = model_instance.url_model_name
+
+        url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
+        if model_instance._meta.sub_model_type != 'ticket':
+            url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        reverse.assert_called_with(
+            url_basename,
+            None,
+            {
+                'app_label': model_instance._meta.app_label,
+                'ticket_type': model_instance._meta.sub_model_type,
+                'pk': model_instance.id,
+            },
+            None,
+            None
+        )
+
+
 
 @pytest.mark.module_core
 class TicketBaseModelPyTest(

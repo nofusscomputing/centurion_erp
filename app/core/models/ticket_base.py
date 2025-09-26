@@ -862,6 +862,7 @@ class TicketBase(
         if str(self._meta.sub_model_type) != 'ticket':
 
             kwargs.update({
+                'app_label': self._meta.app_label,
                 'ticket_type': str(self._meta.sub_model_type),
             })
 

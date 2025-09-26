@@ -117,10 +117,12 @@ class TicketBaseMetadataInheritedCases(
         }
 
         self.url_kwargs = {
+            'app_label': self.model._meta.app_label,
             'ticket_type': self.model._meta.sub_model_type
         }
 
         self.url_view_kwargs = {
+            'app_label': self.model._meta.app_label,
             'ticket_type': self.model._meta.sub_model_type
         }
 
