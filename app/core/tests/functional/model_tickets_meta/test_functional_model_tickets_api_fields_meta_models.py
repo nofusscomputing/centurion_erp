@@ -287,7 +287,7 @@ for model in get_models():
         continue
 
 
-    cls_name: str = f"{model._meta.object_name}MetaModelViewSetPyTest"
+    cls_name: str = f"{model._meta.object_name}MetaModelAPIPermissionPyTest"
 
     dynamic_class = type(
         cls_name,
