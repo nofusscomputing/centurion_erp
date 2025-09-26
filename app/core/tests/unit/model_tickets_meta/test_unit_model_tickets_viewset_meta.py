@@ -77,6 +77,48 @@ class ModelTicketViewsetMetaInheritedCases(
 ):
 
 
+    @pytest.fixture( scope = 'function' )
+    def viewset_mock_request(self, django_db_blocker, viewset,
+        model_user, kwargs_user, organization_one, model,
+        model_instance, model_kwargs, 
+    ):
+
+        with django_db_blocker.unblock():
+
+            obj = model_instance( kwargs_create = model_kwargs )
+
+            kwargs = kwargs_user.copy()
+            kwargs['username'] = "test_user1-" + str(
+                str(
+                    random.randint(1,99))
+                    + str(random.randint(300,399))
+                    + str(random.randint(400,499)
+                )
+            ),
+
+            user = model_user.objects.create( **kwargs )
+
+        view_set = viewset()
+
+        request = MockRequest(
+            user = user,
+            model = model,
+            viewset = viewset,
+            organization = organization_one,
+        )
+
+        view_set.request = request
+        view_set.kwargs = obj.get_url_kwargs( many = True )
+
+        yield view_set
+
+        del view_set.request
+
+        with django_db_blocker.unblock():
+
+            user.delete()
+
+
     def test_function_get_queryset_manager_calls_user(self, mocker,
         model, model_instance, model_kwargs, viewset
     ):

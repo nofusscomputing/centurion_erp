@@ -1793,13 +1793,10 @@ class CommonSubModelViewSetInheritedCases(
 
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset,
-        model_user, kwargs_user, organization_one, model,
-        model_instance, model_kwargs, 
+        model_user, kwargs_user, organization_one, model
     ):
 
         with django_db_blocker.unblock():
-
-            obj = model_instance( kwargs_create = model_kwargs )
 
             kwargs = kwargs_user.copy()
             kwargs['username'] = "test_user1-" + str(
@@ -1822,7 +1819,9 @@ class CommonSubModelViewSetInheritedCases(
         )
 
         view_set.request = request
-        view_set.kwargs = obj.get_url_kwargs( many = True )
+        view_set.kwargs = {
+            view_set.model_kwarg: model._meta.model_name
+        }
 
         yield view_set
 
