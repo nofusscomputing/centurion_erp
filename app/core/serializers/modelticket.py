@@ -83,7 +83,40 @@ class ModelSerializer(
 
     def validate(self, attrs):
 
-        attrs['ticket_id'] = self.context['view'].kwargs['ticket_id']
+        ticket_id = self.context['view'].kwargs.get('ticket_id', None)
+
+        if ticket_id:
+
+            if attrs.get('ticket', None):
+
+                if attrs['ticket'].id != int(ticket_id):
+                    raise ValueError( 'two different tickets found.' )
+
+                del attrs['ticket']
+
+            if not ticket_id:
+
+                ticket_id = self.initial_data.get('ticket', None)
+
+
+            attrs['ticket_id'] = int( ticket_id )
+
+
+        model_id = self.context['view'].kwargs.get('model_id', None)
+
+        if model_id:
+
+            if attrs.get('model', None):
+
+                if attrs['model'].id != int(model_id):
+                    raise ValueError( 'two different models found.' )
+
+                del attrs['model']
+
+
+            attrs['model_id'] = int( model_id )
+
+
         attrs = super().validate(attrs)
 
         return attrs

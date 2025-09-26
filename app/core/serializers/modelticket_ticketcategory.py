@@ -41,7 +41,6 @@ class ModelSerializer(
             'organization',
             'display_name',
             'content_type',
-            'ticket',
             'created',
             'modified',
             '_urls',
