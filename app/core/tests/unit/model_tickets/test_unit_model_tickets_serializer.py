@@ -11,6 +11,8 @@ from core.models.model_tickets import (
 )
 
 
+
+@pytest.mark.tickets
 @pytest.mark.model_modelticket
 class ModelTicketSerializerTestCases(
     SerializerTestCases

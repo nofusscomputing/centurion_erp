@@ -1200,6 +1200,7 @@ markers = [
     "regression: selects all tests for regression.",
     "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
+    "tickets: Selects all tests for tickets",
     "unit: Selects all Unit Tests.",
     "viewset: Selects all ViewSet Tests.",
 ]

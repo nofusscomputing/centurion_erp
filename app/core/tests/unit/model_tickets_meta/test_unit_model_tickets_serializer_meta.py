@@ -6,6 +6,7 @@ from core.tests.unit.model_tickets.test_unit_model_tickets_serializer import (
 
 
 
+@pytest.mark.tickets
 @pytest.mark.model_modelticketmeta
 class ModelTicketMetaSerializerTestCases(
     ModelTicketSerializerInheritedCases

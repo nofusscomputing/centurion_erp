@@ -8,6 +8,7 @@ from centurion.tests.abstract.mock_view import MockView
 
 
 
+@pytest.mark.tickets
 @pytest.mark.model_ticketcommentbase
 class TicketCommentBaseSerializerTestCases(
     SerializerTestCases

@@ -16,6 +16,7 @@ from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_mod
 
 
 
+@pytest.mark.tickets
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
     CenturionSubAbstractModelInheritedCases,
