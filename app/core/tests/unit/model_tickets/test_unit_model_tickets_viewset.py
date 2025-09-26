@@ -55,7 +55,7 @@ class ViewsetTestCases(
                 'value': 'model_name'
             },
             'model_suffix': {
-                'value': 'ticket'
+                'type': type(None)
             },
             'serializer_class': {
                 'type': type(None),

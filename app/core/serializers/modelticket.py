@@ -9,7 +9,9 @@ from access.serializers.organization import TenantBaseSerializer
 from centurion.serializers.content_type import (
     ContentTypeBaseSerializer
 )
-# from centurion.serializers.user import UserBaseSerializer
+from core.serializers.ticketbase import (
+    BaseSerializer as TicketBaseSerializer
+)
 
 from core.models.model_tickets import ModelTicket
 
@@ -95,3 +97,5 @@ class ViewSerializer(ModelSerializer):
     content_type = ContentTypeBaseSerializer( many = False, read_only = True )
 
     organization = TenantBaseSerializer( many = False, read_only = True )
+
+    ticket = TicketBaseSerializer( many = False, read_only = True )

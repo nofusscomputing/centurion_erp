@@ -5,16 +5,15 @@ from core.viewsets.ticket_model_link import (
     ViewSet,
 )
 
-from api.tests.unit.viewset.test_unit_tenancy_viewset import (
-    ModelViewSetInheritedCases,
-    SubModelViewSetInheritedCases,
+from core.tests.unit.model_tickets.test_unit_model_tickets_viewset import (
+    ModelTicketViewsetInheritedCases
 )
 
 
-
+@pytest.mark.tickets
 @pytest.mark.model_modelticket
 class ViewsetTestCases(
-    SubModelViewSetInheritedCases,
+        ModelTicketViewsetInheritedCases,
 ):
 
 
@@ -54,9 +53,6 @@ class ViewsetTestCases(
             'model_kwarg': {
                 'value': 'model_name'
             },
-            'model_suffix': {
-                'value': 'ticket'
-            },
             'serializer_class': {
                 'type': type(None),
             },
@@ -76,7 +72,7 @@ class ViewsetTestCases(
 
 
 
-class ModelTicketViewsetInheritedCases(
+class ModelTicketViewsetMetaInheritedCases(
     ViewsetTestCases,
 ):
     pass
