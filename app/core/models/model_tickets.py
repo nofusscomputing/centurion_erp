@@ -128,7 +128,7 @@ class ModelTicketMetaModel(
 
         if self.__class__.objects.filter(
             model_id = self.model.id, ticket_id = self.ticket.id
-        ).exists():
+        ).exclude( id = getattr(self, 'id', 0)).exists():
 
             raise ValidationError(
                 message = 'This object and ticket assignment already exists',
