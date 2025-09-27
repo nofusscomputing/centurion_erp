@@ -10,6 +10,7 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
+@pytest.mark.tickets
 @pytest.mark.model_modelticket
 class ModelTicketAPITestCases(
     APIFieldsInheritedCases,
