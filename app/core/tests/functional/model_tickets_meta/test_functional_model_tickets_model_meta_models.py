@@ -2,6 +2,9 @@ import pytest
 
 from django.apps import apps
 from django.conf import settings
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 
 from core.models.model_tickets import ModelTicketMetaModel
@@ -197,6 +200,24 @@ class ModelTicketMetaModelTestCases(
         with django_db_blocker.unblock():
 
             model.delete()
+
+
+
+    @pytest.mark.regression
+    def test_single_ticket_for_model(self, created_model, model):
+        """Test row Unique
+        
+        Must only be able to assing a ticket to a model once.
+        """
+
+        with pytest.raises(ValidationError):
+
+            model.objects.create(
+                model = created_model.model,
+                ticket = created_model.ticket
+            )
+
+
 
 
 

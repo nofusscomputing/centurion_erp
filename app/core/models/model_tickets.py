@@ -1,5 +1,6 @@
 from django.contrib.auth.models import ContentType
 from django.db import models
+from django.utils.ipv6 import ValidationError
 
 from access.fields import AutoLastModifiedField
 
@@ -124,6 +125,15 @@ class ModelTicketMetaModel(
 
 
     def clean_fields(self, exclude = None):
+
+        if self.__class__.objects.filter(
+            model_id = self.model.id, ticket_id = self.ticket.id
+        ).exists():
+
+            raise ValidationError(
+                message = 'This object and ticket assignment already exists',
+                code = 'no_duplicate_ticket_model'
+            )
 
         self.organization = self.model.get_tenant()
 
