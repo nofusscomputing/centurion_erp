@@ -21,7 +21,7 @@ class ModelTicketModelInheritedCases(
 
 
 
-@pytest.mark.module_assistance
+@pytest.mark.module_core
 class ModelTicketModelPyTest(
     ModelTicketModelTestCases,
 ):
