@@ -260,6 +260,7 @@ class ViewSet( SubModelViewSet ):
                 viewname = '_api_ticketbase_sub-list',
                 request = self.request,
                 kwargs = {
+                    'app_label': self.model._meta.app_label,
                     'ticket_type': self.kwargs[self.model_kwarg],
                 }
             )

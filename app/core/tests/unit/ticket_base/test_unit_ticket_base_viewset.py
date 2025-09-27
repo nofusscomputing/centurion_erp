@@ -13,6 +13,7 @@ from core.viewsets.ticket import (
 
 
 
+@pytest.mark.tickets
 @pytest.mark.model_ticketbase
 class ViewsetTestCases(
     SubModelViewSetInheritedCases,

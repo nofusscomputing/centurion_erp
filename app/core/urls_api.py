@@ -53,10 +53,6 @@ router.register(
     feature_flag = '2025-00006', basename = '_api_ticketbase'
 )
 router.register(
-    prefix=f'/ticket/(?P<ticket_type>[{ticket_type_names}]+)', viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticketbase_sub'
-)
-router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/comment', viewset = ticket_comment.NoDocsViewSet,
     feature_flag = '2025-00006', basename = '_api_ticket_comment_base'
 )

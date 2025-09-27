@@ -126,6 +126,10 @@ All models must contain the core features, being:
 
     _Enables the possibility within markdown fields to use its [tag](../user/core/markdown.md#model-reference--model-tag) to create a link to the model._
 
+- [Ticket Linking](../user/core/tickets.md#linking-items-to-a-ticket)
+
+    _Provides the ability to link a model to a ticket._
+
 
 ### History
 

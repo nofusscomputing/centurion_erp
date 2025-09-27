@@ -6,12 +6,12 @@ from core.viewsets.ticket_model_link import (
 )
 
 from api.tests.unit.viewset.test_unit_tenancy_viewset import (
-    ModelViewSetInheritedCases,
     SubModelViewSetInheritedCases,
 )
 
 
 
+@pytest.mark.tickets
 @pytest.mark.model_modelticket
 class ViewsetTestCases(
     SubModelViewSetInheritedCases,
@@ -55,6 +55,7 @@ class ViewsetTestCases(
                 'value': 'model_name'
             },
             'model_suffix': {
+                'type': str,
                 'value': 'ticket'
             },
             'serializer_class': {

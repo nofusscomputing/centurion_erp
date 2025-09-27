@@ -13,6 +13,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 
 
+@pytest.mark.tickets
 @pytest.mark.model_ticketcommentbase
 class TicketCommentBaseModelTestCases(
     CenturionAbstractModelInheritedCases

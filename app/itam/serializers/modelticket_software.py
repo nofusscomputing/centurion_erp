@@ -6,13 +6,10 @@ from centurion.models.meta import (    # pylint: disable=E0401:import-error disa
     SoftwareTicket as ModelLinkedtoTicket
 )
 
-from centurion.serializers.content_type import (
-    ContentTypeBaseSerializer
-)
-
 from core.serializers.modelticket import (    # pylint: disable=W0611:unused-import
     BaseSerializer,
     ModelSerializer,
+    ViewSerializer as ModelTicketViewSerializer,
 )
 
 
@@ -44,7 +41,6 @@ class ModelSerializer(
             'organization',
             'display_name',
             'content_type',
-            'ticket',
             'created',
             'modified',
             '_urls',
@@ -54,9 +50,10 @@ class ModelSerializer(
 
 
 @extend_schema_serializer(component_name = 'SoftwareTicketViewSerializer')
-class ViewSerializer(ModelSerializer):
+class ViewSerializer(
+    ModelSerializer,
+    ModelTicketViewSerializer
+):
     """SoftwareTicket Base View Model"""
-
-    content_type = ContentTypeBaseSerializer( many = False, read_only = True )
 
     organization = TenantBaseSerializer( many = False, read_only = True )

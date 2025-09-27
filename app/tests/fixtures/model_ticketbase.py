@@ -34,7 +34,10 @@ def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
 
     with django_db_blocker.unblock():
 
-        user = model_user.objects.create( **kwargs_user.copy() )
+        kwargs = kwargs_user.copy()
+        kwargs['username'] = 'tb_' + str( random.randint(1, 99999))
+
+        user = model_user.objects.create( **kwargs )
 
 
         project = model_project.objects.create(
