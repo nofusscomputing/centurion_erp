@@ -1,8 +1,13 @@
 import pytest
+import random
 
 from django.apps import apps
 from django.conf import settings
 from django.db import models
+
+from api.tests.functional.test_functional_common_viewset import (
+    MockRequest
+)
 
 from core.models.model_tickets import ModelTicketMetaModel
 from core.tests.functional.model_tickets.test_functional_model_tickets_viewset import (
@@ -197,6 +202,97 @@ class ModelTicketMetaViewsetTestCases(
         with django_db_blocker.unblock():
 
             model.delete()
+
+
+    @pytest.fixture( scope = 'function' )
+    def viewset_mock_request(self, django_db_blocker, viewset,
+        model_user, kwargs_user, organization_one, organization_two,
+        model_instance, model_kwargs, model, model_ticketcommentbase,
+        kwargs_ticketbase,
+    ):
+
+        with django_db_blocker.unblock():
+
+            kwargs = kwargs_user.copy()
+            kwargs['username'] = 'username.one' + str(
+                random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
+            user = model_user.objects.create( **kwargs )
+
+            kwargs = kwargs_user.copy()
+            kwargs['username'] = 'username.two' + str(
+                random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
+            user2 = model_user.objects.create( **kwargs )
+
+            self.user = user
+
+            kwargs = model_kwargs.copy()
+            if 'organization' in kwargs:
+                kwargs['organization'] = organization_one
+            if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
+                kwargs['user'] = user2
+            user_tenancy_item = model_instance( kwargs_create = kwargs )
+
+            kwargs = model_kwargs.copy()
+
+            kwargs_ticket = kwargs_ticketbase.copy()
+            kwargs_ticket['title'] = 'other org ticket'
+            kwargs['ticket'] = model_kwargs['ticket'].__class__.objects.create(
+                **kwargs_ticket
+            )
+            if 'organization' in kwargs:
+                kwargs['organization'] = organization_two
+            if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
+                kwargs['user'] = user
+            other_tenancy_item = model_instance( kwargs_create = kwargs )
+
+        view_set = viewset()
+        model = getattr(view_set, 'model', None)
+
+        if not model:
+            model = Tenant
+
+        request = MockRequest(
+            user = user,
+            model = model,
+            viewset = viewset,
+            tenant = organization_one
+        )
+
+        view_set.request = request
+        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
+
+
+        yield view_set
+
+        del view_set.request
+        del view_set
+        del self.user
+
+        with django_db_blocker.unblock():
+
+            for group in user.groups.all():
+
+                for role in group.roles.all():
+                    role.delete()
+
+                group.delete()
+
+            user_tenancy_item.delete(keep_parents = False)
+            other_tenancy_item.delete(keep_parents = False)
+
+            user.delete()
+            user2.delete
+
+            for db_obj in model_user.objects.all():
+                try:
+                    db_obj.delete()
+                except:
+                    pass
+
+            kwargs['ticket'].delete()
+
+
+
 
 
 
