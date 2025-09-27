@@ -133,11 +133,11 @@ if apps.models_ready:
                     'model': models.ForeignKey(
                         model,
                         blank = False,
-                        help_text = 'Ticket this Model belongs to',
+                        help_text = 'Model the ticket is for.',
                         null = False,
                         on_delete = models.CASCADE,
                         related_name = '+',
-                        verbose_name = 'Ticket',
+                        verbose_name = 'Model',
                     )
                 }
             )
