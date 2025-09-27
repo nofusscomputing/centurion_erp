@@ -3,6 +3,7 @@ import pytest
 from django.apps import apps
 from django.conf import settings
 from django.db import models
+from django.test import Client
 from django.utils.module_loading import import_string
 
 from api.tests.functional.test_functional_permissions_api import (
@@ -200,6 +201,45 @@ class APIPermissionsTestCases(
         with django_db_blocker.unblock():
 
             model.delete()
+
+
+
+    def test_permission_add(self, model_instance, api_request_permissions,
+        model_kwargs, kwargs_api_create
+    ):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['add'] )
+
+        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+
+        url = the_model.get_url( many = True )
+
+        the_model.delete()
+
+        response = client.post(
+            path = url,
+            data = kwargs_api_create,
+            content_type = 'application/json'
+        )
+
+        assert response.status_code == 201, response.content
+
+
+
+    def test_returned_results_only_user_orgs(self):
+        pytest.xfail( reason = 'this model is not filterable to org, it is by ticket or model' )
+
+    def test_returned_data_from_user_and_global_organizations_only(self):
+        pytest.xfail( reason = 'this model is not filterable to org, it is by ticket or model' )
+
+
+
 
 
 
