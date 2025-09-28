@@ -72,16 +72,38 @@ class ModelTicket(
 
 
     table_fields: list = [
-        'organization',
         'ticket',
-        'created',
+        'status_badge',
+        'created'
     ]
-
 
 
     def __str__(self) -> str:
 
-        return ''
+        model_tag = getattr(self.model, 'model_tag', None)
+
+        if model_tag is None:
+
+            for sub_model in self._meta.get_fields():
+
+                model = sub_model.related_model
+
+                if not model:
+                    continue
+
+                if(
+                    issubclass(model, self.__class__)
+                    # and self.id == model.id
+                ):
+
+                    if not getattr(self, sub_model.accessor_name, None):
+                        continue
+
+                    model_tag = model.model.field.related_model.model_tag
+                    break
+
+
+        return f'${model_tag}-{str(self.id)}'
 
 
 
