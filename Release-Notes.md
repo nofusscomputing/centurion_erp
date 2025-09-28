@@ -1,5 +1,7 @@
 ## Verrsion 1.25.0
 
+- Centurion ERP relicenced to AGPL-3.0-only
+
 
 ## Version 1.24.1
 

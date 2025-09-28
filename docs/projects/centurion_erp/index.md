@@ -27,7 +27,25 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 </span>
 
-Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurion ERP is being developed to provide an open source option with a large emphasis on the IT Service Management (ITSM) modules. The goal is to provide a system that is not only an IT Information Library (ITIL), but that of which will connect to other ITSM systems, i.e. AWX for automation orchestration. Other common modules that form part of or are normally found within an ERP system, will be added if they relate specifically to any ITSM workflow. We welcome contributions should you desire a feature that does not yet exist.
+<!-- markdownlint-disable no-emphasis-as-heading -->
+_"`An ERP with a large emphasis on the IT Service Management (ITSM) and Automation."_
+<!-- markdownlint-restore -->
+
+Whilst there are many Enterprise Rescource Planning (ERP) applications, most suffer one or more of the following issues:
+
+- High upfront and hidden costs
+- Critical features locked behind paywalls
+- Complex, bloated deployments that overwhelm smaller teams
+- Poor usability and steep learning curves that frustrate staff
+- Painful integrations and migration headaches
+- Ongoing maintenance costs and technical debt
+
+Centurion ERP is developed as a community project, a true open source product with no restrictions or hidden tiers. It is not an “open core” model with premium features locked away, nor a downstream edition of a paid product. Everything Centurion ERP offers is freely available to everyone. Centurion ERP allows users to adopt functionality at their own pace, avoiding unnecessary complexity. Centurion ERP is designed to include all the software features a user needs within a single platform, enabling true consolidation and reducing reliance on multiple external systems; where a specific feature is missing, the system can be easily extended to fill the gap.
+
+By addressing these common challenges directly, Centurion ERP aims to provide a practical, sustainable ERP that supports growth without introducing unnecessary barriers.
+
+!!! quote "From the creator:"
+    An ERP, depending on industry; can have a lot of modules. This equates to a lot of time to design and implement--Reality is, I'm a single person and as such will not be able to add a lot of features due to that fact. This is not an intent that Centurion ERP will not have those modules/features added/created. In this circumstance it will be left up to the community to implement. With that said, my focus is to provide a system that is not only an IT Infrastructure Library (ITIL), but that of which will connect to other ITSM systems, i.e. AWX for automation orchestration. In addition, also provide the base modules to Centurion ERP so that it can be easily extended with the required features that one would find within an ERP.
 
 
 ## Documentation
@@ -165,3 +183,22 @@ Feature table uses the following keys:
 | | Kubernetes | :x: |  _[see #999](https://github.com/nofusscomputing/centurion_erp/issues/999)_ |
 
 To find out what we are working on now please view the [Milestones](https://github.com/nofusscomputing/centurion_erp/milestones) on Github.
+
+
+## Licencing
+
+Centurion ERP is released under the GNU Affero General Public License (AGPL-3.0-only).
+
+The AGPL guarantees full access to the source code, with the freedom to use, modify, and extend the system as needed. Unlike other licenses, the AGPL ensures that improvements made are shared back with the community. This protects users from vendor lock-in and ensures that Centurion ERP remains transparent, auditable, and community-driven over the long term.
+
+A common concern with this and similar licences, is the idea of “having to share code.” This often causes confusion and leads decision makers to opt away from using software with these conditions. This confusion generally stems from a lack of understanding of what the "sharing code" means. Simply put, any modification that is made to Centurion, not your data (which is anything you enter into Centurion ERP once it's installed); is what is shared with the community. This condition in particular enforces that any improvements anyone makes then become available for everyone, strengthening Centurion ERP as a product.
+
+Finally, if Centurion’s licence were ever changed to something more restrictive, the community can always fork the last AGPL release. This safeguard ensures that Centurion ERP — or its successor forks — will always remain free and open.
+
+
+!!! example
+    Company ACME has decided to use Centurion ERP. They are a manufacturing company. Centurion is missing the manufacturing features. So company ACME requires a software developer (or someone skilled enough) to extend Centurion ERP with the features required. ACME then deploys Centurion ERP with the features they added to Centurion ERP. In addition, **ALL** of the work the software developer does "must" be publically available (AGPL requirement).
+
+    Now company Homewares comes along whom is also a manufacturer. They see that Centurion ERP has the manufacturing features, thanks to ACME company. However in this case, Homewares company wants to add additional features. to do this they fork ACME companies work and add the new features. Again they share all of the work they did.
+
+    Now there are two different manufacturing "feature sets". ACME can if they choose, use Homewares manufacturing "features" or they can stick to their own, which also incldues ONLY extending their own manufacturing "features".
