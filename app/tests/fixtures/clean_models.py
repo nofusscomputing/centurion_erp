@@ -30,12 +30,12 @@ def clean_model_from_db(django_db_blocker):
                                 continue
 
                         try:
-                            rel_obj.delete()
+                            rel_obj.delete( keep_parents = False )
                         except ProtectedError:
                             pass
 
                 try:
-                    db_obj.delete()
+                    db_obj.delete( keep_parents = False )
                 except ProtectedError:
                     pass
 
