@@ -215,7 +215,7 @@ For this command to process the following conditions must be met:
 
             model = Tenant
 
-            item_type = TicketLinkedItem.Modules.ORGANIZATION
+            item_type = TicketLinkedItem.Modules.TENANT
 
         elif  model_type == 'role':
 
