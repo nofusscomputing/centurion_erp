@@ -128,80 +128,84 @@ class ModelTicketMetaViewsetTestCases(
     @pytest.fixture( scope = 'class', autouse = True)
     def model_kwargs(self, django_db_blocker,
         request, kwargs_modelticketmetamodel, model_contenttype,
-        model, organization_one
+        model, organization_one,
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        obj = None
+        def factory(obj = obj):
+            model_kwargs = kwargs_modelticketmetamodel.copy()
+
+            with django_db_blocker.unblock():
+
+                ticket_model_class =  apps.get_model(
+                    app_label = model._meta.app_label,
+                    model_name = str( model._meta.object_name )[0:len(model._meta.object_name)-6]
+                )
+
+                ticket_model = request.getfixturevalue(
+                    # 'model_' + request.cls.ticket_model_class._meta.model_name
+                    'model_' + ticket_model_class._meta.model_name
+                )
+
+                ticket_model_kwargs = request.getfixturevalue(
+                    'kwargs_' + ticket_model._meta.model_name
+                )
+
+                if callable(ticket_model_kwargs):
+                    ticket_model_kwargs = ticket_model_kwargs()
+
+
+                kwargs_many_to_many = {}
+
+                kwargs = {}
+
+                for key, value in ticket_model_kwargs.items():
+
+                    field = ticket_model._meta.get_field(key)
+
+                    if isinstance(field, models.ManyToManyField):
+
+                        kwargs_many_to_many.update({
+                            key: value
+                        })
+
+                    else:
+
+                        kwargs.update({
+                            key: value
+                        })
+
+
+                obj = ticket_model.objects.create( **kwargs )
+
+                for key, value in kwargs_many_to_many.items():
+
+                    field = getattr(obj, key)
+
+                    for entry in value:
+
+                        field.add(entry)
+
+
+            if ticket_model_class._meta.model_name == 'tenant':
+                model_kwargs['organization'] = organization_one
+                model_kwargs['model'] = organization_one
+
+            else:
+
+                model_kwargs.update({
+                    'model': obj
+                })
+
+            request.cls.kwargs_create_item = model_kwargs
+
+            return model_kwargs
+
+        yield factory
 
         with django_db_blocker.unblock():
 
-            ticket_model_class =  apps.get_model(
-                app_label = model._meta.app_label,
-                model_name = str( model._meta.object_name )[0:len(model._meta.object_name)-6]
-            )
-
-            ticket_model = request.getfixturevalue(
-                # 'model_' + request.cls.ticket_model_class._meta.model_name
-                'model_' + ticket_model_class._meta.model_name
-            )
-
-            ticket_model_kwargs = request.getfixturevalue(
-                'kwargs_' + ticket_model._meta.model_name
-            )
-
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
-
-
-            kwargs_many_to_many = {}
-
-            kwargs = {}
-
-            for key, value in ticket_model_kwargs.items():
-
-                field = ticket_model._meta.get_field(key)
-
-                if isinstance(field, models.ManyToManyField):
-
-                    kwargs_many_to_many.update({
-                        key: value
-                    })
-
-                else:
-
-                    kwargs.update({
-                        key: value
-                    })
-
-
-            model = ticket_model.objects.create( **kwargs )
-
-            for key, value in kwargs_many_to_many.items():
-
-                field = getattr(model, key)
-
-                for entry in value:
-
-                    field.add(entry)
-
-
-        if ticket_model_class._meta.model_name == 'tenant':
-            model_kwargs['organization'] = organization_one
-            model_kwargs['model'] = organization_one
-
-        else:
-
-            model_kwargs.update({
-                'model': model
-            })
-
-        request.cls.kwargs_create_item = model_kwargs
-
-        yield model_kwargs
-
-        with django_db_blocker.unblock():
-
-            model.delete()
+            obj.delete()
 
 
     @pytest.fixture( scope = 'function' )
@@ -225,31 +229,31 @@ class ModelTicketMetaViewsetTestCases(
 
             self.user = user
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             if 'organization' in kwargs:
                 kwargs['organization'] = organization_one
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user2
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
 
             kwargs_ticket = kwargs_ticketbase.copy()
             kwargs_ticket['title'] = 'other org ticket'
-            kwargs['ticket'] = model_kwargs['ticket'].__class__.objects.create(
+            kwargs['ticket'] = kwargs['ticket'].__class__.objects.create(
                 **kwargs_ticket
             )
             if 'organization' in kwargs:
-                kwargs['organization'] = organization_two
+                kwargs['model'].organization = organization_two
+                kwargs['model'].save()
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user
+
+
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
-        view_set = viewset()
-        model = getattr(view_set, 'model', None)
 
-        if not model:
-            model = Tenant
+        view_set = viewset()
 
         request = MockRequest(
             user = user,
