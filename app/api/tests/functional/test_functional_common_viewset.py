@@ -261,7 +261,7 @@ class CommonViewSetTestCases:
 
     # parmeterize to view action
     def test_function_get_queryset_filtered_results_action_list(self,
-        viewset_mock_request, organization_one, model
+        viewset_mock_request, organization_one, organization_two, model
     ):
         """Test class function
 
@@ -281,6 +281,9 @@ class CommonViewSetTestCases:
 
         assert len(model.objects.all()) >= 2, 'multiple objects must exist for test to work'
         assert len( queryset ) > 0, 'Empty queryset returned. Test not possible'
+        assert len(model.objects.filter( organization = organization_one)) > 0, 'objects in user org required for test to work.'
+        assert len(model.objects.filter( organization = organization_two)) > 0, 'objects in different org required for test to work.'
+
 
         for result in queryset:
 
