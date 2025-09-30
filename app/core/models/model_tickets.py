@@ -4,6 +4,7 @@ from django.utils.ipv6 import ValidationError
 
 from access.fields import AutoLastModifiedField
 
+from core.managers.ticketmodel import TicketModelManager
 from core.models.centurion import CenturionModel
 from core.models.ticket_base import TicketBase
 
@@ -24,6 +25,8 @@ class ModelTicket(
     model_notes = None
 
     model_tag = None
+
+    objects = TicketModelManager()
 
     @property
     def url_model_name(self):
@@ -81,6 +84,7 @@ class ModelTicket(
     def __str__(self) -> str:
 
         model_tag = getattr(self.model, 'model_tag', None)
+        model_id = 0
 
         if model_tag is None:
 
@@ -100,10 +104,11 @@ class ModelTicket(
                         continue
 
                     model_tag = model.model.field.related_model.model_tag
+                    model_id = getattr(self, sub_model.accessor_name, None).model.id
                     break
 
 
-        return f'${model_tag}-{str(self.id)}'
+        return f'${model_tag}-{str(model_id)}'
 
 
 
