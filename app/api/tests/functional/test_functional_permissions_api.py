@@ -58,7 +58,7 @@ class APIPermissionAddInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
         try:
 
@@ -100,17 +100,29 @@ class APIPermissionAddInheritedCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+
+        kwargs = model_kwargs()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        the_model = model_instance( kwargs_create = kwargs )
 
         url = the_model.get_url( many = True )
 
         # the_model.delete()
 
+        kwargs_create = kwargs_api_create.copy()
+        # kwargs_create['model'] = the_model.model.id
+        kwargs_create['created_by'] = api_request_permissions['user']['add'].id
+        kwargs_create['organization'] = api_request_permissions['tenancy']['user'].id
+
+
         try:
 
             response = client.post(
                 path = url,
-                data = kwargs_api_create,
+                data = kwargs_create,
                 content_type = 'application/json'
             )
 
@@ -121,7 +133,7 @@ class APIPermissionAddInheritedCases:
 
                 response = client.post(
                     path = the_model.get_url( many = False ),
-                    data = kwargs_api_create
+                    data = kwargs_create
                 )
 
             except NoReverseMatch:
@@ -179,7 +191,7 @@ class APIPermissionChangeInheritedCases:
         client = Client()
 
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -216,7 +228,7 @@ class APIPermissionChangeInheritedCases:
 
         client.force_login( api_request_permissions['user']['change'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -287,7 +299,7 @@ class APIPermissionDeleteInheritedCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -317,7 +329,7 @@ class APIPermissionDeleteInheritedCases:
 
         client.force_login( api_request_permissions['user']['delete'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -357,7 +369,7 @@ class APIRegression:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -424,7 +436,7 @@ class APIPermissionViewInheritedCases(
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -461,7 +473,7 @@ class APIPermissionViewInheritedCases(
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -492,7 +504,7 @@ class APIPermissionViewInheritedCases(
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -516,7 +528,7 @@ class APIPermissionViewInheritedCases(
         items that are not part of the users organizations.
         """
 
-        if model_kwargs.get('organization', None) is None:
+        if model_kwargs().get('organization', None) is None:
             pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
 
@@ -534,7 +546,7 @@ class APIPermissionViewInheritedCases(
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -543,7 +555,7 @@ class APIPermissionViewInheritedCases(
             kwargs_create = kwargs
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
@@ -552,7 +564,7 @@ class APIPermissionViewInheritedCases(
             kwargs_create = kwargs
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
         })
@@ -561,7 +573,7 @@ class APIPermissionViewInheritedCases(
             kwargs_create = kwargs
         )
 
-        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
         response = client.get(
             path = the_model.get_url( many = True )
@@ -598,7 +610,7 @@ class APIPermissionViewInheritedCases(
 
 
     def test_returned_data_from_user_and_global_organizations_only(
-        self, model_instance, model_kwargs, api_request_permissions
+        self, model, model_instance, model_kwargs, api_request_permissions
     ):
         """Check items returned
 
@@ -606,7 +618,7 @@ class APIPermissionViewInheritedCases(
         global ONLY!
         """
 
-        if model_kwargs.get('organization', None) is None:
+        if model_kwargs().get('organization', None) is None:
             pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
         client = Client()
@@ -619,7 +631,7 @@ class APIPermissionViewInheritedCases(
         ]
 
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
@@ -628,7 +640,7 @@ class APIPermissionViewInheritedCases(
             kwargs_create = kwargs
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
         })
@@ -640,7 +652,7 @@ class APIPermissionViewInheritedCases(
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        the_model3 = model_instance( kwargs_create = model_kwargs.copy() )
+        the_model3 = model_instance( kwargs_create = model_kwargs() )
 
         response = client.get(
             path = the_model3.get_url( many = True )
@@ -654,8 +666,8 @@ class APIPermissionViewInheritedCases(
 
             pytest.xfail( reason = 'ViewSet is public viewable, test is N/A' )
 
-        assert response.status_code == 200    # must be successful for test to pass
-        assert len(response.data['results']) >= 2    # fail if only one item extist.
+        assert response.status_code == 200, 'http success not returned, test cant continue.'
+        assert len(model.objects.filter()) >= 2, 'multiple objects in multiple orgs must exist for test to continue.'
 
 
         for row in response.data['results']:

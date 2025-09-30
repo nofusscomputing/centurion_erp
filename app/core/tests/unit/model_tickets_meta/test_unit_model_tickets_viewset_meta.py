@@ -89,9 +89,9 @@ class ModelTicketViewsetMetaInheritedCases(
 
         with django_db_blocker.unblock():
 
-            obj = model_instance( kwargs_create = model_kwargs )
+            obj = model_instance( kwargs_create = model_kwargs() )
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = "test_user1-" + str(
                 str(
                     random.randint(1,99))
@@ -133,7 +133,7 @@ class ModelTicketViewsetMetaInheritedCases(
         access to.
         """
 
-        obj = model_instance( kwargs_create = model_kwargs )
+        obj = model_instance( kwargs_create = model_kwargs() )
 
         manager = mocker.patch.object(model, 'objects' )
 
@@ -158,7 +158,7 @@ class ModelTicketViewsetMetaInheritedCases(
         Ensure that when function `get_queryset` the queryset is filtered by `pk` kwarg
         """
 
-        obj = model_instance( kwargs_create = model_kwargs )
+        obj = model_instance( kwargs_create = model_kwargs() )
 
         manager = mocker.patch.object(model, 'objects' )
 
@@ -187,7 +187,7 @@ class ModelTicketViewsetMetaInheritedCases(
         Ensure that when function `get_queryset` the queryset is filtered by `.model_kwarg` kwarg
         """
 
-        obj = model_instance( kwargs_create = model_kwargs )
+        obj = model_instance( kwargs_create = model_kwargs() )
 
         if not model._is_submodel:
             pytest.xfail( reason = 'test case only applicable to sub-models' )

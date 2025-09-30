@@ -15,9 +15,9 @@ def model(request, model_slmticket):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_slmticket):
 
-    request.cls.kwargs_create_item = kwargs_slmticket.copy()
+    request.cls.kwargs_create_item = kwargs_slmticket()
 
-    yield kwargs_slmticket.copy()
+    yield kwargs_slmticket
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

@@ -11,9 +11,9 @@ def model(model_gitrepository):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_gitrepository):
 
-    request.cls.kwargs_create_item = kwargs_gitrepository.copy()
+    request.cls.kwargs_create_item = kwargs_gitrepository()
 
-    yield kwargs_gitrepository.copy()
+    yield kwargs_gitrepository
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

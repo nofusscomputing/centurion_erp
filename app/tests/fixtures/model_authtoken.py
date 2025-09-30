@@ -26,29 +26,25 @@ def kwargs_authtoken(django_db_blocker,
     model_authtoken, model_user, kwargs_user
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_user.copy()
-        kwargs['username'] = 'at_' + str(random.randint(9999,99999))
+            kwargs = kwargs_user()
+            kwargs['username'] = 'at_' + str(random.randint(9999,99999))
 
-        user = model_user.objects.create( **kwargs )
+            user = model_user.objects.create( **kwargs )
 
-    kwargs = {
-        'note': 'a note',
-        'token': model_authtoken().generate,
-        'user': user,
-        'expires': (datetime.datetime.now() + relativedelta(months=1)).isoformat(timespec='seconds') + 'Z'
-    }
+        kwargs = {
+            'note': 'a note',
+            'token': model_authtoken().generate,
+            'user': user,
+            'expires': (datetime.datetime.now() + relativedelta(months=1)).isoformat(timespec='seconds') + 'Z'
+        }
 
-    yield kwargs
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        user.delete()
+    yield factory
 
 
 

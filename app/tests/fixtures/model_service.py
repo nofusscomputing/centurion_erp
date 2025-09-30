@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from itim.models.services import Service
 from itim.serializers.service import (
@@ -25,40 +25,35 @@ def kwargs_service(django_db_blocker,
     kwargs_port, model_port,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        kwargs = kwargs_device()
-        kwargs.update({
-            'name': 'svc' + random_str
-        })
+        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
-        device = model_device.objects.create( **kwargs )
+        with django_db_blocker.unblock():
 
-        port = model_port.objects.create( **kwargs_port )
+            kwargs = kwargs_device()
+            kwargs.update({
+                'name': 'svc' + random_str
+            })
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'service_' + random_str,
-        'device': device,
-        'config_key_variable': 'svc',
-        'port': [ port ],
-        'config': { 'config_key_1': 'config_value_1' }
-    }
+            device = model_device.objects.create( **kwargs )
 
-    yield kwargs.copy()
+            port = model_port.objects.create( **kwargs_port() )
 
-    with django_db_blocker.unblock():
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'service_' + random_str,
+            'device': device,
+            'config_key_variable': 'svc',
+            'port': [ port ],
+            'config': { 'config_key_1': 'config_value_1' }
+        }
 
-        try:
-            device.delete()
-        except:
-            pass
+        return kwargs
 
-        port.delete()
+    yield factory
+
 
 
 

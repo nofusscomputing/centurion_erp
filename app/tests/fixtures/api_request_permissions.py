@@ -39,19 +39,19 @@ def api_request_permissions( django_db_blocker,
                 )
 
             add_user = model_user.objects.create_user(
-                username="api_rp_user_add" + str( random.randint(1,999) ), password="password"
+                username="api_rp_user_add" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
 
             add_group = model_group.objects.create(
-                name = 'add_team' + str( random.randint(1,999) ),
+                name = 'add_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             add_user.groups.set( [ add_group ])
 
             add_role = model_role.objects.create(
                 organization = organization_one,
-                name = 'add_role' + str( random.randint(1,999) ),
+                name = 'add_role' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             add_role.groups.set( [ add_group ] )
@@ -60,7 +60,7 @@ def api_request_permissions( django_db_blocker,
             # add user to different org, however no perms
             role_diff_org = model_role.objects.create(
                 organization = organization_two,
-                name = 'role_diff_org' + str( random.randint(1,999) ),
+                name = 'role_diff_org' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             role_diff_org.groups.set( [ add_group ] )
@@ -74,18 +74,18 @@ def api_request_permissions( django_db_blocker,
                 )
 
             change_user = model_user.objects.create_user(
-                username="api_rp_user_change" + str( random.randint(1,999) ), password="password"
+                username="api_rp_user_change" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
             change_group = model_group.objects.create(
-                name = 'change_team' + str( random.randint(1,999) ),
+                name = 'change_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             change_user.groups.set( [ change_group ])
 
             change_role = model_role.objects.create(
                 organization = organization_one,
-                name = 'change_role' + str( random.randint(1,999) ),
+                name = 'change_role' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             role_diff_org.groups.set( [ change_group ] )
@@ -103,18 +103,18 @@ def api_request_permissions( django_db_blocker,
                 )
 
             delete_user = model_user.objects.create_user(
-                username="api_rp_user_delete" + str( random.randint(1,999) ), password="password"
+                username="api_rp_user_delete" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
             delete_group = model_group.objects.create(
-                name = 'delete_team' + str( random.randint(1,999) ),
+                name = 'delete_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             delete_user.groups.set( [ delete_group ])
 
             delete_role = model_role.objects.create(
                 organization = organization_one,
-                name = 'delete_role' + str( random.randint(1,999) ),
+                name = 'delete_role' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             role_diff_org.groups.set( [ delete_group ] )
@@ -132,18 +132,18 @@ def api_request_permissions( django_db_blocker,
                 )
 
             view_user = model_user.objects.create_user(
-                username="api_r_perm_user_view" + str( random.randint(1,999) ), password="password"
+                username="api_r_perm_user_view" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
             view_group = model_group.objects.create(
-                name = 'view_team' + str( random.randint(1,999) ),
+                name = 'view_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             view_user.groups.set( [ view_group ])
 
             view_role = model_role.objects.create(
                 organization = organization_one,
-                name = 'view_role' + str( random.randint(1,999) ),
+                name = 'view_role' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             role_diff_org.groups.set( [ view_group ] )
@@ -153,19 +153,19 @@ def api_request_permissions( django_db_blocker,
 
 
             different_organization_user = model_user.objects.create_user(
-                username="api_rp_diff_org_user" + str( random.randint(1,999) ), password="password"
+                username="api_rp_diff_org_user" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
 
             different_organization_group = model_group.objects.create(
-                name = 'diff_org_team' + str( random.randint(1,999) ),
+                name = 'diff_org_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             different_organization_user.groups.set( [ different_organization_group ])
 
             different_organization_role = model_role.objects.create(
                 organization = organization_two,
-                name = 'diff_org_team' + str( random.randint(1,999) ),
+                name = 'diff_org_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
 
             different_organization_role.groups.set( [ different_organization_group ] )
@@ -181,7 +181,7 @@ def api_request_permissions( django_db_blocker,
 
 
             no_permission_user = model_user.objects.create_user(
-                username="api_rp_nil_permissions" + str( random.randint(1,999) ), password="password"
+                username="api_rp_nil_permissions" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
 

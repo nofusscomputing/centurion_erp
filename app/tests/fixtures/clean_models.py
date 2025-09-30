@@ -21,22 +21,26 @@ def clean_model_from_db(django_db_blocker):
                     if db_obj.owner_organization is None:
                         continue
 
-                for linked_model in db_obj._meta.related_objects:
-
-                    for rel_obj in linked_model.related_model.objects.all():
-
-                        if rel_obj._meta.model_name == 'appsettings':
-                            if rel_obj.owner_organization is None:
-                                continue
-
-                        try:
-                            rel_obj.delete( keep_parents = False )
-                        except ProtectedError:
-                            pass
-
                 try:
                     db_obj.delete( keep_parents = False )
                 except ProtectedError:
-                    pass
+
+                    for linked_model in db_obj._meta.related_objects:
+
+                        for rel_obj in linked_model.related_model.objects.all():
+
+                            if rel_obj._meta.model_name == 'appsettings':
+                                if rel_obj.owner_organization is None:
+                                    continue
+
+                            try:
+                                rel_obj.delete( keep_parents = False )
+                            except ProtectedError:
+                                pass
+
+                    try:
+                        db_obj.delete( keep_parents = False )
+                    except ProtectedError:
+                        pass
 
     yield clean_db

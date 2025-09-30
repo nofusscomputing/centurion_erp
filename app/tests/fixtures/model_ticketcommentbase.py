@@ -1,7 +1,5 @@
-import datetime
 import pytest
-
-from django.db import models
+import random
 
 from core.models.ticket_comment_base import TicketCommentBase
 from core.serializers.ticketcommentbase import (
@@ -27,55 +25,46 @@ def kwargs_ticketcommentbase(django_db_blocker, kwargs_centurionmodel,
     model_ticketcommentcategory, kwargs_ticketcommentcategory
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        person = model_person.objects.create( **kwargs_person )
+            person = model_person.objects.create( **kwargs_person() )
 
-        ticket = model_ticketbase.objects.create( **kwargs_ticketbase )
+            ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
 
-        category = model_ticketcommentcategory.objects.create(
-            **kwargs_ticketcommentcategory
-        )
+            category = model_ticketcommentcategory.objects.create(
+                **kwargs_ticketcommentcategory()
+            )
 
-    kwargs = kwargs_centurionmodel.copy()
-    del kwargs['model_notes']
+        kwargs = kwargs_centurionmodel()
+        del kwargs['model_notes']
 
-    kwargs = {
-        **kwargs,
-        # 'parent': '',
-        'ticket': ticket,
-        'external_ref': 123,
-        'external_system': model_ticketbase.Ticket_ExternalSystem.CUSTOM_1,
-        'comment_type': model_ticketcommentbase._meta.sub_model_type,
-        'category': category,
-        'body': 'a comment body',
-        'private': False,
-        'duration': 1,
-        'estimation': 2,
-        # 'template': '',
-        'is_template': False,
-        'source': model_ticketbase.TicketSource.HELPDESK,
-        'user': person,
-        'is_closed': True,
-        'date_closed': '2025-05-09T19:32Z',
+        kwargs = {
+            **kwargs,
+            # 'parent': '',
+            'ticket': ticket,
+            'external_ref': int( random.randint(1,999999)),
+            'external_system': model_ticketbase.Ticket_ExternalSystem.CUSTOM_1,
+            'comment_type': model_ticketcommentbase._meta.sub_model_type,
+            'category': category,
+            'body': 'a comment body',
+            'private': False,
+            'duration': 1,
+            'estimation': 2,
+            # 'template': '',
+            'is_template': False,
+            'source': model_ticketbase.TicketSource.HELPDESK,
+            'user': person,
+            'is_closed': True,
+            'date_closed': '2025-05-09T19:32Z',
 
 
-    }
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        person.delete()
-
-        try:
-            category.delete()
-        except models.deletion.ProtectedError:
-            pass
+    yield factory
 
 
 

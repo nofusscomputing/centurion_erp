@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from itam.models.device import DeviceType
 from itam.serializers.device_type import (
@@ -21,15 +21,16 @@ def model_devicetype(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_devicetype(kwargs_centurionmodel):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'typ' + str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', ''),
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'typ' +str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

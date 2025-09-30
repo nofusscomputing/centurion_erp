@@ -1,8 +1,6 @@
 import pytest
 import random
 
-from django.db import models
-
 from core.models.model_tickets import ModelTicketMetaModel
 from core.serializers.modelticket import (
     BaseSerializer,
@@ -33,7 +31,7 @@ def kwargs_modelticketmetamodel(django_db_blocker,
         with django_db_blocker.unblock():
 
             kwargs = kwargs_device()
-            kwargs['name'] = 'model-ticket-' + str( random.randint(1, 99999))
+            kwargs['name'] = 'model-ticket-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
             device = model_device.objects.create( **kwargs )
 
@@ -47,14 +45,6 @@ def kwargs_modelticketmetamodel(django_db_blocker,
         return kwargs
 
     yield factory
-
-    with django_db_blocker.unblock():
-
-        for obj in model_objs:
-            try:
-                obj.delete()
-            except models.deletion.ProtectedError:
-                pass
 
 
 @pytest.fixture( scope = 'class')

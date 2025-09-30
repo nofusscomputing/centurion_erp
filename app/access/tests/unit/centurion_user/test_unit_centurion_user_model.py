@@ -74,12 +74,12 @@ class CenturionUserModelTestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_group.copy()
+            kwargs = kwargs_group()
             kwargs['name'] = 'grp_1'
             group_1 = model_group.objects.create( **kwargs )
 
 
-            kwargs = kwargs_role.copy()
+            kwargs = kwargs_role()
             kwargs['name'] = 'role_group_1'
             kwargs['organization'] = organization_one
             role_group_1 = model_role.objects.create( **kwargs )
@@ -111,7 +111,7 @@ class CenturionUserModelTestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_role.copy()
+            kwargs = kwargs_role()
             kwargs['name'] = 'user_role'
             kwargs['organization'] = organization_two
             user_role = model_role.objects.create( **kwargs )
@@ -155,7 +155,7 @@ class CenturionUserModelTestCases(
             centurion_user.user_permissions.set([ role_permission ])
 
 
-            kwargs = kwargs_group.copy()
+            kwargs = kwargs_group()
             kwargs['name'] = 'grp_1'
             group_1 = model_group.objects.create( **kwargs )
 

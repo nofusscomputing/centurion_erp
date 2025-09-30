@@ -349,7 +349,7 @@ class CommonViewSetTestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = "test_user1-" + str(
                 str(
                     random.randint(1,99))
@@ -1798,7 +1798,7 @@ class CommonSubModelViewSetInheritedCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = "test_user1-" + str(
                 str(
                     random.randint(1,99))

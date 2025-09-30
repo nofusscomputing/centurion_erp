@@ -1,8 +1,6 @@
-import datetime
 import pytest
 import random
 
-from django.db import models
 
 from itam.models.device import DeviceModel
 from itam.serializers.device_model import (
@@ -26,28 +24,23 @@ def kwargs_devicemodel(kwargs_centurionmodel, django_db_blocker,
     model_manufacturer, kwargs_manufacturer,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_manufacturer.copy()
-        kwargs['name'] = 'dm_' + str( random.randint(1, 99999) )
-        manufacturer = model_manufacturer.objects.create( **kwargs )
+            kwargs = kwargs_manufacturer()
+            kwargs['name'] = 'dm_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            manufacturer = model_manufacturer.objects.create( **kwargs )
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'devmodel' + str( random.randint(1, 99999) ),
-        'manufacturer': manufacturer,
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'devmodel' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'manufacturer': manufacturer,
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        try:
-            manufacturer.delete()
-        except models.deletion.ProtectedError:
-            pass
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

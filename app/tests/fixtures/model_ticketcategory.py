@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from core.models.ticket.ticket_category import TicketCategory
 
@@ -16,12 +16,13 @@ def model_ticketcategory(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_ticketcategory(kwargs_centurionmodel):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'tc' + str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', ''),
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'tc' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory

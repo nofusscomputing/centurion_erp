@@ -110,7 +110,7 @@ class ProjectMilestoneModelPyTest(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'project_id': model_kwargs['project'].id,
+            'project_id': model_instance.project.id,
             'pk': model_instance.id
         }
 

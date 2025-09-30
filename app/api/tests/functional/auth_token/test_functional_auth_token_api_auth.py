@@ -18,7 +18,7 @@ class TokenAuthenticationTestCases:
         model, model_kwargs, model_instance
     ):
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
 
         the_model = model_instance( kwargs_create = kwargs )
         the_model.token = model().token_hash(kwargs['token'])

@@ -29,9 +29,13 @@ def serializer_gitlabrepository():
 @pytest.fixture( scope = 'class')
 def kwargs_gitlabrepository( kwargs_gitrepository ):
 
-    kwargs = {
-        **kwargs_gitrepository.copy(),
-        'visibility': True,
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_gitrepository(),
+            'visibility': True,
+        }
+
+        return kwargs
+
+    yield factory

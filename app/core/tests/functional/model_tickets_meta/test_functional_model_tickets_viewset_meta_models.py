@@ -132,6 +132,9 @@ class ModelTicketMetaViewsetTestCases(
         model, organization_one,
     ):
 
+        if not hasattr(request.cls, 'kwargs_create_item'):
+            request.cls.kwargs_create_item = {}
+
         with django_db_blocker.unblock():
 
             ticket_model_class =  apps.get_model(
@@ -147,9 +150,6 @@ class ModelTicketMetaViewsetTestCases(
             ticket_model_kwargs = request.getfixturevalue(
                 'kwargs_' + ticket_model._meta.model_name
             )
-
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
 
         model_obj = []
         def factory(
@@ -167,7 +167,7 @@ class ModelTicketMetaViewsetTestCases(
 
                 kwargs = {}
 
-                for key, value in ticket_model_kwargs.items():
+                for key, value in ticket_model_kwargs().items():
 
                     field = ticket_model._meta.get_field(key)
 
@@ -213,7 +213,7 @@ class ModelTicketMetaViewsetTestCases(
                     'model': obj
                 })
 
-            request.cls.kwargs_create_item = model_kwargs
+            request.cls.kwargs_create_item.update(model_kwargs)
 
             return model_kwargs
 
@@ -236,7 +236,7 @@ class ModelTicketMetaViewsetTestCases(
 
             user = api_request_permissions['user']['view']
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = 'username.two' + str(
                 random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
             user2 = model_user.objects.create( **kwargs )
@@ -256,7 +256,7 @@ class ModelTicketMetaViewsetTestCases(
 
             kwargs = model_kwargs( organization = organization_two)
 
-            kwargs_ticket = kwargs_ticketbase.copy()
+            kwargs_ticket = kwargs_ticketbase()
             kwargs_ticket['title'] = 'other org ticket'
             kwargs_ticket['organization'] = organization_two
 

@@ -39,7 +39,7 @@ class TenancyAbstractModelTestCases(
 
 
     @pytest.fixture( scope = 'class', autouse = True)
-    def setup_organization(cls, request, model, organization_one, model_kwargs):
+    def setup_organization(cls, request, model, organization_one):
 
         request.cls.organization = organization_one
 

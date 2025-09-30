@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from itam.models.software import SoftwareVersion
 from itam.serializers.software_version import (
@@ -24,30 +24,23 @@ def kwargs_softwareversion(django_db_blocker,
     kwargs_software, model_software
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_software
-        kwargs.update({
-            'name': 'sv_' + random_str
-        })
+            kwargs = kwargs_software()
 
-        software = model_software.objects.create( **kwargs_software )
+            software = model_software.objects.create( **kwargs_software() )
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'software': software,
-        'name': 'softwareversion_' + random_str,
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'software': software,
+            'name': 'softwareversion_' + str( random.randint(1,999) ) + str( random.randint(1,999) ) + str( random.randint(1,999) ),
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        software.delete()
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

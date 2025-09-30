@@ -15,9 +15,13 @@ def model_centurionmodelnotemeta(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_centurionmodelnotemeta(request, kwargs_centurionmodelnote):
 
-    kwargs = {
-        **kwargs_centurionmodelnote.copy(),
-    }
-    del kwargs['organization']
+    def factory():
 
-    yield kwargs
+        kwargs = {
+            **kwargs_centurionmodelnote(),
+        }
+        del kwargs['organization']
+
+        return kwargs
+
+    yield factory

@@ -113,10 +113,12 @@ class ModelSerializer(
 
             if attrs.get('model', None):
 
-                if attrs['model'].id != int(model_id):
-                    raise ValueError( 'two different models found.' )
+                if hasattr(attrs['model'], 'id'):
 
-                del attrs['model']
+                    if attrs['model'].id != int(model_id):
+                        raise ValueError( 'two different models found.' )
+
+                    del attrs['model']
 
 
             attrs['model_id'] = int( model_id )

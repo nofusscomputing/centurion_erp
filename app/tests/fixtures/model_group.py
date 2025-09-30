@@ -1,7 +1,6 @@
 import pytest
 
 from django.contrib.auth.models import Group
-from django.db.models.deletion import ProtectedError
 
 
 @pytest.fixture( scope = 'class')
@@ -15,8 +14,12 @@ def model_group(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_group():
 
-    kwargs = {
-        'name': 'a group name',
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            'name': 'a group name',
+        }
+
+        return kwargs
+
+    yield factory

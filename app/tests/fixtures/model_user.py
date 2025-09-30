@@ -15,12 +15,15 @@ def model_user(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_user():
 
-    kwargs = {}
+    def factory():
 
-    kwargs = {
-        'username': "test_user-" + str(
-            random.randint(1,99) + random.randint(1,99) + random.randint(1,99) ),
-        'password': "password"
-    }
+        kwargs = {}
 
-    yield kwargs.copy()
+        kwargs = {
+            'username': "test_user-" + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'password': "password"
+        }
+
+        return kwargs
+
+    yield factory

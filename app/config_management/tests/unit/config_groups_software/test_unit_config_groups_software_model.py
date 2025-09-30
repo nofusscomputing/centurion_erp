@@ -143,7 +143,7 @@ class ConfigGroupSoftwareModelTestCases(
 
         url = model_instance.get_url_kwargs()
 
-        assert model_instance.get_url_kwargs() == { 'config_group_id': model_kwargs['config_group'].id, 'pk': model_instance.id }
+        assert model_instance.get_url_kwargs() == { 'config_group_id': model_instance.parent_object.id, 'pk': model_instance.id }
 
 
 

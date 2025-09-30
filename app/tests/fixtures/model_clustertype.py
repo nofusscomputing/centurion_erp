@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from itim.models.clusters import ClusterType
 from itim.serializers.cluster_type import (
@@ -21,17 +21,17 @@ def model_clustertype(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_clustertype(kwargs_centurionmodel):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'clustertype_' + random_str,
-        'config': { 'config_key_1': 'config_value_1' }
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'clustertype_' +  str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'config': { 'config_key_1': 'config_value_1' }
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

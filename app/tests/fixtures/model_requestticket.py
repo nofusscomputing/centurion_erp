@@ -22,11 +22,15 @@ def kwargs_requestticket(kwargs_slmticket,
 
 ):
 
-    kwargs = {
-        **kwargs_slmticket,
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_slmticket(),
+        }
+
+        return kwargs
+
+    yield factory
 
 
 

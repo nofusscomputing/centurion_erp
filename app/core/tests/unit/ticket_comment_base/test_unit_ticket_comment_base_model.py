@@ -175,7 +175,7 @@ class TicketCommentBaseModelTestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_ticketbase.copy()
+            kwargs = kwargs_ticketbase()
 
             del kwargs['external_system']
             del kwargs['external_ref']
@@ -493,7 +493,7 @@ class TicketCommentBaseModelTestCases(
             'core.models.centurion.CenturionModel.delete', return_value = None
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         del kwargs['external_ref']
         del kwargs['external_system']
 
@@ -508,7 +508,7 @@ class TicketCommentBaseModelTestCases(
 
         parent_obj = model.objects.create( **kwargs )
 
-        kwargs = kwargs_ticketcommentbase.copy()
+        kwargs = kwargs_ticketcommentbase()
         del kwargs['external_ref']
         del kwargs['external_system']
         kwargs['parent'] = parent_obj
