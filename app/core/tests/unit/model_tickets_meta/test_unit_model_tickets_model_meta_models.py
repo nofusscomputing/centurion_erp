@@ -88,7 +88,7 @@ class ModelTicketMetaModelsModelTestCases(
         request, kwargs_modelticketmetamodel
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        model_kwargs = kwargs_modelticketmetamodel()
         model = None
 
         with django_db_blocker.unblock():

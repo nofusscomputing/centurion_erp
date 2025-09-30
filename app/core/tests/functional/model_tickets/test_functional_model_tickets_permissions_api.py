@@ -127,10 +127,10 @@ class APIPermissionsTestCases(
     @pytest.fixture( scope = 'class', autouse = True)
     def model_kwargs(self, django_db_blocker,
         request, kwargs_modelticketmetamodel, model_contenttype,
-        model, organization_one
+        model, organization_one, clean_model_from_db
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        model_kwargs = kwargs_modelticketmetamodel()
 
         with django_db_blocker.unblock():
 
@@ -173,11 +173,11 @@ class APIPermissionsTestCases(
                     })
 
 
-            model = ticket_model.objects.create( **kwargs )
+            obj = ticket_model.objects.create( **kwargs )
 
             for key, value in kwargs_many_to_many.items():
 
-                field = getattr(model, key)
+                field = getattr(obj, key)
 
                 for entry in value:
 
@@ -191,16 +191,16 @@ class APIPermissionsTestCases(
         else:
 
             model_kwargs.update({
-                'model': model
+                'model': obj
             })
 
         request.cls.kwargs_create_item = model_kwargs
 
         yield model_kwargs
 
-        with django_db_blocker.unblock():
+        clean_model_from_db(model)
 
-            model.delete()
+        clean_model_from_db(ticket_model)
 
 
 
@@ -216,7 +216,7 @@ class APIPermissionsTestCases(
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+        the_model = model_instance( kwargs_create = model_kwargs )
 
         url = the_model.get_url( many = True )
 

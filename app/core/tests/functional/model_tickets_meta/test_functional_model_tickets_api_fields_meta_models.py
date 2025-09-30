@@ -132,7 +132,7 @@ class ModelTicketMetaModelsAPITestCases(
         request, kwargs_modelticketmetamodel, model_contenttype,
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        model_kwargs = kwargs_modelticketmetamodel()
 
         with django_db_blocker.unblock():
 

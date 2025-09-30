@@ -36,4 +36,6 @@ class ModelTicketViewsetPyTest(
     ViewsetTestCases,
 ):
 
-    pass
+
+    def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'test n/a as model does not have `model` field' )
