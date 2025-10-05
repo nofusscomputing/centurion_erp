@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from core.models.ticket_comment_base import TicketCommentBase, TicketBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
@@ -16,7 +16,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 @pytest.mark.tickets
 @pytest.mark.model_ticketcommentbase
 class TicketCommentBaseModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

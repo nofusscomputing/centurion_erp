@@ -4,7 +4,7 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractBaseModelInheritedCases
 )
 
 
@@ -12,7 +12,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 @pytest.mark.tickets
 @pytest.mark.model_modelticket
 class ModelTicketModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractBaseModelInheritedCases
 ):
 
 

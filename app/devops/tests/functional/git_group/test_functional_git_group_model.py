@@ -5,14 +5,14 @@ from django.core.exceptions import (
 )
 
 from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_gitgroup
 class GitGroupModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

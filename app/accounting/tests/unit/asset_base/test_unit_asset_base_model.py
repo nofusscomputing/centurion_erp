@@ -5,14 +5,14 @@ from django.db import models
 from accounting.models.asset_base import AssetBase
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 @pytest.mark.skip( reason = 'behind ff, see #887' )
 @pytest.mark.model_assetbase
 class AssetBaseModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

@@ -3,7 +3,7 @@ import pytest
 from django.db import models
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 from devops.models.git_group import GitGroup
@@ -11,7 +11,7 @@ from devops.models.git_group import GitGroup
 
 @pytest.mark.model_gitrepository
 class GitRepositoryBaseModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

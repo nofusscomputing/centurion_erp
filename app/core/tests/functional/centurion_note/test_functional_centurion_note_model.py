@@ -4,13 +4,13 @@ from django.apps import apps
 from django.conf import settings
 
 from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 @pytest.mark.note_models
 class CenturionNoteModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

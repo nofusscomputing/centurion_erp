@@ -4,14 +4,14 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_projectmilestone
 class ProjectMilestoneModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

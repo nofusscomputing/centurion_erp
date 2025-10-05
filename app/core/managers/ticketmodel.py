@@ -99,6 +99,11 @@ class TicketModelManager(
                     content_filter
                 )
 
+            elif not content_filter:
+
+                return super().get_queryset().none()
+
+
 
         if content_filter:
             return super().get_queryset().select_related( *fields )

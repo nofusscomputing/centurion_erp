@@ -8,7 +8,7 @@ from core import exceptions as centurion_exceptions
 from core.fields.badge import Badge
 from core.models.ticket_base import TicketBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model import (
     CenturionSubAbstractModelInheritedCases
@@ -20,7 +20,7 @@ from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_mod
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
     CenturionSubAbstractModelInheritedCases,
-    CenturionAbstractModelInheritedCases,
+    CenturionAbstractTenancyModelInheritedCases,
 ):
 
 
