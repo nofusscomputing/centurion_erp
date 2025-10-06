@@ -6,13 +6,18 @@ from django.db import models
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractBaseModelInheritedCases
 )
+from core.tests.unit.manager_ticketmodel.test_unit_ticket_model_manager import (
+    TicketModelManagerInheritedCases
+)
+
 
 
 
 @pytest.mark.tickets
 @pytest.mark.model_modelticket
 class ModelTicketModelTestCases(
-    CenturionAbstractBaseModelInheritedCases
+    TicketModelManagerInheritedCases,
+    CenturionAbstractBaseModelInheritedCases,
 ):
 
 
@@ -107,4 +112,10 @@ class ModelTicketModelInheritedCases(
 class ModelTicketModelPyTest(
     ModelTicketModelTestCases,
 ):
-    pass
+
+    def test_manager_ticketmodel_filter_tenant(self):
+        pytest.xfail( reason = 'filtering requires field model which is not avail in base model.' )
+
+
+    def test_manager_ticketmodel_select_related(self):
+        pytest.xfail( reason = 'filtering requires field model which is not avail in base model.' )

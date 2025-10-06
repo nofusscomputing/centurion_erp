@@ -17,7 +17,6 @@ from core.models.centurion import CenturionModel
 @pytest.mark.centurion_models
 class CenturionAbstractBaseModelTestCases(
     CenturionMixnInheritedCases,
-    # TenancyAbstractModelInheritedCases
 ):
     """Centurion Abstract Model base Test Cases"""
 
@@ -171,7 +170,6 @@ class CenturionAbstractBaseModelTestCases(
 
 class CenturionAbstractBaseModelInheritedCases(
     CenturionAbstractBaseModelTestCases,
-    # TenancyAbstractModelInheritedCases,
 ):
     """Centurion Abstract Model base Inherited Cases
     
