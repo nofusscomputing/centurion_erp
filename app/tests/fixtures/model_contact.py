@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from access.models.contact import Contact
 from access.serializers.entity_contact import (
@@ -21,18 +21,18 @@ def model_contact(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_contact( kwargs_person ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_person.copy(),
-        'entity_type': 'contact',
-        'email': 'p' + random_str + '@domain.tld',
-        'directory': True,
-    }
+        kwargs = {
+            **kwargs_person(),
+            'entity_type': 'contact',
+            'email': 'p' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)) + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)) + '@domain.tld',
+            'directory': True,
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

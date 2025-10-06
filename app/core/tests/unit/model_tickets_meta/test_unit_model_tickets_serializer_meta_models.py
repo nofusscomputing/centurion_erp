@@ -89,67 +89,74 @@ class ModelTicketMetaModelsSerializerTestCases(
         request, kwargs_modelticketmetamodel, model_contenttype,
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel()
+        request.cls.kwargs_create_item = {}
+
+        model_objs = []
+        def factory(model_objs = model_objs):
+
+            model_kwargs = kwargs_modelticketmetamodel()
+
+            with django_db_blocker.unblock():
+
+                ticket_model = request.getfixturevalue(
+                    'model_' + request.cls.ticket_model_class._meta.model_name
+                )
+
+                ticket_model_kwargs = request.getfixturevalue(
+                    'kwargs_' + ticket_model._meta.model_name
+                )()
+
+
+                kwargs_many_to_many = {}
+
+                kwargs = {}
+
+                for key, value in ticket_model_kwargs.items():
+
+                    field = ticket_model._meta.get_field(key)
+
+                    if isinstance(field, models.ManyToManyField):
+
+                        kwargs_many_to_many.update({
+                            key: value
+                        })
+
+                    else:
+
+                        kwargs.update({
+                            key: value
+                        })
+
+
+                model = ticket_model.objects.create( **kwargs )
+
+                model_objs += [ model ]
+
+                for key, value in kwargs_many_to_many.items():
+
+                    field = getattr(model, key)
+
+                    for entry in value:
+
+                        field.add(entry)
+
+            #     kwargs = {}
+
+
+            model_kwargs.update({
+                'model': model
+            })
+
+            request.cls.kwargs_create_item.update(model_kwargs)
+
+            return model_kwargs
+
+        yield factory
 
         with django_db_blocker.unblock():
 
-            ticket_model = request.getfixturevalue(
-                'model_' + request.cls.ticket_model_class._meta.model_name
-            )
-
-            ticket_model_kwargs = request.getfixturevalue(
-                'kwargs_' + ticket_model._meta.model_name
-            )
-
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
-
-
-            kwargs_many_to_many = {}
-
-            kwargs = {}
-
-            for key, value in ticket_model_kwargs.items():
-
-                field = ticket_model._meta.get_field(key)
-
-                if isinstance(field, models.ManyToManyField):
-
-                    kwargs_many_to_many.update({
-                        key: value
-                    })
-
-                else:
-
-                    kwargs.update({
-                        key: value
-                    })
-
-
-            model = ticket_model.objects.create( **kwargs )
-
-            for key, value in kwargs_many_to_many.items():
-
-                field = getattr(model, key)
-
-                for entry in value:
-
-                    field.add(entry)
-
-        #     kwargs = {}
-
-
-        model_kwargs.update({
-            'model': model
-        })
-
-        request.cls.kwargs_create_item = model_kwargs
-
-        yield model_kwargs
-
-        with django_db_blocker.unblock():
-
-            model.delete()
+            for obj in model_objs:
+                obj.delete()
 
 
     @pytest.fixture( scope = 'class' )

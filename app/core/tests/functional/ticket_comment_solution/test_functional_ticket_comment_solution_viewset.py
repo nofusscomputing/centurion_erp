@@ -25,19 +25,19 @@ class ViewsetTestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = 'username.one' + str(
                 random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
             user = model_user.objects.create( **kwargs )
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = 'username.two' + str(
                 random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
             user2 = model_user.objects.create( **kwargs )
 
             self.user = user
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             del kwargs['external_ref']
             del kwargs['external_system']
             # if 'organization' in kwargs:
@@ -51,7 +51,7 @@ class ViewsetTestCases(
             kwargs['ticket'].is_closed = False
             kwargs['ticket'].save()
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             del kwargs['external_ref']
             del kwargs['external_system']
             # if 'organization' in kwargs:

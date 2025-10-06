@@ -29,28 +29,18 @@ class ViewsetTestCases(
 
         with django_db_blocker.unblock():
 
-            user = model_user.objects.create( **kwargs_user )
+            user = model_user.objects.create( **kwargs_user() )
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = 'username.two'
             user2 = model_user.objects.create( **kwargs )
 
             self.user = user
 
-            # kwargs = model_kwargs.copy()
-            # if 'organization' in kwargs:
-            #     kwargs['organization'] = organization_one
-            # if 'user' in kwargs:
-            #     kwargs['user'] = user2
             user_tenancy_item = model.objects.get(
                 user = user
             )
 
-            # kwargs = model_kwargs.copy()
-            # if 'organization' in kwargs:
-            #     kwargs['organization'] = organization_two
-            # if 'user' in kwargs:
-            #     kwargs['user'] = user
             other_tenancy_item = model.objects.get(
                 user = user2
             )

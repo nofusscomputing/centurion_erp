@@ -11,9 +11,10 @@ def model(model_modelticketmetamodel):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_modelticketmetamodel):
 
-    request.cls.kwargs_create_item = kwargs_modelticketmetamodel()
+    kwargs = kwargs_modelticketmetamodel
+    request.cls.kwargs_create_item = kwargs()
 
-    yield request.cls.kwargs_create_item
+    yield kwargs
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

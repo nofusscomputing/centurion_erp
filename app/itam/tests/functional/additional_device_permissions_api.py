@@ -60,7 +60,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
         # self.kwargs_create_item['ticket'].status = 2
         # self.kwargs_create_item['ticket'].save()
@@ -89,7 +89,7 @@ class AdditionalTestCases:
         items that are not part of the users organizations.
         """
 
-        if model_kwargs.get('organization', None) is None:
+        if model_kwargs().get('organization', None) is None:
             pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
 
@@ -107,7 +107,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317eb1'
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
@@ -117,7 +117,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317ea1'
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
@@ -127,7 +127,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317ea2'
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
@@ -137,7 +137,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs['uuid'] = '039d1b53-d776-49f9-8b8e-a71550317ea3'
         the_model = model_instance( kwargs_create = kwargs )
 

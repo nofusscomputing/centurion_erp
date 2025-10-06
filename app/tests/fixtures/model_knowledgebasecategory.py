@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from assistance.models.knowledge_base_category import KnowledgeBaseCategory
 from assistance.serializers.knowledge_base_category import (
@@ -21,29 +21,30 @@ def model_knowledgebasecategory(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_knowledgebasecategory(django_db_blocker, kwargs_centurionmodel, model_user):
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+        with django_db_blocker.unblock():
 
-        user = model_user.objects.create(
-            username = 'kb cat tgt user' + random_str,
-            password = 'apassword'
-        )
+            random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
-        kwargs = {
-            **kwargs_centurionmodel.copy(),
-            'name': 'kb cat' + random_str,
-            # 'parent_category': '',
-            # 'target_team': '',
-            'target_user': user,
-            'modified': '2024-06-03T23:00:00Z',
-        }
+            user = model_user.objects.create(
+                username = 'kb cat tgt user' + random_str,
+                password = 'apassword'
+            )
 
-    yield kwargs.copy()
+            kwargs = {
+                **kwargs_centurionmodel(),
+                'name': 'kb cat' + random_str,
+                # 'parent_category': '',
+                # 'target_team': '',
+                'target_user': user,
+                'modified': '2024-06-03T23:00:00Z',
+            }
 
-    with django_db_blocker.unblock():
+        return kwargs
 
-        user.delete()
+    yield factory
+
 
 
 @pytest.fixture( scope = 'class')

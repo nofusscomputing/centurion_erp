@@ -1,4 +1,3 @@
-import datetime
 import pytest
 import random
 
@@ -25,29 +24,27 @@ def kwargs_software(kwargs_centurionmodel, django_db_blocker,
     model_softwarecategory, kwargs_softwarecategory
 ):
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        publisher = model_manufacturer.objects.create( **kwargs_manufacturer )
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_softwarecategory.copy()
-        kwargs['name'] = 'soft_c_' + str( random.randint(1,999) ),
+            publisher = model_manufacturer.objects.create( **kwargs_manufacturer() )
 
-        category = model_softwarecategory.objects.create( **kwargs )
+            kwargs = kwargs_softwarecategory()
+            kwargs['name'] = 'soft_c_' + str( random.randint(1,999) ) + str( random.randint(1,999) ) + str( random.randint(1,999) ),
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'publisher': publisher,
-        'name': 'software_' + str( random.randint(1,999) ),
-        'category': category,
-    }
+            category = model_softwarecategory.objects.create( **kwargs )
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'publisher': publisher,
+            'name': 'software_' + str( random.randint(1,999) ) + str( random.randint(1,999) ) + str( random.randint(1,999) ),
+            'category': category,
+        }
 
-    with django_db_blocker.unblock():
+        return kwargs
 
-        publisher.delete()
-
-        category.delete()
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

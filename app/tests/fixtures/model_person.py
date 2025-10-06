@@ -21,17 +21,21 @@ def model_person(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_person( kwargs_entity ):
 
-    kwargs = {
-        **kwargs_entity.copy(),
-        'entity_type': 'person',
-        'f_name': 'p' + str( random.randint(1,99) + random.randint(1,99) + random.randint(1,99) ),
-        'm_name': 'p' + str( random.randint(1,99) + random.randint(1,99) + random.randint(1,99) ),
-        'l_name': 'p' + str( random.randint(1,99) + random.randint(1,99) + random.randint(1,99) ),
-        'dob': str(random.randint(1972, 2037)) + '-' + str(
-            random.randint(1, 12)) + '-' + str(random.randint(1, 28))
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_entity(),
+            'entity_type': 'person',
+            'f_name': 'pfn' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
+            'm_name': 'pmn' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
+            'l_name': 'pln' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
+            'dob': str(random.randint(1972, 2037)) + '-' + str(
+                random.randint(1, 12)) + '-' + str(random.randint(1, 28))
+        }
+
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

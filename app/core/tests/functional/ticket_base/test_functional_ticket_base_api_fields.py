@@ -27,19 +27,19 @@ class APITestCases(
         with django_db_blocker.unblock():
 
             entity_user = model_entity.objects.create(
-                organization = model_kwargs['organization'],
+                organization = model_kwargs()['organization'],
                 model_notes = 'asdas'
             )
 
             parent_ticket = model.objects.create(
-                organization = model_kwargs['organization'],
+                organization = model_kwargs()['organization'],
                 title = 'parent ticket' + str(random.randint(9999,999999)),
                 description = 'bla bla',
-                opened_by = model_kwargs['opened_by'],
+                opened_by = model_kwargs()['opened_by'],
             )
 
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             kwargs['parent_ticket'] = parent_ticket
 
             kwargs['is_solved'] = True

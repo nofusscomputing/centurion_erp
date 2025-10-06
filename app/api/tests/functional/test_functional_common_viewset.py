@@ -191,26 +191,21 @@ class CommonViewSetTestCases:
 
             user = api_request_permissions['user']['view']
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = 'username.two' + str(
                 random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
             user2 = model_user.objects.create( **kwargs )
 
             self.user = user
 
-            if callable(model_kwargs):
-                model_kwargs = model_kwargs()
-            else:
-                model_kwargs = model_kwargs.copy()
-
-            kwargs = model_kwargs
+            kwargs = model_kwargs()
             if 'organization' in kwargs:
                 kwargs['organization'] = organization_one
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user2
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             if 'organization' in kwargs:
                 kwargs['organization'] = organization_two
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):

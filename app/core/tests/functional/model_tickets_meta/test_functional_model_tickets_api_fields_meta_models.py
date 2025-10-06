@@ -142,10 +142,7 @@ class ModelTicketMetaModelsAPITestCases(
 
             ticket_model_kwargs = request.getfixturevalue(
                 'kwargs_' + ticket_model._meta.model_name
-            )
-
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
+            )()
 
 
             kwargs_many_to_many = {}

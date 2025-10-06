@@ -11,9 +11,10 @@ def model(model_role):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_role):
 
-    request.cls.kwargs_create_item = kwargs_role.copy()
+    kwargs = kwargs_role
+    request.cls.kwargs_create_item = kwargs()
 
-    yield kwargs_role.copy()
+    yield kwargs
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

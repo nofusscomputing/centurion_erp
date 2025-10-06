@@ -67,7 +67,7 @@ class TicketCommentSolutionModelTestCases(
 
         else:
 
-            kwargs = model_kwargs
+            kwargs = model_kwargs()
 
             kwargs['ticket'].is_closed = False
             kwargs['ticket'].date_closed = None
@@ -137,7 +137,7 @@ class TicketCommentSolutionModelTestCases(
 
 
 
-    def test_function_called_clean_ticketcommentsolution(self, model, mocker, ticket):
+    def test_function_called_clean_ticketcommentsolution(self, model, mocker, model_kwargs, ticket):
         """Function Check
 
         Ensure function `TicketCommentBase.clean` is called
@@ -145,7 +145,7 @@ class TicketCommentSolutionModelTestCases(
 
         spy = mocker.spy(TicketCommentSolution, 'clean')
 
-        valid_data = self.kwargs_create_item.copy()
+        valid_data = model_kwargs()
 
         valid_data['ticket'] = ticket
 

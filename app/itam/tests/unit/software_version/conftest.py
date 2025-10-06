@@ -11,9 +11,9 @@ def model(model_softwareversion):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_softwareversion):
 
-    request.cls.kwargs_create_item = kwargs_softwareversion.copy()
+    request.cls.kwargs_create_item = kwargs_softwareversion()
 
-    yield kwargs_softwareversion.copy()
+    yield kwargs_softwareversion
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

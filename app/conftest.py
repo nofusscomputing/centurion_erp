@@ -862,7 +862,7 @@ def user(django_db_blocker, model_user, kwargs_user):
 
     with django_db_blocker.unblock():
 
-        kwargs = kwargs_user.copy()
+        kwargs = kwargs_user()
         kwargs['username'] = 'gl_usr_' + str(random.randint(999,9999))
 
         user = model_user.objects.create(

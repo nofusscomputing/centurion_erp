@@ -93,7 +93,7 @@ class SoftwareEnableFeatureFlagModelPyTest(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'software_id': model_kwargs['software'].id,
+            'software_id': model_instance.software.id,
             'pk': model_instance.id
         }
 

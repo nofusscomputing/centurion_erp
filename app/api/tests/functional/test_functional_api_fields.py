@@ -96,10 +96,7 @@ class APIFieldsTestCases:
 
             kwargs = {}
 
-            if callable(model_kwargs):
-                model_kwargs = model_kwargs()
-
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 

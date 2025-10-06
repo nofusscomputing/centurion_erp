@@ -27,7 +27,7 @@ class KnowledgeBaseSerializerTestCases(
 
             kwargs = {}
 
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 
@@ -214,7 +214,7 @@ class KnowledgeBaseSerializerTestCases(
         )
 
         kwargs = kwargs_api_create.copy()
-        group = model_group.objects.create( **kwargs_group )
+        group = model_group.objects.create( **kwargs_group() )
         kwargs.update({
             'target_team': [ group ]
         })

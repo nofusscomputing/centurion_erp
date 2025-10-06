@@ -11,9 +11,9 @@ def model(model_devicetype):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_devicetype):
 
-    request.cls.kwargs_create_item = kwargs_devicetype.copy()
+    request.cls.kwargs_create_item = kwargs_devicetype()
 
-    yield kwargs_devicetype.copy()
+    yield kwargs_devicetype
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

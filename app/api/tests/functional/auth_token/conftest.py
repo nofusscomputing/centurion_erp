@@ -11,9 +11,9 @@ def model(model_authtoken):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_authtoken):
 
-    request.cls.kwargs_create_item = kwargs_authtoken.copy()
+    request.cls.kwargs_create_item = kwargs_authtoken()
 
-    yield kwargs_authtoken.copy()
+    yield kwargs_authtoken
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

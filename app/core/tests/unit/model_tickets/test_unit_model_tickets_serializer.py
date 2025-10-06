@@ -41,7 +41,7 @@ class ModelTicketSerializerTestCases(
         )
 
         mock_view.kwargs = {
-            'ticket_type': model_kwargs['ticket']._meta.sub_model_type,
+            'ticket_type': model_kwargs()['ticket']._meta.sub_model_type,
             'ticket_id': kwargs_api_create['ticket']
         }
 
@@ -76,7 +76,7 @@ class ModelTicketSerializerInheritedCases(
         )
 
         mock_view.kwargs = {
-            'ticket_type': model_kwargs['ticket']._meta.sub_model_type,
+            'ticket_type': model_kwargs()['ticket']._meta.sub_model_type,
             'ticket_id': kwargs_api_create['ticket']
         }
 

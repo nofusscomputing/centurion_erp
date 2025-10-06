@@ -27,9 +27,9 @@ def create_serializer():
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_itamassetbase):
 
-    request.cls.kwargs_create_item = kwargs_itamassetbase.copy()
+    request.cls.kwargs_create_item = kwargs_itamassetbase()
 
-    yield kwargs_itamassetbase.copy()
+    yield kwargs_itamassetbase
 
     if hasattr(request.cls, 'kwargs_create_item'):
         try:

@@ -45,7 +45,7 @@ class ContactSerializerTestCases(
             action = 'create',
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['f_name'] = 'duplicate'
 
         obj = model.objects.create(
@@ -54,6 +54,9 @@ class ContactSerializerTestCases(
 
         kwargs = kwargs_api_create.copy()
         kwargs['f_name'] = 'duplicate'
+        kwargs['m_name'] = obj.m_name
+        kwargs['l_name'] = obj.l_name
+        kwargs['dob'] = f'{obj.dob.year}-{obj.dob.month}-{obj.dob.day}'
         kwargs['email'] = 'abc@xyz.qwe'
 
 

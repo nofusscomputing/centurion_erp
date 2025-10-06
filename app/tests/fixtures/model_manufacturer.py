@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from core.models.manufacturer import Manufacturer
 
@@ -16,13 +16,13 @@ def model_manufacturer(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_manufacturer(kwargs_centurionmodel):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'man' + random_str,
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'man' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory

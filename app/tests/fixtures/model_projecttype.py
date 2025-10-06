@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from project_management.models.project_types import ProjectType
 from project_management.serializers.project_type import (
@@ -20,37 +20,31 @@ def model_projecttype(clean_model_from_db):
 
 @pytest.fixture( scope = 'class')
 def kwargs_projecttype(kwargs_centurionmodel, django_db_blocker,
+    model_projecttype,
     model_knowledgebase, kwargs_knowledgebase,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_knowledgebase.copy()
-        team = kwargs['target_team']
-        del kwargs['target_team']
+            kwargs = kwargs_knowledgebase()
+            team = kwargs['target_team']
+            del kwargs['target_team']
 
-        runbook = model_knowledgebase.objects.create( **kwargs )
+            runbook = model_knowledgebase.objects.create( **kwargs )
 
-        runbook.target_team.add( team[0] )
+            runbook.target_team.add( team[0] )
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'projecttype_' + random_str,
-        'runbook': runbook,
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'projecttype_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'runbook': runbook,
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        for proj in runbook.projecttype_set.all():
-            proj.delete()
-
-        runbook.delete()
+    yield factory
 
 
 

@@ -107,7 +107,6 @@ class CenturionNoteModelTestCases(
                 )
 
 
-
         self.kwargs_create_item.update({
             'content_type': content_type,
             'created_by': user,

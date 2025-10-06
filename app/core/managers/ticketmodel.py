@@ -99,9 +99,9 @@ class TicketModelManager(
                     content_filter
                 )
 
-            elif not content_filter:
+            # elif not content_filter:
 
-                return super().get_queryset().none()
+            #     return super().get_queryset().none()
 
 
 

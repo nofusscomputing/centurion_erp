@@ -117,7 +117,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })

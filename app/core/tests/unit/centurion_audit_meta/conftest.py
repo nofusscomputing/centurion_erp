@@ -13,9 +13,9 @@ def model(model_centurionauditmeta):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_centurionauditmeta):
 
-    request.cls.kwargs_create_item = kwargs_centurionauditmeta.copy()
+    request.cls.kwargs_create_item = kwargs_centurionauditmeta()
 
-    yield kwargs_centurionauditmeta.copy()
+    yield kwargs_centurionauditmeta
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

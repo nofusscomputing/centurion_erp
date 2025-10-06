@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from human_resources.models.employee import Employee
 
@@ -16,13 +16,15 @@ def model_employee(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_employee( kwargs_contact ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '').replace('-', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_contact.copy(),
-        'employee_number':  int(str(random_str)[( len(random_str) - 13 ):])
-    }
+        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)) + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_contact(),
+            'employee_number':  random_str
+        }
+
+        return kwargs
+
+    yield factory

@@ -19,7 +19,7 @@ class AdditionalTestCases:
         model_ticketbase, kwargs_ticketbase
     ):
 
-        kwargs = kwargs_ticketbase
+        kwargs = kwargs_ticketbase()
         kwargs['title'] = 'cust_mk_' + str(random.randint(5000,9999))
 
         if kwargs.get('external_system', None):
@@ -33,7 +33,7 @@ class AdditionalTestCases:
 
 
 
-        kwargs = kwargs_ticketcommentsolution.copy()
+        kwargs = kwargs_ticketcommentsolution()
         kwargs['ticket'] = ticket
 
         request.kwargs_create_item = kwargs
@@ -50,7 +50,7 @@ class AdditionalTestCases:
 
 
     def test_permission_add(self, model_instance, api_request_permissions,
-        kwargs_api_create
+        kwargs_api_create, model_kwargs
     ):
         """ Check correct permission for add 
 
@@ -61,15 +61,16 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item.copy() )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
-        self.kwargs_create_item['ticket'].status = 2
-        self.kwargs_create_item['ticket'].save()
+        the_model.ticket.status = 2
+        the_model.ticket.save()
 
         url = the_model.get_url( many = True )
 
         kwargs = kwargs_api_create
         kwargs['ticket'] = self.kwargs_create_item['ticket'].id
+
 
         response = client.post(
             path = url,
@@ -97,7 +98,7 @@ class AdditionalTestCases:
         ids=[test_name for test_name, user, expected in permission_no_add]
     )
     def test_permission_no_add(
-        self, kwargs_api_create, model_instance,
+        self, kwargs_api_create, model_instance, model_kwargs,
         api_request_permissions, test_name, user, expected
     ):
         """ Check correct permission for add
@@ -111,7 +112,7 @@ class AdditionalTestCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item.copy() )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
         kwargs = kwargs_api_create
         kwargs['ticket'] = self.kwargs_create_item['ticket'].id
@@ -128,7 +129,7 @@ class AdditionalTestCases:
 
 
 
-    def test_permission_change(self, model_instance, api_request_permissions):
+    def test_permission_change(self, model_instance, api_request_permissions, model_kwargs):
         """ Check correct permission for change
 
         Make change with user who has change permission
@@ -138,7 +139,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['change'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -178,7 +179,7 @@ class AdditionalTestCases:
         ids=[test_name for test_name, user, expected in permission_no_change]
     )
     def test_permission_no_change(self, model_instance, api_request_permissions, test_name,
-        user, expected,
+        user, expected, model_kwargs,
     ):
         """ Ensure permission view cant make change
 
@@ -188,7 +189,7 @@ class AdditionalTestCases:
         client = Client()
 
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -215,7 +216,7 @@ class AdditionalTestCases:
 
 
 
-    def test_permission_delete(self, model_instance, api_request_permissions):
+    def test_permission_delete(self, model_instance, api_request_permissions, model_kwargs):
         """ Check correct permission for delete
 
         Delete item as user with delete permission
@@ -225,7 +226,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['delete'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -259,7 +260,7 @@ class AdditionalTestCases:
         ids=[test_name for test_name, user, expected in permission_no_delete]
     )
     def test_permission_no_delete(self, model_instance, api_request_permissions,
-        test_name, user, expected
+        test_name, user, expected, model_kwargs,
     ):
         """ Check correct permission for delete
 
@@ -272,7 +273,7 @@ class AdditionalTestCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -292,7 +293,7 @@ class AdditionalTestCases:
 
 
 
-    def test_permission_view(self, model_instance, api_request_permissions):
+    def test_permission_view(self, model_instance, api_request_permissions, model_kwargs):
         """ Check correct permission for view
 
         Attempt to view as user with view permission
@@ -302,7 +303,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -319,7 +320,7 @@ class AdditionalTestCases:
 
 
     def test_function_fetch_feature_flag_not_called(self, mocker, model_instance,
-        api_request_permissions, model_kwargs
+        api_request_permissions, model_kwargs,
     ):
         """ Check function calls durin api request
 
@@ -332,7 +333,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -369,7 +370,7 @@ class AdditionalTestCases:
         ids=[test_name for test_name, user, expected in permission_no_view]
     )
     def test_permission_no_view(self, model_instance, api_request_permissions,
-        test_name, user, expected
+        test_name, model_kwargs, user, expected
     ):
         """ Check correct permission for view
 
@@ -382,7 +383,7 @@ class AdditionalTestCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -423,7 +424,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
@@ -435,7 +436,7 @@ class AdditionalTestCases:
         kwargs['ticket'].status = 2
         kwargs['ticket'].save()
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
         })
@@ -446,7 +447,7 @@ class AdditionalTestCases:
         kwargs['ticket'].status = 2
         kwargs['ticket'].save()
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })

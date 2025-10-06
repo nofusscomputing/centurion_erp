@@ -25,7 +25,7 @@ class AuthTokenAPITestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             kwargs['user'] = api_request_permissions['user']['view']
 
 
