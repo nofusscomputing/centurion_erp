@@ -9,6 +9,7 @@ from access.serializers.organization import TenantBaseSerializer
 from centurion.serializers.content_type import (
     ContentTypeBaseSerializer
 )
+from core import fields as centurion_field
 from core.serializers.ticketbase import (
     BaseSerializer as TicketBaseSerializer
 )
@@ -60,6 +61,10 @@ class ModelSerializer(
     """ModelTicket Base Model"""
 
 
+    display_name = centurion_field.MarkdownField(source='__str__', required = False, read_only= True )
+
+    organization = common.OrganizationField(read_only = True)
+
     _urls = serializers.SerializerMethodField('get_url')
 
 
@@ -108,10 +113,12 @@ class ModelSerializer(
 
             if attrs.get('model', None):
 
-                if attrs['model'].id != int(model_id):
-                    raise ValueError( 'two different models found.' )
+                if hasattr(attrs['model'], 'id'):
 
-                del attrs['model']
+                    if attrs['model'].id != int(model_id):
+                        raise ValueError( 'two different models found.' )
+
+                    del attrs['model']
 
 
             attrs['model_id'] = int( model_id )

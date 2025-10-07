@@ -19,7 +19,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
         url = the_model.get_url( many = True )
 

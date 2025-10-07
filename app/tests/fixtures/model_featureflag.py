@@ -21,37 +21,36 @@ def model_featureflag(clean_model_from_db):
 def kwargs_featureflag(django_db_blocker, kwargs_centurionmodel, model_software, kwargs_software, model_softwareenablefeatureflag):
 
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        kwargs = kwargs_software
+        with django_db_blocker.unblock():
 
-        kwargs.update({'name': 'ff_enable_software'})
+            kwargs = kwargs_software()
 
-        software = model_software.objects.create(
-            **kwargs
-        )
+            # kwargs.update({'name': 'ff_enable_software'})
 
-        enable_feature_flag = model_softwareenablefeatureflag.objects.create(
-            organization = kwargs_centurionmodel['organization'],
-            software = software,
-            enabled = True
-        )
+            software = model_software.objects.create(
+                **kwargs
+            )
 
-        kwargs = {
-            **kwargs_centurionmodel.copy(),
-            'software': software,
-            'name': 'a name',
-            'description': ' a description',
-            'enabled': True,
-        }
+            enable_feature_flag = model_softwareenablefeatureflag.objects.create(
+                organization = kwargs_centurionmodel()['organization'],
+                software = software,
+                enabled = True
+            )
 
-        yield kwargs.copy()
+            kwargs = {
+                **kwargs_centurionmodel(),
+                'software': software,
+                'name': 'a name',
+                'description': ' a description',
+                'enabled': True,
+            }
 
-        enable_feature_flag.delete()
-        try:
-            software.delete()
-        except:
-            pass
+        return kwargs
+
+    yield factory
+
 
 
 

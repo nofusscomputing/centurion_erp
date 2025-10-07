@@ -4,14 +4,14 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_projectmilestone
 class ProjectMilestoneModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -110,7 +110,7 @@ class ProjectMilestoneModelPyTest(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'project_id': model_kwargs['project'].id,
+            'project_id': model_instance.project.id,
             'pk': model_instance.id
         }
 

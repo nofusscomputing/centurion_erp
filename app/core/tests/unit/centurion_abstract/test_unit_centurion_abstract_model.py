@@ -15,11 +15,10 @@ from core.models.centurion import CenturionModel
 
 @pytest.mark.unit
 @pytest.mark.centurion_models
-class CenturionAbstractModelTestCases(
+class CenturionAbstractBaseModelTestCases(
     CenturionMixnInheritedCases,
-    TenancyAbstractModelInheritedCases
 ):
-
+    """Centurion Abstract Model base Test Cases"""
 
     @property
     def parameterized_class_attributes(self):
@@ -169,17 +168,41 @@ class CenturionAbstractModelTestCases(
 
 
 
-
-class CenturionAbstractModelInheritedCases(
-    CenturionAbstractModelTestCases,
+class CenturionAbstractBaseModelInheritedCases(
+    CenturionAbstractBaseModelTestCases,
 ):
+    """Centurion Abstract Model base Inherited Cases
+    
+    Note: Does not cover the manager and/or queryset/permission test cases
+    """
+    pass
+
+
+
+class CenturionAbstractTenancyModelTestCases(
+    CenturionAbstractBaseModelTestCases,
+    TenancyAbstractModelInheritedCases,
+):
+    """Centurion Abstract Model base Test Cases
+    
+    Note: Covers the manager and/or queryset/permission test cases
+    """
+    pass
+
+class CenturionAbstractTenancyModelInheritedCases(
+    CenturionAbstractTenancyModelTestCases,
+):
+    """Centurion Abstract Model base Inherited Cases
+    
+    Note: Covers the manager and/or queryset/permission test cases
+    """
 
     pass
 
 
 
-class CenturionAbstractModelPyTest(
-    CenturionAbstractModelTestCases,
+class CenturionAbstractTenancyModelPyTest(
+    CenturionAbstractTenancyModelTestCases,
 ):
 
     @property

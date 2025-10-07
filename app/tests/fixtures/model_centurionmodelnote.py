@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from core.models.centurion_notes import CenturionModelNote
 
@@ -17,33 +17,32 @@ def model_centurionmodelnote(clean_model_from_db):
 def kwargs_centurionmodelnote(django_db_blocker,
     model_contenttype, kwargs_centurionmodel, kwargs_user, model_user):
 
-    kwargs = kwargs_centurionmodel.copy()
-    del kwargs['model_notes']
+    def factory():
 
-    with django_db_blocker.unblock():
+        kwargs = kwargs_centurionmodel()
+        del kwargs['model_notes']
 
-        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+        with django_db_blocker.unblock():
 
-        user_kwargs = kwargs_user.copy()
-        user_kwargs.update({
-                'username': 'note_user' + str(random_str)
-            })
+            user_kwargs = kwargs_user()
+            user_kwargs.update({
+                    'username': 'note_user' +  str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+                })
 
-        user = model_user.objects.create(
-            **user_kwargs,
-        )
+            user = model_user.objects.create(
+                **user_kwargs,
+            )
 
-        kwargs = {
-            **kwargs,
-            'body': 'a random note',
-            'created_by': user,
-            'content_type': model_contenttype.objects.get(
-                app_label = user._meta.app_label,
-                model = user._meta.model_name,
-            ),
-        }
+            kwargs = {
+                **kwargs,
+                'body': 'a random note',
+                'created_by': user,
+                'content_type': model_contenttype.objects.get(
+                    app_label = user._meta.app_label,
+                    model = user._meta.model_name,
+                ),
+            }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-        user.delete()
+    yield factory

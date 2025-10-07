@@ -11,9 +11,9 @@ def model(model_projecttype):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_projecttype):
 
-    request.cls.kwargs_create_item = kwargs_projecttype.copy()
+    request.cls.kwargs_create_item = kwargs_projecttype()
 
-    yield kwargs_projecttype.copy()
+    yield kwargs_projecttype
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

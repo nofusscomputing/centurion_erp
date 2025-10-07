@@ -1,4 +1,3 @@
-import datetime
 import pytest
 
 from access.models.entity import Entity
@@ -19,18 +18,18 @@ def model_entity(clean_model_from_db):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_entity( kwargs_centurionmodel ):
+def kwargs_entity( model_entity, kwargs_centurionmodel ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'entity_type': 'entity',
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'entity_type': 'entity',
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

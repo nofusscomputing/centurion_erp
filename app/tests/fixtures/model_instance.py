@@ -1,23 +1,23 @@
-import datetime
 import pytest
 
 from django.apps import apps
-from django.db import models
 
 from access.models.tenant import Tenant
 
 
 
-model_objs: list = []
-
 
 @pytest.fixture( scope = 'function')
-def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
+def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs, clean_model_from_db):
 
     with django_db_blocker.unblock():
 
 
-        def instance( random_field:str = '', kwargs_create: dict = {} ):
+        def instance(
+            random_field:str = '',
+            kwargs_create: dict = {},
+            model_kwargs = model_kwargs
+        ):
             """Create a model instance
 
             Args:
@@ -30,14 +30,13 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
                 Model Object (Model): Model that was created.
             """
 
-            global model_objs
-
             obj = None
             org = None
 
-            kwargs = model_kwargs
-            if callable(kwargs):
-                kwargs = kwargs()
+            model_kwargs = model_kwargs()
+
+            kwargs = model_kwargs.copy()
+
 
             if kwargs_create:
 
@@ -83,8 +82,8 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
 
 
                 if(
-                    model is not Tenant
-                    and (
+                    model is Tenant
+                    or (
                         org is not None
                         or (
                             'organization' not in model_kwargs
@@ -101,8 +100,6 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
 
                     obj = obj['instance']
 
-                    model_objs += [ obj ]
-
                 else:
 
                     obj = org
@@ -114,28 +111,6 @@ def model_instance(django_db_blocker, model_kwarg_data, model, model_kwargs):
 
     yield instance
 
-    with django_db_blocker.unblock():
-
-        for model_obj in model_objs:
-
-            is_abstract = False
-
-            if hasattr(model_obj, '_meta'):
-
-                is_abstract = model_obj._meta.abstract
-
-
-            if is_abstract:
-
-                del model_obj
-
-            else:
-
-                try:
-                    if model_obj.id:
-                        model_obj.delete()
-                except:
-                    pass
 
 
     if 'mockmodel' in apps.all_models['core']:

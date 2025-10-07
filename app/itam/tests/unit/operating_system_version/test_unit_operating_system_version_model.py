@@ -4,14 +4,14 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_operatingsystemversion
 class OperatingSystemVersionModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -78,7 +78,7 @@ class OperatingSystemVersionModelPyTest(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'operating_system_id': model_kwargs['operating_system'].id,
+            'operating_system_id': model_instance.operating_system.id,
             'pk': model_instance.id
         }
 

@@ -95,76 +95,80 @@ class ModelTicketMetaModelsViewSetTestCases(
 
     @pytest.fixture( scope = 'class', autouse = True)
     def model_kwargs(self, django_db_blocker,
+        clean_model_from_db, model,
         request, kwargs_modelticketmetamodel, model_contenttype,
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        ticket_model = request.getfixturevalue(
+            'model_' + request.cls.ticket_model_class._meta.model_name
+        )
 
-        with django_db_blocker.unblock():
-
-            ticket_model = request.getfixturevalue(
-                'model_' + request.cls.ticket_model_class._meta.model_name
-            )
+        def factory(
+            ticket_model = ticket_model,
+        ):
 
             ticket_model_kwargs = request.getfixturevalue(
                 'kwargs_' + ticket_model._meta.model_name
-            )
+            )()
 
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
+            model_kwargs = kwargs_modelticketmetamodel()
 
+            with django_db_blocker.unblock():
 
-            kwargs_many_to_many = {}
+                kwargs_many_to_many = {}
 
-            kwargs = {}
+                kwargs = {}
 
-            for key, value in ticket_model_kwargs.items():
+                for key, value in ticket_model_kwargs.items():
 
-                field = ticket_model._meta.get_field(key)
+                    field = ticket_model._meta.get_field(key)
 
-                if isinstance(field, models.ManyToManyField):
+                    if isinstance(field, models.ManyToManyField):
 
-                    kwargs_many_to_many.update({
-                        key: value
-                    })
+                        kwargs_many_to_many.update({
+                            key: value
+                        })
 
-                else:
+                    else:
 
-                    kwargs.update({
-                        key: value
-                    })
-
-
-            model = ticket_model.objects.create( **kwargs )
-
-            for key, value in kwargs_many_to_many.items():
-
-                field = getattr(model, key)
-
-                for entry in value:
-
-                    field.add(entry)
-
-        #     kwargs = {}
+                        kwargs.update({
+                            key: value
+                        })
 
 
-        model_kwargs.update({
-            'model': model
-        })
+                model = ticket_model.objects.create( **kwargs )
 
-        request.cls.kwargs_create_item = model_kwargs
+                for key, value in kwargs_many_to_many.items():
 
-        yield model_kwargs
+                    field = getattr(model, key)
 
-        with django_db_blocker.unblock():
+                    for entry in value:
 
-            model.delete()
+                        field.add(entry)
+
+            #     kwargs = {}
+
+
+            model_kwargs.update({
+                'model': model
+            })
+
+            request.cls.kwargs_create_item = model_kwargs
+
+            return model_kwargs
+
+        yield factory
+
+        clean_model_from_db(ticket_model)
+        clean_model_from_db(model)
 
 
     @pytest.fixture( scope = 'class' )
-    def model(self, request):
+    def model(self, request, clean_model_from_db):
 
-        return request.cls.model_class
+        yield request.cls.model_class
+
+        clean_model_from_db(request.cls.model_class)
 
 
     @pytest.mark.skip( reason = 'ToDo: Figure out how to dynomagic add note_model instance' )

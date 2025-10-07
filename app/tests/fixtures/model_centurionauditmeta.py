@@ -13,10 +13,14 @@ def model_centurionauditmeta(clean_model_from_db):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_centurionauditmeta(request, kwargs_centurionaudit):
+def kwargs_centurionauditmeta(kwargs_centurionaudit):
 
-    kwargs = {
-        **kwargs_centurionaudit.copy(),
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionaudit(),
+        }
+
+        return kwargs
+
+    yield factory

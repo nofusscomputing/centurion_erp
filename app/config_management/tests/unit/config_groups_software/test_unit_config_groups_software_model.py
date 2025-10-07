@@ -4,7 +4,7 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
@@ -64,7 +64,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 @pytest.mark.model_configgroupsoftware
 class ConfigGroupSoftwareModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -143,7 +143,7 @@ class ConfigGroupSoftwareModelTestCases(
 
         url = model_instance.get_url_kwargs()
 
-        assert model_instance.get_url_kwargs() == { 'config_group_id': model_kwargs['config_group'].id, 'pk': model_instance.id }
+        assert model_instance.get_url_kwargs() == { 'config_group_id': model_instance.parent_object.id, 'pk': model_instance.id }
 
 
 

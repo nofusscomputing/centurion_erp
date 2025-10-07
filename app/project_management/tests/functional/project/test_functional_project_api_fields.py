@@ -29,7 +29,7 @@ class ProjectAPITestCases(
 
             kwargs = {}
 
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 
@@ -53,7 +53,7 @@ class ProjectAPITestCases(
 
             # kwargs.update({ 'parent_project': self.item})
             del kwargs['manager_user']
-            manager_team = model_group.objects.create( **kwargs_group )
+            manager_team = model_group.objects.create( **kwargs_group() )
             kwargs['manager_team'] = manager_team
             kwargs['external_ref'] = 1
             kwargs['external_system'] = 1

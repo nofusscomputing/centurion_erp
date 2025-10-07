@@ -1,4 +1,3 @@
-import datetime
 import pytest
 
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
@@ -22,33 +21,25 @@ def kwargs_softwareenablefeatureflag(django_db_blocker,
         kwargs_centurionmodel, model_software, kwargs_software
     ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        kwargs_soft = kwargs_software.copy()
-        kwargs_soft.update({
-            'name': 'seff' + str(random_str).replace(
-                ' ', '').replace(':', '').replace('+', '').replace('.', '')
-        })
+            software = model_software.objects.create(
+                **kwargs_software()
+            )
 
-        software = model_software.objects.create(
-            **kwargs_soft
-        )
+        kwargs = kwargs_centurionmodel()
+        del kwargs['model_notes']
+        kwargs = {
+            **kwargs,
+            'software': software,
+            'enabled': True
+        }
 
-    kwargs = kwargs_centurionmodel.copy()
-    del kwargs['model_notes']
-    kwargs = {
-        **kwargs,
-        'software': software,
-        'enabled': True
-    }
+        return kwargs
 
-    yield kwargs.copy()
-
-    with django_db_blocker.unblock():
-
-        software.delete()
+    yield factory
 
 
 

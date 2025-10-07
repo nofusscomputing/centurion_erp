@@ -19,7 +19,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = self.kwargs_create_item )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
         url = the_model.get_url( many = True )
 
@@ -47,7 +47,7 @@ class AdditionalTestCases:
         items that are not part of the users organizations.
         """
 
-        if model_kwargs.get('organization', None) is None:
+        if model_kwargs().get('organization', None) is None:
             pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
 
@@ -65,7 +65,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
@@ -74,7 +74,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
         })
@@ -87,7 +87,7 @@ class AdditionalTestCases:
         )
 
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs['dob'] = str(random.randint(1972, 2037)) + '-' + str(
             random.randint(1, 12)) + '-' + str(random.randint(1, 28))
 
@@ -136,7 +136,7 @@ class AdditionalTestCases:
         global ONLY!
         """
 
-        if model_kwargs.get('organization', None) is None:
+        if model_kwargs().get('organization', None) is None:
             pytest.xfail( reason = 'Model lacks organization field. test is n/a' )
 
         client = Client()
@@ -149,7 +149,7 @@ class AdditionalTestCases:
         ]
 
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['different']
         })
@@ -161,7 +161,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['global']
         })
@@ -175,7 +175,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs['dob'] = str(random.randint(1972, 2037)) + '-' + str(
             random.randint(1, 12)) + '-' + str(random.randint(1, 28))
 

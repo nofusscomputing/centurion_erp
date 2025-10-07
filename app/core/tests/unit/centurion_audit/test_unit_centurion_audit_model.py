@@ -11,13 +11,13 @@ from django.db import models
 # from core.models.audit import CenturionAudit
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 @pytest.mark.audit_models
 class CenturionAuditModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

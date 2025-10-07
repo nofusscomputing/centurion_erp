@@ -4,14 +4,14 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_devicesoftware
 class DeviceSoftwareModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -121,7 +121,7 @@ class DeviceSoftwareModelPyTest(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'device_id': model_kwargs['device'].id,
+            'device_id': model_instance.device.id,
             'pk': model_instance.id
         }
 

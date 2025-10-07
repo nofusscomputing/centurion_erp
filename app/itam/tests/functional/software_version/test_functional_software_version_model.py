@@ -1,14 +1,14 @@
 import pytest
 
 from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_softwareversion
 class SoftwareVersionModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
     pass
 

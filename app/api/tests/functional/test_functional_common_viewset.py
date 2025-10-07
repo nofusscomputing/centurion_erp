@@ -182,32 +182,30 @@ class CommonViewSetTestCases:
 
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset,
+        clean_model_from_db, api_request_permissions,
         model_user, kwargs_user, organization_one, organization_two,
         model_instance, model_kwargs, model, model_ticketcommentbase
     ):
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_user.copy()
-            kwargs['username'] = 'username.one' + str(
-                random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
-            user = model_user.objects.create( **kwargs )
+            user = api_request_permissions['user']['view']
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = 'username.two' + str(
                 random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
             user2 = model_user.objects.create( **kwargs )
 
             self.user = user
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             if 'organization' in kwargs:
                 kwargs['organization'] = organization_one
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user2
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             if 'organization' in kwargs:
                 kwargs['organization'] = organization_two
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
@@ -237,31 +235,14 @@ class CommonViewSetTestCases:
         del view_set
         del self.user
 
-        with django_db_blocker.unblock():
+        clean_model_from_db(model)
+        clean_model_from_db(model_user)
 
-            for group in user.groups.all():
-
-                for role in group.roles.all():
-                    role.delete()
-
-                group.delete()
-
-            user_tenancy_item.delete()
-            other_tenancy_item.delete()
-
-            user.delete()
-            user2.delete
-
-            for db_obj in model_user.objects.all():
-                try:
-                    db_obj.delete()
-                except:
-                    pass
 
 
     # parmeterize to view action
     def test_function_get_queryset_filtered_results_action_list(self,
-        viewset_mock_request, organization_one, model
+        viewset_mock_request, organization_one, organization_two, model
     ):
         """Test class function
 
@@ -281,6 +262,10 @@ class CommonViewSetTestCases:
 
         assert len(model.objects.all()) >= 2, 'multiple objects must exist for test to work'
         assert len( queryset ) > 0, 'Empty queryset returned. Test not possible'
+        if model._meta.model_name != 'tenant':
+            assert len(model.objects.filter( organization = organization_one)) > 0, 'objects in user org required for test to work.'
+            assert len(model.objects.filter( organization = organization_two)) > 0, 'objects in different org required for test to work.'
+
 
         for result in queryset:
 

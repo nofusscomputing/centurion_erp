@@ -110,7 +110,7 @@ class TicketCommentBaseModelTestCases(
 
         existing_comment = ticket_comment
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['parent'] = existing_comment
 
         del kwargs['external_ref']
@@ -144,7 +144,7 @@ class TicketCommentBaseModelTestCases(
 
         existing_comment = ticket_comment
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['parent'] = existing_comment
 
         del kwargs['external_ref']
@@ -176,7 +176,7 @@ class TicketCommentBaseModelTestCases(
         ticket.is_solved = False
         ticket.save()
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['parent'] = ticket_comment
 
         del kwargs['external_ref']
@@ -207,7 +207,7 @@ class TicketCommentBaseModelTestCases(
         ticket_comment.ticket.is_solved = False
         ticket_comment.ticket.save()
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['parent'] = ticket_comment
 
         del kwargs['external_ref']
@@ -241,7 +241,7 @@ class TicketCommentBaseModelTestCases(
 
         existing_comment = ticket_comment
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['parent'] = existing_comment
 
         del kwargs['external_ref']
@@ -274,7 +274,7 @@ class TicketCommentBaseModelTestCases(
 
         existing_comment = ticket_comment
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['parent'] = existing_comment
 
         del kwargs['external_ref']

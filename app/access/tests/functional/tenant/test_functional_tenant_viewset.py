@@ -29,14 +29,10 @@ class ViewsetTestCases(
 
         with django_db_blocker.unblock():
 
-            user = model_user.objects.create( **kwargs_user )
+            user = model_user.objects.create( **kwargs_user() )
 
-            # kwargs = model_kwargs.copy()
-            # kwargs['organization'] = organization_one
             user_tenancy_item = organization_one
 
-            # kwargs = model_kwargs.copy()
-            # kwargs['organization'] = organization_two
             other_tenancy_item = organization_two
 
         view_set = viewset()

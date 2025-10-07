@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from itim.models.clusters import Cluster
 from itim.serializers.cluster import (
@@ -24,34 +24,29 @@ def kwargs_cluster(kwargs_centurionmodel, django_db_blocker,
     model_clustertype, kwargs_clustertype
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_device()
-        kwargs['serial_number'] = 'clu-123-654'
-        kwargs['uuid'] = '1cf3a2d4-1776-418b-86eb-00404a43d60e'
+            kwargs = kwargs_device()
+            kwargs['serial_number'] = f'clu-{random.randint(100, 999)}-{random.randint(100, 999)}-654'
+            kwargs['uuid'] = f'1cf{random.randint(100, 999)}d4-1776-4{random.randint(100, 999)}-8{random.randint(100, 999)}-0{random.randint(100, 999)}4a43d60e'
 
-        node = model_device.objects.create( **kwargs )
-        cluster_type = model_clustertype.objects.create( **kwargs_clustertype )
+            node = model_device.objects.create( **kwargs )
+            cluster_type = model_clustertype.objects.create( **kwargs_clustertype() )
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'cluster_' + random_str,
-        'nodes': [ node ],
-        'cluster_type': cluster_type,
-        'config': { 'config_key_1': 'config_value_1' }
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'cluster_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'nodes': [ node ],
+            'cluster_type': cluster_type,
+            'config': { 'config_key_1': 'config_value_1' }
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
+    yield factory
 
-    with django_db_blocker.unblock():
-
-        node.delete()
-        cluster_type.delete()
 
 
 

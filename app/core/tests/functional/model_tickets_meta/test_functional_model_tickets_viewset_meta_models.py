@@ -127,11 +127,13 @@ class ModelTicketMetaViewsetTestCases(
 
     @pytest.fixture( scope = 'class', autouse = True)
     def model_kwargs(self, django_db_blocker,
+        clean_model_from_db,
         request, kwargs_modelticketmetamodel, model_contenttype,
-        model, organization_one
+        model, organization_one,
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        if not hasattr(request.cls, 'kwargs_create_item'):
+            request.cls.kwargs_create_item = {}
 
         with django_db_blocker.unblock():
 
@@ -149,63 +151,82 @@ class ModelTicketMetaViewsetTestCases(
                 'kwargs_' + ticket_model._meta.model_name
             )
 
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
+        model_obj = []
+        def factory(
+            ticket_model_class = ticket_model_class,
+            ticket_model = ticket_model,
+            ticket_model_kwargs = ticket_model_kwargs,
+            organization = None
+        ):
+
+            model_kwargs = kwargs_modelticketmetamodel()
+
+            with django_db_blocker.unblock():
+
+                kwargs_many_to_many = {}
+
+                kwargs = {}
+
+                for key, value in ticket_model_kwargs().items():
+
+                    field = ticket_model._meta.get_field(key)
+
+                    if isinstance(field, models.ManyToManyField):
+
+                        kwargs_many_to_many.update({
+                            key: value
+                        })
+
+                    else:
+
+                        kwargs.update({
+                            key: value
+                        })
 
 
-            kwargs_many_to_many = {}
+                if organization:
+                    kwargs['organization'] = organization
 
-            kwargs = {}
-
-            for key, value in ticket_model_kwargs.items():
-
-                field = ticket_model._meta.get_field(key)
-
-                if isinstance(field, models.ManyToManyField):
-
-                    kwargs_many_to_many.update({
-                        key: value
-                    })
+                if ticket_model._meta.model_name == 'tenant':
+                    obj = organization
 
                 else:
 
-                    kwargs.update({
-                        key: value
-                    })
+                    obj = ticket_model.objects.create( **kwargs )
+
+                for key, value in kwargs_many_to_many.items():
+
+                    field = getattr(obj, key)
+
+                    for entry in value:
+
+                        field.add(entry)
 
 
-            model = ticket_model.objects.create( **kwargs )
+            if ticket_model_class._meta.model_name == 'tenant':
+                model_kwargs['organization'] = organization_one
+                model_kwargs['model'] = organization_one
 
-            for key, value in kwargs_many_to_many.items():
+            else:
 
-                field = getattr(model, key)
+                model_kwargs.update({
+                    'model': obj
+                })
 
-                for entry in value:
+            request.cls.kwargs_create_item.update(model_kwargs)
 
-                    field.add(entry)
+            return model_kwargs
 
+        yield factory
 
-        if ticket_model_class._meta.model_name == 'tenant':
-            model_kwargs['organization'] = organization_one
-            model_kwargs['model'] = organization_one
-
-        else:
-
-            model_kwargs.update({
-                'model': model
-            })
-
-        request.cls.kwargs_create_item = model_kwargs
-
-        yield model_kwargs
-
-        with django_db_blocker.unblock():
-
-            model.delete()
+        clean_model_from_db(model)
+        clean_model_from_db(ticket_model_class)
+        clean_model_from_db(ticket_model)
 
 
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset,
+        clean_model_from_db, api_request_permissions,
         model_user, kwargs_user, organization_one, organization_two,
         model_instance, model_kwargs, model, model_ticketcommentbase,
         kwargs_ticketbase,
@@ -213,43 +234,68 @@ class ModelTicketMetaViewsetTestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_user.copy()
-            kwargs['username'] = 'username.one' + str(
-                random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
-            user = model_user.objects.create( **kwargs )
+            user = api_request_permissions['user']['view']
 
-            kwargs = kwargs_user.copy()
+            kwargs = kwargs_user()
             kwargs['username'] = 'username.two' + str(
                 random.randint(1,99) + random.randint(1,99) + random.randint(1,99) )
             user2 = model_user.objects.create( **kwargs )
 
             self.user = user
 
-            kwargs = model_kwargs.copy()
-            if 'organization' in kwargs:
-                kwargs['organization'] = organization_one
+            kwargs = model_kwargs()
+            kwargs['organization'] = organization_one
+
+            if kwargs['model']._meta.model_name == 'tenant':
+                kwargs['model'] = organization_one
+
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user2
+
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs( organization = organization_two)
 
-            kwargs_ticket = kwargs_ticketbase.copy()
+            kwargs_ticket = kwargs_ticketbase()
             kwargs_ticket['title'] = 'other org ticket'
-            kwargs['ticket'] = model_kwargs['ticket'].__class__.objects.create(
+            kwargs_ticket['organization'] = organization_two
+
+            kwargs['ticket'] = kwargs['ticket'].__class__.objects.create(
                 **kwargs_ticket
             )
-            if 'organization' in kwargs:
-                kwargs['organization'] = organization_two
+
+            kwargs['organization'] = organization_two
+
+
+            if(
+                kwargs['model']._meta.model_name in [
+                    'gitrepository',
+                    'githubrepository',
+                    'gitlabrepository',
+                ]
+            ):
+
+                kwargs['model'].git_group.organization = organization_two
+
+            elif hasattr(kwargs['model'], 'organization'):
+
+                kwargs['model'].organization = organization_two
+
+            elif kwargs['model']._meta.model_name == 'tenant':
+
+                kwargs['model'] = organization_two
+
+
+            kwargs['model'].save()
+
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user
+
+
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
-        view_set = viewset()
-        model = getattr(view_set, 'model', None)
 
-        if not model:
-            model = Tenant
+        view_set = viewset()
 
         request = MockRequest(
             user = user,
@@ -268,31 +314,11 @@ class ModelTicketMetaViewsetTestCases(
         del view_set
         del self.user
 
-        with django_db_blocker.unblock():
-
-            for group in user.groups.all():
-
-                for role in group.roles.all():
-                    role.delete()
-
-                group.delete()
-
-            user_tenancy_item.delete(keep_parents = False)
-            other_tenancy_item.delete(keep_parents = False)
-
-            user.delete()
-            user2.delete
-
-            for db_obj in model_user.objects.all():
-                try:
-                    db_obj.delete()
-                except:
-                    pass
-
-            kwargs['ticket'].delete()
-
-
-
+        clean_model_from_db(model)
+        clean_model_from_db(model_user)
+        clean_model_from_db(user_tenancy_item.__class__)
+        clean_model_from_db(kwargs['model'].__class__)
+        clean_model_from_db(kwargs['ticket'].__class__)
 
 
 

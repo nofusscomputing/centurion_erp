@@ -52,6 +52,7 @@ omit = [
     #
     # Old Ticketing Model
     #
+    "app/core/lib/slash_commands/linked_model.py",
     "app/core/models/ticket/*",
     "app/core/signal/ticket_linked_item_delete.py",
     "app/core/serializers/ticket_depreciated.py",

@@ -25,23 +25,31 @@ def kwargs_modelticket(django_db_blocker,
     model_ticketbase, kwargs_ticketbase,
 ):
 
-    with django_db_blocker.unblock():
+    model_objs = []
+    def factory(model_objs = model_objs):
 
-        kwargs = kwargs_ticketbase
-        kwargs['title'] = 'model_ticket _' + str( random.randint(1, 99999)),
-        del kwargs['external_system']
-        del kwargs['external_ref']
+        with django_db_blocker.unblock():
 
-        ticket = model_ticketbase.objects.create( **kwargs )
+            kwargs = kwargs_ticketbase()
+            kwargs['title'] = 'model_ticket _' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            del kwargs['external_system']
+            del kwargs['external_ref']
 
-        kwargs = {
-            **kwargs_centurionmodel.copy(),
-            'content_type': model_contenttype.objects.filter()[0],
-            'ticket': ticket
-        }
-        del kwargs['model_notes']
+            ticket = model_ticketbase.objects.create( **kwargs )
 
-    yield kwargs.copy()
+            model_objs += [ ticket ]
+
+            kwargs = {
+                **kwargs_centurionmodel(),
+                'content_type': model_contenttype.objects.filter()[0],
+                'ticket': ticket
+            }
+            del kwargs['model_notes']
+
+        return kwargs
+
+    yield factory
+
 
 
 @pytest.fixture( scope = 'class')

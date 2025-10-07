@@ -1,15 +1,13 @@
 import pytest
 
-from core.viewsets.ticket_model_link import (
-    ModelTicket,
-    ViewSet,
-)
-
 from api.tests.unit.viewset.test_unit_tenancy_viewset import (
     SubModelViewSetInheritedCases,
 )
 
-
+from core.viewsets.ticket_model_link import (
+    ModelTicket,
+    ViewSet,
+)
 
 @pytest.mark.tickets
 @pytest.mark.model_modelticket

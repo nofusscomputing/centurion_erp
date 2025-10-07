@@ -20,7 +20,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs )
+        the_model = model_instance( kwargs_create = model_kwargs() )
 
         url = the_model.get_url( many = True )
 
@@ -34,4 +34,4 @@ class AdditionalTestCases:
         if response.status_code == 405:
             pytest.xfail( reason = 'ViewSet does not have this request method.' )
 
-        assert response.status_code == 200, response.content
+        assert response.status_code == 201, response.content

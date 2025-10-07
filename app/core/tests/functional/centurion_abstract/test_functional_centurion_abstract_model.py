@@ -70,7 +70,7 @@ class CenturionAbstractModelTestCases(
 
 
 
-class CenturionAbstractModelInheritedCases(
+class CenturionAbstractTenancyModelInheritedCases(
     CenturionAbstractModelTestCases,
 ):
     pass

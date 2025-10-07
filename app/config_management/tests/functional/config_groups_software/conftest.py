@@ -11,9 +11,9 @@ def model(model_configgroupsoftware):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_configgroupsoftware):
 
-    request.cls.kwargs_create_item = kwargs_configgroupsoftware.copy()
+    request.cls.kwargs_create_item = kwargs_configgroupsoftware()
 
-    yield kwargs_configgroupsoftware.copy()
+    yield kwargs_configgroupsoftware
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

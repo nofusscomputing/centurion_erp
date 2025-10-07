@@ -22,13 +22,17 @@ def kwargs_slmticket(kwargs_ticketbase,
 
 ):
 
-    kwargs = {
-        **kwargs_ticketbase,
-        'tto': 1,
-        'ttr': 2,
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_ticketbase(),
+            'tto': 1,
+            'ttr': 2,
+        }
+
+        return kwargs
+
+    yield factory
 
 
 

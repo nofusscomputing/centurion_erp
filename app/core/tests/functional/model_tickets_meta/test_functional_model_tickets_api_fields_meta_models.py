@@ -132,7 +132,7 @@ class ModelTicketMetaModelsAPITestCases(
         request, kwargs_modelticketmetamodel, model_contenttype,
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        model_kwargs = kwargs_modelticketmetamodel()
 
         with django_db_blocker.unblock():
 
@@ -142,10 +142,7 @@ class ModelTicketMetaModelsAPITestCases(
 
             ticket_model_kwargs = request.getfixturevalue(
                 'kwargs_' + ticket_model._meta.model_name
-            )
-
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
+            )()
 
 
             kwargs_many_to_many = {}

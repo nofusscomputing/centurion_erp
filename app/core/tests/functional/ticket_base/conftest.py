@@ -27,6 +27,6 @@ def create_serializer():
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_ticketbase):
 
-    request.cls.kwargs_create_item = kwargs_ticketbase.copy()
+    request.cls.kwargs_create_item = kwargs_ticketbase()
 
-    yield kwargs_ticketbase.copy()
+    yield kwargs_ticketbase

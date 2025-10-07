@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from config_management.models.groups import ConfigGroupSoftware
 
@@ -21,41 +21,39 @@ def kwargs_configgroupsoftware(django_db_blocker,
 ):
 
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        centurion_kwargs = kwargs_centurionmodel.copy()
+        with django_db_blocker.unblock():
 
-        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+            centurion_kwargs = kwargs_centurionmodel()
 
-        software_kwargs = kwargs_software.copy()
-        software_kwargs.update({
-            'name': 'cgs' + str(random_str),
-            'organization': centurion_kwargs['organization']
-        })
+            random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
-        software = model_software.objects.create( **software_kwargs )
+            software_kwargs = kwargs_software()
+            software_kwargs.update({
+                'name': 'cgs' + str(random_str),
+                'organization': centurion_kwargs['organization']
+            })
+
+            software = model_software.objects.create( **software_kwargs )
 
 
-        group_kwargs = kwargs_configgroups.copy()
-        group_kwargs.update({
-            'name': 'cgg' + random_str,
-            'organization': centurion_kwargs['organization']
-        })
+            group_kwargs = kwargs_configgroups()
+            group_kwargs.update({
+                'name': 'cgg' + random_str,
+                'organization': centurion_kwargs['organization']
+            })
 
-        group = model_configgroups.objects.create( **group_kwargs )
+            group = model_configgroups.objects.create( **group_kwargs )
 
-        kwargs = {
-            **centurion_kwargs,
-            'software': software,
-            'config_group': group,
-            'action': DeviceSoftware.Actions.INSTALL,
-            'modified': '2024-06-07T23:00:01Z',
-            }
+            kwargs = {
+                **centurion_kwargs,
+                'software': software,
+                'config_group': group,
+                'action': DeviceSoftware.Actions.INSTALL,
+                'modified': '2024-06-07T23:00:01Z',
+                }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        software.delete()
-
-        group.delete()
+    yield factory

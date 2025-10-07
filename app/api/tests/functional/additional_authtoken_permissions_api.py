@@ -50,7 +50,7 @@ class AdditionalTestCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -107,7 +107,7 @@ class AdditionalTestCases:
 
             client.force_login( api_request_permissions['user'][user] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user']
         })
@@ -143,7 +143,7 @@ class AdditionalTestCases:
 
         client.force_login( user )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'user': user
         })
@@ -188,7 +188,7 @@ class AdditionalTestCases:
 
         client.force_login( user )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user'],
             'user': user
@@ -233,7 +233,7 @@ class AdditionalTestCases:
 
         client.force_login( user )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user'],
             'user': user
@@ -278,9 +278,10 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
-            'organization': api_request_permissions['tenancy']['user']
+            'organization': api_request_permissions['tenancy']['user'],
+            'user': api_request_permissions['user']['view'],
         })
 
         view_item = model_instance(
@@ -323,7 +324,7 @@ class AdditionalTestCases:
 
         client.force_login( user )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user'],
             'user': user
@@ -333,7 +334,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'user': api_request_permissions['user']['add']
         })

@@ -20,17 +20,21 @@ def model_role(clean_model_from_db):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_role(
+def kwargs_role(model_role,
     kwargs_centurionmodel
 ):
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'r_' + str( random.randint(1,99) + random.randint(1,99) + random.randint(1,99) ),
-        'modified': '2024-06-03T23:00:00Z',
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'r_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'modified': '2024-06-03T23:00:00Z',
+        }
+
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

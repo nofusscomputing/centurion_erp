@@ -1,8 +1,6 @@
 import pytest
 import random
 
-from django.db import models
-
 from itam.models.device import Device
 from itam.serializers.device import (
     DeviceBaseSerializer,
@@ -27,46 +25,35 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
 ):
 
 
-    instances = []
-
-    def kwargs(instances = instances):
+    def kwargs():
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_devicemodel.copy()
-            kwargs['name'] = 'dev_model-' + str( random.randint(10000, 99999) )
+            kwargs = kwargs_devicemodel()
+            kwargs['name'] = 'dev_dm' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
             device_model = model_devicemodel.objects.create( **kwargs )
 
-            kwargs = kwargs_devicetype.copy()
-            kwargs['name'] = 'dev_model-' + str( random.randint(10000, 99999) )
+            kwargs = kwargs_devicetype()
+            kwargs['name'] = 'dev_dt-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
             device_type = model_devicetype.objects.create( **kwargs )
 
         kwargs = {
-            **kwargs_centurionmodel.copy(),
-            'name': 'dev-' + str( random.randint(10000, 99999) ),
-            'serial_number': 'dev-' + str( random.randint(1, 99999) ),
-            'uuid': '7318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(10000, 99999) ),
+            **kwargs_centurionmodel(),
+            'name': 'dev-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'serial_number': 'dev-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'uuid': '73'+ str( random.randint(10000, 99999) ) + 'c-e3e8-4680-a3bf-2' + str( random.randint(10000, 99999) ) + 'e' + str( random.randint(10000, 99999) ),
             'device_model': device_model,
             'device_type': device_type,
             'config':  { 'a_dev_config_key': 'a_dev_config_value'},
             'inventorydate': '2025-07-31T11:51:00Z',
         }
 
-        instances += [device_model, device_type ]
-
         return kwargs
 
     yield kwargs
 
-    with django_db_blocker.unblock():
-
-        for obj in instances:
-            try:
-                obj.delete()
-            except models.deletion.ProtectedError:
-                pass
 
 
 @pytest.fixture( scope = 'class')

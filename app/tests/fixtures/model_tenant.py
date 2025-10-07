@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from access.models.tenant import Tenant
 from access.serializers.organization import (
@@ -20,25 +20,24 @@ def model_tenant(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_tenant( django_db_blocker, model_user ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        user = model_user.objects.create(
-            username = 'a'+random_str,
-            password = 'password'
-        )
+            user = model_user.objects.create(
+                username = 'a' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+                password = 'password'
+            )
 
-    kwargs = {
-        'name': 'te',
-        'manager': user,
-    }
+        kwargs = {
+            'name': 'te' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'manager': user,
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
+    yield factory
 
-        user.delete()
 
 
 @pytest.fixture( scope = 'class')

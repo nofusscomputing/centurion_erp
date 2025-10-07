@@ -25,23 +25,26 @@ def kwargs_modelticketmetamodel(django_db_blocker,
     model_device, kwargs_device,
 ):
 
-    with django_db_blocker.unblock():
+    model_objs = []
+    def factory(model_objs = model_objs):
 
-        kwargs = kwargs_device()
-        kwargs['name'] = 'model-ticket-' + str( random.randint(1, 99999))
+        with django_db_blocker.unblock():
 
-        device = model_device.objects.create( **kwargs )
+            kwargs = kwargs_device()
+            kwargs['name'] = 'model-ticket-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
-        kwargs = {
-            **kwargs_modelticket.copy(),
-            'model': device
-        }
+            device = model_device.objects.create( **kwargs )
 
-    yield kwargs.copy()
+            model_objs += [ device ]
 
-    with django_db_blocker.unblock():
+            kwargs = {
+                **kwargs_modelticket(),
+                'model': device
+            }
 
-        device.delete()
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

@@ -6,13 +6,13 @@ from django.conf import settings
 from core.models.audit import CenturionAudit
 
 from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 @pytest.mark.audit_models
 class CenturionAuditModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

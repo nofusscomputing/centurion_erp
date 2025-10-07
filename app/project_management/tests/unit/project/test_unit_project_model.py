@@ -4,7 +4,7 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 from project_management.models.projects import Project
@@ -13,7 +13,7 @@ from project_management.models.projects import Project
 
 @pytest.mark.model_project
 class ClusterModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

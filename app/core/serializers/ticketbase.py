@@ -46,12 +46,14 @@ class BaseSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'display_name',
+            'title',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
+            'title',
             'url',
         ]
 

@@ -127,10 +127,10 @@ class APIPermissionsTestCases(
     @pytest.fixture( scope = 'class', autouse = True)
     def model_kwargs(self, django_db_blocker,
         request, kwargs_modelticketmetamodel, model_contenttype,
-        model, organization_one
+        model, organization_one, clean_model_from_db
     ):
 
-        model_kwargs = kwargs_modelticketmetamodel.copy()
+        request.cls.kwargs_create_item = {}
 
         with django_db_blocker.unblock():
 
@@ -144,68 +144,80 @@ class APIPermissionsTestCases(
                 'model_' + ticket_model_class._meta.model_name
             )
 
-            ticket_model_kwargs = request.getfixturevalue(
-                'kwargs_' + ticket_model._meta.model_name
-            )
+        def factory(
+            model = model,
+            ticket_model_class = ticket_model_class,
+            ticket_model = ticket_model,
+        ):
 
-            if callable(ticket_model_kwargs):
-                ticket_model_kwargs = ticket_model_kwargs()
+            model_kwargs = kwargs_modelticketmetamodel()
 
-
-            kwargs_many_to_many = {}
-
-            kwargs = {}
-
-            for key, value in ticket_model_kwargs.items():
-
-                field = ticket_model._meta.get_field(key)
-
-                if isinstance(field, models.ManyToManyField):
-
-                    kwargs_many_to_many.update({
-                        key: value
-                    })
-
-                else:
-
-                    kwargs.update({
-                        key: value
-                    })
+            with django_db_blocker.unblock():
 
 
-            model = ticket_model.objects.create( **kwargs )
-
-            for key, value in kwargs_many_to_many.items():
-
-                field = getattr(model, key)
-
-                for entry in value:
-
-                    field.add(entry)
+                ticket_model_kwargs = request.getfixturevalue(
+                    'kwargs_' + ticket_model._meta.model_name
+                )()
 
 
-        if ticket_model_class._meta.model_name == 'tenant':
-            model_kwargs['organization'] = organization_one
-            model_kwargs['model'] = organization_one
+                kwargs_many_to_many = {}
 
-        else:
+                kwargs = {}
 
-            model_kwargs.update({
-                'model': model
-            })
+                for key, value in ticket_model_kwargs.items():
 
-        request.cls.kwargs_create_item = model_kwargs
+                    field = ticket_model._meta.get_field(key)
 
-        yield model_kwargs
+                    if isinstance(field, models.ManyToManyField):
 
-        with django_db_blocker.unblock():
+                        kwargs_many_to_many.update({
+                            key: value
+                        })
 
-            model.delete()
+                    else:
+
+                        kwargs.update({
+                            key: value
+                        })
+
+
+                model = ticket_model.objects.create( **kwargs )
+
+                for key, value in kwargs_many_to_many.items():
+
+                    field = getattr(model, key)
+
+                    for entry in value:
+
+                        field.add(entry)
+
+
+            if ticket_model_class._meta.model_name == 'tenant':
+                model_kwargs['organization'] = organization_one
+                model_kwargs['model'] = organization_one
+
+            else:
+
+                model_kwargs.update({
+                    'model': model
+                })
+
+            request.cls.kwargs_create_item.update(model_kwargs)
+
+            return model_kwargs
+
+        yield factory
+
+        clean_model_from_db(ticket_model)
+
+        clean_model_from_db(ticket_model_class)
+
+        clean_model_from_db(model)
 
 
 
-    def test_permission_add(self, model_instance, api_request_permissions,
-        model_kwargs, kwargs_api_create
+    def test_permission_add(self, model, api_request_permissions,
+        model_kwargs, kwargs_api_create, model_instance,
     ):
         """ Check correct permission for add 
 
@@ -216,7 +228,12 @@ class APIPermissionsTestCases(
 
         client.force_login( api_request_permissions['user']['add'] )
 
-        the_model = model_instance( kwargs_create = model_kwargs.copy() )
+        kwargs = model_kwargs()
+        kwargs['model'] = model.model.field.related_model.objects.get(
+            pk = kwargs_api_create['model']
+        )
+
+        the_model = model_instance( kwargs_create = kwargs )
 
         url = the_model.get_url( many = True )
 

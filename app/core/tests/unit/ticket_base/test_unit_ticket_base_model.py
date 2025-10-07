@@ -8,7 +8,7 @@ from core import exceptions as centurion_exceptions
 from core.fields.badge import Badge
 from core.models.ticket_base import TicketBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model import (
     CenturionSubAbstractModelInheritedCases
@@ -20,7 +20,7 @@ from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_mod
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
     CenturionSubAbstractModelInheritedCases,
-    CenturionAbstractModelInheritedCases,
+    CenturionAbstractTenancyModelInheritedCases,
 ):
 
 
@@ -261,7 +261,7 @@ class TicketBaseModelTestCases(
 
             kwargs = {}
 
-            for key, value in kwargs_project.items():
+            for key, value in kwargs_project().items():
 
                 field = model_project._meta.get_field(key)
 
@@ -277,7 +277,7 @@ class TicketBaseModelTestCases(
 
             project_one = model_project.objects.create( **kwargs )
 
-            kwargs = kwargs_projectmilestone.copy()
+            kwargs = kwargs_projectmilestone()
             kwargs['name'] = 'p1_m1'
             kwargs['project'] = project_one
 
@@ -287,7 +287,7 @@ class TicketBaseModelTestCases(
 
             kwargs = {}
 
-            for key, value in kwargs_project.items():
+            for key, value in kwargs_project().items():
 
                 field = model_project._meta.get_field(key)
 
@@ -302,7 +302,7 @@ class TicketBaseModelTestCases(
 
             project_two = model_project.objects.create( **kwargs )
 
-            kwargs = kwargs_projectmilestone.copy()
+            kwargs = kwargs_projectmilestone()
             kwargs['name'] = 'p2_m1'
             kwargs['project'] = project_two
 
@@ -347,13 +347,13 @@ class TicketBaseModelTestCases(
         model_projectmilestone, kwargs_projectmilestone,
     ):
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['title'] = kwargs['title'] + 'a'
         kwargs['external_ref'] = 123
 
         ticket = model.objects.create( **kwargs )
 
-        kwargs_proj = kwargs_project.copy()
+        kwargs_proj = kwargs_project()
         team_members = kwargs_proj['team_members']
         del kwargs_proj['team_members']
         del kwargs_proj['code']
@@ -362,11 +362,11 @@ class TicketBaseModelTestCases(
         project_one.team_members.add( team_members[0] )
 
 
-        kwargs = kwargs_projectmilestone
+        kwargs = kwargs_projectmilestone()
         kwargs['project'] = project_one
         milestone_one = model_projectmilestone.objects.create( **kwargs )
 
-        kwargs = kwargs_project
+        kwargs = kwargs_project()
         kwargs['name'] = 'project_two'
         team_members = kwargs['team_members']
         del kwargs['team_members']
@@ -375,7 +375,7 @@ class TicketBaseModelTestCases(
         project_two = model_project.objects.create( **kwargs )
         project_two.team_members.add( team_members[0] )
 
-        kwargs = kwargs_projectmilestone
+        kwargs = kwargs_projectmilestone()
         kwargs['name'] = 'two'
         kwargs['project'] = project_two
         milestone_two = model_projectmilestone.objects.create( **kwargs )
@@ -591,7 +591,7 @@ class TicketBaseModelTestCases(
     @pytest.fixture( scope = 'function' )
     def ticket(self, db, model, model_kwargs):
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
 
         kwargs['title'] = 'can close ticket'
 
@@ -623,7 +623,7 @@ class TicketBaseModelTestCases(
         model_ticketcommentbase, kwargs_ticketcommentbase
     ):
 
-        kwargs = kwargs_ticketcommentbase.copy()
+        kwargs = kwargs_ticketcommentbase()
         del kwargs['ticket']
 
 
@@ -913,7 +913,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(TicketBase, 'clean')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was clean called'
 
@@ -935,7 +935,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(TicketBase, 'save')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was save called'
 
@@ -956,7 +956,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(model, 'slash_command')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was save called'
 
@@ -1128,7 +1128,7 @@ class TicketBaseModelPyTest(
 
         spy = mocker.spy(model, 'slash_command')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was save called'
 
