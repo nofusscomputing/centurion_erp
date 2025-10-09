@@ -1,5 +1,8 @@
 import pytest
 
+# from django.core.exceptions import ValidationError
+from rest_framework.serializers import ValidationError
+
 from api.tests.unit.test_unit_serializer import (
     SerializerTestCases
 )
@@ -56,6 +59,82 @@ class ModelTicketSerializerTestCases(
         assert serializer.is_valid(raise_exception = True)
 
 
+    def test_serializer_method_validate_ticket_id(
+        self, kwargs_api_create, model, model_kwargs, model_serializer, request_user
+    ):
+        """Test serializer method validate
+        
+        Ensure that when ticket id is passed in kwargs and data that raises an
+        exception if they dont match.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'create',
+        )
+
+        mock_view.kwargs = {
+            'ticket_type': model_kwargs()['ticket']._meta.sub_model_type,
+            'ticket_id': int(kwargs_api_create['ticket']) + 1
+        }
+
+        serializer = model_serializer['model'](
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        with pytest.raises(ValidationError) as exc:
+            serializer.is_valid(raise_exception = True)
+
+        assert exc.value.get_codes()['non_field_errors'][0] == 'ticket_id_not_match'
+
+
+
+    def test_serializer_method_validate_model_id(
+        self, kwargs_api_create, model, model_kwargs, model_serializer, request_user
+    ):
+        """Test serializer method validate
+        
+        Ensure that when model id is passed in kwargs and data that raises an
+        exception if they dont match.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'create',
+        )
+
+        mock_view.kwargs = {
+            'model_name': model_kwargs()['model']._meta.model_name,
+            'model_id': int(kwargs_api_create['model']) + 1
+        }
+
+        serializer = model_serializer['model'](
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        with pytest.raises(ValidationError) as exc:
+            serializer.is_valid(raise_exception = True)
+
+
+        assert exc.value.get_codes()['non_field_errors'][0] == 'model_id_not_match'
+
+
 
 class ModelTicketSerializerInheritedCases(
     ModelTicketSerializerTestCases
@@ -103,4 +182,11 @@ class ModelTicketSerializerInheritedCases(
 class ModelTicketSerializerPyTest(
     ModelTicketSerializerTestCases
 ):
-    pass
+
+    def test_serializer_method_validate_ticket_id(self):
+        pytest.xfail( reason = 'this is tested in sub-models and not required to be teted here.' )
+
+
+
+    def test_serializer_method_validate_model_id(self):
+        pytest.xfail( reason = 'this is tested in sub-models and not required to be teted here.' )

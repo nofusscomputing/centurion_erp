@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from django.core.exceptions import ValidationError
+
 from drf_spectacular.utils import extend_schema_serializer
 
 from api.serializers import common
@@ -95,7 +97,10 @@ class ModelSerializer(
             if attrs.get('ticket', None):
 
                 if attrs['ticket'].id != int(ticket_id):
-                    raise ValueError( 'two different tickets found.' )
+                    raise ValidationError(
+                        message = 'two different tickets found.',
+                            code = 'ticket_id_not_match'
+                    )
 
                 del attrs['ticket']
 
@@ -116,7 +121,10 @@ class ModelSerializer(
                 if hasattr(attrs['model'], 'id'):
 
                     if attrs['model'].id != int(model_id):
-                        raise ValueError( 'two different models found.' )
+                        raise ValidationError(
+                            message = 'two different models found.',
+                            code = 'model_id_not_match'
+                        )
 
                     del attrs['model']
 

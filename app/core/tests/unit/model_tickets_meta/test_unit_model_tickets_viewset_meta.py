@@ -15,7 +15,7 @@ from core.viewsets.ticket_model_link import (
 
 
 @pytest.mark.tickets
-@pytest.mark.model_modelticket
+@pytest.mark.model_modelticketmeta
 class ViewsetTestCases(
     ModelTicketViewsetInheritedCases,
 ):
