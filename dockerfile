@@ -105,6 +105,9 @@ ENV PYTHONTZPATH=""
 # correctly
 ENV PROMETHEUS_MULTIPROC_DIR=""
 
+# Prevent python depreciation warnings
+ENV PYTHONWARNINGS=ignore::DeprecationWarning
+
 ENV IS_WORKER=False
 
 

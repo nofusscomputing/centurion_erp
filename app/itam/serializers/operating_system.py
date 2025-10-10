@@ -59,16 +59,21 @@ class OperatingSystemModelSerializer(
 
         get_url.update({
             'installations': reverse("v2:_api_v2_operating_system_installs-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
-            'tickets': reverse(
-                "v2:_api_v2_item_tickets-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'item_class': 'operating_system',
-                    'item_id': item.pk
-                    }
-            ),
             'version': reverse("v2:_api_operatingsystemversion-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
         })
+
+        if not self.context['request'].feature_flag['2025-00006']:
+            get_url.update({
+                'tickets': reverse(
+                    "v2:_api_v2_item_tickets-list",
+                    request=self._context['view'].request,
+                    kwargs={
+                        'item_class': 'operating_system',
+                        'item_id': item.pk
+                        }
+                )
+            })
+
 
         return get_url
 

@@ -39,6 +39,8 @@ class TicketBase(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
     model_notes = None
 
     model_tag = 'ticket'
@@ -127,9 +129,15 @@ class TicketBase(
             'id'
         ]
 
-        unique_together = ('external_system', 'external_ref',)
+        permissions = [
+            ('import_ticketbase', 'Can import a ticket base'),
+            ('purge_ticketbase', 'Can purge a ticket base'),
+            ('triage_ticketbase', 'Can triage a ticket base'),
+        ]
 
         sub_model_type = 'ticket'
+
+        unique_together = ('external_system', 'external_ref',)
 
         verbose_name = "Ticket"
 
@@ -668,6 +676,8 @@ class TicketBase(
         except Exception:
             pass
 
+        super().clean()
+
 
 
     def clean_fields(self, exclude = None):
@@ -845,13 +855,17 @@ class TicketBase(
 
         kwargs = super().get_url_kwargs( many = many )
 
-        if self._is_submodel:
+        if 'model_name' in kwargs:
 
             del kwargs['model_name']
 
+        if str(self._meta.sub_model_type) != 'ticket':
+
             kwargs.update({
+                'app_label': self._meta.app_label,
                 'ticket_type': str(self._meta.sub_model_type),
             })
+
 
         return kwargs
 
@@ -861,7 +875,8 @@ class TicketBase(
 
         from core.models.ticket_comment_action import TicketCommentAction
 
-        request = get_request()
+        # request = get_request()
+        request = None
 
         excluded_fields: list = [
             'created',
@@ -880,13 +895,24 @@ class TicketBase(
             if (
                 self._before[field] != self._after[field]
                 and field not in excluded_fields
-                and field in fields
+                and (
+                    field in fields
+                    or (
+                        str( field )[0:len(field)-3] in fields
+                        and str( field ).endswith('_id')
+                    )
+                )
             ):
 
                 changed_fields = changed_fields + [ field ]
 
 
         for field in changed_fields:
+
+            if not request:
+                # exit if no request obj.
+                # this clause is temp until action commenting is setup/refactored
+                return
 
             comment_text: str = None
 
@@ -1074,20 +1100,14 @@ class TicketBase(
 
                     comment_user = None
 
-                # comment = TicketCommentAction.objects.create(
+                # User requires entity to be usable for ticket comment
+                # TicketCommentAction.objects.create(
                 #     organization = self.organization,
                 #     ticket = self,
                 #     comment_type = TicketCommentAction._meta.sub_model_type,
                 #     body = comment_text,
                 #     # user = user
                 # )
-
-                # comment.save()
-                a = 'b'
-
-
-
-
 
         # return None
 

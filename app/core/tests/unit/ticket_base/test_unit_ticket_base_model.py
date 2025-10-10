@@ -7,17 +7,20 @@ from django.db.models.query import QuerySet
 from core import exceptions as centurion_exceptions
 from core.fields.badge import Badge
 from core.models.ticket_base import TicketBase
-# from core.models.ticket_comment_base import TicketCommentBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
+)
+from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model import (
+    CenturionSubAbstractModelInheritedCases
 )
 
 
 
-@pytest.mark.skip( reason = 'work to be completed in #889' )
+@pytest.mark.tickets
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionSubAbstractModelInheritedCases,
+    CenturionAbstractTenancyModelInheritedCases,
 ):
 
 
@@ -28,8 +31,14 @@ class TicketBaseModelTestCases(
             '_audit_enabled': {
                 'value': False
             },
+            '_is_submodel': {
+                'value': False
+            },
             '_notes_enabled': {
                 'value': False
+            },
+            '_ticket_linkable': {
+                'value': False,
             },
             'model_tag': {
                 'type': str,
@@ -241,6 +250,87 @@ class TicketBaseModelTestCases(
 
 
 
+    @pytest.fixture( scope = 'function' )
+    def ticket_projects(self, django_db_blocker,
+        model_project, kwargs_project,
+        model_projectmilestone, kwargs_projectmilestone,
+    ):
+
+
+        with django_db_blocker.unblock():
+
+            kwargs = {}
+
+            for key, value in kwargs_project().items():
+
+                field = model_project._meta.get_field(key)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    continue
+
+                kwargs.update({
+                    key: value
+                })
+
+            kwargs['name'] = 'p1'
+
+            project_one = model_project.objects.create( **kwargs )
+
+            kwargs = kwargs_projectmilestone()
+            kwargs['name'] = 'p1_m1'
+            kwargs['project'] = project_one
+
+
+            project_milestone_one = model_projectmilestone.objects.create( **kwargs )
+
+
+            kwargs = {}
+
+            for key, value in kwargs_project().items():
+
+                field = model_project._meta.get_field(key)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    continue
+
+                kwargs.update({
+                    key: value
+                })
+
+
+            project_two = model_project.objects.create( **kwargs )
+
+            kwargs = kwargs_projectmilestone()
+            kwargs['name'] = 'p2_m1'
+            kwargs['project'] = project_two
+
+            project_milestone_two = model_projectmilestone.objects.create( **kwargs )
+
+
+        yield {
+            'one': {
+                'project': project_one,
+                'milestone': project_milestone_one
+            },
+            'two':  {
+                'project': project_two,
+                'milestone': project_milestone_two
+            },
+        }
+
+
+        with django_db_blocker.unblock():
+
+            project_milestone_one.delete()
+            project_milestone_two.delete()
+
+            project_two.delete()
+            project_one.delete()
+
+
+
     def test_class_inherits_ticketbase(self, model):
         """ Class inheritence
 
@@ -257,13 +347,13 @@ class TicketBaseModelTestCases(
         model_projectmilestone, kwargs_projectmilestone,
     ):
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['title'] = kwargs['title'] + 'a'
         kwargs['external_ref'] = 123
 
         ticket = model.objects.create( **kwargs )
 
-        kwargs_proj = kwargs_project.copy()
+        kwargs_proj = kwargs_project()
         team_members = kwargs_proj['team_members']
         del kwargs_proj['team_members']
         del kwargs_proj['code']
@@ -272,11 +362,11 @@ class TicketBaseModelTestCases(
         project_one.team_members.add( team_members[0] )
 
 
-        kwargs = kwargs_projectmilestone
+        kwargs = kwargs_projectmilestone()
         kwargs['project'] = project_one
         milestone_one = model_projectmilestone.objects.create( **kwargs )
 
-        kwargs = kwargs_project
+        kwargs = kwargs_project()
         kwargs['name'] = 'project_two'
         team_members = kwargs['team_members']
         del kwargs['team_members']
@@ -285,7 +375,7 @@ class TicketBaseModelTestCases(
         project_two = model_project.objects.create( **kwargs )
         project_two.team_members.add( team_members[0] )
 
-        kwargs = kwargs_projectmilestone
+        kwargs = kwargs_projectmilestone()
         kwargs['name'] = 'two'
         kwargs['project'] = project_two
         milestone_two = model_projectmilestone.objects.create( **kwargs )
@@ -416,15 +506,49 @@ class TicketBaseModelTestCases(
         assert model().ticket_estimation is not None
 
 
-    @pytest.mark.skip( reason = 'write test')
-    def test_function_get_milestone_choices(self, model):
+    def test_function_get_milestone_choices(self, mocker, model,
+        ticket_projects,
+    ):
         """Function test
 
         Ensure that function `get_ticket_type_choices` returns a tuple of
         each projects milestones
         """
 
-        assert ('project_name', (model()._meta.sub_model_type, model()._meta.verbose_name)) in model.get_milestone_choices()
+        mocker.patch.object(model, 'project', return_value = ticket_projects['one']['project'] )
+
+        choices = model.get_milestone_choices()
+
+        for project, milestones in choices:
+
+            if project != ticket_projects['one']['project'].name:
+                continue
+
+            assert (
+                ticket_projects['one']['milestone'].id, ticket_projects['one']['milestone'].name
+            ) in milestones
+
+
+    def test_function_get_milestone_choices_wrong_milesone_not_containd(self, mocker, model,
+        ticket_projects,
+    ):
+        """Function test
+
+        Ensure that function `get_ticket_type_choices` returns the correct milestones per project
+        """
+
+        mocker.patch.object(model, 'project', return_value = ticket_projects['one']['project'] )
+
+        choices = model.get_milestone_choices()
+
+        for project, milestones in choices:
+
+            if project != ticket_projects['one']['project'].name:
+                continue
+
+            assert (
+                ticket_projects['two']['milestone'].id, ticket_projects['two']['milestone'].name
+            ) not in milestones
 
 
     def test_function_urgency_badge_type(self, model):
@@ -467,7 +591,7 @@ class TicketBaseModelTestCases(
     @pytest.fixture( scope = 'function' )
     def ticket(self, db, model, model_kwargs):
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
 
         kwargs['title'] = 'can close ticket'
 
@@ -499,7 +623,7 @@ class TicketBaseModelTestCases(
         model_ticketcommentbase, kwargs_ticketcommentbase
     ):
 
-        kwargs = kwargs_ticketcommentbase.copy()
+        kwargs = kwargs_ticketcommentbase()
         del kwargs['ticket']
 
 
@@ -789,7 +913,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(TicketBase, 'clean')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was clean called'
 
@@ -811,7 +935,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(TicketBase, 'save')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was save called'
 
@@ -832,7 +956,7 @@ class TicketBaseModelTestCases(
 
         spy = mocker.spy(model, 'slash_command')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was save called'
 
@@ -846,12 +970,116 @@ class TicketBaseModelTestCases(
 
 
 
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+
+        model_instance.model = model_instance
+
+        app_namespace = ''
+        if model_instance.app_namespace:
+            app_namespace = model_instance.app_namespace + ':'
+
+        url_model_name = model_instance._meta.model_name
+        if model_instance.url_model_name:
+            url_model_name = model_instance.url_model_name
+
+        url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
+        if model_instance._meta.sub_model_type != 'ticket':
+            url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        reverse.assert_called_with(
+            url_basename,
+            None,
+            {
+                'ticket_type': model_instance._meta.sub_model_type,
+                'pk': model_instance.id,
+            },
+            None,
+            None
+        )
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'ticket_type': model_instance._meta.sub_model_type,
+            'pk': model_instance.id,
+        }
+
+
+
 
 class TicketBaseModelInheritedCases(
     TicketBaseModelTestCases,
 ):
 
     sub_model_type = None
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_is_submodel': {
+                'value': True
+            },
+        }
+
+
+    def test_method_get_url_kwargs(self, model_instance):
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'app_label': model_instance._meta.app_label,
+            'ticket_type': model_instance._meta.sub_model_type,
+            'pk': model_instance.id
+        }
+
+
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+
+        model_instance.model = model_instance
+
+        app_namespace = ''
+        if model_instance.app_namespace:
+            app_namespace = model_instance.app_namespace + ':'
+
+        url_model_name = model_instance._meta.model_name
+        if model_instance.url_model_name:
+            url_model_name = model_instance.url_model_name
+
+        url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
+        if model_instance._meta.sub_model_type != 'ticket':
+            url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        reverse.assert_called_with(
+            url_basename,
+            None,
+            {
+                'app_label': model_instance._meta.app_label,
+                'ticket_type': model_instance._meta.sub_model_type,
+                'pk': model_instance.id,
+            },
+            None,
+            None
+        )
 
 
 
@@ -900,7 +1128,7 @@ class TicketBaseModelPyTest(
 
         spy = mocker.spy(model, 'slash_command')
 
-        valid_data = model_kwargs.copy()
+        valid_data = model_kwargs()
 
         valid_data['title'] = 'was save called'
 
@@ -911,3 +1139,48 @@ class TicketBaseModelPyTest(
         )
 
         spy.assert_called_with(item, valid_data['description'])
+
+    def test_method_get_url_attribute__is_submodel_set(self, mocker, model_instance, settings):
+
+        site_path = '/module/page/1'
+
+        reverse = mocker.patch('rest_framework.reverse._reverse', return_value = site_path)
+
+
+        model_instance.model = model_instance
+
+        app_namespace = ''
+        if model_instance.app_namespace:
+            app_namespace = model_instance.app_namespace + ':'
+
+        url_model_name = model_instance._meta.model_name
+        if model_instance.url_model_name:
+            url_model_name = model_instance.url_model_name
+
+        url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
+        if model_instance._meta.sub_model_type != 'ticket':
+            url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
+
+        url = model_instance.get_url( relative = True)
+
+        reverse.assert_called_with(
+            url_basename,
+            None,
+            {
+                'pk': model_instance.id,
+            },
+            None,
+            None
+        )
+
+
+    def test_method_get_url_kwargs(self, mocker, model_instance, settings):
+
+        model_instance.model = model_instance
+
+        url = model_instance.get_url_kwargs()
+
+        assert model_instance.get_url_kwargs() == {
+            'pk': model_instance.id,
+        }
+

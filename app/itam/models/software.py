@@ -97,6 +97,8 @@ class SoftwareCategory(
 
             self.organization = app_settings.global_organization
 
+        super().clean()
+
 
 
 class Software(
@@ -272,6 +274,8 @@ class Software(
         if app_settings.software_is_global:
 
             self.organization = app_settings.global_organization
+
+        super().clean()
 
 
 

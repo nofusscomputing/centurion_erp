@@ -29,7 +29,7 @@ class ServiceAPITestCases(
 
             kwargs = {}
 
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 
@@ -45,7 +45,7 @@ class ServiceAPITestCases(
                         key: value
                     })
 
-            dep_kwargs = model_kwargs.copy()
+            dep_kwargs = model_kwargs()
             dep_kwargs['name'] = 'dep service'
             ports = dep_kwargs['port']
             del dep_kwargs['port']
@@ -54,14 +54,14 @@ class ServiceAPITestCases(
             for port in ports:
                 dependent_service.port.add( port )
 
-            template_kwargs = model_kwargs.copy()
+            template_kwargs = model_kwargs()
             template_kwargs['name'] = 'a template'
             del template_kwargs['port']
             template = model.objects.create( **template_kwargs )
 
             kwargs_many_to_many.update({ 'dependent_service': [ dependent_service ]})
 
-            clu_kwargs = kwargs_cluster.copy()
+            clu_kwargs = kwargs_cluster()
             nodes = clu_kwargs['nodes']
             del clu_kwargs['nodes']
             cluster = model_cluster.objects.create( **clu_kwargs )

@@ -24,6 +24,8 @@ class AppSettings(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
     class Meta:
 
         ordering = [
@@ -131,6 +133,8 @@ class AppSettings(
         if self.software_is_global and self.global_organization is None:
 
             raise ValidationError("Global Software must have a global organization")
+
+        super().clean()
 
     __all__ = [
         'device_model_is_global',

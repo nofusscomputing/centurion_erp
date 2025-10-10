@@ -1,7 +1,5 @@
-import datetime
 import pytest
-
-from django.core.exceptions import ObjectDoesNotExist
+import random
 
 from itam.models.device import DeviceOperatingSystem
 
@@ -22,45 +20,38 @@ def kwargs_deviceoperatingsystem(django_db_blocker,
     kwargs_operatingsystemversion, model_operatingsystemversion
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    with django_db_blocker.unblock():
+        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
-        kwargs = kwargs_device.copy()
-        kwargs.update({
-            'name': 'dos' + random_str
-        })
+        with django_db_blocker.unblock():
 
-        device = model_device.objects.create(
-            **kwargs
-        )
+            kwargs = kwargs_device()
+            kwargs.update({
+                'name': 'dos' + random_str
+            })
 
-        kwargs = kwargs_operatingsystemversion.copy()
-        kwargs.update({
-            'name': 'dos' + random_str
-        })
+            device = model_device.objects.create(
+                **kwargs
+            )
 
-        operating_system_version = model_operatingsystemversion.objects.create(
-            **kwargs
-        )
+            kwargs = kwargs_operatingsystemversion()
+            kwargs.update({
+                'name': 'dos' + random_str
+            })
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'device': device,
-        'operating_system_version': operating_system_version,
-        'version': 'devos' + str(random_str)[len(str(random_str))-10:],
-        'installdate': '2025-06-11T17:38:00Z',
-    }
+            operating_system_version = model_operatingsystemversion.objects.create(
+                **kwargs
+            )
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'device': device,
+            'operating_system_version': operating_system_version,
+            'version': 'devos' + str(random_str)[len(str(random_str))-10:],
+            'installdate': '2025-06-11T17:38:00Z',
+        }
 
-    with django_db_blocker.unblock():
+        return kwargs
 
-        try:
-            device.delete()
-        except ObjectDoesNotExist:
-            pass
-
-        operating_system_version.delete()
+    yield factory

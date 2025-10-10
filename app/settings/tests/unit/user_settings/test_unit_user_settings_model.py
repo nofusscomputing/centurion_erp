@@ -9,7 +9,7 @@ from access.tests.unit.managers.test_unit_user_manager import (
 )
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 from settings.models.user_settings import UserSettings
@@ -19,7 +19,7 @@ from settings.models.user_settings import UserSettings
 @pytest.mark.model_usersettings
 class UserSettingsModelTestCases(
     UserManagerInheritedCases,
-    CenturionAbstractModelInheritedCases,
+    CenturionAbstractTenancyModelInheritedCases,
 ):
 
 
@@ -32,6 +32,9 @@ class UserSettingsModelTestCases(
             },
             '_notes_enabled': {
                 'value': False
+            },
+            '_ticket_linkable': {
+                'value': False,
             },
             'model_tag': {
                 'type': models.fields.NOT_PROVIDED,

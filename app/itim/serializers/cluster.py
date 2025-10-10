@@ -57,15 +57,20 @@ class ClusterModelSerializer(
         get_url.update({
             'external_links': reverse("v2:_api_externallink-list", request=self._context['view'].request) + '?cluster=true',
             'service': reverse("v2:_api_v2_service_cluster-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
-            'tickets': reverse(
-                "v2:_api_v2_item_tickets-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'item_class': 'cluster',
-                    'item_id': item.pk
-                    }
-            )
         })
+
+        if not self.context['request'].feature_flag['2025-00006']:
+            get_url.update({
+                'tickets': reverse(
+                    "v2:_api_v2_item_tickets-list",
+                    request=self._context['view'].request,
+                    kwargs={
+                        'item_class': 'cluster',
+                        'item_id': item.pk
+                        }
+                )
+            })
+
 
         return get_url
 

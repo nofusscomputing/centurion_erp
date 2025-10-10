@@ -25,8 +25,6 @@ class TicketSLMAPITestCases(
 
 
 
-
-@pytest.mark.module_itim
 class TicketSLMAPIInheritedCases(
     TicketSLMAPITestCases,
 ):

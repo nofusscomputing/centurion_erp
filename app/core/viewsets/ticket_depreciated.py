@@ -292,7 +292,7 @@ class TicketViewSet(ModelViewSet):
             or self.action == 'update'
         ):
 
-            organization = self._obj_organization
+            organization = None
 
 
             if organization:

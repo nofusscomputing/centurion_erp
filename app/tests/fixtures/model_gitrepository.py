@@ -32,33 +32,31 @@ def kwargs_gitrepository(django_db_blocker,
     kwargs_centurionmodel, model_gitgroup, kwargs_gitgroup
 ):
 
-    kwargs = kwargs_gitgroup.copy()
-    kwargs.update({
-        'name': 'gitrepo'
-    })
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        git_group = model_gitgroup.objects.create(
-            **kwargs
-        )
+        kwargs = kwargs_gitgroup()
+        kwargs.update({
+            'name': 'gitrepo'
+        })
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'provider': GitGroup.GitProvider.GITHUB,
-        'provider_id': 1,
-        'git_group': git_group,
-        'path': 'a_path',
-        'name': 'the name',
-        'description': 'a random bit of text.',
-        'modified': '2025-06-09T01:02:03Z'
-    }
+        with django_db_blocker.unblock():
 
-    yield kwargs.copy()
+            git_group = model_gitgroup.objects.create(
+                **kwargs
+            )
 
-    with django_db_blocker.unblock():
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'provider': GitGroup.GitProvider.GITHUB,
+            'provider_id': 1,
+            'git_group': git_group,
+            'path': 'a_path',
+            'name': 'the name',
+            'description': 'a random bit of text.',
+            'modified': '2025-06-09T01:02:03Z'
+        }
 
-        try:
-            git_group.delete()
-        except:
-            pass
+        return kwargs
+
+    yield factory

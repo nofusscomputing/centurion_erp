@@ -174,6 +174,21 @@ class CommonModelSerializer(CommonBaseSerializer):
                 }
             )
 
+
+        if self.context['request'].feature_flag['2025-00006']:
+
+            if getattr(item, '_ticket_linkable', False):
+                get_url['tickets'] = reverse(
+                    "v2:_api_modelticket_sub-list",
+                    request = self._context['view'].request,
+                    kwargs = {
+                        'app_label': item._meta.app_label,
+                        'model_name': item._meta.model_name,
+                        'model_id': item.pk
+                    }
+                )
+
+
         return get_url
 
 

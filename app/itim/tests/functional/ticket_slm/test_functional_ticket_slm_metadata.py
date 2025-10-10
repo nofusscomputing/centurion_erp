@@ -47,7 +47,9 @@ class SLMTicketMetadataInheritedCases(
     model = None
 
 
-
+#
+# This is a base model and does not have api access
+#
 # class SLMTicketTest(
 #     MetadataTestCases,
 #     TestCase,

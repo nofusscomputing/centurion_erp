@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from core.models.audit import CenturionAudit
 
@@ -19,39 +19,39 @@ def kwargs_centurionaudit(django_db_blocker,
     kwargs_user, model_user
 ):
 
-    kwargs = kwargs_centurionmodel.copy()
-    del kwargs['model_notes']
+    def factory():
 
-    with django_db_blocker.unblock():
+        kwargs = kwargs_centurionmodel()
+        del kwargs['model_notes']
+
+        with django_db_blocker.unblock():
 
 
-        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+            random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
-        user_kwargs = kwargs_user.copy()
-        user_kwargs.update({
-                'username': 'audit_user' + str(random_str)
-            })
+            user_kwargs = kwargs_user()
+            user_kwargs.update({
+                    'username': 'audit_user' + str(random_str)
+                })
 
-        user = model_user.objects.create(
-            **user_kwargs,
-        )
+            user = model_user.objects.create(
+                **user_kwargs,
+            )
 
-        kwargs = {
-            **kwargs,
-            'before': {},
-            'after': {
-                'after_key': 'after_value'
-            },
-            'action': CenturionAudit.Actions.ADD,
-            'user': user,
-            'content_type': model_contenttype.objects.get(
-                app_label = user._meta.app_label,
-                model = user._meta.model_name,
-            ),
-        }
+            kwargs = {
+                **kwargs,
+                'before': {},
+                'after': {
+                    'after_key': 'after_value'
+                },
+                'action': CenturionAudit.Actions.ADD,
+                'user': user,
+                'content_type': model_contenttype.objects.get(
+                    app_label = user._meta.app_label,
+                    model = user._meta.model_name,
+                ),
+            }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        user.delete()
+    yield factory

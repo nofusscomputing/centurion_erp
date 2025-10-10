@@ -30,7 +30,7 @@ class AppSettingsSerializerTestCases(
 
             kwargs = {}
 
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 

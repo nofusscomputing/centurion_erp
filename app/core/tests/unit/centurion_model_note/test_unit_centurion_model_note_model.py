@@ -4,13 +4,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 @pytest.mark.note_models
 class CenturionNoteModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -18,21 +18,24 @@ class CenturionNoteModelTestCases(
     def parameterized_class_attributes(self):
         
         return {
-        '_audit_enabled': {
-            'value': False,
-        },
-        '_notes_enabled': {
-            'value': False,
-        },
-        'model_tag': {
-            'type': type(None),
-            'value': None,
-        },
-        'url_model_name': {
-            'type': str,
-            'value': 'centurionmodelnote',
+            '_audit_enabled': {
+                'value': False,
+            },
+            '_notes_enabled': {
+                'value': False,
+            },
+            '_ticket_linkable': {
+                'value': False,
+            },
+            'model_tag': {
+                'type': type(None),
+                'value': None,
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'centurionmodelnote',
+            }
         }
-    }
 
 
     @property
@@ -102,7 +105,6 @@ class CenturionNoteModelTestCases(
                 content_type = ContentType.objects.get(
                     pk = 1,
                 )
-
 
 
         self.kwargs_create_item.update({

@@ -5,14 +5,14 @@ from django.core.exceptions import (
 )
 
 from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_gitgroup
 class GitGroupModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -23,7 +23,7 @@ class GitGroupModelTestCases(
         tenancy is set to that of the parent group
         """
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
 
         kwargs['provider'] = model.GitProvider.GITLAB
 
@@ -50,7 +50,7 @@ class GitGroupModelTestCases(
         can't have parents/nesting.
         """
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
 
         kwargs['provider'] = model.GitProvider.GITHUB
 

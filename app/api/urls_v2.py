@@ -18,8 +18,10 @@ from centurion.viewsets.base import (
 )
 
 from core.viewsets import (
+    ticket,
     audit_history,
     centurion_model_notes,
+    ticket_model_link,
 )
 
 app_name = "API"
@@ -29,6 +31,10 @@ history_type_names = ''
 history_app_labels = ''
 notes_type_names = ''
 notes_app_labels = ''
+ticket_model_links_app_labels = ''
+ticket_model_links_type_names = ''
+ticket_app_names = ''
+ticket_type_names = ''
 
 for model in apps.get_models():
 
@@ -49,12 +55,30 @@ for model in apps.get_models():
 
             notes_app_labels += model._meta.app_label + '|'
 
+    if getattr(model, '_ticket_linkable', False):
+
+        ticket_model_links_type_names += model._meta.model_name + '|'
+
+        if model._meta.app_label not in ticket_model_links_app_labels:
+
+            ticket_model_links_app_labels += model._meta.app_label + '|'
+
+    if issubclass(model, ticket.TicketBase):
+        ticket_app_names += model._meta.app_label + '|'
+        ticket_type_names += model._meta.sub_model_type + '|'
+
 
 history_app_labels = str(history_app_labels)[:-1]
 history_type_names = str(history_type_names)[:-1]
 
 notes_app_labels = str(notes_app_labels)[:-1]
 notes_type_names = str(notes_type_names)[:-1]
+
+ticket_model_links_app_labels = str(ticket_model_links_app_labels)[:-1]
+ticket_model_links_type_names = str(ticket_model_links_type_names)[:-1]
+
+ticket_app_names = str(ticket_app_names)[:-1]
+ticket_type_names = str(ticket_type_names)[:-1]
 
 router = DefaultRouter(trailing_slash=False)
 
@@ -82,6 +106,20 @@ router.register(
         ]+)/(?P<model_id>[0-9]+)/notes',
     viewset = centurion_model_notes.ViewSet,
     basename = '_api_centurionmodelnote_sub'
+)
+
+router.register(
+    prefix = f'/(?P<app_label>[{ticket_model_links_app_labels} \
+        ]+)/(?P<model_name>[{ticket_model_links_type_names}]+)/(?P<model_id>[0-9]+)/tickets',
+    viewset = ticket_model_link.ViewSet,
+    feature_flag = '2025-00006', basename = '_api_modelticket_sub'
+)
+
+router.register(
+    prefix = f'/(?P<app_label>[{ticket_app_names} \
+        ]+)/ticket/(?P<ticket_type>[{ticket_type_names}]+)',
+    viewset = ticket.ViewSet,
+    feature_flag = '2025-00006', basename = '_api_ticketbase_sub'
 )
 
 

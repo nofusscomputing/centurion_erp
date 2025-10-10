@@ -65,15 +65,21 @@ class DeviceModelSerializer(
             'operating_system': reverse("v2:_api_deviceoperatingsystem-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'service': reverse("v2:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'software': reverse("v2:_api_devicesoftware-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
-            'tickets': reverse(
-                "v2:_api_v2_item_tickets-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'item_class': 'device',
-                    'item_id': item.pk
-                    }
-            )
         })
+
+
+        if not self.context['request'].feature_flag['2025-00006']:
+            get_url.update({
+                'tickets': reverse(
+                    "v2:_api_v2_item_tickets-list",
+                    request=self._context['view'].request,
+                    kwargs={
+                        'item_class': 'device',
+                        'item_id': item.pk
+                        }
+                )
+            })
+
 
         return get_url
 

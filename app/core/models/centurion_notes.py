@@ -21,6 +21,8 @@ class CenturionModelNote(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
 
     @property
     def url_model_name(self):

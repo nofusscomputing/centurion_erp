@@ -1,3 +1,10 @@
+## Verrsion 1.25.0
+
+- Centurion ERP relicenced to AGPL-3.0-only
+
+- No end-user noticable features in this release. All new functionality is related to upcoming features.
+
+
 ## Version 1.24.1
 
 - Fixed excessive query response times

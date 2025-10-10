@@ -1,5 +1,4 @@
 import pytest
-import json
 
 from django.db import models
 
@@ -12,7 +11,7 @@ def kwargs_api_create(django_db_blocker, model_kwargs):
 
     with django_db_blocker.unblock():
 
-        for field, value in model_kwargs.items():
+        for field, value in model_kwargs().items():
 
             if value is None:
                 continue

@@ -28,7 +28,7 @@ class ConfigGroupsAPITestCases(
 
             kwargs = {}
 
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 
@@ -44,7 +44,7 @@ class ConfigGroupsAPITestCases(
                         key: value
                     })
 
-            device = model_device.objects.create( **kwargs_device )
+            device = model_device.objects.create( **kwargs_device() )
 
             kwargs_many_to_many.update({
                 'hosts': [ device ]

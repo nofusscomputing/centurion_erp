@@ -27,14 +27,18 @@ def serializer_gitgroup():
 @pytest.fixture( scope = 'class')
 def kwargs_gitgroup(kwargs_centurionmodel):
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'parent_group': None,
-        'provider': GitGroup.GitProvider.GITHUB,
-        'provider_pk': 1,
-        'name': 'a name',
-        'path': 'a_path',
-        'description': 'a random bit of text.'
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'parent_group': None,
+            'provider': GitGroup.GitProvider.GITHUB,
+            'provider_pk': 1,
+            'name': 'a name',
+            'path': 'a_path',
+            'description': 'a random bit of text.'
+        }
+
+        return kwargs
+
+    yield factory

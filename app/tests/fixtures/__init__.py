@@ -227,6 +227,18 @@ from .model_manufacturer import (
     model_manufacturer,
 )
 
+from .model_modelticket import (
+    kwargs_modelticket,
+    model_modelticket,
+    serializer_modelticket,
+)
+
+from .model_modelticketmeta import (
+    kwargs_modelticketmetamodel,
+    model_modelticketmetamodel,
+    serializer_modelticketmetamodel,
+)
+
 from .model_operatingsystem import (
     kwargs_operatingsystem,
     model_operatingsystem,
@@ -282,6 +294,7 @@ from .model_projecttype import (
 from .model_requestticket import (
     kwargs_requestticket,
     model_requestticket,
+    serializer_requestticket,
 )
 
 from .model_role import (
@@ -299,6 +312,7 @@ from .model_service import (
 from .model_slmticket import (
     kwargs_slmticket,
     model_slmticket,
+    serializer_slmticket,
 )
 
 from .model_software import (
@@ -328,21 +342,25 @@ from .model_softwareversion import (
 from .model_ticketbase import (
     kwargs_ticketbase,
     model_ticketbase,
+    serializer_ticketbase,
 )
 
 from .model_ticketcommentaction import (
     kwargs_ticketcommentaction,
     model_ticketcommentaction,
+    serializer_ticketcommentaction,
 )
 
 from .model_ticketcommentbase import (
     kwargs_ticketcommentbase,
     model_ticketcommentbase,
+    serializer_ticketcommentbase,
 )
 
 from .model_ticketcommentsolution import (
     kwargs_ticketcommentsolution,
     model_ticketcommentsolution,
+    serializer_ticketcommentsolution,
 )
 
 from .model_tenant import (

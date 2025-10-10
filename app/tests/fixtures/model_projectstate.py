@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from project_management.models.project_states import ProjectState
 from project_management.serializers.project_states import (
@@ -22,36 +22,29 @@ def kwargs_projectstate(kwargs_centurionmodel, django_db_blocker,
     model_knowledgebase, kwargs_knowledgebase,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_knowledgebase.copy()
-        team = kwargs['target_team']
-        del kwargs['target_team']
+            kwargs = kwargs_knowledgebase()
+            team = kwargs['target_team']
+            del kwargs['target_team']
 
-        runbook = model_knowledgebase.objects.create( **kwargs )
+            runbook = model_knowledgebase.objects.create( **kwargs )
 
-        runbook.target_team.add( team[0] )
+            runbook.target_team.add( team[0] )
 
-    kwargs = kwargs_centurionmodel.copy()
+        kwargs = kwargs_centurionmodel()
 
-    kwargs = {
-        **kwargs,
-        'name': 'projectstate_' + random_str,
-        'runbook': runbook,
-    }
+        kwargs = {
+            **kwargs,
+            'name': 'projectstate_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'runbook': runbook,
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
-
-        for proj in runbook.projectstate_set.all():
-            proj.delete()
-
-        runbook.delete()
+    yield factory
 
 
 

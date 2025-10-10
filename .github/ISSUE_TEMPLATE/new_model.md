@@ -67,7 +67,6 @@ Describe in detail the following:
     - [ ] API Metadata
     - [ ] API Render (fields)
     - [ ] Model
-    - [ ] Serializer
     - [ ] [ViewSet](https://nofusscomputing.com/projects/centurion_erp/development/views/#requirements)
 
 

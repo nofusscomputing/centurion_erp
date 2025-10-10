@@ -104,6 +104,8 @@ class DeviceType(
 
             self.organization = app_settings.global_organization
 
+        super().clean()
+
 
     def __str__(self):
 
@@ -543,6 +545,8 @@ class DeviceSoftware(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
 
     class Meta:
         ordering = [
@@ -678,6 +682,8 @@ class DeviceOperatingSystem(
     _audit_enabled = False
 
     _notes_enabled = False
+
+    _ticket_linkable = False
 
     class Meta:
 

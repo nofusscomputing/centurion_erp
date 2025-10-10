@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from accounting.models.asset_base import AssetBase
 
@@ -14,15 +14,15 @@ def model_assetbase(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_assetbase( kwargs_centurionmodel, model_assetbase ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'asset_number': 'ab_' + random_str,
-        'serial_number': 'ab_' + random_str,
-        # 'asset_type': (model_assetbase._meta.sub_model_type, model_assetbase._meta.verbose_name),
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'asset_number': 'ab_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'serial_number': 'ab_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            # 'asset_type': (model_assetbase._meta.sub_model_type, model_assetbase._meta.verbose_name),
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory

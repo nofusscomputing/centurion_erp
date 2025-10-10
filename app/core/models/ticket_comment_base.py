@@ -2,6 +2,7 @@ import datetime
 
 from django.apps import apps
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -26,6 +27,8 @@ class TicketCommentBase(
     _audit_enabled = False
 
     _notes_enabled = False
+
+    _ticket_linkable = False
 
     model_notes = None
 
@@ -80,6 +83,7 @@ class TicketCommentBase(
         help_text = 'Parent ID for creating discussion threads',
         null = True,
         on_delete = models.PROTECT,
+        related_name = 'threads',
         verbose_name = 'Parent Comment',
     )
 
@@ -275,6 +279,20 @@ class TicketCommentBase(
                 )
 
 
+            if self.parent:
+
+                if self.parent.parent:
+
+                    raise ValidationError(
+                        message = {
+                            'parent': 'Replying to a discussion reply is not possible'
+                        },
+                        code = 'single_level_discussion_replies_only'
+                    )
+
+        super().clean()
+
+
 
     def clean_fields(self, exclude=None):
 
@@ -286,6 +304,19 @@ class TicketCommentBase(
 
 
         super().clean_fields(exclude = exclude)
+
+
+
+    def delete(self, using = None, keep_parents = False):
+
+        if len(self.threads.all()):
+            raise models.ProtectedError(
+                msg = 'Can not delete a comment that has threads',
+                protected_objects = self
+            )
+
+
+        return super().delete(using = using, keep_parents = False)
 
 
 

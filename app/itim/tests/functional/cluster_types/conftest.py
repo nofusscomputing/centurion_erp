@@ -11,9 +11,9 @@ def model(model_clustertype):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_clustertype):
 
-    request.cls.kwargs_create_item = kwargs_clustertype.copy()
+    request.cls.kwargs_create_item = kwargs_clustertype()
 
-    yield kwargs_clustertype.copy()
+    yield kwargs_clustertype
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

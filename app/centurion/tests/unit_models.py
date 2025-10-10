@@ -116,7 +116,7 @@ class ModelTestCases(
 
             instance = model_kwarg_data(
                 model = model,
-                model_kwargs = model_kwargs,
+                model_kwargs = model_kwargs(),
                 create_instance = True,
             )
 

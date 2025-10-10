@@ -22,6 +22,8 @@ class SoftwareEnableFeatureFlag(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
     documentation = ''
 
 

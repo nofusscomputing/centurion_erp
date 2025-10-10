@@ -1,5 +1,7 @@
-import datetime
 import pytest
+import random
+
+from django.db import models
 
 from config_management.models.groups import ConfigGroupHosts
 
@@ -18,42 +20,32 @@ def kwargs_configgrouphosts(django_db_blocker,
     kwargs_centurionmodel, model_configgroups, kwargs_configgroups,
 ):
 
+    def factory():
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        centurion_kwargs = kwargs_centurionmodel.copy()
+            centurion_kwargs = kwargs_centurionmodel()
 
-        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-
-        host_kwargs = kwargs_device.copy()
-        host_kwargs.update({
-            'name': 'cgh' + str(random_str).replace(
-                ' ', '').replace(':', '').replace('+', '').replace('.', ''),
-            'organization': centurion_kwargs['organization']
-        })
-
-        host = model_device.objects.create( **host_kwargs )
+            host = model_device.objects.create( **kwargs_device() )
 
 
-        group_kwargs = kwargs_configgroups.copy()
-        group_kwargs.update({
-            'name': 'cgg' + random_str,
-            'organization': centurion_kwargs['organization']
-        })
+            group_kwargs = kwargs_configgroups()
+            group_kwargs.update({
+                'name': 'cgg' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+                'organization': centurion_kwargs['organization']
+            })
 
-        group = model_configgroups.objects.create( **group_kwargs )
+            group = model_configgroups.objects.create( **group_kwargs )
 
-        kwargs = {
-            **centurion_kwargs,
-            'host': host,
-            'group': group,
-            'modified': '2024-06-07T23:00:00Z',
-            }
+            host = model_device.objects.create( **kwargs_device() )
 
-    yield kwargs.copy()
+            kwargs = {
+                **centurion_kwargs,
+                'host': host,
+                'group': group,
+                'modified': '2024-06-07T23:00:00Z',
+                }
 
-    with django_db_blocker.unblock():
+        return kwargs
 
-        host.delete()
-
-        group.delete()
+    yield factory

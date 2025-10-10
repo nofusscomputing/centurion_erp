@@ -29,14 +29,18 @@ def serializer_githubrepository():
 @pytest.fixture( scope = 'class')
 def kwargs_githubrepository( kwargs_gitrepository ):
 
-    kwargs = {
-        **kwargs_gitrepository.copy(),
-        'wiki': True,
-        'issues': True,
-        'sponsorships': True,
-        'preserve_this_repository': True,
-        'discussions': True,
-        'projects': True,
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_gitrepository(),
+            'wiki': True,
+            'issues': True,
+            'sponsorships': True,
+            'preserve_this_repository': True,
+            'discussions': True,
+            'projects': True,
+        }
+
+        return kwargs
+
+    yield factory

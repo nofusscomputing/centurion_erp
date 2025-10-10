@@ -1,5 +1,6 @@
-import datetime
 import pytest
+import random
+
 
 from itam.models.operating_system import OperatingSystem
 from itam.serializers.operating_system import (
@@ -24,25 +25,23 @@ def kwargs_operatingsystem(django_db_blocker,
     kwargs_manufacturer, model_manufacturer,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        publisher = model_manufacturer.objects.create( **kwargs_manufacturer.copy() )
+        with django_db_blocker.unblock():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'os' + random_str,
-        'publisher': publisher,
-    }
+            publisher = model_manufacturer.objects.create( **kwargs_manufacturer() )
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'os' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'publisher': publisher,
+        }
 
-    with django_db_blocker.unblock():
+        return kwargs
 
-        publisher.delete()
+    yield factory
+
 
 
 @pytest.fixture( scope = 'class')

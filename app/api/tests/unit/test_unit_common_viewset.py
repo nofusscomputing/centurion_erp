@@ -1,6 +1,7 @@
 import django
 import logging
 import pytest
+import random
 
 from django.contrib.auth.models import ContentType, Permission
 
@@ -348,7 +349,16 @@ class CommonViewSetTestCases(
 
         with django_db_blocker.unblock():
 
-            user = model_user.objects.create( **kwargs_user )
+            kwargs = kwargs_user()
+            kwargs['username'] = "test_user1-" + str(
+                str(
+                    random.randint(1,99))
+                    + str(random.randint(300,399))
+                    + str(random.randint(400,499)
+                )
+            ),
+
+            user = model_user.objects.create( **kwargs )
 
         view_set = viewset()
         model = getattr(view_set, 'model', None)
@@ -1788,7 +1798,16 @@ class CommonSubModelViewSetInheritedCases(
 
         with django_db_blocker.unblock():
 
-            user = model_user.objects.create( **kwargs_user )
+            kwargs = kwargs_user()
+            kwargs['username'] = "test_user1-" + str(
+                str(
+                    random.randint(1,99))
+                    + str(random.randint(300,399))
+                    + str(random.randint(400,499)
+                )
+            ),
+
+            user = model_user.objects.create( **kwargs )
 
         view_set = viewset()
 
@@ -1801,7 +1820,7 @@ class CommonSubModelViewSetInheritedCases(
 
         view_set.request = request
         view_set.kwargs = {
-            'model_name': model._meta.model_name
+            view_set.model_kwarg: model._meta.model_name
         }
 
         yield view_set

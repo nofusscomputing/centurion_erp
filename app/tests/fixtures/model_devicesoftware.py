@@ -1,7 +1,4 @@
-import datetime
 import pytest
-
-from django.core.exceptions import ObjectDoesNotExist
 
 from itam.models.device import DeviceSoftware
 
@@ -22,37 +19,31 @@ def kwargs_devicesoftware(django_db_blocker,
     kwargs_softwareversion, model_softwareversion
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    model_objs = []
+    def factory(model_objs = model_objs):
 
-    with django_db_blocker.unblock():
+        with django_db_blocker.unblock():
 
-        device = model_device.objects.create(
-            **kwargs_device.copy()
-        )
+            device = model_device.objects.create(
+                **kwargs_device()
+            )
 
-        softwareversion = model_softwareversion.objects.create(
-            **kwargs_softwareversion
-        )
+            softwareversion = model_softwareversion.objects.create(
+                **kwargs_softwareversion()
+            )
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'device': device,
-        'software': kwargs_softwareversion['software'],
-        'action': DeviceSoftware.Actions.INSTALL,
-        'version': softwareversion,
-        'installedversion': softwareversion,
-        'installed': '2025-06-11T17:38:00Z',
-    }
+            model_objs += [ device, softwareversion ]
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'device': device,
+            'software': kwargs_softwareversion()['software'],
+            'action': DeviceSoftware.Actions.INSTALL,
+            'version': softwareversion,
+            'installedversion': softwareversion,
+            'installed': '2025-06-11T17:38:00Z',
+        }
 
-    with django_db_blocker.unblock():
+        return kwargs
 
-        try:
-            device.delete()
-        except ObjectDoesNotExist:
-            pass
-
-        softwareversion.delete()
+    yield factory

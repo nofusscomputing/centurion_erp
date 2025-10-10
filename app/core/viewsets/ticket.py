@@ -260,6 +260,7 @@ class ViewSet( SubModelViewSet ):
                 viewname = '_api_ticketbase_sub-list',
                 request = self.request,
                 kwargs = {
+                    'app_label': self.model._meta.app_label,
                     'ticket_type': self.kwargs[self.model_kwarg],
                 }
             )
@@ -270,27 +271,28 @@ class ViewSet( SubModelViewSet ):
 
     def get_permission_required(self):
 
-        import_permission = self.model._meta.app_label + '.import_' + self.model._meta.model_name
 
-        if(import_permission in self.request.user.get_permissions( tenancy = False )):
+        if not self._permission_required:
 
-            self._has_import = True
+            # tenancy = get from http/post data
+            # self._has_import = self.request.user.has_perm(
+            #     permission = self.model._meta.app_label + '.import_' + self.model._meta.model_name,
+            #     tenancy = tenancy
+            # )
 
+            # self._has_purge = self.request.user.has_perm(
+            #     permission = self.model._meta.app_label + '.purge_' + self.model._meta.model_name,
+            #     obj = self.get_queryset()[0]
+            # )
 
-        purge_permission = self.model._meta.app_label + '.purge_' + self.model._meta.model_name
+            # self._has_triage = self.request.user.has_perm(
+            #     permission = self.model._meta.app_label + '.triage_' + self.model._meta.model_name,
+            #     obj = self.get_queryset()[0]
+            # )
 
-        if(purge_permission in self.request.user.get_permissions( tenancy = False )):
+            self._permission_required = super().get_permission_required()
 
-            self._has_purge = True
-
-
-        triage_permission = self.model._meta.app_label + '.triage_' + self.model._meta.model_name
-
-        if(triage_permission in self.request.user.get_permissions( tenancy = False )):
-
-            self._has_triage = True
-
-        return super().get_permission_required()
+        return self._permission_required
 
 
 
