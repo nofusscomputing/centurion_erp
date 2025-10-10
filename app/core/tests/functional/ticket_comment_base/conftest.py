@@ -17,6 +17,6 @@ def model(request):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_ticketcommentbase):
 
-    request.cls.kwargs_create_item = kwargs_ticketcommentbase.copy()
+    request.cls.kwargs_create_item = kwargs_ticketcommentbase()
 
-    yield kwargs_ticketcommentbase.copy()
+    yield kwargs_ticketcommentbase

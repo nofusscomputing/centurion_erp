@@ -12,6 +12,8 @@ class ProjectMilestone(
     CenturionModel
 ):
 
+    _ticket_linkable = False
+
     model_tag = 'project_milestone'
 
 

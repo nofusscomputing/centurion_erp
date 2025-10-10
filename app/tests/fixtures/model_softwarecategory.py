@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from itam.models.software import SoftwareCategory
 from itam.serializers.software_category import (
@@ -21,16 +21,16 @@ def model_softwarecategory(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_softwarecategory(kwargs_centurionmodel):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'name': 'sc_' + random_str,
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'name': 'sc_' + str( random.randint(1,999) ) + str( random.randint(1,999) ) + str( random.randint(1,999) ),
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

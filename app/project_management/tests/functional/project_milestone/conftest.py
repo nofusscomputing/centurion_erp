@@ -11,9 +11,9 @@ def model(model_projectmilestone):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_projectmilestone):
 
-    request.cls.kwargs_create_item = kwargs_projectmilestone.copy()
+    request.cls.kwargs_create_item = kwargs_projectmilestone()
 
-    yield kwargs_projectmilestone.copy()
+    yield kwargs_projectmilestone
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from access.models.company_base import Company
 from access.serializers.entity_company import (
@@ -21,16 +21,16 @@ def model_company(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_company( kwargs_entity ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
+    def factory():
 
-    kwargs = {
-        **kwargs_entity.copy(),
-        'name': 'c' + random_str,
-    }
+        kwargs = {
+            **kwargs_entity(),
+            'name': 'c' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+        }
 
-    yield kwargs.copy()
+        return kwargs
+
+    yield factory
 
 
 @pytest.fixture( scope = 'class')

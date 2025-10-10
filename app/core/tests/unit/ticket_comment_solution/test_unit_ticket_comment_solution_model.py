@@ -1,6 +1,9 @@
 import pytest
 
 from django.apps import apps
+from django.db import models
+
+from access.tests.unit.managers.test_unit_tenancy_manager import has_arg_kwarg
 
 from core.models.ticket_comment_solution import TicketCommentSolution
 
@@ -64,7 +67,7 @@ class TicketCommentSolutionModelTestCases(
 
         else:
 
-            kwargs = model_kwargs
+            kwargs = model_kwargs()
 
             kwargs['ticket'].is_closed = False
             kwargs['ticket'].date_closed = None
@@ -134,7 +137,7 @@ class TicketCommentSolutionModelTestCases(
 
 
 
-    def test_function_called_clean_ticketcommentsolution(self, model, mocker, ticket):
+    def test_function_called_clean_ticketcommentsolution(self, model, mocker, model_kwargs, ticket):
         """Function Check
 
         Ensure function `TicketCommentBase.clean` is called
@@ -142,7 +145,7 @@ class TicketCommentSolutionModelTestCases(
 
         spy = mocker.spy(TicketCommentSolution, 'clean')
 
-        valid_data = self.kwargs_create_item.copy()
+        valid_data = model_kwargs()
 
         valid_data['ticket'] = ticket
 
@@ -262,3 +265,97 @@ class TicketCommentSolutionModelPyTest(
         model_instance.save()
 
         validate_unique.assert_called_once()
+
+
+    def test_manager_tenancy_filter_tenant(self, mocker,
+        model_instance, model, api_request_permissions
+    ):
+
+        filter = mocker.spy(models.QuerySet, 'filter')
+
+        obj = model_instance
+
+        obj.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        obj.ticket.is_solved = False
+
+        obj.ticket.save()
+
+        if hasattr(model, 'organization'):
+            obj.organization = api_request_permissions['tenancy']['user']
+            obj.save()
+
+        filter.reset_mock()
+
+        model.objects.user(
+            user = api_request_permissions['user']['view'],
+            permission = str( model._meta.app_label + '.view_' + model._meta.model_name )
+        ).all()
+
+        assert any(
+            has_arg_kwarg(call = c, key = 'organization__in') 
+            and c.args[0].model is model for c in filter.call_args_list
+        )
+
+
+    def test_method_clean_calls_super_centurion_mixin(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch('django.db.models.base.Model.clean', return_value = None)
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.ticket.save()
+
+        super_clean.reset_mock()
+
+        model_instance.clean()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_clean_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.clean', return_value = None
+        )
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.ticket.save()
+
+        super_clean.reset_mock()
+
+        model_instance.clean()
+
+        super_clean.assert_called_once()
+
+
+    def test_method_clean_calls_super_tenancy_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch('django.db.models.base.Model.clean', return_value = None)
+
+        model_instance.ticket.status = model_instance.ticket.__class__.TicketStatus.NEW
+        model_instance.ticket.is_solved = False
+
+        model_instance.ticket.save()
+
+        super_clean.reset_mock()
+
+        model_instance.clean()
+
+
+        super_clean.assert_called_once()

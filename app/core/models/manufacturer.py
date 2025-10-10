@@ -90,6 +90,7 @@ class Manufacturer(
 
             self.organization = app_settings.global_organization
 
+        super().clean()
 
     def __str__(self):
 

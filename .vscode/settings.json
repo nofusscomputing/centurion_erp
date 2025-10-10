@@ -36,4 +36,10 @@
     "multiDiffEditor.experimental.enabled": false,
     "diffEditor.experimental.showEmptyDecorations": false,
     "editor.experimental.asyncTokenization": false,
+    "licenser.author": "No Fuss Computing",
+    "licenser.projectName": "Centurion ERP",
+    "licenser.customHeaderFile": "${workspaceFolder}/.vscode/licenser.txt",
+    "licenser.license": "Custom",
+    "licenser.customSPDXId": "AGPL-3.0-only",
+    "licenser.disableAutoHeaderInsertion": true
 }

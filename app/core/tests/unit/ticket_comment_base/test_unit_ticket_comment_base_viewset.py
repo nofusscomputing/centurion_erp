@@ -1,129 +1,133 @@
-import django
 import pytest
 
-from django.test import Client, TestCase
+from django.db import models
+from types import NoneType
 
-from rest_framework.reverse import reverse
-
-from api.tests.unit.viewset.test_unit_tenancy_viewset import SubModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import (
+    SubModelViewSetInheritedCases
+)
 
 from core.viewsets.ticket_comment import (
-    NoDocsViewSet,
     TicketBase,
     TicketCommentBase,
     ViewSet
 )
 
-User = django.contrib.auth.get_user_model()
 
 
-
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
+@pytest.mark.tickets
 @pytest.mark.model_ticketcommentbase
-class TicketCommentBaseViewsetTestCases(
+class ViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
 
-    model = None
 
-    viewset = ViewSet
-
-    base_model = TicketCommentBase
-
-    route_name = None
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-    @classmethod
-    def setUpTestData(self):
-
-
-        self.viewset = ViewSet
-
-
-        if self.model is None:
-
-            self.model = TicketCommentBase
-
-
-
-        super().setUpTestData()
-
-        self.ticket = TicketBase.objects.create(
-            organization = self.organization,
-            title = 'ticket comment test',
-            opened_by = self.view_user,
-        )
-
-        self.kwargs = {
-            'ticket_id': self.ticket.id
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            '_has_import': {
+                'type': bool,
+                'value': False
+            },
+            '_has_purge': {
+                'type': bool,
+                'value': False
+            },
+            '_has_triage': {
+                'type': bool,
+                'value': False
+            },
+            '_model_documentation': {
+                'type': NoneType,
+            },
+            'base_model': {
+                'value': TicketCommentBase,
+            },
+            'back_url': {
+                'type': NoneType,
+            },
+            'documentation': {
+                'type': NoneType,
+            },
+            'filterset_fields': {
+                'value': [
+                    'category',
+                    'external_system',
+                    'external_system',
+                    'is_template',
+                    'organization',
+                    'parent',
+                    'source',
+                    'template',
+                ]
+            },
+            'model': {
+                'value': TicketCommentBase
+            },
+            'model_documentation': {
+                'type': NoneType,
+            },
+            'model_kwarg': {
+                'value':'ticket_comment_model',
+            },
+            'model_suffix': {
+                'type': NoneType,
+            },
+            'parent_model': {
+                'type': models.base.ModelBase,
+                'value': TicketBase
+            },
+            'parent_model_pk_kwarg': {
+                'value': 'ticket_id'
+            },
+            'search_fields': {
+                'value': [
+                    'body',
+                ]
+            },
+            'serializer_class': {
+                'type': NoneType,
+            },
+            'view_description': {
+                'value': 'Comments made on Ticket'
+            },
+            'view_name': {
+                'type': NoneType,
+            },
+            'view_serializer_name': {
+                'type': NoneType,
+            },
         }
 
-        if self.model is not TicketCommentBase:
+    def test_function_get_parent_model(self, mocker, viewset):
+        """Test class function
 
-            self.kwargs = {
-                **self.kwargs,
-                'ticket_comment_model': self.model._meta.sub_model_type
-            }
+        Ensure that when function `get_parent_model` is called it returns the value
+        of `viewset.parent_model`.
 
-        self.viewset.kwargs = self.kwargs
-
-
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
-
-        client.force_login(self.view_user)
-
-        self.http_options_response_list = client.options(url)
-
-
-    @classmethod
-    def tearDownClass(cls):
-
-        cls.ticket.delete()
-
-        super().tearDownClass()
-
-
-
-    def test_view_attr_value_model_kwarg(self):
-        """Attribute Test
-
-        Attribute `model_kwarg` must be equal to model._meta.sub_model_type
+        For all models that dont have attribute `viewset.parent_model` set, it should
+        return None
         """
 
-        view_set = self.viewset()
-
-        assert view_set.model_kwarg == 'ticket_comment_model'
+        assert viewset().get_parent_model() is TicketBase
 
 
 
 class TicketCommentBaseViewsetInheritedCases(
-    TicketCommentBaseViewsetTestCases,
+    ViewsetTestCases,
 ):
-    """Test Suite for Sub-Models of TicketCommentBase
-    
-    Use this Test suit if your sub-model inherits directly from TicketCommentBase.
-    """
-
-    model: str = None
-    """name of the model to test"""
-
-    route_name = 'v2:_api_ticket_comment_base_sub'
+    pass
 
 
 
 @pytest.mark.module_core
-class TicketCommentBaseViewsetTest(
-    TicketCommentBaseViewsetTestCases,
-    TestCase,
+class TicketCommentBaseViewsetPyTest(
+    ViewsetTestCases,
 ):
 
-    kwargs = {}
-
-    route_name = 'v2:_api_ticket_comment_base'
-
-    viewset = NoDocsViewSet
+    pass

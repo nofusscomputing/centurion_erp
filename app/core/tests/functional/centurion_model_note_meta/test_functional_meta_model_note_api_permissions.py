@@ -88,85 +88,93 @@ class ModelNotesMetaAPIPermissionsTestCases(
 
 
     @pytest.fixture( scope = 'class', autouse = True)
-    def model_kwargs(self, django_db_blocker,
+    def model_kwargs(self, django_db_blocker, clean_model_from_db,
         request, note_model, kwargs_centurionmodelnotemeta
     ):
 
-        model_kwargs = kwargs_centurionmodelnotemeta.copy()
 
-        with django_db_blocker.unblock():
+        request.cls.kwargs_create_item = {}
 
-            note_model_kwargs = request.getfixturevalue('kwargs_' + note_model._meta.model_name)
+        def factory(note_model = note_model,
+            kwargs_centurionmodelnotemeta = kwargs_centurionmodelnotemeta,
+        ):
 
-            kwargs = {}
+            model_kwargs = kwargs_centurionmodelnotemeta()
 
-            many_field = {}
+            with django_db_blocker.unblock():
 
-            for field, value in note_model_kwargs.items():
+                note_model_kwargs = request.getfixturevalue('kwargs_' + note_model._meta.model_name)()
 
-                if not hasattr(getattr(note_model, field), 'field'):
-                    continue
+                kwargs = {}
 
-                if isinstance(getattr(note_model, field).field, models.ManyToManyField):
+                many_field = {}
 
-                    if field in many_field:
+                for field, value in note_model_kwargs.items():
 
-                        many_field[field] += [ value ]
+                    if not hasattr(getattr(note_model, field), 'field'):
+                        continue
 
-                    elif isinstance(value, list):
+                    if isinstance(getattr(note_model, field).field, models.ManyToManyField):
 
-                        value_list = []
+                        if field in many_field:
 
-                        for list_value in value:
+                            many_field[field] += [ value ]
 
-                            value_list += [ list_value ]
+                        elif isinstance(value, list):
 
+                            value_list = []
 
-                        value = value_list
+                            for list_value in value:
 
-                    else:
-
-                        many_field.update({
-                            field: [
-                                value
-                            ]
-                        })
-
-                    continue
-
-                kwargs.update({
-                    field: value
-                })
+                                value_list += [ list_value ]
 
 
-            model = note_model.objects.create(
-                **kwargs
-            )
+                            value = value_list
+
+                        else:
+
+                            many_field.update({
+                                field: [
+                                    value
+                                ]
+                            })
+
+                        continue
+
+                    kwargs.update({
+                        field: value
+                    })
 
 
-            for field, values in many_field.items():
+                model = note_model.objects.create(
+                    **kwargs
+                )
 
-                for value in values:
+                for field, values in many_field.items():
 
-                    getattr(model, field).add( value )
+                    for value in values:
+
+                        getattr(model, field).add( value )
 
 
-        model_kwargs.update({
-            'model': model
-        })
-        request.cls.kwargs_create_item = model_kwargs
+            model_kwargs.update({
+                'model': model
+            })
+            request.cls.kwargs_create_item.update(model_kwargs)
 
-        yield model_kwargs
+            return model_kwargs
 
-        with django_db_blocker.unblock():
+        yield factory
 
-            model.delete()
+        clean_model_from_db(note_model)
 
 
     @pytest.fixture( scope = 'class' )
-    def model(self, request):
+    def model(self, request, clean_model_from_db):
 
-        return request.cls.model_class
+        yield request.cls.model_class
+
+        clean_model_from_db(request.cls.model_class)
 
 
     @pytest.mark.skip( reason = 'ToDo: Figure out how to dynomagic add note_model instance' )

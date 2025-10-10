@@ -51,14 +51,19 @@ def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
 
     for model in apps.get_models():
 
-        if model._meta.app_label not in model_apps:
+        model_name = str(model._meta.model_name)
+
+        if(
+            model._meta.app_label not in model_apps
+            or model_name.endswith('ticket') and len(model_name) > 6
+        ):
             continue
 
         skip = False
 
         for exclude in excludes:
 
-            if exclude in str(model._meta.model_name):
+            if exclude in model_name:
                 skip = True
                 break
 
@@ -93,16 +98,20 @@ def _generated(self, {args_str}):
 
 
 
-def model(self, model__model_name):
+def model(self, model__model_name, clean_model_from_db):
 
     yield model__model_name
+
+    clean_model_from_db(model__model_name)
 
 
 def model_kwargs(self, request, kwargs__model_name):
 
-    request.cls.kwargs_create_item = kwargs__model_name.copy()
+    kwargs = kwargs__model_name
 
-    yield kwargs__model_name.copy()
+    request.cls.kwargs_create_item = kwargs
+
+    yield kwargs
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item
@@ -165,7 +174,7 @@ for centurion_model in get_models(
             '__module__': 'api.tests.functional.test_functional_meta_permissions_api',
             '__qualname__': cls_name,
             'model': make_fixture_with_args(
-                arg_names = ['model_' + str(centurion_model._meta.model_name) ],
+                arg_names = ['model_' + str(centurion_model._meta.model_name), 'clean_model_from_db' ],
                 func = model,
                 decorator_factory = pytest.fixture,
                 decorator_args = {'scope': 'class'}

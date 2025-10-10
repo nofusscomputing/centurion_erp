@@ -8,6 +8,7 @@ from core.viewsets import (
     ticket_comment,
     ticket_comment_depreciated,
     ticket_linked_item,
+    ticket_model_link,
     related_ticket,
 
 )
@@ -52,10 +53,6 @@ router.register(
     feature_flag = '2025-00006', basename = '_api_ticketbase'
 )
 router.register(
-    prefix=f'/ticket/(?P<ticket_type>[{ticket_type_names}]+)', viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticketbase_sub'
-)
-router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/comment', viewset = ticket_comment.NoDocsViewSet,
     feature_flag = '2025-00006', basename = '_api_ticket_comment_base'
 )
@@ -76,6 +73,10 @@ router.register(
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/linked_item', viewset = ticket_linked_item.ViewSet,
     basename = '_api_v2_ticket_linked_item'
+)
+router.register(
+    prefix=f'/ticket/(?P<ticket_type>[{ticket_type_names}]+)/(?P<model_id>[0-9]+)/models', viewset = ticket_model_link.ViewSet,
+    feature_flag = '2025-00006', basename = '_api_modelticket'
 )
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/related_ticket', viewset = related_ticket.ViewSet,

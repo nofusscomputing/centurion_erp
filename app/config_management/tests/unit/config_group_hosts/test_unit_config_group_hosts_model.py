@@ -4,7 +4,7 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
@@ -13,7 +13,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 
 @pytest.mark.model_configgrouphosts
 class ConfigGroupHostModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -26,6 +26,9 @@ class ConfigGroupHostModelTestCases(
                 'value': models.NOT_PROVIDED,
             },
             '_notes_enabled': {
+                'value': False,
+            },
+            '_ticket_linkable': {
                 'value': False,
             },
         }

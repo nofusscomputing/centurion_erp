@@ -27,9 +27,9 @@ def create_serializer():
 @pytest.fixture( scope = 'class')
 def model_kwargs(request, kwargs_employee):
 
-    request.cls.kwargs_create_item = kwargs_employee.copy()
+    request.cls.kwargs_create_item = kwargs_employee()
 
-    yield kwargs_employee.copy()
+    yield kwargs_employee
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

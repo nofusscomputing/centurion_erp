@@ -76,7 +76,7 @@ class ViewsetTestCases(
 
         mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
-        view_set.kwargs = { 'project_id': model_kwargs['project'].id }
+        view_set.kwargs = { 'project_id': model_kwargs()['project'].id }
 
         assert view_set.queryset is None    # Must be empty before init
 
@@ -102,7 +102,7 @@ class ViewsetTestCases(
         mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.kwargs = {
-            'project_id': model_kwargs['project'].id
+            'project_id': model_kwargs()['project'].id
         }
 
         qs = mocker.spy(view_set.model, 'objects')
@@ -137,7 +137,7 @@ class ViewsetTestCases(
         view_set = viewset()
         view_set.request = mocker.Mock()
         view_set.kwargs =  {
-                'project_id': model_kwargs['project'].id
+                'project_id': model_kwargs()['project'].id
         }
 
         mocker.patch.object(view_set, 'get_permission_required', return_value = None)
@@ -165,7 +165,7 @@ class ViewsetTestCases(
 
         view_set.kwargs =  {
             'pk': 1,
-            'project_id': model_kwargs['project'].id
+            'project_id': model_kwargs()['project'].id
         }
 
         if model._is_submodel:

@@ -29,6 +29,8 @@ class CenturionAudit(
     _notes_enabled: bool = False
     """Don't create notes table for istory model"""
 
+    _ticket_linkable = False
+
     model_notes = None
 
     @property

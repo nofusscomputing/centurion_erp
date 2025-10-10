@@ -1,7 +1,5 @@
 import pytest
 
-from django.db import models
-
 from itim.tests.unit.ticket_slm.test_unit_ticket_slm_model import SLMTicketModelInheritedCases
 
 from itim.models.request_ticket import RequestTicket

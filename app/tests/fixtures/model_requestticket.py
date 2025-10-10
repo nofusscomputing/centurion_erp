@@ -1,6 +1,11 @@
 import pytest
 
 from itim.models.request_ticket import RequestTicket
+from itim.serializers.ticketbase_request import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -17,8 +22,23 @@ def kwargs_requestticket(kwargs_slmticket,
 
 ):
 
-    kwargs = {
-        **kwargs_slmticket,
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_slmticket(),
+        }
+
+        return kwargs
+
+    yield factory
+
+
+
+@pytest.fixture( scope = 'class')
+def serializer_requestticket():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

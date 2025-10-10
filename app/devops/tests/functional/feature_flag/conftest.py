@@ -12,9 +12,9 @@ def model(model_featureflag):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_featureflag):
 
-    request.cls.kwargs_create_item = kwargs_featureflag.copy()
+    request.cls.kwargs_create_item = kwargs_featureflag()
 
-    yield kwargs_featureflag.copy()
+    yield kwargs_featureflag
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

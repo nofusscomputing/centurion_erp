@@ -7,7 +7,45 @@ from django.test import Client
 class AdditionalTestCases:
 
 
-    def test_permission_change(self, model_instance, api_request_permissions):
+    def test_permission_add(self, model_instance, api_request_permissions,
+        model_kwargs, kwargs_api_create
+    ):
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['add'] )
+
+        kwargs = model_kwargs()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user'],
+            'model': api_request_permissions['tenancy']['user']
+        })
+
+        the_model = model_instance(
+            kwargs_create = kwargs,
+        )
+
+        url = the_model.get_url( many = True )
+
+        kwargs_create = kwargs_api_create.copy()
+        kwargs_create.update({
+            'organization': api_request_permissions['tenancy']['user'].id,
+            'model': api_request_permissions['tenancy']['user'].id
+        })
+
+        response = client.post(
+            path = url,
+            data = kwargs_create,
+            content_type = 'application/json'
+        )
+
+        assert response.status_code == 201, response.content
+
+
+
+    def test_permission_change(self, model_instance, api_request_permissions,
+        model_kwargs
+    ):
         """ Check correct permission for change
 
         Make change with user who has change permission
@@ -17,7 +55,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['change'] )
 
-        kwargs = self.kwargs_create_item.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user'],
             'model': api_request_permissions['tenancy']['user']
@@ -40,7 +78,9 @@ class AdditionalTestCases:
 
 
 
-    def test_permission_delete(self, model_instance, api_request_permissions):
+    def test_permission_delete(self, model_instance, api_request_permissions,
+        model_kwargs
+    ):
         """ Check correct permission for delete
 
         Delete item as user with delete permission
@@ -50,7 +90,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['delete'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user'],
             'model': api_request_permissions['tenancy']['user']
@@ -70,7 +110,9 @@ class AdditionalTestCases:
         assert response.status_code == 204, response.content
 
 
-    def test_permission_view(self, model_instance, api_request_permissions):
+    def test_permission_view(self, model_instance, api_request_permissions,
+        model_kwargs
+    ):
         """ Check correct permission for view
 
         Attempt to view as user with view permission
@@ -80,7 +122,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user'],
             'model': api_request_permissions['tenancy']['user']
@@ -113,7 +155,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = self.kwargs_create_item
+        kwargs = model_kwargs()
         kwargs.update({
             'organization': api_request_permissions['tenancy']['user'],
             'model': api_request_permissions['tenancy']['user']
@@ -148,7 +190,7 @@ class AdditionalTestCases:
 
         client.force_login( api_request_permissions['user']['view'] )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'model': api_request_permissions['tenancy']['different']
         })
@@ -157,7 +199,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'model': api_request_permissions['tenancy']['global']
         })
@@ -166,7 +208,7 @@ class AdditionalTestCases:
             kwargs_create = kwargs
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs.update({
             'model': api_request_permissions['tenancy']['user']
         })

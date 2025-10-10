@@ -106,3 +106,40 @@ if apps.models_ready:
             )
 
             setattr(sys.modules[module_path], notes_meta_name, NotesMetaModel)
+
+
+        if getattr(model, '_ticket_linkable', False):
+
+            ticketlinkedmodel_meta_name = f'{model._meta.object_name}Ticket'
+
+            if ticketlinkedmodel_meta_name in existing_models:
+                continue
+
+
+            TicketLinkedModel = type(
+                ticketlinkedmodel_meta_name,
+                ( import_string("core.models.model_tickets.ModelTicketMetaModel"), ),
+                {
+                    '__module__': module_path,
+                    '__qualname__': ticketlinkedmodel_meta_name,
+                    '__doc__': f'Auto-generated meta model for {name} Ticket.',
+                    'Meta': type('Meta', (), {
+                                'app_label': model._meta.app_label,
+                                'db_table': model._meta.db_table + '_ticket',
+                                'managed': True,
+                                'verbose_name': model._meta.verbose_name + ' Ticket',
+                                'verbose_name_plural': model._meta.verbose_name + ' Tickets',
+                            }),
+                    'model': models.ForeignKey(
+                        model,
+                        blank = False,
+                        help_text = 'Model the ticket is for.',
+                        null = False,
+                        on_delete = models.CASCADE,
+                        related_name = '+',
+                        verbose_name = 'Model',
+                    )
+                }
+            )
+
+            setattr(sys.modules[module_path], ticketlinkedmodel_meta_name, TicketLinkedModel)

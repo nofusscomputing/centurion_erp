@@ -1,5 +1,5 @@
-import datetime
 import pytest
+import random
 
 from itam.models.operating_system import OperatingSystemVersion
 from itam.serializers.operating_system_version import (
@@ -24,28 +24,26 @@ def kwargs_operatingsystemversion(django_db_blocker,
     kwargs_operatingsystem, model_operatingsystem,
 ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-    random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '')
 
-    with django_db_blocker.unblock():
+    def factory():
 
-        os = model_operatingsystem.objects.create(
-            **kwargs_operatingsystem.copy()
-        )
+        with django_db_blocker.unblock():
+
+            os = model_operatingsystem.objects.create(
+                **kwargs_operatingsystem()
+            )
 
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'operating_system': os,
-        'name': 'osv' + random_str,
-    }
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'operating_system': os,
+            'name': 'osv' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+        }
 
-    yield kwargs.copy()
+        return kwargs
 
-    with django_db_blocker.unblock():
+    yield factory
 
-        os.delete()
 
 
 @pytest.fixture( scope = 'class')

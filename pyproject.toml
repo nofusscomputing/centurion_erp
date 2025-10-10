@@ -39,24 +39,35 @@ omit = [
     #
     "app/core/models/model_history.py",
     "app/*/models/*_history.py",
+    "app/core/mixins/history_save.py",
+    "app/devops/models/git_repository/github_history.py",
+    "app/devops/models/git_repository/gitlab_history.py",
     #
     # Old Notes model
     #
     "app/core/models/notes.py",
     "app/*/models/*_notes.py",
+    "app/devops/models/git_repository/github_notes.py",
+    "app/devops/models/git_repository/gitlab_notes.py",
     #
     # Old Ticketing Model
     #
+    "app/core/lib/slash_commands/linked_model.py",
     "app/core/models/ticket/*",
     "app/core/signal/ticket_linked_item_delete.py",
     "app/core/serializers/ticket_depreciated.py",
+    "app/core/serializers/ticket_comment_depreciated.py",
+    "app/core/serializers/ticket_related.py",
     "app/core/viewsets/ticket_depreciated.py",
     # "app/core/serializers/ticket_related.py",
     # "app/core/serializers/ticket_linked_item.py",
     "app/core/viewsets/related_ticket.py",
     "app/core/viewsets/ticket_linked_item.py",
     "app/core/viewsets/ticket_comment_depreciated.py",
-    
+    #
+    # Not required as file is for debugging
+    #
+    "app/centurion/middleware/trace_calls.py",
 ]
 
 
@@ -1124,6 +1135,7 @@ markers = [
     "model_appsettings: Selects tests for model app settings.",
     "model_authtoken: Selects tests for model Auth Token.",
     "model_company: Selects test for model Company.",
+    "model_centurionuser: Selects tests for modell Centurion User",
     "model_configgroups: Selects Config Group tests.",
     "model_configgrouphosts: Selects Config Group Hosts tests.",
     "model_configgroupsoftware: Selects Config Group Software tests.",
@@ -1147,6 +1159,8 @@ markers = [
     "model_knowledgebase: Selects Knowledge base tests.",
     "model_knowledgebasecategory: Selects Knowledge base category tests.",
     "model_manufacturer: Select all manufacturer tests.",
+    "model_modelticket: Select all tests for model Model Tickets",
+    "model_modelticketmeta: Select all tests for model Model Tickets Meta",
     "model_operatingsystem: Select tests for model Operating System.",
     "model_operatingsystemversion: Select tests for model Operating System Version.",
     "model_person: Selects test for model Person.",
@@ -1197,6 +1211,7 @@ markers = [
     "regression: selects all tests for regression.",
     "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
+    "tickets: Selects all tests for tickets",
     "unit: Selects all Unit Tests.",
     "viewset: Selects all ViewSet Tests.",
 ]

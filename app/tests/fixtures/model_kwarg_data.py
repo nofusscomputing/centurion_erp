@@ -1,10 +1,9 @@
-import datetime
 import pytest
 import random
 import logging
 
 from django.conf import settings
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 
 from django.db import models
 
@@ -15,9 +14,7 @@ def model_kwarg_data(django_db_blocker):
 
     def data(model, model_kwargs, model_instance = None, create_instance = False, instances = instances) -> dict:
 
-        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
-        random_str = str(random_str).replace(
-            ' ', '').replace(':', '').replace('+', '').replace('.', '').replace('-', '')
+        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
 
         log:logging.Logger = settings.CENTURION_LOG.getChild('fixture').getChild('model_kwarg_data')
         kwargs = {}
@@ -74,41 +71,41 @@ def model_kwarg_data(django_db_blocker):
 
                 continue
 
-            elif(
-                (
-                    getattr(model, field).field.unique
-                    or is_unique_together_field
-                )
-                and not isinstance(getattr(model, field).field, models.UUIDField)
-                and not isinstance(getattr(model, field).field, models.ForeignKey)
+            # elif(
+            #     (
+            #         getattr(model, field).field.unique
+            #         or is_unique_together_field
+            #     )
+            #     and not isinstance(getattr(model, field).field, models.UUIDField)
+            #     and not isinstance(getattr(model, field).field, models.ForeignKey)
 
-            ):
+            # ):
 
-                value = str('a' + str(random.randint(133,499)) + str(random.randint(500,999)))
+            #     value = str('a' + str(random.randint(133,499)) + str(random.randint(500,999)))
 
-                if isinstance(getattr(model, field).field, models.IntegerField):
+            #     if isinstance(getattr(model, field).field, models.IntegerField):
 
-                    # value = str(random_str)[( len(random_str) - 13 ):]
-                    value = random.randint(1,999999)
+            #         # value = str(random_str)[( len(random_str) - 13 ):]
+            #         value = random.randint(1,999999)
 
-                elif isinstance(getattr(model, field).field, models.EmailField):
-
-
-                    value = str(random.randint(1,999)) + '@instance.tld'
-
-            elif isinstance(getattr(model, field).field, models.UUIDField):
+            #     elif isinstance(getattr(model, field).field, models.EmailField):
 
 
-                value = '6318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(20000, 99999) )
+            #         value = str(random.randint(1,999)) + '@instance.tld'
 
-            elif(
-                isinstance(getattr(model, field).field, models.DateField)
-                and field not in [ 'created', 'modified' ]
-            ):
+            # elif isinstance(getattr(model, field).field, models.UUIDField):
 
 
-                value = str(random.randint(1972, 2037)) + '-' + str(
-                    random.randint(1, 12)) + '-' + str(random.randint(1, 28))
+            #     value = '6318f7cc-e3e8-4680-a3bf-29d77ce' + str( random.randint(20000, 99999) )
+
+            # elif(
+            #     isinstance(getattr(model, field).field, models.DateField)
+            #     and field not in [ 'created', 'modified' ]
+            # ):
+
+
+            #     value = str(random.randint(1972, 2037)) + '-' + str(
+            #         random.randint(1, 12)) + '-' + str(random.randint(1, 28))
 
 
             kwargs.update({
@@ -138,27 +135,27 @@ def model_kwarg_data(django_db_blocker):
 
                 #     if 'unique' in e.error_dict['__all__'][0].code:
 
-                try:
+                # try:
 
-                    instance = model.objects.get(
-                        **kwargs
-                    )
+                #     instance = model.objects.get(
+                #         **kwargs
+                #     )
 
-                except ObjectDoesNotExist as e:
+                # except ObjectDoesNotExist as e:
 
-                    log.exception(
-                        msg = f'{e}\n\n{kwargs}\n\n',
-                        stack_info = True,
-                    )
+                #     log.exception(
+                #         msg = f'{e}\n\n{kwargs}\n\n',
+                #         stack_info = True,
+                #     )
 
-                    if 'modified' in kwargs:
+                #     if 'modified' in kwargs:
 
-                        no_modified_in_kwargs = kwargs.copy()
-                        del no_modified_in_kwargs['modified']
+                #         no_modified_in_kwargs = kwargs.copy()
+                #         del no_modified_in_kwargs['modified']
 
-                        instance = model.objects.get(
-                            **no_modified_in_kwargs
-                        )
+                #         instance = model.objects.get(
+                #             **no_modified_in_kwargs
+                #         )
 
 
             for field, values in many_field.items():

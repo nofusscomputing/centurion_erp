@@ -11,13 +11,13 @@ from django.db import models
 # from core.models.audit import CenturionAudit
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 @pytest.mark.audit_models
 class CenturionAuditModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -25,21 +25,24 @@ class CenturionAuditModelTestCases(
     def parameterized_class_attributes(self):
         
         return {
-        '_audit_enabled': {
-            'value': False,
-        },
-        '_notes_enabled': {
-            'value': False,
-        },
-        'model_tag': {
-            'type': type(None),
-            'value': None,
-        },
-        'url_model_name': {
-            'type': str,
-            'value': 'centurionaudit',
+            '_audit_enabled': {
+                'value': False,
+            },
+            '_notes_enabled': {
+                'value': False,
+            },
+            '_ticket_linkable': {
+                'value': False,
+            },
+            'model_tag': {
+                'type': type(None),
+                'value': None,
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'centurionaudit',
+            }
         }
-    }
 
 
     @property

@@ -17,12 +17,16 @@ def kwargs_checkin(django_db_blocker,
     kwargs_centurionmodel, kwargs_featureflag
 ):
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'software': kwargs_featureflag['software'],
-        'version': '1.20.300',
-        'deployment_id': 'rand deploymentid',
-        'feature': 'a feature',
-    }
+    def factory():
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'software': kwargs_featureflag()['software'],
+            'version': '1.20.300',
+            'deployment_id': 'rand deploymentid',
+            'feature': 'a feature',
+        }
+
+        return kwargs
+
+    yield factory

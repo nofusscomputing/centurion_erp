@@ -28,7 +28,7 @@ class knowledgeBaseCategoryAPITestCases(
 
             kwargs = {}
 
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 
@@ -46,7 +46,7 @@ class knowledgeBaseCategoryAPITestCases(
 
 
             # Switch model fields so all fields can be checked
-            group = model_group.objects.create( **kwargs_group )
+            group = model_group.objects.create( **kwargs_group() )
             kwargs_many_to_many.update({ 'target_team': [ group ]})
             del kwargs['target_user']
 

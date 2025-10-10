@@ -20,7 +20,7 @@ class TenantSerializerTestCases(
 
         with django_db_blocker.unblock():
 
-            item = model.objects.create( **model_kwargs )
+            item = model.objects.create( **model_kwargs() )
 
             yield item
 

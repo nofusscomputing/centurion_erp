@@ -106,6 +106,10 @@ A Sub-model specifically inherits from a normal model with the purpose of using 
 
 All models must contain the core features, being:
 
+- [Assosiate model to ticket](./core/ticket.md#assosiate-object-to-ticket)
+
+    _Link an item to a ticket_
+
 - [Audit History](./core/model_history.md)
 
     _Every change that occurs to a model is recorded_
@@ -121,6 +125,10 @@ All models must contain the core features, being:
 - Model Tag
 
     _Enables the possibility within markdown fields to use its [tag](../user/core/markdown.md#model-reference--model-tag) to create a link to the model._
+
+- [Ticket Linking](../user/core/tickets.md#linking-items-to-a-ticket)
+
+    _Provides the ability to link a model to a ticket._
 
 
 ### History

@@ -27,7 +27,7 @@ class ServiceSerializerTestCases(
 
             kwargs = {}
 
-            for key, value in model_kwargs.items():
+            for key, value in model_kwargs().items():
 
                 field = model._meta.get_field(key)
 
@@ -170,7 +170,7 @@ class ServiceSerializerTestCases(
             action = 'create',
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['is_template'] = True
         ports = kwargs['port']
         del kwargs['port']
@@ -215,7 +215,7 @@ class ServiceSerializerTestCases(
             action = 'create',
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['is_template'] = True
         del kwargs['port']
 
@@ -255,7 +255,7 @@ class ServiceSerializerTestCases(
             action = 'create',
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         kwargs['is_template'] = True
         del kwargs['port']
         del kwargs['device']
@@ -333,7 +333,7 @@ class ServiceSerializerTestCases(
             action = 'create',
         )
 
-        kwargs = kwargs_cluster.copy()
+        kwargs = kwargs_cluster()
         nodes = kwargs['nodes']
         del kwargs['nodes']
         cluster = model_cluster.objects.create( **kwargs )
@@ -379,7 +379,7 @@ class ServiceSerializerTestCases(
             action = 'create',
         )
 
-        kwargs = model_kwargs.copy()
+        kwargs = model_kwargs()
         del kwargs['port']
         root_service = model.objects.create ( **kwargs )
         root_service.dependent_service.add( created_model )

@@ -20,7 +20,7 @@ class knowledgebaseCategorySerializerTestCases(
 
         with django_db_blocker.unblock():
 
-            item = model.objects.create( **model_kwargs )
+            item = model.objects.create( **model_kwargs() )
 
             yield item
 
@@ -112,7 +112,7 @@ class knowledgebaseCategorySerializerTestCases(
         )
 
         kwargs = kwargs_api_create.copy()
-        group = model_group.objects.create( **kwargs_group )
+        group = model_group.objects.create( **kwargs_group() )
         kwargs.update({
             'target_team': [ group.id ]
         })
@@ -184,7 +184,7 @@ class knowledgebaseCategorySerializerTestCases(
             action = 'create',
         )
 
-        group = model_group.objects.create( **kwargs_group )
+        group = model_group.objects.create( **kwargs_group() )
 
         with pytest.raises(ValidationError) as err:
 
@@ -224,7 +224,7 @@ class knowledgebaseCategorySerializerTestCases(
             action = 'create',
         )
 
-        group = model_group.objects.create( **kwargs_group )
+        group = model_group.objects.create( **kwargs_group() )
         created_model.target_user = None
         created_model.target_team.add( group )
         created_model.save()

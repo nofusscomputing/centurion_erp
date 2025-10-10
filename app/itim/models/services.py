@@ -349,6 +349,8 @@ class Service(
 
             self.config_key_variable = self.config_key_variable.lower()
 
+        super().clean()
+
 
     @property
     def config_variables(self):

@@ -95,15 +95,6 @@ class SLMTicketModelTestCases(
         assert type(model().get_related_model()) is type(None)
 
 
-    def test_method_get_url_kwargs(self, model_instance):
-
-        url = model_instance.get_url_kwargs()
-
-        assert model_instance.get_url_kwargs() == {
-            'ticket_type': model_instance._meta.sub_model_type,
-            'pk': model_instance.id
-        }
-
 
 
 class SLMTicketModelInheritedCases(

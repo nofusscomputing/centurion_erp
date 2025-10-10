@@ -15,7 +15,6 @@ from core.models.ticket_comment_base import (
 )
 
 
-@pytest.mark.skip( reason = 'behind Feature flag. see #884' )
 @pytest.mark.model_ticketcommentbase
 class TicketCommentBaseAPIFieldsTestCases(
     APIFieldsInheritedCases,
@@ -33,7 +32,7 @@ class TicketCommentBaseAPIFieldsTestCases(
         with django_db_blocker.unblock():
 
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
 
             kwargs['body'] = 'the template comment'
 
@@ -49,7 +48,7 @@ class TicketCommentBaseAPIFieldsTestCases(
             )
 
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             kwargs['template'] = template_comment
 
             kwargs['ticket'].is_closed = False
@@ -68,11 +67,10 @@ class TicketCommentBaseAPIFieldsTestCases(
             request.cls.item = item
 
 
-            kwargs = model_kwargs.copy()
+            kwargs = model_kwargs()
             kwargs['body'] = 'the child comment'
             kwargs['comment_type'] = model._meta.sub_model_type
             kwargs['parent'] = request.cls.item
-            # kwargs['ticket'] = request.cls.item.ticket
 
             del kwargs['external_ref']
             del kwargs['external_system']

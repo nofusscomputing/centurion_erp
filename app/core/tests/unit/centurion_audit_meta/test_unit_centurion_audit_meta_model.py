@@ -255,3 +255,12 @@ class MetaAbstractModelPyTest(
 
     def test_manager_tenancy_select_related(self):
         pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_method_clean_fields_calls_super_centurion_abstract(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_method_clean_fields_calls_super_centurion_mixin(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_method_clean_fields_calls_super_tenancy_abstract(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )

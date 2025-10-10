@@ -11,9 +11,9 @@ def model(model_operatingsystem):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_operatingsystem):
 
-    request.cls.kwargs_create_item = kwargs_operatingsystem.copy()
+    request.cls.kwargs_create_item = kwargs_operatingsystem()
 
-    yield kwargs_operatingsystem.copy()
+    yield kwargs_operatingsystem
 
     if hasattr(request.cls, 'kwargs_create_item'):
         del request.cls.kwargs_create_item

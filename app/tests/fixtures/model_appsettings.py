@@ -19,24 +19,25 @@ def model_appsettings(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_appsettings( django_db_blocker, model_user ):
 
-    random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+    def factory():
 
-    with django_db_blocker.unblock():
+        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
 
-        user = model_user.objects.create(
-            username = 'a'+random_str,
-            password = 'password'
-        )
+        with django_db_blocker.unblock():
 
-    kwargs = {
-        'device_model_is_global': False,
-    }
+            user = model_user.objects.create(
+                username = 'a'+random_str,
+                password = 'password'
+            )
 
-    yield kwargs.copy()
+        kwargs = {
+            'device_model_is_global': False,
+        }
 
-    with django_db_blocker.unblock():
+        return kwargs
 
-        user.delete()
+    yield factory
+
 
 
 @pytest.fixture( scope = 'class')
@@ -47,4 +48,3 @@ def serializer_appsettings():
         'model': AppSettingsModelSerializer,
         'view': AppSettingsViewSerializer
     }
-

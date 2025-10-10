@@ -84,23 +84,19 @@ class ModelSerializer(
             '_self': item.get_url( request = self._context['view'].request )
         }
 
-        if item.id is not None:
+        if item.id is not None and item.__class__._meta.model_name != 'ticketcommentsolution':
 
-            threads = TicketCommentBase.objects.filter(parent = item.id, ticket = ticket_id)
-
-            if len(threads) > 0:
-
-                urls.update({
-                    'threads': reverse(
-                        'API:_api_ticket_comment_base_sub_thread-list',
-                        request = self._context['view'].request,
-                        kwargs={
-                            'ticket_id': ticket_id,
-                            'ticket_comment_model': 'comment',
-                            'parent_id': item.id
-                        }
-                    )
-                })
+            urls.update({
+                'threads': reverse(
+                    'API:_api_ticket_comment_base_sub_thread-list',
+                    request = self._context['view'].request,
+                    kwargs={
+                        'ticket_id': ticket_id,
+                        'ticket_comment_model': 'comment',
+                        'parent_id': item.id
+                    }
+                )
+            })
 
         return urls
 
@@ -239,23 +235,14 @@ class ModelSerializer(
                 comment = self.Meta.model.objects.filter( id = attrs['parent_id'] )
 
 
-                if list(comment)[0].parent_id:
-
-                    raise centurion_exceptions.ValidationError(
-                        detail = {
-                            'parent': 'Replying to a discussion reply is not possible'
-                        },
-                        code = 'single_discussion_replies_only'
-                    )
-
         else:
 
-                    raise centurion_exceptions.ValidationError(
-                        detail = {
-                            'parent': 'Replying to a discussion reply is not possible'
-                        },
-                        code = 'single_discussion_replies_only'
-                    )
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'parent': 'Replying to a discussion reply is not possible'
+                },
+                code = 'single_discussion_replies_only'
+            )
 
         return attrs
 

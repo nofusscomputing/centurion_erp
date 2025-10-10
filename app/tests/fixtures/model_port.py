@@ -21,16 +21,20 @@ def model_port(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_port(kwargs_centurionmodel):
 
-    random_port = random.randrange(1, 65535, 50)
+    def factory():
 
-    kwargs = {
-        **kwargs_centurionmodel.copy(),
-        'description': 'a descriptive str',
-        'number': random_port,
-        'protocol': Port.Protocol.TCP
-    }
+        random_port = random.randrange(1, 65535, 50)
 
-    yield kwargs.copy()
+        kwargs = {
+            **kwargs_centurionmodel(),
+            'description': 'a descriptive str',
+            'number': random_port,
+            'protocol': Port.Protocol.TCP
+        }
+
+        return kwargs
+
+    yield factory
 
 
 

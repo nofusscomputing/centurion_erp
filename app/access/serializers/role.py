@@ -64,16 +64,19 @@ class ModelSerializer(
 
         get_url = super().get_url( item = item )
 
-        get_url.update({
-            'tickets': reverse(
-                "v2:_api_v2_item_tickets-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'item_class': self.Meta.model._meta.model_name,
-                    'item_id': item.pk
-                    }
-            )
-        })
+        if not self.context['request'].feature_flag['2025-00006']:
+
+            get_url.update({
+                'tickets': reverse(
+                    "v2:_api_v2_item_tickets-list",
+                    request=self._context['view'].request,
+                    kwargs={
+                        'item_class': self.Meta.model._meta.model_name,
+                        'item_id': item.pk
+                        }
+                )
+            })
+
 
         return get_url
 

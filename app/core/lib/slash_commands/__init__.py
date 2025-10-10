@@ -2,13 +2,15 @@ import re
 
 from .duration import Duration
 from .related_ticket import CommandRelatedTicket
-from .linked_model import CommandLinkedModel
+from .linked_model import CommandLinkedModel    # depreciated model
+# from .link_model import CommandLinkModelTicket
 
 
 class SlashCommands(
     Duration,
     CommandRelatedTicket,
-    CommandLinkedModel,
+    CommandLinkedModel,    # depreciated model
+    # CommandLinkModelTicket,
 ):
     """Slash Commands Base Class
     
@@ -75,6 +77,8 @@ class SlashCommands(
                     returned_line = re.sub(self.time_spent, self.command_duration, line)
 
                 elif command == 'link':
+
+                    # returned_line = re.sub(self.link_model, self.command_link_model, line)
 
                     returned_line = re.sub(self.linked_item, self.command_linked_model, line)
 

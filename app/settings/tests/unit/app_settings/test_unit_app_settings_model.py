@@ -4,14 +4,14 @@ from django.db import models
 
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 )
 
 
 
 @pytest.mark.model_appsettings
 class AppSettingsModelTestCases(
-    CenturionAbstractModelInheritedCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 
@@ -21,6 +21,9 @@ class AppSettingsModelTestCases(
         return {
             '_notes_enabled': {
                 'value': False
+            },
+            '_ticket_linkable': {
+                'value': False,
             },
             'model_tag': {
                 'type': models.fields.NOT_PROVIDED,

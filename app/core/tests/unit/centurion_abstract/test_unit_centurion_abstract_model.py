@@ -15,11 +15,10 @@ from core.models.centurion import CenturionModel
 
 @pytest.mark.unit
 @pytest.mark.centurion_models
-class CenturionAbstractModelTestCases(
+class CenturionAbstractBaseModelTestCases(
     CenturionMixnInheritedCases,
-    TenancyAbstractModelInheritedCases
 ):
-
+    """Centurion Abstract Model base Test Cases"""
 
     @property
     def parameterized_class_attributes(self):
@@ -85,16 +84,125 @@ class CenturionAbstractModelTestCases(
 
 
 
-class CenturionAbstractModelInheritedCases(
-    CenturionAbstractModelTestCases,
+    def test_method_clean_fields_calls_super_centurion_abstract(self, mocker, model, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.clean_fields', return_value = None
+        )
+
+        model_instance.clean_fields()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_clean_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.clean', return_value = None
+        )
+
+        model_instance.clean()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_validate_constraints_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.validate_constraints', return_value = None
+        )
+
+        model_instance.validate_constraints()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_validate_unique_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `clean` calls `super().clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.validate_unique', return_value = None
+        )
+
+        model_instance.validate_unique()
+
+
+        super_clean.assert_called_once()
+
+
+    def test_method_full_clean_calls_super_centurion_abstract(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `full_clean` calls `super().full_clean`
+        """
+
+        super_clean = mocker.patch(
+            'core.models.centurion.CenturionModel.full_clean', return_value = None
+        )
+
+        model_instance.full_clean()
+
+
+        super_clean.assert_called_once()
+
+
+
+class CenturionAbstractBaseModelInheritedCases(
+    CenturionAbstractBaseModelTestCases,
 ):
+    """Centurion Abstract Model base Inherited Cases
+    
+    Note: Does not cover the manager and/or queryset/permission test cases
+    """
+    pass
+
+
+
+class CenturionAbstractTenancyModelTestCases(
+    CenturionAbstractBaseModelTestCases,
+    TenancyAbstractModelInheritedCases,
+):
+    """Centurion Abstract Model base Test Cases
+    
+    Note: Covers the manager and/or queryset/permission test cases
+    """
+    pass
+
+class CenturionAbstractTenancyModelInheritedCases(
+    CenturionAbstractTenancyModelTestCases,
+):
+    """Centurion Abstract Model base Inherited Cases
+    
+    Note: Covers the manager and/or queryset/permission test cases
+    """
 
     pass
 
 
 
-class CenturionAbstractModelPyTest(
-    CenturionAbstractModelTestCases,
+class CenturionAbstractTenancyModelPyTest(
+    CenturionAbstractTenancyModelTestCases,
 ):
 
     @property
