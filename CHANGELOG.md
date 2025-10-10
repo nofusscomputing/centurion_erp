@@ -1,3 +1,111 @@
+## 1.25.0 (2025-10-10)
+
+### feat
+
+- **python**: update social-auth-app-django 5.4.1 -> 5.6.0
+- **python**: Upgrade django 5.1.12 -> 5.1.13
+- **base**: prevent python depreciation warnings within the docker container
+- **core**: add model manager ModelTicket
+- **core**: Add new method for processing link slash command
+- **core**: enable posting to modelticket endpoint
+- Add field `model` to modelticket setializers
+- **core**: Make  model core.ModelTicketMetaModel so ticket only assigned once
+- **core**: Add URL Route for model core.ModelTicketMetaModel
+- **core**: Add URL Route for model core.ModelTicket again
+- **core**: order model ModelTicket by created date
+- **core**: Add Migrations for model core.ModelTicket
+- **core**: Add URL Route for model core.ModelTicket
+- **core**: Add ViewSet for model core.ModelTicket
+- **core**: Add serializer for model core.ModelTicket
+- **core**: Add new model core.ModelTicket
+- **core**: Do not allow a ticket comment to be deleted when it has threads
+- **core**: Add TicketBase model permissions import, purge and triage
+
+### Fixes
+
+- **core**: Ensure model_type=tenant selects the right type
+- **core**: when validating ModelTicket uniqueness, exclude self
+- **core**: Correct model field name and description for ModelTicket
+- ModelTicket sub-Serializers require field `ticket` be writable
+- **api**: when converting viewset exception, check msg attr exists
+- **core**: TicketModel ViewSerializer to inherit from bas ViewSerializer
+- **core**: ret model_suffix to ViewSet
+- **core**: Field change detection for ticket must cater for foriegn field ids
+- **core**: When adding a comment of TicketCommentSolution, it must solve the ticket
+- **core**: Add delete method to TicketCommentBase
+- **core**: TicketCommentBase model method clean must call super
+- **settings**: AppSettings model method clean must call super
+- **itim**: Service model method clean must call super
+- **itam**: Software model method clean must call super
+- **itam**: SoftwareCategory model method clean must call super
+- **itam**: DeviceType model method clean must call super
+- **itam**: DeviceModel model method clean must call super
+- **core**: TicketBase model method clean must call super
+- **core**: Manufacturer model method clean must call super
+
+### Refactoring
+
+- **core**: move ticket sub url so it's fully-dynamic
+
+### Tests
+
+- **core**: Unit Test cases for ModelTicket Serializer Validate method
+- **core**: Unit Test cases for ModelTicket Serializer Validate method
+- **core**: ModelTicket Manager Test Suite
+- refactor fixtures to fixture factories
+- **api**: Ensure when checking queryset filtered results all of the test data is available.
+- **core**: Add functional model test to ensure ticket and model can only be assigned once
+- **core**: Add functional ViewSet Test suite for ALL ModelTickets models
+- **core**: Add functional Model Test suite for ALL ModelTickets models
+- **core**: Add functional API Permissions Test suite for ALL ModelTickets endpoints
+- **core**: Add API Fields REnder Functional Test suites for model ModelTicket
+- **core**: Add ViewSet Unit test suite for model ModelTicketMetaModels
+- **core**: Add Serializer Unit test suite for model ModelTicketMetaModels again
+- **core**: Add Serializer Unit test suite for model ModelTicketMetaModels
+- **core**: Add Serializer Unit test suite for model ModelTicketMeta
+- **core**: Add Model Unit test suite for model ModelTicketMetaModels
+- **core**: Add Model Unit test suite for model ModelTicketMetaModel
+- **core**: Correct Serializer Unit test case for model ModelTicket is_valid
+- **core**: Add Serializer Unit test suite for model ModelTicket
+- **core**: Add ViewSet Unit test suite for model ModelTicket
+- **core**: Add Unit test case for model attribute `_ticket_linkable`
+- **core**: Add Unit test suite for model ModelTicket
+- **core**: Add TicketCommentAction Unit Serializer test suite
+- **core**: Add TicketCommentSolution Unit Serializer test suite
+- **core**: Add TicketCommentSolution functional ViewSet test suite
+- **core**: Add TicketCommentAction functional ViewSer test suite
+- **core**: Add TicketCommentSolution functional model test cases for threads
+- **core**: Add TicketCommentAction functional model test cases for threads
+- **core**: Add TicketBaseComment functional model test cases for threads
+- **core**: Update TicketCommentSolution unit model test suite
+- **core**: Update TicketCommentSolution unit ViewSet test suite
+- **core**: Update TicketCommentAction unit ViewSet test suite
+- **core**: Update TicketCommentBase unit ViewSet test suite
+- **core**: Add TicketCommentBase unit Serializer test suite
+- **itim**: Remove skip for TicketCommentBase unit model test suite
+- **itim**: Add TicketCommentBase functional ViewSet test suite
+- **itim**: Remove skip for TicketCommentBase Functional api_fields test suite
+- **itim**: add RequestTicket Functional model test suite
+- **itim**: add SLMTicket Functional model test suite
+- **core**: skip clean_fields method super call test case as model is abstract for model MetaAbstract Note
+- **core**: skip clean_fields method super call test case as model is abstract for model MetaAbstract Audit
+- Add test cases to unit Model test suite for all model clean fields methods along inheritance chain
+- **core**: Add sub-Model unit test cases for model TicketBase
+- **core**: Model functional test cases for model TicketBase clean function
+- **itim**: Update viewset functional test suite for model RequestTicket
+- **itim**: Update viewset functional test suite for model SLMTicket
+- **core**: Update viewset functional test suite for model TicketBase
+- **core**: Update metadata functional test suite for model TicketBase
+- **core**: Model unit test case for model TicketBase checking milstone choices
+- **core**: Re-Enable Model unit test suit for model TicketBase
+- **core**: Add ViewSet unit test suit for model TicketBase
+- **itim**: Add ViewSet unit test suit for model SLMTicket
+- **itim**: Add Serializer unit test suit for model SLMTicket
+- **itim**: Add ViewSet unit test suit for model RequestTicket
+- **itim**: Add Serializer unit test suit for model RequestTicket
+- **core**: Add ViewSet unit test suit for model TicketBase
+- **core**: Add Serializer unit test suit for model TicketBase
+
 ## 1.24.1 (2025-09-17)
 
 ### Fixes
