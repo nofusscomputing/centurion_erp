@@ -6,7 +6,7 @@ from access.tests.unit.contact.test_unit_contact_serializer import (
 
 
 
-@pytest.mark.model_contact
+@pytest.mark.model_employee
 class EmployeeSerializerTestCases(
     ContactSerializerInheritedCases
 ):
@@ -31,7 +31,7 @@ class EmployeeSerializerInheritedCases(
 
 
 
-@pytest.mark.module_access
+@pytest.mark.module_human_resources
 class EmployeeSerializerPyTest(
     EmployeeSerializerTestCases
 ):

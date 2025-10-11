@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from access.tests.functional.contact.test_functional_contact_metadata import (
@@ -8,6 +10,7 @@ from human_resources.models.employee import Employee
 
 
 
+@pytest.mark.model_employee
 class EmployeeMetadataTestCases(
     ContactMetadataInheritedCases,
 ):
@@ -40,6 +43,7 @@ class EmployeeMetadataInheritedCases(
 
 
 
+@pytest.mark.module_human_resources
 class EmployeeMetadataTest(
     EmployeeMetadataTestCases,
     TestCase,
