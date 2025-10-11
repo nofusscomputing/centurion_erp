@@ -1,3 +1,6 @@
+## Verrsion 1.26.0
+
+
 ## Verrsion 1.25.0
 
 - Centurion ERP relicenced to AGPL-3.0-only
