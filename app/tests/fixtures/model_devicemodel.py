@@ -1,6 +1,6 @@
 import pytest
-import random
 
+from datetime import datetime
 
 from itam.models.device import DeviceModel
 from itam.serializers.device_model import (
@@ -29,12 +29,12 @@ def kwargs_devicemodel(kwargs_centurionmodel, django_db_blocker,
         with django_db_blocker.unblock():
 
             kwargs = kwargs_manufacturer()
-            kwargs['name'] = 'dm_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            kwargs['name'] = 'dm_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
             manufacturer = model_manufacturer.objects.create( **kwargs )
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'devmodel' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'devmodel' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'manufacturer': manufacturer,
         }
 

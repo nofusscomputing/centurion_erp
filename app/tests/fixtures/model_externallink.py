@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from settings.models.external_link import ExternalLink
 from settings.serializers.external_links import (
@@ -23,7 +24,7 @@ def kwargs_externallink( model_externallink, kwargs_centurionmodel ):
 
     def factory():
 
-        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+        random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
         kwargs = {
             **kwargs_centurionmodel(),

@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from access.models.company_base import Company
 from access.serializers.entity_company import (
@@ -25,7 +26,7 @@ def kwargs_company( kwargs_entity ):
 
         kwargs = {
             **kwargs_entity(),
-            'name': 'c' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'c' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
         }
 
         return kwargs

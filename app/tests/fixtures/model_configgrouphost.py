@@ -1,7 +1,6 @@
 import pytest
-import random
 
-from django.db import models
+from datetime import datetime
 
 from config_management.models.groups import ConfigGroupHosts
 
@@ -31,7 +30,7 @@ def kwargs_configgrouphosts(django_db_blocker,
 
             group_kwargs = kwargs_configgroups()
             group_kwargs.update({
-                'name': 'cgg' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+                'name': 'cgg' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
                 'organization': centurion_kwargs['organization']
             })
 

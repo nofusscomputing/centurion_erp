@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from core.models.model_tickets import ModelTicketMetaModel
 from core.serializers.modelticket import (
@@ -31,7 +32,7 @@ def kwargs_modelticketmetamodel(django_db_blocker,
         with django_db_blocker.unblock():
 
             kwargs = kwargs_device()
-            kwargs['name'] = 'model-ticket-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            kwargs['name'] = 'model-ticket-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
             device = model_device.objects.create( **kwargs )
 

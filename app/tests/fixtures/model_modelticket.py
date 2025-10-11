@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from core.models.model_tickets import ModelTicket
 from core.serializers.modelticket import (
@@ -31,7 +32,7 @@ def kwargs_modelticket(django_db_blocker,
         with django_db_blocker.unblock():
 
             kwargs = kwargs_ticketbase()
-            kwargs['title'] = 'model_ticket _' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            kwargs['title'] = 'model_ticket _' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             del kwargs['external_system']
             del kwargs['external_ref']
 

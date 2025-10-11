@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from access.models.contact import Contact
 from access.serializers.entity_contact import (
@@ -26,7 +27,7 @@ def kwargs_contact( kwargs_person ):
         kwargs = {
             **kwargs_person(),
             'entity_type': 'contact',
-            'email': 'p' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)) + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)) + '@domain.tld',
+            'email': 'p' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ) + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ) + '@domain.tld',
             'directory': True,
         }
 

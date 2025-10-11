@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from core.models.centurion_notes import CenturionModelNote
 
@@ -26,7 +27,7 @@ def kwargs_centurionmodelnote(django_db_blocker,
 
             user_kwargs = kwargs_user()
             user_kwargs.update({
-                    'username': 'note_user' +  str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+                    'username': 'note_user' +  str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
                 })
 
             user = model_user.objects.create(
