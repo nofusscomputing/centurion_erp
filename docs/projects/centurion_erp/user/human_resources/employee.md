@@ -8,10 +8,9 @@ about: https://github.com/nofusscomputing/centurion_erp
 
 This component within HR is for the management of an organizations employee(s).
 
-!!! info
-    This Feature is currently not available as it's still under development.
-
 
 ## Fields
+
+This model shares all of the fields that are available for a [contact](../access/contact.md). additionally employee also has field(s):
 
 - employee number _An internal number to reference the employee_

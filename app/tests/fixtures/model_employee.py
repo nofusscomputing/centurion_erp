@@ -1,7 +1,13 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from human_resources.models.employee import Employee
+from human_resources.serializers.entity_employee import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
+)
 
 
 
@@ -18,7 +24,7 @@ def kwargs_employee( kwargs_contact ):
 
     def factory():
 
-        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)) + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+        random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ) + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
         kwargs = {
             **kwargs_contact(),
@@ -28,3 +34,13 @@ def kwargs_employee( kwargs_contact ):
         return kwargs
 
     yield factory
+
+
+@pytest.fixture( scope = 'class')
+def serializer_employee():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

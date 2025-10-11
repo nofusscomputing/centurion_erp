@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from access.models.role import Role
 from access.serializers.role import (
@@ -28,7 +29,7 @@ def kwargs_role(model_role,
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'r_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'r_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'modified': '2024-06-03T23:00:00Z',
         }
 

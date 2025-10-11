@@ -711,15 +711,6 @@ if FEATURE_FLAGGING_ENABLED:
                 }
             },
             {
-                "2025-00005": {
-                    "name": "Human Resources/Employee",
-                    "description": "Employee Model. see https://github.com/nofusscomputing/centurion_erp/issues/92",
-                    "enabled": True,
-                    "created": "",
-                    "modified": ""
-                }
-            },
-            {
                 "2025-00006": {
                     "name": "Ticket Models",
                     "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",

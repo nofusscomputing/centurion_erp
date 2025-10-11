@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from itam.models.device import DeviceOperatingSystem
 
@@ -22,7 +23,7 @@ def kwargs_deviceoperatingsystem(django_db_blocker,
 
     def factory():
 
-        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+        random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
         with django_db_blocker.unblock():
 

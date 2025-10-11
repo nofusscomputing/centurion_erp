@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from settings.models.user_settings import UserSettings
 from settings.serializers.user_settings import (
@@ -27,7 +28,7 @@ def kwargs_usersettings( django_db_blocker, model_user ):
         with django_db_blocker.unblock():
 
             user = model_user.objects.create(
-                username = 'a' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+                username = 'a' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
                 password = 'password'
             )
 

@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from core.models.manufacturer import Manufacturer
 
@@ -20,7 +21,7 @@ def kwargs_manufacturer(kwargs_centurionmodel):
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'man' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
+            'name': 'man' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
         }
 
         return kwargs

@@ -148,6 +148,7 @@ from .model_devicetype import (
 from .model_employee import (
     kwargs_employee,
     model_employee,
+    serializer_employee,
 )
 
 from .model_entity import (

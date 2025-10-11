@@ -1,5 +1,7 @@
 ## Verrsion 1.26.0
 
+- Model [Employee](https://nofusscomputing.com/projects/centurion_erp/user/human_resources/employee/) now available, as feature flag `2025-00005` has been removed from Centurion ERPs feature flag checks.
+
 
 ## Verrsion 1.25.0
 

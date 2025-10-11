@@ -4,23 +4,23 @@ from access.tests.functional.person.test_functional_person_model import PersonMo
 
 
 
-@pytest.mark.model_person
-class TenantModelTestCases(
+@pytest.mark.model_contact
+class ContactModelTestCases(
     PersonModelInheritedCases
 ):
     pass
 
 
 
-class TenantModelInheritedCases(
-    TenantModelTestCases,
+class ContactModelInheritedCases(
+    ContactModelTestCases,
 ):
     pass
 
 
 
 @pytest.mark.module_access
-class TenantModelPyTest(
-    TenantModelTestCases,
+class ContactModelPyTest(
+    ContactModelTestCases,
 ):
     pass
