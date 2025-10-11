@@ -1,7 +1,5 @@
 import pytest
 
-from django.test import TestCase
-
 from access.tests.functional.contact.test_functional_contact_viewset import (
     ContactViewsetInheritedCases
 )

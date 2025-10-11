@@ -2,6 +2,11 @@ import pytest
 import random
 
 from human_resources.models.employee import Employee
+from human_resources.serializers.entity_employee import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
+)
 
 
 
@@ -28,3 +33,13 @@ def kwargs_employee( kwargs_contact ):
         return kwargs
 
     yield factory
+
+
+@pytest.fixture( scope = 'class')
+def serializer_employee():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

@@ -84,11 +84,7 @@ class ContactSerializerInheritedCases(
     ContactSerializerTestCases
 ):
 
-    def test_serializer_validation_duplicate_f_name_l_name_dob(self,
-        kwargs_api_create, model, model_serializer, request_user
-    ):
-
-        assert False, 'You must redefine this test in your test suite'
+    pass
 
 
 
