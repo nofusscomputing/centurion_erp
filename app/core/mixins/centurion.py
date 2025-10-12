@@ -288,17 +288,19 @@ class Centurion(
 
         namespace = f'v{api_version}'
 
-        if self.get_app_namespace():
-            namespace = namespace + ':' + self.get_app_namespace()
+        model = self.get_related_model()
+
+        if model.get_app_namespace():
+            namespace = namespace + ':' + model.get_app_namespace()
 
 
-        url_basename = f'{namespace}:_api_{self._meta.model_name}'
+        url_basename = f'{namespace}:_api_{model._meta.model_name}'
 
-        if self.url_model_name:
+        if model.url_model_name:
 
-            url_basename = f'{namespace}:_api_{self.url_model_name}'
+            url_basename = f'{namespace}:_api_{model.url_model_name}'
 
-        if self._is_submodel:
+        if model._is_submodel:
 
             url_basename += '_sub'
 
@@ -312,7 +314,7 @@ class Centurion(
             url_basename += '-detail'
 
 
-        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs( many = many ) )
+        url = reverse( viewname = url_basename, kwargs = model.get_url_kwargs( many = many ) )
 
         if not relative:
 
@@ -339,13 +341,12 @@ class Centurion(
 
         kwargs = {}
 
-        if self._is_submodel:
+        model = self.get_related_model()
+
+        if model._is_submodel:
 
             kwargs.update({
-                # **super().get_url_kwargs( many = many ),
-                # 'app_label': self._meta.app_label,    # this has been removed as the app_namespace can cover
-                'model_name': str(self._meta.model_name),
-                # 'model_id': self.model.id,    # Unknown why this was added as sub-model id's match the model
+                'model_name': str( model._meta.model_name ),
             })
 
         if many:
@@ -355,7 +356,7 @@ class Centurion(
         else:
 
             kwargs.update({
-                'pk': self.id
+                'pk': model.id
             })
 
             return kwargs
