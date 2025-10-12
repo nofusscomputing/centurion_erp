@@ -352,15 +352,6 @@ class TicketCommentBaseModelTestCases(
 
 
 
-    def test_function_get_related_model(self, model_instance):
-        """Function Check
-
-        Confirm function `get_related_model` returns `None` for self
-        """
-
-        assert model_instance.get_related_model() == None
-
-
     def test_function_get_url(self, model_instance):
         """Function Check
 

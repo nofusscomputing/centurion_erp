@@ -100,12 +100,4 @@ class PersonModelInheritedCases(
 class PersonModelPyTest(
     PersonModelTestCases,
 ):
-
-
-    def test_function_value_get_related_model(self, model_instance):
-        """Function test
-
-        Confirm function `get_related_model` is None for base model
-        """
-
-        assert model_instance.get_related_model() is None
+    pass

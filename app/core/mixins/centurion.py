@@ -242,6 +242,35 @@ class Centurion(
         return ''
 
 
+    def get_related_model(self):
+        """Recursive model Fetch
+
+        Returns the lowest model found in a chain of inherited models.
+
+        Returns:
+            models.Model: Lowset model found in inherited model chain
+            self: Model is not a sub-model or this sub-model was directly accessed.
+        """
+
+        related_model_name = self.get_related_field_name()
+
+        related_model = getattr(self, related_model_name, None)
+
+        if related_model is None:
+
+            related_model = self
+
+        elif hasattr(related_model, 'get_related_field_name'):
+
+            if related_model.get_related_field_name() != '':
+
+                related_model = related_model.get_related_model()
+
+
+        return related_model
+
+
+
     def get_url(
         self, relative: bool = False, api_version: int = 2, many = False, request: any = None
     ) -> str:

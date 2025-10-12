@@ -325,41 +325,6 @@ class TicketCommentBase(
 
 
 
-    def get_related_model(self):
-        """Recursive model Fetch
-
-        Returns the lowest model found in a chain of inherited models.
-
-        Args:
-            model (models.Model, optional): Model to fetch the child model from. Defaults to None.
-
-        Returns:
-            models.Model: Lowset model found in inherited model chain
-        """
-
-        related_model_name = self.get_related_field_name()
-
-        related_model = getattr(self, related_model_name, None)
-
-        if related_model_name == '':
-
-            related_model = None
-
-        elif related_model is None:
-
-            related_model = self
-
-        elif hasattr(related_model, 'get_related_field_name'):
-
-            if related_model.get_related_field_name() != '':
-
-                related_model = related_model.get_related_model()
-
-
-        return related_model
-
-
-
     def get_url(
         self, relative: bool = False, api_version: int = 2, many = False, request: any = None
     ) -> str:

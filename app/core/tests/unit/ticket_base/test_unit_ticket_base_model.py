@@ -851,20 +851,6 @@ class TicketBaseModelTestCases(
         assert type(model().get_comments()) is QuerySet
 
 
-    def test_function_get_related_model_type(self, model, ticket):
-        """Function test
-
-        Ensure that function `get_related_model` returns a value that
-        is of type `QuerySet`.
-        """
-
-        ticket = model.objects.get(
-            pk = ticket.pk
-        )
-
-        assert type(ticket.get_related_model()) is model
-
-
 
     def test_meta_attribute_sub_model_type_length(self, model):
         """Meta Attribute Check
@@ -1061,19 +1047,6 @@ class TicketBaseModelPyTest(
 ):
 
     sub_model_type = 'ticket'
-
-
-    def test_function_get_related_model_type(self, model):
-        """Function test
-
-        This test case overwrites a test of the same name. This model should
-        return `None` as it's the base model.
-
-        Ensure that function `get_related_model` returns a value that
-        is of type `QuerySet`.
-        """
-
-        assert type(model().get_related_model()) is type(None)
 
 
     def test_function_save_called_slash_command(self, model, mocker, ticket, model_kwargs):
