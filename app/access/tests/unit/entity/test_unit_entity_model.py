@@ -20,6 +20,10 @@ class EntityModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': Entity,
+            },
             '_is_submodel': {
                 'value': False
             },
@@ -63,15 +67,6 @@ class EntityModelTestCases(
         """
 
         assert issubclass(model, Entity)
-
-
-    def test_function_value_get_related_model(self, model, model_instance):
-        """Function test
-
-        Confirm function `get_related_model` is of the sub-model type
-        """
-
-        assert type(model_instance.get_related_model()) == model
 
 
     def test_attribute_type_kb_model_name(self, model):
@@ -121,14 +116,6 @@ class EntityModelInheritedCases(
 class EntityModelPyTest(
     EntityModelTestCases,
 ):
-
-    def test_function_value_get_related_model(self, model_instance):
-        """Function test
-
-        Confirm function `get_related_model` is None for base model
-        """
-
-        assert model_instance.get_related_model() is None
 
     def test_method_get_url_kwargs(self, mocker, model_instance, settings):
         """Test Class Method

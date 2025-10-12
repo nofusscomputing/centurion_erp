@@ -27,6 +27,12 @@ class Centurion(
     _audit_enabled: bool = True
     """Should this model have audit history kept"""
 
+    _base_model: models.Model = None
+    """Base model for this sub-model
+    
+    This should be set to the first model within the chain of models.
+    """
+
     _is_submodel: bool = False
     """This model a sub-model"""
 
@@ -200,6 +206,71 @@ class Centurion(
 
 
 
+    def get_related_field_name(self) -> str:
+        """Related model field name.
+
+        Get the name of the attribute within this model for it's related model.
+        This method is normally only used for sub-models.
+
+        Returns:
+            str: Field name of the related model.
+            empty string (str): There is not related model.
+        """
+
+        if self._base_model:
+
+            meta = getattr(self, '_meta')
+
+
+            for related_object in getattr(meta, 'related_objects', []):
+
+                if not issubclass(related_object.related_model, self._base_model):
+
+                    continue
+
+
+                if getattr(self, related_object.name, None):
+
+                    if( 
+                        not str(related_object.name).endswith('history')
+                        and not str(related_object.name).endswith('notes')
+                    ):
+
+                        return related_object.name
+
+
+        return ''
+
+
+    def get_related_model(self):
+        """Recursive model Fetch
+
+        Returns the lowest model found in a chain of inherited models.
+
+        Returns:
+            models.Model: Lowset model found in inherited model chain
+            self: Model is not a sub-model or this sub-model was directly accessed.
+        """
+
+        related_model_name = self.get_related_field_name()
+
+        related_model = getattr(self, related_model_name, None)
+
+        if related_model is None:
+
+            related_model = self
+
+        elif hasattr(related_model, 'get_related_field_name'):
+
+            if related_model.get_related_field_name() != '':
+
+                related_model = related_model.get_related_model()
+
+
+        return related_model
+
+
+
     def get_url(
         self, relative: bool = False, api_version: int = 2, many = False, request: any = None
     ) -> str:
@@ -217,17 +288,19 @@ class Centurion(
 
         namespace = f'v{api_version}'
 
-        if self.get_app_namespace():
-            namespace = namespace + ':' + self.get_app_namespace()
+        model = self.get_related_model()
+
+        if model.get_app_namespace():
+            namespace = namespace + ':' + model.get_app_namespace()
 
 
-        url_basename = f'{namespace}:_api_{self._meta.model_name}'
+        url_basename = f'{namespace}:_api_{model._meta.model_name}'
 
-        if self.url_model_name:
+        if model.url_model_name:
 
-            url_basename = f'{namespace}:_api_{self.url_model_name}'
+            url_basename = f'{namespace}:_api_{model.url_model_name}'
 
-        if self._is_submodel:
+        if model._is_submodel:
 
             url_basename += '_sub'
 
@@ -241,7 +314,7 @@ class Centurion(
             url_basename += '-detail'
 
 
-        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs( many = many ) )
+        url = reverse( viewname = url_basename, kwargs = model.get_url_kwargs( many = many ) )
 
         if not relative:
 
@@ -268,13 +341,12 @@ class Centurion(
 
         kwargs = {}
 
-        if self._is_submodel:
+        model = self.get_related_model()
+
+        if model._is_submodel:
 
             kwargs.update({
-                # **super().get_url_kwargs( many = many ),
-                # 'app_label': self._meta.app_label,    # this has been removed as the app_namespace can cover
-                'model_name': str(self._meta.model_name),
-                # 'model_id': self.model.id,    # Unknown why this was added as sub-model id's match the model
+                'model_name': str( model._meta.model_name ),
             })
 
         if many:
@@ -284,7 +356,7 @@ class Centurion(
         else:
 
             kwargs.update({
-                'pk': self.id
+                'pk': model.id
             })
 
             return kwargs

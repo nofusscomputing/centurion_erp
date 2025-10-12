@@ -26,6 +26,11 @@ class TicketCommentBase(
 
     _audit_enabled = False
 
+    @property
+    def _base_model(self):
+
+        return TicketCommentBase
+
     _notes_enabled = False
 
     _ticket_linkable = False
@@ -317,65 +322,6 @@ class TicketCommentBase(
 
 
         return super().delete(using = using, keep_parents = False)
-
-
-
-    def get_related_model(self):
-        """Recursive model Fetch
-
-        Returns the lowest model found in a chain of inherited models.
-
-        Args:
-            model (models.Model, optional): Model to fetch the child model from. Defaults to None.
-
-        Returns:
-            models.Model: Lowset model found in inherited model chain
-        """
-
-        related_model_name = self.get_related_field_name()
-
-        related_model = getattr(self, related_model_name, None)
-
-        if related_model_name == '':
-
-            related_model = None
-
-        elif related_model is None:
-
-            related_model = self
-
-        elif hasattr(related_model, 'get_related_field_name'):
-
-            if related_model.get_related_field_name() != '':
-
-                related_model = related_model.get_related_model()
-
-
-        return related_model
-
-
-
-    def get_related_field_name(self) -> str:
-
-        meta = getattr(self, '_meta')
-
-        for related_object in getattr(meta, 'related_objects', []):
-
-            if not issubclass(related_object.related_model, TicketBase):
-
-                continue
-
-            if getattr(self, related_object.name, None):
-
-                if(
-                    not str(related_object.name).endswith('history')
-                    and not str(related_object.name).endswith('notes')
-                ):
-
-                    return related_object.name
-
-
-        return ''
 
 
 

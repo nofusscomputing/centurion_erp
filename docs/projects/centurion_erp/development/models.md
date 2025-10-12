@@ -99,7 +99,25 @@ All sub-models are intended to be extended and contain the core features for ALL
 
 ### Sub-Model
 
-A Sub-model specifically inherits from a normal model with the purpose of using the base model fields (the common fields) and if required specifying its own fields. A sub-model provides an additional feature in that the data from the base model can now be based off of the permissions of the sub-model, not the base. THis model inherits from `core.models.centurion.CenturionSubModel` and its base model.
+A Sub-model specifically inherits from a normal model with the purpose of using the base model fields (the common fields) and if required specifying its own fields. A sub-model provides an additional feature in that the data from the base model can now be based off of the permissions of the sub-model, not the base.
+
+To setup a sub-model you must do the following:
+
+- A sub-model and its base are not abstract, the entire chain of models are concrete models.
+
+    !!! info
+        This is important as it ensures that each model within a chain has permissions for that model.
+
+- Add `_base_model` property to the base model class, that returns the base model.
+
+- Add attribute `_is_submodel` with a value of `True` to **all** sub-model classes.
+
+    !!! tip
+        Don't add this to the base model class
+
+- Add attribute `url_model_name` with the value of the string that will be used within the url basename to the base model class.
+
+- Add the URL route to the correct API Version url file. _i.e. app/api/urls_v2.py_
 
 
 ## Core Features

@@ -10,6 +10,11 @@ class Entity(
     CenturionModel
 ):
 
+    @property
+    def _base_model(self):
+
+        return Entity
+
     model_tag = 'entity'
 
     documentation = ''
@@ -50,12 +55,7 @@ class Entity(
 
         related_model = self.get_related_model()
 
-        if related_model is None:
-
-            return f'{self.entity_type} {self.pk}'
-
-
-        return str( related_model )
+        return f'{related_model.entity_type} {self.pk}'
 
 
     page_layout: dict = []
@@ -83,61 +83,3 @@ class Entity(
             self.entity_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
 
         super().clean_fields( exclude = exclude )
-
-
-
-    def get_related_field_name(self) -> str:
-
-        meta = getattr(self, '_meta')
-
-        for related_object in getattr(meta, 'related_objects', []):
-
-            if not issubclass(related_object.related_model, Entity):
-
-                continue
-
-            if getattr(self, related_object.name, None):
-
-                if(
-                    not str(related_object.name).endswith('history')
-                    and not str(related_object.name).endswith('notes')
-                ):
-
-                    return related_object.name
-
-
-        return ''
-
-
-    def get_related_model(self):
-        """Recursive model Fetch
-
-        Returns the lowest model found in a chain of inherited models.
-
-        Args:
-            model (models.Model, optional): Model to fetch the child model from. Defaults to None.
-
-        Returns:
-            models.Model: Lowset model found in inherited model chain
-        """
-
-        related_model_name = self.get_related_field_name()
-
-        related_model = getattr(self, related_model_name, None)
-
-        if related_model_name == '':
-
-            related_model = None
-
-        elif related_model is None:
-
-            related_model = self
-
-        elif hasattr(related_model, 'get_related_field_name'):
-
-            if related_model.get_related_field_name() != '':
-
-                related_model = related_model.get_related_model()
-
-
-        return related_model
