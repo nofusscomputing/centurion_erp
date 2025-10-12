@@ -20,6 +20,10 @@ class AssetBaseModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': AssetBase,
+            },
             'app_namespace': {
                 'type': str,
                 'value': 'accounting'

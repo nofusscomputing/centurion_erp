@@ -28,6 +28,10 @@ class TicketBaseModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': TicketBase,
+            },
             '_audit_enabled': {
                 'value': False
             },
@@ -847,38 +851,6 @@ class TicketBaseModelTestCases(
         assert type(model().get_comments()) is QuerySet
 
 
-
-    def test_function_get_related_field_name_type(self, model, ticket):
-        """Function test
-
-        Ensure that function `get_related_field_name` returns a value that
-        is of type `str`.
-        """
-
-        ticket = model.objects.get(
-            pk = ticket.pk
-        )
-
-        assert type(ticket.get_related_field_name()) is str
-
-
-    def test_function_get_related_field_name_value(self, model, ticket):
-        """Function test
-
-        Ensure that function `get_related_field_name` returns a string that is
-        model the attribute the model exists under.
-        """
-
-        ticket = model.objects.get(
-            pk = ticket.pk
-        )
-
-        assert(
-            ticket.get_related_field_name() != None
-            and ticket.get_related_field_name() != ''
-        )
-
-
     def test_function_get_related_model_type(self, model, ticket):
         """Function test
 
@@ -1089,19 +1061,6 @@ class TicketBaseModelPyTest(
 ):
 
     sub_model_type = 'ticket'
-
-
-    def test_function_get_related_field_name_value(self, model):
-        """Function test
-
-        This test case overwrites a test of the same name. This model should
-        return an empty string as it's the base model.
-
-        Ensure that function `get_related_field_name` returns a string that is
-        model the attribute the model exists under.
-        """
-
-        assert model().get_related_field_name() == ''
 
 
     def test_function_get_related_model_type(self, model):

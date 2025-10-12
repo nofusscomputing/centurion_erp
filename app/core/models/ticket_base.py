@@ -32,6 +32,11 @@ class TicketBase(
 
     _audit_enabled = False
 
+    @property
+    def _base_model(self):
+
+        return TicketBase
+
     _before: dict
     """History Before
     Data before save was called
@@ -779,29 +784,6 @@ class TicketBase(
 
         return self._ticket_comments
 
-
-
-    def get_related_field_name(self) -> str:
-
-        meta = getattr(self, '_meta')
-
-        for related_object in getattr(meta, 'related_objects', []):
-
-            if not issubclass(related_object.related_model, TicketBase):
-
-                continue
-
-            if getattr(self, related_object.name, None):
-
-                if( 
-                    not str(related_object.name).endswith('history')
-                    and not str(related_object.name).endswith('notes')
-                ):
-
-                    return related_object.name
-
-
-        return ''
 
 
     def get_related_model(self):

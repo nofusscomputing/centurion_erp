@@ -6,10 +6,15 @@ from access.tests.functional.tenancy_abstract.test_functional_tenancy_abstract_m
     TenancyAbstractModelInheritedCases
 )
 
+from core.tests.functional.mixin_centurion.test_functional_centurion_mixin import (
+    CenturionAbstractMixinInheritedCases,
+)
+
 
 
 @pytest.mark.centurion_models
 class CenturionAbstractModelTestCases(
+    CenturionAbstractMixinInheritedCases,
     TenancyAbstractModelInheritedCases
 ):
 

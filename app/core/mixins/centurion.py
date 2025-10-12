@@ -27,6 +27,12 @@ class Centurion(
     _audit_enabled: bool = True
     """Should this model have audit history kept"""
 
+    _base_model: models.Model = None
+    """Base model for this sub-model
+    
+    This should be set to the first model within the chain of models.
+    """
+
     _is_submodel: bool = False
     """This model a sub-model"""
 
@@ -198,6 +204,42 @@ class Centurion(
         """Return the objects organization"""
         return self.organization
 
+
+
+    def get_related_field_name(self) -> str:
+        """Related model field name.
+
+        Get the name of the attribute within this model for it's related model.
+        This method is normally only used for sub-models.
+
+        Returns:
+            str: Field name of the related model.
+            empty string (str): There is not related model.
+        """
+
+        if self._base_model:
+
+            meta = getattr(self, '_meta')
+
+
+            for related_object in getattr(meta, 'related_objects', []):
+
+                if not issubclass(related_object.related_model, self._base_model):
+
+                    continue
+
+
+                if getattr(self, related_object.name, None):
+
+                    if( 
+                        not str(related_object.name).endswith('history')
+                        and not str(related_object.name).endswith('notes')
+                    ):
+
+                        return related_object.name
+
+
+        return ''
 
 
     def get_url(

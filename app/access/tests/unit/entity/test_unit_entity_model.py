@@ -20,6 +20,10 @@ class EntityModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': Entity,
+            },
             '_is_submodel': {
                 'value': False
             },

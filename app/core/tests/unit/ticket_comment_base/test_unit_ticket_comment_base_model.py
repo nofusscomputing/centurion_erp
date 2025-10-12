@@ -24,6 +24,10 @@ class TicketCommentBaseModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': TicketCommentBase,
+            },
             '_audit_enabled': {
                 'value': False
             },
@@ -355,18 +359,6 @@ class TicketCommentBaseModelTestCases(
         """
 
         assert model_instance.get_related_model() == None
-
-
-
-    def test_function_get_related_field_name(self, model_instance):
-        """Function Check
-
-        Confirm function `get_related_field_name` returns an empty string
-        for self
-        """
-
-        assert model_instance.get_related_field_name() == ''
-
 
 
     def test_function_get_url(self, model_instance):
