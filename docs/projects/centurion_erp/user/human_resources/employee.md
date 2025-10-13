@@ -13,4 +13,6 @@ This component within HR is for the management of an organizations employee(s).
 
 This model shares all of the fields that are available for a [contact](../access/contact.md). additionally employee also has field(s):
 
-- employee number _An internal number to reference the employee_
+- `employee number` _An internal number to reference the employee._
+
+- `user` _The Centurion ERP user account associated with this employee._
