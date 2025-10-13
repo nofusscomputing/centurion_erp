@@ -20,15 +20,20 @@ def model_employee(clean_model_from_db):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_employee( kwargs_contact ):
+def kwargs_employee( django_db_blocker, kwargs_contact, model_user, kwargs_user ):
 
     def factory():
 
         random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ) + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
+        with django_db_blocker.unblock():
+
+            user = model_user.objects.create( **kwargs_user() )
+
         kwargs = {
             **kwargs_contact(),
-            'employee_number':  random_str
+            'employee_number':  random_str,
+            'user': user,
         }
 
         return kwargs

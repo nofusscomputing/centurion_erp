@@ -46,6 +46,13 @@ class EmployeeModelTestCases(
                 'null': False,
                 'unique': True,
             },
+            'user': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.OneToOneField,
+                'null': True,
+                'unique': True,
+            },
         }
 
 
