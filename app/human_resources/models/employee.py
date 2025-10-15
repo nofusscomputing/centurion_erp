@@ -97,7 +97,7 @@ class Employee(
                         'employee_number',
                     ],
                     "right": [
-                        '',
+                        'user',
                     ]
                 }
             ]
