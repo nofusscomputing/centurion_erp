@@ -11,8 +11,17 @@ This component within HR is for the management of an organizations employee(s).
 
 ## Fields
 
-This model shares all of the fields that are available for a [contact](../access/contact.md). additionally employee also has field(s):
+This model shares all of the fields that are available for a [contact](../access/contact.md#fields). additionally employee also has field(s):
 
-- `employee number` _An internal number to reference the employee._
+- `employee number` An internal number to reference the employee. ***Mandatory***
 
-- `user` _The Centurion ERP user account associated with this employee._
+- `user` The Centurion ERP user account associated with this employee. ***Optional***
+
+
+## Creating an Employee
+
+Complete all of the required fields and click save. The following rules apply when creating an employee:
+
+- `Employee Number` must be unique.
+
+- As an employee is a sub-object of a `Contact` its [rules apply](../access/contact.md#creating-a-contact) too.
