@@ -120,6 +120,16 @@ To setup a sub-model you must do the following:
 - Add the URL route to the correct API Version url file. _i.e. app/api/urls_v2.py_
 
 
+#### Linking Models
+
+Sub-models have the ability to auto-link to an existing parent model. This feature is designed purely to aid in data de-duplication. To enable this feature add attribute `_linked_model_kwargs: tuple[ tuple[ str ] ]` to the sub-model class with the fields ( `str` ) to use to search for the existing model. Each inner tuple will be used to create the kwargs to search for the existing model. This searching will occur for each outer tuple and when nothing is found will move to the next tuple. As soon as a match is found it'll be linked to.
+
+As part of the linking, if there is data in the existing fields, it'll be used instead of any data the user specified for the field. This is to ensure that the linking is to an existing and un-modified parent. There is but one exception, the `model_notes` field which is appended to the existing data.
+
+!!! note
+    Linking of models only occurs to its immediate parent. If the immediate parent is missing an error is raised telling the user of this fact so that they can create the missing parent-model within the chain.
+
+
 ## Core Features
 
 All models must contain the core features, being:
