@@ -262,6 +262,18 @@ class ViewSet(
 
 
 
+    def get_queryset(self):
+
+        if self.kwargs.get(self.model_kwarg, None) == 'contact': 
+
+            return super().get_queryset().filter( directory = True )
+
+        else:
+
+            return super().get_queryset()
+
+
+
 @extend_schema_view( # prevent duplicate documentation of both /access/entity endpoints
     create = extend_schema(exclude = True),
     destroy = extend_schema(exclude = True),
