@@ -28,6 +28,12 @@ class ContactModelTestCases(
             '_is_submodel': {
                 'value': True
             },
+            '_linked_model_kwargs': {
+                'type': tuple,
+                'value': (
+                    ( 'email', ),
+                ),
+            },
             'url_model_name': {
                 'type': str,
                 'value': 'entity'

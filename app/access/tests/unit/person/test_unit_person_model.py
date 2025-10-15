@@ -29,6 +29,15 @@ class PersonModelTestCases(
             '_is_submodel': {
                 'value': True
             },
+            '_linked_model_kwargs': {
+                'type': tuple,
+                'value': (
+                    ( 'f_name', 'm_name', 'l_name', 'dob' ),
+                    ( 'f_name', 'l_name', 'dob' ),
+                    ( 'f_name', 'm_name', 'l_name' ),
+                    ( 'f_name', 'l_name' ),
+                ),
+            },
             'url_model_name': {
                 'type': str,
                 'value': 'entity'

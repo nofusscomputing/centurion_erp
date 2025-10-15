@@ -1,4 +1,7 @@
 from django.conf import settings
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -35,6 +38,14 @@ class Centurion(
 
     _is_submodel: bool = False
     """This model a sub-model"""
+
+    _linked_model_kwargs: tuple[ tuple[ str ] ] = None
+    """Used for linking existing parent model.
+
+    This field is only used for sub-models.
+
+    Note: Leave this field blank if you don't wish to link existing models.
+    """
 
     _notes_enabled: bool = True
     """Should a table for notes be created for this model"""
@@ -106,6 +117,14 @@ class Centurion(
 
 
         super().delete(using = using, keep_parents = keep_parents)
+
+
+
+    def clean_fields(self, exclude=None):
+
+        self.link_parent_model()
+
+        return super().clean_fields(exclude)
 
 
 
@@ -360,6 +379,155 @@ class Centurion(
             })
 
             return kwargs
+
+
+    def link_parent_model(self):
+        """Link Existing parent model.
+
+        Using `model._linked_model_kwargs` as the model filter kwargs, attempt to locate an
+        existing model that matches, if so, then don't create a new model, link the existing model.
+
+        Raises:
+            ValidationError: When attempting to link parent model and there is a missing model
+                within the chain.
+        """
+
+        if(
+            self.id is None
+            and self._state.adding
+            and self._linked_model_kwargs
+            and self._is_submodel
+        ):
+
+            model_notes = self.model_notes
+
+            parent_models = self._meta.get_parent_list()
+            parent_models.reverse()
+
+            prev_found_model = None
+            for parent_model in parent_models:    # Confirm sub-model chain has ALL models created
+
+                if not parent_model._is_submodel or not parent_model._linked_model_kwargs:
+                    continue
+
+
+                for kwargs in parent_model._linked_model_kwargs:
+
+                    model_kwargs = {}
+                    for kwarg in kwargs:
+
+                        kwarg_value = getattr(self, kwarg)
+
+                        if not kwarg_value:
+                            continue
+
+
+                        model_kwargs.update({
+                            kwarg: kwarg_value
+                        })
+
+
+                    if len( model_kwargs ) != len( kwargs ):
+                        continue
+
+                existing_model = parent_model.objects.filter(
+                    **model_kwargs
+                ).first()
+
+                if prev_found_model and not existing_model:
+                    raise ValidationError(
+                        message = (
+                            f'Found matching {prev_found_model._meta.model_name} [id: {prev_found_model.id}], '
+                            f'however unable to link as no {parent_model._meta.model_name} exists for '
+                            f'this {prev_found_model._meta.model_name}'
+                            ),
+                        code = 'linking_models_break_in_chain'
+                    )
+
+                if existing_model:
+                    prev_found_model = existing_model
+
+
+            parent_model = self._meta.pk.related_model
+
+            linked_model_kwargs = parent_model._linked_model_kwargs
+
+            if not linked_model_kwargs:
+                return
+
+            for kwargs in linked_model_kwargs:
+
+                model_kwargs = {}
+                for kwarg in kwargs:
+
+                    kwarg_value = getattr(self, kwarg)
+
+                    if not kwarg_value:
+                        continue
+
+
+                    model_kwargs.update({
+                        kwarg: kwarg_value
+                    })
+
+
+                if len( model_kwargs ) != len( kwargs ):
+                    continue
+
+
+                existing_contact = parent_model.objects.filter(
+                    **model_kwargs
+                ).first()
+
+                if existing_contact:
+
+                    parent_fields = parent_model._meta.get_fields(include_parents = True)
+
+                    for parent_field in parent_fields:
+
+                        if(
+                            parent_field.auto_created
+                            or not parent_field.editable
+                            or not hasattr(self, parent_field.name)
+                            or type(parent_field) in [    # Related Fields
+                                models.ManyToManyRel,
+                                models.ManyToOneRel,
+                                models.OneToOneRel,
+                            ]
+                            or parent_field.name in [
+                                'created',
+                                'id',
+                                'model_notes',    # This field is amended below
+                                'modified',
+                            ]
+                        ):
+                            continue
+
+
+                        current_field_data = getattr(self, parent_field.name, None)
+                        existing_field_data = getattr(existing_contact, parent_field.name, None)
+
+                        if current_field_data != existing_field_data:
+
+                            setattr(self, parent_field.name, existing_field_data)
+
+
+                    setattr(self, self._meta.pk.name, existing_contact)
+
+                    if model_notes:
+
+                        if existing_contact.model_notes:
+
+                            self.model_notes = existing_contact.model_notes + str( '\n\n' + model_notes )
+
+                        else:
+
+                            self.model_notes = model_notes
+
+
+                    self._state.adding = False
+
+                    break    # found a match process no further
 
 
 

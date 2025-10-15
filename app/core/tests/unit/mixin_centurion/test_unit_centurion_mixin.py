@@ -34,11 +34,15 @@ class CenturionMixnTestCases(
                 'type': bool,
                 'value': False,
             },
-            '_ticket_linkable': {
+            '_linked_model_kwargs': {
+                'type': type(None),
+                'value': None,
+            },
+            '_notes_enabled': {
                 'type': bool,
                 'value': True,
             },
-            '_notes_enabled': {
+            '_ticket_linkable': {
                 'type': bool,
                 'value': True,
             },
