@@ -553,7 +553,7 @@ class Centurion(
 
             try:
 
-                self._before = type(self).objects.get( id = self.id ).get_audit_values()
+                self._before = type(self).objects.get( id = self.id ).get_audit_values() or {}
 
             except models.ObjectDoesNotExist as e:
                 self._before = {}
