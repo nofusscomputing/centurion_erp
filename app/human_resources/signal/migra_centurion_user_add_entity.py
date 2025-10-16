@@ -39,8 +39,6 @@ def centurion_user_add_entity(sender, **kwargs):
                 if(
                     user.get_entity()
                     or user.username == 'system'
-                    or user.first_name in [None, '']
-                    or user.last_name in [None, '']
                 ):
                     continue
 
@@ -66,13 +64,30 @@ def centurion_user_add_entity(sender, **kwargs):
 
                 print( f'    Processing user {user.username}.....' )
 
+
+                if organization is None:
+                    print( f'        No Organization associated with user {user.username}.' )
+                    raise ValueError()
+
+
                 random_int = int( str(datetime.now().strftime("%y%m%d%H%M%S")) + f"{datetime.now().microsecond // 100:04d}" )
 
                 email = user.email
 
                 if email in [None, '']:
-                    email = f'no_email.{random_int}@noreply.local'
+                    email = f'auto_email.{random_int}@noreply.local'
 
+
+                f_name = user.first_name
+
+                if f_name in [None, '']:
+                    f_name = f'auto_fname__{user.username}'
+
+
+                l_name = user.last_name
+
+                if l_name in [None, '']:
+                    l_name = f'auto_l_name__{user.username}'
 
                 entity_kwargs = {
                     'organization': apps.get_model(
@@ -82,8 +97,8 @@ def centurion_user_add_entity(sender, **kwargs):
                         id = organization['organization']
                     ),
                     'employee_number':  random_int,
-                    'f_name': user.first_name,
-                    'l_name': user.last_name,
+                    'f_name': f_name,
+                    'l_name': l_name,
                     'email': email,
                     'directory': False,
                     'user': user,
