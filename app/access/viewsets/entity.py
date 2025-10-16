@@ -264,13 +264,17 @@ class ViewSet(
 
     def get_queryset(self):
 
-        if self.model._meta.model_name == 'contact':
+        if self._queryset is None:
 
-            return super().get_queryset().filter( directory = True )
+            if self.model._meta.model_name == 'contact':
 
-        else:
+                self._queryset = super().get_queryset().filter( directory = True )
 
-            return super().get_queryset()
+            else:
+
+                self._queryset = super().get_queryset()
+        
+        return self._queryset
 
 
 
