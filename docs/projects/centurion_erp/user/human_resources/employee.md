@@ -25,3 +25,5 @@ Complete all of the required fields and click save. The following rules apply wh
 - `Employee Number` must be unique.
 
 - As an employee is a sub-object of a `Contact` its [rules apply](../access/contact.md#creating-a-contact) too.
+
+When creating a employee, if an existing contact is found that matches the contact details, it will not be re-created. The existing contact will be linked to the new employee.

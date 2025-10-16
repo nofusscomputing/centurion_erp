@@ -35,3 +35,5 @@ Complete all of the required fields and click save. The following rules apply wh
 - As a contact is a sub-object of a `Person` the following additional rules apply:
 
     - fields (`First Name`, `Middle Name`, `Last Name` and `DOB`) or (`First Name`, `Last Name` and `DOB`) or (`First Name`, `Last Name`) must be unique. _checked in the listed order._
+
+When creating a contact, if an existing person is found that matches the persons details, it will not be re-created. The existing person will be linked to the new contact.
