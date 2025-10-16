@@ -264,7 +264,7 @@ class ViewSet(
 
     def get_queryset(self):
 
-        if self.kwargs.get(self.model_kwarg, None) == 'contact': 
+        if self.model._meta.model_name == 'contact':
 
             return super().get_queryset().filter( directory = True )
 
