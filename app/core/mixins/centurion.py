@@ -393,69 +393,30 @@ class Centurion(
         """
 
         if(
-            self.id is None
-            and self._state.adding
-            and self._linked_model_kwargs
-            and self._is_submodel
+            (
+                self.id is not None
+                and not self._state.adding
+                and not self._linked_model_kwargs
+            )
+            or not self._is_submodel
+            or self._base_model == self
         ):
-
-            model_notes = self.model_notes
-
-            parent_models = self._meta.get_parent_list()
-            parent_models.reverse()
-
-            prev_found_model = None
-            for parent_model in parent_models:    # Confirm sub-model chain has ALL models created
-
-                if not parent_model._is_submodel or not parent_model._linked_model_kwargs:
-                    continue
+            return
 
 
-                for kwargs in parent_model._linked_model_kwargs:
+        model_notes = self.model_notes
 
-                    model_kwargs = {}
-                    for kwarg in kwargs:
+        parent_models = self._meta.get_parent_list()
+        parent_models.reverse()
 
-                        kwarg_value = getattr(self, kwarg)
+        prev_found_model = None
+        for parent_model in parent_models:    # Confirm sub-model chain has ALL models created
 
-                        if not kwarg_value:
-                            continue
-
-
-                        model_kwargs.update({
-                            kwarg: kwarg_value
-                        })
+            if not parent_model._is_submodel or not parent_model._linked_model_kwargs:
+                continue
 
 
-                    if len( model_kwargs ) != len( kwargs ):
-                        continue
-
-                existing_model = parent_model.objects.filter(
-                    **model_kwargs
-                ).first()
-
-                if prev_found_model and not existing_model:
-                    raise ValidationError(
-                        message = (
-                            f'Found matching {prev_found_model._meta.model_name} [id: {prev_found_model.id}], '
-                            f'however unable to link as no {parent_model._meta.model_name} exists for '
-                            f'this {prev_found_model._meta.model_name}'
-                            ),
-                        code = 'linking_models_break_in_chain'
-                    )
-
-                if existing_model:
-                    prev_found_model = existing_model
-
-
-            parent_model = self._meta.pk.related_model
-
-            linked_model_kwargs = parent_model._linked_model_kwargs
-
-            if not linked_model_kwargs:
-                return
-
-            for kwargs in linked_model_kwargs:
+            for kwargs in parent_model._linked_model_kwargs:
 
                 model_kwargs = {}
                 for kwarg in kwargs:
@@ -474,60 +435,104 @@ class Centurion(
                 if len( model_kwargs ) != len( kwargs ):
                     continue
 
+            existing_model = parent_model.objects.filter(
+                **model_kwargs
+            ).first()
 
-                existing_contact = parent_model.objects.filter(
-                    **model_kwargs
-                ).first()
+            if prev_found_model and not existing_model:
+                raise ValidationError(
+                    message = (
+                        f'Found matching {prev_found_model._meta.model_name} [id: {prev_found_model.id}], '
+                        f'however unable to link as no {parent_model._meta.model_name} exists for '
+                        f'this {prev_found_model._meta.model_name}'
+                        ),
+                    code = 'linking_models_break_in_chain'
+                )
 
-                if existing_contact:
-
-                    parent_fields = parent_model._meta.get_fields(include_parents = True)
-
-                    for parent_field in parent_fields:
-
-                        if(
-                            parent_field.auto_created
-                            or not parent_field.editable
-                            or not hasattr(self, parent_field.name)
-                            or type(parent_field) in [    # Related Fields
-                                models.ManyToManyRel,
-                                models.ManyToOneRel,
-                                models.OneToOneRel,
-                            ]
-                            or parent_field.name in [
-                                'created',
-                                'id',
-                                'model_notes',    # This field is amended below
-                                'modified',
-                            ]
-                        ):
-                            continue
+            if existing_model:
+                prev_found_model = existing_model
 
 
-                        current_field_data = getattr(self, parent_field.name, None)
-                        existing_field_data = getattr(existing_contact, parent_field.name, None)
+        parent_model = self._meta.pk.related_model
 
-                        if current_field_data != existing_field_data:
+        linked_model_kwargs = parent_model._linked_model_kwargs
 
-                            setattr(self, parent_field.name, existing_field_data)
+        if not linked_model_kwargs:
+            return
 
+        for kwargs in linked_model_kwargs:
 
-                    setattr(self, self._meta.pk.name, existing_contact)
+            model_kwargs = {}
+            for kwarg in kwargs:
 
-                    if model_notes:
+                kwarg_value = getattr(self, kwarg)
 
-                        if existing_contact.model_notes:
-
-                            self.model_notes = existing_contact.model_notes + str( '\n\n' + model_notes )
-
-                        else:
-
-                            self.model_notes = model_notes
+                if not kwarg_value:
+                    continue
 
 
-                    self._state.adding = False
+                model_kwargs.update({
+                    kwarg: kwarg_value
+                })
 
-                    break    # found a match process no further
+
+            if len( model_kwargs ) != len( kwargs ):
+                continue
+
+
+            existing_contact = parent_model.objects.filter(
+                **model_kwargs
+            ).first()
+
+            if existing_contact:
+
+                parent_fields = parent_model._meta.get_fields(include_parents = True)
+
+                for parent_field in parent_fields:
+
+                    if(
+                        parent_field.auto_created
+                        or not parent_field.editable
+                        or not hasattr(self, parent_field.name)
+                        or type(parent_field) in [    # Related Fields
+                            models.ManyToManyRel,
+                            models.ManyToOneRel,
+                            models.OneToOneRel,
+                        ]
+                        or parent_field.name in [
+                            'created',
+                            'id',
+                            'model_notes',    # This field is amended below
+                            'modified',
+                        ]
+                    ):
+                        continue
+
+
+                    current_field_data = getattr(self, parent_field.name, None)
+                    existing_field_data = getattr(existing_contact, parent_field.name, None)
+
+                    if current_field_data != existing_field_data:
+
+                        setattr(self, parent_field.name, existing_field_data)
+
+
+                setattr(self, self._meta.pk.name, existing_contact)
+
+                if model_notes:
+
+                    if existing_contact.model_notes:
+
+                        self.model_notes = existing_contact.model_notes + str( '\n\n' + model_notes )
+
+                    else:
+
+                        self.model_notes = model_notes
+
+
+                self._state.adding = False
+
+                break    # found a match process no further
 
 
 
