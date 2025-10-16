@@ -301,11 +301,7 @@ class TicketCommentBase(
 
     def clean_fields(self, exclude=None):
 
-        try:
-            self.organization
-
-        except:
-            self.organization = self.ticket.organization
+        self.organization = self.ticket.organization
 
 
         super().clean_fields(exclude = exclude)

@@ -6,6 +6,10 @@ from access.serializers.entity_contact import (
 )
 from access.serializers.organization import TenantBaseSerializer
 
+from centurion.serializers.user import (
+    UserBaseSerializer,
+)
+
 from human_resources.models.employee import Employee
 
 
@@ -46,6 +50,7 @@ class ModelSerializer(
             'dob',
             'email',
             'directory',
+            'user',
             'model_notes',
             'created',
             'modified',
@@ -73,3 +78,5 @@ class ViewSerializer(
     """
 
     organization = TenantBaseSerializer(many=False, read_only=True)
+
+    user = UserBaseSerializer(many=False, read_only=True)

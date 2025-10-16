@@ -19,6 +19,10 @@ class EmployeeSerializerTestCases(
                 'will_create': False,
                 'exception_key': 'required'
             },
+            "user": {
+                'will_create': True,
+                # 'exception_key': 'required'
+            },
         }
 
 

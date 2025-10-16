@@ -262,6 +262,22 @@ class ViewSet(
 
 
 
+    def get_queryset(self):
+
+        if self._queryset is None:
+
+            if self.model._meta.model_name == 'contact':
+
+                self._queryset = super().get_queryset().filter( directory = True )
+
+            else:
+
+                self._queryset = super().get_queryset()
+        
+        return self._queryset
+
+
+
 @extend_schema_view( # prevent duplicate documentation of both /access/entity endpoints
     create = extend_schema(exclude = True),
     destroy = extend_schema(exclude = True),

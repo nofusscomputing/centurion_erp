@@ -164,7 +164,7 @@ class SoftwareEnableFeatureFlagSerializerTestCases(
             serializer.is_valid(raise_exception = True)
             serializer.save()
 
-        assert err.value.args[0]['organization'][0].code == 'null'
+        assert err.value.args[0]['organization'][0].code == 'blank'
 
 
 

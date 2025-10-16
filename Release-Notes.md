@@ -2,6 +2,8 @@
 
 - Model [Employee](https://nofusscomputing.com/projects/centurion_erp/user/human_resources/employee/) now available, as feature flag `2025-00005` has been removed from Centurion ERPs feature flag checks.
 
+- Migration signal added to create an Employee for each user. This migration will only run once for each user.
+
 
 ## Verrsion 1.25.0
 
