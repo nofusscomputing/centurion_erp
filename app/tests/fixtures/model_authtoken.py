@@ -31,7 +31,7 @@ def kwargs_authtoken(django_db_blocker,
         with django_db_blocker.unblock():
 
             kwargs = kwargs_user()
-            kwargs['username'] = 'at_' + str(random.randint(9999,99999))
+            kwargs['username'] = 'at_' + str( datetime.datetime.now().strftime("%H%M%S") + f"{datetime.datetime.now().microsecond // 100:04d}" )
 
             user = model_user.objects.create( **kwargs )
 
