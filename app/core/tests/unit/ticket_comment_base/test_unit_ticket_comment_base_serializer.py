@@ -1,5 +1,9 @@
 import pytest
 
+from rest_framework.exceptions import (
+    ValidationError
+)
+
 from api.tests.unit.test_unit_serializer import (
     SerializerTestCases
 )
@@ -92,6 +96,48 @@ class TicketCommentBaseSerializerTestCases(
         full_clean.assert_called_once()
 
 
+
+    def test_serializer_validation_user_is_not_entity(self, kwargs_api_create, model,
+        model_serializer, request_user,
+        model_employee, kwargs_employee
+    ):
+        """ Serializer Check
+
+        Confirm that using valid data the object validates without exceptions.
+        """
+
+        kwargs = kwargs_employee()
+        user = kwargs['user']
+        del kwargs['user']
+
+        employee = model_employee.objects.create( **kwargs )
+
+        mock_view = MockView(
+            user = user,
+            model = model,
+            action = 'create',
+        )
+
+        mock_view._has_import = False
+        mock_view._has_purge = False
+        mock_view._has_triage = False
+
+        mock_view.kwargs = {
+            'ticket_id': kwargs_api_create['ticket'],
+        }
+
+        serializer = model_serializer['model'](
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        with pytest.raises(ValidationError) as exc:
+
+            serializer.is_valid(raise_exception = True)
+            serializer.save()
 
 
 
