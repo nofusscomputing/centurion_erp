@@ -1085,6 +1085,41 @@ class TicketBaseSerializerTestCases:
 
 
 
+    def test_serializer_validation_user_is_not_entity(self,
+        fake_view, create_serializer,
+        model_employee, kwargs_employee
+    ):
+        """Validation Check
+        
+        When creating a ticket, the user must have an entity assigned, if not
+        raise a validation error.
+        """
+
+        kwargs = kwargs_employee()
+        user = kwargs['user']
+        del kwargs['user']
+
+        employee = model_employee.objects.create( **kwargs )
+
+        view_set = fake_view(
+            user = user,
+            _has_import = True,
+            _has_triage = True
+        )
+
+
+        serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = self.valid_data
+        )
+
+        with pytest.raises(ValidationError) as exc:
+
+            serializer.is_valid(raise_exception = True)
+            serializer.save()
 
 
 
