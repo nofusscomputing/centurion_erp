@@ -449,7 +449,7 @@ class TicketBase(
 
 
     opened_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        Entity,
         blank = True,
         help_text = 'Who is the ticket for',
         null = True,

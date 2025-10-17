@@ -255,23 +255,8 @@ class APITestCases(
             'opened_by.display_name': {
                 'expected': str
             },
-            'opened_by.first_name': {
-                'expected': str
-            },
-            'opened_by.last_name': {
-                'expected': str
-            },
-            'opened_by.username': {
-                'expected': str
-            },
-            'opened_by.username': {
-                'expected': str
-            },
-            'opened_by.is_active': {
-                'expected': bool
-            },
             'opened_by.url': {
-                'expected': Hyperlink
+                'expected': str
             },
 
             'subscribed_to': {

@@ -48,12 +48,18 @@ class TicketCommentBaseSerializerTestCases(
 
     @pytest.mark.regression
     def test_serializer_create_calls_model_full_clean(self,
-        kwargs_api_create, mocker, model, model_serializer, request_user
+        kwargs_api_create, mocker, model, model_serializer, request_user,
+        model_employee, kwargs_employee
     ):
         """ Serializer Check
 
         Confirm that using valid data the object validates without exceptions.
         """
+
+        employee = model_employee.objects.create( **kwargs_employee() )
+
+        employee.user = request_user
+        employee.save()
 
         mock_view = MockView(
             user = request_user,

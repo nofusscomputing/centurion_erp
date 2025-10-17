@@ -168,6 +168,7 @@ class TicketBaseSerializerTestCases:
         model,
         django_db_blocker,
         organization_one,
+        model_employee, kwargs_employee
     ):
 
         with django_db_blocker.unblock():
@@ -199,22 +200,33 @@ class TicketBaseSerializerTestCases:
                 })
 
 
-            request.cls.view_user = User.objects.create_user(username="cafs_test_user_view" + str(random.randint(1,99999)), password="password")
+            kwargs = kwargs_employee()
+            kwargs['user'] = User.objects.create_user(username="cafs_test_user_view" + str(random.randint(1,99999)), password="password")
 
-            request.cls.other_user = User.objects.create_user(username="cafs_test_user_other" + str(random.randint(1,99999)), password="password")
+            employee = model_employee.objects.create( **kwargs )
+
+            request.cls.view_user = employee
+
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = User.objects.create_user(username="cafs_test_user_other" + str(random.randint(1,99999)), password="password")
+
+            employee = model_employee.objects.create( **kwargs )
+
+            request.cls.other_user = employee
 
 
         yield
 
-        with django_db_blocker.unblock():
+        # with django_db_blocker.unblock():
 
-            try:
-                request.cls.view_user.delete()
-            except django.db.models.deletion.ProtectedError:
-                pass
-            request.cls.other_user.delete()
+        #     try:
+        #         request.cls.view_user.delete()
+        #     except django.db.models.deletion.ProtectedError:
+        #         pass
+        #     request.cls.other_user.delete()
 
-            del request.cls.valid_data
+        #     del request.cls.valid_data
 
 
 
@@ -318,7 +330,7 @@ class TicketBaseSerializerTestCases:
         """
 
         view_set = fake_view(
-            user = self.view_user,
+            user = self.view_user.user,
             _has_import = True,
             _has_triage = True
         )
@@ -343,7 +355,7 @@ class TicketBaseSerializerTestCases:
         """
 
         view_set = fake_view(
-            user = self.view_user,
+            user = self.view_user.user,
             _has_import = True,
             _has_triage = False
         )
@@ -372,7 +384,7 @@ class TicketBaseSerializerTestCases:
         valid_data['milestone'] = self.project_milestone_two.id
 
         view_set = fake_view(
-            user = self.view_user,
+            user = self.view_user.user,
             _has_import = True,
             _has_triage = True
         )
@@ -402,7 +414,7 @@ class TicketBaseSerializerTestCases:
         valid_data['milestone'] = self.project_milestone_two.id
 
         view_set = fake_view(
-            user = self.view_user,
+            user = self.view_user.user,
             _has_import = True,
             _has_triage = True
         )
@@ -445,7 +457,7 @@ class TicketBaseSerializerTestCases:
         del valid_data[param_value]
 
         view_set = fake_view(
-            user = self.view_user,
+            user = self.view_user.user,
             _has_import = True,
         )
 
@@ -490,7 +502,7 @@ class TicketBaseSerializerTestCases:
         del valid_data[param_value]
 
         view_set = fake_view(
-            user = self.view_user,
+            user = self.view_user.user,
             _has_import = True,
         )
 
@@ -616,7 +628,7 @@ class TicketBaseSerializerTestCases:
 
 
         view_set = fake_view(
-            user = self.other_user,
+            user = self.other_user.user,
             _has_import = param_permission_import,
             _has_triage = param_permission_triage
         )
@@ -624,7 +636,7 @@ class TicketBaseSerializerTestCases:
 
         if param_is_owner:
 
-            view_set.request.user = self.view_user
+            view_set.request.user = self.view_user.user
 
 
         serializer = create_serializer(
@@ -653,7 +665,7 @@ class TicketBaseSerializerTestCases:
     def existing_ticket(self, db, fake_view, create_serializer):
 
         view_set = fake_view(
-            user = self.view_user,
+            user = self.view_user.user,
             _has_import = True,
             _has_triage = True
         )
@@ -737,7 +749,7 @@ class TicketBaseSerializerTestCases:
 
 
         view_set = fake_view(
-            user = self.other_user,
+            user = self.other_user.user,
             _has_import = param_permission_import,
             _has_triage = param_permission_triage,
             action = 'partial_update',
@@ -745,7 +757,7 @@ class TicketBaseSerializerTestCases:
 
         if param_is_owner:
 
-            view_set.request.user = self.view_user
+            view_set.request.user = self.view_user.user
 
 
         serializer = create_serializer(
@@ -777,7 +789,7 @@ class TicketBaseSerializerTestCases:
     def fresh_ticket_serializer(self, request, django_db_blocker, fake_view, create_serializer):
 
         view_set = fake_view(
-            user = request.cls.view_user
+            user = request.cls.view_user.user
         )
 
         valid_data = request.cls.valid_data.copy()
