@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from itim.models.clusters import ClusterType
 from itim.serializers.cluster_type import (
@@ -25,7 +26,7 @@ def kwargs_clustertype(kwargs_centurionmodel):
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'clustertype_' +  str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'clustertype_' +  str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'config': { 'config_key_1': 'config_value_1' }
         }
 

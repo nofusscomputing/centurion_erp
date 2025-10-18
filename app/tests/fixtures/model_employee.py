@@ -1,7 +1,13 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from human_resources.models.employee import Employee
+from human_resources.serializers.entity_employee import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
+)
 
 
 
@@ -14,17 +20,33 @@ def model_employee(clean_model_from_db):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_employee( kwargs_contact ):
+def kwargs_employee( django_db_blocker, kwargs_contact, model_user, kwargs_user ):
 
     def factory():
 
-        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)) + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+        random_str = str( datetime.now().strftime("%y%m%d%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
+
+        with django_db_blocker.unblock():
+
+            user = model_user.objects.create( **kwargs_user() )
 
         kwargs = {
             **kwargs_contact(),
-            'employee_number':  random_str
+            'entity_type': 'employee',
+            'employee_number':  int(random_str),
+            'user': user,
         }
 
         return kwargs
 
     yield factory
+
+
+@pytest.fixture( scope = 'class')
+def serializer_employee():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

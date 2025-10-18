@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from config_management.models.groups import ConfigGroupSoftware
 
@@ -27,7 +28,7 @@ def kwargs_configgroupsoftware(django_db_blocker,
 
             centurion_kwargs = kwargs_centurionmodel()
 
-            random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
             software_kwargs = kwargs_software()
             software_kwargs.update({

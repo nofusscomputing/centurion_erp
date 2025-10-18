@@ -26,15 +26,21 @@ class TicketBaseModelTestCases(
         organization_one,
         django_db_blocker,
         model, model_person, model_user,
+        model_employee, kwargs_employee,
     ):
 
         request.cls.organization = organization_one
 
         with django_db_blocker.unblock():
 
-            request.cls.ticket_user = model_user.objects.create_user(
+            kwargs = kwargs_employee()
+            kwargs['user'] = model_user.objects.create_user(
                 username="test_user_for_tickets", password="password"
             )
+            
+            employee = model_employee.objects.create( **kwargs )
+
+            request.cls.ticket_user = employee
 
 
             request.cls.entity_user = model_person.objects.create(

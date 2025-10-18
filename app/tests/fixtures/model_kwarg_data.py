@@ -1,6 +1,7 @@
 import pytest
-import random
 import logging
+
+from datetime import datetime
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -14,7 +15,7 @@ def model_kwarg_data(django_db_blocker):
 
     def data(model, model_kwargs, model_instance = None, create_instance = False, instances = instances) -> dict:
 
-        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+        random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
         log:logging.Logger = settings.CENTURION_LOG.getChild('fixture').getChild('model_kwarg_data')
         kwargs = {}

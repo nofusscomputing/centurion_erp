@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from assistance.models.knowledge_base import KnowledgeBase
 from assistance.serializers.knowledge_base import (
@@ -27,7 +28,7 @@ def kwargs_knowledgebase(django_db_blocker,
 
         with django_db_blocker.unblock():
 
-            random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
             group = model_group.objects.create(
                 name = 'kb tgt team' + random_str

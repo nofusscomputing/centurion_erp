@@ -1,7 +1,5 @@
 import pytest
 
-from django.test import TestCase
-
 from access.tests.unit.contact.test_unit_contact_viewset import (
     ContactViewsetInheritedCases
 )
@@ -9,33 +7,31 @@ from access.tests.unit.contact.test_unit_contact_viewset import (
 from human_resources.models.employee import Employee
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
+
 @pytest.mark.model_employee
 class ViewsetTestCases(
     ContactViewsetInheritedCases,
 ):
 
-    model: str = Employee
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'model': {
+                'value': Employee
+            }
+        }
 
 
 
 class EmployeeViewsetInheritedCases(
     ViewsetTestCases,
 ):
-    """Sub-Entity Test Cases
-
-    Test Cases for Entity models that inherit from model Employee
-    """
-
-    model: str = None
-    """name of the model to test"""
-
+    pass
 
 
 @pytest.mark.module_human_resources
-class EmployeeViewsetTest(
+class EmployeeViewsetPyTest(
     ViewsetTestCases,
-    TestCase,
 ):
 
     pass

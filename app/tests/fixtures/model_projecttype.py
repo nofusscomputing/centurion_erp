@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from project_management.models.project_types import ProjectType
 from project_management.serializers.project_type import (
@@ -38,7 +39,7 @@ def kwargs_projecttype(kwargs_centurionmodel, django_db_blocker,
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'projecttype_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'projecttype_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'runbook': runbook,
         }
 

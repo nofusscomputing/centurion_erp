@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from project_management.models.project_states import ProjectState
 from project_management.serializers.project_states import (
@@ -38,7 +39,7 @@ def kwargs_projectstate(kwargs_centurionmodel, django_db_blocker,
 
         kwargs = {
             **kwargs,
-            'name': 'projectstate_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'projectstate_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'runbook': runbook,
         }
 

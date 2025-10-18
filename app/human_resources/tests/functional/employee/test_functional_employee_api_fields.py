@@ -1,5 +1,7 @@
 import pytest
 
+from rest_framework.relations import Hyperlink
+
 from access.tests.functional.contact.test_functional_contact_api_fields import (
     ContactAPIInheritedCases
 )
@@ -17,6 +19,30 @@ class EmployeeAPITestCases(
         return {
             'employee_number': {
                 'expected': int
+            },
+            'user': {
+                'expected': dict
+            },
+            'user.id': {
+                'expected': int
+            },
+            'user.display_name': {
+                'expected': str
+            },
+            'user.first_name': {
+                'expected': str
+            },
+            'user.last_name': {
+                'expected': str
+            },
+            'user.username': {
+                'expected': str
+            },
+            'user.is_active': {
+                'expected': bool
+            },
+            'user.url': {
+                'expected': Hyperlink
             }
         }
 

@@ -18,7 +18,9 @@ class TicketCommentBaseModelTestCases(
 
 
     @pytest.fixture
-    def ticket(self, request, django_db_blocker):
+    def ticket(self, request, django_db_blocker,
+        model_employee, kwargs_employee,
+    ):
         """ Ticket that requires body
 
         when using this fixture, set the `description` then call ticket.save()
@@ -29,16 +31,21 @@ class TicketCommentBaseModelTestCases(
 
         with django_db_blocker.unblock():
 
+            kwargs = kwargs_employee()
+            kwargs['user'] = request.cls.ticket_user
+
+            employee = model_employee.objects.create( **kwargs )
+
             ticket = TicketBase()
 
             ticket.organization = request.cls.organization
             ticket.title = 'A ticket for slash commands'
-            ticket.opened_by = request.cls.ticket_user
+            ticket.opened_by = employee
 
             ticket = TicketBase.objects.create(
                 organization = request.cls.organization,
                 title = 'A ticket for slash commands',
-                opened_by = request.cls.ticket_user,
+                opened_by = employee,
             )
 
         yield ticket

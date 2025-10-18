@@ -1,6 +1,8 @@
 import pytest
 import random
 
+from datetime import datetime
+
 from access.models.person import Person
 from access.serializers.entity_person import (
     BaseSerializer,
@@ -26,9 +28,9 @@ def kwargs_person( kwargs_entity ):
         kwargs = {
             **kwargs_entity(),
             'entity_type': 'person',
-            'f_name': 'pfn' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
-            'm_name': 'pmn' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
-            'l_name': 'pln' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) ),
+            'f_name': 'pfn' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
+            'm_name': 'pmn' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
+            'l_name': 'pln' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'dob': str(random.randint(1972, 2037)) + '-' + str(
                 random.randint(1, 12)) + '-' + str(random.randint(1, 28))
         }

@@ -273,6 +273,8 @@ class ModelSerializer(
 
         attrs['comment_type'] = self.context['view'].model._meta.sub_model_type
 
+        attrs['user'] = self.context['request'].user.get_entity()
+
         if self.context['view']._has_triage:
 
             attrs = self.validate_triage( attrs )

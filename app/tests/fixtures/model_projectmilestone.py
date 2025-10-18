@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from django.db import models
 
@@ -50,7 +51,7 @@ def kwargs_projectmilestone(django_db_blocker,
                     })
 
             kwargs.update({
-                'name': 'pm' + str( random.randint(1,99) ) + str( random.randint(100,199) ) + str( random.randint(200,299) )
+                'name': 'pm' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
             })
             del kwargs['code']
 
@@ -64,7 +65,7 @@ def kwargs_projectmilestone(django_db_blocker,
 
         kwargs = {
             **kwargs,
-            'name': 'pm_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'pm_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'project': project,
             'start_date': '2025-08-04T00:00:01Z',
             'finish_date': '2025-08-04T00:00:02Z',

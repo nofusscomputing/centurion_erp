@@ -1,14 +1,15 @@
 import pytest
 
-from django.db import models
+from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
+    CenturionAbstractTenancyModelInheritedCases
+)
 
-from centurion.tests.unit_models import ModelTestCases
 
 
 @pytest.mark.models
 @pytest.mark.unit
 class CenturionSubAbstractModelTestCases(
-    ModelTestCases
+    CenturionAbstractTenancyModelInheritedCases
 ):
 
 

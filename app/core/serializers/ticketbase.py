@@ -8,8 +8,6 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from centurion.serializers.user import UserBaseSerializer
-
 from core import exceptions as centurion_exception
 from core import fields as centurion_field
 from core.fields.badge import BadgeField
@@ -304,10 +302,7 @@ class ModelSerializer(
         if getattr(self.context['view'], 'action', '') in [ 'create' ]:
             # Always set that the ticket was opened by user ho is making the request
 
-            try:
-                attrs['opened_by'] = self.context['request'].user
-            except KeyError:
-                pass
+            attrs['opened_by'] = self.context['request'].user.get_entity()
 
 
         attrs = self.validate_field_milestone( attrs )
@@ -324,13 +319,13 @@ class ModelSerializer(
 
         opened_by_id = attrs.get('opened_by', 0)
 
-        if opened_by_id != 0:
+        if opened_by_id not in [ 0, None ]:
 
             opened_by_id = opened_by_id.id
 
-        request_user_id = int(self.context['request'].user.id)
+        request_user_id = getattr(self.context['request'].user.get_entity(), 'id', 0)
 
-        if opened_by_id == 0:
+        if opened_by_id in [ 0, None ]:
 
             request_user_id = 0
 
@@ -431,7 +426,7 @@ class ViewSerializer(ModelSerializer):
 
     milestone = ProjectMilestoneBaseSerializer(many=False, read_only=True)
 
-    opened_by = UserBaseSerializer()
+    opened_by = EntityBaseSerializer()
 
     organization = TenantBaseSerializer(many=False, read_only=True)
 

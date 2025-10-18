@@ -69,33 +69,6 @@ class SLMTicketModelTestCases(
         assert issubclass(model, SLMTicket)
 
 
-    def test_function_get_related_field_name_value(self, model):
-        """Function test
-
-        This test case overwrites a test of the same name. This model should
-        return an empty string as it's the base model.
-
-        Ensure that function `get_related_field_name` returns a string that is
-        model the attribute the model exists under.
-        """
-
-        assert model().get_related_field_name() == ''
-
-
-    def test_function_get_related_model_type(self, model):
-        """Function test
-
-        This test case overwrites a test of the same name. This model should
-        return `None` as it's the base model.
-
-        Ensure that function `get_related_model` returns a value that
-        is of type `QuerySet`.
-        """
-
-        assert type(model().get_related_model()) is type(None)
-
-
-
 
 class SLMTicketModelInheritedCases(
     SLMTicketModelTestCases,
