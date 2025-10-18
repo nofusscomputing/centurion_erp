@@ -151,6 +151,14 @@ class ModelTicketMetaModelTestCases(
                 )()
 
 
+                content_type = model_contenttype.objects.filter(
+                    app_label = ticket_model._meta.app_label,
+                    model = ticket_model._meta.model_name
+                ).first()
+
+                model_kwargs['content_type'] = content_type
+
+
                 kwargs_many_to_many = {}
 
                 kwargs = {}
