@@ -1,3 +1,53 @@
+## 1.26.0 (2025-10-18)
+
+### feat
+
+- **core**: When a ticket comment is created, associate with currently authenticated user
+- **core**: ensure that when attempting to link sub-model reqs are met
+- **human_resources**: Add user field to Employee details page
+- **human_resources**: Add Migration signal to ensure that all users have an Employy entity created.
+- **core**: Add Linking of parent models when sub-model is being created
+- **human_resources**: Migration for field user to Employee Entity model
+- **human_resources**: Add field user to Employee Entity model
+- **human_resources**: remove feature flag 2025-00005
+
+### Fixes
+
+- **core**: Whn attempting to link a model, if it already has an id, dont attempt to link to a parent
+- **human_resources**: when adding users as an employee as part of migration signal auto-generate the names if hey are blank
+- **access**: Entity qs must e cached
+- **itam**: Oranizatio field must be null if not defined for Software model
+- **core**: When validating a ticket comment always set its tenancy to the tickets tenancy
+- **core**: when saving a model if no before data is found (`=None`) set to empty dict by default
+- **access**: when fetching data, determine type by model
+- **core**: When fetching model history during save, when no pk exists, always assume creatung model
+- **access**: Contacts must be filtered to those who opt for directory listing
+- **access**: when setting display name for entiry models, use get_related_model function
+
+### Refactoring
+
+- **core**: When generating entity display name, look in the entity type class for it first
+- **core**: migrations for TicketBase field to be Entity model
+- **core**: migrate opened_by field to be Entity model
+- **access**: organization field must be null for tenancy_abstract_model
+- **core**: update get_url functions to use get_related_model function
+- migrate function get_related_model to Centurion mixin
+- migrate function get_related_field_name to Centurion mixin
+
+### Tests
+
+- **base**: Functional test cases to ensure that when creating and edting a model that the supplied data matches what's saved
+- **core**: Ensure ticket comment cant be created if the user has no entity assigned
+- **core**: Ensure ticket cant be created if the user has no entity assigned
+- **access**: Test cases to ensure that child model links to existing person model
+- **access**: Test cases to ensure that child model links to existing contact model
+- **access**: remove test for validation of duplicate
+- **human_resources**: Update Test suites for employee to perform fiels User checks
+- **core**: Remove centrion mixin function test to check returning related model name
+- **human_resources**: Unit ViewSet test suite for Employee model
+- **human_resources**: Unit serializer test suite for Employee model
+- **human_resources**: Functional model test suite for Employee model
+
 ## 1.25.0 (2025-10-10)
 
 ### feat
