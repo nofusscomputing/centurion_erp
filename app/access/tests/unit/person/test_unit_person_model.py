@@ -29,6 +29,15 @@ class PersonModelTestCases(
             '_is_submodel': {
                 'value': True
             },
+            '_linked_model_kwargs': {
+                'type': tuple,
+                'value': (
+                    ( 'f_name', 'm_name', 'l_name', 'dob' ),
+                    ( 'f_name', 'l_name', 'dob' ),
+                    ( 'f_name', 'm_name', 'l_name' ),
+                    ( 'f_name', 'l_name' ),
+                ),
+            },
             'url_model_name': {
                 'type': str,
                 'value': 'entity'
@@ -100,12 +109,4 @@ class PersonModelInheritedCases(
 class PersonModelPyTest(
     PersonModelTestCases,
 ):
-
-
-    def test_function_value_get_related_model(self, model_instance):
-        """Function test
-
-        Confirm function `get_related_model` is None for base model
-        """
-
-        assert model_instance.get_related_model() is None
+    pass

@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from itam.models.operating_system import OperatingSystemVersion
 from itam.serializers.operating_system_version import (
@@ -37,7 +38,7 @@ def kwargs_operatingsystemversion(django_db_blocker,
         kwargs = {
             **kwargs_centurionmodel(),
             'operating_system': os,
-            'name': 'osv' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'osv' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
         }
 
         return kwargs

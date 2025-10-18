@@ -1,6 +1,8 @@
 import pytest
 import random
 
+from datetime import datetime
+
 from itam.models.device import Device
 from itam.serializers.device import (
     DeviceBaseSerializer,
@@ -30,19 +32,19 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
         with django_db_blocker.unblock():
 
             kwargs = kwargs_devicemodel()
-            kwargs['name'] = 'dev_dm' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            kwargs['name'] = 'dev_dm' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
             device_model = model_devicemodel.objects.create( **kwargs )
 
             kwargs = kwargs_devicetype()
-            kwargs['name'] = 'dev_dt-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            kwargs['name'] = 'dev_dt-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
             device_type = model_devicetype.objects.create( **kwargs )
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'dev-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
-            'serial_number': 'dev-' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'dev-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
+            'serial_number': 'dev-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'uuid': '73'+ str( random.randint(10000, 99999) ) + 'c-e3e8-4680-a3bf-2' + str( random.randint(10000, 99999) ) + 'e' + str( random.randint(10000, 99999) ),
             'device_model': device_model,
             'device_type': device_type,

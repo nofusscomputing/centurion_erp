@@ -126,7 +126,7 @@ Feature table uses the following keys:
 | Fleet Management |||  |
 | | Vehicle Management | :x: |  |
 | **[Human Resource Management](./user/human_resources/index.md)**  || :recycle: | [see #92](https://github.com/nofusscomputing/centurion_erp/issues/92) |
-| | [Employee Records](./user/human_resources/employee.md) | :x: |  |
+| | [Employee Records](./user/human_resources/employee.md) | :recycle: |  |
 | | Maintenence Management | :x: |  |
 | | Onboarding / Offboarding | :x: |  |
 | | Self-Service | :x: |  |

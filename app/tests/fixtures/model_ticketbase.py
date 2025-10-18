@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from core.models.ticket_base import TicketBase
 from core.serializers.ticketbase import (
@@ -21,6 +22,7 @@ def model_ticketbase(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
     model_user, kwargs_user, model_ticketbase,
+    model_employee, kwargs_employee,
     model_project, model_projectmilestone,
     model_ticketcategory,
 ):
@@ -28,30 +30,30 @@ def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
 
     def factory():
 
-        random_str = str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+        random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_user()
-            kwargs['username'] = 'tb_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+            kwargs = kwargs_employee()
+            kwargs['f_name'] = 'tb_fn_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
-            user = model_user.objects.create( **kwargs )
+            user = model_employee.objects.create( **kwargs )
 
 
             project = model_project.objects.create(
                 organization = kwargs_centurionmodel()['organization'],
-                name = 'project_ticket' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299))
+                name = 'project_ticket' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
             )
 
             project_milestone = model_projectmilestone.objects.create(
                 organization = kwargs_centurionmodel()['organization'],
-                name = 'project milestone one' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+                name = 'project milestone one' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
                 project = project
             )
 
             category = model_ticketcategory.objects.create(
                 organization = kwargs_centurionmodel()['organization'],
-                name = 'tb cat ' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+                name = 'tb cat ' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             )
 
 

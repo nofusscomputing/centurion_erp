@@ -63,6 +63,23 @@ class CenturionUser(
 
 
 
+    def get_entity(self):
+        """Get Users Entity
+
+        Returns:
+            CenturionUser: Employee Centurion User account
+            None: No User Account found.
+        """
+
+        employee = getattr(self, 'employee', None)
+
+        if employee:
+            return employee
+
+        return None
+
+
+
     def get_group_permissions(
         self, tenancy: bool = True
     ) -> dict[ str, list[ Permission ] ] | list[ Permission ]:

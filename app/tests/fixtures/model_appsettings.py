@@ -1,5 +1,6 @@
-import datetime
 import pytest
+
+from datetime import datetime
 
 from settings.models.app_settings import AppSettings
 from settings.serializers.app_settings import (
@@ -21,7 +22,7 @@ def kwargs_appsettings( django_db_blocker, model_user ):
 
     def factory():
 
-        random_str = str(datetime.datetime.now(tz=datetime.timezone.utc))
+        random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
         with django_db_blocker.unblock():
 

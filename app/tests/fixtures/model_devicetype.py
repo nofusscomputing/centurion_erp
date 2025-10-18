@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from itam.models.device import DeviceType
 from itam.serializers.device_type import (
@@ -25,7 +26,7 @@ def kwargs_devicetype(kwargs_centurionmodel):
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'typ' +str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'typ' +str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
         }
 
         return kwargs

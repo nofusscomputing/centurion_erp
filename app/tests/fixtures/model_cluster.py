@@ -1,6 +1,8 @@
 import pytest
 import random
 
+from datetime import datetime
+
 from itim.models.clusters import Cluster
 from itim.serializers.cluster import (
     ClusterBaseSerializer,
@@ -37,7 +39,7 @@ def kwargs_cluster(kwargs_centurionmodel, django_db_blocker,
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'name': 'cluster_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'name': 'cluster_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'nodes': [ node ],
             'cluster_type': cluster_type,
             'config': { 'config_key_1': 'config_value_1' }

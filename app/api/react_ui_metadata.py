@@ -426,12 +426,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "Human Resources (HR)",
                 "name": "human_resources",
                 "pages": {
-                    # 'view_employees': {
-                    #     "display_name": "Employees",
-                    #     "name": "employees",
-                    #     "icon": "employees",
-                    #     "link": "/human_resources/employees"
-                    # }
+                    'view_employee': {
+                        "display_name": "Employees",
+                        "name": "employees",
+                        "icon": "employee",
+                        "link": "/access/entity/employee"
+                    }
                 }
             },
             'itam': {
@@ -594,18 +594,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "organization",
                         "icon": 'organization',
                         "link": "/access/company"
-                    }
-                })
-
-
-            if request.feature_flag['2025-00005']:
-
-                nav['human_resources']['pages'].update({
-                    'view_employee': {
-                        "display_name": "Employees",
-                        "name": "employees",
-                        "icon": "employees",
-                        "link": "/access/entity/employee"
                     }
                 })
 

@@ -50,7 +50,7 @@ class TenancyAbstractModel(
         Tenant,
         blank = False,
         help_text = 'Tenant this belongs to',
-        null = False,
+        null = True,
         on_delete = models.CASCADE,
         related_name = '+',
         validators = [

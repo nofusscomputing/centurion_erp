@@ -2,6 +2,10 @@ import pytest
 
 from django.test import TestCase
 
+from human_resources.models.employee import (
+    Employee
+)
+
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from core.models.ticket_base import TicketBase
@@ -61,13 +65,22 @@ class MetadataTestCases(
 
         self.presetUpTestData()
 
+        employee = Employee.objects.create(
+            organization = self.organization,
+            f_name = 'f_name',
+            l_name = 'l_name',
+            email = 'f_name.l_name@noreply.local',
+            user = self.view_user,
+            employee_number = '123456789'
+        )
+
         self.kwargs_create_item.update({
-            'opened_by': self.view_user,
+            'opened_by': employee,
             'organization': self.organization
         })
 
         self.kwargs_create_item_diff_org.update({
-            'opened_by': self.view_user,
+            'opened_by': employee,
             'organization': self.different_organization
         })
 

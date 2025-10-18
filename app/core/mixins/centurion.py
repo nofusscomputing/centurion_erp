@@ -1,4 +1,7 @@
 from django.conf import settings
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 
 from rest_framework.reverse import reverse
@@ -27,8 +30,22 @@ class Centurion(
     _audit_enabled: bool = True
     """Should this model have audit history kept"""
 
+    _base_model: models.Model = None
+    """Base model for this sub-model
+    
+    This should be set to the first model within the chain of models.
+    """
+
     _is_submodel: bool = False
     """This model a sub-model"""
+
+    _linked_model_kwargs: tuple[ tuple[ str ] ] = None
+    """Used for linking existing parent model.
+
+    This field is only used for sub-models.
+
+    Note: Leave this field blank if you don't wish to link existing models.
+    """
 
     _notes_enabled: bool = True
     """Should a table for notes be created for this model"""
@@ -100,6 +117,14 @@ class Centurion(
 
 
         super().delete(using = using, keep_parents = keep_parents)
+
+
+
+    def clean_fields(self, exclude=None):
+
+        self.link_parent_model()
+
+        return super().clean_fields(exclude)
 
 
 
@@ -200,6 +225,71 @@ class Centurion(
 
 
 
+    def get_related_field_name(self) -> str:
+        """Related model field name.
+
+        Get the name of the attribute within this model for it's related model.
+        This method is normally only used for sub-models.
+
+        Returns:
+            str: Field name of the related model.
+            empty string (str): There is not related model.
+        """
+
+        if self._base_model:
+
+            meta = getattr(self, '_meta')
+
+
+            for related_object in getattr(meta, 'related_objects', []):
+
+                if not issubclass(related_object.related_model, self._base_model):
+
+                    continue
+
+
+                if getattr(self, related_object.name, None):
+
+                    if( 
+                        not str(related_object.name).endswith('history')
+                        and not str(related_object.name).endswith('notes')
+                    ):
+
+                        return related_object.name
+
+
+        return ''
+
+
+    def get_related_model(self):
+        """Recursive model Fetch
+
+        Returns the lowest model found in a chain of inherited models.
+
+        Returns:
+            models.Model: Lowset model found in inherited model chain
+            self: Model is not a sub-model or this sub-model was directly accessed.
+        """
+
+        related_model_name = self.get_related_field_name()
+
+        related_model = getattr(self, related_model_name, None)
+
+        if related_model is None:
+
+            related_model = self
+
+        elif hasattr(related_model, 'get_related_field_name'):
+
+            if related_model.get_related_field_name() != '':
+
+                related_model = related_model.get_related_model()
+
+
+        return related_model
+
+
+
     def get_url(
         self, relative: bool = False, api_version: int = 2, many = False, request: any = None
     ) -> str:
@@ -217,17 +307,19 @@ class Centurion(
 
         namespace = f'v{api_version}'
 
-        if self.get_app_namespace():
-            namespace = namespace + ':' + self.get_app_namespace()
+        model = self.get_related_model()
+
+        if model.get_app_namespace():
+            namespace = namespace + ':' + model.get_app_namespace()
 
 
-        url_basename = f'{namespace}:_api_{self._meta.model_name}'
+        url_basename = f'{namespace}:_api_{model._meta.model_name}'
 
-        if self.url_model_name:
+        if model.url_model_name:
 
-            url_basename = f'{namespace}:_api_{self.url_model_name}'
+            url_basename = f'{namespace}:_api_{model.url_model_name}'
 
-        if self._is_submodel:
+        if model._is_submodel:
 
             url_basename += '_sub'
 
@@ -241,7 +333,7 @@ class Centurion(
             url_basename += '-detail'
 
 
-        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs( many = many ) )
+        url = reverse( viewname = url_basename, kwargs = model.get_url_kwargs( many = many ) )
 
         if not relative:
 
@@ -268,13 +360,12 @@ class Centurion(
 
         kwargs = {}
 
-        if self._is_submodel:
+        model = self.get_related_model()
+
+        if model._is_submodel:
 
             kwargs.update({
-                # **super().get_url_kwargs( many = many ),
-                # 'app_label': self._meta.app_label,    # this has been removed as the app_namespace can cover
-                'model_name': str(self._meta.model_name),
-                # 'model_id': self.model.id,    # Unknown why this was added as sub-model id's match the model
+                'model_name': str( model._meta.model_name ),
             })
 
         if many:
@@ -284,10 +375,165 @@ class Centurion(
         else:
 
             kwargs.update({
-                'pk': self.id
+                'pk': model.id
             })
 
             return kwargs
+
+
+    def link_parent_model(self):
+        """Link Existing parent model.
+
+        Using `model._linked_model_kwargs` as the model filter kwargs, attempt to locate an
+        existing model that matches, if so, then don't create a new model, link the existing model.
+
+        Raises:
+            ValidationError: When attempting to link parent model and there is a missing model
+                within the chain.
+        """
+
+        if(
+            self.id is not None
+            or (
+                self.id is not None
+                and not self._state.adding
+                and not self._linked_model_kwargs
+            )
+            or not self._is_submodel
+            or self._base_model == self
+        ):
+            return
+
+
+        model_notes = self.model_notes
+
+        parent_models = self._meta.get_parent_list()
+        parent_models.reverse()
+
+        prev_found_model = None
+        for parent_model in parent_models:    # Confirm sub-model chain has ALL models created
+
+            if not parent_model._is_submodel or not parent_model._linked_model_kwargs:
+                continue
+
+
+            for kwargs in parent_model._linked_model_kwargs:
+
+                model_kwargs = {}
+                for kwarg in kwargs:
+
+                    kwarg_value = getattr(self, kwarg)
+
+                    if not kwarg_value:
+                        continue
+
+
+                    model_kwargs.update({
+                        kwarg: kwarg_value
+                    })
+
+
+                if len( model_kwargs ) != len( kwargs ):
+                    continue
+
+            existing_model = parent_model.objects.filter(
+                **model_kwargs
+            ).first()
+
+            if prev_found_model and not existing_model:
+                raise ValidationError(
+                    message = (
+                        f'Found matching {prev_found_model._meta.model_name} [id: {prev_found_model.id}], '
+                        f'however unable to link as no {parent_model._meta.model_name} exists for '
+                        f'this {prev_found_model._meta.model_name}'
+                        ),
+                    code = 'linking_models_break_in_chain'
+                )
+
+            if existing_model:
+                prev_found_model = existing_model
+
+
+        parent_model = self._meta.pk.related_model
+
+        linked_model_kwargs = parent_model._linked_model_kwargs
+
+        if not linked_model_kwargs:
+            return
+
+        for kwargs in linked_model_kwargs:
+
+            model_kwargs = {}
+            for kwarg in kwargs:
+
+                kwarg_value = getattr(self, kwarg)
+
+                if not kwarg_value:
+                    continue
+
+
+                model_kwargs.update({
+                    kwarg: kwarg_value
+                })
+
+
+            if len( model_kwargs ) != len( kwargs ):
+                continue
+
+
+            existing_contact = parent_model.objects.filter(
+                **model_kwargs
+            ).first()
+
+            if existing_contact:
+
+                parent_fields = parent_model._meta.get_fields(include_parents = True)
+
+                for parent_field in parent_fields:
+
+                    if(
+                        parent_field.auto_created
+                        or not parent_field.editable
+                        or not hasattr(self, parent_field.name)
+                        or type(parent_field) in [    # Related Fields
+                            models.ManyToManyRel,
+                            models.ManyToOneRel,
+                            models.OneToOneRel,
+                        ]
+                        or parent_field.name in [
+                            'created',
+                            'id',
+                            'model_notes',    # This field is amended below
+                            'modified',
+                        ]
+                    ):
+                        continue
+
+
+                    current_field_data = getattr(self, parent_field.name, None)
+                    existing_field_data = getattr(existing_contact, parent_field.name, None)
+
+                    if current_field_data != existing_field_data:
+
+                        setattr(self, parent_field.name, existing_field_data)
+
+
+                setattr(self, self._meta.pk.name, existing_contact)
+
+                if model_notes:
+
+                    if existing_contact.model_notes:
+
+                        self.model_notes = existing_contact.model_notes + str( '\n\n' + model_notes )
+
+                    else:
+
+                        self.model_notes = model_notes
+
+
+                self._state.adding = False
+
+                break    # found a match process no further
 
 
 
@@ -311,12 +557,11 @@ class Centurion(
 
             self._after = self.get_audit_values()
 
-            if self.id:
+            try:
 
-                self._before = type(self).objects.get( id = self.id ).get_audit_values()
+                self._before = type(self).objects.get( id = self.id ).get_audit_values() or {}
 
-            else:
-
+            except models.ObjectDoesNotExist as e:
                 self._before = {}
 
 

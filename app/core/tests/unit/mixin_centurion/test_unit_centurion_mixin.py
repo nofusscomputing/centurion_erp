@@ -1,9 +1,9 @@
 import inspect
 import pytest
 
-from django.core.exceptions import (
-    ValidationError
-)
+# from django.core.exceptions import (
+#     ValidationError
+# )
 
 from centurion.tests.unit_models import ModelTestCases
 
@@ -26,15 +26,23 @@ class CenturionMixnTestCases(
                 'type': bool,
                 'value': True,
             },
+            '_base_model': {
+                'type': type(None),
+                'value': None,
+            },
             '_is_submodel': {
                 'type': bool,
                 'value': False,
             },
-            '_ticket_linkable': {
+            '_linked_model_kwargs': {
+                'type': type(None),
+                'value': None,
+            },
+            '_notes_enabled': {
                 'type': bool,
                 'value': True,
             },
-            '_notes_enabled': {
+            '_ticket_linkable': {
                 'type': bool,
                 'value': True,
             },
@@ -158,6 +166,30 @@ class CenturionMixnTestCases(
 
 
         assert model_instance.get_history_model_name() == test_value
+
+
+
+    def test_method_get_related_field_name_returns_empty_for_self(self, model, mocker):
+        """Test Class Method
+
+        Test to ensure that when function `get_related_field_name` is called
+        and the model is the same as `._base_model`, it returns an empty string.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is abstract, test is N/A.' )
+
+        mocker.patch.object(model, '_base_model', new = model)
+
+        class MockModel:
+            related_model = model._base_model
+            name = model._meta.model_name
+
+        related_objects = [ MockModel() ]
+
+        mock_list = mocker.patch.object(model._meta, 'related_objects', new = related_objects)
+
+        assert model().get_related_field_name() == ''
 
 
 
@@ -334,6 +366,7 @@ class CenturionMixnInheritedCases(
 
 
 
+@pytest.mark.module_core
 class CenturionMixnPyTest(
     CenturionMixnTestCases,
 ):

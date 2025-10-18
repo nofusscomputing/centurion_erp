@@ -99,7 +99,35 @@ All sub-models are intended to be extended and contain the core features for ALL
 
 ### Sub-Model
 
-A Sub-model specifically inherits from a normal model with the purpose of using the base model fields (the common fields) and if required specifying its own fields. A sub-model provides an additional feature in that the data from the base model can now be based off of the permissions of the sub-model, not the base. THis model inherits from `core.models.centurion.CenturionSubModel` and its base model.
+A Sub-model specifically inherits from a normal model with the purpose of using the base model fields (the common fields) and if required specifying its own fields. A sub-model provides an additional feature in that the data from the base model can now be based off of the permissions of the sub-model, not the base.
+
+To setup a sub-model you must do the following:
+
+- A sub-model and its base are not abstract, the entire chain of models are concrete models.
+
+    !!! info
+        This is important as it ensures that each model within a chain has permissions for that model.
+
+- Add `_base_model` property to the base model class, that returns the base model.
+
+- Add attribute `_is_submodel` with a value of `True` to **all** sub-model classes.
+
+    !!! tip
+        Don't add this to the base model class
+
+- Add attribute `url_model_name` with the value of the string that will be used within the url basename to the base model class.
+
+- Add the URL route to the correct API Version url file. _i.e. app/api/urls_v2.py_
+
+
+#### Linking Models
+
+Sub-models have the ability to auto-link to an existing parent model. This feature is designed purely to aid in data de-duplication. To enable this feature add attribute `_linked_model_kwargs: tuple[ tuple[ str ] ]` to the sub-model class with the fields ( `str` ) to use to search for the existing model. Each inner tuple will be used to create the kwargs to search for the existing model. This searching will occur for each outer tuple and when nothing is found will move to the next tuple. As soon as a match is found it'll be linked to.
+
+As part of the linking, if there is data in the existing fields, it'll be used instead of any data the user specified for the field. This is to ensure that the linking is to an existing and un-modified parent. There is but one exception, the `model_notes` field which is appended to the existing data.
+
+!!! note
+    Linking of models only occurs to its immediate parent. If the immediate parent is missing an error is raised telling the user of this fact so that they can create the missing parent-model within the chain.
 
 
 ## Core Features

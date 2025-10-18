@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from access.models.centurion_user import CenturionUser
 
@@ -21,7 +22,7 @@ def kwargs_centurionuser():
         kwargs = {}
 
         kwargs = {
-            'username': "test_user-" + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'username': "test_user-" + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'password': "password"
         }
 

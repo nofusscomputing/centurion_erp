@@ -7,9 +7,6 @@ from django.db.models.query import QuerySet
 from core import exceptions as centurion_exceptions
 from core.fields.badge import Badge
 from core.models.ticket_base import TicketBase
-from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
-    CenturionAbstractTenancyModelInheritedCases
-)
 from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_model import (
     CenturionSubAbstractModelInheritedCases
 )
@@ -20,7 +17,6 @@ from core.tests.unit.centurion_sub_abstract.test_unit_centurion_sub_abstract_mod
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
     CenturionSubAbstractModelInheritedCases,
-    CenturionAbstractTenancyModelInheritedCases,
 ):
 
 
@@ -28,6 +24,10 @@ class TicketBaseModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': TicketBase,
+            },
             '_audit_enabled': {
                 'value': False
             },
@@ -848,52 +848,6 @@ class TicketBaseModelTestCases(
 
 
 
-    def test_function_get_related_field_name_type(self, model, ticket):
-        """Function test
-
-        Ensure that function `get_related_field_name` returns a value that
-        is of type `str`.
-        """
-
-        ticket = model.objects.get(
-            pk = ticket.pk
-        )
-
-        assert type(ticket.get_related_field_name()) is str
-
-
-    def test_function_get_related_field_name_value(self, model, ticket):
-        """Function test
-
-        Ensure that function `get_related_field_name` returns a string that is
-        model the attribute the model exists under.
-        """
-
-        ticket = model.objects.get(
-            pk = ticket.pk
-        )
-
-        assert(
-            ticket.get_related_field_name() != None
-            and ticket.get_related_field_name() != ''
-        )
-
-
-    def test_function_get_related_model_type(self, model, ticket):
-        """Function test
-
-        Ensure that function `get_related_model` returns a value that
-        is of type `QuerySet`.
-        """
-
-        ticket = model.objects.get(
-            pk = ticket.pk
-        )
-
-        assert type(ticket.get_related_model()) is model
-
-
-
     def test_meta_attribute_sub_model_type_length(self, model):
         """Meta Attribute Check
 
@@ -1089,32 +1043,6 @@ class TicketBaseModelPyTest(
 ):
 
     sub_model_type = 'ticket'
-
-
-    def test_function_get_related_field_name_value(self, model):
-        """Function test
-
-        This test case overwrites a test of the same name. This model should
-        return an empty string as it's the base model.
-
-        Ensure that function `get_related_field_name` returns a string that is
-        model the attribute the model exists under.
-        """
-
-        assert model().get_related_field_name() == ''
-
-
-    def test_function_get_related_model_type(self, model):
-        """Function test
-
-        This test case overwrites a test of the same name. This model should
-        return `None` as it's the base model.
-
-        Ensure that function `get_related_model` returns a value that
-        is of type `QuerySet`.
-        """
-
-        assert type(model().get_related_model()) is type(None)
 
 
     def test_function_save_called_slash_command(self, model, mocker, ticket, model_kwargs):

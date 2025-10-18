@@ -12,6 +12,13 @@ class Person(
 
     _is_submodel = True
 
+    _linked_model_kwargs: tuple[ tuple[ str ] ]  = (
+        ( 'f_name', 'm_name', 'l_name', 'dob' ),
+        ( 'f_name', 'l_name', 'dob' ),
+        ( 'f_name', 'm_name', 'l_name' ),
+        ( 'f_name', 'l_name' ),
+    )
+
     documentation = ''
 
 

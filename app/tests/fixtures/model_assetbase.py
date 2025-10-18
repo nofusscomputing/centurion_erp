@@ -1,5 +1,6 @@
 import pytest
-import random
+
+from datetime import datetime
 
 from accounting.models.asset_base import AssetBase
 
@@ -18,8 +19,8 @@ def kwargs_assetbase( kwargs_centurionmodel, model_assetbase ):
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'asset_number': 'ab_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
-            'serial_number': 'ab_' + str( random.randint(1,99)) + str( random.randint(100,199)) + str( random.randint(200,299)),
+            'asset_number': 'ab_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
+            'serial_number': 'ab_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             # 'asset_type': (model_assetbase._meta.sub_model_type, model_assetbase._meta.verbose_name),
         }
 

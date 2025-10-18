@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from access.models.contact import Contact
@@ -32,6 +33,16 @@ class Employee(
         null = False,
         unique = True,
         verbose_name = 'Employee Number'
+    )
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        blank = True,
+        help_text = 'Employee User Account',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = 'employee',
+        verbose_name = 'User',
     )
 
 
@@ -86,7 +97,7 @@ class Employee(
                         'employee_number',
                     ],
                     "right": [
-                        '',
+                        'user',
                     ]
                 }
             ]

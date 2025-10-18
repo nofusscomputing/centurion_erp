@@ -46,6 +46,13 @@ class EmployeeModelTestCases(
                 'null': False,
                 'unique': True,
             },
+            'user': {
+                'blank': True,
+                'default': models.fields.NOT_PROVIDED,
+                'field_type': models.OneToOneField,
+                'null': True,
+                'unique': True,
+            },
         }
 
 
@@ -75,12 +82,4 @@ class EmployeeModelInheritedCases(
 class EmployeeModelPyTest(
     EmployeeModelTestCases,
 ):
-
-
-    def test_function_value_get_related_model(self, model_instance):
-        """Function test
-
-        Confirm function `get_related_model` is None for base model
-        """
-
-        assert model_instance.get_related_model() is None
+    pass

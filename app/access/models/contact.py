@@ -10,6 +10,10 @@ class Contact(
 
     documentation = ''
 
+    _linked_model_kwargs: tuple[ tuple[ str ] ]  = (
+        ( 'email', ),    # Contact
+    )
+
     _is_submodel = True
 
 
