@@ -393,7 +393,8 @@ class Centurion(
         """
 
         if(
-            (
+            self.id is not None
+            or (
                 self.id is not None
                 and not self._state.adding
                 and not self._linked_model_kwargs

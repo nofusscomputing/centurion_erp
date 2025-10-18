@@ -22,6 +22,7 @@ def model_ticketbase(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
     model_user, kwargs_user, model_ticketbase,
+    model_employee, kwargs_employee,
     model_project, model_projectmilestone,
     model_ticketcategory,
 ):
@@ -33,10 +34,10 @@ def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_user()
-            kwargs['username'] = 'tb_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
+            kwargs = kwargs_employee()
+            kwargs['f_name'] = 'tb_fn_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
-            user = model_user.objects.create( **kwargs )
+            user = model_employee.objects.create( **kwargs )
 
 
             project = model_project.objects.create(

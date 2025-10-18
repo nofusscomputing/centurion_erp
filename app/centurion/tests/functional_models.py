@@ -2,6 +2,8 @@ import pytest
 
 from django.db import models
 
+from uuid import UUID
+
 
 
 @pytest.mark.models
@@ -95,3 +97,133 @@ class ModelTestCases:
         db_model = model.objects.get( id = created_model.id )
 
         assert db_model == created_model
+
+
+
+    @pytest.mark.regression
+    def test_model_create_field_values(self,
+        model, model_kwargs,
+    ):
+        """Check model fields
+
+        When a model is created, ensure that the field data provided matches
+        the created model field values.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is abstract, test is N/A.' )
+
+        kwargs = model_kwargs()
+
+        for k, v in kwargs.copy().items():
+
+            if(
+                issubclass(getattr(getattr(model, k), 'field').__class__, models.ManyToManyField)
+            ):
+                del kwargs[k]
+
+        obj = model.objects.create( **kwargs )
+
+        failures = []
+
+        for key, value in kwargs.items():
+
+            if(
+                issubclass(getattr(getattr(model, key), 'field').__class__, models.DateTimeField)
+                or issubclass(getattr(getattr(model, key), 'field').__class__, models.DateField)
+            ):
+                continue
+
+            field = getattr(obj, key)
+
+            if(
+                (
+                    field != value
+                    and not issubclass(field.__class__, UUID)
+                ) or (
+                    issubclass(field.__class__, UUID)
+                    and str(field) != value
+                )
+            ):
+
+                failures += [ f'field {key} value does not match {value}!={field}' ]
+
+
+        assert len(failures) == 0, failures
+
+
+
+    @pytest.mark.regression
+    def test_model_edit_field_values(self,
+        model, model_kwargs,
+    ):
+        """Check model fields
+
+        When a model is edited, ensure that the field data provided matches
+        the edited model field values.
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is abstract, test is N/A.' )
+
+        kwargs_create = model_kwargs()
+
+        for k, v in kwargs_create.copy().items():
+
+            if(
+                issubclass(getattr(getattr(model, k), 'field').__class__, models.ManyToManyField)
+            ):
+                del kwargs_create[k]
+
+        obj = model.objects.create( **kwargs_create )
+
+
+        kwargs_edit = model_kwargs()
+
+        for k, v in kwargs_edit.copy().items():
+
+            if(
+                issubclass(getattr(getattr(model, k), 'field').__class__, models.ManyToManyField)
+                or issubclass(getattr(getattr(model, k), 'field').__class__, models.DateTimeField)
+                or issubclass(getattr(getattr(model, k), 'field').__class__, models.DateField)
+                or k in [
+                    'organization'
+                ]
+            ):
+                del kwargs_edit[k]
+
+
+
+        failures = []
+
+        for key, value in kwargs_edit.items():
+
+            field = getattr(obj, key)
+
+            if issubclass(field.__class__, UUID):
+
+                assert str(field) == kwargs_create[key], f'For test to be successful, field must be known value. {field}!={kwargs_create[key]}'
+
+            else:
+                assert field == kwargs_create[key], f'For test to be successful, field must be known value. {field}!={kwargs_create[key]}'
+
+            setattr(obj, key, value)
+
+            obj.save()
+
+            field = getattr(obj, key)
+
+            if(
+                (
+                    field != value
+                    and not issubclass(field.__class__, UUID)
+                ) or (
+                    issubclass(field.__class__, UUID)
+                    and str(field) != value
+                )
+            ):
+
+                failures += [ f'field {key} value does not match {value}!={field}, edit failure.' ]
+
+
+        assert len(failures) == 0, failures

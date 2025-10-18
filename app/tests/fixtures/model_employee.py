@@ -24,7 +24,7 @@ def kwargs_employee( django_db_blocker, kwargs_contact, model_user, kwargs_user 
 
     def factory():
 
-        random_str = str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ) + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
+        random_str = str( datetime.now().strftime("%y%m%d%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
 
         with django_db_blocker.unblock():
 
@@ -32,7 +32,8 @@ def kwargs_employee( django_db_blocker, kwargs_contact, model_user, kwargs_user 
 
         kwargs = {
             **kwargs_contact(),
-            'employee_number':  random_str,
+            'entity_type': 'employee',
+            'employee_number':  int(random_str),
             'user': user,
         }
 

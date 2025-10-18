@@ -55,7 +55,11 @@ class Entity(
 
         related_model = self.get_related_model()
 
-        return f'{related_model.entity_type} {self.pk}'
+        if related_model is not self:
+            return str( related_model )
+        
+        return f'{self.entity_type} {self.pk}'
+ 
 
 
     page_layout: dict = []
