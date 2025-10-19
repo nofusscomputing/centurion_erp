@@ -1,3 +1,9 @@
+## 1.26.1 (2025-10-19)
+
+### Refactoring
+
+- **human_resources**: Adjust employee id field, int -> bigint
+
 ## 1.26.0 (2025-10-18)
 
 ### feat
