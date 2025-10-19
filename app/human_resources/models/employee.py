@@ -27,7 +27,7 @@ class Employee(
         verbose_name_plural = 'Employees'
 
 
-    employee_number = models.IntegerField(
+    employee_number = models.BigIntegerField(
         blank = False,
         help_text = 'Employees identification number.',
         null = False,

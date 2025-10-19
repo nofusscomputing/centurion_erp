@@ -2,14 +2,13 @@ from datetime import datetime
 
 from django.apps import apps
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.db.models.signals import (
     post_migrate,
 )
 from django.dispatch import receiver
 
-# from core.mixins.centurion import Centurion
+from centurion.logging import CenturionLogger
 
 
 @receiver(post_migrate, dispatch_uid="centurion_user_add_entity")
@@ -19,7 +18,7 @@ def centurion_user_add_entity(sender, **kwargs):
     if sender.label != 'human_resources':
         return
 
-    
+    log: CenturionLogger = settings.CENTURION_LOG.getChild( suffix = 'migration' ).getChild( suffix = 'human_resources' )
 
     try:
 
@@ -67,7 +66,7 @@ def centurion_user_add_entity(sender, **kwargs):
 
                 if organization is None:
                     print( f'        No Organization associated with user {user.username}.' )
-                    raise ValueError()
+                    raise ValueError( f'No Organization associated with user {user.username}.')
 
 
                 random_int = int( str(datetime.now().strftime("%y%m%d%H%M%S")) + f"{datetime.now().microsecond // 100:04d}" )
@@ -119,7 +118,8 @@ def centurion_user_add_entity(sender, **kwargs):
                 print( f'        Employee {entity.id}, created for user {user.username}' )
 
             except Exception as exc:
-                print( f'        Error Occured processing user {user.username}, Employee was not created' )
+                print( f'        Error Occured processing user {user.username}, Employee was not created.[{exc}]' )
+                log.exception(exc)
 
         print(f'Completed processing current Centurion Users migration to an Employee Entity.')
     except Exception as exc:
