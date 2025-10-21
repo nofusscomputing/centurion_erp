@@ -26,6 +26,7 @@ def kwargs_company( kwargs_entity ):
 
         kwargs = {
             **kwargs_entity(),
+            'entity_type': 'company',
             'name': 'c' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
         }
 
