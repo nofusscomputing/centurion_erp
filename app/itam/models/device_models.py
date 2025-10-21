@@ -1,6 +1,9 @@
 from django.db import models
 
 from access.fields import AutoLastModifiedField
+from access.models.company_base import (
+    Company
+)
 
 from core.models.centurion import CenturionModel
 
@@ -37,12 +40,22 @@ class DeviceModel(
         verbose_name = 'Name'
     )
 
-    manufacturer = models.ForeignKey(
+    manufacturer_old = models.ForeignKey(
         Manufacturer,
         blank = True,
         help_text = 'Manufacturer this model is from',
         null = True,
         on_delete = models.PROTECT,
+        verbose_name = 'Manufacturer'
+    )
+
+    manufacturer = models.ForeignKey(
+        Company,
+        blank = True,
+        help_text = 'Manufacturer this model is from',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = 'device_models',
         verbose_name = 'Manufacturer'
     )
 
