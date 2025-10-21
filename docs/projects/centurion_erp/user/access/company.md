@@ -14,6 +14,9 @@ A Company as the name suggests is intented to be the location where Business' / 
 A contact has field(s):
 
 - `Organization` The Companies Tenancy. ***Mandatory***
+
+    If the Centurion ERP webmaster has set within application [settings for manufacturers](../settings/app_settings.md#global-organization) to be global, whenever a Company is created, regardless of the organization set, it will be adjusted to be the global organization the webmaster has set.
+
 - `Name` The Companies name. ***Mandatory***
 
 
