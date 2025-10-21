@@ -653,7 +653,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         view_settings: list = [
             'assistance.view_knowledgebasecategory',
-            'core.view_manufacturer',
             'itam.view_devicemodel',
             'itam.view_devicetype',
             'itam.view_softwarecategory',
