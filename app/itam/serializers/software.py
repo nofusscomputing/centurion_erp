@@ -2,10 +2,11 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
+from access.serializers.entity_company import (
+    BaseSerializer as CompanyBaseSerializer,
+)
 
 from api.serializers import common
-
-from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.software import Software
 from itam.serializers.software_category import SoftwareCategoryBaseSerializer
@@ -131,4 +132,4 @@ class SoftwareViewSerializer(SoftwareModelSerializer):
 
     organization = TenantBaseSerializer( many = False, read_only = True )
 
-    publisher = ManufacturerBaseSerializer( many = False, read_only = True )
+    publisher = CompanyBaseSerializer( many = False, read_only = True )
