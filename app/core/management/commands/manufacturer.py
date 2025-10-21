@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 
-from core.models.manufacturer import Manufacturer
+from access.models.company_base import Company
 
 from settings.models.app_settings import AppSettings
 
@@ -20,7 +20,7 @@ class Command(BaseCommand):
         
         if kwargs['global']:
 
-            softwares = Manufacturer.objects.filter()
+            softwares = Company.objects.filter()
 
             self.stdout.write('Running global')
 
@@ -43,7 +43,7 @@ class Command(BaseCommand):
             self.stdout.write('Running Migrate')
             self.stdout.write(f'Global organization: {app_settings.global_organization}')
 
-            softwares = Manufacturer.objects.filter(
+            softwares = Company.objects.filter(
                 ~Q(organization = app_settings.global_organization)
                 &
                 Q(organization=app_settings.global_organization),
