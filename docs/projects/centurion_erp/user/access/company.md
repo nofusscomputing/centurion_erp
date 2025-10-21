@@ -20,6 +20,6 @@ A contact has field(s):
 - `Name` The Companies name. ***Mandatory***
 
 
-## Creating a Contact
+## Creating a Company
 
 Complete all of the required fields and click save. There are no specific rules that apply when creating a Company.
