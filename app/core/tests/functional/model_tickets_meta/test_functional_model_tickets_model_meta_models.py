@@ -239,6 +239,7 @@ for centurion_model in get_models(
                             'centurionaudit',
                             'history',
                             'centurionmodelnote',
+                            'manufacturer',
                             'notes'
                         ]
 ):
