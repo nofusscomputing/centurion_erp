@@ -64,7 +64,6 @@ class SoftwareModelSerializer(
                 request=self._context['view'].request
             ) + '',
             'installations': reverse("v2:_api_v2_software_installs-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
-            'publisher': item.publisher.get_url( many = False ),
             'services': 'ToDo',
             'version': reverse(
                 "v2:_api_softwareversion-list",
@@ -74,6 +73,12 @@ class SoftwareModelSerializer(
                 }
             ),
         })
+
+        if item.publisher:
+
+            get_url.update({
+                'publisher': item.publisher.get_url( many = False ),
+            })
 
         if not self.context['request'].feature_flag['2025-00006']:
             get_url.update({
