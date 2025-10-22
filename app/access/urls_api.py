@@ -33,7 +33,7 @@ router.register('', access_v2.Index, basename = '_api_access_home')
 
 router.register(
     prefix = '/(?P<model_name>[company]+)', viewset = entity.ViewSet,
-    feature_flag = '2025-00008',basename = '_api_v2_company'
+    basename = '_api_v2_company'
 )
 
 router.register(

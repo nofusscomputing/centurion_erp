@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from access.models.company_base import Company
@@ -7,6 +9,7 @@ from access.tests.functional.entity.test_functional_entity_metadata import (
 
 
 
+@pytest.mark.model_company
 class CompanyMetadataTestCases(
     EntityMetadataInheritedCases,
 ):
@@ -64,6 +67,7 @@ class CompanyMetadataInheritedCases(
 
 
 
+@pytest.mark.module_access
 class CompanyMetadataTest(
     CompanyMetadataTestCases,
     TestCase,

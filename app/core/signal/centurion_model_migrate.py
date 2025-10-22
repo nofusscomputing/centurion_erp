@@ -80,12 +80,15 @@ def centurion_model_migrate(sender, **kwargs):
             'history_model_name': 'ConfigGroupsHistory',
             'notes_model_name': 'ConfigGroupNotes'
         },
-        {
-            'app_label': 'core',
-            'model_name': 'Manufacturer',
-            'history_model_name': 'ManufacturerHistory',
-            'notes_model_name': 'ManufacturerNotes'
-        },
+        #
+        #    Model Depreciated in favour of access.Company
+        #
+        # {
+        #     'app_label': 'core',
+        #     'model_name': 'Manufacturer',
+        #     'history_model_name': 'ManufacturerHistory',
+        #     'notes_model_name': 'ManufacturerNotes'
+        # },
         {
             'app_label': 'core',
             'model_name': 'TicketCategory',

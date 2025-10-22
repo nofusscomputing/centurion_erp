@@ -36,15 +36,6 @@ class Index(IndexViewset):
             ]
         },
         {
-            "name": "Common",
-            "links": [
-                {
-                    "name": "Manufacturers",
-                    "model": "manufacturer"
-                }
-            ]
-        },
-        {
             "name": "Core",
             "links": [
                 {
@@ -114,7 +105,6 @@ class Index(IndexViewset):
                 "device_type": reverse('v2:_api_devicetype-list', request=request),
                 "external_link": reverse('v2:_api_externallink-list', request=request),
                 "knowledge_base_category": reverse('v2:_api_knowledgebasecategory-list', request=request),
-                "manufacturer": reverse('v2:_api_manufacturer-list', request=request),
                 "port": reverse('v2:_api_port-list', request=request),
                 "project_state": reverse('v2:_api_projectstate-list', request=request),
                 "project_type": reverse('v2:_api_projecttype-list', request=request),

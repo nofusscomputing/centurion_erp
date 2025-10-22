@@ -22,7 +22,7 @@ def model_operatingsystem(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_operatingsystem(django_db_blocker,
     kwargs_centurionmodel,
-    kwargs_manufacturer, model_manufacturer,
+    model_company, kwargs_company,
 ):
 
 
@@ -30,7 +30,7 @@ def kwargs_operatingsystem(django_db_blocker,
 
         with django_db_blocker.unblock():
 
-            publisher = model_manufacturer.objects.create( **kwargs_manufacturer() )
+            publisher = model_company.objects.create( **kwargs_company() )
 
         kwargs = {
             **kwargs_centurionmodel(),

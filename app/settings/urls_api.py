@@ -10,7 +10,6 @@ from centurion_feature_flag.urls.routers import DefaultRouter
 
 from core.viewsets import (
     celery_log as celery_log_v2,
-    manufacturer as manufacturer_v2,
     ticket_category,
     ticket_comment_category,
 
@@ -79,10 +78,6 @@ router.register(
     prefix = '/knowledge_base_category',
     viewset = knowledge_base_category_v2.ViewSet,
     basename = '_api_knowledgebasecategory'
-)
-router.register(
-    prefix = '/manufacturer', viewset = manufacturer_v2.ViewSet,
-    basename = '_api_manufacturer'
 )
 router.register(
     prefix = '/port', viewset = port_v2.ViewSet,

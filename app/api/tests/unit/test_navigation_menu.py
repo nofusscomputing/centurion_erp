@@ -1249,58 +1249,58 @@ class NavigationMenu(
 
 
 
-    def test_navigation_menu_visible_core_manufacturer_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_core_manufacturer_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that if the user has the permission, the navigation menu and
-        page is available for the user
-        """
+    #     Ensure that if the user has the permission, the navigation menu and
+    #     page is available for the user
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_manufacturer)
+    #     nav_menu = self.metadata.get_navigation(self.core_manufacturer)
 
-        menu_name = 'settings'
+    #     menu_name = 'settings'
 
-        page_name = 'setting'
+    #     page_name = 'setting'
 
-        menu_page_exists: bool = False
-
-
-        for menu in nav_menu:
-
-            for page in menu['pages']:
-
-                if(
-                    menu['name'] == menu_name
-                    and page['name'] == page_name
-                ):
-
-                    menu_page_exists = True
+    #     menu_page_exists: bool = False
 
 
-        assert menu_page_exists
+    #     for menu in nav_menu:
+
+    #         for page in menu['pages']:
+
+    #             if(
+    #                 menu['name'] == menu_name
+    #                 and page['name'] == page_name
+    #             ):
+
+    #                 menu_page_exists = True
+
+
+    #     assert menu_page_exists
 
 
 
-    def test_navigation_menu_visible_core_manufacturer_no_additional_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_core_manufacturer_no_additional_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that only the navigation menu and entry is the only one displayed
-        for the user who has the desired permission
-        """
+    #     Ensure that only the navigation menu and entry is the only one displayed
+    #     for the user who has the desired permission
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_manufacturer)
+    #     nav_menu = self.metadata.get_navigation(self.core_manufacturer)
 
-        pages_found: int = 0
-
-
-        for menu in nav_menu:
-
-            for page in menu['pages']:
-
-                pages_found += 1
+    #     pages_found: int = 0
 
 
-        assert pages_found == 1
+    #     for menu in nav_menu:
+
+    #         for page in menu['pages']:
+
+    #             pages_found += 1
+
+
+    #     assert pages_found == 1
 
 
 

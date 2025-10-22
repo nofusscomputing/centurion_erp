@@ -14,8 +14,6 @@ from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APITenancyObject
 
-from core.models.manufacturer import Manufacturer
-
 from itam.serializers.device_operating_system import Device, DeviceOperatingSystem, DeviceOperatingSystemModelSerializer
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 
