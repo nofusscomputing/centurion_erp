@@ -1,5 +1,9 @@
 ## Version v1.27.0
 
+- Model [Company](https://nofusscomputing.com/projects/centurion_erp/user/access/company/) now available, as feature flag `2025-00008` has been removed from Centurion ERPs feature flag checks.
+
+- Migration signal added to migrate each manufacturer to a company. This migration will only run once for each manufacturer.
+
 
 ## Verrsion 1.26.0
 

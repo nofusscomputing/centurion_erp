@@ -392,6 +392,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "icon": 'role',
                         "link": "/access/role"
                     },
+                    'view_company': {
+                        "display_name": "Companies",
+                        "name": "organization",
+                        "icon": 'organization',
+                        "link": "/access/company"
+                    },
                     'view_contact': {
                         "display_name": "Directory",
                         "name": "directory",
@@ -585,18 +591,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "link": "/devops/git_repository"
                     }
                 })
-
-            if request.feature_flag['2025-00008']:
-
-                nav['access']['pages'].update({
-                    'view_company': {
-                        "display_name": "Companies",
-                        "name": "organization",
-                        "icon": 'organization',
-                        "link": "/access/company"
-                    }
-                })
-
 
             if request.feature_flag['2025-00004']:
 
