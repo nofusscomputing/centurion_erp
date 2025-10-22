@@ -46,6 +46,7 @@ class DeviceModel(
         help_text = 'Manufacturer this model is from',
         null = True,
         on_delete = models.PROTECT,
+        related_name = '+',
         verbose_name = 'Manufacturer'
     )
 
