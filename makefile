@@ -162,6 +162,11 @@ test-integration:
 		export exit_code=20;
 
 	fi;
+
+	docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
+	docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
+	docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
+	docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
 	cd test;
 	echo 'REmoving containers.';
 	docker-compose down -v;
