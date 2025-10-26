@@ -30,7 +30,7 @@ class SoftwareAPITestCases(
                 'expected': str
             },
             'publisher.url': {
-                'expected': Hyperlink
+                'expected': str
             },
             'name': {
                 'expected': str
