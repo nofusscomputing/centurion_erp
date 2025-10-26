@@ -21,16 +21,16 @@ def model_devicemodel(clean_model_from_db):
 
 @pytest.fixture( scope = 'class')
 def kwargs_devicemodel(kwargs_centurionmodel, django_db_blocker,
-    model_manufacturer, kwargs_manufacturer,
+    model_company, kwargs_company,
 ):
 
     def factory():
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_manufacturer()
+            kwargs = kwargs_company()
             kwargs['name'] = 'dm_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
-            manufacturer = model_manufacturer.objects.create( **kwargs )
+            manufacturer = model_company.objects.create( **kwargs )
 
         kwargs = {
             **kwargs_centurionmodel(),
