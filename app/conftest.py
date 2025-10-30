@@ -88,6 +88,9 @@ def load_sqlite_fixture(django_db_setup, django_db_blocker):
     Load the SQLite database from an SQL dump file.
     This runs during test setup and loads the schema and data via SQLite directly.
     """
+    if 'sqlite3' not in str(settings.DATABASES['default']['ENGINE']):
+        return
+
     db_path = settings.DATABASES['default']['NAME']
     sql_file_path = os.path.join('app/fixtures', 'fresh_db.sql')
 

@@ -346,6 +346,9 @@ def centurion_model_migrate(sender, **kwargs):
             except LookupError as e:    # Model does not exist
                 print(f'Model {history_model_name} does not exist: {e}')
 
+            except Exception as e:
+                print(f'Model {history_model_name} error: {e}')
+
 
         print(f"    Model Notes is enabled={getattr(model, '_notes_enabled', False)}.")
 
@@ -411,5 +414,8 @@ def centurion_model_migrate(sender, **kwargs):
 
             except LookupError as e:    # Model does not exist
                 print(f'Model {notes_model_name} does not exist: {e}')
+
+            except Exception as e:    # Model does not exist
+                print(f'Model {notes_model_name} error: {e}')
 
     print(f'Migration from old history and notes tables to new tables completed.')

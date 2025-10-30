@@ -518,6 +518,31 @@ DATETIME_FORMAT = 'j N Y H:i:s'
 if RUNNING_TESTS:
     SECRET_KEY = 'django-insecure-tests_are_being_run'
 
+    # if os.getenv('IS_INTEGRATION_TEST'):
+
+    #     DATABASES['default'] = {
+    #             'ENGINE': 'django.db.backends.postgresql',
+    #             'NAME': 'itsm',
+    #             'USER': 'admin',
+    #             'PASSWORD': 'admin',
+    #             'HOST': '127.0.0.1',
+    #             'PORT': '5432',
+    #         }
+
+
+# DATABASES['default'] = {
+#                 'ENGINE': 'django.db.backends.postgresql',
+#                 'NAME': 'itsm',
+#                 'USER': 'admin',
+#                 'PASSWORD': 'admin',
+#                 'HOST': '127.0.0.1',
+#                 'PORT': '5432',
+#             }
+
+
+# DATABASES['default']['TEST'] = {
+#     "DEPENDENCIES": ["postgres"],
+# }
 #
 # Load user settings files
 #
