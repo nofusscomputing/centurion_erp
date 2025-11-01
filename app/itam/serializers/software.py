@@ -2,10 +2,11 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
+from access.serializers.entity_company import (
+    BaseSerializer as CompanyBaseSerializer,
+)
 
 from api.serializers import common
-
-from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.software import Software
 from itam.serializers.software_category import SoftwareCategoryBaseSerializer
@@ -63,7 +64,6 @@ class SoftwareModelSerializer(
                 request=self._context['view'].request
             ) + '',
             'installations': reverse("v2:_api_v2_software_installs-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
-            'publisher': reverse("v2:_api_manufacturer-list", request=self._context['view'].request),
             'services': 'ToDo',
             'version': reverse(
                 "v2:_api_softwareversion-list",
@@ -73,6 +73,12 @@ class SoftwareModelSerializer(
                 }
             ),
         })
+
+        if item.publisher:
+
+            get_url.update({
+                'publisher': item.publisher.get_url( many = False ),
+            })
 
         if not self.context['request'].feature_flag['2025-00006']:
             get_url.update({
@@ -131,4 +137,4 @@ class SoftwareViewSerializer(SoftwareModelSerializer):
 
     organization = TenantBaseSerializer( many = False, read_only = True )
 
-    publisher = ManufacturerBaseSerializer( many = False, read_only = True )
+    publisher = CompanyBaseSerializer( many = False, read_only = True )

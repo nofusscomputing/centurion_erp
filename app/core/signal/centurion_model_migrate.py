@@ -80,12 +80,15 @@ def centurion_model_migrate(sender, **kwargs):
             'history_model_name': 'ConfigGroupsHistory',
             'notes_model_name': 'ConfigGroupNotes'
         },
-        {
-            'app_label': 'core',
-            'model_name': 'Manufacturer',
-            'history_model_name': 'ManufacturerHistory',
-            'notes_model_name': 'ManufacturerNotes'
-        },
+        #
+        #    Model Depreciated in favour of access.Company
+        #
+        # {
+        #     'app_label': 'core',
+        #     'model_name': 'Manufacturer',
+        #     'history_model_name': 'ManufacturerHistory',
+        #     'notes_model_name': 'ManufacturerNotes'
+        # },
         {
             'app_label': 'core',
             'model_name': 'TicketCategory',
@@ -343,6 +346,9 @@ def centurion_model_migrate(sender, **kwargs):
             except LookupError as e:    # Model does not exist
                 print(f'Model {history_model_name} does not exist: {e}')
 
+            except Exception as e:
+                print(f'Model {history_model_name} error: {e}')
+
 
         print(f"    Model Notes is enabled={getattr(model, '_notes_enabled', False)}.")
 
@@ -408,5 +414,8 @@ def centurion_model_migrate(sender, **kwargs):
 
             except LookupError as e:    # Model does not exist
                 print(f'Model {notes_model_name} does not exist: {e}')
+
+            except Exception as e:    # Model does not exist
+                print(f'Model {notes_model_name} error: {e}')
 
     print(f'Migration from old history and notes tables to new tables completed.')

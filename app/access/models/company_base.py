@@ -1,6 +1,10 @@
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from access.models.entity import Entity
+
+from settings.models.app_settings import AppSettings
 
 
 
@@ -37,11 +41,6 @@ class Company(
         unique = False,
         verbose_name = 'Name'
     )
-
-
-    def __str__(self) -> str:
-
-        return self.name
 
 
     page_layout: dict = [
@@ -95,3 +94,37 @@ class Company(
         'organization',
         'created',
     ]
+
+
+    def __str__(self) -> str:
+
+        return self.name
+
+
+    def clean_fields(self, exclude = None):
+
+        app_settings = AppSettings.objects.get(owner_organization=None)
+
+        if app_settings.manufacturer_is_global:
+
+            if app_settings.global_organization is None:
+
+                log = self.context['logger']
+                if log:
+
+                    log.error(
+                        msg = 'No Global organization is set, unable to save Company as a global company.'
+                    )
+
+                raise ValidationError(
+                    message = {
+                        'organization': ValidationError(
+                            message='No global organization has been set. Please notify the webmaster.',
+                            code = 'no_global_org_set'
+                        )
+                    },
+                )
+
+            self.organization = app_settings.global_organization
+
+        super().clean_fields( exclude = exclude )

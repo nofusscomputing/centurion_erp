@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
+from access.serializers.entity_company import (
+    BaseSerializer as CompanyBaseSerializer,
+)
 
 from api.serializers import common
-
-from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.device_models import DeviceModel
 
@@ -79,7 +80,7 @@ class DeviceModelModelSerializer(
 
 class DeviceModelViewSerializer(DeviceModelModelSerializer):
 
-    manufacturer = ManufacturerBaseSerializer( many = False, read_only = True )
+    manufacturer = CompanyBaseSerializer( many = False, read_only = True )
 
     organization = TenantBaseSerializer( many = False, read_only = True )
 

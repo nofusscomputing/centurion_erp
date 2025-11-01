@@ -30,7 +30,7 @@ class DeviceModelAPITestCases(
                 'expected': str
             },
             'manufacturer.url': {
-                'expected': Hyperlink
+                'expected': str
             },
             'modified': {
                 'expected': str
