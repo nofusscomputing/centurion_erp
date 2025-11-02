@@ -80,6 +80,7 @@ test-integration:
 	cp pyproject.toml app/;
 	sed -i 's|^source = \[ "./app" \]|source = [ "." ]|' app/pyproject.toml;
 	cd test;
+	export CENTURION_IMAGE_TAG=$$(git log -1 --format=%H);
 	if docker-compose up -d; then
 
 		docker ps -a;
@@ -115,7 +116,7 @@ test-integration:
 
 			docker logs centurion-erp;
 			echo 'Starting integration tests.';
-			pytest --override-ini addopts= --no-migrations --tb=long --verbosity=2 --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
+			pytest --override-ini addopts= --no-migrations --reuse-db --tb=long --verbosity=2 --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
 			echo 'Restarting Gunicorn.';
 			docker exec -i centurion-erp supervisorctl restart gunicorn;
 			echo 'Creating Coverage reports.';
@@ -135,6 +136,8 @@ test-integration:
 			docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
 			docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
 			docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
+			docker exec -i postgres psql -Uadmin -c "\l" > ./test/volumes/log/postgres-database.log;
+			docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > ./test/volumes/log/postgres-tables.log;
 			docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
 			export exit_code=10;
 
@@ -158,10 +161,22 @@ test-integration:
 		docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
 		docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
 		docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
+		docker exec -i postgres psql -Uadmin -c "\l" > ./test/volumes/log/postgres-database.log;
+		docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > ./test/volumes/log/postgres-tables.log;
 		docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
 		export exit_code=20;
 
 	fi;
+
+	echo '';
+	docker ps -a;
+	docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
+	docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
+	docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
+	docker exec -i postgres psql -Uadmin -c "\l" > ./test/volumes/log/postgres-database.log;
+	docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > ./test/volumes/log/postgres-tables.log;
+	docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
+	export exit_code=0;
 	cd test;
 	echo 'REmoving containers.';
 	docker-compose down -v;

@@ -1158,7 +1158,6 @@ markers = [
     "model_itamassetbase: Selects tests for model ITAM Asset Base.",
     "model_knowledgebase: Selects Knowledge base tests.",
     "model_knowledgebasecategory: Selects Knowledge base category tests.",
-    "model_manufacturer: Select all manufacturer tests.",
     "model_modelticket: Select all tests for model Model Tickets",
     "model_modelticketmeta: Select all tests for model Model Tickets Meta",
     "model_operatingsystem: Select tests for model Operating System.",

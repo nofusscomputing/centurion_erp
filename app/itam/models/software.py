@@ -1,6 +1,7 @@
 from django.db import models
 
 from access.fields import AutoLastModifiedField
+from access.models.company_base import Company
 from access.models.tenant import Tenant
 
 from core.models.centurion import CenturionModel
@@ -133,12 +134,23 @@ class Software(
         verbose_name = 'Tenant'
     )
 
-    publisher = models.ForeignKey(
+    publisher_old = models.ForeignKey(
         Manufacturer,
         blank= True,
         help_text = 'Who publishes this software',
         null = True,
         on_delete = models.PROTECT,
+        related_name = '+',
+        verbose_name = 'Publisher',
+    )
+
+    publisher = models.ForeignKey(
+        Company,
+        blank= True,
+        help_text = 'Who publishes this software',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = 'software',
         verbose_name = 'Publisher',
     )
 

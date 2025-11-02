@@ -4,6 +4,7 @@ set -e
 
 echo "Installing python test requirements......";
 docker exec -i centurion-erp pip install -r /requirements_test.txt;
+pip install -r ../requirements_production.txt;
 echo "Complete: Installing python test requirements.";
 
 echo "Restarting Gunicorn";
@@ -60,18 +61,21 @@ while [ "$STATUS" != "healthy" ]; do
   ELAPSED=$((ELAPSED + INTERVAL))
 done
 
-echo "Creating centurion super user.";
-docker exec -i centurion-erp python manage.py createsuperuser --username admin --email admin@localhost --noinput
+#
+# migrated to test suite fixture
+#
+# echo "Creating centurion super user.";
+# docker exec -i centurion-erp python manage.py createsuperuser --username admin --email admin@localhost --noinput
 
-echo "Installing application expect.";
-docker exec -i centurion-erp apk add expect
+# echo "Installing application expect.";
+# docker exec -i centurion-erp apk add expect
 
-echo "Setting super user password.";
-docker exec -i centurion-erp expect -c "
-    spawn python manage.py changepassword admin
-    expect \"Password:\"
-    send \"admin\r\"
-    expect \"Password (again):\"
-    send \"admin\r\"
-    expect eof
-"
+# echo "Setting super user password.";
+# docker exec -i centurion-erp expect -c "
+#     spawn python manage.py changepassword admin
+#     expect \"Password:\"
+#     send \"admin\r\"
+#     expect \"Password (again):\"
+#     send \"admin\r\"
+#     expect eof
+# "
