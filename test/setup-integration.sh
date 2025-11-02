@@ -4,6 +4,7 @@ set -e
 
 echo "Installing python test requirements......";
 docker exec -i centurion-erp pip install -r /requirements_test.txt;
+pip install -r ../requirements_production.txt;
 echo "Complete: Installing python test requirements.";
 
 echo "Restarting Gunicorn";

@@ -111,6 +111,13 @@ class MigrationsTestCases:
 
 
 
+    @pytest.fixture(autouse=True, scope='function')
+    def ensure_real_db(self):
+        assert settings.DATABASES['default']['ENGINE'] != 'django.db.backends.sqlite3' or \
+            settings.DATABASES['default']['NAME'] != ':memory:', \
+            "Tests are using in-memory SQLite, not your real DB"
+
+
     def test_run_migrations_fresh(self, truncate_database_sql_string, run_command):
         """Test Django Migrations
 

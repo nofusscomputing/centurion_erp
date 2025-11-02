@@ -55,6 +55,13 @@ urls_list_view_auth_required_authenticated_excluded = [
 class URLChecksPyTest:
 
 
+    @pytest.fixture(autouse=True, scope='function')
+    def ensure_real_db(self):
+        assert settings.DATABASES['default']['ENGINE'] != 'django.db.backends.sqlite3' or \
+            settings.DATABASES['default']['NAME'] != ':memory:', \
+            "Tests are using in-memory SQLite, not your real DB"
+
+
     @pytest.fixture( scope = 'class')
     def admin_user(self, django_db_blocker):
 
