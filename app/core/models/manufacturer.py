@@ -7,7 +7,11 @@ from core.models.centurion import CenturionModel
 from settings.models.app_settings import AppSettings
 
 
-
+#
+# Depreciated:
+#    - Migrated: https://github.com/nofusscomputing/centurion_erp/issues/914
+#    - Removal: https://github.com/nofusscomputing/centurion_erp/issues/1049
+#
 class Manufacturer(
     CenturionModel,
 ):
