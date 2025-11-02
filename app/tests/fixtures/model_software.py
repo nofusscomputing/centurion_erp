@@ -20,7 +20,7 @@ def model_software(clean_model_from_db):
 
 @pytest.fixture( scope = 'class')
 def kwargs_software(kwargs_centurionmodel, django_db_blocker,
-    model_manufacturer, kwargs_manufacturer,
+    model_company, kwargs_company,
     model_softwarecategory, kwargs_softwarecategory
 ):
 
@@ -28,7 +28,7 @@ def kwargs_software(kwargs_centurionmodel, django_db_blocker,
 
         with django_db_blocker.unblock():
 
-            publisher = model_manufacturer.objects.create( **kwargs_manufacturer() )
+            publisher = model_company.objects.create( **kwargs_company() )
 
             kwargs = kwargs_softwarecategory()
             kwargs['name'] = 'soft_c_' + str( random.randint(1,999) ) + str( random.randint(1,999) ) + str( random.randint(1,999) ),

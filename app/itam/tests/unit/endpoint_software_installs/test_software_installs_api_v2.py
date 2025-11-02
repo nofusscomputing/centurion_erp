@@ -9,13 +9,12 @@ from django.test import Client, TestCase
 
 from rest_framework.relations import Hyperlink
 
+from access.models.company_base import Company
 from access.models.tenant import Tenant as Organization
 from access.models.team import Team
 from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APITenancyObject
-
-from core.models.manufacturer import Manufacturer
 
 from itam.models.device import Device, DeviceSoftware
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
@@ -43,7 +42,7 @@ class SoftwareInstallsAPI(
 
         self.organization = Organization.objects.create(name='test_org')
 
-        manufacturer = Manufacturer.objects.create(
+        manufacturer = Company.objects.create(
             organization = self.organization,
             name = 'a manufacturer'
         )
