@@ -1,3 +1,23 @@
+## 1.27.0 (2025-11-02)
+
+### feat
+
+- **core**: Migration signal to migrate manufacturers to companies
+- **itam**: Add Company field to model itam.Software
+- **itam**: Add Company field to model itam.OperatingSystem
+- **itam**: Add Company field to model itam.DeviceModels
+- **access**: Add Global settings option to set company to global organization
+
+### Refactoring
+
+- **itam**: Migrate Manufacturer management command to use access.company model
+
+### Tests
+
+- **base**: Correct migration update so it works properly
+- **access**: Add Test cases to Company model to ensure that global org is correctly set
+- **access**: Add Functional Model Test Suite for Company model
+
 ## 1.26.1 (2025-10-19)
 
 ### Refactoring
