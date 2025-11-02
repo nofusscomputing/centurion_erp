@@ -2,6 +2,8 @@ import os
 import pytest
 import subprocess
 
+from django.conf import settings
+
 
 
 class MigrationsTestCases:
@@ -9,7 +11,7 @@ class MigrationsTestCases:
     @pytest.fixture
     def run_command(self):
 
-        def command(command: str):
+        def command(command: str, description: str = ''):
             """
             Runs a specified shell command and returns (exit_code, stdout, stderr).
             """
@@ -21,6 +23,8 @@ class MigrationsTestCases:
             )
 
             return {
+                'command': command,
+                'description': description,
                 'returncode': result.returncode,
                 'stdout': result.stdout,
                 'stderr': result.stderr
@@ -98,7 +102,8 @@ class MigrationsTestCases:
         print(cmd)
 
         result = run_command(
-            cmd
+            command = cmd,
+            description = 'remove all database tables'
         )
 
         print( result )
@@ -127,7 +132,10 @@ class MigrationsTestCases:
         - python manage.py
         """
 
-        result = run_command('docker exec -i centurion-erp python manage.py migrate')
+        result = run_command(
+            command = 'docker exec -i centurion-erp python manage.py migrate',
+            description = 'run initial migrations'
+        )
 
         print( result )
 
@@ -145,41 +153,94 @@ class MigrationsTestCases:
             - python manage.py migrate
         """
 
-        result = run_command("sh -c 'cd test; docker-compose rm -fs centurion; CENTURION_IMAGE_TAG=$(git rev-list -n 1 $(git describe --tags --abbrev=0)) \
-docker-compose up -d centurion;'")
 
-        print( result['stdout'] )
+        result = run_command(
+            command = f"echo ${{GITHUB_SHA:-\"$(git log -1 --format=%H)\"}}",
+            description = 'fetch current git hash'
+        )
 
-        assert result['returncode'] == 0, print( result )
+        last_git_commit_sha = result['stdout']
 
-        result = run_command('sh -c "sleep 30"')
-
-        print( result )
-
-        result = run_command('docker ps -a')
-
-        print( result['stdout'] )
-
-        result = run_command('docker exec -i centurion-erp python manage.py migrate')
-
-        print( result['stdout'] )
 
         assert result['returncode'] == 0, print( result )
 
-        result = run_command("sh -c 'cd test; docker-compose rm -fs centurion; CENTURION_IMAGE_TAG=$GITHUB_SHA \
-docker-compose up -d centurion;'")
+        result = run_command(
+            command = f"echo $(git rev-list -n 1 $(git describe --tags --abbrev=0))",
+            description = 'fetch current git hash'
+        )
 
-        print( result['stdout'] )
+        last_git_tag_sha = result['stdout']
 
         assert result['returncode'] == 0, print( result )
 
-        result = run_command('docker ps -a')
 
-        print( result['stdout'] )
 
-        result = run_command('docker exec -i centurion-erp python manage.py migrate')
+        # set image to the latest git tag
+        result = run_command(
+            command = (
+                "sh -c 'cd test; "
+                "docker-compose rm -fs centurion; "
+                f"CENTURION_IMAGE_TAG={last_git_tag_sha} "
+                "docker-compose up -d centurion;'"
+            ),
+            description = 'set centurion image to the current git tag'
+        )
 
-        print( result['stdout'] )
+        assert result['returncode'] == 0, print( result )
+
+        result = run_command(
+            command = (
+                "docker inspect -f '{{ index .Config.Image }}' centurion-erp | cut -d: -f2"
+            ),
+            description = 'fetch centurion-erp container tag, should be most recent git tag sha'
+        )
+
+        assert result['stdout'] == last_git_tag_sha, print( result )
+
+
+
+        # perform the initial migration
+
+        result = run_command(
+            command = 'docker exec -i centurion-erp python manage.py migrate',
+            description = 'perform initial migrations for latest release'
+        )
+
+        assert result['returncode'] == 0, print( result )
+
+
+
+
+        # set the image to the current git head
+        result = run_command(
+            command = (
+                "sh -c 'cd test; "
+                "docker-compose rm -fs centurion; "
+                f"CENTURION_IMAGE_TAG={last_git_commit_sha} "
+                "docker-compose up -d centurion;'"
+            ),
+            description = 'set centurion image to the current git tag'
+        )
+
+        assert result['returncode'] == 0, print( result )
+
+        result = run_command(
+            command = (
+                "docker inspect -f '{{ index .Config.Image }}' centurion-erp | cut -d: -f2"
+            ),
+            description = 'fetch centurion-erp container tag, should be current git head'
+        )
+
+        assert result['stdout'] == last_git_commit_sha, print( result )
+
+
+
+        # perform the upgrade migration
+
+        result = run_command(
+            command = 'docker exec -i centurion-erp python manage.py migrate',
+            description = 'perform upgrade migrations'
+        )
 
         assert result['returncode'] == 0, print( result )
 
