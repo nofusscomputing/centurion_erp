@@ -4,6 +4,8 @@ import re
 import requests
 import time
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.urls import get_resolver, URLPattern, URLResolver
 
 
@@ -53,9 +55,26 @@ urls_list_view_auth_required_authenticated_excluded = [
 class URLChecksPyTest:
 
 
+    @pytest.fixture( scope = 'class')
+    def admin_user(self, django_db_blocker):
+
+        with django_db_blocker.unblock():
+
+            User = get_user_model()
+            user = User.objects.create_superuser(
+                username="admin",
+                email="admin@localhost",
+                password="admin"
+            )
+
+            yield user
+
+            user.delete()
+
+
 
     @pytest.fixture(scope="class")
-    def auto_login_client(self):
+    def auto_login_client(self, admin_user):
         session = requests.Session()
 
         login_page_url = "http://127.0.0.1:8003/api/v2/auth/login"
@@ -192,4 +211,4 @@ class URLChecksPyTest:
             time.sleep(10)
             response = auto_login_client.request("GET", url)
 
-        assert response.status_code == 200
+        assert response.status_code == 200, response
