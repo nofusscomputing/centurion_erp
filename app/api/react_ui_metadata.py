@@ -392,6 +392,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "icon": 'role',
                         "link": "/access/role"
                     },
+                    'view_company': {
+                        "display_name": "Companies",
+                        "name": "organization",
+                        "icon": 'organization',
+                        "link": "/access/company"
+                    },
                     'view_contact': {
                         "display_name": "Directory",
                         "name": "directory",
@@ -586,18 +592,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
-            if request.feature_flag['2025-00008']:
-
-                nav['access']['pages'].update({
-                    'view_company': {
-                        "display_name": "Companies",
-                        "name": "organization",
-                        "icon": 'organization',
-                        "link": "/access/company"
-                    }
-                })
-
-
             if request.feature_flag['2025-00004']:
 
                 nav['accounting']['pages'].update({
@@ -653,7 +647,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         view_settings: list = [
             'assistance.view_knowledgebasecategory',
-            'core.view_manufacturer',
             'itam.view_devicemodel',
             'itam.view_devicetype',
             'itam.view_softwarecategory',
