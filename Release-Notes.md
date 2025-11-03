@@ -1,3 +1,6 @@
+## Version v1.29.0
+
+
 ## Version v1.28.1
 
 - Permissions loader to capture errors gracefully.
