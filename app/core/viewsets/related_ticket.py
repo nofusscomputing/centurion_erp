@@ -16,6 +16,7 @@ from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-
 @extend_schema_view(
     destroy = extend_schema(
         summary = 'Delete a related ticket',
+        deprecated = True,
         description = '',
         parameters = [
             OpenApiParameter(
@@ -31,6 +32,7 @@ from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-
     ),
     list = extend_schema(
         summary = 'Fetch all related tickets',
+        deprecated = True,
         description='',
         parameters = [
             OpenApiParameter(
@@ -46,6 +48,7 @@ from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-
     ),
     retrieve = extend_schema(
         summary = 'Fetch a related ticket',
+        deprecated = True,
         description='',
         parameters = [
             OpenApiParameter(
