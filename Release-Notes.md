@@ -1,3 +1,6 @@
+## Version v1.28.0
+
+
 ## Version v1.27.0
 
 - Model [Company](https://nofusscomputing.com/projects/centurion_erp/user/access/company/) now available, as feature flag `2025-00008` has been removed from Centurion ERPs feature flag checks.
