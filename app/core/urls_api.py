@@ -7,6 +7,7 @@ from core.viewsets import (
     ticket,
     ticket_comment,
     ticket_comment_depreciated,
+    ticket_dependency,
     ticket_linked_item,
     ticket_model_link,
     related_ticket,
@@ -92,6 +93,10 @@ router.register(
         ]+)/(?P<parent_id>[0-9]+)/threads',
     viewset = ticket_comment.ViewSet,
     feature_flag = '2025-00006', basename = '_api_ticket_comment_base_sub_thread'
+)
+router.register(
+    prefix = '/ticket/(?P<ticket_id>[0-9]+)/ticket_dependency', viewset = ticket_dependency.ViewSet,
+    basename = '_api_ticketdependency'
 )
 router.register(
     prefix = '/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket',
