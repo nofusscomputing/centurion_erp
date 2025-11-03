@@ -314,9 +314,9 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + str(value) + ' ')
                         linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', str(value))
 
-                    if(getattr(obj, 'ticket', None)):
+                    if hasattr(obj, 'dependent_ticket'):
 
-                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(obj.dependent_ticket))
+                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(getattr(obj.dependent_ticket, 'id', 0)))
 
 
                     for ticket, number in linked_tickets:
@@ -328,7 +328,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                             field_info["render"]['tickets'].update({
                                 number: {
                                     'status': TicketBase.TicketStatus(item.status).label,
-                                    'ticket_type': item._meta.sub_model_type,
+                                    'ticket_type': item.ticket_type,
                                     'title': str(item),
                                     'url': str(item.get_url()).replace('/api/v2', '')
                                 }
