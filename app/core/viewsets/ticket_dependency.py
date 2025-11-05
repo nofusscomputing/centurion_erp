@@ -1,22 +1,23 @@
+# import importlib
+
 from django.db.models import Q
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from api.viewsets.common.tenancy import ModelListRetrieveDeleteViewSet
 
-from core.models.ticket.ticket import Ticket
-from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-import
-    RelatedTickets,
-    RelatedTicketModelSerializer,
-    RelatedTicketViewSerializer,
+from core.models.ticket_base import TicketBase
+from core.serializers.ticket_dependency import (    # pylint: disable=W0611:unused-import
+    TicketDependency,
+    ModelSerializer,
+    ViewSerializer
 )
 
 
 
 @extend_schema_view(
     destroy = extend_schema(
-        summary = 'Delete a related ticket',
-        deprecated = True,
+        summary = 'Delete a ticket dependency',
         description = '',
         parameters = [
             OpenApiParameter(
@@ -31,8 +32,7 @@ from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-
         }
     ),
     list = extend_schema(
-        summary = 'Fetch all related tickets',
-        deprecated = True,
+        summary = 'Fetch all dependent tickets',
         description='',
         parameters = [
             OpenApiParameter(
@@ -42,13 +42,12 @@ from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-
             ),
         ],
         responses = {
-            200: OpenApiResponse(description='', response=RelatedTicketViewSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
     retrieve = extend_schema(
-        summary = 'Fetch a related ticket',
-        deprecated = True,
+        summary = 'Fetch a dependent ticket',
         description='',
         parameters = [
             OpenApiParameter(
@@ -63,12 +62,14 @@ from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-
             ),
         ],
         responses = {
-            200: OpenApiResponse(description='', response=RelatedTicketViewSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
 )
-class ViewSet(ModelListRetrieveDeleteViewSet):
+class ViewSet(
+    ModelListRetrieveDeleteViewSet
+):
 
 
     filterset_fields = [
@@ -81,13 +82,13 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
 
     metadata_markdown = True
 
-    model = RelatedTickets
+    model = TicketDependency
 
-    parent_model = Ticket
+    parent_model = TicketBase
 
     parent_model_pk_kwarg = 'ticket_id'
 
-    view_description: str = 'Related Tickets'
+    view_description: str = 'Tickets that a dependent upon one another.'
 
 
     def get_serializer_class(self):
@@ -97,30 +98,27 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
             or self.action == 'retrieve'
         ):
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
+            self.serializer_class = globals()['ViewSerializer']
 
         else:
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
+            self.serializer_class = globals()['ModelSerializer']
 
 
         return self.serializer_class
 
 
+
     def get_queryset(self):
 
-        if self.queryset is not None:
+        if self._queryset is None:
 
-            return self.queryset
+            self._queryset = super().get_queryset()
 
-        self.queryset = RelatedTickets.user(
-                    user = self.request.user, permission = self._permission_required
-        ).objects.filter(
-            Q(from_ticket_id_id=self.kwargs['ticket_id'])
-                |
-            Q(to_ticket_id_id=self.kwargs['ticket_id'])
-        )
+            self._queryset = self._queryset.filter(
+                Q(ticket_id=self.kwargs['ticket_id'])
+                    |
+                Q(dependent_ticket_id=self.kwargs['ticket_id'])
+            )
 
-        self.queryset = self.queryset.filter().order_by('id')
-
-        return self.queryset
+        return self._queryset

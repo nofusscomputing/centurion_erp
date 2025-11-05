@@ -298,7 +298,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 queryset = field.context['view'].get_queryset()
 
                 from core.lib.slash_commands.linked_model import CommandLinkedModel
-                from core.models.ticket.ticket import Ticket
+                from core.models.ticket_base import TicketBase
 
                 for obj in queryset:
 
@@ -314,27 +314,27 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + str(value) + ' ')
                         linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', str(value))
 
-                    if(getattr(obj, 'from_ticket_id_id', None)):
+                    if hasattr(obj, 'dependent_ticket'):
 
-                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(obj.to_ticket_id_id))
+                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(getattr(obj.dependent_ticket, 'id', 0)))
 
 
                     for ticket, number in linked_tickets:
 
                         try:
 
-                            item = Ticket.objects.get( pk = number )
+                            item = TicketBase.objects.get( pk = number )
 
                             field_info["render"]['tickets'].update({
                                 number: {
-                                    'status': Ticket.TicketStatus.All(item.status).label,
-                                    'ticket_type': Ticket.TicketType(item.ticket_type).label,
+                                    'status': TicketBase.TicketStatus(item.status).label,
+                                    'ticket_type': item.ticket_type,
                                     'title': str(item),
                                     'url': str(item.get_url()).replace('/api/v2', '')
                                 }
                             })
 
-                        except Ticket.DoesNotExist as e:
+                        except TicketBase.DoesNotExist as e:
 
                             pass
 
