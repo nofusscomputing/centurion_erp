@@ -78,11 +78,16 @@ class TicketDependency(
         'created'
     ]
 
+    page_layout = None
+
 
 
     def clean_fields(self, exclude=None):
 
+        self.organization = self.ticket.organization
+
         model = type(self)
+
 
         obj = model.objects.filter(
             models.Q(
@@ -96,10 +101,20 @@ class TicketDependency(
             )
         )
 
+
+        exclude = {}
+        if self.pk:
+
+            obj = obj.exclude(
+                pk = self.pk
+            )
+
+
+
         if obj.count() > 0:
 
             raise ValidationError(
-                detail = {
+                message = {
                     'dependent_ticket': f"Ticket is already related to #{self.dependent_ticket.id}"
                 },
                 code = 'duplicate_entry'
@@ -108,7 +123,7 @@ class TicketDependency(
         if self.ticket == self.dependent_ticket:
 
             raise ValidationError(
-                detail = {
+                message = {
                     'dependent_ticket': "Ticket can not be assigned to itself as related"
                 },
                 code = 'self_not_related'
