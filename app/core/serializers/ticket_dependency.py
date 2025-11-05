@@ -98,40 +98,6 @@ class ModelSerializer(
         ]
 
 
-    def validate(self, attrs):
-
-        check_db = self.Meta.model.objects.filter(
-            dependent_ticket = attrs['dependent_ticket'],
-            ticket = attrs['ticket'],
-        )
-
-        check_db_inverse = self.Meta.model.objects.filter(
-            dependent_ticket = attrs['ticket'],
-            ticket = attrs['dependent_ticket'],
-        )
-
-        if check_db.count() > 0 or check_db_inverse.count() > 0:
-
-            raise centurion_exceptions.ValidationError(
-                detail = {
-                    'dependent_ticket': f"Ticket is already related to #{attrs['dependent_ticket'].id}"
-                },
-                code = 'duplicate_entry'
-            )
-
-
-        if attrs['dependent_ticket'].id == attrs['ticket'].id:
-
-            raise centurion_exceptions.ValidationError(
-                detail = {
-                    'dependent_ticket': f"Ticket can not be assigned to itself as related"
-                },
-                code = 'self_not_related'
-            )
-
-        return attrs
-
-
 
 @extend_schema_serializer(component_name = 'TicketDependencyViewSerializer')
 class ViewSerializer(ModelSerializer):
