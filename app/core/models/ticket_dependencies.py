@@ -13,6 +13,10 @@ class TicketDependency(
 
     _notes_enabled = False
 
+    _ticket_linkable = False
+
+    save_model_history: bool = False
+
     class Meta:
 
         ordering = [

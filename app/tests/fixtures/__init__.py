@@ -364,6 +364,12 @@ from .model_ticketcommentsolution import (
     serializer_ticketcommentsolution,
 )
 
+from .model_ticketdependency import (
+    kwargs_ticketdependency,
+    model_ticketdependency,
+    serializer_ticketdependency,
+)
+
 from .model_tenant import (
     kwargs_tenant,
     model_tenant,
