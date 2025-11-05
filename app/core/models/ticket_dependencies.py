@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from core.models.centurion import CenturionModel
@@ -76,6 +77,46 @@ class TicketDependency(
         'organization',
         'created'
     ]
+
+
+
+    def clean_fields(self, exclude=None):
+
+        model = type(self)
+
+        obj = model.objects.filter(
+            models.Q(
+                ticket = self.ticket,
+                dependent_ticket = self.dependent_ticket
+            )
+                |
+            models.Q(
+                ticket = self.dependent_ticket,
+                dependent_ticket = self.ticket
+            )
+        )
+
+        if obj.count() > 0:
+
+            raise ValidationError(
+                detail = {
+                    'dependent_ticket': f"Ticket is already related to #{self.dependent_ticket.id}"
+                },
+                code = 'duplicate_entry'
+            )
+
+        if self.ticket == self.dependent_ticket:
+
+            raise ValidationError(
+                detail = {
+                    'dependent_ticket': "Ticket can not be assigned to itself as related"
+                },
+                code = 'self_not_related'
+            )
+
+
+        return super().clean_fields(exclude)
+
 
 
     def get_url_kwargs(self, many = False) -> dict:
