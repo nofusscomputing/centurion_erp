@@ -151,6 +151,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 metadata['layout'] = view.get_page_layout()
 
 
+        if metadata.get('layout', None) is None:
+            metadata['layout'] = []
+
+        if metadata.get('table_fields', None) is None:
+            metadata['table_fields'] = []
+
         build_repo: str = None
 
         if settings.BUILD_REPO:
