@@ -2,8 +2,6 @@ import pytest
 
 from django.db import models
 
-# from rest_framework.relations import Hyperlink
-
 from api.tests.functional.test_functional_api_fields import (
     APIFieldsInheritedCases,
 )
@@ -60,6 +58,16 @@ class TicketDependencyAPITestCases(
             'modified': {
                 'expected': models.NOT_PROVIDED
             },
+        }
+
+
+    @property
+    def parameterized_api_metadata_fields(self) -> dict:
+
+        return {
+            # 'table_fields': {
+            #     'expected': models.NOT_PROVIDED
+            # },
         }
 
 
