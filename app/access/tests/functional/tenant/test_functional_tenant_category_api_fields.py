@@ -114,4 +114,10 @@ class TenantAPIPyTest(
     TenantAPITestCases,
 ):
 
-    pass
+
+    def test_api_metadata_field_exists(self):
+        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+
+
+    def test_api_metadata_field_type(self):
+        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
