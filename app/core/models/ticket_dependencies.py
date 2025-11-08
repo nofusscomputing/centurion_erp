@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from access.models.entity import Entity
+
 from core.models.centurion import CenturionModel
 from core.models.ticket_base import TicketBase
 
@@ -68,6 +70,15 @@ class TicketDependency(
         verbose_name = 'Related Ticket',
     )
 
+    user = models.ForeignKey(
+        Entity,
+        blank= False,
+        help_text = 'Who added the dependency',
+        on_delete = models.PROTECT,
+        related_name = '+',
+        verbose_name = 'User',
+    )
+
 
     table_fields: list = [
         'id',
@@ -79,6 +90,12 @@ class TicketDependency(
     ]
 
     page_layout = None
+
+
+
+    def __str__(self):
+
+        return str( '#' + str(self.ticket.id) )
 
 
 
@@ -150,6 +167,48 @@ class TicketDependency(
         return self.ticket
 
 
-    def __str__(self):
 
-        return str( '#' + str(self.ticket.id) )
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        if self.how_related == self.Related.BLOCKED_BY:
+
+            comment_field_value_from = f"added #{self.ticket.id} as blocked by #{self.dependent_ticket.id}"
+            comment_field_value_to = f"added #{self.dependent_ticket.id} as blocking #{self.ticket.id}"
+
+        elif self.how_related == self.Related.BLOCKS:
+
+            comment_field_value_from = f"added #{self.ticket.id} as blocking #{self.dependent_ticket.id}"
+            comment_field_value_to = f"added #{self.dependent_ticket.id} as blocked by #{self.ticket.id}"
+
+        elif self.how_related == self.Related.RELATED:
+
+            comment_field_value_from = f"added #{self.ticket.id} as related to #{self.dependent_ticket.id}"
+            comment_field_value_to = f"added #{self.dependent_ticket.id} as related to #{self.ticket.id}"
+
+
+        from core.models.ticket_comment_action import TicketCommentAction
+
+        if comment_field_value_from:
+
+            TicketCommentAction.objects.create(
+                ticket = self.ticket,
+                comment_type = TicketCommentAction._meta.sub_model_type,
+                body = comment_field_value_from,
+                source = TicketBase.TicketSource.DIRECT,
+                user = self.user,
+                is_closed = True,
+            )
+
+
+        if comment_field_value_to:
+
+            TicketCommentAction.objects.create(
+                ticket = self.dependent_ticket,
+                comment_type = TicketCommentAction._meta.sub_model_type,
+                body = comment_field_value_to,
+                source = TicketBase.TicketSource.DIRECT,
+                user = self.user,
+                is_closed = True,
+            )

@@ -51,6 +51,18 @@ For this command to process the following conditions must be met:
 
         found_items = re.findall(self.ticket_dependency_single_item, match.group('full'))
 
+        comment_user = getattr(self, 'user', None)
+
+        if self._base_model()._meta.model_name == 'ticketbase':
+            comment_user = self.opened_by
+
+
+        base_model = getattr(self, '_base_model', None)
+
+        if base_model:
+            base_model = base_model._meta.model_name
+
+
         try:
 
             for ticket_id in found_items:
@@ -59,8 +71,7 @@ For this command to process the following conditions must be met:
 
                     if ticket_id is not None:
 
-                        from core.serializers.ticket_related import RelatedTickets, RelatedTicketModelSerializer
-                        from core.serializers.ticket_dependency import TicketDependency, ModelSerializer
+                        from core.models.ticket_dependencies import TicketDependency
 
                         if command == 'relate':
 
@@ -81,32 +92,27 @@ For this command to process the following conditions must be met:
                             return str(match.string[match.start():match.end()])
 
 
-                        if str(self._meta.verbose_name).lower() == 'ticket':
+                        if base_model == 'ticketbase':
 
                             from_ticket = self
 
-                            to_ticket = self.__class__.objects.get(pk = ticket_id)
+                            to_ticket = self._base_model.objects.get(pk = ticket_id)
 
-                        elif str(self._meta.verbose_name).lower() == 'ticket comment':
+                        elif base_model == 'ticketcommentbase':
 
                             from_ticket = self.ticket
 
-                            to_ticket = self.ticket.__class__.objects.get(pk = ticket_id)
+                            to_ticket = self.ticket._base_model.objects.get(pk = ticket_id)
 
 
-                        item = ModelSerializer(
-                            data = {
-                                'ticket': from_ticket.id,
-                                'how_related': int(how_related),
-                                'dependent_ticket': to_ticket.id,
-                                'organization': from_ticket.organization.id
-                            }
+                        TicketDependency.objects.create(
+                            ticket = from_ticket,
+                            how_related = how_related,
+                            dependent_ticket = to_ticket,
+                            organization = from_ticket.organization,
+                            user = comment_user
+
                         )
-
-                        if item.is_valid( raise_exception = False ):
-
-                            item.save()
-
 
                 except centurion_exceptions.ValidationError as err:
 

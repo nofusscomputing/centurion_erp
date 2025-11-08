@@ -87,6 +87,7 @@ class ModelSerializer(
             'dependent_ticket',
             'ticket',
             'how_related',
+            'user',
             'organization',
             '_urls',
         ]
