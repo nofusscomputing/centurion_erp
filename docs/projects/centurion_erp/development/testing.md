@@ -29,10 +29,9 @@ example file system structure showing the layout of the tests directory for a mo
 │   ├── functional
 │   │   ├── __init__.py
 │   │   └── <model name>
-│           ├── test_functional_<model name>_api_fields.py
-│           ├── test_functional_<model name>_api_permission.py
-│           ├── test_functional_<model name>_api_metadata.py
-│           ├── test_functional_<model name>_model.py
+│   │       ├── test_functional_<model name>_api_fields.py
+│   │       ├── test_functional_<model name>_api_permission.py
+│   │       ├── test_functional_<model name>_model.py
 │   │       └── test_functional_<model name>_serializer.py
 │   ├── __init__.py
 │   ├── integration

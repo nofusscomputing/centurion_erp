@@ -33,10 +33,12 @@ class APIMetadataTestCases:
                 'expected': str
             },
 
+            # Not used for page rendering
             # 'renders': {
             #     'expected': str
             # },
 
+            # Not used for page rendering
             # 'parses': {
             #     'expected': str
             # },
@@ -62,29 +64,41 @@ class APIMetadataTestCases:
 
 
     @pytest.fixture( scope = 'class')
-    def metadata_request(self, api_request_permissions):
+    def metadata_request_detail(self, api_request_permissions):
 
         client = Client()
 
         client.force_login( api_request_permissions['user']['view'] )
-        response = client.options( self.item.get_url() )
+        response = client.options( self.item.get_url( many = False ) )
 
 
-        yield response.data
-
-
+        yield response
 
 
 
+    @pytest.fixture( scope = 'class')
+    def metadata_request_list(self, api_request_permissions):
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['view'] )
+        response = client.options( self.item.get_url( many = True ) )
+
+
+        yield response
+
+
+
+    @pytest.mark.metadata
     @pytest.mark.regression
-    def test_api_metadata_field_exists(self, recursearray, metadata_request,
+    def test_api_metadata_detail_field_exists(self, recursearray, metadata_request_detail,
         parameterized, param_key_api_metadata_fields,
         param_value,
         param_expected
     ):
         """Test for existance of API metadata Field"""
 
-        api_data = recursearray(metadata_request, param_value)
+        api_data = recursearray(metadata_request_detail.data, param_value)
 
         if param_expected is models.NOT_PROVIDED:
 
@@ -96,15 +110,15 @@ class APIMetadataTestCases:
 
 
 
-    @pytest.mark.regression
-    def test_api_metadata_field_type(self, recursearray, metadata_request,
+    @pytest.mark.metadata
+    def test_api_metadata_detail_field_type(self, recursearray, metadata_request_detail,
         parameterized, param_key_api_metadata_fields,
         param_value,
         param_expected
     ):
         """Test for type for API metadata Field"""
 
-        api_data = recursearray(metadata_request, param_value)
+        api_data = recursearray(metadata_request_detail.data, param_value)
 
         if param_expected is models.NOT_PROVIDED:
 
@@ -113,6 +127,94 @@ class APIMetadataTestCases:
         else:
 
             assert type( api_data.get('value', 'is empty') ) is param_expected
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_detail_requires_auth(self):
+        """API Metadata check
+
+        Ensure that a detail request to metadata returns HTTP/401 when not
+        authenticated
+        """
+
+        client = Client()
+
+        response = client.options( self.item.get_url( many = False ) )
+
+        assert response.status_code == 401
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_list_requires_auth(self):
+        """API Metadata check
+
+        Ensure that a detail request to metadata returns HTTP/401 when not
+        authenticated
+        """
+
+        client = Client()
+
+        response = client.options( self.item.get_url( many = True ) )
+
+        assert response.status_code == 401
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_detail_ok(self, metadata_request_detail):
+        """API Metadata check
+
+        Ensure that a detail request to metadata returns HTTP/200
+        """
+
+        assert metadata_request_detail.status_code == 200
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_list_ok(self, metadata_request_list):
+        """API Metadata check
+
+        Ensure that a list request to metadata returns HTTP/200
+        """
+
+        assert metadata_request_list.status_code == 200
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_detail_has_layout(self, metadata_request_detail):
+        """API Metadata check
+
+        Ensure that a list request contains page layout
+        """
+
+        assert 'layout' in metadata_request_detail.data
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_list_has_table_fields(self, metadata_request_list):
+        """API Metadata check
+
+        Ensure that a list request contains the table fields
+        """
+
+        assert 'table_fields' in metadata_request_list.data
+
+
+
+
+
+
 
 
 @pytest.mark.fields
