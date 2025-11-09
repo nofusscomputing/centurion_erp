@@ -106,6 +106,28 @@ class TicketDependencyModelTestCases(
 
 
 
+    def test_method_centurion_save_called(self, mocker, model_instance):
+        """Test Class Method
+
+        Ensure method `core.mixins.centurion.Centurion.save()` is called
+        when `model.save()` is called.
+        """
+
+        class MockManager:
+
+            def get(*args, **kwargs):
+                return model_instance
+
+        model_instance.objects = MockManager()
+
+        save = mocker.patch('core.mixins.centurion.Centurion.save', return_value = None)
+
+        model_instance.save()
+
+        assert save.call_count == 3, 'There must be three calls,: initial model, dependency and action comment'
+
+
+
 class TicketDependencyModelInheritedCases(
     TicketDependencyModelTestCases,
 ):

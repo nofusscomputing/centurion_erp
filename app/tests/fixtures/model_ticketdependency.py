@@ -22,7 +22,7 @@ def model_ticketdependency(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_ticketdependency(django_db_blocker,
     model_ticketbase, kwargs_ticketbase,
-    model_ticketdependency,
+    model_ticketdependency, model_employee, kwargs_employee
 ):
 
 
@@ -45,13 +45,13 @@ def kwargs_ticketdependency(django_db_blocker,
 
             dependent_ticket = model_ticketbase.objects.create( **kwargs )
 
+            kwargs = {
 
-        kwargs = {
-
-            'ticket': source_ticket,
-            'how_related': model_ticketdependency.Related.RELATED,
-            'dependent_ticket': dependent_ticket,
-        }
+                'ticket': source_ticket,
+                'how_related': model_ticketdependency.Related.RELATED,
+                'dependent_ticket': dependent_ticket,
+                'user': model_employee.objects.create( **kwargs_employee() )
+            }
 
         return kwargs
 
