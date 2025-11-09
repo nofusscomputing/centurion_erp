@@ -6,7 +6,7 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-The ticketing system within Centurion ERP is common to all ticket types. The differences are primarily fields and the value of fields.
+A ticket within Centurion ERP is an item of work. Its intent is to capture all of the required data for the lifecycle of the work item.
 
 
 ## Features
@@ -17,27 +17,81 @@ The ticketing system within Centurion ERP is common to all ticket types. The dif
 
 - [Markdown](./markdown.md) support within the ticket description and comment(s)
 
-- Milestone
-
 - Parent / Child Tickets
 
 - Project
 
-- Related Tickets
-
 - Slash commands
 
-- Ticket Types:
+- Ticket Dependencies
 
-    - Changes
 
-    - Incidents
+## Fields
 
-    - Problems
+As tickets are a core feature, most ticket will contain the fields below. With exception to the fields marked "Mandatory" Most fields are only available for a ticket triage user.
 
-    - Service Request or Request for short
+- [`Organization`](../access/tenant.md) Tenancy where the ticket should be created. ***Mandatory***
 
-    - Project Task
+- `Title` Title of the ticket. ***Mandatory***
+
+- `Description` Description for the ticket. ***Mandatory***
+
+- `External System` External sysem ID. ***Optional***
+
+    !!! note
+        This field is only available for a user with import permissions
+
+- `Reference Number` External system ticket number. ***Optional***
+
+    !!! note
+        This field is only available for a user with import permissions
+
+- `Parent Ticket` Parent ticket of this ticket. ***Optional***
+
+- [`Status`](#ticket-status) Status of this ticket. ***Optional***
+
+- [`Category`](./ticketcategory.md) Category of this ticket. ***Optional***
+
+- `Private` Mark ticket as private. ***Optional***
+
+- [`Project`](../project_management/project.md) Project this ticket belongs to. ***Optional***
+
+- `Project Milestone` Milestone for this ticket. ***Optional***
+
+- `Urgency` Urgency for this ticket to be solved from the ticket raiser. ***Optional***
+
+- `Impact` Assessed impact of this ticket. ***Optional***
+
+- `Priority` Work completion order of this ticket. ***Optional***
+
+- `Opened By` Whom opened the ticket. ***Optional***
+
+- `Users / Groups Subscribed` User / Groups whom are subscribed to obtain updates of this ticket. ***Optional***
+
+- `Users / Groups Assigned` User / Groups whom are assigned to work on this ticket. ***Optional***
+
+- `Planned Start Date` When the ticket is planned to be started by. ***Optional***
+
+- `Planned Finish Date` When the ticket is planned to be completed by. ***Optional***
+
+- `Real Start Date` When the ticket work actually started. ***Optional***
+
+- `Real Finish Date` When the ticket work actually finished. ***Optional***
+
+In Addition, tickets also contain the following objects for each ticket:
+
+- `Dependencies` Other related tickets, (related, blocked and blocked by). ***Optional***
+
+- [`Linked Models`](#linking-items-to-a-ticket) Models the ticket is related to. ***Optional***
+
+
+## Creating a Ticket
+
+Complete all of the required fields and click save. The following rules apply when creating a ticket:
+
+- Ticket must have a non-blank title.
+
+- If a project is selected, the milestone must come from the same project.
 
 
 ## Linking items to a ticket
@@ -107,7 +161,7 @@ Ticket comments support [markdown](./markdown.md) as well as slash commands. Com
 
     A typical comment that has the ability to track time spent, have a category assigned as well as a source for the comment.
 
-- ~~Notification _Change, Incident, Problem, Project Tasks and Request tickets._~~ _awaiting [github-564](https://github.com/nofusscomputing/centurion_erp/issues/564)_
+- ~~Notification _Change, Incident, Problem, Project Tasks and Request tickets.~~_ _awaiting [github-564](https://github.com/nofusscomputing/centurion_erp/issues/564)_
 
 - Solution
 
@@ -144,7 +198,7 @@ When using slash commands, there is only to be one slash command per line. All s
 
 ### Linked Items
 
-::: app.core.lib.slash_commands.CommandLinkedModel
+::: app.core.lib.slash_commands.CommandLinkModelTicket
     options:
         inherited_members: false
         members: []
@@ -153,9 +207,9 @@ When using slash commands, there is only to be one slash command per line. All s
         summary: true
 
 
-### Related Tickets
+### Ticket Dependencies
 
-::: app.core.lib.slash_commands.CommandRelatedTicket
+::: app.core.lib.slash_commands.CommandTicketDependency
     options:
         inherited_members: false
         members: []

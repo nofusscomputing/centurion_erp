@@ -407,7 +407,8 @@ class TicketCommentBase(
 
         body = self.body
 
-        self.body = self.slash_command(self.body)
+        if self._meta.sub_model_type != 'action':
+            self.body = self.slash_command(self.body)
 
         if(
            (

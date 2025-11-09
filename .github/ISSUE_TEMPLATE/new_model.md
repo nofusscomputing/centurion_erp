@@ -64,7 +64,6 @@ Describe in detail the following:
     - [ ] [ViewSet](https://nofusscomputing.com/projects/centurion_erp/development/views/#requirements)
     - [ ] Serializer
 - Function Test
-    - [ ] API Metadata
     - [ ] API Render (fields)
     - [ ] Model
     - [ ] [ViewSet](https://nofusscomputing.com/projects/centurion_erp/development/views/#requirements)
