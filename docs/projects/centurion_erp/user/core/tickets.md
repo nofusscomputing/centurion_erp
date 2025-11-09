@@ -161,7 +161,7 @@ Ticket comments support [markdown](./markdown.md) as well as slash commands. Com
 
     A typical comment that has the ability to track time spent, have a category assigned as well as a source for the comment.
 
-- ~~Notification _Change, Incident, Problem, Project Tasks and Request tickets._~~ _awaiting [github-564](https://github.com/nofusscomputing/centurion_erp/issues/564)_
+- ~~Notification _Change, Incident, Problem, Project Tasks and Request tickets.~~_ _awaiting [github-564](https://github.com/nofusscomputing/centurion_erp/issues/564)_
 
 - Solution
 
@@ -198,7 +198,7 @@ When using slash commands, there is only to be one slash command per line. All s
 
 ### Linked Items
 
-::: app.core.lib.slash_commands.CommandLinkedModel
+::: app.core.lib.slash_commands.CommandLinkModelTicket
     options:
         inherited_members: false
         members: []
@@ -207,9 +207,9 @@ When using slash commands, there is only to be one slash command per line. All s
         summary: true
 
 
-### Related Tickets
+### Ticket Dependencies
 
-::: app.core.lib.slash_commands.CommandRelatedTicket
+::: app.core.lib.slash_commands.CommandTicketDependency
     options:
         inherited_members: false
         members: []
