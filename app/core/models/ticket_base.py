@@ -684,25 +684,6 @@ class TicketBase(
         super().clean()
 
 
-
-    def clean_fields(self, exclude = None):
-
-        if(
-            self.description != ''
-            and self.description is not None
-        ):
-
-            description = self.slash_command(self.description)
-
-            if description != self.description:
-
-                self.description = description
-
-
-        return super().clean_fields(exclude = exclude)
-
-
-
     def get_can_close(self, raise_exceptions = False ) -> bool:
 
         if(
@@ -1081,3 +1062,11 @@ class TicketBase(
         if self._before:
 
             self.create_action_comment()
+
+        description = self.slash_command(self.description)
+
+        if description != self.description:
+
+            self.description = description
+
+            self.save()
