@@ -185,6 +185,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
                 self._queryset = self._queryset.filter(
                     ticket_id = int(self.kwargs['model_id'])
                 )
+
             elif(
                 'app_label' in self.kwargs
                 and 'model_name' in self.kwargs
