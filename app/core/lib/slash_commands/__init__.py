@@ -3,7 +3,7 @@ import re
 from .duration import Duration
 from .related_ticket import CommandRelatedTicket    # depreciated model
 from .linked_model import CommandLinkedModel    # depreciated model
-# from .link_model import CommandLinkModelTicket
+from .link_model import CommandLinkModelTicket
 from .ticket_dependency import CommandTicketDependency
 
 
