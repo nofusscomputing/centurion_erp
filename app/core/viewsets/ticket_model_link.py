@@ -174,6 +174,29 @@ class ViewSet( SubModelViewSet_ReWrite ):
 
     view_description = 'Models linked to ticket'
 
+    def get_queryset(self):
+
+        if self._queryset is None:
+
+            self._queryset = super().get_queryset()
+
+            if 'ticket_type' in self.kwargs:
+
+                self._queryset = self._queryset.filter(
+                    ticket_id = int(self.kwargs['model_id'])
+                )
+            elif(
+                'app_label' in self.kwargs
+                and 'model_name' in self.kwargs
+            ):
+
+                self._queryset = self._queryset.filter(
+                    model_id = int(self.kwargs['model_id'])
+                )
+
+
+        return self._queryset
+
 
 
 @extend_schema_view( # prevent duplicate documentation of both /access/entity endpoints
