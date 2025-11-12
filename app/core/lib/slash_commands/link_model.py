@@ -66,38 +66,22 @@ For this command to process the following conditions must be met:
 
             for model_type, model_id in found_items:
 
-                try:
+                model = self.get_model( model_type )
 
-                    model = self.get_model( model_type )
+                model = apps.get_model(
+                    app_label = model._meta.app_label,
+                    model_name = f'{model._meta.object_name}Ticket'.lower()
+                )
 
-                    model = apps.get_model(
-                        app_label = model._meta.app_label,
-                        model_name = f'{model._meta.object_name}Ticket'.lower()
-                    )
+                if not model:
 
-                    if not model:
-
-                        return str(match.string[match.start():match.end()])
+                    return str(match.string[match.start():match.end()])
 
 
-                    model.objects.create(
-                        ticket = ticket,
-                        model_id = int(model_id)
-                    )
-
-
-                except ValidationError as err:
-
-                    error = err.get_codes().get('non_field_errors', None)
-
-                    if error is not None:
-
-                        if error[0] != 'unique':
-
-                            raise ValidationError(
-                                message = err.message,
-                                code = err.code
-                            )
+                model.objects.create(
+                    ticket = ticket,
+                    model_id = int(model_id)
+                )
 
 
             return None
