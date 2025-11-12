@@ -303,7 +303,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 queryset = field.context['view'].get_queryset()
 
-                from core.lib.slash_commands.linked_model import CommandLinkedModel
+                from core.lib.slash_commands.link_model import CommandLinkModelTicket
                 from core.models.ticket_base import TicketBase
 
                 for obj in queryset:
@@ -349,7 +349,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                         try:
 
-                            model, item_type = CommandLinkedModel().get_model( model_type )
+                            model = CommandLinkModelTicket().get_model( model_type )
 
                             if model:
 
