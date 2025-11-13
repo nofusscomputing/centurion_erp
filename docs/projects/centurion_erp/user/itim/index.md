@@ -13,5 +13,7 @@ IT Infrastructure Management (ITIM) is a crucial area of IT Service Management (
 
 - [Change Ticket](./change.md)
 
+- [Incident Ticket](./incident.md)
+
 - [Ports](./port.md)
 - [Services](./service.md)
