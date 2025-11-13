@@ -626,7 +626,28 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Requests New",
                         "name": "request_new",
                         "icon": "ticket_request",
-                        "link": "/core/ticket/request"
+                        "link": "/itim/ticket/request"
+                    }
+                })
+
+                nav['itim']['pages'].update({
+                    'itim.view_changeticket': {
+                        "display_name": "Changes New",
+                        "name": "change_new",
+                        "icon": "ticket_change",
+                        "link": "/itim/ticket/change"
+                    },
+                    'itim.view_incidentticket': {
+                        "display_name": "Incidents New",
+                        "name": "incident_new",
+                        "icon": "ticket_incident",
+                        "link": "/itim/ticket/incident"
+                    },
+                    'itim.view_problemticket': {
+                        "display_name": "Problems New",
+                        "name": "problem_new",
+                        "icon": "ticket_problem",
+                        "link": "/itim/ticket/problem"
                     }
                 })
 
