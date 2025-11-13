@@ -216,11 +216,17 @@ nav:
 
         - projects/centurion_erp/user/itim/index.md
 
+        - projects/centurion_erp/user/itim/change.md
+
         - projects/centurion_erp/user/itim/cluster.md
 
         - projects/centurion_erp/user/itim/clustertype.md
 
+        - projects/centurion_erp/user/itim/incident.md
+
         - projects/centurion_erp/user/itim/port.md
+
+        - projects/centurion_erp/user/itim/problem.md
 
         - projects/centurion_erp/user/itim/service.md
 
