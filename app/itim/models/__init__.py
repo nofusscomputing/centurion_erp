@@ -12,3 +12,6 @@ from .cluster_notes import ClusterNotes    # pylint: disable=W0611:unused-import
 from .cluster_type_notes import ClusterTypeNotes    # pylint: disable=W0611:unused-import
 from .port_notes import PortNotes    # pylint: disable=W0611:unused-import
 from .service_notes import ServiceNotes    # pylint: disable=W0611:unused-import
+from .ticket_change import ChangeTicket    # pylint: disable=W0611:unused-import
+from .ticket_incident import IncidentTicket    # pylint: disable=W0611:unused-import
+from .ticket_problem import ProblemTicket    # pylint: disable=W0611:unused-import
