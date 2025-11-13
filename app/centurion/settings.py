@@ -738,6 +738,15 @@ if FEATURE_FLAGGING_ENABLED:
                     "modified": ""
                 }
             },
+            {
+                "2025-00009": {
+                    "name": "itim.ChangeTicket",
+                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": "Z"
+                }
+            },
         ]
 
         feature_flag.update({

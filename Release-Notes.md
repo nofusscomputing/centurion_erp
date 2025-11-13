@@ -1,5 +1,7 @@
 ## Version v1.29.0
 
+- Change Ticket model added behind feature flag `2025-00009` and will remain behind this flag until production ready.
+
 
 ## Version v1.28.1
 
