@@ -4,6 +4,8 @@
 
 - Incident Ticket model added behind feature flag `2025-00010` and will remain behind this flag until production ready.
 
+- Problem Ticket model added behind feature flag `2025-00011` and will remain behind this flag until production ready.
+
 
 ## Version v1.28.1
 
