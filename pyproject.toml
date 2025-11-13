@@ -148,7 +148,6 @@ omit = [
     "*apps.py",
     "*conftest.py",
     "*manage.py",
-    "*__init__.py",
     "*asgi*",
     "*wsgi*",
     "*admin.py",
@@ -1348,6 +1347,7 @@ markers = [
     "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
     "tickets: Selects all tests for tickets",
+    "tickets_slash_command: Selects all test for Ticket/Ticket Comment slash commands.",
     "unit: Selects all Unit Tests.",
     "viewset: Selects all ViewSet Tests.",
 ]
