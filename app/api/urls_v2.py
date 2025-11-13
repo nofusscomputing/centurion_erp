@@ -82,6 +82,14 @@ ticket_type_names = str(ticket_type_names)[:-1]
 
 router = DefaultRouter(trailing_slash=False)
 
+if not router._feature_flagging['2025-00006']:
+    ticket_type_names = str( ticket_type_names ).replace('request', '').replace('||', '')
+
+
+if not router._feature_flagging['2025-00009']:
+    ticket_type_names = str( ticket_type_names ).replace('change', '').replace('||', '')
+
+
 
 router.register('', v2.Index, basename='_api_v2_home')
 
