@@ -90,6 +90,9 @@ if not router._feature_flagging['2025-00009']:
     ticket_type_names = str( ticket_type_names ).replace('change', '').replace('||', '')
 
 
+if not router._feature_flagging['2025-00010']:
+    ticket_type_names = str( ticket_type_names ).replace('incident', '').replace('||', '')
+
 
 router.register('', v2.Index, basename='_api_v2_home')
 
