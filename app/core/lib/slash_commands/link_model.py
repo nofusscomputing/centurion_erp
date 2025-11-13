@@ -50,9 +50,15 @@ For this command to process the following conditions must be met:
 
         ticket = self
 
-        if str(self._meta.verbose_name).lower() == 'ticket comment':
+        base_model = getattr(self, '_base_model', None)
+
+        if base_model:
+            base_model = base_model._meta.model_name
+
+        if base_model == 'ticketcommentbase':
 
             ticket = self.ticket
+
 
         found_items = re.findall(self.single_model, match.group('full'))
 
@@ -60,44 +66,22 @@ For this command to process the following conditions must be met:
 
             for model_type, model_id in found_items:
 
-                try:
+                model = self.get_model( model_type )
 
-                    model = self.get_model( model_type )
+                model = apps.get_model(
+                    app_label = model._meta.app_label,
+                    model_name = f'{model._meta.object_name}Ticket'.lower()
+                )
 
-                    if not model:
+                if not model:
 
-                        return str(match.string[match.start():match.end()])
+                    return str(match.string[match.start():match.end()])
 
-                    serializer_module = importlib.import_module(
-                        f'{model._meta.app_label}.serializers.modelticket_{model._meta.model_name}'
-                    )
 
-                    serializer = serializer_module(
-                        data = {
-                            'organization': ticket.organization,
-                            'ticket': ticket.id,
-                            'item_type': item_type,
-                            'item': item.id
-                        }
-                    )
-
-                    if serializer.is_valid( raise_exception = True ):
-
-                        serializer.save()
-
-                except ValidationError as err:
-
-                    error = err.get_codes().get('non_field_errors', None)
-
-                    if error is not None:
-
-                        if error[0] != 'unique':
-
-                            raise ValidationError(
-                                message = err.message,
-                                code = err.code
-                            )
-
+                model.objects.create(
+                    ticket = ticket,
+                    model_id = int(model_id)
+                )
 
 
             return None
@@ -120,8 +104,8 @@ For this command to process the following conditions must be met:
 
         for obj_model in apps.get_models():
 
-            if model_type == obj_model.model_tag:
-                return obj.model
+            if model_type == getattr(obj_model, 'model_tag', '-not_model-'):
+                return obj_model
 
 
         return None

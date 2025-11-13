@@ -11,7 +11,7 @@ class SlashCommands(
     Duration,
     CommandRelatedTicket,    # depreciated model
     CommandLinkedModel,    # depreciated model
-    # CommandLinkModelTicket,
+    CommandLinkModelTicket,
     CommandTicketDependency,
 ):
     """Slash Commands Base Class
@@ -88,8 +88,7 @@ class SlashCommands(
 
                     if base_model in ['ticketbase', 'ticketcommentbase']:
 
-                        # returned_line = re.sub(self.link_model, self.command_link_model, line)
-                        pass
+                        returned_line = re.sub(self.link_model, self.command_link_model, line)
 
                     else:    # Depreciated Ticket Model and Command
 

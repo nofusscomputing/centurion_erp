@@ -1,9 +1,6 @@
 {
     "gitlab.aiAssistedCodeSuggestions.enabled": false,
     "gitlab.duoChat.enabled": false,
-    "cSpell.enableFiletypes": [
-        "!python"
-    ],
     "python.testing.pytestArgs": [
         "--override-ini", "addopts=", "--capture=no",
         "--no-migrations",
@@ -12,10 +9,6 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "cSpell.words": [
-        "ITSM"
-    ],
-    "cSpell.language": "en-AU",
     "jest.enable": false,
     "pylint.enabled": true,
     "testing.showCoverageInExplorer": true,
