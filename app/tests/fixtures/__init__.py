@@ -41,6 +41,7 @@ from .model_authtoken import (
 from .model_centurionaudit import (
     kwargs_centurionaudit,
     model_centurionaudit,
+    serializer_centurionaudit,
 )
 
 from .model_centurionauditmeta import (
