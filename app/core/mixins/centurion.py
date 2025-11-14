@@ -553,7 +553,18 @@ class Centurion(
             validate_constraints = True
         )
 
-        if self._audit_enabled and type(self).context.get(self._meta.model_name, None):
+        base_model = self._base_model
+
+        if base_model:
+            base_model = base_model._meta.model_name
+
+        if(
+            (
+                self._audit_enabled
+                or base_model == 'ticketbase'
+            )
+            and type(self).context.get(self._meta.model_name, None)
+        ):
 
             self._after = self.get_audit_values()
 
