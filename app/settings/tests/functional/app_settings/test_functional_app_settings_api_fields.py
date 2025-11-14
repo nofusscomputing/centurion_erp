@@ -138,6 +138,17 @@ class AppSettingsAPITestCases(
             }
         }
 
+    def test_api_metadata_list_requires_auth(self):
+        pytest.xfail( reason = 'list view not available for model. test is N/A.' )
+
+
+    def test_api_metadata_list_ok(self):
+        pytest.xfail( reason = 'list view not available for model. test is N/A.' )
+
+
+    def test_api_metadata_list_has_table_fields(self):
+        pytest.xfail( reason = 'list view not available for model. test is N/A.' )
+
 
 
 class AppSettingsAPIInheritedCases(

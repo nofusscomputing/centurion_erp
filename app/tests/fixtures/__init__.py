@@ -41,6 +41,7 @@ from .model_authtoken import (
 from .model_centurionaudit import (
     kwargs_centurionaudit,
     model_centurionaudit,
+    serializer_centurionaudit,
 )
 
 from .model_centurionauditmeta import (
@@ -364,6 +365,12 @@ from .model_ticketcommentsolution import (
     serializer_ticketcommentsolution,
 )
 
+from .model_ticketdependency import (
+    kwargs_ticketdependency,
+    model_ticketdependency,
+    serializer_ticketdependency,
+)
+
 from .model_tenant import (
     kwargs_tenant,
     model_tenant,
@@ -378,11 +385,13 @@ from .model_tenancyabstract import (
 from .model_ticketcategory import (
     kwargs_ticketcategory,
     model_ticketcategory,
+    serializer_ticketcategory,
 )
 
 from .model_ticketcommentcategory import (
     kwargs_ticketcommentcategory,
     model_ticketcommentcategory,
+    serializer_ticketcommentcategory,
 )
 
 from .model_user import (

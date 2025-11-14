@@ -90,6 +90,13 @@ class ModelSerializer(
                     'model_id': item.pk,
                 }
             ),
+            'ticket_dependencies': reverse(
+                viewname = "v2:_api_ticketdependency-list",
+                request = self._context['view'].request,
+                kwargs = {
+                    'ticket_id': item.pk
+                }
+            )
         }
 
         if item.project:

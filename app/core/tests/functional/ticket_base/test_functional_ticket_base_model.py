@@ -5,73 +5,16 @@ from django.db import models
 from core.models.ticket_base import (
     TicketBase
 )
-# from core.tests.functional.slash_commands.test_slash_command_related import (
-#     SlashCommandsTicketInheritedTestCases
-# )
+from core.tests.functional.slash_commands.test_slash_command_related import (
+    SlashCommandsTicketInheritedTestCases
+)
 
 
 
 @pytest.mark.model_ticketbase
 class TicketBaseModelTestCases(
-    # SlashCommandsTicketInheritedTestCases
+    SlashCommandsTicketInheritedTestCases
 ):
-
-    #
-    # fixture from core.tests.functional.slash_commands.test_slash_command_related
-    #     when class re-imported this fixture can be removed.
-    #     ToDo: update base fixture for new ticket models.
-    #
-    @pytest.fixture(scope = 'class')
-    def setup_class(self, request,
-        organization_one,
-        django_db_blocker,
-        model, model_person, model_user,
-        model_employee, kwargs_employee,
-    ):
-
-        request.cls.organization = organization_one
-
-        with django_db_blocker.unblock():
-
-            kwargs = kwargs_employee()
-            kwargs['user'] = model_user.objects.create_user(
-                username="test_user_for_tickets", password="password"
-            )
-            
-            employee = model_employee.objects.create( **kwargs )
-
-            request.cls.ticket_user = employee
-
-
-            request.cls.entity_user = model_person.objects.create(
-                organization = organization_one,
-                f_name = 'ip',
-                l_name = 'funny'
-            )
-
-
-            request.cls.existing_ticket = model.objects.create(
-                organization = organization_one,
-                title = 'an existing ticket',
-                description = "the ticket body",
-                opened_by = request.cls.ticket_user,
-            )
-
-
-
-        yield
-
-        with django_db_blocker.unblock():
-
-            request.cls.existing_ticket.delete()
-
-            try:
-                request.cls.ticket_user.delete()
-            except models.ProtectedError:
-                pass
-
-            request.cls.entity_user.delete()
-
 
 
     @pytest.fixture
@@ -88,19 +31,11 @@ class TicketBaseModelTestCases(
 
             ticket.organization = organization_one
             ticket.title = 'A ticket for slash commands'
-            ticket.opened_by = request.cls.ticket_user
-
-            # ticket = TicketBase.objects.create(
-            #     organization = request.cls.organization,
-            #     title = 'A ticket for slash commands',
-            #     opened_by = request.cls.ticket_user,
-            # )
+            ticket.opened_by = request.cls.entity_user
+            ticket.description = 'a ticket desc'
 
         yield ticket
 
-        with django_db_blocker.unblock():
-
-            ticket.delete()
 
 
     clean_clear_closed_solved = [

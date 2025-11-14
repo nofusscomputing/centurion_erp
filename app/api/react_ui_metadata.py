@@ -151,6 +151,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 metadata['layout'] = view.get_page_layout()
 
 
+        if metadata.get('layout', None) is None:
+            metadata['layout'] = []
+
+        if metadata.get('table_fields', None) is None:
+            metadata['table_fields'] = []
+
         build_repo: str = None
 
         if settings.BUILD_REPO:
@@ -297,8 +303,8 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 queryset = field.context['view'].get_queryset()
 
-                from core.lib.slash_commands.linked_model import CommandLinkedModel
-                from core.models.ticket.ticket import Ticket
+                from core.lib.slash_commands.link_model import CommandLinkModelTicket
+                from core.models.ticket_base import TicketBase
 
                 for obj in queryset:
 
@@ -314,27 +320,27 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + str(value) + ' ')
                         linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', str(value))
 
-                    if(getattr(obj, 'from_ticket_id_id', None)):
+                    if hasattr(obj, 'dependent_ticket'):
 
-                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(obj.to_ticket_id_id))
+                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(getattr(obj.dependent_ticket, 'id', 0)))
 
 
                     for ticket, number in linked_tickets:
 
                         try:
 
-                            item = Ticket.objects.get( pk = number )
+                            item = TicketBase.objects.get( pk = number )
 
                             field_info["render"]['tickets'].update({
                                 number: {
-                                    'status': Ticket.TicketStatus.All(item.status).label,
-                                    'ticket_type': Ticket.TicketType(item.ticket_type).label,
+                                    'status': TicketBase.TicketStatus(item.status).label,
+                                    'ticket_type': item.ticket_type,
                                     'title': str(item),
                                     'url': str(item.get_url()).replace('/api/v2', '')
                                 }
                             })
 
-                        except Ticket.DoesNotExist as e:
+                        except TicketBase.DoesNotExist as e:
 
                             pass
 
@@ -343,7 +349,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                         try:
 
-                            model, item_type = CommandLinkedModel().get_model( model_type )
+                            model = CommandLinkModelTicket().get_model( model_type )
 
                             if model:
 
@@ -620,7 +626,28 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Requests New",
                         "name": "request_new",
                         "icon": "ticket_request",
-                        "link": "/core/ticket/request"
+                        "link": "/itim/ticket/request"
+                    }
+                })
+
+                nav['itim']['pages'].update({
+                    'itim.view_changeticket': {
+                        "display_name": "Changes New",
+                        "name": "change_new",
+                        "icon": "ticket_change",
+                        "link": "/itim/ticket/change"
+                    },
+                    'itim.view_incidentticket': {
+                        "display_name": "Incidents New",
+                        "name": "incident_new",
+                        "icon": "ticket_incident",
+                        "link": "/itim/ticket/incident"
+                    },
+                    'itim.view_problemticket': {
+                        "display_name": "Problems New",
+                        "name": "problem_new",
+                        "icon": "ticket_problem",
+                        "link": "/itim/ticket/problem"
                     }
                 })
 

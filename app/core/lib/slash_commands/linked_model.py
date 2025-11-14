@@ -69,7 +69,7 @@ For this command to process the following conditions must be met:
 
                 try:
 
-                    model, item_type = self.get_model( model_type )
+                    model, item_type = self.get_model_old( model_type )
 
                     if not model:
 
@@ -121,7 +121,7 @@ For this command to process the following conditions must be met:
         return None
 
 
-    def get_model(self, model_type) -> tuple():
+    def get_model_old(self, model_type) -> tuple():
 
         model = None
 

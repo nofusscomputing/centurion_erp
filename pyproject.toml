@@ -13,7 +13,6 @@ omit = [
     "*apps.py",
     "*conftest.py",
     "*manage.py",
-    "*__init__.py",
     "*asgi*",
     "*wsgi*",
     "*admin.py",
@@ -53,6 +52,7 @@ omit = [
     # Old Ticketing Model
     #
     "app/core/lib/slash_commands/linked_model.py",
+    "app/core/lib/slash_commands/related_ticket.py",
     "app/core/models/ticket/*",
     "app/core/signal/ticket_linked_item_delete.py",
     "app/core/serializers/ticket_depreciated.py",
@@ -1135,7 +1135,8 @@ markers = [
     "model_appsettings: Selects tests for model app settings.",
     "model_authtoken: Selects tests for model Auth Token.",
     "model_company: Selects test for model Company.",
-    "model_centurionuser: Selects tests for modell Centurion User",
+    "model_centurionaudit: Selects tests for model Centurion Audit",
+    "model_centurionuser: Selects tests for model Centurion User",
     "model_configgroups: Selects Config Group tests.",
     "model_configgrouphosts: Selects Config Group Hosts tests.",
     "model_configgroupsoftware: Selects Config Group Software tests.",
@@ -1183,6 +1184,7 @@ markers = [
     "model_ticketcommentbase: Select all ticket Comment.",
     "model_ticketcommentsolution: Select test for model ticket Action Solution.",
     "model_ticketcommentcategory: Select all ticket comment category tests.",
+    "model_ticketdependency: Select all ticket dependency tests.",
     "models: Selects all models tests.",
     "model_tenant: Select all Tentant model tests.",
     "model_usersettings: Select tests for model User Settings.",
@@ -1211,6 +1213,7 @@ markers = [
     "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
     "tickets: Selects all tests for tickets",
+    "tickets_slash_command: Selects all test for Ticket/Ticket Comment slash commands.",
     "unit: Selects all Unit Tests.",
     "viewset: Selects all ViewSet Tests.",
 ]
