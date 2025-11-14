@@ -3,6 +3,11 @@ import pytest
 from datetime import datetime
 
 from core.models.ticket.ticket_category import TicketCategory
+from core.serializers.ticket_category import (
+    TicketCategoryBaseSerializer,
+    TicketCategoryModelSerializer,
+    TicketCategoryViewSerializer
+)
 
 
 
@@ -27,3 +32,13 @@ def kwargs_ticketcategory(kwargs_centurionmodel):
         return kwargs
 
     yield factory
+
+
+@pytest.fixture( scope = 'class')
+def serializer_ticketcategory():
+
+    yield {
+        'base': TicketCategoryBaseSerializer,
+        'model': TicketCategoryModelSerializer,
+        'view': TicketCategoryViewSerializer
+    }

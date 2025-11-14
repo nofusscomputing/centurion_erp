@@ -384,6 +384,7 @@ from .model_tenancyabstract import (
 from .model_ticketcategory import (
     kwargs_ticketcategory,
     model_ticketcategory,
+    serializer_ticketcategory,
 )
 
 from .model_ticketcommentcategory import (
