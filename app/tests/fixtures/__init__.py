@@ -390,6 +390,7 @@ from .model_ticketcategory import (
 from .model_ticketcommentcategory import (
     kwargs_ticketcommentcategory,
     model_ticketcommentcategory,
+    serializer_ticketcommentcategory,
 )
 
 from .model_user import (
