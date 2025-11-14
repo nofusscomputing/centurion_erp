@@ -674,13 +674,6 @@ class TicketBase(
             self.date_closed = None
 
 
-        self._before = {}
-
-        try:
-            self._before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
-        except Exception:
-            pass
-
         super().clean()
 
 
@@ -1057,9 +1050,7 @@ class TicketBase(
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
-        self._after = self.__dict__.copy()
-
-        if self._before:
+        if getattr(self, '_before', None):
 
             self.create_action_comment()
 
