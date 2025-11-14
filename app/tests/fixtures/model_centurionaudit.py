@@ -3,6 +3,11 @@ import pytest
 from datetime import datetime
 
 from core.models.audit import CenturionAudit
+from core.serializers.centurionaudit import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -56,3 +61,13 @@ def kwargs_centurionaudit(django_db_blocker,
         return kwargs
 
     yield factory
+
+
+@pytest.fixture( scope = 'class')
+def serializer_centurionaudit():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }
