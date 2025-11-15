@@ -366,6 +366,69 @@ class CenturionMixnInheritedCases(
 
 
 
+    def test_method_get_audit_values_clean_model_returns_fields_only(self, mocker, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_audit_values` returns All model fields as a dict
+        """
+
+        class MockManager:
+
+            def get(*args, **kwargs):
+                return model_instance
+
+        m2m_fields = {}
+        for m2m_field in model_instance._meta.many_to_many:
+
+            value = list(
+                getattr(model_instance, m2m_field.name).values_list(
+                    'pk', flat = True
+                )
+            )
+
+            if len(value) < 1:
+                value = None
+
+            m2m_fields.update({
+                m2m_field.name: value
+            })
+
+
+        empty_fields = {}
+        for field in model_instance._meta.fields:
+
+            value = getattr(model_instance, field.name, None)
+            if field in self.kwargs_create_item or value is not None:
+                continue
+
+            empty_fields.update({
+                field.name: value
+            })
+
+
+        model_instance.objects = MockManager()
+
+        for field in self.kwargs_create_item:
+
+            if type(self.kwargs_create_item[field]) is list:
+                continue
+
+            setattr(model_instance, field, self.kwargs_create_item[field])
+
+        method_values = model_instance.get_audit_values()
+
+        assert method_values == {
+            'id': model_instance.id,
+            **self.kwargs_create_item,
+            **m2m_fields,
+            **empty_fields,
+        }    # Correct Values Returned
+
+        assert len(method_values) == len([*model_instance._meta.fields, *model_instance._meta.many_to_many])
+        # Fail-Safe to ensure test writer fills all fields
+
+
+
 @pytest.mark.module_core
 class CenturionMixnPyTest(
     CenturionMixnTestCases,
@@ -712,39 +775,33 @@ class CenturionMixnPyTest(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
 
-        assert model_instance.get_audit_values() == {
-            'id': None,
-            **self.kwargs_create_item
-        }
+        assert model_instance.get_audit_values() == {}
 
 
 
-    def test_method_get_audit_values_clean_model_returns_fields_only(self, mocker, model_instance):
-        """Test Class Method
+    # def test_method_get_audit_values_clean_model_returns_fields_only(self, mocker, model_instance):
+    #     """Test Class Method
         
-        Ensure method `get_audit_values` returns All model fields as a dict
-        """
+    #     Ensure method `get_audit_values` returns All model fields as a dict
+    #     """
 
-        class MockManager:
+    #     class MockManager:
 
-            def get(*args, **kwargs):
-                return model_instance
+    #         def get(*args, **kwargs):
+    #             return model_instance
 
-        model_instance.objects = MockManager()
+    #     model_instance.objects = MockManager()
 
-        for field in self.kwargs_create_item:
+    #     for field in self.kwargs_create_item:
 
-            setattr(model_instance, field, self.kwargs_create_item[field])
+    #         setattr(model_instance, field, self.kwargs_create_item[field])
 
-        method_values = model_instance.get_audit_values()
+    #     method_values = model_instance.get_audit_values()
 
-        assert method_values == {
-            'id': model_instance.id,
-            **self.kwargs_create_item,
-        }    # Correct Values Returned
+    #     assert method_values == {}    # Correct Values Returned
 
-        assert len(method_values) == len(model_instance._meta.fields)
-        # Fail-Safe to ensure test writer fills all fields
+    #     assert len(method_values) == len( [ *model_instance._meta.fields, *model_instance._meta.many_to_many ])
+    #     # Fail-Safe to ensure test writer fills all fields
 
 
 
