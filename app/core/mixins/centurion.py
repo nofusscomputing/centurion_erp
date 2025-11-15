@@ -171,7 +171,8 @@ class Centurion(
             dict: Model fields
         """
 
-        data = self.__dict__.copy()
+        if self.pk is None:
+            return {}
 
         clean_data: dict = {}
 
