@@ -180,13 +180,17 @@ class Centurion(
 
             if hasattr(self, field.name):
 
-                data = getattr(self, field.name)
+                data = getattr(self, field.name, None)
 
                 if isinstance(field, models.ManyToManyField):
 
                     data = []
 
-                    for val in getattr(self, field.name).all():
+                    values = getattr(self, field.name).all()
+                    if len(values) < 1:
+                        data = None
+
+                    for val in values:
                         data += [ val.id ]
 
 

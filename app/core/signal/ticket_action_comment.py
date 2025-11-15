@@ -137,7 +137,7 @@ def ticket(instance) -> None:
         if(
             field_name not in instance._before
             and field_name in _after
-        ):
+        ):    # Add
 
             to_value = instance._after[field_name]
 
@@ -145,7 +145,7 @@ def ticket(instance) -> None:
             field_name in instance._before
             and field_name in _after
             and instance._before != _after
-        ):
+        ):    # Change
 
             value = instance._before[field_name]
             to_value = _after[field_name]
@@ -153,7 +153,7 @@ def ticket(instance) -> None:
         elif(
             field_name in instance._before
             and field_name not in _after
-        ):
+        ):    # Remove
 
             value = instance._before[field_name]
 
@@ -161,7 +161,17 @@ def ticket(instance) -> None:
             continue
 
 
-        if isinstance(instance._meta.get_field(field_name), models.ForeignKey):
+        if isinstance(instance._meta.get_field(field_name), models.DateTimeField):
+
+            if value:
+                value = str(value.utcfromtimestamp(value.timestamp()))+ '+00:00'
+
+
+            if to_value:
+                to_value = str(to_value.utcfromtimestamp(to_value.timestamp()))+ '+00:00'
+
+
+        elif isinstance(instance._meta.get_field(field_name), models.ForeignKey):
 
             if value:
                 value = f'${instance._meta.get_field(field_name).related_model.model_tag}-{value.id}'
@@ -169,6 +179,7 @@ def ticket(instance) -> None:
 
             if to_value:
                 to_value = f'${instance._meta.get_field(field_name).related_model.model_tag}-{to_value.id}'
+
 
         elif getattr(instance._meta.get_field(field_name), 'choices', None) is not None:
 
@@ -192,6 +203,7 @@ def ticket(instance) -> None:
 
 
             if choices_class:
+
                 if value:
                     value = choices_class(value).label
 
