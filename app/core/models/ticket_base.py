@@ -465,7 +465,7 @@ class TicketBase(
         # on_delete = models.PROTECT,
         related_name = 'ticket_subscription',
         symmetrical = False,
-        verbose_name = 'Users / Groups Subscribed',
+        verbose_name = 'Subscribers',
     )
 
     assigned_to = models.ManyToManyField(
@@ -475,7 +475,7 @@ class TicketBase(
         # on_delete = models.PROTECT,
         related_name = 'ticket_assigned',
         symmetrical = False,
-        verbose_name = 'Users / Groups Assigned',
+        verbose_name = 'Assignees',
     )
 
     planned_start_date = models.DateTimeField(
@@ -1007,28 +1007,24 @@ class TicketBase(
 
             elif comment_text:
 
-                if request:
+                user = type(self).context[self._meta.model_name].get_entity()
 
-                    if request.user.pk:
+                if user:
 
-                        comment_user = request.user
-
-                    else:
-
-                        comment_user = None
+                    comment_user = user
 
                 else:
 
                     comment_user = None
 
                 # User requires entity to be usable for ticket comment
-                # TicketCommentAction.objects.create(
-                #     organization = self.organization,
-                #     ticket = self,
-                #     comment_type = TicketCommentAction._meta.sub_model_type,
-                #     body = comment_text,
-                #     # user = user
-                # )
+                TicketCommentAction.objects.create(
+                    organization = self.organization,
+                    ticket = self,
+                    comment_type = TicketCommentAction._meta.sub_model_type,
+                    body = comment_text,
+                    user = comment_user,
+                )
 
         # return None
 
@@ -1050,9 +1046,9 @@ class TicketBase(
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
-        if getattr(self, '_before', None):
+        # if getattr(self, '_before', None):
 
-            self.create_action_comment()
+        #     self.create_action_comment()
 
         description = self.slash_command(self.description)
 
