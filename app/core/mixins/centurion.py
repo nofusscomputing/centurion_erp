@@ -175,12 +175,22 @@ class Centurion(
 
         clean_data: dict = {}
 
-        for field in self._meta.fields:
+        for field in [ *self._meta.fields, *self._meta.many_to_many ]:
 
             if hasattr(self, field.name):
 
+                data = getattr(self, field.name)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    data = []
+
+                    for val in getattr(self, field.name).all():
+                        data += [ val.id ]
+
+
                 clean_data.update({
-                    field.name: getattr(self, field.name)
+                    field.name: data
                 })
 
 
