@@ -39,7 +39,6 @@ def kwargs_knowledgebasecategory(django_db_blocker, kwargs_centurionmodel, model
                 # 'parent_category': '',
                 # 'target_team': '',
                 'target_user': user,
-                'modified': '2024-06-03T23:00:00Z',
             }
 
         return kwargs

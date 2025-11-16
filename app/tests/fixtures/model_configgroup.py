@@ -30,7 +30,6 @@ def kwargs_configgroups(django_db_blocker,
             **kwargs_centurionmodel(),
             'name': 'cg' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'config': {"key": "one", "existing": "dont_over_write"},
-            'modified': '2024-06-03T23:00:00Z',
             }
 
         return kwargs
