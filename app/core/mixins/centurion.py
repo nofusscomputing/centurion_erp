@@ -171,7 +171,8 @@ class Centurion(
             dict: Model fields
         """
 
-        data = self.__dict__.copy()
+        if self.pk is None:
+            return {}
 
         clean_data: dict = {}
 
@@ -179,14 +180,28 @@ class Centurion(
 
             if hasattr(self, field.name):
 
-                data = getattr(self, field.name)
+                if(
+                    field.auto_created
+                    and isinstance(field, models.OneToOneField)
+                ):
+                    continue
+
+                data = getattr(self, field.name, None)
 
                 if isinstance(field, models.ManyToManyField):
 
                     data = []
 
-                    for val in getattr(self, field.name).all():
+                    values = getattr(self, field.name).all()
+                    if len(values) < 1:
+                        data = None
+
+                    for val in values:
                         data += [ val.id ]
+
+                elif isinstance(field, models.DateTimeField):
+                    if data and type(data) is not str:
+                        data = data.isoformat(timespec='seconds')
 
 
                 clean_data.update({
