@@ -25,6 +25,23 @@ def create_action_comment(ticket, text, user) -> None:
     )
 
 
+def get_action_user(instance):
+
+    user = None
+
+    if hasattr(type(instance), 'context'):
+
+        for k, v in type(instance).context.items():
+
+            if k == 'logger' or getattr(v, 'username', '') == 'system':
+                continue
+
+            if v._meta.model_name == 'centurionuser':
+                user = v
+                break
+
+    return user
+
 
 def filter_models(instance, created) -> str | None:
     """Filter Models / Get Comment source
@@ -49,16 +66,26 @@ def filter_models(instance, created) -> str | None:
 
         base_model = base_model._meta.model_name
 
+    user = get_action_user(instance = instance)
 
     if(
         str(instance._meta.model_name).endswith('ticket')
         and base_model != 'ticketbase'
+        and user
     ):
 
         model_field = getattr(instance, 'model', None)
 
+        model_name = getattr(model_field, '_meta', '')
+        model_check = False
+
+        if model_name:
+            model_name = model_name.model_name
+
+            model_check = (model_name == str(model_name).replace('ticket', ''))
+
         if(
-            model_field._meta.model_name == str(instance._meta.model_name).replace('ticket', '')
+            model_check
             and not model_field._ticket_linkable
         ):
             return None
@@ -69,6 +96,7 @@ def filter_models(instance, created) -> str | None:
     elif(
         base_model == 'ticketbase'
         and not created
+        and user
     ):
 
         return 'ticket'    # Action comment ticket save
@@ -297,20 +325,9 @@ def link_model_ticket(instance) -> None:
         instance (Model): Model that was linked to ticket
     """
 
-    user = None
-    for k, v in type(instance).context.items():
-
-        if k == 'logger' or getattr(v, 'username', '') == 'system':
-            continue
-
-        if v._meta.model_name == 'centurionuser':
-            user = v
-            break
-
-
     create_action_comment(
         ticket = instance.ticket,
-        user = user.get_entity(),
+        user = get_action_user( instance = instance ).get_entity(),
         text = f'linked model ${instance.model.model_tag}-{instance.model.id}'
     )
 
@@ -323,11 +340,11 @@ def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
 
     action: str = kwargs.get('action', '')
 
+    action_comment_source = filter_models(instance, created)
+
     try:
 
         log: Logger = settings.CENTURION_LOG.getChild('ticket_action_comment')
-
-        action_comment_source = filter_models(instance, created)
 
         if(
             action_comment_source is None
@@ -373,11 +390,13 @@ def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
 
         log.error(
             msg = str(
-                'unable to save audit log for model '
+                'unable to save action comment for a ticket '
                 'vars: '
+                f"action_comment_source={action_comment_source} "
                 f"model={instance._meta.model_name} "
                 f"app_label={instance._meta.app_label} "
-                f"context={instance.context}"
+                f"context={instance.context} "
+                f"context2={type(instance).context} "
             ),
             exc_info = True
         )
