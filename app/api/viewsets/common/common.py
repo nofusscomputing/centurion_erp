@@ -148,7 +148,8 @@ class Create(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -212,7 +213,8 @@ class Destroy(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -276,7 +278,8 @@ class List(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -343,7 +346,8 @@ class Retrieve(
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -428,9 +432,6 @@ class Update(
                     status = 500
                 )
 
-        if hasattr(self.model, 'context'):
-
-            self.model.context = { 'logger': None }
 
         return response
 

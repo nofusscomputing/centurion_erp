@@ -54,7 +54,6 @@ def kwargs_gitrepository(django_db_blocker,
             'path': 'a_path',
             'name': 'the name',
             'description': 'a random bit of text.',
-            'modified': '2025-06-09T01:02:03Z'
         }
 
         return kwargs
