@@ -427,7 +427,7 @@ class TicketCommentBase(
                     and self.body != ''
                 )
             )
-            or self.comment_type == self.CommentType.SOLUTION
+            or self.comment_type == 'solution'
         ):
 
             super().save(force_insert=force_insert, force_update=force_update,
