@@ -268,6 +268,12 @@ class TicketCommentBase(
 
         if not self.is_template:
 
+            if(
+                self.pk is None
+                and self._meta.model_name == 'ticketcommentbase'
+            ):
+                self.is_closed = True
+
             if self.is_closed and self.date_closed is None:
 
                 self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(
