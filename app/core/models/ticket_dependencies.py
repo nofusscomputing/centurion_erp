@@ -151,6 +151,54 @@ class TicketDependency(
 
 
 
+    def delete(self, using = None, keep_parents = None):
+
+        super().delete(using = using, keep_parents = keep_parents)
+
+        if self.how_related == self.Related.BLOCKED_BY:
+
+            comment_field_value_from = f"Removed #{self.ticket.id} as blocked by #{self.dependent_ticket.id}"
+            comment_field_value_to = f"Removed #{self.dependent_ticket.id} as blocking #{self.ticket.id}"
+
+        elif self.how_related == self.Related.BLOCKS:
+
+            comment_field_value_from = f"Removed #{self.ticket.id} as blocking #{self.dependent_ticket.id}"
+            comment_field_value_to = f"Removed #{self.dependent_ticket.id} as blocked by #{self.ticket.id}"
+
+        elif self.how_related == self.Related.RELATED:
+
+            comment_field_value_from = f"Removed #{self.ticket.id} as related to #{self.dependent_ticket.id}"
+            comment_field_value_to = f"Removed #{self.dependent_ticket.id} as related to #{self.ticket.id}"
+
+
+        from core.models.ticket_comment_action import TicketCommentAction
+
+        if comment_field_value_from:
+
+            TicketCommentAction.objects.create(
+                ticket = self.ticket,
+                comment_type = TicketCommentAction._meta.sub_model_type,
+                body = comment_field_value_from,
+                source = TicketBase.TicketSource.DIRECT,
+                user = self.user,
+                is_closed = True,
+            )
+
+
+        if comment_field_value_to:
+
+            TicketCommentAction.objects.create(
+                ticket = self.dependent_ticket,
+                comment_type = TicketCommentAction._meta.sub_model_type,
+                body = comment_field_value_to,
+                source = TicketBase.TicketSource.DIRECT,
+                user = self.user,
+                is_closed = True,
+            )
+
+
+
+
     def get_url_kwargs(self, many = False) -> dict:
 
         kwargs = super().get_url_kwargs( many = many )
