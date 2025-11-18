@@ -156,6 +156,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 class ViewSet( SubModelViewSet_ReWrite ):
 
     allowed_methods = [
+        'DELETE',
         'GET',
         'OPTIONS',
         'POST',
