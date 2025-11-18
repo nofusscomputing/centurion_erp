@@ -286,7 +286,7 @@ class LinkedModelTicketCommentTestCases(
 
         action_comment = model_ticketcommentaction.objects.filter(
             ticket = ticket_comment.ticket,
-            body = f'linked model {command_obj}'
+            body = f'Linked model {command_obj}'
         )
 
 
