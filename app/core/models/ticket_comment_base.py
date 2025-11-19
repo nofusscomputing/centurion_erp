@@ -279,6 +279,9 @@ class TicketCommentBase(
                 self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(
                     microsecond=0).isoformat()
 
+            elif not self.is_closed and self.date_closed is not None:
+                self.date_closed = None
+
 
             if self.comment_type != self._meta.sub_model_type:
 
@@ -437,3 +440,13 @@ class TicketCommentBase(
             if hasattr(self.ticket, '_ticket_comments'):
 
                 del self.ticket._ticket_comments
+
+            if self.parent:
+
+                if(
+                    self.parent.is_closed
+                    and self.comment_type not in [ 'action', 'solution' ]
+                ):
+
+                    self.parent.is_closed = False
+                    self.parent.save()
