@@ -1,12 +1,16 @@
 import pytest
 
-from access.tests.functional.entity.test_functional_entity_model import EntityModelInheritedCases
+from access.tests.functional.entity.test_functional_entity_model import (
+    EntityModelInheritedCases,
+    TicketAssigneeEntityTestCases,
+)
 
 
 
 @pytest.mark.model_person
 class PersonModelTestCases(
-    EntityModelInheritedCases
+    TicketAssigneeEntityTestCases,
+    EntityModelInheritedCases,
 ):
     pass
 
