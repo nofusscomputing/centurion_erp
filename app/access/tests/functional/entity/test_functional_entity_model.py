@@ -83,6 +83,81 @@ class TicketAssigneeEntityTestCases:
 
 
 
+class TicketSubscriberEntityTestCases:
+    """Person / Company Entity Test Suite
+
+    This test suite is intended to be included within model Functional test
+    suites for Entities that can be subscribed to a ticket.
+    """
+
+
+    @pytest.mark.module_core
+    @pytest.mark.model_ticketbase
+    @pytest.mark.model_ticketcommentaction
+    @pytest.mark.tickets
+    def test_ticket_subscriber_add_action_comment(self, mocker,
+        created_model, ticket,
+        model_ticketbase, model_ticketcommentaction,
+    ):
+        """Ticket Action Check
+
+        Ensure that when an subscriber is added to a ticket an action comment
+        is created.
+        """
+
+        context = mocker.patch('core.mixins.centurion.Centurion.context', {
+            'logger': None,
+            model_ticketbase._meta.model_name: ticket.opened_by.user,
+            created_model._meta.model_name: ticket.opened_by.user,
+        })
+
+        ticket.subscribed_to.add( created_model )
+
+        action_comment = model_ticketcommentaction.objects.filter(
+            ticket = ticket,
+            body = f'Added $entity-{created_model.id} to Subscribers'
+        )
+
+
+        assert len(action_comment) == 1
+
+
+
+    @pytest.mark.module_core
+    @pytest.mark.model_ticketbase
+    @pytest.mark.model_ticketcommentaction
+    @pytest.mark.tickets
+    def test_ticket_subscriber_remove_action_comment(self, mocker,
+        created_model, ticket,
+        model_ticketbase, model_ticketcommentaction,
+    ):
+        """Ticket Action Check
+
+        Ensure that when an subscriber is removed from a ticket an action comment
+        is created.
+        """
+
+        context = mocker.patch('core.mixins.centurion.Centurion.context', {
+            'logger': None,
+            model_ticketbase._meta.model_name: ticket.opened_by.user,
+            created_model._meta.model_name: ticket.opened_by.user,
+        })
+
+        ticket.subscribed_to.add( created_model )
+
+        ticket.subscribed_to.remove( created_model )
+
+
+        action_comment = model_ticketcommentaction.objects.filter(
+            ticket = ticket,
+            body = f'Removed $entity-{created_model.id} from Subscribers'
+        )
+
+
+        assert len(action_comment) == 1
+
+
+
 @pytest.mark.model_entity
 class EntityModelTestCases(
     CenturionAbstractTenancyModelInheritedCases
