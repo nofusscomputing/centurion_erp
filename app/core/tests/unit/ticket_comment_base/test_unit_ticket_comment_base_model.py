@@ -497,9 +497,36 @@ class TicketCommentBaseModelTestCases(
         kwargs['parent'] = parent_obj
         kwargs['ticket'] = ticket
 
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
 
         assert len(parent_obj.threads.all()) > 0, 'Test requires there be threads.'

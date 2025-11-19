@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models.signals import (
     m2m_changed,
+    post_delete,
     post_save,
 )
 from django.dispatch import receiver
@@ -19,6 +20,7 @@ def create_action_comment(ticket, text, user) -> None:
     TicketCommentAction.objects.create(
         organization = ticket.organization,
         ticket = ticket,
+        is_closed = True,
         comment_type = TicketCommentAction._meta.sub_model_type,
         body = text,
         user = user,
@@ -318,27 +320,38 @@ def ticket_m2m(instance, field, model, action:str, ids: list[int] ) -> None:
 
 
 
-def link_model_ticket(instance) -> None:
+def link_model_ticket(instance, action:str) -> None:
     """Create action comment when model linked
 
     Args:
         instance (Model): Model that was linked to ticket
+        action (str): What action occured. choice: '' | delete.
     """
+
+    text: str = 'Linked model'
+    if action == 'delete':
+
+        text: str = 'Un-linked model'
+
 
     create_action_comment(
         ticket = instance.ticket,
         user = get_action_user( instance = instance ).get_entity(),
-        text = f'linked model ${instance.model.model_tag}-{instance.model.id}'
+        text = f'{text} ${instance.model.model_tag}-{instance.model.id}'
     )
 
 
 
 @receiver(signal=m2m_changed, sender=TicketBase.assigned_to.through, dispatch_uid="ticket_action_comment_save")
 @receiver(signal=m2m_changed, sender=TicketBase.subscribed_to.through, dispatch_uid="ticket_action_comment_save")
+@receiver(signal=post_delete, dispatch_uid="ticket_action_comment_save")
 @receiver(signal=post_save, dispatch_uid="ticket_action_comment_save")
 def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
 
     action: str = kwargs.get('action', '')
+
+    if kwargs.get('signal') is post_delete:
+        action = 'post_delete'
 
     action_comment_source = filter_models(instance, created)
 
@@ -383,7 +396,10 @@ def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
 
         elif action_comment_source == 'model':    # Model linked / un-linked
 
-            link_model_ticket(instance)
+            link_model_ticket(
+                instance = instance, 
+                action = str(action)[5:],
+            )
 
 
     except Exception as e:

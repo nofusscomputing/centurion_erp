@@ -286,7 +286,89 @@ class LinkedModelTicketCommentTestCases(
 
         action_comment = model_ticketcommentaction.objects.filter(
             ticket = ticket_comment.ticket,
-            body = f'linked model {command_obj}'
+            body = f'Linked model {command_obj}'
+        )
+
+
+        assert len(action_comment) == 1
+
+
+
+    @pytest.mark.module_core
+    @pytest.mark.model_ticketcommentaction
+    @pytest.mark.slash_command
+    @pytest.mark.slash_command_linked_model
+    @pytest.mark.tickets
+    def test_slash_command_link_ticket_comment_creates_action_comment_on_remove(self, 
+        mocker, model,
+        created_model, ticket_comment,
+        parameterized, param_key_slash_command,
+        param_link, param_slash_command,
+        param_text, param_stays_in_comment,
+        model_ticketcommentaction, model_ticketcommentbase
+    ):
+        """Slash command Check
+
+        Ensure that an action comment is created and linked to the ticket
+        when a model is un-linked.
+        """
+
+        if not getattr(created_model, '_ticket_linkable', False):
+            pytest.xfail( reason = 'Model is not ticket linkable. Test is N/A.' )
+
+
+        if param_stays_in_comment:
+            pytest.xfail( reason = 'slash command is invalid. Test is N/A.' )
+
+
+        context = mocker.patch('core.mixins.centurion.Centurion.context', {
+            'logger': None,
+            model_ticketcommentbase._meta.model_name: ticket_comment.user.user,
+        })
+
+        comment_text = param_text
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str( f'${created_model.model_tag}-{created_model.id}' )
+
+        ticket_comment.body = str(
+            comment_text.replace(
+                'COMMAND', f'/{param_slash_command} ' + command_obj
+            )
+        )
+
+
+        ticket_comment.save()
+
+        action_comment = model_ticketcommentaction.objects.filter(
+            ticket = ticket_comment.ticket,
+            body = f'Linked model {command_obj}'
+        )
+
+
+        assert len(action_comment) == 1, 'The model appears to not have linked the model'
+
+        model_name = created_model
+        if created_model._is_submodel:
+            model_name = created_model._base_model
+
+        ticket_linked_model = apps.get_model(
+            app_label = model_name._meta.app_label,
+            model_name = f'{model_name._meta.model_name}ticket'
+        )
+
+        ticket_link = ticket_linked_model.objects.get(
+            ticket = ticket_comment.ticket,
+            model = created_model
+        )
+
+        ticket_link.delete()
+
+        action_comment = model_ticketcommentaction.objects.filter(
+            ticket = ticket_comment.ticket,
+            body = f'Un-linked model {command_obj}'
         )
 
 

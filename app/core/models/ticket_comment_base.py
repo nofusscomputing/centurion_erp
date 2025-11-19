@@ -268,10 +268,19 @@ class TicketCommentBase(
 
         if not self.is_template:
 
+            if(
+                self.pk is None
+                and self._meta.model_name == 'ticketcommentbase'
+            ):
+                self.is_closed = True
+
             if self.is_closed and self.date_closed is None:
 
                 self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(
                     microsecond=0).isoformat()
+
+            elif not self.is_closed and self.date_closed is not None:
+                self.date_closed = None
 
 
             if self.comment_type != self._meta.sub_model_type:
@@ -421,7 +430,7 @@ class TicketCommentBase(
                     and self.body != ''
                 )
             )
-            or self.comment_type == self.CommentType.SOLUTION
+            or self.comment_type == 'solution'
         ):
 
             super().save(force_insert=force_insert, force_update=force_update,
@@ -431,3 +440,13 @@ class TicketCommentBase(
             if hasattr(self.ticket, '_ticket_comments'):
 
                 del self.ticket._ticket_comments
+
+            if self.parent:
+
+                if(
+                    self.parent.is_closed
+                    and self.comment_type not in [ 'action', 'solution' ]
+                ):
+
+                    self.parent.is_closed = False
+                    self.parent.save()
