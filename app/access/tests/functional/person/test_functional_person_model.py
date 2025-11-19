@@ -3,6 +3,7 @@ import pytest
 from access.tests.functional.entity.test_functional_entity_model import (
     EntityModelInheritedCases,
     TicketAssigneeEntityTestCases,
+    TicketSubscriberEntityTestCases,
 )
 
 
@@ -10,6 +11,7 @@ from access.tests.functional.entity.test_functional_entity_model import (
 @pytest.mark.model_person
 class PersonModelTestCases(
     TicketAssigneeEntityTestCases,
+    TicketSubscriberEntityTestCases,
     EntityModelInheritedCases,
 ):
     pass
