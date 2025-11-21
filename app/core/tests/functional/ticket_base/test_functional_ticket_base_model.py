@@ -1,6 +1,6 @@
 import pytest
 
-from django.db import models
+from django.apps import apps
 
 from core.models.ticket_base import (
     TicketBase
@@ -109,6 +109,174 @@ class TicketBaseModelTestCases(
         ticket.clean()
 
         assert ticket.is_closed
+
+
+
+    @pytest.mark.module_core
+    @pytest.mark.model_ticketcommentaction
+    @pytest.mark.regression
+    @pytest.mark.signal_action_comment
+    @pytest.mark.slash_command
+    @pytest.mark.slash_command_dependency
+    @pytest.mark.tickets
+    def test_action_comment_for_link_ticket_on_source_ticket(self, model,
+        model_ticketbase, kwargs_ticketbase,
+        model_ticketcommentbase, kwargs_ticketcommentbase,
+        ticket,
+    ):
+        """Test Action Comment Creation
+
+        Ensure that when a ticket is linked to another, that an action comment is
+        created on the source ticket.
+        """
+
+        dest_ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
+
+        ticket.save()
+
+        kwargs = kwargs_ticketcommentbase()
+        kwargs['ticket'] = ticket
+        kwargs['body'] = f"{kwargs['body']}\n\n/relate #{dest_ticket.id}"
+
+        comment = model_ticketcommentbase.objects.create( **kwargs )
+
+        action_comment = model_ticketcommentbase.objects.get(
+            ticket = ticket,
+            body = f'added #{ticket.id} as related to #{dest_ticket.id}'
+        )
+
+        assert action_comment.body == f'added #{ticket.id} as related to #{dest_ticket.id}'
+
+
+
+    @pytest.mark.module_core
+    @pytest.mark.model_ticketcommentaction
+    @pytest.mark.regression
+    @pytest.mark.signal_action_comment
+    @pytest.mark.slash_command
+    @pytest.mark.slash_command_dependency
+    @pytest.mark.tickets
+    def test_action_comment_for_unlink_ticket_on_source_ticket(self, model,
+        model_ticketbase, kwargs_ticketbase,
+        model_ticketcommentbase, kwargs_ticketcommentbase,
+        ticket,
+    ):
+        """Test Action Comment Creation
+
+        Ensure that when a ticket is linked to another, that an action comment is
+        created on the source ticket.
+        """
+
+        dest_ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
+
+        ticket.save()
+
+        kwargs = kwargs_ticketcommentbase()
+        kwargs['ticket'] = ticket
+        kwargs['body'] = f"{kwargs['body']}\n\n/relate #{dest_ticket.id}"
+
+        comment = model_ticketcommentbase.objects.create( **kwargs )
+
+        dependency_model = apps.get_model(
+            app_label = 'core',
+            model_name = 'ticketdependency'
+        ).objects.get(
+            ticket = ticket,
+            dependent_ticket = dest_ticket
+        )
+
+        dependency_model.delete()
+
+        action_comment = model_ticketcommentbase.objects.get(
+            ticket = ticket,
+            body = f'Removed #{ticket.id} as related to #{dest_ticket.id}'
+        )
+
+        assert action_comment.body == f'Removed #{ticket.id} as related to #{dest_ticket.id}'
+
+
+
+    @pytest.mark.module_core
+    @pytest.mark.model_ticketcommentaction
+    @pytest.mark.regression
+    @pytest.mark.signal_action_comment
+    @pytest.mark.slash_command
+    @pytest.mark.slash_command_dependency
+    @pytest.mark.tickets
+    def test_action_comment_for_link_ticket_on_dest_ticket(self, model,
+        model_ticketbase, kwargs_ticketbase,
+        model_ticketcommentbase, kwargs_ticketcommentbase,
+        ticket,
+    ):
+        """Test Action Comment Creation
+
+        Ensure that when a ticket is linked to another, that an action comment is
+        created on the source ticket.
+        """
+
+        dest_ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
+
+        ticket.save()
+
+        kwargs = kwargs_ticketcommentbase()
+        kwargs['ticket'] = ticket
+        kwargs['body'] = f"{kwargs['body']}\n\n/relate #{dest_ticket.id}"
+
+        comment = model_ticketcommentbase.objects.create( **kwargs )
+
+        action_comment = model_ticketcommentbase.objects.get(
+            ticket = dest_ticket,
+            body = f'added #{dest_ticket.id} as related to #{ticket.id}'
+        )
+
+        assert action_comment.body == f'added #{dest_ticket.id} as related to #{ticket.id}'
+
+
+
+    @pytest.mark.module_core
+    @pytest.mark.model_ticketcommentaction
+    @pytest.mark.regression
+    @pytest.mark.signal_action_comment
+    @pytest.mark.slash_command
+    @pytest.mark.slash_command_dependency
+    @pytest.mark.tickets
+    def test_action_comment_for_un_link_ticket_on_dest_ticket(self, model,
+        model_ticketbase, kwargs_ticketbase,
+        model_ticketcommentbase, kwargs_ticketcommentbase,
+        ticket,
+    ):
+        """Test Action Comment Creation
+
+        Ensure that when a ticket is linked to another, that an action comment is
+        created on the source ticket.
+        """
+
+        dest_ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
+
+        ticket.save()
+
+        kwargs = kwargs_ticketcommentbase()
+        kwargs['ticket'] = ticket
+        kwargs['body'] = f"{kwargs['body']}\n\n/relate #{dest_ticket.id}"
+
+        comment = model_ticketcommentbase.objects.create( **kwargs )
+
+        dependency_model = apps.get_model(
+            app_label = 'core',
+            model_name = 'ticketdependency'
+        ).objects.get(
+            ticket = ticket,
+            dependent_ticket = dest_ticket
+        )
+
+        dependency_model.delete()
+
+        action_comment = model_ticketcommentbase.objects.get(
+            ticket = dest_ticket,
+            body = f'Removed #{dest_ticket.id} as related to #{ticket.id}'
+        )
+
+        assert action_comment.body == f'Removed #{dest_ticket.id} as related to #{ticket.id}'
 
 
 
