@@ -1361,6 +1361,7 @@ markers = [
     "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
     "tickets: Selects all tests for tickets",
+    "signal_action_comment: Selects all tests for signal action_comment.",
     "slash_command: Selects all test for Ticket/Ticket Comment slash commands.",
     "slash_command_linked_model: Selects all test for Ticket/Ticket Comment slash command /link.",
     "unit: Selects all Unit Tests.",

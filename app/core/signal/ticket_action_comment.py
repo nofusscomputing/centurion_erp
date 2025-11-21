@@ -35,7 +35,11 @@ def get_action_user(instance):
 
         for k, v in type(instance).context.items():
 
-            if k == 'logger' or getattr(v, 'username', '') == 'system':
+            if(
+                k == 'logger'
+                or getattr(v, 'username', '') == 'system'
+                or v == None
+            ):
                 continue
 
             if v._meta.model_name == 'centurionuser':
