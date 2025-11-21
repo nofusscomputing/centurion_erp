@@ -10,7 +10,21 @@ from core.tests.functional.ticket_base.test_functional_ticket_base_model import 
 class SLMTicketModelTestCases(
     TicketBaseModelInheritedTestCases
 ):
-    pass
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {
+            'ttr': {
+                'field': 'ttr',
+                'type': int
+            },
+            'tto': {
+                'field': 'tto',
+                'type': int
+            },
+        }
+
 
 
 class SLMTicketModelInheritedTestCases(
