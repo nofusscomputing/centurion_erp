@@ -268,7 +268,10 @@ class Centurion(
 
             for related_object in getattr(meta, 'related_objects', []):
 
-                if not issubclass(related_object.related_model, self._base_model):
+                if(
+                    not issubclass(related_object.related_model, self._base_model)
+                    or not issubclass(type(related_object), models.OneToOneRel)
+                ):
 
                     continue
 
