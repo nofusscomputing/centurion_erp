@@ -104,6 +104,18 @@ class TicketCommentCategory(
                         'modified',
                     ]
                 },
+                {
+                    "layout": "double",
+                    "name": "Comment Types",
+                    "left": [
+                        'comment',
+                        'notification',
+                    ],
+                    "right": [
+                        'solution',
+                        'task',
+                    ]
+                },
             ]
         },
         {
