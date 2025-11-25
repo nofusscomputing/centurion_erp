@@ -365,6 +365,12 @@ from .model_ticketcommentsolution import (
     serializer_ticketcommentsolution,
 )
 
+from .model_ticketcommenttask import (
+    model_ticketcommenttask,
+    kwargs_ticketcommenttask,
+    serializer_ticketcommenttask,
+)
+
 from .model_ticketdependency import (
     kwargs_ticketdependency,
     model_ticketdependency,
