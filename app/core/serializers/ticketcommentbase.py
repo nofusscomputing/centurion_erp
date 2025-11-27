@@ -88,17 +88,19 @@ class ModelSerializer(
 
         if item.id is not None and item.__class__._meta.model_name != 'ticketcommentsolution':
 
-            urls.update({
-                'threads': reverse(
-                    'API:_api_ticket_comment_base_sub_thread-list',
-                    request = self._context['view'].request,
-                    kwargs={
-                        'ticket_id': ticket_id,
-                        'ticket_comment_model': 'comment',
-                        'parent_id': item.id
-                    }
-                )
-            })
+            if len(item.threads.all()) > 0:    # Only present threads URL when there are threads.
+
+                urls.update({
+                    'threads': reverse(
+                        'API:_api_ticket_comment_base_sub_thread-list',
+                        request = self._context['view'].request,
+                        kwargs={
+                            'ticket_id': ticket_id,
+                            'ticket_comment_model': 'comment',
+                            'parent_id': item.id
+                        }
+                    )
+                })
 
         return urls
 
