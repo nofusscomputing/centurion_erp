@@ -584,8 +584,13 @@ class CommonViewSet(
             if not msg:
                 msg = str(ex)
 
+            msg = f'20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug. msg was {msg}'
+            self.get_log().exception(
+                msg = msg
+            )
+
             exc = APIException(
-                detail = f'20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug. msg was {msg}',
+                detail = msg,
                 code = 'unknown_exception'
             )
 

@@ -2,10 +2,11 @@ import importlib
 
 from django.apps import apps
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, PolymorphicProxySerializer
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes, OpenApiResponse, PolymorphicProxySerializer
 
 from api.viewsets.common.tenancy import SubModelViewSet
 
+from core.serializers.ticketcommentbase import ModelSerializer
 from core.models.ticket_comment_base import (
     TicketBase,
     TicketCommentBase
@@ -36,7 +37,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             )
 
             serializers.update({
-                str(model._meta.verbose_name).lower().replace(' ', '_'): getattr(serializer_module, serializer_type + 'Serializer')
+                model._meta.sub_model_type: getattr(serializer_module, serializer_type + 'Serializer')
             })
 
     return serializers
@@ -49,14 +50,24 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description="""Ticket Comment API requests depend upon the users permission and comment type. 
         To view an examaple of a request, select the correct schema _Link above example, called schema_.
 
-Responses from the API are the same for all users when the request returns 
+        Responses from the API are the same for all users when the request returns 
         status `HTTP/20x`.
         """,
         parameters = [
             OpenApiParameter(
                 name = 'ticket_id',
                 location = 'path',
-                type = int
+                type = OpenApiTypes.INT64
+            ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'ticket_comment_model',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
             ),
         ],
         request = PolymorphicProxySerializer(
