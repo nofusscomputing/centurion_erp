@@ -167,7 +167,9 @@ Ticket comments support [markdown](./markdown.md) as well as slash commands. Com
 
     A solution comment has all of the features a standard comment has. In addition, leaving this type of comment will mark the ticket as solved as long as it meets the [criteria](#solving-a-ticket).
 
-- ~~Task _Change, Incident, Problem, Project Tasks and Request tickets._~~ _awaiting [github-564](https://github.com/nofusscomputing/centurion_erp/issues/564)_
+- Task
+
+    A task comment as the name implies is for recording and categorising work done on a ticket.
 
 
 ## Slash Commands
