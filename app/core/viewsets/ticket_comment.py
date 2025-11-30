@@ -281,7 +281,7 @@ class ViewSet(
             self._has_purge = True
 
 
-        triage_permission = self.model._meta.app_label + '.triage_' + self.model._meta.model_name
+        triage_permission = self.parent_model._meta.app_label + '.triage_' + self.parent_model._meta.model_name
 
         if(triage_permission in self.request.user.get_permissions( tenancy = False )):
 

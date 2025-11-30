@@ -22,6 +22,35 @@ class ViewsetTestCases(
         return ViewSet
 
 
+    @pytest.mark.skip( reason = 'To be written.' )
+    def test_permission_triage_task_comment_create(self):
+        """Ticket Permission Check
+        
+        Only a user with permission `triage` on the ticket being edited
+        can `create` a ticket task comment
+        """
+        pass
+
+
+    @pytest.mark.skip( reason = 'To be written.' )
+    def test_permission_triage_task_comment_edit(self):
+        """Ticket Permission Check
+        
+        Only a user with permission `triage` on the ticket being edited
+        can `create` a ticket task comment
+        """
+        pass
+
+
+    @pytest.mark.skip( reason = 'To be written.' )
+    def test_permission_triage_task_comment_delete(self):
+        """Ticket Permission Check
+        
+        Only a user with permission `triage` on the ticket being edited
+        can `create` a ticket task comment
+        """
+        pass
+
 
 class TicketBaseViewsetInheritedCases(
     ViewsetTestCases,
