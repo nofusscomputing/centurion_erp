@@ -169,7 +169,7 @@ Ticket comments support [markdown](./markdown.md) as well as slash commands. Com
 
 - Task
 
-    A task comment as the name implies is for recording and categorising work done on a ticket.
+    A task comment as the name implies is for recording and categorising work done on a ticket. This type of ticket is reserverd for a user whom has the `triage` permission for the ticket being worked on.
 
 
 ## Slash Commands
