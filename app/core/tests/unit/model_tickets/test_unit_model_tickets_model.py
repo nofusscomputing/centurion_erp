@@ -2,7 +2,7 @@ import pytest
 
 from django.db import models
 
-from core.models.model_tickets import ModelTicket
+from core.models.model_tickets import ModelTicket, TicketBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractBaseModelInheritedCases
 )

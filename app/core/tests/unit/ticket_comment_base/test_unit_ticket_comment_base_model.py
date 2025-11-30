@@ -295,9 +295,9 @@ class TicketCommentBaseModelTestCases(
 
         permission_found = False
 
-        for permission, description in model._meta.permissions:
+        for permission, description in model.ticket.field.related_model._meta.permissions:
 
-            if permission == 'triage_' + model._meta.model_name:
+            if permission == 'triage_' + model.ticket.field.related_model._meta.model_name:
 
                 permission_found = True
                 break
