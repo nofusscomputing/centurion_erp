@@ -123,6 +123,7 @@ class ModelTicketViewsetMetaInheritedCases(
             user.delete()
 
 
+
     def test_function_get_queryset_manager_calls_user(self, mocker,
         model, model_instance, model_kwargs, viewset
     ):

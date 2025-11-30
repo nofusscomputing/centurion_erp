@@ -1,13 +1,18 @@
 import pytest
 
+from django.db import models
+
 from api.tests.unit.viewset.test_unit_tenancy_viewset import (
     SubModelViewSetInheritedCases,
 )
 
+from core.models.ticket_base import TicketBase
 from core.viewsets.ticket_model_link import (
     ModelTicket,
     ViewSet,
 )
+
+
 
 @pytest.mark.tickets
 @pytest.mark.model_modelticket
@@ -43,6 +48,9 @@ class ViewsetTestCases(
                    'organization'
                 ]
             },
+            'metadata_markdown': {
+                'value': True
+            },
             'model': {
                 'value': ModelTicket
             },
@@ -55,6 +63,14 @@ class ViewsetTestCases(
             'model_suffix': {
                 'type': str,
                 'value': 'ticket'
+            },
+            'parent_model': {
+                'type': models.base.ModelBase,
+                'value': TicketBase
+            },
+            'parent_model_pk_kwarg': {
+                'type': str,
+                'value': 'model_id'
             },
             'serializer_class': {
                 'type': type(None),
@@ -72,6 +88,12 @@ class ViewsetTestCases(
                 'type': type(None),
             }
         }
+
+
+
+    def test_function_get_parent_model(self, viewset):
+
+        assert viewset().get_parent_model() is TicketBase
 
 
 
