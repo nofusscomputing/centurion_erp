@@ -303,8 +303,8 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 queryset = field.context['view'].get_queryset()
 
-                from core.lib.slash_commands.link_model import CommandLinkModelTicket
                 from core.models.ticket_base import TicketBase
+                from core.models.model_tickets import ModelTicket
 
                 for obj in queryset:
 
@@ -317,7 +317,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                     if value:
 
-                        linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + str(value) + ' ')
                         linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', str(value))
 
                     if hasattr(obj, 'dependent_ticket'):
@@ -345,32 +344,33 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                             pass
 
 
-                    for model_type, model_id in linked_models:
+                    for model in ModelTicket.objects.filter(
+                        ticket_id = int(field.context['view'].kwargs[field.context['view'].parent_model_pk_kwarg])
+                    ):
 
                         try:
 
-                            model = CommandLinkModelTicket().get_model( model_type )
+                            if not hasattr(model.model, 'id'):
+                                continue
 
-                            if model:
+                            model = model.get_related_model()
 
-                                item = model.objects.get( pk = model_id )
-
-                                item_meta = { 
-                                    model_id: {
-                                        'title': str(item),
-                                        'url': str(item.get_url()).replace('/api/v2', ''),
-                                    }
+                            item_meta = { 
+                                str(model.model.id): {
+                                    'title': str(model),
+                                    'url': str(model.model.get_url()).replace('/api/v2', ''),
                                 }
+                            }
 
-                                if not field_info["render"]['models'].get(model_type, None):
+                            if not field_info["render"]['models'].get(model.model.model_tag, None):
 
-                                    field_info["render"]['models'].update({
-                                        model_type: item_meta
-                                    })
+                                field_info["render"]['models'].update({
+                                    model.model.model_tag: item_meta
+                                })
 
-                                else:
+                            else:
 
-                                    field_info["render"]['models'][model_type].update( item_meta )
+                                field_info["render"]['models'][model.model.model_tag].update( item_meta )
 
                         except model.DoesNotExist as e:
 
