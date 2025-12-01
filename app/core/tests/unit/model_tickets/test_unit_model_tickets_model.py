@@ -2,7 +2,7 @@ import pytest
 
 from django.db import models
 
-
+from core.models.model_tickets import ModelTicket, TicketBase
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractBaseModelInheritedCases
 )
@@ -27,6 +27,10 @@ class ModelTicketModelTestCases(
         return {
             '_audit_enabled': {
                 'value': False
+            },
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': ModelTicket
             },
             '_notes_enabled': {
                 'value': False

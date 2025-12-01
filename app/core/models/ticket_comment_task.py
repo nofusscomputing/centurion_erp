@@ -20,7 +20,6 @@ class TicketCommentTask(
         permissions = [
             ('import_ticketcommenttask', 'Can import ticket task comment.'),
             ('purge_ticketcommenttask', 'Can purge ticket task comment.'),
-            ('triage_ticketcommenttask', 'Can triage ticket task comment.'),
         ]
 
         sub_model_type = 'task'

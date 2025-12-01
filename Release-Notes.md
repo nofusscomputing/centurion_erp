@@ -1,10 +1,16 @@
 ## Version v1.28.0
 
-- Change Ticket model added behind feature flag `2025-00009` and will remain behind this flag until production ready.
+- New models:
 
-- Incident Ticket model added behind feature flag `2025-00010` and will remain behind this flag until production ready.
+    Any model behind a feature flag will remain behind the flag until production ready.
 
-- Problem Ticket model added behind feature flag `2025-00011` and will remain behind this flag until production ready.
+    - Change Ticket model added behind feature flag `2025-00009`.
+
+    - Incident Ticket model added behind feature flag `2025-00010`.
+
+    - Problem Ticket model added behind feature flag `2025-00011`.
+
+    - Ticket Task model added behind feature flag `2025-00006` and will remain until production ready.
 
 
 ## Version v1.27.0

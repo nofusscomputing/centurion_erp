@@ -12,7 +12,7 @@ from drf_spectacular.utils import (
 
 from api.viewsets.common.tenancy import SubModelViewSet_ReWrite
 
-from core.models.model_tickets import ModelTicket
+from core.models.model_tickets import ModelTicket, TicketBase
 
 
 
@@ -169,9 +169,15 @@ class ViewSet( SubModelViewSet_ReWrite ):
         'organization',
     ]
 
+    metadata_markdown = True
+
     model_kwarg = 'model_name'
 
     model_suffix = 'ticket'
+
+    parent_model = TicketBase
+
+    parent_model_pk_kwarg = 'model_id'
 
     view_description = 'Models linked to ticket'
 

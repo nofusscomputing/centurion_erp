@@ -53,7 +53,6 @@ class TicketCommentBase(
         permissions = [
             ('import_ticketcommentbase', 'Can import ticket comment.'),
             ('purge_ticketcommentbase', 'Can purge ticket comment.'),
-            ('triage_ticketcommentbase', 'Can triage ticket comment.'),
         ]
 
         sub_model_type = 'comment'
