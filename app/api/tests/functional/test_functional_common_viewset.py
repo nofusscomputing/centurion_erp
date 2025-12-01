@@ -258,6 +258,12 @@ class CommonViewSetTestCases:
 
         only_user_results_returned = True
 
+        for permission_class in viewset.permission_classes:
+            viewset.permissions_required = permission_class().get_required_permissions(
+            method = 'GET',
+            model_cls = model
+        )
+
         queryset = viewset.get_queryset()
 
         assert len(model.objects.all()) >= 2, 'multiple objects must exist for test to work'

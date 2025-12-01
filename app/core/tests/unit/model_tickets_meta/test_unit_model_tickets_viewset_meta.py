@@ -144,8 +144,6 @@ class ModelTicketViewsetMetaInheritedCases(
 
         tester = obj.get_url_kwargs( many = True)
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.get_queryset()
 
         manager.user.assert_called()
@@ -164,8 +162,6 @@ class ModelTicketViewsetMetaInheritedCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 
@@ -196,8 +192,6 @@ class ModelTicketViewsetMetaInheritedCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 

@@ -158,8 +158,6 @@ class ViewsetTestCases(
             'ticket_id': model_kwargs()['ticket'].id
         }
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         if model._is_submodel:
             view_set.kwargs =  {
                 view_set.model_kwarg: model._meta.model_name
@@ -178,8 +176,6 @@ class ViewsetTestCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 

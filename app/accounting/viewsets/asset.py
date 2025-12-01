@@ -217,10 +217,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 class ViewSet( SubModelViewSet_ReWrite ):
 
     _has_purge: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has purge permission.
-    """
+    """User Permission"""
 
     base_model = AssetBase
 

@@ -266,14 +266,14 @@ class ViewSet(ModelViewSet):
         if 'ticket_id' in self.kwargs:
 
             self.queryset = TicketLinkedItem.objects.user(
-                user = self.request.user, permission = self._permission_required
+                user = self.request.user, permission = self.permissions_required
             ).filter(ticket=self.kwargs['ticket_id']).order_by('id')
 
         elif 'item_id' in self.kwargs:
 
 
             self.queryset = TicketLinkedItem.objects.user(
-                user = self.request.user, permission = self._permission_required
+                user = self.request.user, permission = self.permissions_required
             ).filter(
                 item=int(self.kwargs['item_id']),
                 item_type = self.item_type
