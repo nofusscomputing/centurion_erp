@@ -74,8 +74,6 @@ class ViewsetTestCases(
 
         view_set = viewset_mock_request
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.kwargs = { 'project_id': model_kwargs()['project'].id }
 
         assert view_set.queryset is None    # Must be empty before init
@@ -98,8 +96,6 @@ class ViewsetTestCases(
         """
 
         view_set = viewset_mock_request
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.kwargs = {
             'project_id': model_kwargs()['project'].id
@@ -140,8 +136,6 @@ class ViewsetTestCases(
                 'project_id': model_kwargs()['project'].id
         }
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.get_queryset()
 
         manager.user.assert_called()
@@ -158,8 +152,6 @@ class ViewsetTestCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 

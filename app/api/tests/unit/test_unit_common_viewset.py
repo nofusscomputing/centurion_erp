@@ -403,7 +403,7 @@ class CommonViewSetTestCases(
                 'type': str,
                 'value': None
             },
-            '_permission_required': {
+            'permissions_required': {
                 'type': type(None),
                 'value': None
             },
@@ -474,7 +474,6 @@ class CommonViewSetTestCases(
         """
 
         view_set = viewset_mock_request
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         from django.db import connection
         from django.test.utils import CaptureQueriesContext
@@ -502,7 +501,6 @@ class CommonViewSetTestCases(
         """
 
         view_set = viewset_mock_request
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         qs = mocker.spy(view_set.model, 'objects')
 

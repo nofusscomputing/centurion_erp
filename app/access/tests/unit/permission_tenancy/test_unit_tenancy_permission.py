@@ -144,16 +144,13 @@ class MyMockView:
 
         self._obj_organization = obj_organization
 
-        self._permission_required = permission_required
+        self.permissions_required = permission_required
 
         self.request = self.MockRequest(
             data = data,
             method = method,
             user = user,
         )
-
-    def get_permission_required( self ):
-        return self._permission_required
 
 
 @pytest.mark.mixin
