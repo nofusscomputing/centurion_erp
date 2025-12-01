@@ -679,6 +679,20 @@ class CommonViewSet(
     _Mandatory_, Permission check class
     """
 
+    perms_map: dict[str, list[str]] = {}
+    """Additional Permissions Map
+
+    If there is a requirement for additional permissions add it to this map.
+    format is:
+        {
+            HTTP_METHOD: [ 'permission string' ]
+        }
+        i.e. { 'GET': [ 'core.view_ticketbase' ] }
+
+    Permissions in this map will be added in addition to the common CRUD
+    permissions. This will force the user to require **ALL** permissions.
+    """
+
     table_fields: list = []
     """ Table layout list
 

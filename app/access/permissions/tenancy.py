@@ -6,9 +6,10 @@ from rest_framework.exceptions import (
     ParseError,
     PermissionDenied
 )
-from rest_framework.permissions import DjangoObjectPermissions
 
 from access.models.tenancy import Tenant
+
+from api.permissions.common import CenturionObjectPermissions
 
 from core import exceptions as centurion_exceptions
 from core.mixins.centurion import Centurion
@@ -16,7 +17,7 @@ from core.mixins.centurion import Centurion
 
 
 class TenancyPermissions(
-    DjangoObjectPermissions,
+    CenturionObjectPermissions,
 ):
     """Tenant Permission Mixin
 
@@ -205,6 +206,13 @@ class TenancyPermissions(
             False (bool): User does not have the required permission
         """
 
+        self._perms_map = getattr(view, 'perms_map', {})
+
+        view.permissions_required = self.get_required_permissions(
+            method = request.method,
+            model_cls = view.model
+        )
+
         if request.user.is_anonymous:
 
             raise NotAuthenticated(
@@ -319,6 +327,8 @@ class TenancyPermissions(
 
 
     def has_object_permission(self, request, view, obj):
+
+        self._perms_map = getattr(view, 'perms_map', {})
 
         try:
 
