@@ -296,7 +296,7 @@ Each model has the following Test Suites auto-magic created:
 - API Metadata checks: `api.tests.functional.test_functional_api_metadata.APIMetadataInheritedCases`
 
     _Checks the HTTP/OPTIONS endpoints for each model. Included as part of the functional API Fields Render test case._
-    
+
     - Customization of the model fields to check are done under property `parameterized_api_metadata_fields`
 
 Unless otherwise specified, these auto-magic tests require no input and will be created on a model inheriting from [`CenturionModel`](./api/models/centurion.md) and run every time the tests are run.
