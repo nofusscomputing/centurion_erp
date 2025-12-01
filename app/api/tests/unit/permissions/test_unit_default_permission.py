@@ -8,10 +8,16 @@ from api.permissions.default import (
     DefaultDenyPermission,
 )
 
+from api.tests.unit.permissions.test_unit_common_object_permission import (
+    CenturionObjectPermissionTestCases
+)
+
 
 
 @pytest.mark.permissions
-class DefaultDenyPermissionTestCases:
+class DefaultDenyPermissionTestCases(
+    CenturionObjectPermissionTestCases
+):
 
 
     def test_function_has_permission(self, mocker,
