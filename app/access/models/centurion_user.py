@@ -337,7 +337,22 @@ class CenturionUser(
 
         for perm in permission_list:
 
-            if not self.has_perm( perm, obj ):
+            if obj:
+
+                if not self.has_perm( permission = perm, obj = obj ):
+                    return False
+
+            elif tenancy:
+
+                if not self.has_perm( permission = perm, tenancy = tenancy ):
+                    return False
+
+            elif not obj and not tenancy:
+
+                if not self.has_perm( permission = perm, tenancy_permission = False ):
+                    return False
+
+            else:
                 return False
 
         return True
