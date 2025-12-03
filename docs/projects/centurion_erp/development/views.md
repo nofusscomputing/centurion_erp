@@ -1,6 +1,6 @@
 ---
-title: Views
-description: Views/viewset development Documentation for Centurion ERP
+title: ViewsSets
+description: ViewsSet development Documentation for Centurion ERP
 date: 2024-07-12
 template: project.html
 about: https://github.com/nofusscomputing/centurion_erp
@@ -60,27 +60,7 @@ When working with viewsets the following requirements must be met:
 
 ## Permissions
 
-If you wish to deviate from the standard CRUD permissions, define a function called `get_dynamic_permissions` within the `view`/`ViewSet`. The function must return a list of permissions. This is useful if you have added additional permissions to a model.
-
-Example of the function `get_dynamic_permissions`
-
-``` py
-
-def get_dynamic_permissions(self):
-
-    if self.action == 'create':
-
-        self.permission_required = [
-            'core.random_permission_name',
-        ]
-
-    else:
-
-        raise ValueError('unable to determine the action_keyword')
-
-    return super().get_permission_required()
-
-```
+Within Centurion ERP viewsets will normally user the [Tenancy Permissions](./permissions.md#tenancy-permissions) Mixin. To see more about the other available permission classes refer to its [docs](./permissions.md).
 
 
 ## Navigation
