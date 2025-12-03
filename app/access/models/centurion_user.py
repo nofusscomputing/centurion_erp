@@ -335,24 +335,29 @@ class CenturionUser(
         self, permission_list: list[ Permission ], obj = None, tenancy: Tenant = None
     ) -> bool:
 
+        has_perms = True
+
+        if not isinstance(permission_list, list):
+            raise TypeError(f'permissions list must be of type list, not type {type(permission_list)}')
+
         for perm in permission_list:
 
             if obj:
 
                 if not self.has_perm( permission = perm, obj = obj ):
-                    return False
+                    has_perms = False
 
             elif tenancy:
 
                 if not self.has_perm( permission = perm, tenancy = tenancy ):
-                    return False
+                    has_perms = False
 
             elif not obj and not tenancy:
 
                 if not self.has_perm( permission = perm, tenancy_permission = False ):
-                    return False
+                    has_perms = False
 
             else:
-                return False
+                has_perms = False
 
-        return True
+        return has_perms
