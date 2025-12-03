@@ -213,6 +213,7 @@ class CommonViewSetTestCases:
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
         view_set = viewset()
+        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
         model = getattr(view_set, 'model', None)
 
         if not model:
@@ -226,7 +227,6 @@ class CommonViewSetTestCases:
         )
 
         view_set.request = request
-        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
 
 
         yield view_set

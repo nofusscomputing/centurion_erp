@@ -228,9 +228,8 @@ class TenancyPermissions(
         try:
 
 
-            if not request.user.has_perm(
-                permission = view.get_permission_required(),
-                tenancy_permission = False
+            if not request.user.has_perms(
+                permission_list = view.permissions_required,
             ):
 
                 raise PermissionDenied(
@@ -254,9 +253,8 @@ class TenancyPermissions(
                 )
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy_permission = False
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                 )
                 and view.action in [ 'metadata', 'list' ]
             ):
@@ -264,9 +262,8 @@ class TenancyPermissions(
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy_permission = False
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                 )
                 and not self.is_tenancy_model(view)
             ):
@@ -274,8 +271,8 @@ class TenancyPermissions(
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                     tenancy = obj_organization
                 )
                 and self.is_tenancy_model(view)
@@ -284,11 +281,13 @@ class TenancyPermissions(
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy = obj_organization
+                (
+                    request.user.has_perms(
+                        permission_list = view.permissions_required,
+                        tenancy = obj_organization
+                    )
+                    and self.is_tenancy_model(view)
                 )
-                and self.is_tenancy_model(view)
                 or request.user.is_superuser
             ):
 
@@ -341,8 +340,8 @@ class TenancyPermissions(
 
                 if(
                     (
-                        request.user.has_perm(
-                            permission = view.get_permission_required(),
+                        request.user.has_perms(
+                            permission_list = view.permissions_required,
                             obj = obj
                         )
                         or request.user.is_superuser
