@@ -320,6 +320,9 @@ class TenancyPermissions(
 
             pass
 
+        except PermissionDenied:
+            pass
+
 
         return False
 
