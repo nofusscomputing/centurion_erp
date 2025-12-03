@@ -213,6 +213,7 @@ class CommonViewSetTestCases:
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
         view_set = viewset()
+        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
         model = getattr(view_set, 'model', None)
 
         if not model:
@@ -226,7 +227,6 @@ class CommonViewSetTestCases:
         )
 
         view_set.request = request
-        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
 
 
         yield view_set
@@ -257,6 +257,12 @@ class CommonViewSetTestCases:
             pytest.xfail( reason = 'no model exists, assuming viewset is a base/mixin viewset.' )
 
         only_user_results_returned = True
+
+        for permission_class in viewset.permission_classes:
+            viewset.permissions_required = permission_class().get_required_permissions(
+            method = 'GET',
+            model_cls = model
+        )
 
         queryset = viewset.get_queryset()
 

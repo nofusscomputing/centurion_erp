@@ -17,9 +17,15 @@ from core.mixins.centurion import Centurion
 
 class MockObj:
 
+    class Meta:
+        app_label = 'core'
+        model_name = 'mock_object'
+
 
     def __init__(self, tenancy):
         self._tenancy = tenancy
+
+        self._meta = self.Meta()
 
 
     def get_tenant(self):
@@ -70,6 +76,34 @@ class MockUser:
         return True
 
 
+    def has_perms(
+        self, permission_list: list, obj = None, tenancy = None
+    ) -> bool:
+
+        for perm in permission_list:
+
+            if obj:
+
+                if not self.has_perm( permission = perm, obj = obj ):
+                    return False
+
+            elif tenancy:
+
+                if not self.has_perm( permission = perm, tenancy = tenancy ):
+                    return False
+
+            elif not obj and not tenancy:
+
+                if not self.has_perm( permission = perm, tenancy_permission = False ):
+                    return False
+
+            else:
+                return False
+
+        return True
+
+
+
 class MockLogger:
 
     class MockChild:
@@ -85,7 +119,18 @@ class MyMockView:
 
     class MockModel:
 
+        class Meta:
+            app_label = 'core'
+            model_name = 'mock_object'
+
         __name__: str = 'NotSpecified'
+
+        _meta = Meta()
+
+        def __init__(self):
+
+            self._meta = self.Meta()
+
 
     class MockRequest:
 
@@ -144,16 +189,16 @@ class MyMockView:
 
         self._obj_organization = obj_organization
 
-        self._permission_required = permission_required
+        if permission_required is not list:
+            self.permissions_required = [ permission_required ]
+        else:
+            self.permissions_required = permission_required
 
         self.request = self.MockRequest(
             data = data,
             method = method,
             user = user,
         )
-
-    def get_permission_required( self ):
-        return self._permission_required
 
 
 @pytest.mark.mixin
@@ -515,14 +560,13 @@ class TenancyPermissionsTestCases(
             )
         )
 
+        mocker.patch('rest_framework.permissions.DjangoModelPermissions.get_required_permissions', return_value = [ param_required_permission ] )
+
         view.allowed_methods = [ param_request_method ]
 
         if param_raised_exception:
-            with pytest.raises(param_raised_exception) as exc:
 
-                view.permission_classes[0]().has_permission(request = view.request, view = view)
-
-            assert exc.value.get_codes() == param_exec_code, exc.value.get_codes()
+            assert not view.permission_classes[0]().has_permission(request = view.request, view = view)
 
         else:
 

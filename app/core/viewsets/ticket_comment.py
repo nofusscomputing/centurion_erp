@@ -222,22 +222,13 @@ class ViewSet(
 ):
 
     _has_import: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has import permission.
-    """
+    """User Permission"""
 
     _has_purge: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has purge permission.
-    """
+    """User Permission"""
 
     _has_triage: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has triage permission.
-    """
+    """User Permission"""
 
     base_model = TicketCommentBase
 
@@ -264,30 +255,6 @@ class ViewSet(
 
     view_description = 'Comments made on Ticket'
 
-
-    def get_permission_required(self):
-
-        import_permission = self.model._meta.app_label + '.import_' + self.model._meta.model_name
-
-        if(import_permission in self.request.user.get_permissions( tenancy = False )):
-
-            self._has_import = True
-
-
-        purge_permission = self.model._meta.app_label + '.purge_' + self.model._meta.model_name
-
-        if(purge_permission in self.request.user.get_permissions( tenancy = False )):
-
-            self._has_purge = True
-
-
-        triage_permission = self.parent_model._meta.app_label + '.triage_' + self.parent_model._meta.model_name
-
-        if(triage_permission in self.request.user.get_permissions( tenancy = False )):
-
-            self._has_triage = True
-
-        return super().get_permission_required()
 
 
     def get_queryset(self):

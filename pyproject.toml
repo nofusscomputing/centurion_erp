@@ -1113,6 +1113,122 @@ redefining-builtins-modules = ["six.moves", "past.builtins", "future.builtins", 
 
 
 
+[tool.pyright]
+# Docs: https://microsoft.github.io/pyright
+include = [
+    "app"
+]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+
+]
+
+
+typeCheckingMode = "off"   # turns off the bulk of checking
+
+# Disable ALL diagnostics and only enable what is required.
+# Note: Dont enable any that are covered by PyLint.
+
+analyzeUnannotatedFunctions = true
+disableBytesTypePromotions = true
+strictParameterNoneValue = false
+enableTypeIgnoreComments = true
+enableReachabilityAnalysis = false
+strictListInference = false
+strictDictionaryInference = false
+strictSetInference = false
+deprecateTypingAliases = false
+enableExperimentalFeatures = false
+reportMissingTypeStubs = "none"
+reportMissingModuleSource = "none"
+reportInvalidTypeForm = "none"
+reportMissingImports = "error"
+reportUndefinedVariable = "none"
+reportAssertAlwaysTrue = "none"
+reportInvalidStringEscapeSequence = "none"
+reportInvalidTypeVarUse = "none"
+reportSelfClsParameterName = "none"
+reportUnsupportedDunderAll = "none"
+reportUnusedExpression = "none"
+reportWildcardImportFromLibrary = "none"
+reportAbstractUsage = "none"
+reportArgumentType = "none"
+reportAssertTypeFailure = "none"
+reportAssignmentType = "none"
+reportAttributeAccessIssue = "none"
+reportCallIssue = "none"
+reportGeneralTypeIssues = "none"
+reportInconsistentOverload = "none"
+reportIndexIssue = "none"
+reportInvalidTypeArguments = "none"
+reportNoOverloadImplementation = "none"
+reportOperatorIssue = "none"
+reportOptionalSubscript = "none"
+reportOptionalMemberAccess = "none"
+reportOptionalCall = "none"
+reportOptionalIterable = "none"
+reportOptionalContextManager = "none"
+reportOptionalOperand = "none"
+reportRedeclaration = "none"
+reportReturnType = "none"
+reportTypedDictNotRequiredAccess = "none"
+reportPrivateImportUsage = "none"
+reportUnboundVariable = "none"
+reportUnhashable = "none"
+reportUnusedCoroutine = "none"
+reportUnusedExcept = "none"
+reportFunctionMemberAccess = "none"
+reportIncompatibleMethodOverride = "none"
+reportIncompatibleVariableOverride = "none"
+reportOverlappingOverload = "none"
+reportPossiblyUnboundVariable = "none"
+reportConstantRedefinition = "none"
+reportDeprecated = "none"
+reportDuplicateImport = "none"
+reportIncompleteStub = "none"
+reportInconsistentConstructor = "none"
+reportInvalidStubStatement = "none"
+reportMatchNotExhaustive = "none"
+reportMissingParameterType = "none"
+reportMissingTypeArgument = "none"
+reportPrivateUsage = "warning"
+reportTypeCommentUsage = "none"
+reportUnknownArgumentType = "none"
+reportUnknownLambdaType = "none"
+reportUnknownMemberType = "none"
+reportUnknownParameterType = "none"
+reportUnknownVariableType = "none"
+reportUnnecessaryCast = "none"
+reportUnnecessaryComparison = "none"
+reportUnnecessaryContains = "none"
+reportUnnecessaryIsInstance = "none"
+reportUnusedClass = "warning"
+reportUnusedImport = "none"    # PyLint has this enabled
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+reportUntypedBaseClass = "none"
+reportUntypedClassDecorator = "none"
+reportUntypedFunctionDecorator = "none"
+reportUntypedNamedTuple = "none"
+reportCallInDefaultInitializer = "none"
+reportImplicitOverride = "none"
+reportImplicitStringConcatenation = "none"
+reportImportCycles = "none"
+reportMissingSuperCall = "none"
+reportPropertyTypeMismatch = "none"
+reportUninitializedInstanceVariable = "none"
+reportUnnecessaryTypeIgnoreComment = "none"
+reportUnreachable = "none"
+reportUnusedCallResult = "none"
+
+
+pythonVersion = "3.11"
+pythonPlatform = "Linux"
+
+
+
+
 [tool.pytest.ini_options]
 
 addopts = '--no-migrations --cov --cov-branch --cov-report term --tb=long --verbosity=2 --showlocals app'

@@ -1,6 +1,7 @@
 import importlib
 
 from django.apps import apps
+from django.core.exceptions import FieldDoesNotExist
 
 from drf_spectacular.utils import (
     extend_schema,
@@ -12,7 +13,7 @@ from drf_spectacular.utils import (
 
 from api.viewsets.common.tenancy import SubModelViewSet_ReWrite
 
-from core.models.model_tickets import ModelTicket, TicketBase
+from core.models.model_tickets import ModelTicket
 
 
 
@@ -175,7 +176,19 @@ class ViewSet( SubModelViewSet_ReWrite ):
 
     model_suffix = 'ticket'
 
-    parent_model = TicketBase
+    @property
+    def parent_model(self):
+
+        try:
+
+            model = self.model._meta.get_field('model').related_model
+
+            return model
+
+        except FieldDoesNotExist:
+            
+            return None
+
 
     parent_model_pk_kwarg = 'model_id'
 

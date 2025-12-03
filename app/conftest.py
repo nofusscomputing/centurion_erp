@@ -809,22 +809,13 @@ def fake_view():
 
 
         _has_import: bool
-        """User Permission
-
-        get_permission_required() sets this to `True` when user has import permission.
-        """
+        """User Permission"""
 
         _has_purge: bool
-        """User Permission
-
-        get_permission_required() sets this to `True` when user has purge permission.
-        """
+        """User Permission"""
 
         _has_triage: bool
-        """User Permission
-
-        get_permission_required() sets this to `True` when user has triage permission.
-        """
+        """User Permission"""
 
         action:str
         """ The View Action

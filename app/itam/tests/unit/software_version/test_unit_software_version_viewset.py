@@ -100,8 +100,6 @@ class ViewsetTestCases(
 
         view_set = viewset_mock_request
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.kwargs = {
             'software_id': self.kwargs_create_item['software'].id
         }
@@ -124,8 +122,6 @@ class ViewsetTestCases(
         """
 
         view_set = viewset_mock_request
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.kwargs = {
             'software_id': self.kwargs_create_item['software'].id
@@ -164,8 +160,6 @@ class ViewsetTestCases(
                 'software_id': self.kwargs_create_item['software'].id
         }
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.get_queryset()
 
         manager.user.assert_called()
@@ -180,8 +174,6 @@ class ViewsetTestCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 

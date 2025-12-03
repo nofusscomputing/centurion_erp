@@ -6,9 +6,10 @@ from rest_framework.exceptions import (
     ParseError,
     PermissionDenied
 )
-from rest_framework.permissions import DjangoObjectPermissions
 
 from access.models.tenancy import Tenant
+
+from api.permissions.common import CenturionObjectPermissions
 
 from core import exceptions as centurion_exceptions
 from core.mixins.centurion import Centurion
@@ -16,7 +17,7 @@ from core.mixins.centurion import Centurion
 
 
 class TenancyPermissions(
-    DjangoObjectPermissions,
+    CenturionObjectPermissions,
 ):
     """Tenant Permission Mixin
 
@@ -105,7 +106,13 @@ class TenancyPermissions(
 
             pk = view.kwargs.get('pk', None)
 
-            if not pk:
+            if view.action == 'create' and view.get_parent_model():
+
+                tenant = view.get_parent_model().objects.get(
+                    pk = int(view.kwargs[view.parent_model_pk_kwarg])
+                ).get_tenant()
+
+            elif not pk:
 
                 data = getattr(view.request, 'data', None)
 
@@ -205,6 +212,13 @@ class TenancyPermissions(
             False (bool): User does not have the required permission
         """
 
+        self._perms_map = getattr(view, 'perms_map', {})
+
+        view.permissions_required = self.get_required_permissions(
+            method = request.method,
+            model_cls = view.model
+        )
+
         if request.user.is_anonymous:
 
             raise NotAuthenticated(
@@ -220,9 +234,8 @@ class TenancyPermissions(
         try:
 
 
-            if not request.user.has_perm(
-                permission = view.get_permission_required(),
-                tenancy_permission = False
+            if not request.user.has_perms(
+                permission_list = view.permissions_required,
             ):
 
                 raise PermissionDenied(
@@ -246,9 +259,8 @@ class TenancyPermissions(
                 )
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy_permission = False
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                 )
                 and view.action in [ 'metadata', 'list' ]
             ):
@@ -256,9 +268,8 @@ class TenancyPermissions(
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy_permission = False
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                 )
                 and not self.is_tenancy_model(view)
             ):
@@ -266,21 +277,25 @@ class TenancyPermissions(
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                     tenancy = obj_organization
                 )
                 and self.is_tenancy_model(view)
+                and obj_organization is not None
             ):
 
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy = obj_organization
+                (
+                    request.user.has_perms(
+                        permission_list = view.permissions_required,
+                        tenancy = obj_organization
+                    )
+                    and self.is_tenancy_model(view)
+                    and obj_organization is not None
                 )
-                and self.is_tenancy_model(view)
                 or request.user.is_superuser
             ):
 
@@ -313,12 +328,17 @@ class TenancyPermissions(
 
             pass
 
+        except PermissionDenied:
+            pass
+
 
         return False
 
 
 
     def has_object_permission(self, request, view, obj):
+
+        self._perms_map = getattr(view, 'perms_map', {})
 
         try:
 
@@ -331,8 +351,8 @@ class TenancyPermissions(
 
                 if(
                     (
-                        request.user.has_perm(
-                            permission = view.get_permission_required(),
+                        request.user.has_perms(
+                            permission_list = view.permissions_required,
                             obj = obj
                         )
                         or request.user.is_superuser
