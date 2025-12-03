@@ -19,8 +19,14 @@ class TenancyMixin:
     parent_model: models.Model = None
     """ Parent Model
 
-    This attribute defines the parent model for the model in question. The parent model when defined
-    will be used as the object to obtain the permissions from.
+    This attribute defines the parent model for the model in question. The
+    parent model when defined will be used as the object to obtain the
+    permissions from.
+
+    Generally this wont need to be defined. A use case for this is when you
+    link two models. You would define the parent_model and ensure that the
+    tenancy (`model.tenancy = parent_model.get_tenanncy()`) matches the parent.
+    This should be done in (i.e. within `model.clean_fields()` )
     """
 
     parent_model_pk_kwarg: str = 'pk'
