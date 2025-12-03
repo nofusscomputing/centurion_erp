@@ -106,7 +106,13 @@ class TenancyPermissions(
 
             pk = view.kwargs.get('pk', None)
 
-            if not pk:
+            if view.action == 'create' and view.get_parent_model():
+
+                tenant = view.get_parent_model().objects.get(
+                    pk = int(view.kwargs[view.parent_model_pk_kwarg])
+                ).get_tenant()
+
+            elif not pk:
 
                 data = getattr(view.request, 'data', None)
 
