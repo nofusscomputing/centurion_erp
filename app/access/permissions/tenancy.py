@@ -276,6 +276,7 @@ class TenancyPermissions(
                     tenancy = obj_organization
                 )
                 and self.is_tenancy_model(view)
+                and obj_organization is not None
             ):
 
                 return True
@@ -287,6 +288,7 @@ class TenancyPermissions(
                         tenancy = obj_organization
                     )
                     and self.is_tenancy_model(view)
+                    and obj_organization is not None
                 )
                 or request.user.is_superuser
             ):
