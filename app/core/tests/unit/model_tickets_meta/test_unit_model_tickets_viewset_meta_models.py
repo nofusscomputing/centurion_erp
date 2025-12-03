@@ -90,6 +90,9 @@ class ModelTicketMetaModelsViewSetTestCases(
             'model': {
                 'value': self.model_class
             },
+            'parent_model': {
+                'value': self.ticket_model_class
+            },
         }
 
 

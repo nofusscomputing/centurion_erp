@@ -65,8 +65,8 @@ class ViewsetTestCases(
                 'value': 'ticket'
             },
             'parent_model': {
-                'type': models.base.ModelBase,
-                'value': TicketBase
+                'type': type(None),
+                'value': None
             },
             'parent_model_pk_kwarg': {
                 'type': str,
@@ -91,16 +91,37 @@ class ViewsetTestCases(
 
 
 
-    def test_function_get_parent_model(self, viewset):
+    def test_function_get_parent_model(self, viewset, model):
 
-        assert viewset().get_parent_model() is TicketBase
+        viewset = viewset()
+
+        assert viewset.get_parent_model() is None
 
 
 
 class ModelTicketViewsetInheritedCases(
     ViewsetTestCases,
 ):
-    pass
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'parent_model': {
+                'type': models.base.ModelBase,
+                'value': TicketBase
+            },
+        }
+
+
+    def test_function_get_parent_model(self, viewset, model):
+
+        viewset = viewset()
+
+        viewset.kwargs = {
+            viewset.model_kwarg: model._meta.get_field('model').related_model._meta.model_name
+        }
+
+        assert viewset.get_parent_model() is model._meta.get_field('model').related_model
 
 
 
