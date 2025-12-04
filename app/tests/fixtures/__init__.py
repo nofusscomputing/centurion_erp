@@ -69,6 +69,11 @@ from .model_centurionuser import (
     model_centurionuser,
 )
 
+from .model_changeticket import (
+    kwargs_changeticket,
+    model_changeticket,
+)
+
 from .model_checkin import (
     kwargs_checkin,
     model_checkin,
