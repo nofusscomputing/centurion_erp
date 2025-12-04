@@ -85,6 +85,9 @@ class ViewsetTestCases(
             'parent_model_pk_kwarg': {
                 'value': 'ticket_id'
             },
+            'perms_map': {
+                'type': dict
+            },
             'search_fields': {
                 'value': [
                     'body',
