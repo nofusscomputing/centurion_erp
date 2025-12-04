@@ -50,8 +50,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'AssetBaseTicketViewSerializer')
 class ViewSerializer(
-    ModelSerializer,
     ModelTicketViewSerializer,
+    ModelSerializer,
 ):
     """AssetBaseTicket Base View Model"""
     pass
