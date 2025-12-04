@@ -208,6 +208,11 @@ from .model_instance import (
     model_instance
 )
 
+from .model_incidentticket import (
+    kwargs_incidentticket,
+    model_incidentticket,
+)
+
 from .model_itamassetbase import (
     kwargs_itamassetbase,
     model_itamassetbase,
