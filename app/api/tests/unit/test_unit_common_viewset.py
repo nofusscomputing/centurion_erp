@@ -344,7 +344,7 @@ class CommonViewSetTestCases(
 
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset,
-        model_user, kwargs_user, organization_one
+        mocker, model_user, kwargs_user, organization_one
     ):
 
         with django_db_blocker.unblock():
@@ -365,6 +365,11 @@ class CommonViewSetTestCases(
 
         if not model:
             model = Tenant
+
+
+        if model and hasattr(view_set, 'model'):
+            if hasattr(view_set.model, 'objects'):
+                mocker.patch.object(view_set.model, 'objects', return_value = 'boo')
 
         request = MockRequest(
             user = user,
@@ -1791,7 +1796,7 @@ class CommonSubModelViewSetInheritedCases(
 
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset,
-        model_user, kwargs_user, organization_one, model
+        model_user, kwargs_user, organization_one, mocker, model
     ):
 
         with django_db_blocker.unblock():
@@ -1820,6 +1825,8 @@ class CommonSubModelViewSetInheritedCases(
         view_set.kwargs = {
             view_set.model_kwarg: model._meta.model_name
         }
+
+        mocker.patch.object(view_set.model, 'objects', return_value = 'boo')
 
         yield view_set
 
