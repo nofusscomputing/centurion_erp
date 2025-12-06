@@ -126,15 +126,15 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        if self.queryset is not None:
+        if self._queryset is not None:
 
-            return self.queryset
+            return self._queryset
 
-        self.queryset = super().get_queryset()
+        self._queryset = super().get_queryset()
 
-        self.queryset = self.queryset.filter( project_id = self.kwargs['project_id'])
+        self._queryset = self._queryset.filter( project_id = self.kwargs['project_id'])
 
-        return self.queryset
+        return self._queryset
 
 
     def get_serializer_class(self):

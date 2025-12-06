@@ -282,7 +282,7 @@ class ViewSet(
                 ]
             ):
 
-                model = self.queryset.first()
+                model = self._queryset.first()
                 
                 ticket = model.ticket.get_related_model()
 
@@ -324,29 +324,29 @@ class ViewSet(
 
     def get_queryset(self):
 
-        if self.queryset is None:
+        if self._queryset is None:
 
-            self.queryset = super().get_queryset()
+            self._queryset = super().get_queryset()
 
             if 'parent_id' in self.kwargs:
 
-                self.queryset = self.queryset.filter(parent=self.kwargs['parent_id'])
+                self._queryset = self._queryset.filter(parent=self.kwargs['parent_id'])
 
             else:
 
-                self.queryset = self.queryset.filter(parent=None)
+                self._queryset = self._queryset.filter(parent=None)
 
 
             if 'ticket_id' in self.kwargs:
 
-                self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id'])
+                self._queryset = self._queryset.filter(ticket=self.kwargs['ticket_id'])
 
             if 'pk' in self.kwargs:
 
-                self.queryset = self.queryset.filter(pk = self.kwargs['pk'])
+                self._queryset = self._queryset.filter(pk = self.kwargs['pk'])
 
 
-        return self.queryset
+        return self._queryset
 
 
 

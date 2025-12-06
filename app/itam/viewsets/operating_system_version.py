@@ -142,17 +142,17 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        if self.queryset is not None:
+        if self._queryset is not None:
 
-            return self.queryset
+            return self._queryset
 
-        self.queryset = super().get_queryset()
+        self._queryset = super().get_queryset()
 
-        self.queryset = self.queryset.filter(
+        self._queryset = self._queryset.filter(
             operating_system_id = self.kwargs['operating_system_id']
         )
 
-        return self.queryset
+        return self._queryset
 
 
     def get_serializer_class(self):
