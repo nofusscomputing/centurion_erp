@@ -212,26 +212,26 @@ class TenancyPermissions(
             False (bool): User does not have the required permission
         """
 
-        self._perms_map = getattr(view, 'perms_map', {})
+        try:
 
-        view.permissions_required = self.get_required_permissions(
-            method = request.method,
-            model_cls = view.model
-        )
 
-        if request.user.is_anonymous:
+            self._perms_map = getattr(view, 'perms_map', {})
 
-            raise NotAuthenticated(
-                code = 'anonymouse_user'
+            view.permissions_required = self.get_required_permissions(
+                method = request.method,
+                model_cls = view.model
             )
 
+            if request.user.is_anonymous:
 
-        if request.method not in view.allowed_methods:
+                raise NotAuthenticated(
+                    code = 'anonymouse_user'
+                )
 
-            raise MethodNotAllowed(method = request.method)
 
+            if request.method not in view.allowed_methods:
 
-        try:
+                raise MethodNotAllowed(method = request.method)
 
 
             if not request.user.has_perms(

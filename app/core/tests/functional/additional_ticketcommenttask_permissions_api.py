@@ -16,6 +16,7 @@ class AdditionalTestCases:
 
     def test_permission_add(self, model_instance, api_request_permissions,
         model_kwargs, kwargs_api_create,
+        model_permission, model_contenttype,
         model_employee, kwargs_employee,
     ):
         """ Check correct permission for add 
@@ -29,7 +30,6 @@ class AdditionalTestCases:
         kwargs['user'] = api_request_permissions['user']['add']
         emplyoee = model_employee.objects.create( **kwargs )
 
-        client.force_login( api_request_permissions['user']['add'] )
 
 
         kwargs = model_kwargs()
@@ -38,6 +38,22 @@ class AdditionalTestCases:
         })
 
         the_model = model_instance( kwargs_create = kwargs )
+
+        triage_permissions = model_permission.objects.get(
+                codename = 'triage_' + the_model.ticket._meta.model_name,
+                content_type = model_contenttype.objects.get(
+                    app_label = the_model.ticket._meta.app_label,
+                    model = the_model.ticket._meta.model_name,
+                )
+            )
+
+        api_request_permissions['user']['add'].groups.all(
+        ).first().roles.all().first().permissions.add(triage_permissions)
+
+
+
+        client.force_login( api_request_permissions['user']['add'] )
+
 
         url = the_model.get_url( many = True )
 

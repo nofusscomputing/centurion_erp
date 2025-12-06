@@ -69,6 +69,11 @@ from .model_centurionuser import (
     model_centurionuser,
 )
 
+from .model_changeticket import (
+    kwargs_changeticket,
+    model_changeticket,
+)
+
 from .model_checkin import (
     kwargs_checkin,
     model_checkin,
@@ -203,6 +208,11 @@ from .model_instance import (
     model_instance
 )
 
+from .model_incidentticket import (
+    kwargs_incidentticket,
+    model_incidentticket,
+)
+
 from .model_itamassetbase import (
     kwargs_itamassetbase,
     model_itamassetbase,
@@ -269,6 +279,11 @@ from .model_port import (
     serializer_port,
 )
 
+from .model_problemticket import (
+    kwargs_problemticket,
+    model_problemticket,
+)
+
 from .model_project import (
     kwargs_project,
     model_project,
@@ -285,6 +300,11 @@ from .model_projectstate import (
     kwargs_projectstate,
     model_projectstate,
     serializer_projectstate,
+)
+
+from .model_projectticket import (
+    kwargs_projecttaskticket,
+    model_projecttaskticket,
 )
 
 from .model_projecttype import (
