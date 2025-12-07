@@ -82,7 +82,7 @@ class ModelTicketViewsetMetaInheritedCases(
 
 
     @pytest.fixture( scope = 'function' )
-    def viewset_mock_request(self, django_db_blocker, viewset,
+    def viewset_mock_request(self, django_db_blocker, viewset, mocker,
         model_user, kwargs_user, organization_one, model,
         model_instance, model_kwargs, 
     ):
@@ -103,6 +103,7 @@ class ModelTicketViewsetMetaInheritedCases(
             user = model_user.objects.create( **kwargs )
 
         view_set = viewset()
+
 
         request = MockRequest(
             user = user,

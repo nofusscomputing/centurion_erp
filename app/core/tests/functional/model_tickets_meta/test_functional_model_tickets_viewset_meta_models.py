@@ -225,7 +225,7 @@ class ModelTicketMetaViewsetTestCases(
 
 
     @pytest.fixture( scope = 'function' )
-    def viewset_mock_request(self, django_db_blocker, viewset,
+    def viewset_mock_request(self, django_db_blocker, viewset, mocker,
         clean_model_from_db, api_request_permissions,
         model_user, kwargs_user, organization_one, organization_two,
         model_instance, model_kwargs, model, model_ticketcommentbase,
@@ -296,6 +296,12 @@ class ModelTicketMetaViewsetTestCases(
 
 
         view_set = viewset()
+
+        for permission_class in viewset.permission_classes:
+            view_set.permissions_required = permission_class().get_required_permissions(
+                method = 'GET',
+                model_cls = model
+            )
 
         request = MockRequest(
             user = user,

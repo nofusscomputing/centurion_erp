@@ -93,6 +93,7 @@ class ViewsetTestCases(
 
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset,
+        mocker,
         model_user, kwargs_user, organization_one,
         model_kwargs,
     ):
@@ -113,8 +114,9 @@ class ViewsetTestCases(
         view_set = viewset()
         model = getattr(view_set, 'model', None)
 
-        if not model:
-            model = Tenant
+        # if not model:
+        #     model = Tenant
+        mocker.patch.object(view_set.model, 'objects', return_value = 'boo')
 
         request = MockRequest(
             user = user,

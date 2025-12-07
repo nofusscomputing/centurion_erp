@@ -214,6 +214,13 @@ class CommonViewSetTestCases:
 
         view_set = viewset()
         view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
+
+        for permission_class in viewset.permission_classes:
+            view_set.permissions_required = permission_class().get_required_permissions(
+                method = 'GET',
+                model_cls = model
+            )
+
         model = getattr(view_set, 'model', None)
 
         if not model:

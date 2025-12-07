@@ -80,9 +80,9 @@ class ViewsetTestCases(
 
         q = view_set.get_queryset()
 
-        assert view_set.queryset is not None    # Must not be empty after init
+        assert view_set._queryset is not None    # Must not be empty after init
 
-        assert q == view_set.queryset
+        assert q == view_set._queryset
 
 
 
