@@ -300,7 +300,7 @@ class CenturionUser(
 
 
     def has_perm(
-        self, permission: Permission, obj = None, tenancy: Tenant = None,
+        self, permission: str, obj = None, tenancy: Tenant = None,
         tenancy_permission: bool = True
     ) -> bool:
 
@@ -332,7 +332,7 @@ class CenturionUser(
 
 
     def has_perms(
-        self, permission_list: list[ Permission ], obj = None, tenancy: Tenant = None
+        self, permission_list: list[ str ], obj = None, tenancy: Tenant = None
     ) -> bool:
 
         has_perms = True
