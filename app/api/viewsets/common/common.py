@@ -536,7 +536,7 @@ class CommonViewSet(
         viewsets (class): Django Rest Framework base class.
     """
 
-    permissions_required: list = None
+    permissions_required: list[ str ] = None
     """Cached Permissions required
     
     This variable is intended to be only be set from the permission class.
