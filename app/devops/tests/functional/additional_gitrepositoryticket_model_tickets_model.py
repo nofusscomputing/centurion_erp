@@ -1,23 +1,12 @@
-from django.contrib.auth.password_validation import password_validators_help_text_html
 import pytest
 import random
 
-from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
-    CenturionAbstractTenancyModelInheritedCases
-)
+from django.test import Client
 
 
-@pytest.mark.tickets
-@pytest.mark.model_modelticket
-class ModelTicketModelTestCases(
-    CenturionAbstractTenancyModelInheritedCases
-):
-    password_validators_help_text_html
 
+class AdditionalTestCases:
 
-class ModelTicketModelInheritedCases(
-    ModelTicketModelTestCases,
-):
 
     def test_manager_filter_content_has_perm(self, model,
         model_kwargs, model_permission, model_contenttype,
@@ -52,6 +41,8 @@ class ModelTicketModelInheritedCases(
 
         # Create Other org item
         kwargs = model_kwargs()
+        kwargs['model'].git_group.organization = organization_two
+        kwargs['model'].git_group.save()
         kwargs['model'].organization = organization_two
         kwargs['model'].save()
 
@@ -97,6 +88,8 @@ class ModelTicketModelInheritedCases(
 
         # Create Other org item
         kwargs = model_kwargs()
+        kwargs['model'].git_group.organization = organization_two
+        kwargs['model'].git_group.save()
         kwargs['model'].organization = organization_two
         kwargs['model'].save()
 
@@ -111,13 +104,3 @@ class ModelTicketModelInheritedCases(
 
 
         assert len(queryset) == 0, f'No objects should have returned, {queryset}'
-
-
-
-
-
-@pytest.mark.module_core
-class ModelTicketModelPyTest(
-    ModelTicketModelTestCases,
-):
-    pass
