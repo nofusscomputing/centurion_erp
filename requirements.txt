@@ -1,5 +1,5 @@
 
-django==5.1.14
+django==5.1.15
 django-cors-headers==4.4.0
 
 django-debug-toolbar==5.1.0
