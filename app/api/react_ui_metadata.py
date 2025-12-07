@@ -641,6 +641,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         },
                     })
 
+                if request.feature_flag['2025-00010']:
+
+                    nav['itim']['pages'].update({
+
+                        'itim.view_incidentticket': {
+                            "display_name": "Incidents New",
+                            "name": "incident_new",
+                            "icon": "ticket_incident",
+                            "link": "/itim/ticket/incident"
+                        },
+                    })
+
 
         return nav
 
