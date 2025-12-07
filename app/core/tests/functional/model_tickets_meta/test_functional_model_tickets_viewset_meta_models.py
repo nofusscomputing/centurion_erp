@@ -297,7 +297,11 @@ class ModelTicketMetaViewsetTestCases(
 
         view_set = viewset()
 
-        mocker.patch.object(view_set.model, 'objects', return_value = 'boo')
+        for permission_class in viewset.permission_classes:
+            view_set.permissions_required = permission_class().get_required_permissions(
+                method = 'GET',
+                model_cls = model
+            )
 
         request = MockRequest(
             user = user,
