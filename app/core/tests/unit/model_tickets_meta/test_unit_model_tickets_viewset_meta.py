@@ -104,7 +104,6 @@ class ModelTicketViewsetMetaInheritedCases(
 
         view_set = viewset()
 
-        mocker.patch.object(view_set.model, 'objects', return_value = 'boo')
 
         request = MockRequest(
             user = user,

@@ -479,6 +479,7 @@ class CommonViewSetTestCases(
         """
 
         view_set = viewset_mock_request
+        mocker.patch.object(view_set.model, 'objects', return_value = 'boo')
 
         from django.db import connection
         from django.test.utils import CaptureQueriesContext
