@@ -1,29 +1,18 @@
-from django.contrib.auth.password_validation import password_validators_help_text_html
 import pytest
 import random
 
-from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
-    CenturionAbstractTenancyModelInheritedCases
-)
+from django.test import Client
 
 
-@pytest.mark.tickets
-@pytest.mark.model_modelticket
-class ModelTicketModelTestCases(
-    CenturionAbstractTenancyModelInheritedCases
-):
-    password_validators_help_text_html
 
+class AdditionalTestCases:
 
-class ModelTicketModelInheritedCases(
-    ModelTicketModelTestCases,
-):
 
     def test_manager_filter_content_has_perm(self, model,
         model_kwargs, model_permission, model_contenttype,
         organization_one, organization_two,
         model_employee, kwargs_employee,
-        model_role, created_model,
+        model_role, model_configgroups, kwargs_configgroups
     ):
         """Model Manager Test
 
@@ -52,8 +41,10 @@ class ModelTicketModelInheritedCases(
 
         # Create Other org item
         kwargs = model_kwargs()
-        kwargs['model'].organization = organization_two
-        kwargs['model'].save()
+        kwargs_model = kwargs_configgroups()
+        kwargs_model['organization'] = organization_two
+
+        kwargs['model'] = model_configgroups.objects.create( **kwargs_model )
 
         diff_org_item = model.objects.create( **kwargs )
 
@@ -76,7 +67,7 @@ class ModelTicketModelInheritedCases(
         model_kwargs, model_permission, model_contenttype,
         organization_two,
         model_employee, kwargs_employee,
-        # model_role,
+        model_role, model_configgroups, kwargs_configgroups
     ):
         """Model Manager Test
 
@@ -97,8 +88,10 @@ class ModelTicketModelInheritedCases(
 
         # Create Other org item
         kwargs = model_kwargs()
-        kwargs['model'].organization = organization_two
-        kwargs['model'].save()
+        kwargs_model = kwargs_configgroups()
+        kwargs_model['organization'] = organization_two
+
+        kwargs['model'] = model_configgroups.objects.create( **kwargs_model )
 
         diff_org_item = model.objects.create( **kwargs )
 
@@ -111,13 +104,3 @@ class ModelTicketModelInheritedCases(
 
 
         assert len(queryset) == 0, f'No objects should have returned, {queryset}'
-
-
-
-
-
-@pytest.mark.module_core
-class ModelTicketModelPyTest(
-    ModelTicketModelTestCases,
-):
-    pass

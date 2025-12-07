@@ -6,6 +6,7 @@ from django.core.exceptions import (
     ValidationError
 )
 from django.db import models
+from django.utils.module_loading import import_string
 
 from core.models.model_tickets import ModelTicketMetaModel
 from core.tests.functional.model_tickets.test_functional_model_tickets_model import (
@@ -255,9 +256,23 @@ for centurion_model in get_models(
 
     cls_name: str = f"{centurion_model._meta.object_name}ModelPyTest"
 
+    inc_classes = (ModelTicketMetaModelTestCases,)
+    try:
+
+        additional_testcases = import_string(
+            centurion_model._meta.app_label + '.tests.functional.additional_' +
+            centurion_model._meta.model_name + '_model_tickets_model.AdditionalTestCases'
+        )
+
+        inc_classes = (additional_testcases, *inc_classes)
+
+    except Exception as ex:
+        additional_testcases = None
+
+
     dynamic_class = type(
         cls_name,
-        (ModelTicketMetaModelTestCases,),
+        inc_classes,
         {
             '__module__': 'api.tests.functional.test_functional_meta_permissions_api',
             '__qualname__': cls_name,
