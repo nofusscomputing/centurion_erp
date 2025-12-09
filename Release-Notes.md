@@ -16,6 +16,8 @@
 
     - [see v1.19.0] Removed Depreciated "model History" models
 
+    - [see v1.19.0] Removed Depreciated "model Notes" models
+
 
 ## Version v1.27.0
 

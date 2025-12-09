@@ -50,13 +50,6 @@ omit = [
     #
     "app/core/mixins/history_save.py",
     #
-    # Old Notes model
-    #
-    "app/core/models/notes.py",
-    "app/*/models/*_notes.py",
-    "app/devops/models/git_repository/github_notes.py",
-    "app/devops/models/git_repository/gitlab_notes.py",
-    #
     # Old Ticketing Model
     #
     "app/core/lib/slash_commands/linked_model.py",
