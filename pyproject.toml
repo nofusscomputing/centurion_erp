@@ -48,18 +48,7 @@ omit = [
     #
     # Old History Model
     #
-    "app/core/models/model_history.py",
-    "app/*/models/*_history.py",
     "app/core/mixins/history_save.py",
-    "app/devops/models/git_repository/github_history.py",
-    "app/devops/models/git_repository/gitlab_history.py",
-    #
-    # Old Notes model
-    #
-    "app/core/models/notes.py",
-    "app/*/models/*_notes.py",
-    "app/devops/models/git_repository/github_notes.py",
-    "app/devops/models/git_repository/gitlab_notes.py",
     #
     # Old Ticketing Model
     #

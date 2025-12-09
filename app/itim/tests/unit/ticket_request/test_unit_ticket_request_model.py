@@ -48,7 +48,7 @@ class RequestTicketTestCases(
     def test_class_inherits_requestticket(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from requestticket
         """
 
         assert issubclass(model, RequestTicket)

@@ -3,8 +3,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 from access.models.tenant import Tenant
 from api.viewsets.common.tenancy import ModelViewSet
 
-# This import only exists so that the migrations can be created
-from project_management.models.project_history import ProjectHistory    # pylint: disable=W0611:unused-import
 from project_management.serializers.project import (    # pylint: disable=W0611:unused-import
     Project,
     ProjectImportSerializer,

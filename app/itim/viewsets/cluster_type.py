@@ -2,8 +2,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-# This import only exists so that the migrations can be created
-from itim.models.cluster_type_history import ClusterTypeHistory    # pylint: disable=W0611:unused-import
 from itim.serializers.cluster_type import (    # pylint: disable=W0611:unused-import
     ClusterType,
     ClusterTypeModelSerializer,

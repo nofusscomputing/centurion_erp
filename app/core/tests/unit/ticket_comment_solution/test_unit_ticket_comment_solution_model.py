@@ -130,7 +130,7 @@ class TicketCommentSolutionModelTestCases(
     def test_class_inherits_ticketcommentsolution(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from ticketcommentsolution
         """
 
         assert issubclass(model, TicketCommentSolution)
