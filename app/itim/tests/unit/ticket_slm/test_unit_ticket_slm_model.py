@@ -63,7 +63,7 @@ class SLMTicketModelTestCases(
     def test_class_inherits_SLMTicket(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from slmticket
         """
 
         assert issubclass(model, SLMTicket)

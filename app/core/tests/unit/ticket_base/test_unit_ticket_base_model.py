@@ -334,7 +334,7 @@ class TicketBaseModelTestCases(
     def test_class_inherits_ticketbase(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from ticketbase
         """
 
         assert issubclass(model, TicketBase)

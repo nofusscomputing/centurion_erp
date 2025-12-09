@@ -2,8 +2,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-# THis import only exists so that the migrations can be created
-from itam.models.device_model_history import DeviceModelHistory    # pylint: disable=W0611:unused-import
 from itam.serializers.device_model import (    # pylint: disable=W0611:unused-import
     DeviceModel,
     DeviceModelModelSerializer,
