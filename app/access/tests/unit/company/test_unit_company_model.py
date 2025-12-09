@@ -55,7 +55,7 @@ class CompanyModelTestCases(
     def test_class_inherits_company(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from company
         """
 
         assert issubclass(model, Company)

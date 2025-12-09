@@ -56,7 +56,7 @@ class ITAMAssetModelTestCases(
     def test_class_inherits_itamassetbase(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from itamassetbase
         """
 
         assert issubclass(model, ITAMAssetBase)

@@ -12,6 +12,10 @@
 
     - Ticket Task model added behind feature flag `2025-00006` and will remain until production ready.
 
+- Removed Models:
+
+    - [see v1.19.0] Removed Depreciated "model History" models
+
 
 ## Version v1.28.1
 
