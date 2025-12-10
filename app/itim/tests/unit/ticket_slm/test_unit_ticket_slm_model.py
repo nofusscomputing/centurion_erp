@@ -27,10 +27,6 @@ class SLMTicketModelTestCases(
             '_is_submodel': {
                 'value': True
             },
-            'model_tag': {
-                'type': str,
-                'value': 'ticket'
-            },
             'url_model_name': {
                 'type': str,
                 'value': 'ticketbase'
