@@ -22,7 +22,22 @@ class TicketDependencyAPITestCases(
             '_urls.notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'display_name': {
+                'expected': dict
+            },
+            'display_name.markdown': {
+                'expected': str
+            },
+            'display_name.render': {
+                'expected' :dict
+            },
             'model_notes': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
                 'expected': models.NOT_PROVIDED
             },
             'ticket': {

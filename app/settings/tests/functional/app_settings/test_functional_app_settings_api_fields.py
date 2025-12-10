@@ -82,6 +82,12 @@ class AppSettingsAPITestCases(
             'model_notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
+                'expected': models.NOT_PROVIDED
+            },
             'organization': {
                 'expected': models.NOT_PROVIDED
             },

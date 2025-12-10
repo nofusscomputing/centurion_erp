@@ -25,6 +25,12 @@ class CenturionAuditAPITestCases(
             'model_notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
+                'expected': models.NOT_PROVIDED
+            },
             'modified': {
                 'expected': models.NOT_PROVIDED
             },
