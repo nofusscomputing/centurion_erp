@@ -18,6 +18,8 @@
 
     - [see v1.19.0] Removed Depreciated "model Notes" models
 
+- Markdown Serializer field now provides render data for UI
+
 
 ## Version v1.27.0
 

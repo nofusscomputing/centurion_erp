@@ -48,8 +48,6 @@ class TicketBase(
 
     model_notes = None
 
-    model_tag = 'ticket'
-
     save_model_history: bool = False
 
     url_model_name = 'ticketbase'
