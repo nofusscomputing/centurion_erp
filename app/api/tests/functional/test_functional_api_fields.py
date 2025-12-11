@@ -59,7 +59,13 @@ class APIFieldsTestCases(
 
         api_fields_model = {
             'model_notes': {
+                'expected': dict
+            },
+            'model_notes.markdown': {
                 'expected': str
+            },
+            'model_notes.render': {
+                'expected': dict
             },
             'created': {
                 'expected': str

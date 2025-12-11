@@ -1122,7 +1122,7 @@ typeCheckingMode = "off"   # turns off the bulk of checking
 analyzeUnannotatedFunctions = true
 disableBytesTypePromotions = true
 strictParameterNoneValue = false
-enableTypeIgnoreComments = true
+enableTypeIgnoreComments = false
 enableReachabilityAnalysis = false
 strictListInference = false
 strictDictionaryInference = false
@@ -1238,11 +1238,14 @@ markers = [
     "audit_models: Selects Audit models.",
     "authentication: Selects all authentication tests.",
     "centurion_models: Selects Centurion models",
+    "fields: Selects all field related tests",
     "functional: Selects all Functional tests.",
     "integration: Selects all Integration tests.",
     "manager: Selects all model manager test cases",
+    "markdown: Selects all markdown test cases",
     "manager_common: Selects all common model manager test cases",
     "manager_tenancy: Selects all tenancy model manager test cases",
+    "manager_ticketmodel: Selects all ticket model manager test cases.",
     "meta_models: Selects Meta models",
     "metadata: Selects all tests for api OPTIONS requests.",
     "mixin: Selects all mixin test cases.",
@@ -1296,6 +1299,7 @@ markers = [
     "model_softwareenablefeatureflag: Selects tests for model Software Enabled Feature Flag.",
     "model_softwareversion: Selects tests for model Software Version.",
     "model_tenant: Selects tests for model Tenant.",
+    "model_tickets: Selects ALL ticket related tests",
     "model_ticketbase: Selects tests for model Ticket Base.",
     "model_ticketcategory: Select all ticket category tests.",
     "model_ticketcommentaction: Select test for model ticket Action Comment.",

@@ -155,7 +155,13 @@ class TicketCommentBaseAPIFieldsTestCases(
             },
 
             'body': {
+                'expected': dict
+            },
+            'body.markdown': {
                 'expected': str
+            },
+            'body.render': {
+                'expected': dict
             },
             'private': {
                 'expected': bool
@@ -214,6 +220,12 @@ class TicketCommentBaseAPIFieldsTestCases(
                 'expected': models.NOT_PROVIDED
             },
             'model_notes': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
                 'expected': models.NOT_PROVIDED
             },
             '_urls.notes': {
