@@ -1,6 +1,7 @@
 from django.db import models
 
 from access.models.tenancy import Tenant
+from access.permissions.super_user import SuperUserPermissions
 from access.permissions.tenancy import TenancyPermissions
 
 
@@ -35,7 +36,9 @@ class TenancyMixin:
     This value is used to define the kwarg that is used as the parent objects primary key (pk).
     """
 
-    permission_classes = [ TenancyPermissions ]
+    permission_classes = [
+        TenancyPermissions | SuperUserPermissions,
+    ]
     """Permission Class
 
     _Mandatory_, Permission check class
