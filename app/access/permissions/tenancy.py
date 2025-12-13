@@ -46,6 +46,8 @@ class TenancyPermissions(
 
     _is_tenancy_model: bool = None
 
+    _tenant: Tenant = None
+
 
 
     def is_tenancy_model(self, view) -> bool:
@@ -96,80 +98,82 @@ class TenancyPermissions(
             Tenant: Tenancy the object belongs or will belong to.
         """
 
-        tenant = None
+        if not self._tenant:
 
-        if obj:
+            tenant = None
 
-            tenant = obj.get_tenant()
+            if obj:
 
-        elif view.request:
+                self._tenant = obj.get_tenant()
 
-            pk = view.kwargs.get('pk', None)
+            elif view.request:
 
-            if view.action == 'create' and view.get_parent_model():
+                pk = view.kwargs.get('pk', None)
 
-                tenant = view.get_parent_model().objects.get(
-                    pk = int(view.kwargs[view.parent_model_pk_kwarg])
-                ).get_tenant()
+                if view.action == 'create' and view.get_parent_model():
 
-            elif not pk:
+                    self._tenant = view.get_parent_model().objects.get(
+                        pk = int(view.kwargs[view.parent_model_pk_kwarg])
+                    ).get_tenant()
 
-                data = getattr(view.request, 'data', None)
+                elif not pk:
 
-                tenant_kwarg = view.kwargs.get('organization_id', None)
-                tenant_id = tenant_kwarg
-                tenant_data = None
+                    data = getattr(view.request, 'data', None)
 
-                if data:
+                    tenant_kwarg = view.kwargs.get('organization_id', None)
+                    tenant_id = tenant_kwarg
+                    tenant_data = None
 
-                    tenant_data = data.get('organization_id', None)
+                    if data:
 
-
-                    if not tenant_data:
-
-                        tenant_data = data.get('organization', None)
+                        tenant_data = data.get('organization_id', None)
 
 
-                    tenant_id = tenant_data
+                        if not tenant_data:
 
-                if tenant_kwarg and tenant_data:
+                            tenant_data = data.get('organization', None)
 
-                    if int(tenant_kwarg) != int(tenant_data):
 
-                        view.get_log().getChild('authorization').warn(
-                            msg = str(
-                                'Tenant within supplied path and tenant within user supplied'
-                                'data do not match'
+                        tenant_id = tenant_data
+
+                    if tenant_kwarg and tenant_data:
+
+                        if int(tenant_kwarg) != int(tenant_data):
+
+                            view.get_log().getChild('authorization').warn(
+                                msg = str(
+                                    'Tenant within supplied path and tenant within user supplied'
+                                    'data do not match'
+                                )
                             )
+
+                            # if tenancy in path and user supplied data they should match.
+                            # if not, could indicate something untoward.
+                            raise ParseError(
+                                detail = (
+                                    'tenancy mismatch. both path and supplied tenancy must match'
+                                ),
+                                code = 'tenancy_mismatch'
+                            )
+
+
+                    if tenant_id:
+
+                        self._tenant = Tenant.objects.get(
+                            pk = int( tenant_id )
                         )
 
-                        # if tenancy in path and user supplied data they should match.
-                        # if not, could indicate something untoward.
-                        raise ParseError(
-                            detail = (
-                                'tenancy mismatch. both path and supplied tenancy must match'
-                            ),
-                            code = 'tenancy_mismatch'
-                        )
+
+                elif pk:
+
+                    obj = view.model.objects.get( pk = int( pk ) )
+
+                    if self.is_tenancy_model( view = view ):
+
+                        self._tenant = obj.get_tenant()
 
 
-                if tenant_id:
-
-                    tenant = Tenant.objects.get(
-                        pk = int( tenant_id )
-                    )
-
-
-            elif pk:
-
-                obj = view.model.objects.get( pk = int( pk ) )
-
-                if self.is_tenancy_model( view = view ):
-
-                    tenant = obj.get_tenant()
-
-
-        return tenant
+        return self._tenant
 
 
 

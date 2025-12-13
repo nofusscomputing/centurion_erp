@@ -5,6 +5,8 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
+from rest_framework.permissions import OperandHolder
+
 from api.tests.functional.test_functional_common_viewset import (
     MockRequest
 )
@@ -298,6 +300,11 @@ class ModelTicketMetaViewsetTestCases(
         view_set = viewset()
 
         for permission_class in viewset.permission_classes:
+
+            if isinstance(permission_class, OperandHolder):
+                permission_class = permission_class.op1_class
+
+
             view_set.permissions_required = permission_class().get_required_permissions(
                 method = 'GET',
                 model_cls = model

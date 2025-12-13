@@ -167,9 +167,15 @@ Ticket comments support [markdown](./markdown.md) as well as slash commands. Com
 
     A solution comment has all of the features a standard comment has. In addition, leaving this type of comment will mark the ticket as solved as long as it meets the [criteria](#solving-a-ticket).
 
+    !!! info
+        To add this type of comment, you will require the `triage` permission for the ticket type the comment is for.
+
 - Task
 
     A task comment as the name implies is for recording and categorising work done on a ticket. This type of ticket is reserverd for a user whom has the `triage` permission for the ticket being worked on.
+
+    !!! info
+        To add this type of comment, you will require the `triage` permission for the ticket type the comment is for.
 
 
 ## Slash Commands

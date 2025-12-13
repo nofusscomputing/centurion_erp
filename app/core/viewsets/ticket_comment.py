@@ -4,8 +4,11 @@ from django.apps import apps
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes, OpenApiResponse, PolymorphicProxySerializer
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.viewsets.common.tenancy import SubModelViewSet
 
+from core.permissions.ticket import TicketPermission
 from core.serializers.ticketcommentbase import ModelSerializer
 from core.models.ticket_comment_base import (
     TicketBase,
@@ -253,6 +256,10 @@ class ViewSet(
 
     parent_model_pk_kwarg = 'ticket_id'
 
+    permission_classes = [
+        TicketPermission | SuperUserPermissions,
+    ]
+
 
     @property
     def perms_map(self) -> dict[str, list[str]] | dict:
@@ -270,49 +277,52 @@ class ViewSet(
 
         if getattr(self, '_perms_map', None) is None:
 
-            ticket = None
+            try:
 
-            if(
-                'pk' in self.kwargs
-                and self.request.method in [
-                    'DELETE',
-                    'PATCH',
-                    'PUT',
-                    'POST'
-                ]
-            ):
-
-                model = self._queryset.first()
-                
-                ticket = model.ticket.get_related_model()
-
-            elif(
-                self.model_kwarg in self.kwargs
-                and self.parent_model_pk_kwarg in self.kwargs
-            ):
-
-                model = self.model
-
-                ticket = self.parent_model.objects.get(
-                    pk = int( self.kwargs[self.parent_model_pk_kwarg] )
-                ).get_related_model()
-
-
-            if ticket:
-
-                triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
+                ticket = None
 
                 if(
-                    model.comment_type == 'task'
-                    or self.model._meta.model_name == 'ticketcommenttask'
+                    'pk' in self.kwargs
+                    and self.request.method in [
+                        'DELETE',
+                        'PATCH',
+                        'PUT',
+                        'POST'
+                    ]
                 ):
 
-                    self._perms_map: dict[str, list[str]] = {
-                        'POST': [ triage_permission ],
-                        'PUT': [ triage_permission ],
-                        'PATCH': [ triage_permission ],
-                        'DELETE': [ triage_permission ],
-                    }
+                    ticket = self.model.ticket.get_related_model()
+
+                elif(
+                    self.model_kwarg in self.kwargs
+                    and self.parent_model_pk_kwarg in self.kwargs
+                ):
+
+                    ticket = self.parent_model.objects.get(
+                        pk = int( self.kwargs[self.parent_model_pk_kwarg] )
+                    ).get_related_model()
+
+
+                if ticket:
+
+                    triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
+
+                    if(
+                        self.model.comment_type == 'task'
+                        or self.model._meta.model_name == 'ticketcommenttask'
+                    ):
+
+                        self._perms_map: dict[str, list[str]] = {
+                            'POST': [ triage_permission ],
+                            'PUT': [ triage_permission ],
+                            'PATCH': [ triage_permission ],
+                            'DELETE': [ triage_permission ],
+                        }
+
+            except Exception:
+                self.get_log().exception(
+                    msg = 'Error occured whilst obtaining permission map.'
+                )
 
 
         return getattr(self, '_perms_map', {})

@@ -12,8 +12,11 @@ from drf_spectacular.utils import (
 
 from rest_framework.reverse import reverse
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.viewsets.common.tenancy import SubModelViewSet
 
+from core.permissions.ticket import TicketPermission
 from core.models.ticket_base import TicketBase
 
 
@@ -230,6 +233,10 @@ class ViewSet( SubModelViewSet ):
     ]
 
     model_kwarg = 'ticket_type'
+
+    permission_classes = [
+        TicketPermission | SuperUserPermissions,
+    ]
 
     search_fields = [
         'title',
