@@ -4,8 +4,11 @@ from django.apps import apps
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes, OpenApiResponse, PolymorphicProxySerializer
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.viewsets.common.tenancy import SubModelViewSet
 
+from core.permissions.ticket import TicketPermission
 from core.serializers.ticketcommentbase import ModelSerializer
 from core.models.ticket_comment_base import (
     TicketBase,
@@ -252,6 +255,10 @@ class ViewSet(
     parent_model = TicketBase
 
     parent_model_pk_kwarg = 'ticket_id'
+
+    permission_classes = [
+        TicketPermission | SuperUserPermissions,
+    ]
 
 
     @property
