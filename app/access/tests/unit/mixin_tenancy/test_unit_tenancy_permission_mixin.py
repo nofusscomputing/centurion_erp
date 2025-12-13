@@ -1,5 +1,6 @@
 import pytest
 
+from access.permissions.super_user import SuperUserPermissions
 from access.permissions.tenancy import TenancyPermissions
 
 from centurion.tests.unit_class import ClassTestCases
@@ -36,7 +37,7 @@ class TenancyMixinTestCases(
             },
             'permission_classes': {
                 'type': list,
-                'value': [ TenancyPermissions ]
+                'value': [ TenancyPermissions | SuperUserPermissions ]
             },
             '_obj_tenancy': {
                 'type': type(None),
