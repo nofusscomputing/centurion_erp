@@ -1,4 +1,5 @@
 import datetime
+import inspect
 import logging
 import os
 import pytest
@@ -152,6 +153,49 @@ def pytest_generate_tests(metafunc):
 
     parameterized_key: str = None
 
+
+    def get_type_name(value) -> str:
+
+        type_name = None
+
+        if(
+            inspect.isclass(value)
+            or (
+                hasattr(value, "__class__")
+                and type(value) not in [ bool, dict, int, str, type(None) ]
+            )
+        ):
+
+            if isinstance(value, list) and value:
+
+                type_name: str = [ get_type_name(item) for item in value ]
+
+            else:
+
+                type_name: str = str(getattr(value, '__name__', value.__class__.__name__)).lower()
+
+
+        elif callable(value):
+
+            type_name: str = str(value.__name__).lower()
+
+        else:
+
+            type_name: str = str(value).lower()
+
+
+        if isinstance(type_name, str):
+
+            type_name = type_name.replace(', ', '_')    # lists
+            type_name = type_name.replace("'", '')      # lists
+            type_name = type_name.replace('"', '')      # lists
+            type_name = type_name.replace(' ', '_')     # lists | str
+
+
+        return type_name
+
+
+
     if {'parameterized'} <= set(metafunc.fixturenames):
 
         for mark in metafunc.definition.own_markers:    # Skip tests markd to skip
@@ -303,18 +347,11 @@ def pytest_generate_tests(metafunc):
                         if key in item[1]:
 
                             item_values += ( item[1][key], )
+                            value = get_type_name(
+                                value = item[1][key]
+                            )
 
-                            if type(item[1][key]) is type:
-
-                                ids_name += '_' + getattr(item[1][key], '__name__', 'err_generate_tests').lower()
-
-                            elif callable(item[1][key]):
-
-                                ids_name  += '_' + item[1][key].__name__
-
-                            else:
-
-                                ids_name += '_' + str(item[1][key]).lower()
+                            ids_name += f'_{value}'
 
 
                 if(
