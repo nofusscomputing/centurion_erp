@@ -240,6 +240,24 @@ class ModelSerializer(
                     'ticket_type',
                 ]
 
+            if not self.context['view']._has_triage:
+
+                read_only_fields += [
+                    'parent_ticket',
+                    'category',
+                    'project',
+                    'milestone',
+                    'urgency',
+                    'impact',
+                    'priority',
+                    'opened_by',
+                    'assigned_to',
+                    'planned_start_date',
+                    'planned_finish_date',
+                    'real_start_date',
+                    'real_finish_date',
+                ]
+
             self.Meta.read_only_fields = read_only_fields
 
 
