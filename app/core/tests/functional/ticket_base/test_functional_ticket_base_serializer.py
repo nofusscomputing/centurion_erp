@@ -459,6 +459,7 @@ class TicketBaseSerializerTestCases:
         view_set = fake_view(
             user = self.view_user.user,
             _has_import = True,
+            _has_triage = True,
         )
 
         with pytest.raises(param_exception_obj) as err:
@@ -504,6 +505,7 @@ class TicketBaseSerializerTestCases:
         view_set = fake_view(
             user = self.view_user.user,
             _has_import = True,
+            _has_triage = True
         )
 
         serializer = create_serializer(
@@ -843,9 +845,23 @@ class TicketBaseSerializerTestCases:
 
         serializer = fresh_ticket_serializer['serializer']
 
-        serializer.initial_data['assigned_to'] = [ self.entity_user.id ]
-
         serializer.context['view']._has_triage = True
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        serializer = serializer.__class__(
+            serializer.instance,
+            context = {
+                'request': serializer.context['view'].request,
+                'view': serializer.context['view'],
+            },
+            data = {
+                'assigned_to': [ self.entity_user.id ]
+            },
+            partial = True,
+        )
 
         serializer.is_valid(raise_exception = True)
 

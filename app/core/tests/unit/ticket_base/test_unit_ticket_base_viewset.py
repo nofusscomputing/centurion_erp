@@ -2,10 +2,13 @@ import pytest
 
 from types import NoneType
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.tests.unit.viewset.test_unit_tenancy_viewset import (
     SubModelViewSetInheritedCases
 )
 
+from core.permissions.ticket import TicketPermission
 from core.viewsets.ticket import (
     TicketBase,
     ViewSet,
@@ -69,6 +72,10 @@ class ViewsetTestCases(
             },
             'model_suffix': {
                 'type': NoneType,
+            },
+            'permission_classes': {
+                'type': list,
+                'value': [ TicketPermission | SuperUserPermissions ]
             },
             'search_fields': {
                 'value': [
