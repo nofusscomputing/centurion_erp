@@ -172,6 +172,7 @@ omit = [
     #
     "app/access/models/team.py",
     "app/access/models/team_user.py",
+    "app/core/lib/feature_not_used.py",
     #
     # Organization rename to Tenant
     #
@@ -193,6 +194,7 @@ omit = [
     "app/core/signal/ticket_linked_item_delete.py",
     "app/core/serializers/ticket_depreciated.py",
     "app/core/serializers/ticket_comment_depreciated.py",
+    "app/core/serializers/ticket_linked_item.py",
     "app/core/models/ticket/ticket_linked_items.py",
     "app/core/serializers/ticket_related.py",
     "app/core/viewsets/ticket_depreciated.py",
