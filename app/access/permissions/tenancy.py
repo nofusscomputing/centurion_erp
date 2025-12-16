@@ -292,15 +292,12 @@ class TenancyPermissions(
                 return True
 
             elif(
-                (
-                    request.user.has_perms(
-                        permission_list = view.permissions_required,
-                        tenancy = obj_organization
-                    )
-                    and self.is_tenancy_model(view)
-                    and obj_organization is not None
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
+                    tenancy = obj_organization
                 )
-                or request.user.is_superuser
+                and self.is_tenancy_model(view)
+                and obj_organization is not None
             ):
 
                 return True
@@ -354,22 +351,14 @@ class TenancyPermissions(
             if self.is_tenancy_model( view ):
 
                 if(
-                    (
-                        request.user.has_perms(
-                            permission_list = view.permissions_required,
-                            obj = obj
-                        )
-                        or request.user.is_superuser
+                    request.user.has_perms(
+                        permission_list = view.permissions_required,
+                        obj = obj
                     )
                     and self.get_tenancy( view = view, obj = obj )
                 ):
 
                     return True
-
-
-            elif not self.is_tenancy_model( view ) or request.user.is_superuser:
-
-                return True
 
 
         except Exception as e:
