@@ -9,6 +9,10 @@ User = django.contrib.auth.get_user_model()
 
 class MockView:
 
+    _has_import = False
+
+    _has_triage = False
+
     action: str = None
 
     app_settings: AppSettings = None

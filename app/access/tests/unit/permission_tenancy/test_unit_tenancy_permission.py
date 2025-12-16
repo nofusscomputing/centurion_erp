@@ -415,7 +415,7 @@ class TenancyPermissionsTestCases(
                 'user_tenancy': 1,
             },
             'not_tenancy_model': {
-                'expect_access': True,
+                'expect_access': False,
                 'is_anonymous': False,
                 'is_superuser': False,
                 'is_tenancy_model': False,

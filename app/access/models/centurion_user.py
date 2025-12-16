@@ -304,9 +304,6 @@ class CenturionUser(
         tenancy_permission: bool = True
     ) -> bool:
 
-        if self.is_superuser:
-            return True
-
 
         if tenancy is None and obj is None and tenancy_permission:
             raise ValueError('either an object or tanancy is required.')
