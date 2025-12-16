@@ -92,6 +92,11 @@ class SuperUserPermissionTestCases(
 
 
 
+    @pytest.mark.xfail( reason = 'SuperUser permissions expected to call `is_superuser`' )
+    def test_function_has_object_permission_no_call_is_superuser(self):
+        assert False
+
+
 @pytest.mark.module_access
 class SuperUserPermissionPyTest(
     SuperUserPermissionTestCases
