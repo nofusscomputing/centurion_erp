@@ -2,12 +2,15 @@ from rest_framework.exceptions import (
     MethodNotAllowed,
     NotAuthenticated,
 )
-from rest_framework.permissions import DjangoObjectPermissions
+
+from api.permissions.common import (
+    CenturionObjectPermissions
+)
 
 
 
 class SuperUserPermissions(
-    DjangoObjectPermissions,
+    CenturionObjectPermissions,
 ):
     """User based Permission Mixin
 
