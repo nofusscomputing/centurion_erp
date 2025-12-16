@@ -1,5 +1,6 @@
 import pytest
 
+from unittest.mock import PropertyMock
 
 from api.permissions.common import (
     CenturionModelPermissions,
@@ -225,6 +226,44 @@ class CenturionModelPermissionTestCases(
         assert issubclass(test_class, CenturionModelPermissions)
 
 
+    def test_function_has_permission_no_call_is_superuser(self, viewset, mocker):
+        """Test Function
+
+        Ensure function `has_permission` does not call variable `user.is_superuser`
+        """
+        
+        view = viewset
+
+        if not isinstance(view, MyMockView):
+            view = view(
+                method = 'GET',
+                kwargs = {},
+                user = MockUser(
+                    is_anonymous = False,
+                    is_superuser = True
+                )
+            )
+
+            view.allowed_methods = [ 'GET' ]
+
+
+        is_superuser = mocker.patch.object(
+            view.request.user,
+            "is_superuser",
+            new_callable=PropertyMock,
+            return_value=True,
+
+        )
+
+        is_superuser.reset_mock()
+
+        view.permission_classes[0]().has_permission(
+            view = view,
+            request = view.request
+        )
+
+        is_superuser.assert_not_called()
+
 
 class CenturionModelPermissionInheritedCases(
     CenturionModelPermissionTestCases
@@ -263,3 +302,8 @@ class CenturionModelPermissionPyTest(
 
         with pytest.raises(NotImplementedError):
             viewset.permission_classes[0]().has_permission(None, viewset)
+
+
+    @pytest.mark.xfail( reason = 'Common permissions raises notimplemented exception. Test is N/A.' )
+    def test_function_has_permission_no_call_is_superuser(self, viewset, mocker):
+        assert False

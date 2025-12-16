@@ -78,3 +78,9 @@ class CenturionObjectPermissionPyTest(
 
         with pytest.raises(NotImplementedError):
             viewset.permission_classes[0]().has_object_permission(None, viewset, None)
+
+
+
+    @pytest.mark.xfail( reason = 'Common permissions raises notimplemented exception. Test is N/A.' )
+    def test_function_has_permission_no_call_is_superuser(self, viewset, mocker):
+        assert False
