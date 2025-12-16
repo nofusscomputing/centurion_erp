@@ -38,6 +38,8 @@ omit = [
     "app/access/models/team.py",
     "app/access/models/team_user.py",
     "app/core/lib/feature_not_used.py",
+    "app/core/models/manufacturer.py",
+    "app/core/serializers/centurionmodelnote_manufacturer.py",
     #
     # Organization rename to Tenant
     #
