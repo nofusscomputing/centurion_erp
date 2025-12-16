@@ -587,6 +587,7 @@ if DEBUG:
     ]
     DEBUG_TOOLBAR_CONFIG = {
         'TOOLBAR_STORE_CLASS': 'debug_toolbar.store.DatabaseStore',
+        'PROFILER_MAX_DEPTH': 15,
     }
 
 
