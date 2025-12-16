@@ -9,202 +9,22 @@ from rest_framework.exceptions import (
 
 from access.permissions.tenancy import TenancyPermissions
 
-from centurion.tests.unit_class import ClassTestCases
+from api.tests.unit.permissions.test_unit_common_object_permission import (
+    CenturionObjectPermissionInheritedCases,
+    MockObj,
+    MockLogger,
+    MockUser,
+    MyMockView
+)
 
 from core.mixins.centurion import Centurion
 
 
 
-class MockObj:
-
-    class Meta:
-        app_label = 'core'
-        model_name = 'mock_object'
-
-
-    def __init__(self, tenancy):
-        self._tenancy = tenancy
-
-        self._meta = self.Meta()
-
-
-    def get_tenant(self):
-        return self._tenancy
-
-
-class MockUser:
-
-    is_anonymous: bool = None
-
-    def __init__(
-        self,
-        has_perm: bool = False,
-        id: int = 0,
-        is_anonymous: bool = True,
-        is_superuser: bool = False,
-        permissions: list[ str ] = [ 'no_permissions' ],
-        tenancy: int = 999999999999999,
-        object_tenancy: int = 99,
-    ):
-
-        self._has_perm = has_perm
-        self.id = id
-        self.is_anonymous = is_anonymous
-
-        if id:
-            self.is_anonymous = False
-        self.is_superuser = is_superuser
-        self.permissions = permissions
-        self.tenancy = tenancy
-
-
-    def has_perm( self, permission, tenancy = None, obj = None, tenancy_permission = True ):
-
-        if tenancy is None and obj is not None:
-            tenancy = obj.get_tenant()
-
-        if tenancy is None and obj is None and tenancy_permission:
-            raise ValueError('tenancy must be supplied')
-
-        if tenancy:
-            if tenancy != self.tenancy:
-                return False
-
-        if permission not in self.permissions:
-            return False
-
-        return True
-
-
-    def has_perms(
-        self, permission_list: list, obj = None, tenancy = None
-    ) -> bool:
-
-        for perm in permission_list:
-
-            if obj:
-
-                if not self.has_perm( permission = perm, obj = obj ):
-                    return False
-
-            elif tenancy:
-
-                if not self.has_perm( permission = perm, tenancy = tenancy ):
-                    return False
-
-            elif not obj and not tenancy:
-
-                if not self.has_perm( permission = perm, tenancy_permission = False ):
-                    return False
-
-            else:
-                return False
-
-        return True
-
-
-
-class MockLogger:
-
-    class MockChild:
-
-        def warn(self, *args, **kwargs):
-            return None
-
-    def getChild(self, *args, **kwargs):
-        return self.MockChild()
-
-
-class MyMockView:
-
-    class MockModel:
-
-        class Meta:
-            app_label = 'core'
-            model_name = 'mock_object'
-
-        __name__: str = 'NotSpecified'
-
-        _meta = Meta()
-
-        def __init__(self):
-
-            self._meta = self.Meta()
-
-
-    class MockRequest:
-
-        class MockStream:
-
-            method: str = None
-
-            def __init__(self, method: str):
-
-                self.method = method
-
-        data: dict = None
-
-        method: str = None
-
-
-        def __init__(self, data: dict, method: str, user):
-
-            self.data = data
-
-            self.method = method
-
-            if user:
-                self.user = user
-            else:
-                self.user = MockUser()
-
-    mocked_object = None
-
-    def __init__(self,
-        method: str,
-        kwargs: dict,
-        action: str = None,
-        model = None,
-        obj_organization = None,
-        permission_required: str = 'None_specified',
-        user = None,
-        data:dict = None
-    ):
-
-        self.action = action
-
-        self.kwargs = kwargs
-
-        if not action:
-
-            if kwargs.get('pk', None) and method == 'GET':
-                self.action = 'retrieve'
-            elif method == 'GET':
-                self.action = 'list'
-
-        if model:
-            self.model = model
-        else:
-            self.model = self.MockModel
-
-        self._obj_organization = obj_organization
-
-        if permission_required is not list:
-            self.permissions_required = [ permission_required ]
-        else:
-            self.permissions_required = permission_required
-
-        self.request = self.MockRequest(
-            data = data,
-            method = method,
-            user = user,
-        )
-
-
 @pytest.mark.mixin
 @pytest.mark.mixin_tenancypermission
 class TenancyPermissionsTestCases(
-    ClassTestCases
+    CenturionObjectPermissionInheritedCases
 ):
 
 
@@ -221,13 +41,13 @@ class TenancyPermissionsTestCases(
 
 
 
-    def test_class_inherits_mixin_tenancy_permission(self, viewset):
+    def test_class_inherits_mixin_tenancy_permission(self, test_class):
         """Class Inheritence check
 
         Class must inherit from `access.mixins.permissions.TenancyPermissions`
         """
 
-        assert issubclass(viewset.permission_classes[0], TenancyPermissions)
+        assert issubclass(test_class, TenancyPermissions)
 
 
 
@@ -950,6 +770,13 @@ class TenancyPermissionsInheritedCases(
 class TenancyPermissionsPyTest(
     TenancyPermissionsTestCases
 ):
+
+
+    @pytest.fixture( scope = 'class')
+    def test_class(self):
+
+        yield TenancyPermissions
+
 
     @pytest.fixture( scope = 'function' )
     def viewset(self, test_class):
