@@ -24,16 +24,33 @@ class TicketPermission(
 
         tenancy = self.get_tenancy(view = view)
 
-        if tenancy and has_permission:
+        if has_permission:
 
-            view._has_import = request.user.has_perm(
-                permission = f'{view.model._meta.app_label}.import_{view.model._meta.model_name}',
-                tenancy = self.get_tenancy(view = view)
-            )
+            if tenancy:
 
-            view._has_triage = request.user.has_perm(
-                permission = f'{view.model._meta.app_label}.triage_{view.model._meta.model_name}',
-                tenancy = self.get_tenancy(view = view)
-            )
+                view._has_import = request.user.has_perm(
+                    permission = f'{view.model._meta.app_label}.import_{view.model._meta.model_name}',
+                    tenancy = self.get_tenancy(view = view)
+                )
+
+                view._has_triage = request.user.has_perm(
+                    permission = f'{view.model._meta.app_label}.triage_{view.model._meta.model_name}',
+                    tenancy = self.get_tenancy(view = view)
+                )
+
+            elif view.action in [
+                'list',    # Creating
+                'metadata',
+            ]:
+
+                view._has_import = request.user.has_perm(
+                    permission = f'{view.model._meta.app_label}.import_{view.model._meta.model_name}',
+                    tenancy_permission = False
+                )
+
+                view._has_triage = request.user.has_perm(
+                    permission = f'{view.model._meta.app_label}.triage_{view.model._meta.model_name}',
+                    tenancy_permission = False
+                )
 
         return has_permission
