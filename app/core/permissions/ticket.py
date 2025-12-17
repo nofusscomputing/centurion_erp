@@ -24,7 +24,7 @@ class TicketPermission(
 
         tenancy = self.get_tenancy(view = view)
 
-        if tenancy:
+        if tenancy and has_permission:
 
             view._has_import = request.user.has_perm(
                 permission = f'{view.model._meta.app_label}.import_{view.model._meta.model_name}',
