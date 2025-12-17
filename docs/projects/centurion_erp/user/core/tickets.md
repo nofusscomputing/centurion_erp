@@ -50,33 +50,33 @@ As tickets are a core feature, most ticket will contain the fields below. With e
 
 - [`Status`](#ticket-status) Status of this ticket. ***Optional***
 
-- [`Category`](./ticketcategory.md) Category of this ticket. ***Optional***
+- [`Category`](./ticketcategory.md) Category of this ticket. _User requires triage permission._ ***Optional***
 
 - `Private` Mark ticket as private. ***Optional***
 
-- [`Project`](../project_management/project.md) Project this ticket belongs to. ***Optional***
+- [`Project`](../project_management/project.md) Project this ticket belongs to. _User requires triage permission._ ***Optional***
 
-- `Project Milestone` Milestone for this ticket. ***Optional***
+- `Project Milestone` Milestone for this ticket. _User requires triage permission._ ***Optional***
 
 - `Urgency` Urgency for this ticket to be solved from the ticket raiser. ***Optional***
 
-- `Impact` Assessed impact of this ticket. ***Optional***
+- `Impact` Assessed impact of this ticket. _User requires triage permission._ ***Optional***
 
-- `Priority` Work completion order of this ticket. ***Optional***
+- `Priority` Work completion order of this ticket. _User requires triage permission._ ***Optional***
 
 - `Opened By` Whom opened the ticket. ***Optional***
 
-- `Users / Groups Subscribed` User / Groups whom are subscribed to obtain updates of this ticket. ***Optional***
+- `Subscribers` User / Groups whom are subscribed to obtain updates of this ticket. ***Optional***
 
-- `Users / Groups Assigned` User / Groups whom are assigned to work on this ticket. ***Optional***
+- `Assignees` User / Groups whom are assigned to work on this ticket. _User requires triage permission._ ***Optional***
 
-- `Planned Start Date` When the ticket is planned to be started by. ***Optional***
+- `Planned Start Date` When the ticket is planned to be started by. _User requires triage permission._ ***Optional***
 
-- `Planned Finish Date` When the ticket is planned to be completed by. ***Optional***
+- `Planned Finish Date` When the ticket is planned to be completed by. _User requires triage permission._ ***Optional***
 
-- `Real Start Date` When the ticket work actually started. ***Optional***
+- `Real Start Date` When the ticket work actually started. _User requires triage permission._ ***Optional***
 
-- `Real Finish Date` When the ticket work actually finished. ***Optional***
+- `Real Finish Date` When the ticket work actually finished. _User requires triage permission._ ***Optional***
 
 In Addition, tickets also contain the following objects for each ticket:
 

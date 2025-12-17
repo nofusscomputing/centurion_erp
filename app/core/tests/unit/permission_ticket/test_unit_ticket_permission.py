@@ -1,5 +1,7 @@
 import pytest
 
+from unittest.mock import call
+
 from rest_framework.exceptions import (
     MethodNotAllowed,
     NotAuthenticated,
@@ -138,8 +140,26 @@ class TicketPermissionTestCases(
         assert not view._has_import
 
 
+    # ( 'view action', 'HTTP Method', 'should have call to <user>.has_perms', 'does have permission' )
+    view_actions = [
+        ('create', 'POST', False, False),
+        ('delete', 'DELETE', False, False),
+        ('list', 'GET', True, True),
+        ('metadata', 'GET', True, True),
+        ('retrieve', 'GET', False, False),
+        ('update', 'PUT', False, False),
+        ('partial_update', 'PATCH', False, False),
+    ]
 
-    def test_viewset_var__has_import_false_no_tenancy(self, mocker, viewset):
+
+    @pytest.mark.parametrize(
+        argnames = "action, method, call_expected, permission_value",
+        argvalues = view_actions,
+        ids=[f'{action}_{method}_{call_expected}' for action, method, call_expected, permission_value in view_actions]
+    )
+    def test_viewset_var__has_import_no_tenancy(self, mocker, viewset,
+        action, method, call_expected, permission_value,
+    ):
         """Test ViewSet variable is set
         
         Ensure that if no tenancy is found, that variable
@@ -147,7 +167,7 @@ class TicketPermissionTestCases(
         """
 
         view = viewset(
-            method = 'GET',
+            method = method,
             kwargs = {},
             user = MockUser(
                 is_anonymous = False,
@@ -155,11 +175,13 @@ class TicketPermissionTestCases(
             )
         )
 
+        view.action = action
+
         mocker.patch('core.permissions.ticket.TicketPermission.get_tenancy', return_value = None)
 
         mocker.patch('access.permissions.tenancy.TenancyPermissions.has_permission', return_value = True)
 
-        mocker.patch.object(view.request.user, 'has_perm', return_value = True)
+        has_perm = mocker.patch.object(view.request.user, 'has_perm', return_value = True)
 
         assert view._has_import == False, 'Value by default must be `false`'
 
@@ -168,7 +190,16 @@ class TicketPermissionTestCases(
             view = view
         )
 
-        assert not view._has_import
+
+        if call_expected:
+
+            has_perm.assert_any_call(permission='core.import_mock_object', tenancy_permission=False)
+
+        else:
+
+            assert call(permission='core.triage_mock_object', tenancy_permission=False) not in has_perm.call_args_list
+
+        assert view._has_import == permission_value, f'This value should have been {permission_value}'
 
 
 
@@ -273,7 +304,14 @@ class TicketPermissionTestCases(
 
 
 
-    def test_viewset_var_has_triage_false_no_tenancy(self, mocker, viewset):
+    @pytest.mark.parametrize(
+        argnames = "action, method, call_expected, permission_value",
+        argvalues = view_actions,
+        ids=[f'{action}_{method}_{call_expected}' for action, method, call_expected, permission_value in view_actions]
+    )
+    def test_viewset_var_has_triage_no_tenancy(self, mocker, viewset,
+        action, method, call_expected, permission_value,
+    ):
         """Test ViewSet variable is set
         
         Ensure that if no tenancy is found, that variable
@@ -281,7 +319,7 @@ class TicketPermissionTestCases(
         """
 
         view = viewset(
-            method = 'GET',
+            method = method,
             kwargs = {},
             user = MockUser(
                 is_anonymous = False,
@@ -289,11 +327,13 @@ class TicketPermissionTestCases(
             )
         )
 
+        view.action = action
+
         mocker.patch('core.permissions.ticket.TicketPermission.get_tenancy', return_value = None)
 
         mocker.patch('access.permissions.tenancy.TenancyPermissions.has_permission', return_value = True)
 
-        mocker.patch.object(view.request.user, 'has_perm', return_value = True)
+        has_perm = mocker.patch.object(view.request.user, 'has_perm', return_value = True)
 
         assert view._has_triage == False, 'Value by default must be `false`'
 
@@ -302,7 +342,15 @@ class TicketPermissionTestCases(
             view = view
         )
 
-        assert not view._has_triage
+        if call_expected:
+
+            has_perm.assert_any_call(permission='core.triage_mock_object', tenancy_permission=False)
+
+        else:
+
+            assert call(permission='core.triage_mock_object', tenancy_permission=False) not in has_perm.call_args_list
+
+        assert view._has_triage == permission_value, f'This value should have been {permission_value}'
 
 
 
@@ -339,13 +387,5 @@ class TicketPermissionPyTest(
 
             permission_classes = [ test_class ]
 
-        # yield MockView(
-        #     method = 'GET',
-        #     kwargs = {},
-        #     user = MockUser(
-        #         is_anonymous = False,
-        #         is_superuser = False
-        #     )
-        # )
 
         yield MockView
