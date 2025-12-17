@@ -247,7 +247,6 @@ class ModelSerializer(
                     'category',
                     'project',
                     'milestone',
-                    'urgency',
                     'impact',
                     'priority',
                     'opened_by',
