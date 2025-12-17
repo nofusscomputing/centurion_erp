@@ -1335,6 +1335,7 @@ markers = [
     "permissions_public_user: selects all permission tests related to public user.",
     "permissions_super_user: selects all permission tests related to super user.",
     "permissions_tenancy: selects all permission tests related to tenancy permissions.",
+    "permissions_ticket: selects all permission tests related to ticket permissions.",
     "permissions_user: selects all permission tests related to logged in user.",
     "regression: selects all tests for regression.",
     "serializer: Selects all serializer tests",
