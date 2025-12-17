@@ -138,7 +138,11 @@ The settings file is a python file `.py` and must remain a valid python file for
 
 ## Migrations
 
-Migrations serve the purpose of setting up the database. On initial deployment of Centurion ERP migrations must be run as must they be on any upgrade.
+Migrations serve the purpose of setting up the database. On initial deployment of Centurion ERP migrations must be run as must they be on any upgrade. As part of the migration the following further actions are run:
+
+- `Remove Stale Permissions`
+
+    Checks the current permissions and ensures that the content_type still exists. If it does not (the app was removed), the permission is removed from the database.
 
 
 ## Updating
