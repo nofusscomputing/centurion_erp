@@ -331,7 +331,7 @@ class TicketBaseSerializerTestCases:
 
         view_set = fake_view(
             user = self.view_user.user,
-            _has_import = True,
+            _has_import = False,
             _has_triage = True
         )
 
@@ -385,7 +385,7 @@ class TicketBaseSerializerTestCases:
 
         view_set = fake_view(
             user = self.view_user.user,
-            _has_import = True,
+            _has_import = False,
             _has_triage = True
         )
 
@@ -415,7 +415,7 @@ class TicketBaseSerializerTestCases:
 
         view_set = fake_view(
             user = self.view_user.user,
-            _has_import = True,
+            _has_import = False,
             _has_triage = True
         )
 
@@ -505,7 +505,7 @@ class TicketBaseSerializerTestCases:
         view_set = fake_view(
             user = self.view_user.user,
             _has_import = True,
-            _has_triage = True
+            _has_triage = False
         )
 
         serializer = create_serializer(
@@ -668,7 +668,7 @@ class TicketBaseSerializerTestCases:
 
         view_set = fake_view(
             user = self.view_user.user,
-            _has_import = True,
+            _has_import = False,
             _has_triage = True
         )
 
@@ -976,7 +976,7 @@ class TicketBaseSerializerTestCases:
         serializer.initial_data['status'] = model.TicketStatus.SOLVED
 
         serializer.context['view']._has_triage = True
-        serializer.context['view']._has_import = True
+        serializer.context['view']._has_import = False
 
         serializer.is_valid(raise_exception = True)
 
@@ -1062,7 +1062,7 @@ class TicketBaseSerializerTestCases:
         serializer.initial_data['status'] = model.TicketStatus.CLOSED
 
         serializer.context['view']._has_triage = True
-        serializer.context['view']._has_import = True
+        serializer.context['view']._has_import = False
 
         serializer.is_valid(raise_exception = True)
 
@@ -1119,7 +1119,7 @@ class TicketBaseSerializerTestCases:
 
         view_set = fake_view(
             user = user,
-            _has_import = True,
+            _has_import = False,
             _has_triage = True
         )
 
