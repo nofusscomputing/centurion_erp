@@ -8,6 +8,7 @@ from rest_framework.exceptions import (
 
 from access.models.entity import Entity
 
+from core.fields.markdown import MarkdownField
 from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket_base import TicketBase
 
@@ -548,6 +549,65 @@ class TicketBaseSerializerTestCases:
 
             )
         )
+
+
+
+    def test_serializer_valid_data_fields_updatable_permission_import(self, fake_view, parameterized, param_key_test_data,
+        create_serializer,
+        param_value,
+        param_will_create,
+        param_permission_import_required,
+        model_project, kwargs_project
+    ):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with a user with import permission
+        and with valid data, that the field was in-fact updated.
+        """
+
+        if not create_serializer.Meta.model._meta.get_field(param_value).editable:
+            pytest.xfail( reason = 'Field is not editable. test is N/A.' )
+
+
+        valid_data = self.valid_data.copy()
+
+        assert param_value in valid_data, (
+            'The field does not exist within the test data. '
+            'Test can not contiue until this is resolved.'
+        )
+
+        view_set = fake_view(
+            user = self.view_user.user,
+            _has_import = True,
+            _has_triage = False
+        )
+
+        serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        is_valid = serializer.is_valid(raise_exception = False)
+
+        assert is_valid, 'This test requires that the data be valid.'
+
+        fields = serializer.get_fields()
+
+        assert param_value in serializer._validated_data, (
+            'The field is non-existant or is marked as read only. '
+            f'read_only={fields[param_value].read_only}. '
+            'Test can not contiue until this is resolved.'
+        )
+
+        field_data = fields[param_value].to_representation(serializer._validated_data[param_value])
+
+        if isinstance(fields[param_value], MarkdownField):
+            field_data = field_data['markdown']
+
+        assert valid_data[param_value] == field_data
 
 
 
