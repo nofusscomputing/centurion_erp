@@ -32,6 +32,7 @@ class TicketBaseSerializerTestCases:
             'exception_code': 'required',
             'exception_code_key': None,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "external_system": {
             'will_create': False,
@@ -39,6 +40,7 @@ class TicketBaseSerializerTestCases:
             'exception_code': 'external_system_missing',
             'exception_code_key': None,
             'permission_import_required': True,
+            'permission_triage_required': False,
         },
         "external_ref": {
             'will_create': False,
@@ -46,15 +48,18 @@ class TicketBaseSerializerTestCases:
             'exception_code': 'external_ref_missing',
             'exception_code_key': None,
             'permission_import_required': True,
+            'permission_triage_required': False,
         },
         "parent_ticket": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         # "ticket_type": "request",
         "status": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "category": True,
         "title": {
@@ -63,6 +68,7 @@ class TicketBaseSerializerTestCases:
             'exception_code': 'required',
             'exception_code_key': None,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "description": {
             'will_create': False,
@@ -70,6 +76,7 @@ class TicketBaseSerializerTestCases:
             'exception_code': 'required',
             'exception_code_key': None,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "project": {
             'will_create': False,
@@ -77,78 +84,97 @@ class TicketBaseSerializerTestCases:
             'exception_code': 'milestone_requires_project',
             'exception_code_key': 'milestone',
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "milestone": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "urgency": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "impact": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "priority": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "opened_by": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "subscribed_to": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "assigned_to": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "planned_start_date": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "planned_finish_date": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "real_start_date": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "real_finish_date": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': True,
         },
         "is_deleted": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "is_solved": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "date_solved": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "is_closed": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "date_closed": {
             'will_create': True,
             'permission_import_required': False,
+            'permission_triage_required': False,
         },
         "created": {
             'will_create': True,
             'permission_import_required': True,
+            'permission_triage_required': False,
         },
         "modified": {
             'will_create': True,
             'permission_import_required': True,
+            'permission_triage_required': False,
         },
     }
 
@@ -580,6 +606,125 @@ class TicketBaseSerializerTestCases:
             user = self.view_user.user,
             _has_import = True,
             _has_triage = False
+        )
+
+        serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        is_valid = serializer.is_valid(raise_exception = False)
+
+        assert is_valid, 'This test requires that the data be valid.'
+
+        fields = serializer.get_fields()
+
+        assert param_value in serializer._validated_data, (
+            'The field is non-existant or is marked as read only. '
+            f'read_only={fields[param_value].read_only}. '
+            'Test can not contiue until this is resolved.'
+        )
+
+        field_data = fields[param_value].to_representation(serializer._validated_data[param_value])
+
+        if isinstance(fields[param_value], MarkdownField):
+            field_data = field_data['markdown']
+
+        assert valid_data[param_value] == field_data
+
+
+
+    def test_serializer_valid_data_missing_field_is_valid_permission_triage(self, fake_view, parameterized, param_key_test_data,
+        create_serializer,
+        param_value,
+        param_will_create,
+        param_permission_import_required, param_permission_triage_required
+    ):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with a user with triage permission
+        and with valid data, no validation error occurs.
+        """
+
+        if param_permission_import_required:
+            pytest.xfail( reason = 'Field is editable by import user ONLY. test is N/A.' )
+
+        valid_data = self.valid_data.copy()
+
+        del valid_data[param_value]
+
+        view_set = fake_view(
+            user = self.view_user.user,
+            _has_import = False,
+            _has_triage = True
+        )
+
+        serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        is_valid = serializer.is_valid(raise_exception = False)
+
+        assert (
+            (   # triage permission
+                param_permission_triage_required
+                and not param_will_create
+                and param_will_create == is_valid
+            )
+        or
+            (   # does require triage permission to set, however field not required to create.
+                param_permission_triage_required
+                and param_will_create == is_valid
+
+            )
+        or
+            (   # does not require triage permission
+                not param_permission_triage_required
+                and param_will_create == is_valid
+
+            )
+        )
+
+
+
+    def test_serializer_valid_data_fields_updatable_permission_triage(self, fake_view, parameterized, param_key_test_data,
+        create_serializer,
+        param_value,
+        param_will_create,
+        param_permission_import_required, param_permission_triage_required,
+        model_project, kwargs_project
+    ):
+        """Serializer Validation Check
+
+        Ensure that when creating an object with a user with triage permission
+        and with valid data, that the field was in-fact updated.
+        """
+
+        if not create_serializer.Meta.model._meta.get_field(param_value).editable:
+            pytest.xfail( reason = 'Field is not editable. test is N/A.' )
+
+        if param_permission_import_required:
+            pytest.xfail( reason = 'Field is editable by import user ONLY. test is N/A.' )
+
+
+        valid_data = self.valid_data.copy()
+
+        assert param_value in valid_data, (
+            'The field does not exist within the test data. '
+            'Test can not contiue until this is resolved.'
+        )
+
+        view_set = fake_view(
+            user = self.view_user.user,
+            _has_import = False,
+            _has_triage = True
         )
 
         serializer = create_serializer(
