@@ -227,7 +227,7 @@ class ModelSerializer(
             read_only_fields = [
                 'id',
                 'display_name',
-                'created',
+                'ticket_type',
                 'modified',
                 '_urls',
             ]
@@ -237,10 +237,12 @@ class ModelSerializer(
                 read_only_fields += [
                     'external_system',
                     'external_ref',
-                    'ticket_type',
                 ]
 
-            if not self.context['view']._has_triage:
+            if(
+                not self.context['view']._has_triage
+                and not self.context['view']._has_import
+            ):
 
                 read_only_fields += [
                     'parent_ticket',
@@ -255,6 +257,15 @@ class ModelSerializer(
                     'planned_finish_date',
                     'real_start_date',
                     'real_finish_date',
+                ]
+
+            if(
+                self.context['view']._has_triage
+                and not self.context['view']._has_import
+            ):
+
+                read_only_fields += [
+                    'created',
                 ]
 
             self.Meta.read_only_fields = read_only_fields
