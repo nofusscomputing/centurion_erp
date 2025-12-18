@@ -147,16 +147,18 @@ class TicketBaseSerializerTestCases:
         'external_ref': 1,
         'title': 'ticket title',
         'description': 'the ticket description',
-        'status': TicketBase.TicketStatus.NEW,
-        'planned_start_date': '2025-04-16T00:00:01',
-        'planned_finish_date': '2025-04-16T00:00:02',
-        'real_start_date': '2025-04-16T00:00:03',
-        'real_finish_date': '2025-04-16T00:00:04',
+        'status': int(TicketBase.TicketStatus.NEW),
+        'planned_start_date': '2025-04-16T00:00:01Z',
+        'planned_finish_date': '2025-04-16T00:00:02Z',
+        'real_start_date': '2025-04-16T00:00:03Z',
+        'real_finish_date': '2025-04-16T00:00:04Z',
         'is_deleted': False,
         'is_solved': False,
-        'date_solved': '2025-04-16T00:00:04',
+        'date_solved': '2025-04-16T00:00:04Z',
         'is_closed': False,
-        'date_closed': '2025-04-16T00:00:04',
+        'date_closed': '2025-04-16T00:00:04Z',
+        'created': '2025-12-18T07:08:09Z',
+        'modified': '2025-12-18T08:09:10Z'
     }
     """Valid data used by serializer to create object"""
 
@@ -259,9 +261,9 @@ class TicketBaseSerializerTestCases:
             )
 
             request.cls.valid_data.update({
-                'organization': request.cls.organization,
+                'organization': request.cls.organization.pk,
                 'category': TicketCategory.objects.create(
-                organization = request.cls.organization,
+                    organization = request.cls.organization,
                     name = 'a category'
                 ).pk,
                 'opened_by': request.cls.view_user.pk,
@@ -275,6 +277,7 @@ class TicketBaseSerializerTestCases:
                 'assigned_to': [
                     request.cls.entity_user.id,
                 ],
+                'status': int(TicketBase.TicketStatus.ASSIGNED),
                 'subscribed_to': [
                     request.cls.entity_user.id,
                 ],
