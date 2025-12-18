@@ -141,6 +141,14 @@ class TicketBaseSerializerTestCases:
             'will_create': True,
             'permission_import_required': False,
         },
+        "created": {
+            'will_create': True,
+            'permission_import_required': True,
+        },
+        "modified": {
+            'will_create': True,
+            'permission_import_required': True,
+        },
     }
 
     valid_data: dict = {
@@ -526,6 +534,12 @@ class TicketBaseSerializerTestCases:
                 param_permission_import_required
                 and not param_will_create
                 and param_will_create == is_valid
+            )
+        or
+            (   # does require import permission to set, however field not required to create.
+                param_permission_import_required
+                and param_will_create == is_valid
+
             )
         or
             (   # does not require import permission
