@@ -26,3 +26,6 @@ app/artifacts/
 app/pyproject.toml
 app/histogram_**
 app/counter_**
+
+**.egg-info
+dist/
