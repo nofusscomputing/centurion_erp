@@ -5,6 +5,7 @@ gitlab-ci/
 venv/
 docs/
 **/*.sqlite3
+**/*.sqlite3-*
 **/static/
 __pycache__
 **__pycache__
@@ -15,4 +16,4 @@ __pycache__
 **.egg-info
 build/
 dist/
-
+node_modules/

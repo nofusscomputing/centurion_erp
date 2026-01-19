@@ -88,8 +88,11 @@ test-integration:
 	export exit_code=0;
 	cp pyproject.toml app/;
 	sed -i 's|^source = \[ "./app" \]|source = [ "." ]|' app/pyproject.toml;
+	cp -f requirements_dev.txt test/requirements_dev.txt;
 	cd test;
-	export CENTURION_IMAGE_TAG=$$(git log -1 --format=%H);
+	if [ ! -n "$CENTURION_IMAGE_TAG" ]; then
+		export CENTURION_IMAGE_TAG=$$(git log -1 --format=%H);
+	fi
 	if docker-compose up -d; then
 
 		docker ps -a;
@@ -187,6 +190,7 @@ test-integration:
 	docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
 	export exit_code=0;
 	cd test;
+	rm -f requirements_dev.txt;
 	echo 'REmoving containers.';
 	docker-compose down -v;
 	cd ..;

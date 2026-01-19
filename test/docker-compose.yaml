@@ -47,6 +47,13 @@ services:
 
   centurion:
     <<: *centurion
+    image: ${CENTURION_IMAGE:-ghcr.io/nofusscomputing/centurion-erp}:test
+    build:
+      context: ../.
+      dockerfile: test/dockerfile
+      args:
+        CENTURION_IMAGE: ${CENTURION_IMAGE:-ghcr.io/nofusscomputing/centurion-erp}
+        CENTURION_IMAGE_TAG: ${CENTURION_IMAGE_TAG:-dev}
     container_name: centurion-erp
     restart: always
     hostname: centurion-erp
