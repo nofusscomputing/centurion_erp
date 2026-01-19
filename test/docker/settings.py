@@ -46,7 +46,14 @@ DATABASES = {
     }
 }
 
-DEBUG = bool(os.getenv('DJANGO_DEBUG', True))
+if os.getenv('DJANGO_DEBUG') == 'False':
+
+    DEBUG = False
+
+else:
+
+    DEBUG = True
+
 
 FEATURE_FLAGGING_ENABLED = True    # Turn Feature Flagging on/off
 
