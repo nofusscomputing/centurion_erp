@@ -1,3 +1,92 @@
+[build-system]
+requires = [
+    "setuptools>=80.9.0",
+    "setuptools-scm>=9.2.2",
+    "wheel",
+
+]
+build-backend = "setuptools.build_meta"
+
+
+
+[project]
+
+name = "centurion-erp"
+description = "An ERP with a large emphasis on the IT Service Management (ITSM) and Automation."
+
+version = "1.27.0"
+
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.10"
+license = "AGPL-3.0-only"
+
+authors = [
+    { name = "No Fuss Computing", email = "helpdesk@nofusscomputing.com" }
+]
+maintainers = [
+    { name = "No Fuss Computing", email = "helpdesk@nofusscomputing.com" }
+]
+
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    "Development Status :: 4 - Beta",
+
+    "Framework :: Celery",
+    "Framework :: Django",
+    "Framework :: Django :: 5.1",
+
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+
+    "Operating System :: OS Independent"
+]
+
+
+
+[project.scripts]
+manage = "app.manage:main"
+
+
+
+[project.urls]
+
+Documentation = "https://nofusscomputing.com/projects/centurion_erp"
+Changelog = "https://nofusscomputing.com/projects/centurion_erp/blob/master/CHANGELOG.md"
+Homepage = "https://nofusscomputing.com/projects/centurion_erp"
+Issues = "https://github.com/nofusscomputing/centurion_erp/issues"
+releasenotes = "https://nofusscomputing.com/projects/centurion_erp/blob/master/Release-Notes.md"
+Source = "https://github.com/nofusscomputing/centurion_erp"
+
+
+
+[tool.check-wheel-contents]
+ignore = [
+    'W002',    # Require for `W002: Wheel contains duplicate files **/conftest.py`
+               # see: https://github.com/jwodder/check-wheel-contents/issues/7
+    'W004',    # Required for `W004: Module is not located at importable path: src/migrations/0001_initial.py`
+]
+
+
+
+[tool.setuptools]
+package-dir = {"centurion_erp" = "app"}
+
+[tool.setuptools_scm]
+root = 'app'
+
+
+
 [tool.coverage.run]
 source = [ "./app" ]
 omit = [
