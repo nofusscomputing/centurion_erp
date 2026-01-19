@@ -3,7 +3,7 @@
 set -e
 
 echo "Installing python test requirements......";
-docker exec -i centurion-erp pip install -r /requirements_test.txt;
+docker exec -i centurion-erp pip install -r /requirements_dev.txt;
 pip install -r ../requirements_production.txt;
 echo "Complete: Installing python test requirements.";
 

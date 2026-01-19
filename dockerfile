@@ -112,7 +112,7 @@ ENV IS_WORKER=False
 
 
 COPY requirements.txt requirements.txt
-COPY requirements_test.txt requirements_test.txt
+COPY requirements_dev.txt requirements_dev.txt
 
 
 COPY ./app/. app

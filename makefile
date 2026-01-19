@@ -18,7 +18,7 @@ prepare-python: prepare-git-submodule
 	pip install -r gitlab-ci/lint/requirements.txt;
 	pip install -r gitlab-ci/mkdocs/requirements.txt;
 	pip install -r requirements.txt;
-	pip install -r requirements_test.txt;
+	pip install -r requirements_dev.txt;
 
 prepare-docs: prepare-git-submodule
 	npm install markdownlint-cli2;
