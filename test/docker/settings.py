@@ -2,6 +2,9 @@
 
 # If metrics enabled, see https://nofusscomputing.com/projects/centurion_erp/administration/monitoring/#django-exporter-setup)
 # to configure the database metrics.
+import os
+
+
 
 API_TEST = True
 
@@ -43,7 +46,7 @@ DATABASES = {
     }
 }
 
-DEBUG = True
+DEBUG = bool(os.getenv('DJANGO_DEBUG', True))
 
 FEATURE_FLAGGING_ENABLED = True    # Turn Feature Flagging on/off
 

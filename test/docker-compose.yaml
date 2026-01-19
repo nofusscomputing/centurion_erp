@@ -39,6 +39,8 @@ services:
     container_name: centurion-erp-init
     restart: "no"
     entrypoint: ""
+    environment:
+      DJANGO_DEBUG: "False"
     command: sh -c 'sleep 15; python manage.py migrate'
     depends_on:
       - postgres
