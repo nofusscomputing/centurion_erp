@@ -14,6 +14,8 @@ build-backend = "setuptools.build_meta"
 name = "centurion-erp"
 description = "An ERP with a large emphasis on the IT Service Management (ITSM) and Automation."
 
+dynamic = [ 'dependencies', 'optional-dependencies' ]
+
 version = "1.27.0"
 
 readme = {file = "README.md", content-type = "text/markdown"}
@@ -26,6 +28,7 @@ authors = [
 maintainers = [
     { name = "No Fuss Computing", email = "helpdesk@nofusscomputing.com" }
 ]
+
 
 classifiers = [
     # How mature is this project? Common values are
@@ -82,8 +85,21 @@ ignore = [
 [tool.setuptools]
 package-dir = {"centurion_erp" = "app"}
 
+
+
 [tool.setuptools_scm]
 root = 'app'
+
+
+[tool.setuptools.dynamic]
+dependencies = { file = [ "requirements.txt" ] }
+optional-dependencies.dev = { file = [ "requirements_dev.txt" ] }
+optional-dependencies.prod = { file = [ "requirements_production.txt" ] }
+
+
+
+[tool.pip-tools]    # https://pip-tools.readthedocs.io/en/stable/
+generate-hashes = false
 
 
 

@@ -60,6 +60,14 @@ Included within the root of the repository is a makefile that can be used during
 
         _lints the markdown documents within the docs directory for formatting errors that MKDocs may/will have an issue with._
 
+- `pip-file`
+
+    _Compiles pip files in `tools/` directory_
+
+- `pip`
+
+    _syncronises pip packages (Note: uses current python. i.e. if virtual env activated will sync packages within virtual env.)_
+
 - `clean`
 
     _cleans up build artifacts and removes the python virtual environment_

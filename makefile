@@ -70,6 +70,15 @@ fixtures:
 
 lint: markdown-mkdocs-lint
 
+
+pip-file:
+	pip-compile -o requirements.txt -vv
+	pip-compile --extra prod -o requirements_production.txt -vv
+	pip-compile --extra dev -o requirements_dev.txt -vv
+
+pip:
+	pip-sync requirements_dev.txt -vv
+
 test:
 	pytest --cov-report xml:artifacts/coverage_unit_functional.xml --cov-report html:artifacts/coverage/unit_functional/ --junit-xml=artifacts/unit_functional.JUnit.xml app/**/tests/unit app/**/tests/functional
 
