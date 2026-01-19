@@ -73,8 +73,8 @@ lint: markdown-mkdocs-lint
 
 pip-file:
 	pip-compile -o requirements.txt -vv
-	pip-compile requirements.txt tools/requirements_dev.in -o requirements_dev.txt -vv
 	pip-compile requirements.txt tools/requirements_production.in -o requirements_production.txt -vv
+	pip-compile requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv
 
 pip:
 	pip-sync requirements_dev.txt -vv
