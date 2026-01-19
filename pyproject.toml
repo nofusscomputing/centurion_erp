@@ -82,6 +82,34 @@ ignore = [
 
 
 
+[tool.commitizen]
+name = "cz_customize"
+version_provider = "pep621"
+prerelease_offset = 1
+tag_format = "$version"
+update_changelog_on_bump = false
+version_scheme = "semver"
+
+
+
+[tool.commitizen.customize]
+change_type_map = [
+    {"feature" = "Features"},
+    {"fix" = "Fixes"},
+    {"refactor" = "Refactoring"},
+    {"test" = "Tests"},
+]
+change_type_order = [
+    "BREAKING CHANGE",
+    "feat",
+    "fix",
+    "test",
+    "refactor",
+]
+commit_parser = '^(?P<change_type>feat|fix|test|refactor|perf|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?:\s(?P<message>.*)?'
+
+
+
 [tool.setuptools]
 package-dir = {"centurion_erp" = "app"}
 
