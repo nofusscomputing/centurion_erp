@@ -137,7 +137,7 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
     postgresql16-client \
     nginx@nginx=${NGINX_VERSION}; \
   pip install --no-cache-dir /tmp/python_builds/*.*; \
-  pip uninstall setuptools; \
+  pip uninstall -y setuptools; \
   python /app/manage.py collectstatic --noinput; \
   rm -rf /tmp/python_builds; \
   rm /etc/nginx/sites-enabled; \
