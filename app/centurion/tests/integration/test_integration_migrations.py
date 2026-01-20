@@ -190,7 +190,7 @@ class MigrationsTestCases:
 
         result = run_command(
             command = (
-                "docker inspect -f '{{ index .Config.Image }}' centurion-erp | cut -d: -f2"
+                "docker exec centurion-erp sh -c 'echo $CI_COMMIT_SHA'"
             ),
             description = 'fetch centurion-erp container tag, should be most recent git tag sha'
         )
@@ -226,7 +226,7 @@ class MigrationsTestCases:
 
         result = run_command(
             command = (
-                "docker inspect -f '{{ index .Config.Image }}' centurion-erp | cut -d: -f2"
+                "docker exec centurion-erp sh -c 'echo $CI_COMMIT_SHA'"
             ),
             description = 'fetch centurion-erp container tag, should be current git head'
         )
