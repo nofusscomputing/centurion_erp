@@ -178,7 +178,10 @@ class MigrationsTestCases:
         # set image to the latest git tag
         result = run_command(
             command = (
-                "sh -c 'cd test; "
+                "sh -c '"
+                "cp -vf requirements_dev.txt test/requirements_dev.txt; "
+                "cd test; "
+                'docker image rm -f $(docker inspect -f "{{ index .Config.Image }}" centurion-erp | cut -d: -f1):test; '
                 "docker-compose rm -fs centurion; "
                 f"CENTURION_IMAGE_TAG={last_git_tag_sha} "
                 "docker-compose up -d centurion;'"
@@ -214,7 +217,10 @@ class MigrationsTestCases:
         # set the image to the current git head
         result = run_command(
             command = (
-                "sh -c 'cd test; "
+                "sh -c '"
+                "cp -vf requirements_dev.txt test/requirements_dev.txt; "
+                "cd test; "
+                'docker image rm -f $(docker inspect -f "{{ index .Config.Image }}" centurion-erp | cut -d: -f1):test; '
                 "docker-compose rm -fs centurion; "
                 f"CENTURION_IMAGE_TAG={last_git_commit_sha} "
                 "docker-compose up -d centurion;'"
