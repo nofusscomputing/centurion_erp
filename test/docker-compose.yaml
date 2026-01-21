@@ -41,7 +41,7 @@ services:
     entrypoint: ""
     environment:
       DJANGO_DEBUG: "False"
-    command: sh -c 'sleep 15; python manage.py migrate'
+    command: sh -c 'sleep 15; manage migrate'
     depends_on:
       - postgres
       - rabbitmq

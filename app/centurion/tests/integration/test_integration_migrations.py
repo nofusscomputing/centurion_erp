@@ -1,6 +1,7 @@
 import os
 import pytest
 import subprocess
+import sys
 
 from django.conf import settings
 
@@ -53,6 +54,12 @@ class MigrationsTestCases:
         else:
             backend = 'sqlite'
 
+        # ToDo: After release of 1.28.0 these two lines can be removed. see if block below.
+        result = run_command(
+            command = "docker exec centurion-erp sh -c 'echo $CI_COMMIT_SHA'",
+            description = 'fetch current git hash'
+        )
+        last_git_tag_sha = str(result['stdout']).strip()
 
 
 
@@ -97,7 +104,18 @@ class MigrationsTestCases:
         else:
             raise RuntimeError(f"Unsupported database backend: {backend}")
 
-        cmd = 'docker exec -i centurion-erp ' + f'python manage.py dbshell <<\'EOF\'\n{sql_statements}\nEOF'
+        if last_git_tag_sha == 'a6a7f76b40ad415c79de042382ec4b92a05983c4':    # 1.27.0
+
+            cmd = 'docker exec -i centurion-erp ' + f'python manage.py dbshell <<\'EOF\'\n{sql_statements}\nEOF'
+
+        else:
+            #
+            # ToDo: After release of 1.28.0 this if block can be refactored to only include
+            # what is within this else block.
+            # The if block was required as the last git tag (1.27.0) was the old method
+            # of adding centurion to the container.
+            #
+            cmd = 'docker exec -i centurion-erp ' + f'manage dbshell <<\'EOF\'\n{sql_statements}\nEOF'
 
         print(cmd)
 
@@ -133,7 +151,7 @@ class MigrationsTestCases:
         """
 
         result = run_command(
-            command = 'docker exec -i centurion-erp python manage.py migrate',
+            command = 'docker exec -i centurion-erp manage migrate',
             description = 'run initial migrations'
         )
 
@@ -159,7 +177,7 @@ class MigrationsTestCases:
             description = 'fetch current git hash'
         )
 
-        last_git_commit_sha = result['stdout']
+        last_git_commit_sha = str(result['stdout']).strip()
 
 
         assert result['returncode'] == 0, print( result )
@@ -169,7 +187,7 @@ class MigrationsTestCases:
             description = 'fetch current git hash'
         )
 
-        last_git_tag_sha = result['stdout']
+        last_git_tag_sha = str(result['stdout']).strip()
 
         assert result['returncode'] == 0, print( result )
 
@@ -179,6 +197,10 @@ class MigrationsTestCases:
         result = run_command(
             command = (
                 "sh -c '"
+                "cd ..; "
+                "ls -la; "
+                'echo "1******************************${PWD}******************************"; '
+                f'echo "1******************************${str(sys.argv)}******************************"; '
                 "cp -vf requirements_dev.txt test/requirements_dev.txt; "
                 "cd test; "
                 'docker image rm -f $(docker inspect -f "{{ index .Config.Image }}" centurion-erp | cut -d: -f1):test; '
@@ -198,16 +220,29 @@ class MigrationsTestCases:
             description = 'fetch centurion-erp container tag, should be most recent git tag sha'
         )
 
-        assert result['stdout'] == last_git_tag_sha, print( result )
+        assert str(result['stdout']).strip() == last_git_tag_sha, print( result )
 
 
 
         # perform the initial migration
+        if last_git_tag_sha == 'a6a7f76b40ad415c79de042382ec4b92a05983c4':    # 1.27.0
 
-        result = run_command(
-            command = 'docker exec -i centurion-erp python manage.py migrate',
-            description = 'perform initial migrations for latest release'
-        )
+            result = run_command(
+                command = 'docker exec -i centurion-erp python manage.py migrate',
+                description = 'perform initial migrations for latest release'
+            )
+
+        else:
+            #
+            # ToDo: After release of 1.28.0 this if block can be refactored to only include
+            # what is within this else block.
+            # The if block was required as the last git tag (1.27.0) was the old method
+            # of adding centurion to the container.
+            #
+            result = run_command(
+                command = 'docker exec -i centurion-erp manage migrate',
+                description = 'perform initial migrations for latest release'
+            )
 
         assert result['returncode'] == 0, print( result )
 
@@ -218,6 +253,10 @@ class MigrationsTestCases:
         result = run_command(
             command = (
                 "sh -c '"
+                "cd ..; "
+                "ls -la; "
+                'echo "2******************************${PWD}******************************"; '
+                f'echo "2******************************${str(sys.argv)}******************************"; '
                 "cp -vf requirements_dev.txt test/requirements_dev.txt; "
                 "cd test; "
                 'docker image rm -f $(docker inspect -f "{{ index .Config.Image }}" centurion-erp | cut -d: -f1):test; '
@@ -237,14 +276,14 @@ class MigrationsTestCases:
             description = 'fetch centurion-erp container tag, should be current git head'
         )
 
-        assert result['stdout'] == last_git_commit_sha, print( result )
+        assert str(result['stdout']).strip() == last_git_commit_sha, print( result )
 
 
 
         # perform the upgrade migration
 
         result = run_command(
-            command = 'docker exec -i centurion-erp python manage.py migrate',
+            command = 'docker exec -i centurion-erp manage migrate',
             description = 'perform upgrade migrations'
         )
 

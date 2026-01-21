@@ -4,6 +4,8 @@ PATH_VENV := /tmp/centurion_erp
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
 
+START_PWD     := ${PWD}
+
 .PHONY: clean prepare docs ansible-lint lint test
 
 prepare-git-submodule:
@@ -89,7 +91,7 @@ test-integration:
 	cp pyproject.toml app/;
 	sed -i 's|^source = \[ "./app" \]|source = [ "." ]|' app/pyproject.toml;
 	cp -f requirements_dev.txt test/requirements_dev.txt;
-	cd test;
+	cd "${START_PWD}/test";
 	if [ ! -n "$CENTURION_IMAGE_TAG" ]; then
 		export CENTURION_IMAGE_TAG=$$(git log -1 --format=%H);
 	fi
@@ -102,14 +104,14 @@ test-integration:
 	
 		if [ "0${GITHUB_SHA}"!="0" ]; then
 
-			sudo chmod 777 -R ../test
+			sudo chmod 777 -R "${START_PWD}/test"
 
 		fi;
 
 
 		if ./setup-integration.sh; then
 
-			cd ..;
+			cd "${START_PWD}";
 
 			ls -laR test/;
 
@@ -128,7 +130,7 @@ test-integration:
 
 			docker logs centurion-erp;
 			echo 'Starting integration tests.';
-			pytest --override-ini addopts= --no-migrations --reuse-db --tb=long --verbosity=2 --showlocals --junit-xml=integration.JUnit.xml app/*/tests/integration;
+			pytest --override-ini addopts= --no-migrations --reuse-db --tb=long --verbosity=2 --showlocals --junit-xml="${START_PWD}/integration.JUnit.xml" app/*/tests/integration;
 			echo 'Restarting Gunicorn.';
 			docker exec -i centurion-erp supervisorctl restart gunicorn;
 			echo 'Creating Coverage reports.';
@@ -136,74 +138,74 @@ test-integration:
 
 		else
 
-			cd ..;
+			cd "${START_PWD}";
 			ls -la;
 
 			echo 'Error: could not setup containers for testing';
 			echo '';
 			echo '';
-			ls -lar ./test;
+			ls -lar "${START_PWD}/test";
 			echo '';
 			docker ps -a;
-			docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
-			docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
-			docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
-			docker exec -i postgres psql -Uadmin -c "\l" > ./test/volumes/log/postgres-database.log;
-			docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > ./test/volumes/log/postgres-tables.log;
-			docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
+			docker logs centurion-erp-init > "${START_PWD}/test/volumes/log/docker-log-centurion-erp-init.log";
+			docker logs centurion-erp> "${START_PWD}/test/volumes/log/docker-log-centurion-erp.log";
+			docker logs postgres > "${START_PWD}/test/volumes/log/docker-log-postgres.log";
+			docker exec -i postgres psql -Uadmin -c "\l" > "${START_PWD}/test/volumes/log/postgres-database.log";
+			docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > "${START_PWD}/test/volumes/log/postgres-tables.log";
+			docker logs rabbitmq > "${START_PWD}/test/volumes/log/docker-log-rabbitmq.log";
 			export exit_code=10;
 
 		fi;
 	else
 
-		cd ..;
+		cd "${START_PWD}";
 
 		if [ "0${GITHUB_SHA}"!="0" ]; then
 
-			sudo chmod 777 -R ./test
+			sudo chmod 777 -R "${START_PWD}/test"
 
 		fi;
 
 		echo 'Error: Failed to launch containers.';
 		echo '';
 		echo '';
-		ls -lar ./test;
+		ls -lar "${START_PWD}/test";
 		echo '';
 		docker ps -a;
-		docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
-		docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
-		docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
-		docker exec -i postgres psql -Uadmin -c "\l" > ./test/volumes/log/postgres-database.log;
-		docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > ./test/volumes/log/postgres-tables.log;
-		docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
+		docker logs centurion-erp-init > "${START_PWD}/test/volumes/log/docker-log-centurion-erp-init.log";
+		docker logs centurion-erp> "${START_PWD}/test/volumes/log/docker-log-centurion-erp.log";
+		docker logs postgres > "${START_PWD}/test/volumes/log/docker-log-postgres.log";
+		docker exec -i postgres psql -Uadmin -c "\l" > "${START_PWD}/test/volumes/log/postgres-database.log";
+		docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > "${START_PWD}/test/volumes/log/postgres-tables.log";
+		docker logs rabbitmq > "${START_PWD}/test/volumes/log/docker-log-rabbitmq.log";
 		export exit_code=20;
 
 	fi;
 
 	echo '';
 	docker ps -a;
-	docker logs centurion-erp-init > ./test/volumes/log/docker-log-centurion-erp-init.log;
-	docker logs centurion-erp> ./test/volumes/log/docker-log-centurion-erp.log;
-	docker logs postgres > ./test/volumes/log/docker-log-postgres.log;
-	docker exec -i postgres psql -Uadmin -c "\l" > ./test/volumes/log/postgres-database.log;
-	docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > ./test/volumes/log/postgres-tables.log;
-	docker logs rabbitmq > ./test/volumes/log/docker-log-rabbitmq.log;
+	docker logs centurion-erp-init > "${START_PWD}/test/volumes/log/docker-log-centurion-erp-init.log";
+	docker logs centurion-erp> "${START_PWD}/test/volumes/log/docker-log-centurion-erp.log";
+	docker logs postgres > "${START_PWD}/test/volumes/log/docker-log-postgres.log";
+	docker exec -i postgres psql -Uadmin -c "\l" > "${START_PWD}/test/volumes/log/postgres-database.log";
+	docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > "${START_PWD}/test/volumes/log/postgres-tables.log";
+	docker logs rabbitmq > "${START_PWD}/test/volumes/log/docker-log-rabbitmq.log";
 	export exit_code=0;
-	cd test;
+	cd "${START_PWD}/test";
 	rm -f requirements_dev.txt;
 	echo 'REmoving containers.';
 	docker-compose down -v;
-	cd ..;
+	cd "${START_PWD}";
 	exit ${exit_code};
 
 
 
 test-functional:
-	pytest --cov-report xml:artifacts/coverage_functional.xml --cov-report html:artifacts/coverage/functional/ --junit-xml=artifacts/functional.JUnit.xml app/**/tests/functional
+	pytest --cov-report xml:${PWD}/artifacts/coverage_functional.xml --cov-report html:${PWD}/artifacts/coverage/functional/ --junit-xml=${PWD}/artifacts/functional.JUnit.xml app/**/tests/functional
 
 
 test-unit:
-	pytest --cov-report xml:artifacts/coverage_unit.xml --cov-report html:artifacts/coverage/unit/ --junit-xml=artifacts/unit.JUnit.xml app/**/tests/unit
+	pytest --cov-report xml:${PWD}/artifacts/coverage_unit.xml --cov-report html:${PWD}/artifacts/coverage/unit/ --junit-xml=${PWD}/artifacts/unit.JUnit.xml app/**/tests/unit
 
 
 

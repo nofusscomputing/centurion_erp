@@ -56,18 +56,18 @@ RUN pip install --upgrade \
     twine
 
 
-COPY requirements.txt /tmp/requirements.txt
-
-COPY requirements_production.txt /tmp/requirements_production.txt
 
 
 RUN mkdir -p /tmp/python_modules /tmp/python_builds
 
 
-RUN cd /tmp/python_modules \
-  && pip download --dest . --check-build-dependencies \
-    -r /tmp/requirements.txt \
-    -r /tmp/requirements_production.txt
+COPY dist/ /tmp/python_builds
+
+
+RUN \
+    pip download \
+        --dest ./tmp/python_modules \
+        "$(ls /tmp/python_builds/centurion_erp-*-py3-none-any.whl)[prod]";
 
 
 RUN cd /tmp/python_modules \
@@ -115,7 +115,6 @@ COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 
 
-COPY ./app/. app
 
 COPY --from=build /tmp/python_builds /tmp/python_builds
 
@@ -137,9 +136,12 @@ RUN \
         mariadb-dev \
         postgresql16-client \
         nginx@nginx=${NGINX_VERSION}; \
-    pip install --no-cache-dir /tmp/python_builds/*.*; \
-    pip uninstall -y setuptools; \
-    python /app/manage.py collectstatic --noinput; \
+    pip install \
+        --no-cache-dir \
+        --no-index \
+        --find-links /tmp/python_builds \
+        centurion_erp[prod]; \
+    manage collectstatic --noinput; \
     rm -rf /tmp/python_builds; \
     rm /etc/nginx/sites-enabled; \
     rm /etc/nginx/conf.d/default.conf; \
@@ -156,7 +158,7 @@ RUN \
     export
 
 
-WORKDIR /app
+WORKDIR /data
 
 # In future, adjust port to 80 as nginX is now used (Will be breaking change)
 EXPOSE 8000
@@ -166,6 +168,9 @@ VOLUME [ "/data", "/etc/itsm" ]
 
 HEALTHCHECK --interval=10s --timeout=30s --start-period=30s --retries=3 CMD \
   supervisorctl status || exit 1
+
+
+ENV DJANGO_SETTINGS_MODULE=centurion_erp.centurion.settings
 
 
 ENTRYPOINT ["/entrypoint.sh"]

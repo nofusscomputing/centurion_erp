@@ -551,15 +551,20 @@ CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 
 if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log'):
 
-    if not os.path.exists(os.path.join(BASE_DIR, 'log')): # Create log dir
+    if os.getenv('PWD', None) is None:
+        raise LookupError("Unable to determine the current calling/working directory.")
 
-        os.makedirs(os.path.join(BASE_DIR, 'log'))
 
-    if RUNNING_TESTS:
+    if not os.path.exists(os.path.join(os.getenv('PWD', None), 'log')): # Create log dir
 
-        if not os.path.exists(os.path.join(BASE_DIR.parent, 'log')): # Create log dir
+        os.makedirs(os.path.join(os.getenv('PWD', None), 'log'))
 
-            os.makedirs(os.path.join(BASE_DIR.parent, 'log'))
+
+    for log_file, data in CENTURION_LOGGING['handlers'].items():
+
+        if 'filename' in data:
+
+            CENTURION_LOGGING['handlers'][log_file]['filename'] = os.path.join(os.getenv('PWD', None), data['filename'])
 
 
 if DEBUG:
