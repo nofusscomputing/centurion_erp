@@ -87,7 +87,7 @@ LABEL \
   org.opencontainers.image.title="Centurion ERP" \
   org.opencontainers.image.description="An ERP with a focus on ITSM and automation" \
   org.opencontainers.image.vendor="No Fuss Computing" \
-  io.artifacthub.package.license="MIT"
+  io.artifacthub.package.license="AGPL-3.0-only"
 
 
 ARG CI_PROJECT_URL
@@ -126,33 +126,34 @@ COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
 
 COPY includes/ /
 
-RUN pip --disable-pip-version-check list --outdated --format=json | \
-    python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
-    xargs -n1 pip install --no-cache-dir -U; \
-  apk update --no-cache; \
-  apk upgrade --no-cache; \
-  apk add --no-cache \
-    mariadb-client \
-    mariadb-dev \
-    postgresql16-client \
-    nginx@nginx=${NGINX_VERSION}; \
-  pip install --no-cache-dir /tmp/python_builds/*.*; \
-  pip uninstall -y setuptools; \
-  python /app/manage.py collectstatic --noinput; \
-  rm -rf /tmp/python_builds; \
-  rm /etc/nginx/sites-enabled; \
-  rm /etc/nginx/conf.d/default.conf; \
-  mv /etc/nginx/conf.d/centurion.conf /etc/nginx/conf.d/default.conf; \
-  # Check for errors and fail if so
-  nginx -t; \
-  # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
-  if [ ! $(python -m django --version) ]; then \
-    echo "Django not Installed"; \
-    exit 1; \
-  fi; \
-  chmod +x /entrypoint.sh; \
-  mkdir -p /etc/supervisor/conf.d; \
-  export
+RUN \
+    pip --disable-pip-version-check list --outdated --format=json | \
+        python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
+        xargs -n1 pip install --no-cache-dir -U; \
+    apk update --no-cache; \
+    apk upgrade --no-cache; \
+    apk add --no-cache \
+        mariadb-client \
+        mariadb-dev \
+        postgresql16-client \
+        nginx@nginx=${NGINX_VERSION}; \
+    pip install --no-cache-dir /tmp/python_builds/*.*; \
+    pip uninstall -y setuptools; \
+    python /app/manage.py collectstatic --noinput; \
+    rm -rf /tmp/python_builds; \
+    rm /etc/nginx/sites-enabled; \
+    rm /etc/nginx/conf.d/default.conf; \
+    mv /etc/nginx/conf.d/centurion.conf /etc/nginx/conf.d/default.conf; \
+    # Check for errors and fail if so
+    nginx -t; \
+    # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
+    if [ ! $(python -m django --version) ]; then \
+        echo "Django not Installed"; \
+        exit 1; \
+    fi; \
+    chmod +x /entrypoint.sh; \
+    mkdir -p /etc/supervisor/conf.d; \
+    export
 
 
 WORKDIR /app
@@ -167,4 +168,4 @@ HEALTHCHECK --interval=10s --timeout=30s --start-period=30s --retries=3 CMD \
   supervisorctl status || exit 1
 
 
-  ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
