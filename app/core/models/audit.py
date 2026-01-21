@@ -180,7 +180,16 @@ class CenturionAudit(
             return True
 
 
-        if model._before == model._after:
+        if(
+            model._before == model._after
+        ):
+
+            model._after = model.get_audit_values()
+
+
+        if(
+            model._before == model._after
+        ):
 
             raise ValidationError(
                 code = 'before_and_after_same',
