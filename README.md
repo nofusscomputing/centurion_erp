@@ -4,8 +4,7 @@
 
 <br>
 
-![Project Status - Active](https://img.shields.io/badge/Project%20Status-Active-green?logo=github&style=plastic) 
-
+![Project Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2Fcenturion_erp%2Frefs%2Fheads%2Fdevelopment%2F.meta%2Fproject_status.json)
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/nofusscomputing/centurion-erp?style=plastic&logo=docker&color=0db7ed)](https://hub.docker.com/r/nofusscomputing/centurion-erp) [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/centurion-erp)](https://artifacthub.io/packages/container/centurion-erp/centurion-erp) 
 
