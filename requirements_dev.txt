@@ -388,8 +388,6 @@ sqlparse==0.5.5
     #   -r requirements_production.txt
     #   django
     #   django-debug-toolbar
-supervisor==4.2.5
-    # via -r requirements_production.txt
 termcolor==2.5.0
     # via commitizen
 tomlkit==0.14.0

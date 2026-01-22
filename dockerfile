@@ -67,7 +67,7 @@ COPY dist/ /tmp/python_builds
 RUN \
     pip download \
         --dest ./tmp/python_modules \
-        "$(ls /tmp/python_builds/centurion_erp-*-py3-none-any.whl)[prod]";
+        "$(ls /tmp/python_builds/centurion_erp-*-py3-none-any.whl)[docker]";
 
 
 RUN cd /tmp/python_modules \
@@ -106,7 +106,7 @@ ENV PYTHONTZPATH=""
 ENV PROMETHEUS_MULTIPROC_DIR=""
 
 # Prevent python depreciation warnings
-ENV PYTHONWARNINGS=ignore::DeprecationWarning
+ENV PYTHONWARNINGS=ignore
 
 ENV IS_WORKER=False
 
@@ -140,7 +140,7 @@ RUN \
         --no-cache-dir \
         --no-index \
         --find-links /tmp/python_builds \
-        centurion_erp[prod]; \
+        centurion_erp[docker]; \
     manage collectstatic --noinput; \
     rm -rf /tmp/python_builds; \
     rm /etc/nginx/sites-enabled; \

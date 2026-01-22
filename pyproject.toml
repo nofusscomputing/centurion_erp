@@ -122,6 +122,7 @@ root = 'app'
 [tool.setuptools.dynamic]
 dependencies = { file = [ "requirements.txt" ] }
 optional-dependencies.dev = { file = [ "requirements_dev.txt" ] }
+optional-dependencies.docker = { file = [ "requirements_docker.txt" ] }
 optional-dependencies.prod = { file = [ "requirements_production.txt" ] }
 
 
