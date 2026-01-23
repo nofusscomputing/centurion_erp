@@ -1,8 +1,12 @@
 # ITSM Docker Settings
 
+
+# ADDITIONAL_APPS: list = []    # Any additional Django apps to install
+
+#
 # If metrics enabled, see https://nofusscomputing.com/projects/centurion_erp/administration/monitoring/#django-exporter-setup)
 # to configure the database metrics.
-
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
