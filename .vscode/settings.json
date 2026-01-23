@@ -41,5 +41,6 @@
     "licenser.customHeaderFile": "${workspaceFolder}/.vscode/licenser.txt",
     "licenser.license": "Custom",
     "licenser.customSPDXId": "AGPL-3.0-only",
-    "licenser.disableAutoHeaderInsertion": true
+    "licenser.disableAutoHeaderInsertion": true,
+    "git.repositoryScanMaxDepth": 2
 }

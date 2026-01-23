@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import ContentType
+from django.contrib.auth.models import ContentType, models
 from django.core.serializers.json import (
     DjangoJSONEncoder,
     json,
@@ -180,7 +180,16 @@ class CenturionAudit(
             return True
 
 
-        if model._before == model._after:
+        if(
+            model._before == model._after
+        ):
+
+            model._after = model.get_audit_values()
+
+
+        if(
+            model._before == model._after
+        ):
 
             raise ValidationError(
                 code = 'before_and_after_same',
@@ -194,7 +203,7 @@ class CenturionAudit(
             if hasattr(model, field_name + '_id') and value is not None:
 
                 serializable_before.update({
-                    field_name + '_id': int(value)
+                    field_name + '_id': value.id
                 })
                 continue
 
@@ -212,7 +221,7 @@ class CenturionAudit(
             if hasattr(model, field_name + '_id') and value is not None:
 
                 serializable_after.update({
-                    field_name + '_id': int(value)
+                    field_name + '_id': value.id
                 })
                 continue
 

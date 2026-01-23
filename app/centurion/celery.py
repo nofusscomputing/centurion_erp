@@ -12,6 +12,12 @@ from prometheus_client import multiprocess, start_http_server, REGISTRY
 logger = logging.getLogger(__name__)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'centurion.settings')
+#
+# Set working directory
+# This is required due to src dir mappped to module name `centurion_erp`
+# Without this `chdir` code needs to be updated to import from module
+# namespace. in addition src dir would also need to be renamed.
+os.chdir(path=f'{os.path.dirname(__file__)}/../')
 
 worker = Celery('app')
 

@@ -1,0 +1,60 @@
+
+django>=5.1.15,<5.2
+django-cors-headers==4.4.0
+
+
+# ##################################################
+#  Authentication
+# ##################################################
+social-auth-app-django==5.6.0
+
+
+# ##################################################
+#  DRF
+# ##################################################
+djangorestframework==3.16.0
+djangorestframework-jsonapi==7.1.0
+
+pyyaml>=6.0.2
+django-filter==24.2
+
+
+# ##################################################
+#  OpenAPI Schema / Swagger
+# ##################################################
+uritemplate==4.1.1
+coreapi==2.3.3
+
+drf-spectacular==0.28.0
+drf-spectacular[sidecar]==0.28.0
+django_split_settings==1.3.1
+
+
+# ##################################################
+#  Celery
+# ##################################################
+celery==5.4.0
+django-celery-results==2.5.1
+sqlalchemy==2.0.31
+
+
+# ##################################################
+#  Metrics
+# ##################################################
+prometheus-client==0.21.1
+django-prometheus==2.3.1
+
+
+# Version must be specified. see https://github.com/nofusscomputing/centurion_erp/issues/603
+# must also have export PYTHONTZPATH=""
+pytz==2025.1
+tzdata==2025.1
+
+
+# ##################################################
+#  Django View(s)
+# ##################################################
+
+markdown-it-py[plugins]==3.0.0
+markdown-it-py[linkify]==3.0.0
+Pygments==2.18.0

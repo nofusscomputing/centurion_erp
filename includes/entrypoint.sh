@@ -86,9 +86,7 @@ if [ "$1" == "" ]; then
 
         export init_dir=${PWD}
         
-        cd /app;
-        
-        python manage.py feature_flag;
+        manage feature_flag;
 
     fi;
 

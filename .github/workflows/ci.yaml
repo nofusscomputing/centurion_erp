@@ -27,8 +27,30 @@ jobs:
     uses: nofusscomputing/action_mkdocs/.github/workflows/reusable_mkdocs.yaml@development
 
 
+  python:
+    name: 'Python'
+    uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+
+
+  python-build:
+    name: 'Python'
+    if: "!startsWith(github.ref, 'refs/tags/')"
+    uses: nofusscomputing/action_python/.github/workflows/python-package.yaml@development
+
+
+  python-build_tag:
+    name: 'Python'
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: nofusscomputing/action_python/.github/workflows/python-package.yaml@development
+
+
   docker:
     name: 'Docker'
+    if: "!startsWith(github.ref, 'refs/tags/')"
+    needs:
+      - python-build
     uses: nofusscomputing/action_docker/.github/workflows/docker.yaml@development
     with:
       DOCKER_BUILD_IMAGE_NAME: "nofusscomputing/centurion-erp"
@@ -39,11 +61,19 @@ jobs:
       DOCKER_PUBLISH_PASSWORD: ${{ secrets.NFC_DOCKERHUB_TOKEN }}
 
 
-  python:
-    name: 'Python'
-    uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
+  docker_tag:
+    name: 'Docker'
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+      - python-build_tag
+    uses: nofusscomputing/action_docker/.github/workflows/docker.yaml@development
+    with:
+      DOCKER_BUILD_IMAGE_NAME: "nofusscomputing/centurion-erp"
+      DOCKER_PUBLISH_REGISTRY: "docker.io"
+      DOCKER_PUBLISH_IMAGE_NAME: "nofusscomputing/centurion-erp"
     secrets:
-      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+      DOCKER_PUBLISH_USERNAME: ${{ secrets.NFC_DOCKERHUB_USERNAME }}
+      DOCKER_PUBLISH_PASSWORD: ${{ secrets.NFC_DOCKERHUB_TOKEN }}
 
 
   integration-test:
@@ -57,6 +87,45 @@ jobs:
       RABBITMQ_VERSIONS: '[ "3.12", "3.13", "4.0", "4.1" ]'
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+
+
+  integration-test_tag:
+    name: 'Integration Test'
+    uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
+    needs:
+      - docker_tag
+    with:
+      POSTGRES_VERSIONS: '[ "13", "14", "15", "16", "17" ]'
+      PYTHON_VERSION: '3.11'
+      RABBITMQ_VERSIONS: '[ "3.12", "3.13", "4.0", "4.1" ]'
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+
+
+  python-publish:
+    name: Python
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/glpi-import/
+    permissions:
+      id-token: write
+    needs:
+      - python-build_tag
+    
+    steps:
+
+      - name: Download built artifact to dist/
+        uses: actions/download-artifact@v4
+        with:
+          name: Packages
+          path: dist
+
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1
+
 
 
   gitlab-mirror:
