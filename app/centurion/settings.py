@@ -23,6 +23,7 @@ from .logging import CenturionLogger
 
 options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type', 'itam_sub_model_type')
 
+ADDITIONAL_APPS: list = []    # Any additional Django apps to install
 APPEND_SLASH = False
 AUTH_USER_MODEL = 'access.CenturionUser'
 
@@ -605,6 +606,10 @@ if METRICS_ENABLED:
     if DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
 
         DATABASES['default']['ENGINE'] = 'django_prometheus.db.backends.sqlite3',
+
+
+
+INSTALLED_APPS = [ *INSTALLED_APPS, *ADDITIONAL_APPS ]
 
 
 if SSO_ENABLED:
