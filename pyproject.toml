@@ -65,10 +65,10 @@ manage = "centurion_erp.manage:main"
 [project.urls]
 
 Documentation = "https://nofusscomputing.com/projects/centurion_erp"
-Changelog = "https://nofusscomputing.com/projects/centurion_erp/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/nofusscomputing/centurion_erp/blob/master/CHANGELOG.md"
 Homepage = "https://nofusscomputing.com/projects/centurion_erp"
 Issues = "https://github.com/nofusscomputing/centurion_erp/issues"
-releasenotes = "https://nofusscomputing.com/projects/centurion_erp/blob/master/Release-Notes.md"
+releasenotes = "https://github.com/nofusscomputing/centurion_erp/blob/master/Release-Notes.md"
 Source = "https://github.com/nofusscomputing/centurion_erp"
 
 
