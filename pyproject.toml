@@ -93,12 +93,6 @@ version_scheme = "semver"
 
 
 [tool.commitizen.customize]
-change_type_map = [
-    {"feature" = "Features"},
-    {"fix" = "Fixes"},
-    {"refactor" = "Refactoring"},
-    {"test" = "Tests"},
-]
 change_type_order = [
     "BREAKING CHANGE",
     "feat",
@@ -107,6 +101,13 @@ change_type_order = [
     "refactor",
 ]
 commit_parser = '^(?P<change_type>feat|fix|test|refactor|perf|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?:\s(?P<message>.*)?'
+
+
+[tool.commitizen.customize.change_type_map]
+feat = "Features"
+fix = "Fixes"
+refactor = "Refactoring"
+test = "Tests"
 
 
 
