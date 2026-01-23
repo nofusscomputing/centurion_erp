@@ -168,7 +168,7 @@ oauthlib==3.3.1
     #   -r requirements.txt
     #   requests-oauthlib
     #   social-auth-core
-packaging==25.0
+packaging==26.0
     # via gunicorn
 prometheus-client==0.21.1
     # via
@@ -180,7 +180,7 @@ prompt-toolkit==3.0.52
     #   click-repl
 psycopg2==2.9.9
     # via -r tools/requirements_production.in
-pycparser==2.23
+pycparser==3.0
     # via
     #   -r requirements.txt
     #   cffi
@@ -269,7 +269,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.2.14
+wcwidth==0.3.1
     # via
     #   -r requirements.txt
     #   prompt-toolkit

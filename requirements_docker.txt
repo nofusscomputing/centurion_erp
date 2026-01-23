@@ -232,7 +232,7 @@ prompt-toolkit==3.0.52
     #   click-repl
 psycopg2==2.9.9
     # via -r requirements_production.txt
-pycparser==2.23
+pycparser==3.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -349,7 +349,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.2.14
+wcwidth==0.3.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt

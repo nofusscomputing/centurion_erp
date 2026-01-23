@@ -252,7 +252,7 @@ oauthlib==3.3.1
     #   -r requirements_production.txt
     #   requests-oauthlib
     #   social-auth-core
-packaging==25.0
+packaging==26.0
     # via
     #   -r requirements_production.txt
     #   build
@@ -260,6 +260,7 @@ packaging==25.0
     #   commitizen
     #   gunicorn
     #   pytest
+    #   wheel
 pip-tools==7.5.2
     # via -r tools/requirements_dev.in
 platformdirs==4.5.1
@@ -279,7 +280,7 @@ prompt-toolkit==3.0.52
     #   questionary
 psycopg2==2.9.9
     # via -r requirements_production.txt
-pycparser==2.23
+pycparser==3.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -434,12 +435,12 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.2.14
+wcwidth==0.3.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   prompt-toolkit
-wheel==0.45.1
+wheel==0.46.3
     # via pip-tools
 wheel-filename==1.4.2
     # via check-wheel-contents
