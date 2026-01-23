@@ -1,6 +1,36 @@
+## 1.28.0-rc1 (2026-01-23)
+
+### Features
+
+- Build and Release python package
+- **python**: Update django 5.1.13 -> 5.1.15
+
+### Fixes
+
+- **core**: some models may not be centurion models, so use their pk
+- within settings import use relative
+- **python**: use module namespace for script
+- when fetching audit history, if A==B, try fetching history before validation
+- **docker**: remove pip uninstall prompt during build
+- **docker**: requirements_test was renamed to requirements_dev
+
+### Refactoring
+
+- **build**: split prod requirements further to docker
+- **docker**: Remove setuptools as its not required
+
+### Tests
+
+- **core**: use audit values func to ensure before and after the same for validation test
+- **integration**: fix. ensure test cont is rebuilt
+- **integration**: fix. use cont env var for checking hash
+- fix. ensure the var is cast bool
+- **docker**: Dont test work with `settings.Debug=True`
+- remove code migrated to pytest-simplified plugin
+
 ## 1.27.0 (2025-11-02)
 
-### feat
+### Features
 
 - **core**: Migration signal to migrate manufacturers to companies
 - **itam**: Add Company field to model itam.Software
@@ -26,7 +56,7 @@
 
 ## 1.26.0 (2025-10-18)
 
-### feat
+### Features
 
 - **core**: When a ticket comment is created, associate with currently authenticated user
 - **core**: ensure that when attempting to link sub-model reqs are met
@@ -76,7 +106,7 @@
 
 ## 1.25.0 (2025-10-10)
 
-### feat
+### Features
 
 - **python**: update social-auth-app-django 5.4.1 -> 5.6.0
 - **python**: Upgrade django 5.1.12 -> 5.1.13
@@ -206,13 +236,13 @@
 
 ## 1.24.0 (2025-09-13)
 
-### feat
+### Features
 
 - **base**: Add Optional Trace Debugging to Centurion
 
 ## 1.23.0 (2025-09-10)
 
-### feat
+### Features
 
 - **base**: Upgrade Django 5.1.10 -> 5.1.12
 - **access**: Remove feature flag 2025-00002
@@ -228,7 +258,7 @@
 
 ## 1.22.0 (2025-09-09)
 
-### feat
+### Features
 
 - **access**: Add global tenancy to user object
 - **access**: Add superuser viewset permissions
@@ -323,7 +353,7 @@
 
 ## 1.21.0 (2025-08-29)
 
-### feat
+### Features
 
 - **access**: remove feature flag 2025-00003
 - **access**: Ensure for Centurion user that direct assignement of permissions are ignored
@@ -408,7 +438,7 @@
 
 ## 1.20.0 (2025-08-22)
 
-### feat
+### Features
 
 - **access**: Switch Tenancy Object to use refactord Tenancy Manager
 - Switch authorization object from request.tenancy -> request.user
@@ -458,7 +488,7 @@
 
 ## 1.19.0 (2025-08-15)
 
-### feat
+### Features
 
 - **core**: add to migration signal system user and use for inventory objects
 - **docker**: Adjust gunicorn works=4 100reqs/max and preload app
@@ -1153,7 +1183,7 @@
 
 ## 1.18.0 (2025-07-03)
 
-### feat
+### Features
 
 - **python**: upgrade django 5.1.9 -> 5.1.10
 
@@ -1169,7 +1199,7 @@
 
 ## 1.17.0 (2025-05-16)
 
-### feat
+### Features
 
 - **access**: model access.Company feature flag `2025-00008`
 - **access**: URL route for model access.Company
@@ -1336,7 +1366,7 @@
 
 ## 1.16.0 (2025-05-04)
 
-### feat
+### Features
 
 - **core**: Add ViewSet for Ticket Comments
 - **project_management**: Depreciate Project Task Ticket Endpoint
@@ -1461,7 +1491,7 @@
 
 ## 1.15.0 (2025-04-10)
 
-### feat
+### Features
 
 - **settings**: Move Ticket Comment Category from settings to ITOps menu
 - **settings**: Move Ticket Category from settings to ITOps menu
@@ -1581,7 +1611,7 @@
 
 ## 1.14.0 (2025-03-29)
 
-### feat
+### Features
 
 - **itops**: Add navigation menu
 - New Module ITOps
@@ -1698,7 +1728,7 @@
 
 ## 1.13.0 (2025-03-16)
 
-### feat
+### Features
 
 - **devops**: Add ability for user to turn off feature flagging check-in
 - **devops**: When displaying the feature_flag deployments, limit to last 24-hours
@@ -1827,7 +1857,7 @@
 
 ## 1.12.0 (2025-03-01)
 
-### feat
+### Features
 
 - **api**: Add delete column to AuthToken Table
 - **docker**: Upgrade system packages on build
@@ -1853,7 +1883,7 @@
 
 ## 1.11.0 (2025-02-21)
 
-### feat
+### Features
 
 - **core**: Enable App settings History to save without specifying an organization
 - **settings**: save_history method added to App Settings
@@ -2102,7 +2132,7 @@
 
 ## 1.10.0 (2025-02-10)
 
-### feat
+### Features
 
 - **settings**: Provide user with the ability to set browser mode
 - **core**: Parent Ticket validation added to ticket serializer
@@ -2341,7 +2371,7 @@
 
 ## 1.9.0 (2025-02-06)
 
-### feat
+### Features
 
 - **core**: Validate user field to ensure ticket comments always have user who added comment
 - **core**: Cache ticket linked item queryset
@@ -2539,7 +2569,7 @@
 
 ## 1.8.0 (2025-01-23)
 
-### feat
+### Features
 
 - **python**: update django 5.1.4 -> 5.1.5
 - **access**: TenancyManager object to cache the users team lokkup
@@ -2603,7 +2633,7 @@
 
 ## 1.7.0 (2025-01-04)
 
-### feat
+### Features
 
 - **access**: Enable Objects from global organization to be viewable by user with the permission
 - **access**: Enable Objects from globally set organization to return within query
@@ -2670,7 +2700,7 @@
 
 ## 1.6.0 (2024-12-23)
 
-### feat
+### Features
 
 - **access**: Check if organization field is read-only during permission check
 - **access**: Ability to specify parent model for permission to do
@@ -2766,7 +2796,7 @@
 
 ## 1.5.0 (2024-12-09)
 
-### feat
+### Features
 
 - **python**: update django 5.1.2 -> 5.1.4
 - **api**: If global organization defined, filter from ALL organization fields
@@ -2864,7 +2894,7 @@
 
 ## 1.4.0 (2024-11-28)
 
-### feat
+### Features
 
 - **project_management**: add project completed field
 - **api**: Implement Sanity error handling for uncaught exceptions
@@ -3485,7 +3515,7 @@
 
 ## 1.3.0 (2024-10-31)
 
-### feat
+### Features
 
 - **docker**: Add worker service config for SupervisorD
 - **docker**: ensure supervisor starts
@@ -3530,7 +3560,7 @@
 
 ## 1.2.0 (2024-10-11)
 
-### feat
+### Features
 
 - update django 5.0.8 -> 5.1.2
 - **settings**: Add API filter and search
@@ -3831,7 +3861,7 @@
 
 ## 1.1.0 (2024-08-23)
 
-### feat
+### Features
 
 - **itim**: Dont attempt to apply cluster type config if no type specified.
 - **itim**: Service config rendered as part of cluster config
@@ -3965,7 +3995,7 @@
 
 ## 1.0.0-b5 (2024-07-31)
 
-### feat
+### Features
 
 - add Config groups to API
 - **api**: Add device config groups to devices
@@ -3982,7 +4012,7 @@
 
 ## 1.0.0-b4 (2024-07-29)
 
-### feat
+### Features
 
 - **swagger**: remove `{format}` suffixed doc entries
 
@@ -4019,7 +4049,7 @@
 
 ## 1.0.0-a4 (2024-07-18)
 
-### feat
+### Features
 
 - **api**: When processing uploaded inventory and name does not match, update name to one within inventory file
 - **config_management**: Group name to be entire breadcrumb
@@ -4031,7 +4061,7 @@
 
 ## 1.0.0-a3 (2024-07-18)
 
-### feat
+### Features
 
 - **config_management**: Prevent a config group from being able to change organization
 - **itam**: On device organization change remove config groups
@@ -4047,7 +4077,7 @@
 
 ## 1.0.0-a2 (2024-07-17)
 
-### feat
+### Features
 
 - **api**: Inventory matching of device second by uuid
 - **api**: Inventory matching of device first by serial number
@@ -4066,7 +4096,7 @@
 
 - squashed DB migrations in preparation for v1.0 release.
 
-### feat
+### Features
 
 - Administratively set global items org/is_global field now read-only
 - **access**: Add multi-tennant manager
@@ -4090,7 +4120,7 @@
 
 ## 0.7.0 (2024-07-14)
 
-### feat
+### Features
 
 - **core**: Filter every form field if associated with an organization to users organizations only
 - **core**: add var `template_name` to common view template for all views that require it
@@ -4183,7 +4213,7 @@
 
 ## 0.6.0 (2024-06-30)
 
-### feat
+### Features
 
 - user api token
 - **api**: API token authentication
@@ -4219,7 +4249,7 @@
 
 ## 0.5.0 (2024-06-17)
 
-### feat
+### Features
 
 - Setup Organization Managers
 - **access**: add notes field to organization
@@ -4333,7 +4363,7 @@
 
 ## 0.4.0 (2024-06-05)
 
-### feat
+### Features
 
 - 2024 06 05
 - **database**: add mysql support
@@ -4411,7 +4441,7 @@
 
 ## 0.3.0 (2024-05-29)
 
-### feat
+### Features
 
 - Randomz
 - **access**: during organization permission check, check to ensure user is logged on
@@ -4542,7 +4572,7 @@
 
 ## 0.2.0 (2024-05-18)
 
-### feat
+### Features
 
 - 2024 05 18
 - **itam**: Add Operating System to ITAM models
@@ -4566,7 +4596,7 @@
 
 ## 0.1.0 (2024-05-17)
 
-### feat
+### Features
 
 - API token auth
 - **api**: initial token authentication implementation

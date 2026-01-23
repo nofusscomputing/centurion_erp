@@ -244,6 +244,11 @@ nav:
 
         - projects/centurion_erp/user/settings/external_links.md
 
+    - Extensions:
+
+      - projects/centurion_erp/extensions/index.md
+
+      - projects/centurion_erp/extensions/glpi_import/index.md
 
 - Operations: 
 

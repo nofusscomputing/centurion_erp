@@ -56,18 +56,18 @@ RUN pip install --upgrade \
     twine
 
 
-COPY requirements.txt /tmp/requirements.txt
-
-COPY requirements_production.txt /tmp/requirements_production.txt
 
 
 RUN mkdir -p /tmp/python_modules /tmp/python_builds
 
 
-RUN cd /tmp/python_modules \
-  && pip download --dest . --check-build-dependencies \
-    -r /tmp/requirements.txt \
-    -r /tmp/requirements_production.txt
+COPY dist/ /tmp/python_builds
+
+
+RUN \
+    pip download \
+        --dest ./tmp/python_modules \
+        "$(ls /tmp/python_builds/centurion_erp-*-py3-none-any.whl)[docker]";
 
 
 RUN cd /tmp/python_modules \
@@ -87,7 +87,7 @@ LABEL \
   org.opencontainers.image.title="Centurion ERP" \
   org.opencontainers.image.description="An ERP with a focus on ITSM and automation" \
   org.opencontainers.image.vendor="No Fuss Computing" \
-  io.artifacthub.package.license="MIT"
+  io.artifacthub.package.license="AGPL-3.0-only"
 
 
 ARG CI_PROJECT_URL
@@ -106,16 +106,15 @@ ENV PYTHONTZPATH=""
 ENV PROMETHEUS_MULTIPROC_DIR=""
 
 # Prevent python depreciation warnings
-ENV PYTHONWARNINGS=ignore::DeprecationWarning
+ENV PYTHONWARNINGS=ignore
 
 ENV IS_WORKER=False
 
 
 COPY requirements.txt requirements.txt
-COPY requirements_test.txt requirements_test.txt
+COPY requirements_dev.txt requirements_dev.txt
 
 
-COPY ./app/. app
 
 COPY --from=build /tmp/python_builds /tmp/python_builds
 
@@ -126,18 +125,23 @@ COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
 
 COPY includes/ /
 
-RUN pip --disable-pip-version-check list --outdated --format=json | \
-    python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
-    xargs -n1 pip install --no-cache-dir -U; \
-  apk update --no-cache; \
-  apk upgrade --no-cache; \
-  apk add --no-cache \
-    mariadb-client \
-    mariadb-dev \
-    postgresql16-client \
-    nginx@nginx=${NGINX_VERSION}; \
-  pip install --no-cache-dir /tmp/python_builds/*.*; \
-    python /app/manage.py collectstatic --noinput; \
+RUN \
+    pip --disable-pip-version-check list --outdated --format=json | \
+        python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
+        xargs -n1 pip install --no-cache-dir -U; \
+    apk update --no-cache; \
+    apk upgrade --no-cache; \
+    apk add --no-cache \
+        mariadb-client \
+        mariadb-dev \
+        postgresql16-client \
+        nginx@nginx=${NGINX_VERSION}; \
+    pip install \
+        --no-cache-dir \
+        --no-index \
+        --find-links /tmp/python_builds \
+        centurion_erp[docker]; \
+    manage collectstatic --noinput; \
     rm -rf /tmp/python_builds; \
     rm /etc/nginx/sites-enabled; \
     rm /etc/nginx/conf.d/default.conf; \
@@ -146,15 +150,15 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
     nginx -t; \
     # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
     if [ ! $(python -m django --version) ]; then \
-      echo "Django not Installed"; \
-      exit 1; \
+        echo "Django not Installed"; \
+        exit 1; \
     fi; \
     chmod +x /entrypoint.sh; \
     mkdir -p /etc/supervisor/conf.d; \
     export
 
 
-WORKDIR /app
+WORKDIR /data
 
 # In future, adjust port to 80 as nginX is now used (Will be breaking change)
 EXPOSE 8000
@@ -166,4 +170,7 @@ HEALTHCHECK --interval=10s --timeout=30s --start-period=30s --retries=3 CMD \
   supervisorctl status || exit 1
 
 
-  ENTRYPOINT ["/entrypoint.sh"]
+ENV DJANGO_SETTINGS_MODULE=centurion_erp.centurion.settings
+
+
+ENTRYPOINT ["/entrypoint.sh"]

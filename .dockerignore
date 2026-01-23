@@ -5,8 +5,14 @@ gitlab-ci/
 venv/
 docs/
 **/*.sqlite3
+**/*.sqlite3-*
 **/static/
 __pycache__
 **__pycache__
 **.pyc
 ** .pytest*
+
+
+**.egg-info
+build/
+node_modules/

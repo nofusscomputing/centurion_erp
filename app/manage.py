@@ -7,6 +7,12 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'centurion.settings')
+    #
+    # Set working directory
+    # This is required due to src dir mappped to module name `centurion_erp`
+    # Without this `chdir` code needs to be updated to import from module
+    # namespace. in addition src dir would also need to be renamed.
+    os.chdir(os.path.dirname(__file__))
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

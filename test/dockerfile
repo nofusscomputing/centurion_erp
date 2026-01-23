@@ -1,0 +1,11 @@
+ARG CENTURION_IMAGE=ghcr.io/nofusscomputing/centurion-erp
+
+ARG CENTURION_IMAGE_TAG=dev
+
+FROM ${CENTURION_IMAGE}:${CENTURION_IMAGE_TAG}
+
+
+COPY requirements_dev.txt /requirements_dev.txt
+
+RUN \
+    pip install -r /requirements_dev.txt

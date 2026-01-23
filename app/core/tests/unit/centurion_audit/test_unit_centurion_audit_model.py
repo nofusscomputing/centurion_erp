@@ -255,8 +255,8 @@ class CenturionAuditModelPyTest(
 
         with pytest.raises(ValidationError) as e:
 
-            model_instance._after = {'key': 'value'}
-            model_instance._before = {'key': 'value'}
+            model_instance._after = model_instance.get_audit_values()
+            model_instance._before = model_instance.get_audit_values()
 
             model_instance.get_model_history( model = model_instance )
 

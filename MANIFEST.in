@@ -1,0 +1,23 @@
+
+recursive-exclude .gitea *
+recursive-exclude .github *
+recursive-exclude .gitlab *
+recursive-exclude .vscode *
+
+recursive-exclude deploy *
+recursive-exclude docs *
+recursive-exclude includes *
+recursive-exclude test *
+
+exclude .dockerignore
+exclude .git*
+exclude .markdownlin*
+exclude .nfc_automation.yaml
+
+exclude artifacthub-repo.yml
+exclude dockerfile
+exclude mkdocs.yml
+exclude makefile
+
+
+global-exclude *.tmp.*

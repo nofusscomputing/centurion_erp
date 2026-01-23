@@ -29,10 +29,8 @@ services:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
       - RABBITMQ_DEFAULT_VHOST=itsm
-    expose:
-      - 5672
     ports:
-      #   - "5672:5672"
+      - "5672:5672"
       - "15672:15672"
 
 
@@ -41,7 +39,9 @@ services:
     container_name: centurion-erp-init
     restart: "no"
     entrypoint: ""
-    command: sh -c 'sleep 15; python manage.py migrate'
+    environment:
+      DJANGO_DEBUG: "False"
+    command: sh -c 'sleep 15; manage migrate'
     depends_on:
       - postgres
       - rabbitmq
@@ -49,6 +49,13 @@ services:
 
   centurion:
     <<: *centurion
+    image: ${CENTURION_IMAGE:-ghcr.io/nofusscomputing/centurion-erp}:test
+    build:
+      context: ../.
+      dockerfile: test/dockerfile
+      args:
+        CENTURION_IMAGE: ${CENTURION_IMAGE:-ghcr.io/nofusscomputing/centurion-erp}
+        CENTURION_IMAGE_TAG: ${CENTURION_IMAGE_TAG:-dev}
     container_name: centurion-erp
     restart: always
     hostname: centurion-erp
