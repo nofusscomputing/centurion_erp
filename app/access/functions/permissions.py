@@ -6,6 +6,8 @@ from django.contrib.auth.models import (
 )
 from django.db.models import QuerySet
 
+from centurion.logging import CenturionLogger
+
 
 def permission_queryset():
     """Filter Permissions to those used within the application
@@ -13,6 +15,8 @@ def permission_queryset():
     Returns:
         list: Filtered queryset that only contains the used permissions
     """
+
+    log: CenturionLogger = settings.CENTURION_LOG.getChild( suffix = 'base' )
 
     centurion_apps = [
         'access',
@@ -111,8 +115,8 @@ def permission_queryset():
                     codename__in = exclude_permissions
                 )
 
-        except:
-            pass
+        except Exception as e:
+            log.exception( msg = f'Unknown Error Occured: {e}' )
 
         return QuerySet()
 
