@@ -4,7 +4,7 @@ from django.contrib.auth.models import (
     ContentType,
     Permission
 )
-from django.db.models import QuerySet
+from django.db.models import ObjectDoesNotExist, QuerySet
 
 from centurion.logging import CenturionLogger
 
@@ -74,37 +74,46 @@ def permission_queryset():
 
             for model in models:
 
-                if(
-                    not str(model._meta.object_name).endswith('AuditHistory')
-                    and not str(model._meta.model_name).lower().endswith('history')
-                ):
-                    # check `endswith('history')` can be removed when the old history models are removed
-                    continue
-
-                content_type = ContentType.objects.get(
-                    app_label = model._meta.app_label,
-                    model = model._meta.model_name
-                )
-
-                permissions = Permission.objects.filter(
-                    content_type = content_type,
-                )
-
-                for permission in permissions:
+                try:
 
                     if(
-                        not permission.codename == 'view_' + str(model._meta.model_name)
-                        and str(model._meta.object_name).endswith('AuditHistory')
-                    ):
-                        exclude_permissions += [ permission.codename ]
-
-                    elif(
                         not str(model._meta.object_name).endswith('AuditHistory')
-                        and str(model._meta.model_name).lower().endswith('history')
+                        and not str(model._meta.model_name).lower().endswith('history')
                     ):
-                        # This `elif` can be removed when the old history models are removed
+                        # check `endswith('history')` can be removed when the old history models are removed
+                        continue
 
-                        exclude_permissions += [ permission.codename ]
+                    content_type = ContentType.objects.get(
+                        app_label = model._meta.app_label,
+                        model = model._meta.model_name
+                    )
+
+                    permissions = Permission.objects.filter(
+                        content_type = content_type,
+                    )
+
+                    for permission in permissions:
+
+                        if(
+                            not permission.codename == 'view_' + str(model._meta.model_name)
+                            and str(model._meta.object_name).endswith('AuditHistory')
+                        ):
+                            exclude_permissions += [ permission.codename ]
+
+                        elif(
+                            not str(model._meta.object_name).endswith('AuditHistory')
+                            and str(model._meta.model_name).lower().endswith('history')
+                        ):
+                            # This `elif` can be removed when the old history models are removed
+
+                            exclude_permissions += [ permission.codename ]
+
+
+                except ObjectDoesNotExist as e:
+                    pass
+
+                except Exception as e:
+                    log.exception( msg = f'Unknown Error Occured: {e}' )
 
 
             return Permission.objects.select_related('content_type').filter(
