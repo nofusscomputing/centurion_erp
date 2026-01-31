@@ -32,7 +32,7 @@ def debug_task(self):
 
 
 
-@signals.worker_ready.connect()
+@signals.worker_ready.connect( dispatch_uid = 'setup_prometheus' )
 def setup_prometheus(**kwargs):
 
     if not getattr(settings, 'METRICS_ENABLED', False):
