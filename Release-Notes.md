@@ -1,3 +1,10 @@
+## Version v1.28.1
+
+- Permissions loader to capture errors gracefully.
+
+- Remove build artifacts from docker container layers
+
+
 ## Version v1.28.0
 
 - No new features. This release added publishing Centurion ERP to https://pypi.org/project/centurion-erp
