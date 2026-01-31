@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     ContentType,
     Permission
 )
+from django.db import OperationalError, ProgrammingError
 from django.db.models import ObjectDoesNotExist, QuerySet
 
 from centurion.logging import CenturionLogger
@@ -112,9 +113,6 @@ def permission_queryset():
                 except ObjectDoesNotExist as e:
                     pass
 
-                except Exception as e:
-                    log.exception( msg = f'Unknown Error Occured: {e}' )
-
 
             return Permission.objects.select_related('content_type').filter(
                     content_type__app_label__in = centurion_apps,
@@ -124,8 +122,31 @@ def permission_queryset():
                     codename__in = exclude_permissions
                 )
 
+
+        except ProgrammingError as e:    # Migrations have not yet run
+            if(
+                'relation' not in str(e)
+                and 'django_content_type' not in str(e)
+            ):
+                log.exception( msg = f'Unknown Error Occured: {e}' )
+
+
+        except OperationalError as e:
+            if(
+                (    # Migrations have not yet run
+                    'no such table' not in str(e)
+                    and 'django_content_type' not in str(e)
+                ) and (    # Initial startup
+                    'connection to server at' not in str(e)
+                    and 'Connection refused' not in str(e)
+                )
+            ):
+                log.exception( msg = f'Unknown Error Occured: {e}' )
+
+
         except Exception as e:
             log.exception( msg = f'Unknown Error Occured: {e}' )
+
 
         return QuerySet()
 
