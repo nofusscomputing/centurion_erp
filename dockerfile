@@ -115,9 +115,6 @@ COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 
 
-
-COPY --from=build /tmp/python_builds /tmp/python_builds
-
 COPY --from=build /etc/apk/repositories /etc/apk/repositories
 
 COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
@@ -125,10 +122,14 @@ COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
 
 COPY includes/ /
 
-RUN \
+RUN --mount=type=bind,from=build,source=/tmp/python_builds,target=/tmp/python_builds \
     pip --disable-pip-version-check list --outdated --format=json | \
         python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
-        xargs -n1 pip install --no-cache-dir -U; \
+        xargs -n1 pip install  \
+            --no-cache-dir \
+            --no-index \
+            --find-links /tmp/python_builds \
+            -U; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
     apk add --no-cache \

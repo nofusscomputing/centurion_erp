@@ -4,7 +4,10 @@ from django.contrib.auth.models import (
     ContentType,
     Permission
 )
-from django.db.models import QuerySet
+from django.db import OperationalError, ProgrammingError
+from django.db.models import ObjectDoesNotExist, QuerySet
+
+from centurion.logging import CenturionLogger
 
 
 def permission_queryset():
@@ -13,6 +16,8 @@ def permission_queryset():
     Returns:
         list: Filtered queryset that only contains the used permissions
     """
+
+    log: CenturionLogger = settings.CENTURION_LOG.getChild( suffix = 'base' )
 
     centurion_apps = [
         'access',
@@ -70,37 +75,43 @@ def permission_queryset():
 
             for model in models:
 
-                if(
-                    not str(model._meta.object_name).endswith('AuditHistory')
-                    and not str(model._meta.model_name).lower().endswith('history')
-                ):
-                    # check `endswith('history')` can be removed when the old history models are removed
-                    continue
-
-                content_type = ContentType.objects.get(
-                    app_label = model._meta.app_label,
-                    model = model._meta.model_name
-                )
-
-                permissions = Permission.objects.filter(
-                    content_type = content_type,
-                )
-
-                for permission in permissions:
+                try:
 
                     if(
-                        not permission.codename == 'view_' + str(model._meta.model_name)
-                        and str(model._meta.object_name).endswith('AuditHistory')
-                    ):
-                        exclude_permissions += [ permission.codename ]
-
-                    elif(
                         not str(model._meta.object_name).endswith('AuditHistory')
-                        and str(model._meta.model_name).lower().endswith('history')
+                        and not str(model._meta.model_name).lower().endswith('history')
                     ):
-                        # This `elif` can be removed when the old history models are removed
+                        # check `endswith('history')` can be removed when the old history models are removed
+                        continue
 
-                        exclude_permissions += [ permission.codename ]
+                    content_type = ContentType.objects.get(
+                        app_label = model._meta.app_label,
+                        model = model._meta.model_name
+                    )
+
+                    permissions = Permission.objects.filter(
+                        content_type = content_type,
+                    )
+
+                    for permission in permissions:
+
+                        if(
+                            not permission.codename == 'view_' + str(model._meta.model_name)
+                            and str(model._meta.object_name).endswith('AuditHistory')
+                        ):
+                            exclude_permissions += [ permission.codename ]
+
+                        elif(
+                            not str(model._meta.object_name).endswith('AuditHistory')
+                            and str(model._meta.model_name).lower().endswith('history')
+                        ):
+                            # This `elif` can be removed when the old history models are removed
+
+                            exclude_permissions += [ permission.codename ]
+
+
+                except ObjectDoesNotExist as e:
+                    pass
 
 
             return Permission.objects.select_related('content_type').filter(
@@ -111,8 +122,31 @@ def permission_queryset():
                     codename__in = exclude_permissions
                 )
 
-        except:
-            pass
+
+        except ProgrammingError as e:    # Migrations have not yet run
+            if(
+                'relation' not in str(e)
+                and 'django_content_type' not in str(e)
+            ):
+                log.exception( msg = f'Unknown Error Occured: {e}' )
+
+
+        except OperationalError as e:
+            if(
+                (    # Migrations have not yet run
+                    'no such table' not in str(e)
+                    and 'django_content_type' not in str(e)
+                ) and (    # Initial startup
+                    'connection to server at' not in str(e)
+                    and 'Connection refused' not in str(e)
+                )
+            ):
+                log.exception( msg = f'Unknown Error Occured: {e}' )
+
+
+        except Exception as e:
+            log.exception( msg = f'Unknown Error Occured: {e}' )
+
 
         return QuerySet()
 
