@@ -1,3 +1,16 @@
+## 1.28.1 (2026-02-01)
+
+### Fixes
+
+- **core**: When fetching model history, if value not a model use raw value
+- **access**: If migrations have not run when loading permissions, catch error gracefully
+- **celery**: Setup prometheus on main process only
+
+### Refactoring
+
+- **docker**: remove build artifacts from container layers
+- **base**: Limit errors to permission fetching loop
+
 ## 1.28.0 (2026-01-23)
 
 ## 1.28.0-rc1 (2026-01-23)
