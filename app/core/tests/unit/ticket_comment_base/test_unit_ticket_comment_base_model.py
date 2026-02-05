@@ -31,6 +31,12 @@ class TicketCommentBaseModelTestCases(
             '_audit_enabled': {
                 'value': False
             },
+            '_linked_model_kwargs': {
+                'type': tuple,
+                'value': (
+                    ( 'pk', ),
+                ),
+            },
             '_notes_enabled': {
                 'value': False
             },
@@ -73,7 +79,7 @@ class TicketCommentBaseModelTestCases(
                 'blank': False,
                 'default': models.fields.NOT_PROVIDED,
                 'field_type': models.ForeignKey,
-                'null': False,
+                'null': True,
                 'unique': False,
             },
             "external_ref": {

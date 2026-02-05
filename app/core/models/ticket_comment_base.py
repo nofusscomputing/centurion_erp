@@ -24,6 +24,10 @@ class TicketCommentBase(
 ):
 
 
+    _linked_model_kwargs: tuple[ tuple[ str ] ]  = (
+        ( 'pk', ),
+    )
+
     _audit_enabled = False
 
     @property
@@ -95,7 +99,7 @@ class TicketCommentBase(
         TicketBase,
         blank = False,
         help_text = 'Ticket this comment belongs to',
-        null = False,
+        null = True,
         on_delete = models.PROTECT,
         verbose_name = 'Ticket',
     )
