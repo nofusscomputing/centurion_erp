@@ -1,4 +1,0 @@
-[submodule "website-template"]
-	path = website-template
-	url = https://gitlab.com/nofusscomputing/infrastructure/website-template.git
-	branch = development

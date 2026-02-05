@@ -1,4 +1,4 @@
-INHERIT: website-template/mkdocs.yml
+INHERIT: docs_template/mkdocs.yml
 
 docs_dir: 'docs'
 
