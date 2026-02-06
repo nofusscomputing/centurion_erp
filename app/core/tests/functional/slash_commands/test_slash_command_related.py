@@ -1,11 +1,11 @@
+import re
+
 import django
 import pytest
-import re
 
 from core.models.ticket_comment_base import TicketBase, TicketCommentBase
 
-User = django.contrib.auth.get_user_model()
-
+from core.tests.functional.slash_commands.test_slash_command_time_track import SlashCommandsCommonTimeTrack
 
 
 class SlashCommandsFixtures:
@@ -25,7 +25,8 @@ class SlashCommandsFixtures:
 
         with django_db_blocker.unblock():
 
-            request.cls.ticket_user = User.objects.create_user(username="test_user_for_tickets", password="password")
+            request.cls.ticket_user = django.contrib.auth.get_user_model(
+                ).objects.create_user(username="test_user_for_tickets", password="password")
 
 
             kwargs = kwargs_employee()
@@ -74,103 +75,11 @@ class SlashCommandsCommon:
 
 
 
-class SlashCommandsCommonSpend:
-
-    @property
-    def parameterized_slash_command(self):
-        
-        return {
-            'spend_full_no_spaces': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '1h2m3s',
-            },
-            'spend_full_spaces': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '1h 2m 3s',
-            },
-            'spend_hour_minute_spaces': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '1h 2m',
-            },
-            'spend_hour_second_spaces': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '1h 3s',
-            },
-            'spend_minute_second_spaces': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '5m 3s',
-            },
-            'spend_hour': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '1h',
-            },
-            'spend_minute': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '1m',
-            },
-            'spend_second': {
-                'spend': True,
-                'slash_command': 'spend',
-                'command_obj': '4s',
-            },
-
-            'spent_full_no_spaces': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '1h2m3s',
-            },
-            'spent_full_spaces': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '1h 2m 3s',
-            },
-            'spent_hour_minute_spaces': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '1h 2m',
-            },
-            'spent_hour_second_spaces': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '1h 3s',
-            },
-            'spent_minute_second_spaces': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '5m 3s',
-            },
-            'spent_hour': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '1h',
-            },
-            'spent_minute': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '1m',
-            },
-            'spent_second': {
-                'spend': True,
-                'slash_command': 'spent',
-                'command_obj': '4s',
-            },
-
-        }
-
-
-
 class SlashCommandsCommonDependency:
 
     @property
     def parameterized_slash_command(self):
-        
+
         return {
             'relate_existing_ticket': {
                 'relate': True,
@@ -193,9 +102,9 @@ class SlashCommandsCommonDependency:
 
 
 
-# @pytest.mark.skip( reason = 'Awaiting Ticket Refactor')
 class SlashCommandsTicketTestCases(
     SlashCommandsCommonDependency,
+    SlashCommandsCommonTimeTrack,
     SlashCommandsCommon
 ):
     """Ticket Test Cases for Slash Commands
@@ -205,7 +114,7 @@ class SlashCommandsTicketTestCases(
     Requires a fixture called `Ticket`
     """
 
-    def test_slash_command_ticket_single_line_with_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_with_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -243,7 +152,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_lf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_command_own_line_lf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -281,7 +190,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_crlf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_command_own_line_crlf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -318,7 +227,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_lf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_lf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -355,7 +264,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_crlf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_crlf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -392,7 +301,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_lf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_lf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -429,7 +338,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_crlf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_crlf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -466,7 +375,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_blank_line_lf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_lf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -503,7 +412,7 @@ class SlashCommandsTicketTestCases(
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_blank_line_crlf_command_removed_from_description(self, 
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_crlf_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -539,87 +448,8 @@ class SlashCommandsTicketTestCases(
         )
 
 
-    # def test_slash_command_spend_ticket_duration_added(self, 
-    #     ticket,
-    #     parameterized, param_key_slash_command, param_name,
-    #     param_slash_command,
-    #     param_command_obj,
-    #     param_spend,
-    # ):
-    #     """Slash command Check
 
-    #     Ensure the `spend` slash command adds the duration to a ticket comment
-    #     within the duration field.
-    #     """
-
-    #     comment_text = self.single_line_command_own_line_blank_line_crlf
-
-    #     durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
-
-    #     hour = durations['hour']
-
-    #     if not hour:
-    #         hour = 0
-
-    #     else:
-    #         hour = str(durations['hour']).replace('h', '')
-
-    #     hour = (int(hour) * 60) * 60
-
-
-    #     minute = durations['minute']
-
-    #     if not minute:
-    #         minute = 0
-
-    #     else:
-    #         minute = str(durations.get('minute', 0)).replace('m', '')
-
-    #     minute = int(minute) * 60
-
-
-    #     second = durations['second']
-
-    #     if not second:
-    #         second = 0
-    #     else:
-    #         second = str(durations['second']).replace('s', '')
-
-    #     second = int(second)
-
-    #     duration_in_seconds = hour + minute + second
-
-
-    #     assert 'COMMAND' in comment_text
-    #     # COMMAND must be in ticket comment so it can be constructed
-
-    #     command_obj = str(param_command_obj).replace(
-    #         'EXISTINGTICKET', str(self.existing_ticket.id)
-    #     )
-
-    #     ticket.description = str(
-    #         comment_text.replace(
-    #             'COMMAND', '/' + param_slash_command + ' ' + command_obj
-    #         )
-    #     )
-
-
-    #     ticket.save()
-
-    #     ticket_comment = ticket.ticketcommentbase_set.all()
-
-    #     assert len(ticket_comment) == 1
-    #     # A comment should have been created that contains the date, time and
-    #     # duration of the time spent.
-
-    #     ticket_comment = ticket_comment[0]
-
-
-    #     assert ticket_comment.duration == duration_in_seconds
-
-
-
-    def test_slash_command_ticket_single_line_duration_not_added(self, 
+    def test_slash_command_ticket_single_line_duration_not_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -627,7 +457,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking did not create an
+        action comment.
         """
 
         comment_text = self.single_line_with_command
@@ -683,12 +514,13 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == 0
+        assert len(action_comment) == 0
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_lf_duration_added(self, 
+    def test_slash_command_ticket_single_line_command_own_line_lf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -696,7 +528,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_command_own_line_lf
@@ -752,12 +585,15 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.description == duration_in_seconds
+        assert len(action_comment) == 1
+
+        assert action_comment[0].comment_type == 'action'
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_single_line_command_own_line_crlf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -765,7 +601,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_command_own_line_crlf
@@ -821,12 +658,15 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == duration_in_seconds
+        assert len(action_comment) == 1
+
+        assert action_comment[0].comment_type == 'action'
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_lf_duration_added(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_lf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -834,7 +674,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_blank_line_command_own_line_lf
@@ -890,12 +731,15 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == duration_in_seconds
+        assert len(action_comment) == 1
+
+        assert action_comment[0].comment_type == 'action'
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_crlf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -903,7 +747,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_blank_line_command_own_line_crlf
@@ -959,12 +804,15 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == duration_in_seconds
+        assert len(action_comment) == 1
+
+        assert action_comment[0].comment_type == 'action'
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_lf_duration_added(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_lf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -972,7 +820,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_blank_line_command_own_line_blank_line_lf
@@ -1028,12 +877,15 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == duration_in_seconds
+        assert len(action_comment) == 1
+
+        assert action_comment[0].comment_type == 'action'
 
 
 
-    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_single_line_blank_line_command_own_line_blank_line_crlf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1041,7 +893,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_blank_line_command_own_line_blank_line_crlf
@@ -1097,12 +950,15 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == duration_in_seconds
+        assert len(action_comment) == 1
+
+        assert action_comment[0].comment_type == 'action'
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_blank_line_lf_duration_added(self, 
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_lf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1110,7 +966,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_command_own_line_blank_line_lf
@@ -1166,12 +1023,15 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == duration_in_seconds
+        assert len(action_comment) == 1
+
+        assert action_comment[0].comment_type == 'action'
 
 
 
-    def test_slash_command_ticket_single_line_command_own_line_blank_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_single_line_command_own_line_blank_line_crlf_duration_added(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1179,7 +1039,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure that the slash command for time tracking created an action
+        comment.
         """
 
         comment_text = self.single_line_command_own_line_blank_line_crlf
@@ -1235,94 +1096,23 @@ class SlashCommandsTicketTestCases(
 
         ticket.save()
 
+        action_comment = ticket.ticketcommentbase_set.filter(duration = duration_in_seconds)
 
-        assert ticket.duration == duration_in_seconds
+        assert len(action_comment) == 1
 
-
-
-    # def test_slash_command_spend_ticket_comment_duration_added(self, 
-    #     ticket_comment,
-    #     parameterized, param_key_slash_command, param_name,
-    #     param_slash_command,
-    #     param_command_obj,
-    #     param_spend,
-    # ):
-    #     """Slash command Check
-
-    #     Ensure the `spend` slash command adds the duration to the tickets
-    #     duration field.
-    #     """
-
-    #     comment_text = self.single_line_command_own_line_blank_line_crlf
-
-    #     assert 'COMMAND' in comment_text
-    #     # COMMAND must be in ticket comment so it can be constructed
-
-    #     command_obj = str(param_command_obj).replace(
-    #         'EXISTINGTICKET', str(self.existing_ticket.id)
-    #     )
-
-
-    #     durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
-
-    #     hour = durations['hour']
-
-    #     if not hour:
-    #         hour = 0
-
-    #     else:
-    #         hour = str(durations['hour']).replace('h', '')
-
-    #     hour = (int(hour) * 60) * 60
-
-
-    #     minute = durations['minute']
-
-    #     if not minute:
-    #         minute = 0
-
-    #     else:
-    #         minute = str(durations.get('minute', 0)).replace('m', '')
-
-    #     minute = int(minute) * 60
-
-
-    #     second = durations['second']
-
-    #     if not second:
-    #         second = 0
-    #     else:
-    #         second = str(durations['second']).replace('s', '')
-
-    #     second = int(second)
-
-    #     duration_in_seconds = hour + minute + second
-
-    #     ticket_comment.body = str(
-    #         comment_text.replace(
-    #             'COMMAND', '/' + param_slash_command + ' ' + command_obj
-    #         )
-    #     )
-
-
-    #     ticket_comment.save()
-
-
-    #     assert ticket_comment.duration == duration_in_seconds
-
+        assert action_comment[0].comment_type == 'action'
 
 
 
 class SlashCommandsTicketCommentTestCases(
     SlashCommandsCommonDependency,
-    # SlashCommandsCommonSpend,
+    SlashCommandsCommonTimeTrack,
     SlashCommandsCommon
 ):
 
-    # existing_ticket = None
 
 
-    def test_slash_command_ticket_comment_single_line_with_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_with_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1359,7 +1149,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_lf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_lf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1396,7 +1186,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_crlf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_crlf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1434,7 +1224,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_lf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_lf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1472,7 +1262,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_crlf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_crlf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1511,7 +1301,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_lf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_lf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1550,7 +1340,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_crlf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_crlf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1589,7 +1379,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_lf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_lf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1628,7 +1418,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_crlf_command_removed_from_comment(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_crlf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1664,88 +1454,8 @@ class SlashCommandsTicketCommentTestCases(
         )
 
 
-    # def test_slash_command_spend_ticket_duration_added(self, 
-    #     ticket,
-    #     parameterized, param_key_slash_command, param_name,
-    #     param_slash_command,
-    #     param_command_obj,
-    #     param_spend,
-    # ):
-    #     """Slash command Check
 
-    #     Ensure the `spend` slash command adds the duration to a ticket comment
-    #     within the duration field.
-    #     """
-
-    #     comment_text = self.single_line_command_own_line_blank_line_crlf
-
-    #     durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
-
-    #     hour = durations['hour']
-
-    #     if not hour:
-    #         hour = 0
-
-    #     else:
-    #         hour = str(durations['hour']).replace('h', '')
-
-    #     hour = (int(hour) * 60) * 60
-
-
-    #     minute = durations['minute']
-
-    #     if not minute:
-    #         minute = 0
-
-    #     else:
-    #         minute = str(durations.get('minute', 0)).replace('m', '')
-
-    #     minute = int(minute) * 60
-
-
-    #     second = durations['second']
-
-    #     if not second:
-    #         second = 0
-    #     else:
-    #         second = str(durations['second']).replace('s', '')
-
-    #     second = int(second)
-
-    #     duration_in_seconds = hour + minute + second
-
-
-    #     assert 'COMMAND' in comment_text
-    #     # COMMAND must be in ticket comment so it can be constructed
-
-    #     command_obj = str(param_command_obj).replace(
-    #         'EXISTINGTICKET', str(self.existing_ticket.id)
-    #     )
-
-    #     ticket.description = str(
-    #         comment_text.replace(
-    #             'COMMAND', '/' + param_slash_command + ' ' + command_obj
-    #         )
-    #     )
-
-
-    #     ticket.save()
-
-    #     ticket_comment = ticket.ticketcommentbase_set.all()
-
-    #     assert len(ticket_comment) == 1
-    #     # A comment should have been created that contains the date, time and
-    #     # duration of the time spent.
-
-    #     ticket_comment = ticket_comment[0]
-
-
-    #     assert ticket_comment.duration == duration_in_seconds
-
-
-
-
-    def test_slash_command_ticket_comment_single_line_duration_not_added(self, 
+    def test_slash_command_ticket_comment_single_line_duration_not_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1798,8 +1508,6 @@ class SlashCommandsTicketCommentTestCases(
 
         second = int(second)
 
-        duration_in_seconds = hour + minute + second
-
         ticket_comment.body = str(
             comment_text.replace(
                 'COMMAND', '/' + param_slash_command + ' ' + command_obj
@@ -1814,7 +1522,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_lf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_lf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1883,7 +1591,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_crlf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -1953,7 +1661,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_lf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_lf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -2023,7 +1731,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_crlf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -2094,7 +1802,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_lf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_lf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -2165,7 +1873,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_blank_line_command_own_line_blank_line_crlf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -2236,7 +1944,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_lf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_lf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -2307,7 +2015,7 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
-    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_crlf_duration_added(self, 
+    def test_slash_command_ticket_comment_single_line_command_own_line_blank_line_crlf_duration_added(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
         param_slash_command,
@@ -2373,78 +2081,6 @@ class SlashCommandsTicketCommentTestCases(
 
 
         assert ticket_comment.duration == duration_in_seconds
-
-
-
-    # def test_slash_command_spend_ticket_comment_duration_added(self, 
-    #     ticket_comment,
-    #     parameterized, param_key_slash_command, param_name,
-    #     param_slash_command,
-    #     param_command_obj,
-    #     param_spend,
-    # ):
-    #     """Slash command Check
-
-    #     Ensure the `spend` slash command adds the duration to the tickets
-    #     duration field.
-    #     """
-
-    #     comment_text = self.single_line_command_own_line_blank_line_crlf
-
-    #     assert 'COMMAND' in comment_text
-    #     # COMMAND must be in ticket comment so it can be constructed
-
-    #     command_obj = str(param_command_obj).replace(
-    #         'EXISTINGTICKET', str(self.existing_ticket.id)
-    #     )
-
-
-    #     durations = re.match('(?P<hour>\d+h)?\s?(?P<minute>\d+m)?\s?(?P<second>\d+s)?', param_command_obj).groupdict()
-
-    #     hour = durations['hour']
-
-    #     if not hour:
-    #         hour = 0
-
-    #     else:
-    #         hour = str(durations['hour']).replace('h', '')
-
-    #     hour = (int(hour) * 60) * 60
-
-
-    #     minute = durations['minute']
-
-    #     if not minute:
-    #         minute = 0
-
-    #     else:
-    #         minute = str(durations.get('minute', 0)).replace('m', '')
-
-    #     minute = int(minute) * 60
-
-
-    #     second = durations['second']
-
-    #     if not second:
-    #         second = 0
-    #     else:
-    #         second = str(durations['second']).replace('s', '')
-
-    #     second = int(second)
-
-    #     duration_in_seconds = hour + minute + second
-
-    #     ticket_comment.body = str(
-    #         comment_text.replace(
-    #             'COMMAND', '/' + param_slash_command + ' ' + command_obj
-    #         )
-    #     )
-
-
-    #     ticket_comment.save()
-
-
-    #     assert ticket_comment.duration == duration_in_seconds
 
 
 
@@ -2526,4 +2162,3 @@ class SlashCommandsPyTest(
         yield ticket_comment
 
         ticket_comment.delete()
-
