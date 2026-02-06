@@ -2,7 +2,6 @@ import importlib
 import re
 
 from django.apps import apps
-from django.core.exceptions import ValidationError
 
 
 

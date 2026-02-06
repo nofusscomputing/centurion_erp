@@ -1,6 +1,7 @@
 import datetime
 import pytest
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 
 from rest_framework.exceptions import ValidationError
@@ -30,6 +31,12 @@ class TicketCommentBaseModelTestCases(
             },
             '_audit_enabled': {
                 'value': False
+            },
+            '_linked_model_kwargs': {
+                'type': tuple,
+                'value': (
+                    ( 'pk', ),
+                ),
             },
             '_notes_enabled': {
                 'value': False
@@ -73,7 +80,7 @@ class TicketCommentBaseModelTestCases(
                 'blank': False,
                 'default': models.fields.NOT_PROVIDED,
                 'field_type': models.ForeignKey,
-                'null': False,
+                'null': True,
                 'unique': False,
             },
             "external_ref": {
@@ -417,13 +424,11 @@ class TicketCommentBaseModelTestCases(
 
         valid_data['comment_type'] = 'Nope'
 
-        with pytest.raises(ValidationError) as err:
+        with pytest.raises(DjangoValidationError) as err:
 
             model.objects.create(
                 **valid_data
             )
-
-        assert err.value.get_codes()['comment_type'] == 'comment_type_wrong_endpoint'
 
 
 

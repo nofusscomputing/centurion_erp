@@ -144,6 +144,7 @@ omit = [
 
 [tool.coverage.report]
 omit = [
+    "*/tests/*",
     "*/tests/*/*",
     #
     # Migrations / Migration related files
@@ -190,6 +191,7 @@ omit = [
     #
     # Old Ticketing Model
     #
+    "app/core/lib/slash_commands/duration.py",
     "app/core/lib/slash_commands/linked_model.py",
     "app/core/lib/slash_commands/related_ticket.py",
     "app/core/models/ticket/*",

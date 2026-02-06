@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.apps import apps
 from django.conf import settings
@@ -23,6 +24,10 @@ class TicketCommentBase(
     CenturionModel,
 ):
 
+
+    _linked_model_kwargs: tuple[ tuple[ str ] ]  = (
+        ( 'pk', ),
+    )
 
     _audit_enabled = False
 
@@ -95,7 +100,7 @@ class TicketCommentBase(
         TicketBase,
         blank = False,
         help_text = 'Ticket this comment belongs to',
-        null = False,
+        null = True,
         on_delete = models.PROTECT,
         verbose_name = 'Ticket',
     )
@@ -282,14 +287,7 @@ class TicketCommentBase(
                 self.date_closed = None
 
 
-            if self.comment_type != self._meta.sub_model_type:
-
-                raise centurion_exception.ValidationError(
-                    detail = {
-                        'comment_type': 'Comment Type does not match. Check the http endpoint you are using.'
-                    },
-                    code = 'comment_type_wrong_endpoint'
-                )
+            self.comment_type = self._meta.sub_model_type
 
 
             if self.parent:
@@ -418,15 +416,26 @@ class TicketCommentBase(
         if self._meta.sub_model_type != 'action':
             self.body = self.slash_command(self.body)
 
+        is_converted_action_comment = False
+        action_comment_time_track = re.match(self.time_track, body)
+        if(
+            self.body != body
+            and action_comment_time_track
+            and self.comment_type == 'comment'
+        ):
+
+            is_converted_action_comment = True
+           
+
+            if action_comment_time_track:    # Time Tracking comment
+                self.body = f"added {time_track.group('time')} of time spent"
+
+
         if(
            (
-                (
-                    body is not None
-                    and body != ''
-                )
+                body is not None
                 and (
                     self.body is not None
-                    and self.body != ''
                 )
             )
             or self.comment_type == 'solution'
@@ -434,6 +443,22 @@ class TicketCommentBase(
 
             super().save(force_insert=force_insert, force_update=force_update,
                 using=using, update_fields=update_fields)
+
+
+            if is_converted_action_comment:
+
+                action_comment = apps.get_model(
+                    app_label = 'core',
+                    model_name = 'ticketcommentaction'
+                )(
+                    id = self.id,
+                    pk = self.id,
+                    ticket = self.ticket
+                )
+
+                action_comment.full_clean()
+                action_comment.save()
+
 
             # clear ticket comment cache
             if hasattr(self.ticket, '_ticket_comments'):
