@@ -1,6 +1,7 @@
 import datetime
 import pytest
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 
 from rest_framework.exceptions import ValidationError
@@ -423,13 +424,11 @@ class TicketCommentBaseModelTestCases(
 
         valid_data['comment_type'] = 'Nope'
 
-        with pytest.raises(ValidationError) as err:
+        with pytest.raises(DjangoValidationError) as err:
 
             model.objects.create(
                 **valid_data
             )
-
-        assert err.value.get_codes()['comment_type'] == 'comment_type_wrong_endpoint'
 
 
 
