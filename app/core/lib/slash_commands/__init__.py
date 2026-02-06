@@ -1,18 +1,21 @@
 import re
 
-from .duration import Duration
+from .duration import Duration    # depreciated model
 from .related_ticket import CommandRelatedTicket    # depreciated model
 from .linked_model import CommandLinkedModel    # depreciated model
 from .link_model import CommandLinkModelTicket
 from .ticket_dependency import CommandTicketDependency
+from .time_track import CommandTimeTrack
+
 
 
 class SlashCommands(
-    Duration,
+    Duration,    # depreciated model
     CommandRelatedTicket,    # depreciated model
     CommandLinkedModel,    # depreciated model
     CommandLinkModelTicket,
     CommandTicketDependency,
+    CommandTimeTrack,
 ):
     """Slash Commands Base Class
     
@@ -82,7 +85,14 @@ class SlashCommands(
                     or command == 'spent'
                 ):
 
-                    returned_line = re.sub(self.time_spent, self.command_duration, line)
+                    if base_model in ['ticketbase', 'ticketcommentbase']:
+
+                        returned_line = re.sub(self.time_track, self.command_time_track, line)
+
+                    else:    # Depreciated Ticket Model and Command
+
+                        returned_line = re.sub(self.time_spent, self.command_duration, line)
+
 
                 elif command == 'link':
 

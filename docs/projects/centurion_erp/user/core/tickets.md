@@ -195,7 +195,7 @@ When using slash commands, there is only to be one slash command per line. All s
 
 ### Time Spent
 
-::: app.core.lib.slash_commands.Duration
+::: app.core.lib.slash_commands.CommandTimeTrack
     options:
         inherited_members: false
         members: []
