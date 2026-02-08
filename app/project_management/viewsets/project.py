@@ -98,7 +98,7 @@ class ViewSet( ModelViewSet ):
 
                 obj = list(self.queryset)[0]
 
-                organization = obj.organization
+                organization = obj.get_organization()
 
 
         if organization:
