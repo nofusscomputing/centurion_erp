@@ -211,7 +211,7 @@ class ConfigGroups(
             )
 
             # Prevent organization change. ToDo: add feature so that config can change organizations
-            self.organization = obj.organization
+            self.organization = obj.get_organization()
 
         if self.parent is not None:
 
