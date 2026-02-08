@@ -58,9 +58,7 @@ class Create(
 
             except Exception as e:
 
-                if not isinstance(e, APIException):
-
-                    e = self._django_to_api_exception(e)
+                e = self._django_to_api_exception(e)
 
                 if not isinstance(e, rest_framework.exceptions.ValidationError):
 
@@ -78,7 +76,7 @@ class Create(
 
 
                 instance = self.model.objects.user(
-                    user = self.request.user, permission = self._permission_required
+                    user = self.request.user, permission = self.permissions_required
                 ).get( organization = request.data['organization'])
 
             # Always return using the ViewSerializer
@@ -128,27 +126,19 @@ class Create(
 
         except Exception as e:
 
-            if not isinstance(e, APIException):
+            e = self._django_to_api_exception(e)
 
-                e = self._django_to_api_exception(e)
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
-            if hasattr(e, 'status_code'):
-                response = Response(
-                    data = e.get_full_details(),
-                    status = e.status_code
-                )
-
-            else:
-                response = Response(
-                    data = {
-                        e.__class__.__name__: str(e)
-                    },
-                    status = 500
-                )
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            if self.model.context.get(self.model._meta.model_name, None):
+                del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -191,28 +181,19 @@ class Destroy(
 
         except Exception as e:
 
-            if not isinstance(e, APIException):
+            e = self._django_to_api_exception(e)
 
-                e = self._django_to_api_exception(e)
-
-            if hasattr(e, 'status_code'):
-                response = Response(
-                    data = e.get_full_details(),
-                    status = e.status_code
-                )
-
-            else:
-                response = Response(
-                    data = {
-                        e.__class__.__name__: str(e)
-                    },
-                    status = 500
-                )
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            if self.model.context.get(self.model._meta.model_name, None):
+                del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -256,27 +237,19 @@ class List(
 
         except Exception as e:
 
-            if not isinstance(e, APIException):
+            e = self._django_to_api_exception(e)
 
-                e = self._django_to_api_exception(e)
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
-            if hasattr(e, 'status_code'):
-                response = Response(
-                    data = e.get_full_details(),
-                    status = e.status_code
-                )
-
-            else:
-                response = Response(
-                    data = {
-                        e.__class__.__name__: str(e)
-                    },
-                    status = 500
-                )
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            if self.model.context.get(self.model._meta.model_name, None):
+                del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -323,27 +296,19 @@ class Retrieve(
 
         except Exception as e:
 
-            if not isinstance(e, APIException):
+            e = self._django_to_api_exception(e)
 
-                e = self._django_to_api_exception(e)
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
-            if hasattr(e, 'status_code'):
-                response = Response(
-                    data = e.get_full_details(),
-                    status = e.status_code
-                )
-
-            else:
-                response = Response(
-                    data = {
-                        e.__class__.__name__: str(e)
-                    },
-                    status = 500
-                )
 
         if hasattr(self.model, 'context'):
 
-            self.model.context = { 'logger': None }
+            self.model.context['logger'] = None
+            if self.model.context.get(self.model._meta.model_name, None):
+                del self.model.context[self.model._meta.model_name]
 
         return response
 
@@ -410,27 +375,13 @@ class Update(
 
         except Exception as e:
 
-            if not isinstance(e, APIException):
+            e = self._django_to_api_exception(e)
 
-                e = self._django_to_api_exception(e)
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
-            if hasattr(e, 'status_code'):
-                response = Response(
-                    data = e.get_full_details(),
-                    status = e.status_code
-                )
-
-            else:
-                response = Response(
-                    data = {
-                        e.__class__.__name__: str(e)
-                    },
-                    status = 500
-                )
-
-        if hasattr(self.model, 'context'):
-
-            self.model.context = { 'logger': None }
 
         return response
 
@@ -492,28 +443,20 @@ class Update(
 
         except Exception as e:
 
-            if not isinstance(e, APIException):
+            e = self._django_to_api_exception(e)
 
-                e = self._django_to_api_exception(e)
+            response = Response(
+                data = e.get_full_details(),
+                status = e.status_code
+            )
 
-            if hasattr(e, 'status_code'):
-                response = Response(
-                    data = e.get_full_details(),
-                    status = e.status_code
-                )
-
-            else:
-                response = Response(
-                    data = {
-                        e.__class__.__name__: str(e)
-                    },
-                    status = 500
-                )
 
         if hasattr(self.model, 'context'):
 
             self.model.context['logger'] = None
-            del self.model.context[self.model._meta.model_name]
+            if self.model.context.get(self.model._meta.model_name, None):
+                del self.model.context[self.model._meta.model_name]
+
 
         return response
 
@@ -530,8 +473,11 @@ class CommonViewSet(
         viewsets (class): Django Rest Framework base class.
     """
 
-    _permission_required: str = None
-    """Cached Permissions required"""
+    permissions_required: list[ str ] = None
+    """Cached Permissions required
+    
+    This variable is intended to be only be set from the permission class.
+    """
 
     _queryset: models.QuerySet = None
     """View Queryset
@@ -553,7 +499,9 @@ class CommonViewSet(
             None: Exception not converted
         """
 
-        rtn_exception = None
+        if isinstance(ex, APIException):
+            return ex
+
 
         if(
             isinstance(ex, django.core.exceptions.ObjectDoesNotExist)
@@ -574,12 +522,14 @@ class CommonViewSet(
 
         else:
 
-            msg = getattr(ex, 'msg', None)
-            if not msg:
-                msg = str(ex)
+            msg = f"20250704-Unknown Exception Type. Unable to convert." \
+                f"Please report this error as a bug. msg was {getattr(ex, 'msg', None)}"
+            self.get_log().exception(
+                msg = msg
+            )
 
             exc = APIException(
-                detail = f'20250704-Unknown Exception Type. Unable to convert. Please report this error as a bug. msg was {msg}',
+                detail = msg,
                 code = 'unknown_exception'
             )
 
@@ -620,7 +570,7 @@ class CommonViewSet(
     """
 
     _log: CenturionLogger = None
-    
+
     def get_log(self):
 
         if self._log is None:
@@ -665,6 +615,20 @@ class CommonViewSet(
     _Mandatory_, Permission check class
     """
 
+    perms_map: dict[str, list[str]] = {}
+    """Additional Permissions Map
+
+    If there is a requirement for additional permissions add it to this map.
+    format is:
+        {
+            HTTP_METHOD: [ 'permission string' ]
+        }
+        i.e. { 'GET': [ 'core.view_ticketbase' ] }
+
+    Permissions in this map will be added in addition to the common CRUD
+    permissions. This will force the user to require **ALL** permissions.
+    """
+
     table_fields: list = []
     """ Table layout list
 
@@ -699,7 +663,8 @@ class CommonViewSet(
     def get_model_documentation(self) -> str:
         """Generate Documentation Path
 
-        Documentation paths can be added in the following locations in priority of order (lower number is higher priority):
+        Documentation paths can be added in the following locations in priority
+        of order (lower number is higher priority):
 
         1. `<viewset>.documentation`
 
@@ -760,7 +725,7 @@ class CommonViewSet(
 
                 self._queryset = self.model.objects.user(
                     user = self.request.user,
-                    permission = self.get_permission_required()
+                    permission = self.permissions_required
                 ).all()
 
             else:
@@ -789,96 +754,6 @@ class CommonViewSet(
 
 
         return self._queryset
-
-
-
-    def get_permission_required(self) -> str:
-        """ Get / Generate Permission Required
-
-        If there is a requirement that there be custom/dynamic permissions,
-        this function can be safely overridden.
-
-        Raises:
-            ValueError: Unable to determin the view action
-
-        Returns:
-            str: Permission in format `<app_name>.<action>_<model_name>`
-        """
-
-        if self._permission_required:
-
-            return self._permission_required
-
-
-        if hasattr(self, 'get_dynamic_permissions'):
-
-            self._permission_required = self.get_dynamic_permissions()
-
-            if type(self._permission_required) is list:
-
-                self._permission_required = self._permission_required[0]
-
-            return self._permission_required
-
-
-        view_action: str = None
-
-        if(
-            self.action == 'create'
-            or getattr(self.request, 'method', '') == 'POST'
-        ):
-
-            view_action = 'add'
-
-        elif (
-            self.action == 'partial_update'
-            or self.action == 'update'
-            or getattr(self.request, 'method', '') == 'PATCH'
-            or getattr(self.request, 'method', '') == 'PUT'
-        ):
-
-            view_action = 'change'
-
-        elif(
-            self.action == 'destroy'
-            or getattr(self.request, 'method', '') == 'DELETE'
-        ):
-
-            view_action = 'delete'
-
-        elif (
-            self.action == 'list'
-        ):
-
-            view_action = 'view'
-
-        elif self.action == 'retrieve':
-
-            view_action = 'view'
-
-        elif self.action == 'metadata':
-
-            view_action = 'view'
-
-        elif self.action is None:
-
-            return False
-
-
-
-        if view_action is None:
-
-            raise ValueError('view_action could not be defined.')
-
-
-        permission = self.model._meta.app_label + '.' + view_action + '_' + self.model._meta.model_name
-
-        permission_required = permission
-
-
-        self._permission_required = permission_required
-
-        return self._permission_required
 
 
 
@@ -924,7 +799,7 @@ class CommonViewSet(
         if not self.view_description:
 
             self.view_description = ""
-        
+
         if html:
 
             return mark_safe(f"<p>{self.view_description}</p>")
@@ -940,15 +815,15 @@ class CommonViewSet(
 
             return self.view_name
 
-        if getattr(self, 'model', None):
 
-            if self.detail:
+        if self.detail:
 
-                self.view_name = str(self.model._meta.verbose_name)
-            
-            else:
+            self.view_name = str(self.model._meta.verbose_name)
 
-                self.view_name = str(self.model._meta.verbose_name_plural)
+        else:
+
+            self.view_name = str(self.model._meta.verbose_name_plural)
+
 
         return self.view_name
 
@@ -997,11 +872,15 @@ class ModelViewSetBase(
             or self.action == 'retrieve'
         ):
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ', '_') + 'ViewSerializer']
+            self.serializer_class = globals()[str(
+                self.model._meta.verbose_name
+            ).replace(' ', '_') + 'ViewSerializer']
 
         else:
 
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ', '_') + 'ModelSerializer']
+            self.serializer_class = globals()[str(
+                self.model._meta.verbose_name
+            ).replace(' ', '_') + 'ModelSerializer']
 
 
         return self.serializer_class
@@ -1019,7 +898,8 @@ class ModelViewSetBase(
 
         if self.view_serializer_name is None:
 
-            self.view_serializer_name = self.get_serializer_class().__name__.replace('ModelSerializer', 'ViewSerializer')
+            self.view_serializer_name = self.get_serializer_class(
+                ).__name__.replace('ModelSerializer', 'ViewSerializer')
 
         return self.view_serializer_name
 
@@ -1111,60 +991,58 @@ class CommonSubModelViewSet_ReWrite(
 
         related_model = None
 
-        if model_kwarg:
+        is_nested_lookup = False
 
-            is_nested_lookup = False
+        for related_object in model._meta.related_objects:
 
-            for related_object in model._meta.related_objects:
-
-                if(
-                    getattr(
-                            related_object.related_model._meta,'model_name', ''
-                        ) == self.base_model._meta.model_name
-                    or not issubclass(related_object.related_model, self.base_model)
-                    or getattr(
-                            related_object.related_model._meta,'sub_model_type', ''
-                        ) == getattr(self.base_model._meta,'sub_model_type', '-not-exist')
-                ):
-                    continue
+            if(
+                getattr(
+                        related_object.related_model._meta,'model_name', ''
+                    ) == self.base_model._meta.model_name
+                or not issubclass(related_object.related_model, self.base_model)
+                or getattr(
+                        related_object.related_model._meta,'sub_model_type', ''
+                    ) == getattr(self.base_model._meta,'sub_model_type', '-not-exist')
+            ):
+                continue
 
 
-                related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
+            related_objects = getattr(related_object.related_model._meta, 'related_objects', [])
 
-                if(
+            if(
+                str(
+                    related_object.related_model._meta.model_name
+                ).lower().replace(' ', '_') == model_kwarg
+                or str(
+                    getattr(related_object.related_model._meta, 'sub_model_type', '-not-exist')
+                ).lower().replace(' ', '_') == model_kwarg
+            ):
+
+                related_model = related_object.related_model
+                break
+
+            elif related_objects:
+
+                related_model = self.related_objects(
+                    model = related_object.related_model, model_kwarg = model_kwarg
+                )
+
+                is_nested_lookup = True
+
+                if not hasattr(related_model, '_meta'):
+
+                    related_model = None
+
+                elif(
                     str(
-                        related_object.related_model._meta.model_name
+                        getattr(related_model._meta, 'model_name', '')
                     ).lower().replace(' ', '_') == model_kwarg
                     or str(
-                        getattr(related_object.related_model._meta, 'sub_model_type', '-not-exist')
+                        getattr(related_model._meta, 'sub_model_type', '')
                     ).lower().replace(' ', '_') == model_kwarg
                 ):
 
-                    related_model = related_object.related_model
                     break
-
-                elif related_objects:
-
-                    related_model = self.related_objects(
-                        model = related_object.related_model, model_kwarg = model_kwarg
-                    )
-
-                    is_nested_lookup = True
-
-                    if not hasattr(related_model, '_meta'):
-
-                        related_model = None
-
-                    elif(
-                        str(
-                            getattr(related_model._meta, 'model_name', '')
-                        ).lower().replace(' ', '_') == model_kwarg
-                        or str(
-                            getattr(related_model._meta, 'sub_model_type', '')
-                        ).lower().replace(' ', '_') == model_kwarg
-                    ):
-
-                        break
 
 
         if related_model is None and not is_nested_lookup:
@@ -1180,7 +1058,7 @@ class CommonSubModelViewSet_ReWrite(
         serializer_name = self.base_model._meta.model_name
 
         if self.base_model != self.model:
-                      
+
             serializer_name += '_' + str( self.kwargs[self.model_kwarg] )
 
 

@@ -16,6 +16,10 @@ class ModelTicket(
 
     _audit_enabled = False
 
+    @property
+    def _base_model(self):
+        return ModelTicket
+
     _notes_enabled = False
 
     _ticket_linkable = False
@@ -149,6 +153,16 @@ class ModelTicketMetaModel(
             'ticket',
             'model'
         )
+
+
+
+    def __str__(self) -> str:
+
+        model_tag = getattr(self.model, 'model_tag', None)
+        model_id = getattr(self.model, 'id', 0)
+
+        return f'${model_tag}-{str(model_id)}'
+
 
 
     def clean_fields(self, exclude = None):

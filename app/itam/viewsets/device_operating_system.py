@@ -2,8 +2,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-# THis import only exists so that the migrations can be created
-from itam.models.device_operating_system_history import DeviceOperatingSystemHistory    # pylint: disable=W0611:unused-import
 from itam.models.operating_system import OperatingSystem
 from itam.serializers.device_operating_system import (    # pylint: disable=W0611:unused-import
     Device,

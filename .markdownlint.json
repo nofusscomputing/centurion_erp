@@ -1,0 +1,21 @@
+{
+  "line-length": false,
+  "MD007": {
+    "indent": 4
+  },
+  "MD033": {
+    "allowed_elements": [ "br", "div", "span", "u", "p" ]
+  },
+  "blanks-around-headings":{
+    "lines_above": 2,
+    "lines_below": 1
+  },
+  "MD012": { 
+    "maximum": 2
+  }, 
+  "comment": {
+    "html_s": "don't allow html <s> as this can be done in markdown",
+    "MD012": "MD012 max=2 added so that headings can have two lines above for clarity.",
+    "MD033": "Allow br so that line break can be done inside table",
+  }
+}

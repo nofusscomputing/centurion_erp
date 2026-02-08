@@ -105,6 +105,12 @@ class ProjectAPITestCases(
             'model_notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
+                'expected': models.NOT_PROVIDED
+            },
             'external_ref': {
                 'expected': int
             },
@@ -115,7 +121,13 @@ class ProjectAPITestCases(
                 'expected': str
             },
             'description': {
+                'expected': dict
+            },
+            'description.markdown': {
                 'expected': str
+            },
+            'description.render': {
+                'expected': dict
             },
             'priority': {
                 'expected': int

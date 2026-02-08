@@ -23,7 +23,6 @@ class TicketCommentSolution(
         permissions = [
             ('import_ticketcommentsolution', 'Can import ticket solution comment.'),
             ('purge_ticketcommentsolution', 'Can purge ticket solution comment.'),
-            ('triage_ticketcommentsolution', 'Can triage ticket solution comment.'),
         ]
 
         sub_model_type = 'solution'

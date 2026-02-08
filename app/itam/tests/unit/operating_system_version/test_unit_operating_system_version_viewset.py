@@ -90,7 +90,7 @@ class ViewsetTestCases(
 
 
 
-    def test_view_func_get_queryset_cache_result(self, mocker, viewset_mock_request,
+    def test_view_func_get_queryset_cache_result(self, viewset_mock_request,
         # kwargs_create_item
     ):
         """Viewset Test
@@ -101,19 +101,17 @@ class ViewsetTestCases(
 
         view_set = viewset_mock_request
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.kwargs = {
             'operating_system_id': self.kwargs_create_item['operating_system'].id
         }
 
-        assert view_set.queryset is None    # Must be empty before init
+        assert view_set._queryset is None    # Must be empty before init
 
         q = view_set.get_queryset()
 
-        assert view_set.queryset is not None    # Must not be empty after init
+        assert view_set._queryset is not None    # Must not be empty after init
 
-        assert q == view_set.queryset
+        assert q == view_set._queryset
 
 
 
@@ -125,8 +123,6 @@ class ViewsetTestCases(
         """
 
         view_set = viewset_mock_request
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.kwargs = {
             'operating_system_id': self.kwargs_create_item['operating_system'].id
@@ -165,8 +161,6 @@ class ViewsetTestCases(
                 'operating_system_id': self.kwargs_create_item['operating_system'].id
         }
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.get_queryset()
 
         manager.user.assert_called()
@@ -181,8 +175,6 @@ class ViewsetTestCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 

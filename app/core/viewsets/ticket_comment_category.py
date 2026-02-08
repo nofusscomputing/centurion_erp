@@ -1,7 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-# THis import only exists so that the migrations can be created
-from core.models.ticket.ticket_comment_category_history import TicketCommentCategoryHistory    # pylint: disable=W0611:unused-import
 from core.serializers.ticket_comment_category import (    # pylint: disable=W0611:unused-import
     TicketCommentCategory,
     TicketCommentCategoryModelSerializer,

@@ -51,9 +51,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'EntityTicketViewSerializer')
 class ViewSerializer(
+    ModelTicketViewSerializer,
     ModelSerializer,
-    ModelTicketViewSerializer
 ):
     """EntityTicket Base View Model"""
-
-    organization = TenantBaseSerializer( many = False, read_only = True )
+    pass

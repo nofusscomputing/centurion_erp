@@ -120,6 +120,11 @@ def manufacturer_to_company(sender, **kwargs):
 
     log: CenturionLogger = settings.CENTURION_LOG.getChild( suffix = 'migration' ).getChild( suffix = 'core' )
 
+    Company = apps.get_model(
+        app_label = 'access',
+        model_name = 'company'
+    )
+
     try:
 
         Manufacturer = apps.get_model(
@@ -135,11 +140,6 @@ def manufacturer_to_company(sender, **kwargs):
         ManufacturerCenturionModelNote = apps.get_model(
             app_label = 'core',
             model_name = str( f'{Manufacturer._meta.object_name}CenturionModelNote' ).lower()
-        )
-
-        Company = apps.get_model(
-            app_label = 'access',
-            model_name = 'company'
         )
 
         CompanyAuditHistory = apps.get_model(
@@ -277,6 +277,8 @@ def manufacturer_to_company(sender, **kwargs):
                     msg = f'Error occure when processing manufacturer {manufacturer}. [{exc}]'
                 )
 
+
+        del Company[Company._meta.model_name]
 
         print(f'Completed processing current Manufacturers migration to Comapny.')
 

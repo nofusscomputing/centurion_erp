@@ -41,6 +41,7 @@ from .model_authtoken import (
 from .model_centurionaudit import (
     kwargs_centurionaudit,
     model_centurionaudit,
+    serializer_centurionaudit,
 )
 
 from .model_centurionauditmeta import (
@@ -66,6 +67,11 @@ from .model_centurionmodelnotemeta import (
 from .model_centurionuser import (
     kwargs_centurionuser,
     model_centurionuser,
+)
+
+from .model_changeticket import (
+    kwargs_changeticket,
+    model_changeticket,
 )
 
 from .model_checkin import (
@@ -202,6 +208,11 @@ from .model_instance import (
     model_instance
 )
 
+from .model_incidentticket import (
+    kwargs_incidentticket,
+    model_incidentticket,
+)
+
 from .model_itamassetbase import (
     kwargs_itamassetbase,
     model_itamassetbase,
@@ -268,6 +279,11 @@ from .model_port import (
     serializer_port,
 )
 
+from .model_problemticket import (
+    kwargs_problemticket,
+    model_problemticket,
+)
+
 from .model_project import (
     kwargs_project,
     model_project,
@@ -284,6 +300,11 @@ from .model_projectstate import (
     kwargs_projectstate,
     model_projectstate,
     serializer_projectstate,
+)
+
+from .model_projectticket import (
+    kwargs_projecttaskticket,
+    model_projecttaskticket,
 )
 
 from .model_projecttype import (
@@ -364,6 +385,18 @@ from .model_ticketcommentsolution import (
     serializer_ticketcommentsolution,
 )
 
+from .model_ticketcommenttask import (
+    model_ticketcommenttask,
+    kwargs_ticketcommenttask,
+    serializer_ticketcommenttask,
+)
+
+from .model_ticketdependency import (
+    kwargs_ticketdependency,
+    model_ticketdependency,
+    serializer_ticketdependency,
+)
+
 from .model_tenant import (
     kwargs_tenant,
     model_tenant,
@@ -378,11 +411,13 @@ from .model_tenancyabstract import (
 from .model_ticketcategory import (
     kwargs_ticketcategory,
     model_ticketcategory,
+    serializer_ticketcategory,
 )
 
 from .model_ticketcommentcategory import (
     kwargs_ticketcommentcategory,
     model_ticketcommentcategory,
+    serializer_ticketcommentcategory,
 )
 
 from .model_user import (

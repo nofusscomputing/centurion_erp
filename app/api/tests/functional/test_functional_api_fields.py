@@ -5,9 +5,15 @@ from django.test import Client
 
 from rest_framework.relations import Hyperlink
 
+from api.tests.functional.test_functional_api_metadata import (
+    APIMetadataInheritedCases
+)
+
 
 @pytest.mark.functional
-class APIFieldsTestCases:
+class APIFieldsTestCases(
+    APIMetadataInheritedCases
+):
     """ API field Rendering Test Suite
 
     This test suite tests the rendering of API fieilds.
@@ -25,6 +31,9 @@ class APIFieldsTestCases:
     override to add this object.Once you have these two objects, an additional
     check will be done and each test will check both API requests. If the field
     is found in either api request the test will pass
+    
+    Args:
+        APIMetadataInheritedCases (class): Test Suite for API Metadata Fields
     """
 
     @property
@@ -50,7 +59,13 @@ class APIFieldsTestCases:
 
         api_fields_model = {
             'model_notes': {
+                'expected': dict
+            },
+            'model_notes.markdown': {
                 'expected': str
+            },
+            'model_notes.render': {
+                'expected': dict
             },
             'created': {
                 'expected': str

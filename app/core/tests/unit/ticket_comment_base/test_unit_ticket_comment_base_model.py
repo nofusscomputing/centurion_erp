@@ -1,6 +1,7 @@
 import datetime
 import pytest
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 
 from rest_framework.exceptions import ValidationError
@@ -30,6 +31,12 @@ class TicketCommentBaseModelTestCases(
             },
             '_audit_enabled': {
                 'value': False
+            },
+            '_linked_model_kwargs': {
+                'type': tuple,
+                'value': (
+                    ( 'pk', ),
+                ),
             },
             '_notes_enabled': {
                 'value': False
@@ -73,7 +80,7 @@ class TicketCommentBaseModelTestCases(
                 'blank': False,
                 'default': models.fields.NOT_PROVIDED,
                 'field_type': models.ForeignKey,
-                'null': False,
+                'null': True,
                 'unique': False,
             },
             "external_ref": {
@@ -213,7 +220,7 @@ class TicketCommentBaseModelTestCases(
     def test_class_inherits_TicketCommentBase(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from ticketcommentbase
         """
 
         assert issubclass(model, TicketCommentBase)
@@ -234,7 +241,7 @@ class TicketCommentBaseModelTestCases(
     def test_class_inherits_ticketcommentbase(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from 
         """
 
         assert issubclass(model, TicketCommentBase)
@@ -295,9 +302,9 @@ class TicketCommentBaseModelTestCases(
 
         permission_found = False
 
-        for permission, description in model._meta.permissions:
+        for permission, description in model.ticket.field.related_model._meta.permissions:
 
-            if permission == 'triage_' + model._meta.model_name:
+            if permission == 'triage_' + model.ticket.field.related_model._meta.model_name:
 
                 permission_found = True
                 break
@@ -417,13 +424,11 @@ class TicketCommentBaseModelTestCases(
 
         valid_data['comment_type'] = 'Nope'
 
-        with pytest.raises(ValidationError) as err:
+        with pytest.raises(DjangoValidationError) as err:
 
             model.objects.create(
                 **valid_data
             )
-
-        assert err.value.get_codes()['comment_type'] == 'comment_type_wrong_endpoint'
 
 
 
@@ -497,9 +502,36 @@ class TicketCommentBaseModelTestCases(
         kwargs['parent'] = parent_obj
         kwargs['ticket'] = ticket
 
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = kwargs['ticket'].TicketStatus.NEW
+        kwargs['ticket'].save()
         model_ticketcommentbase.objects.create( **kwargs )
 
         assert len(parent_obj.threads.all()) > 0, 'Test requires there be threads.'

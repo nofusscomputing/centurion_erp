@@ -30,7 +30,6 @@ def kwargs_role(model_role,
         kwargs = {
             **kwargs_centurionmodel(),
             'name': 'r_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
-            'modified': '2024-06-03T23:00:00Z',
         }
 
         return kwargs

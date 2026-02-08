@@ -52,7 +52,6 @@ def kwargs_configgroupsoftware(django_db_blocker,
                 'software': software,
                 'config_group': group,
                 'action': DeviceSoftware.Actions.INSTALL,
-                'modified': '2024-06-07T23:00:01Z',
                 }
 
         return kwargs

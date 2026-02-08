@@ -1,3 +1,26 @@
+## Version v1.29.0
+
+- New models:
+
+    Any model behind a feature flag will remain behind the flag until production ready.
+
+    - Change Ticket model added behind feature flag `2025-00009`.
+
+    - Incident Ticket model added behind feature flag `2025-00010`.
+
+    - Problem Ticket model added behind feature flag `2025-00011`.
+
+    - Ticket Task model added behind feature flag `2025-00006` and will remain until production ready.
+
+- Removed Models:
+
+    - [see v1.19.0] Removed Depreciated "model History" models
+
+    - [see v1.19.0] Removed Depreciated "model Notes" models
+
+- Markdown Serializer field now provides render data for UI
+
+
 ## Version v1.28.1
 
 - Permissions loader to capture errors gracefully.

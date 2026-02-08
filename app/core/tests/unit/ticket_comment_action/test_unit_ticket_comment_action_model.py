@@ -49,7 +49,7 @@ class TicketCommentActionModelTestCases(
     def test_class_inherits_TicketCommentAction(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from ticketcomment action
         """
 
         assert issubclass(model, TicketCommentAction)
@@ -100,6 +100,31 @@ class TicketCommentActionModelTestCases(
         `purge`
         """
         pass
+
+
+
+    def test_function_save_called_slash_command(self):
+        pytest.xfail( reason = 'action comment must not call slash_command. Test is N/A.' )
+
+
+
+    def test_function_save_slash_command_not_called(self, model, mocker, ticket):
+        """Function Check
+
+        Ensure function `TicketCommentBase.clean` is called
+        """
+
+        spy = mocker.spy(model, 'slash_command')
+
+        valid_data = self.kwargs_create_item.copy()
+
+        valid_data['ticket'] = ticket
+
+        item = model.objects.create(
+            **valid_data
+        )
+
+        spy.assert_not_called
 
 
 

@@ -8,6 +8,8 @@ from django.db.models.query import QuerySet
 from access.tests.unit.managers.test_unit_common_manager import (
     CommonManagerInheritedCases
 )
+from access.managers.tenancy import TenancyManager
+from core.managers.ticketmodel import TicketModelManager
 
 
 
@@ -37,6 +39,15 @@ class TicketModelManagerTestCases(
 ):
 
 
+    def test_class_inherit_from_tenancy_manager(self):
+        """Test Manager Inheritence
+
+        manager must inherit from Tenancy manager.
+        """
+
+        assert issubclass(TicketModelManager, TenancyManager)
+
+
     def test_manager_ticketmodel_filter_tenant(self, mocker,
         model_instance, model, api_request_permissions
     ):
@@ -56,7 +67,7 @@ class TicketModelManagerTestCases(
 
         model.objects.user(
             user = api_request_permissions['user']['view'],
-            permission = str( model._meta.app_label + '.view_' + model._meta.model_name )
+            permission = [ str( model._meta.app_label + '.view_' + model._meta.model_name ) ]
         ).all()
 
         assert any(
@@ -79,7 +90,7 @@ class TicketModelManagerTestCases(
 
         model.objects.user(
             user = api_request_permissions["user"]["view"],
-            permission = f"{model._meta.app_label}.view_{model._meta.model_name}",
+            permission = [ f"{model._meta.app_label}.view_{model._meta.model_name}" ],
         ).all()
 
         assert any(

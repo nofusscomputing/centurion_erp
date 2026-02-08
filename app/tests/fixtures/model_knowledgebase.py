@@ -57,7 +57,6 @@ def kwargs_knowledgebase(django_db_blocker,
                 'responsible_user': user,
                 # 'responsible_teams': '',
                 'public': True,
-                'modified': '2024-06-03T23:00:00Z',
             }
 
         return kwargs

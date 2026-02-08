@@ -78,6 +78,12 @@ class APITestCases(
             'model_notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
+                'expected': models.NOT_PROVIDED
+            },
             '_urls.notes': {
                 'expected': models.NOT_PROVIDED
             },
@@ -142,7 +148,13 @@ class APITestCases(
                 'expected': str
             },
             'description': {
+                'expected': dict
+            },
+            'description.markdown': {
                 'expected': str
+            },
+            'description.render': {
+                'expected': dict
             },
             'ticket_duration': {
                 'expected': int

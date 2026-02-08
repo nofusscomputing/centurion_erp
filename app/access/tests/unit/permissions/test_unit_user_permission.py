@@ -4,20 +4,39 @@ from rest_framework.exceptions import (
     NotAuthenticated,
 )
 
-from access.tests.unit.permission_tenancy.test_unit_tenancy_permission import (
-    MockObj,
-    MyMockView,
-    MockUser
-)
-
 from access.permissions.user import (
     UserPermissions,
+)
+
+from api.tests.unit.permissions.test_unit_common_object_permission import (
+    CenturionObjectPermissionInheritedCases,
+    MockObj,
+    MockLogger,
+    MockUser,
+    MyMockView
 )
 
 
 
 @pytest.mark.permissions
-class UserPermissionTestCases:
+class UserPermissionTestCases(
+    CenturionObjectPermissionInheritedCases
+):
+
+    @pytest.fixture( scope = 'class')
+    def test_class(self):
+
+        yield UserPermissions
+
+
+    def test_class_inherits_model_permissions(self, test_class):
+        """Test Class inheritence
+        
+        Permission class must inherit from `UserPermissions`.
+        """
+
+        assert issubclass(test_class, UserPermissions)
+
 
 
     def test_function_has_permission(self, mocker,
@@ -88,26 +107,20 @@ class UserPermissionTestCases:
 
 
 
+@pytest.mark.module_access
 class UserPermissionPyTest(
     UserPermissionTestCases
 ):
 
-    @pytest.fixture( scope = 'class' )
-    def permission(self):
-
-        yield UserPermissions
-
-
 
     @pytest.fixture
-    def viewset(self, permission):
-        view_set = MyMockView
+    def viewset(self, test_class):
 
         class MockView(
             MyMockView,
         ):
             allowed_methods = [ 'GET' ]
-            permission_classes = [ permission, ]
+            permission_classes = [ test_class, ]
 
         yield MockView(
             method = 'GET',

@@ -9,6 +9,7 @@ from access.tests.unit.tenancy_abstract.test_unit_tenancy_abstract_model import 
 )
 
 from core.tests.unit.mixin_centurion.test_unit_centurion_mixin import CenturionMixnInheritedCases
+from core.tests.unit.field_markdown.test_unit_markdown_field import MarkdownFieldModelTestCases
 from core.models.centurion import CenturionModel
 
 
@@ -16,6 +17,7 @@ from core.models.centurion import CenturionModel
 @pytest.mark.unit
 @pytest.mark.centurion_models
 class CenturionAbstractBaseModelTestCases(
+    MarkdownFieldModelTestCases,
     CenturionMixnInheritedCases,
 ):
     """Centurion Abstract Model base Test Cases"""

@@ -25,6 +25,12 @@ class SoftwareEnableFeatureFlagAPITestCases(
             'model_notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
+                'expected': models.NOT_PROVIDED
+            },
             'software': {
                 'expected': dict
             },

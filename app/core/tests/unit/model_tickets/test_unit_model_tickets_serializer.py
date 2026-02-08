@@ -12,6 +12,11 @@ from centurion.tests.abstract.mock_view import MockView
 from core.models.model_tickets import (
     ModelTicket
 )
+from core.serializers.modelticket import (
+    BaseSerializer as _BaseSerializer,
+    ModelSerializer as _ModelSerializer,
+    ViewSerializer as _ViewSerializer,
+)
 
 
 
@@ -22,6 +27,37 @@ class ModelTicketSerializerTestCases(
 ):
 
     base_model = ModelTicket
+
+
+    def test_class_inheritance_modelticket_base(self, model_serializer):
+        """Class Test case
+
+        Ensure that the Model serializer inherits from the parent serializer of
+        the same name.
+        """
+
+        assert issubclass(model_serializer['base'], _BaseSerializer)
+
+
+    def test_class_inheritance_modelticket_model(self, model_serializer):
+        """Class Test case
+
+        Ensure that the Model serializer inherits from the parent serializer of
+        the same name.
+        """
+
+        assert issubclass(model_serializer['model'], _ModelSerializer)
+
+
+    def test_class_inheritance_modelticket_view(self, model_serializer):
+        """Class Test case
+
+        Ensure that the View serializer inherits from the parent serializer of
+        the same name.
+        """
+
+        assert issubclass(model_serializer['view'], _ViewSerializer)
+
 
     @pytest.mark.regression
     def test_serializer_create_calls_model_full_clean(self):

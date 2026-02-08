@@ -11,7 +11,7 @@ FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} as build
 
 RUN pip --disable-pip-version-check list --outdated --format=json | \
     python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
-    xargs -n1 pip install --no-cache-dir -U;
+    xargs -n1 pip install --upgrade;
 
 
 RUN apk add --update \
@@ -66,7 +66,7 @@ COPY dist/ /tmp/python_builds
 
 RUN \
     pip download \
-        --dest ./tmp/python_modules \
+        --dest /tmp/python_modules \
         "$(ls /tmp/python_builds/centurion_erp-*-py3-none-any.whl)[docker]";
 
 
@@ -123,13 +123,14 @@ COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
 COPY includes/ /
 
 RUN --mount=type=bind,from=build,source=/tmp/python_builds,target=/tmp/python_builds \
+    --mount=type=bind,from=build,source=/var/cache/apk,target=/var/cache/apk \
+    --mount=type=bind,from=build,source=/root/.cache/pip,target=/root/.cache/pip \
+    \
     pip --disable-pip-version-check list --outdated --format=json | \
         python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
         xargs -n1 pip install  \
             --no-cache-dir \
-            --no-index \
-            --find-links /tmp/python_builds \
-            -U; \
+            --upgrade; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
     apk add --no-cache \

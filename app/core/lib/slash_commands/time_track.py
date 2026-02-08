@@ -1,0 +1,95 @@
+
+
+
+class CommandTimeTrack:
+    # This summary is used for the user documentation
+    """The command keyword is `spend` and you can also use `spent`. The formatting for the time
+after the command, is `<digit>` then either `h`, `m`, `s` for hours, minutes and seconds respectively.
+
+Valid commands are as follows:
+
+- /spend 1h1ms
+
+- /spend 1h 1m 1s
+
+For this command to process the following conditions must be met:
+
+- There is a `<new line>` (`\\n`) char immediatly before the slash `/`
+
+- There is a `<space>` char after the command keyword, i.e. `/spend<space>1h`
+
+- _Optional_ `<space>` char between the time blocks.
+"""
+
+
+    time_track: str = r'\/(?P<command>[spend|spent]+) (?P<time>(?P<hours>\d+h)?[ ]?(?P<minutes>[\d]{1,2}m)?[ ]?(?P<seconds>\d+s)?)[\s|\r\n|\n]?'
+
+
+    def command_time_track(self, match) -> str:
+        """/spend, /spent processor
+
+        Slash command usage within a ticket description will add an action comment with the
+        time spent. For a ticket comment, it's duration field is set to the duration valuee calculated.
+
+        Args:
+            match (re.Match): Grouped matches
+
+        Returns:
+            str: The matched string if the duration calculation is `0`
+            None: On successfully processing the command
+        """
+
+        a = 'a'
+
+        command = match.group('command')
+        time:str =  str(match.group('time')).replace(' ', '')
+        hours =  match.group('hours')
+        minutes =  match.group('minutes')
+        seconds =  match.group('seconds')
+
+        duration: int = 0
+
+        if hours is not None:
+
+            duration += int(hours[:-1])*60*60
+
+        if minutes is not None:
+
+            duration += int(minutes[:-1])*60
+
+        if seconds is not None:
+
+            duration += int(seconds[:-1])
+
+        if duration == 0:
+
+            return str(match.string[match.start():match.end()])
+
+
+        comment_text = f'added {time} of time spent'
+
+        if str(self._base_model._meta.verbose_name).lower() == 'ticket':
+
+            from core.models.ticket_comment_action import TicketCommentAction
+
+            TicketCommentAction.objects.create(
+                ticket = self,
+                comment_type = TicketCommentAction._meta.sub_model_type,
+                body = comment_text,
+                duration = duration,
+                user = self.opened_by,
+            )
+
+        elif(
+            str(self._meta.verbose_name).lower().replace(' ', '_') == 'ticket_comment'
+            or str(self.__class__.__name__).lower().startswith('ticketcomment')
+        ):
+
+            self.duration = duration
+
+        else:
+
+            return str(match.string[match.start():match.end()])
+
+
+        return None

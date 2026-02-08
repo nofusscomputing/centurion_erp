@@ -138,21 +138,33 @@ source = [ "./app" ]
 omit = [
     "*migrations/*",
     "*tests/*/*",
+    "*tests/*",
 ]
 
 
 [tool.coverage.report]
 omit = [
+    "*/tests/*",
     "*/tests/*/*",
+    #
+    # Migrations / Migration related files
     "*/migrations/*",
+    "app/core/signal/centurion_model_migrate.py",
+    "app/core/signal/migra_manufacturer_to_company.py",
+    "app/human_resources/signal/migra_centurion_user_add_entity.py",
+
     "*apps.py",
     "*conftest.py",
     "*manage.py",
-    "*__init__.py",
     "*asgi*",
     "*wsgi*",
     "*admin.py",
     "*urls.py",
+    #
+    # Old Django UI/Forms no longer used
+    #
+    "app/core/lib/markdown.py",
+
     ##############################################
     # Depreciated Code Scheduled to be removed
     ##############################################
@@ -161,6 +173,9 @@ omit = [
     #
     "app/access/models/team.py",
     "app/access/models/team_user.py",
+    "app/core/lib/feature_not_used.py",
+    "app/core/models/manufacturer.py",
+    "app/core/serializers/centurionmodelnote_manufacturer.py",
     #
     # Organization rename to Tenant
     #
@@ -172,26 +187,19 @@ omit = [
     #
     # Old History Model
     #
-    "app/core/models/model_history.py",
-    "app/*/models/*_history.py",
     "app/core/mixins/history_save.py",
-    "app/devops/models/git_repository/github_history.py",
-    "app/devops/models/git_repository/gitlab_history.py",
-    #
-    # Old Notes model
-    #
-    "app/core/models/notes.py",
-    "app/*/models/*_notes.py",
-    "app/devops/models/git_repository/github_notes.py",
-    "app/devops/models/git_repository/gitlab_notes.py",
     #
     # Old Ticketing Model
     #
+    "app/core/lib/slash_commands/duration.py",
     "app/core/lib/slash_commands/linked_model.py",
+    "app/core/lib/slash_commands/related_ticket.py",
     "app/core/models/ticket/*",
     "app/core/signal/ticket_linked_item_delete.py",
     "app/core/serializers/ticket_depreciated.py",
     "app/core/serializers/ticket_comment_depreciated.py",
+    "app/core/serializers/ticket_linked_item.py",
+    "app/core/models/ticket/ticket_linked_items.py",
     "app/core/serializers/ticket_related.py",
     "app/core/viewsets/ticket_depreciated.py",
     # "app/core/serializers/ticket_related.py",
@@ -1235,6 +1243,122 @@ redefining-builtins-modules = ["six.moves", "past.builtins", "future.builtins", 
 
 
 
+[tool.pyright]
+# Docs: https://microsoft.github.io/pyright
+include = [
+    "app"
+]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+
+]
+
+
+typeCheckingMode = "off"   # turns off the bulk of checking
+
+# Disable ALL diagnostics and only enable what is required.
+# Note: Dont enable any that are covered by PyLint.
+
+analyzeUnannotatedFunctions = true
+disableBytesTypePromotions = true
+strictParameterNoneValue = false
+enableTypeIgnoreComments = false
+enableReachabilityAnalysis = false
+strictListInference = false
+strictDictionaryInference = false
+strictSetInference = false
+deprecateTypingAliases = false
+enableExperimentalFeatures = false
+reportMissingTypeStubs = "none"
+reportMissingModuleSource = "none"
+reportInvalidTypeForm = "none"
+reportMissingImports = "none"    # PyLint has this enabled
+reportUndefinedVariable = "none"
+reportAssertAlwaysTrue = "none"
+reportInvalidStringEscapeSequence = "none"
+reportInvalidTypeVarUse = "none"
+reportSelfClsParameterName = "none"
+reportUnsupportedDunderAll = "none"
+reportUnusedExpression = "none"
+reportWildcardImportFromLibrary = "none"
+reportAbstractUsage = "none"
+reportArgumentType = "none"
+reportAssertTypeFailure = "none"
+reportAssignmentType = "none"
+reportAttributeAccessIssue = "none"
+reportCallIssue = "none"
+reportGeneralTypeIssues = "none"
+reportInconsistentOverload = "none"
+reportIndexIssue = "none"
+reportInvalidTypeArguments = "none"
+reportNoOverloadImplementation = "none"
+reportOperatorIssue = "none"
+reportOptionalSubscript = "none"
+reportOptionalMemberAccess = "none"
+reportOptionalCall = "none"
+reportOptionalIterable = "none"
+reportOptionalContextManager = "none"
+reportOptionalOperand = "none"
+reportRedeclaration = "none"
+reportReturnType = "none"
+reportTypedDictNotRequiredAccess = "none"
+reportPrivateImportUsage = "none"
+reportUnboundVariable = "none"
+reportUnhashable = "none"
+reportUnusedCoroutine = "none"
+reportUnusedExcept = "none"
+reportFunctionMemberAccess = "none"
+reportIncompatibleMethodOverride = "none"
+reportIncompatibleVariableOverride = "none"
+reportOverlappingOverload = "none"
+reportPossiblyUnboundVariable = "none"
+reportConstantRedefinition = "none"
+reportDeprecated = "none"
+reportDuplicateImport = "none"
+reportIncompleteStub = "none"
+reportInconsistentConstructor = "none"
+reportInvalidStubStatement = "none"
+reportMatchNotExhaustive = "none"
+reportMissingParameterType = "none"
+reportMissingTypeArgument = "none"
+reportPrivateUsage = "warning"
+reportTypeCommentUsage = "none"
+reportUnknownArgumentType = "none"
+reportUnknownLambdaType = "none"
+reportUnknownMemberType = "none"
+reportUnknownParameterType = "none"
+reportUnknownVariableType = "none"
+reportUnnecessaryCast = "none"
+reportUnnecessaryComparison = "none"
+reportUnnecessaryContains = "none"
+reportUnnecessaryIsInstance = "none"
+reportUnusedClass = "warning"
+reportUnusedImport = "none"    # PyLint has this enabled
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+reportUntypedBaseClass = "none"
+reportUntypedClassDecorator = "none"
+reportUntypedFunctionDecorator = "none"
+reportUntypedNamedTuple = "none"
+reportCallInDefaultInitializer = "none"
+reportImplicitOverride = "none"
+reportImplicitStringConcatenation = "none"
+reportImportCycles = "none"
+reportMissingSuperCall = "none"
+reportPropertyTypeMismatch = "none"
+reportUninitializedInstanceVariable = "none"
+reportUnnecessaryTypeIgnoreComment = "none"
+reportUnreachable = "none"
+reportUnusedCallResult = "none"
+
+
+pythonVersion = "3.11"
+pythonPlatform = "Linux"
+
+
+
+
 [tool.pytest.ini_options]
 
 addopts = '--no-migrations --cov --cov-branch --cov-report term --tb=long --verbosity=2 --showlocals app'
@@ -1255,11 +1379,14 @@ markers = [
     "audit_models: Selects Audit models.",
     "authentication: Selects all authentication tests.",
     "centurion_models: Selects Centurion models",
+    "fields: Selects all field related tests",
     "functional: Selects all Functional tests.",
     "integration: Selects all Integration tests.",
     "manager: Selects all model manager test cases",
+    "markdown: Selects all markdown test cases",
     "manager_common: Selects all common model manager test cases",
     "manager_tenancy: Selects all tenancy model manager test cases",
+    "manager_ticketmodel: Selects all ticket model manager test cases.",
     "meta_models: Selects Meta models",
     "metadata: Selects all tests for api OPTIONS requests.",
     "mixin: Selects all mixin test cases.",
@@ -1270,7 +1397,8 @@ markers = [
     "model_appsettings: Selects tests for model app settings.",
     "model_authtoken: Selects tests for model Auth Token.",
     "model_company: Selects test for model Company.",
-    "model_centurionuser: Selects tests for modell Centurion User",
+    "model_centurionaudit: Selects tests for model Centurion Audit",
+    "model_centurionuser: Selects tests for model Centurion User",
     "model_configgroups: Selects Config Group tests.",
     "model_configgrouphosts: Selects Config Group Hosts tests.",
     "model_configgroupsoftware: Selects Config Group Software tests.",
@@ -1312,12 +1440,15 @@ markers = [
     "model_softwareenablefeatureflag: Selects tests for model Software Enabled Feature Flag.",
     "model_softwareversion: Selects tests for model Software Version.",
     "model_tenant: Selects tests for model Tenant.",
+    "model_tickets: Selects ALL ticket related tests",
     "model_ticketbase: Selects tests for model Ticket Base.",
     "model_ticketcategory: Select all ticket category tests.",
     "model_ticketcommentaction: Select test for model ticket Action Comment.",
     "model_ticketcommentbase: Select all ticket Comment.",
-    "model_ticketcommentsolution: Select test for model ticket Action Solution.",
     "model_ticketcommentcategory: Select all ticket comment category tests.",
+    "model_ticketcommentsolution: Select test for model ticket comment solution.",
+    "model_ticketcommenttask: Select test for model ticket comment task.",
+    "model_ticketdependency: Select all ticket dependency tests.",
     "models: Selects all models tests.",
     "model_tenant: Select all Tentant model tests.",
     "model_usersettings: Select tests for model User Settings.",
@@ -1341,11 +1472,16 @@ markers = [
     "permissions_public_user: selects all permission tests related to public user.",
     "permissions_super_user: selects all permission tests related to super user.",
     "permissions_tenancy: selects all permission tests related to tenancy permissions.",
+    "permissions_ticket: selects all permission tests related to ticket permissions.",
     "permissions_user: selects all permission tests related to logged in user.",
     "regression: selects all tests for regression.",
     "serializer: Selects all serializer tests",
     "tenancy_models: Selects Tenancy models.",
     "tickets: Selects all tests for tickets",
+    "signal_action_comment: Selects all tests for signal action_comment.",
+    "slash_command: Selects all test for Ticket/Ticket Comment slash commands.",
+    "slash_command_dependency: Selects all tests for slash command ticket dependencies.",
+    "slash_command_linked_model: Selects all test for Ticket/Ticket Comment slash command /link.",
     "unit: Selects all Unit Tests.",
     "viewset: Selects all ViewSet Tests.",
 ]

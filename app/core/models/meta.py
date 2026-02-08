@@ -112,7 +112,10 @@ if apps.models_ready:
 
             ticketlinkedmodel_meta_name = f'{model._meta.object_name}Ticket'
 
-            if ticketlinkedmodel_meta_name in existing_models:
+            if(
+                ticketlinkedmodel_meta_name in existing_models
+                or model._is_submodel    # sub-models use the base model table
+            ):
                 continue
 
 

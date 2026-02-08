@@ -85,112 +85,6 @@ class TicketViewSet(ModelViewSet):
     """
 
 
-    def get_permission_required(self):
-
-        organization = None
-
-        if self._permission_required:
-
-            return self._permission_required
-
-
-        if(
-            self.action == 'create'
-            or self.action == 'partial_update'
-            or self.action == 'update'
-        ):
-
-            if 'organization' in self.request.data:
-
-                organization = Organization.objects.user(
-                    user = self.request.user, permission = self._permission_required
-                ).get(
-                    pk = int(self.request.data['organization'])
-                )
-
-            elif(
-                self.action == 'partial_update'
-                or self.action == 'update'
-            ):
-
-                queryset = self.get_queryset()
-
-                if len(queryset) > 0:
-
-                    obj = queryset[0]
-
-                    organization = obj.organization
-
-        if self.action == 'create':
-
-            action_keyword = 'add'
-
-            if organization:
-
-                if self.request.user.has_perm(
-                    permission = str('core.import_ticket_' + self._ticket_type).lower().replace(' ', '_'),
-                    tenancy = organization
-                ):
-
-                    action_keyword = 'import'
-
-
-        elif self.action == 'destroy':
-
-            action_keyword = 'delete'
-
-        elif self.action == 'list':
-
-            action_keyword = 'view'
-
-        elif self.action == 'partial_update':
-
-            action_keyword = 'change'
-
-            if organization:
-
-                if self.request.user.has_perm(
-                    permission = str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_'),
-                    tenancy = organization
-                ):
-
-                    action_keyword = 'triage'
-
-
-        elif self.action == 'retrieve':
-
-            action_keyword = 'view'
-
-        elif self.action == 'update':
-
-            action_keyword = 'change'
-
-            if self.request.user.has_perm(
-                permission = str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_'),
-                tenancy = organization
-            ):
-
-                action_keyword = 'triage'
-
-
-        elif(
-            self.action is None
-            or self.action == 'metadata'
-        ):
-
-            action_keyword = 'view'
-
-        else:
-
-            raise ValueError('unable to determin the action_keyword')
-
-        self._permission_required = str(
-            'core.' + action_keyword + '_ticket_' + self._ticket_type).lower().replace(' ', '_'
-        )
-
-        return self._permission_required
-
-
 
     def get_queryset(self):
 
@@ -204,7 +98,7 @@ class TicketViewSet(ModelViewSet):
         if self.kwargs.get('pk', None):
 
             queryset = self.model.objects.user(
-                user = self.request.user, permission = self._permission_required
+                user = self.request.user, permission = self.permissions_required
             ).select_related(
                 'organization',
                 'category',
@@ -221,7 +115,7 @@ class TicketViewSet(ModelViewSet):
         else:
 
             queryset = self.model.objects.user(
-                user = self.request.user, permission = self._permission_required
+                user = self.request.user, permission = self.permissions_required
             ).select_related(
                 'organization',
                 'category',

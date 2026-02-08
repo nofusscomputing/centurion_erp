@@ -1,22 +1,21 @@
 from drf_spectacular.utils import extend_schema_serializer
 
 from access.serializers.organization import TenantBaseSerializer
+from access.serializers.modelticket_entity import (
+    BaseSerializer,
+    ModelSerializer as EntityModelSerializer,
+    ViewSerializer as EntityViewSerializer
+)
 
 from centurion.models.meta import (    # pylint: disable=E0401:import-error disable=E0611:no-name-in-module
     PersonTicket as ModelLinkedtoTicket
-)
-
-from core.serializers.modelticket import (    # pylint: disable=W0611:unused-import
-    BaseSerializer,
-    ModelSerializer,
-    ViewSerializer as ModelTicketViewSerializer,
 )
 
 
 
 @extend_schema_serializer(component_name = 'PersonTicketModelSerializer')
 class ModelSerializer(
-    ModelSerializer
+    EntityModelSerializer
 ):
 
 
@@ -52,8 +51,7 @@ class ModelSerializer(
 @extend_schema_serializer(component_name = 'PersonTicketViewSerializer')
 class ViewSerializer(
     ModelSerializer,
-    ModelTicketViewSerializer
+    EntityViewSerializer
 ):
     """PersonTicket Base View Model"""
-
-    organization = TenantBaseSerializer( many = False, read_only = True )
+    pass

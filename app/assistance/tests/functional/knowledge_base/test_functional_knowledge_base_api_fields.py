@@ -95,10 +95,22 @@ class knowledgeBaseAPITestCases(
                 'expected': str
             },
             'summary': {
+                'expected': dict
+            },
+            'summary.markdown': {
                 'expected': str
             },
+            'summary.render': {
+                'expected': dict
+            },
             'content': {
+                'expected': dict
+            },
+            'content.markdown': {
                 'expected': str
+            },
+            'content.render': {
+                'expected': dict
             },
             'category': {
                 'expected': dict

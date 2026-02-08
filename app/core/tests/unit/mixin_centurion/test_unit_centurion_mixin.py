@@ -1,6 +1,8 @@
 import inspect
 import pytest
 
+from django.db import models
+
 # from django.core.exceptions import (
 #     ValidationError
 # )
@@ -366,6 +368,83 @@ class CenturionMixnInheritedCases(
 
 
 
+    def test_method_get_audit_values_clean_model_returns_fields_only(self, mocker, model, model_instance):
+        """Test Class Method
+        
+        Ensure method `get_audit_values` returns All model fields as a dict
+        """
+
+        if model._meta.abstract:
+            pytest.xfail( reason = 'Model is abstract. Test is N/A.' )
+
+        class MockManager:
+
+            def get(*args, **kwargs):
+                return model_instance
+
+        model_instance.objects = MockManager()
+
+        for field in self.kwargs_create_item:
+
+            if type(self.kwargs_create_item[field]) is list:
+                continue
+
+            setattr(model_instance, field, self.kwargs_create_item[field])
+
+
+        m2m_fields = {}
+        for m2m_field in model_instance._meta.many_to_many:
+
+            value = list(
+                getattr(model_instance, m2m_field.name).values_list(
+                    'pk', flat = True
+                )
+            )
+
+            if len(value) < 1:
+                value = None
+
+            m2m_fields.update({
+                m2m_field.name: value
+            })
+
+
+        remaining_fields = {}
+        for field in model_instance._meta.fields:
+
+            value = getattr(model_instance, field.name, None)
+            if(
+                # field in self.kwargs_create_item
+                # or value is not None
+                # and field.name not in [ 'id', 'created', 'modified', 'organization' ]
+                field.auto_created
+            ):
+                continue
+
+            if isinstance(field, models.DateTimeField):
+                if value and type(value) is not str:
+                    value = value.isoformat(timespec='seconds')
+
+            remaining_fields.update({
+                field.name: value
+            })
+
+
+        method_values = model_instance.get_audit_values()
+
+        assert method_values == {
+            **m2m_fields,
+            **remaining_fields,
+        }    # Correct Values Returned
+
+        assert len(method_values) == len([
+                *[field for field in model_instance._meta.fields if not field.auto_created],    # Dont include parent model ptr
+                *model_instance._meta.many_to_many
+            ])
+        # Fail-Safe to ensure test writer fills all fields
+
+
+
 @pytest.mark.module_core
 class CenturionMixnPyTest(
     CenturionMixnTestCases,
@@ -712,39 +791,7 @@ class CenturionMixnPyTest(
             'django.db.models.query.QuerySet.get', return_value = model_instance
         )
 
-        assert model_instance.get_audit_values() == {
-            'id': None,
-            **self.kwargs_create_item
-        }
-
-
-
-    def test_method_get_audit_values_clean_model_returns_fields_only(self, mocker, model_instance):
-        """Test Class Method
-        
-        Ensure method `get_audit_values` returns All model fields as a dict
-        """
-
-        class MockManager:
-
-            def get(*args, **kwargs):
-                return model_instance
-
-        model_instance.objects = MockManager()
-
-        for field in self.kwargs_create_item:
-
-            setattr(model_instance, field, self.kwargs_create_item[field])
-
-        method_values = model_instance.get_audit_values()
-
-        assert method_values == {
-            'id': model_instance.id,
-            **self.kwargs_create_item,
-        }    # Correct Values Returned
-
-        assert len(method_values) == len(model_instance._meta.fields)
-        # Fail-Safe to ensure test writer fills all fields
+        assert model_instance.get_audit_values() == {}
 
 
 

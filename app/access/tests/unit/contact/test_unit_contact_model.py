@@ -66,7 +66,7 @@ class ContactModelTestCases(
     def test_class_inherits_contact(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from Contact
         """
 
         assert issubclass(model, Contact)

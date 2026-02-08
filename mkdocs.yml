@@ -1,4 +1,4 @@
-INHERIT: website-template/mkdocs.yml
+INHERIT: docs_template/mkdocs.yml
 
 docs_dir: 'docs'
 
@@ -66,13 +66,15 @@ nav:
 
       - projects/centurion_erp/administration/backup.md
 
-      - projects/centurion_erp/administration/core/ticketing.md
-
       - projects/centurion_erp/administration/devops/feature_flags.md
 
       - projects/centurion_erp/administration/installation.md
 
+      - projects/centurion_erp/administration/logging.md
+
       - projects/centurion_erp/administration/monitoring.md
+
+      - projects/centurion_erp/administration/core/ticketing.md
 
     - Development:
 
@@ -109,16 +111,18 @@ nav:
             - projects/centurion_erp/development/api/serializer/inventory.md
 
       - projects/centurion_erp/development/accounting/asset.md
-      
+
+      - projects/centurion_erp/development/core/entity.md
+
       - projects/centurion_erp/development/fields.md
 
       - projects/centurion_erp/development/models.md
 
-      - projects/centurion_erp/development/core/entity.md
-
       - projects/centurion_erp/development/core/model_history.md
 
       - projects/centurion_erp/development/core/model_notes.md
+
+      - projects/centurion_erp/development/permissions.md
 
       - projects/centurion_erp/development/serializers.md
 
@@ -216,11 +220,17 @@ nav:
 
         - projects/centurion_erp/user/itim/index.md
 
+        - projects/centurion_erp/user/itim/change.md
+
         - projects/centurion_erp/user/itim/cluster.md
 
         - projects/centurion_erp/user/itim/clustertype.md
 
+        - projects/centurion_erp/user/itim/incident.md
+
         - projects/centurion_erp/user/itim/port.md
+
+        - projects/centurion_erp/user/itim/problem.md
 
         - projects/centurion_erp/user/itim/service.md
 

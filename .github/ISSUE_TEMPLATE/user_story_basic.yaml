@@ -85,8 +85,8 @@ body:
       description: |
         Define the conditions that must be true for this feature to be considered complete.  
         These should be testable and unambiguous.  
-        - Functional outcomes (what must the system do?)  
-        - Non-functional outcomes (performance, security, compliance).  
+        - Functional requirements (what must the system do?)  
+        - Non-functional requirements (performance, security, compliance).  
       placeholder: |
         - [ ] User can configure multiple currency rates.  
         - [ ] Transactions automatically convert to base currency.  

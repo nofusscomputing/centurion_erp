@@ -2,6 +2,7 @@ import pytest
 import random
 
 from django.db import models
+from django.test import Client
 
 from rest_framework.relations import Hyperlink
 
@@ -154,7 +155,13 @@ class TicketCommentBaseAPIFieldsTestCases(
             },
 
             'body': {
+                'expected': dict
+            },
+            'body.markdown': {
                 'expected': str
+            },
+            'body.render': {
+                'expected': dict
             },
             'private': {
                 'expected': bool
@@ -215,10 +222,53 @@ class TicketCommentBaseAPIFieldsTestCases(
             'model_notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
+                'expected': models.NOT_PROVIDED
+            },
             '_urls.notes': {
                 'expected': models.NOT_PROVIDED
             },
         }
+
+
+
+    def test_api_field_no_thread_url(self, recursearray,
+        api_request_permissions,
+        model, model_kwargs,
+    ):
+        """Test API Fields
+        
+        if a comment has no threads, then no threads URL is to exist in
+        `_urls` dict.
+        """
+
+        kwargs = model_kwargs()
+
+        kwargs['ticket'].is_closed = False
+        kwargs['ticket'].date_closed = None
+        kwargs['ticket'].is_solved = False
+        kwargs['ticket'].date_solved = None
+        kwargs['ticket'].status = TicketBase.TicketStatus.NEW
+        kwargs['ticket'].save()
+
+        del kwargs['external_ref']
+
+        item = model.objects.create(
+            **kwargs
+        )
+
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['view'] )
+        response = client.get( item.get_url() )
+
+        api_data_two = recursearray(response.data, '_urls.threads')
+        
+        assert api_data_two['key'] not in api_data_two['obj'], 'Thread URL was found in comment'
 
 
 

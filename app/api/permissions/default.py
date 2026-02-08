@@ -1,9 +1,8 @@
-from rest_framework.permissions import DjangoObjectPermissions
-
+from .common import CenturionObjectPermissions
 
 
 class DefaultDenyPermission(
-    DjangoObjectPermissions,
+    CenturionObjectPermissions,
 ):
 
 

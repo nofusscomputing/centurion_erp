@@ -2,8 +2,6 @@ from rest_framework.reverse import reverse
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-# THis import only exists so that the migrations can be created
-from itam.models.software_version_history import SoftwareVersionHistory    # pylint: disable=W0611:unused-import
 from itam.serializers.software_version import (    # pylint: disable=W0611:unused-import
     Software,
     SoftwareVersion,
@@ -146,15 +144,15 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        if self.queryset is not None:
+        if self._queryset is not None:
 
-            return self.queryset
+            return self._queryset
 
-        self.queryset = super().get_queryset()
+        self._queryset = super().get_queryset()
 
-        self.queryset = self.queryset.filter(software_id=self.kwargs['software_id'])
+        self._queryset = self._queryset.filter(software_id=self.kwargs['software_id'])
 
-        return self.queryset
+        return self._queryset
 
 
     def get_return_url(self) -> str:

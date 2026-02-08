@@ -38,7 +38,7 @@ class TenancyManager(
             if getattr(self._user, 'id', None) and getattr(self._user, 'is_authenticated', False):
 
 
-                if not self._user.is_superuser and self._tenancies:
+                if not self._user.is_superuser:
 
                     return super().get_queryset().select_related('organization').filter(
                         models.Q(organization__in = self._tenancies)

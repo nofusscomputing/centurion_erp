@@ -1,5 +1,6 @@
 import pytest
 
+from access.permissions.super_user import SuperUserPermissions
 from access.permissions.tenancy import TenancyPermissions
 
 from centurion.tests.unit_class import ClassTestCases
@@ -36,7 +37,7 @@ class TenancyMixinTestCases(
             },
             'permission_classes': {
                 'type': list,
-                'value': [ TenancyPermissions ]
+                'value': [ TenancyPermissions | SuperUserPermissions ]
             },
             '_obj_tenancy': {
                 'type': type(None),
@@ -91,8 +92,6 @@ class TenancyMixinInheritedCases(
         view_set.request = mocker.Mock()
         view_set.kwargs =  {}
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         if model._is_submodel:
             view_set.kwargs =  {
                 view_set.model_kwarg: model._meta.model_name
@@ -112,8 +111,6 @@ class TenancyMixinInheritedCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 
@@ -143,8 +140,6 @@ class TenancyMixinInheritedCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 

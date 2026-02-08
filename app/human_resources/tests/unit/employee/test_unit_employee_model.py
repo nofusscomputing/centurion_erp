@@ -60,7 +60,7 @@ class EmployeeModelTestCases(
     def test_class_inherits_employee(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from employee
         """
 
         assert issubclass(model, Employee)

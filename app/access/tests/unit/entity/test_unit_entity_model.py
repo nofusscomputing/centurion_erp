@@ -63,7 +63,7 @@ class EntityModelTestCases(
     def test_class_inherits_entity(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from entity
         """
 
         assert issubclass(model, Entity)

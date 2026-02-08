@@ -3,15 +3,12 @@ title: Development
 description: Development documentation home for Centurion ERP by No Fuss Computing
 date: 2024-05-17
 template: project.html
-about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
+about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-This section of the documentation contains different items related to the development of this application. The target audience is anyone whom wishes to develop any part of the application.
+This section of the documentation contains different items related to the development of this application. The target audience is anyone whom wishes to develop any part of the Centurion ERP.
 
 Centurion ERP is a Django Application. We have added a lot of little tid bits that aid in the development process. i.e. abstract classes, tests etc. This allows for decreased development times as items that are common are what could easily be considered templated with the only additional requirement is to add that objests differences.
-
-!!! note
-    The development documentation does require a rewrite to cater for the application changes introduced in v1.4. Specifically that the direction of Centurion ERP being an API application with a seperate UI. Some of theses development docs do cover post v1.4 changes.
 
 
 ## Areas of the code
@@ -24,11 +21,15 @@ Centurion ERP is a Django Application. We have added a lot of little tid bits th
 
     - [Entity](./core/entity.md)
 
+- [Permissions](./permissions.md)
+
 - [Serializers](./serializers.md)
 
 - [Templates](./templates.md)
 
 - [Testing](./testing.md)
+
+- [ViewSets](./views.md)
 
 
 ## Icons

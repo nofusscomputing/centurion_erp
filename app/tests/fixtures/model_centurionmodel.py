@@ -18,7 +18,6 @@ def kwargs_centurionmodel(kwargs_tenancyabstract):
         kwargs = {
             **kwargs_tenancyabstract(),
             'model_notes': 'model notes txt',
-            'created': '2025-05-23T00:00Z',
         }
 
         return kwargs

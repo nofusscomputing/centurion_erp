@@ -3,10 +3,13 @@ import pytest
 from django.db import models
 from types import NoneType
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.tests.unit.viewset.test_unit_tenancy_viewset import (
     SubModelViewSetInheritedCases
 )
 
+from core.permissions.ticket import TicketPermission
 from core.viewsets.ticket_comment import (
     TicketBase,
     TicketCommentBase,
@@ -84,6 +87,13 @@ class ViewsetTestCases(
             },
             'parent_model_pk_kwarg': {
                 'value': 'ticket_id'
+            },
+            'permission_classes': {
+                'type': list,
+                'value': [ TicketPermission | SuperUserPermissions ]
+            },
+            'perms_map': {
+                'type': dict
             },
             'search_fields': {
                 'value': [

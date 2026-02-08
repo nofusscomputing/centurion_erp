@@ -4,12 +4,14 @@ from django.core.exceptions import (
     ValidationError
 )
 from core.models.ticket_comment_base import TicketBase
-from core.tests.functional.ticket_comment_base.test_functional_ticket_comment_base_model import TicketCommentBaseModelInheritedTestCases
+from core.tests.functional.ticket_comment_base.test_functional_ticket_comment_base_model import (
+    TicketCommentBaseSlashCommandModelTestCases
+)
 
 
 @pytest.mark.model_ticketcommentsolution
 class TicketCommentSolutionModelTestCases(
-    TicketCommentBaseModelInheritedTestCases
+    TicketCommentBaseSlashCommandModelTestCases
 ):
 
 

@@ -8,7 +8,7 @@ from centurion.models.meta import (    # pylint: disable=E0401:import-error disa
 
 from core.serializers.modelticket import (    # pylint: disable=W0611:unused-import
     BaseSerializer,
-    ModelSerializer,
+    ModelSerializer as ModelTicketModelSerializer,
     ViewSerializer as ModelTicketViewSerializer,
 )
 
@@ -16,7 +16,7 @@ from core.serializers.modelticket import (    # pylint: disable=W0611:unused-imp
 
 @extend_schema_serializer(component_name = 'RoleTicketModelSerializer')
 class ModelSerializer(
-    ModelSerializer
+    ModelTicketModelSerializer
 ):
 
 
@@ -51,9 +51,9 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'RoleTicketViewSerializer')
 class ViewSerializer(
+    ModelTicketViewSerializer,
     ModelSerializer,
-    ModelTicketViewSerializer
 ):
     """RoleTicket Base View Model"""
 
-    organization = TenantBaseSerializer( many = False, read_only = True )
+    pass

@@ -73,7 +73,7 @@ class AssetBaseModelTestCases(
     def test_class_inherits_assetbase(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from assetbase
         """
 
         assert issubclass(model, AssetBase)

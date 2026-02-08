@@ -28,7 +28,7 @@ def centurion_user_add_entity(sender, **kwargs):
         ).first()
 
         if all_users:
-            print('\n\nFetching Users.\n')
+            log.info( msg = 'Fetching Users.')
 
 
         for user in all_users:
@@ -61,12 +61,12 @@ def centurion_user_add_entity(sender, **kwargs):
                     '-org_count'
                 ).first()
 
-                print( f'    Processing user {user.username}.....' )
+                log.info( msg = f'Processing user {user.username}.....' )
 
 
                 if organization is None:
-                    print( f'        No Organization associated with user {user.username}.' )
-                    raise ValueError( f'No Organization associated with user {user.username}.')
+                    log.error( msg = f'No Organization associated with user {user.username}., Employee will not be created.' )
+                    continue
 
 
                 random_int = int( str(datetime.now().strftime("%y%m%d%H%M%S")) + f"{datetime.now().microsecond // 100:04d}" )
@@ -115,13 +115,14 @@ def centurion_user_add_entity(sender, **kwargs):
 
                 entity = entity_model.objects.create( **entity_kwargs )
 
-                print( f'        Employee {entity.id}, created for user {user.username}' )
+                log.info( msg = f'Employee {entity.id}, created for user {user.username}' )
 
             except Exception as exc:
-                print( f'        Error Occured processing user {user.username}, Employee was not created.[{exc}]' )
-                log.exception(exc)
+                log.exception( msg = f'Error Occured processing user {user.username}, Employee was not created.' )
 
-        print(f'Completed processing current Centurion Users migration to an Employee Entity.')
+
+        log.info( msg = f'Completed processing current Centurion Users migration to an Employee Entity.')
+
     except Exception as exc:
         pass
 

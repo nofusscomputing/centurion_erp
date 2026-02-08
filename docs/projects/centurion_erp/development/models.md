@@ -47,7 +47,7 @@ When creating models they must meet the following requirements:
 
 - No `queryset` is to return data that the user has not got access to.
 
-- Model Exceptions must be from `django.core.exceptions`
+- **All** Model Exceptions must be from `django.core.exceptions`
 
 !!! tip
     It's a good idea to create the initial model class, then create and add the model tests for that class. This way you can run the tests to ensure that the requirements are met. Of Note, the tests may not cover ALL of the requirements section, due diligence will need to be exercised.
@@ -293,7 +293,13 @@ Each model has the following Test Suites auto-magic created:
 
     _Confirms the model has a [`AuditHistory`](./api/models/audit_history.md) model and other checks as required for an `AuditHistory` model._
 
-These auto-magic tests require no input and will be created on a model inheriting from [`CenturionModel`](./api/models/centurion.md) and run every time the tests are run.
+- API Metadata checks: `api.tests.functional.test_functional_api_metadata.APIMetadataInheritedCases`
+
+    _Checks the HTTP/OPTIONS endpoints for each model. Included as part of the functional API Fields Render test case._
+
+    - Customization of the model fields to check are done under property `parameterized_api_metadata_fields`
+
+Unless otherwise specified, these auto-magic tests require no input and will be created on a model inheriting from [`CenturionModel`](./api/models/centurion.md) and run every time the tests are run.
 
 
 ## Depreciated Docs undergoing re-write

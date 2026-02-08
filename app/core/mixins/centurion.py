@@ -171,16 +171,41 @@ class Centurion(
             dict: Model fields
         """
 
-        data = self.__dict__.copy()
+        if self.pk is None:
+            return {}
 
         clean_data: dict = {}
 
-        for field in self._meta.fields:
+        for field in [ *self._meta.fields, *self._meta.many_to_many ]:
 
             if hasattr(self, field.name):
 
+                if(
+                    field.auto_created
+                    and isinstance(field, models.OneToOneField)
+                ):
+                    continue
+
+                data = getattr(self, field.name, None)
+
+                if isinstance(field, models.ManyToManyField):
+
+                    data = []
+
+                    values = getattr(self, field.name).all()
+                    if len(values) < 1:
+                        data = None
+
+                    for val in values:
+                        data += [ val.id ]
+
+                elif isinstance(field, models.DateTimeField):
+                    if data and type(data) is not str:
+                        data = data.isoformat(timespec='seconds')
+
+
                 clean_data.update({
-                    field.name: getattr(self, field.name)
+                    field.name: data
                 })
 
 
@@ -243,7 +268,10 @@ class Centurion(
 
             for related_object in getattr(meta, 'related_objects', []):
 
-                if not issubclass(related_object.related_model, self._base_model):
+                if(
+                    not issubclass(related_object.related_model, self._base_model)
+                    or not issubclass(type(related_object), models.OneToOneRel)
+                ):
 
                     continue
 
@@ -553,7 +581,18 @@ class Centurion(
             validate_constraints = True
         )
 
-        if self._audit_enabled and type(self).context.get(self._meta.model_name, None):
+        base_model = self._base_model
+
+        if base_model:
+            base_model = base_model._meta.model_name
+
+        if(
+            (
+                self._audit_enabled
+                or base_model == 'ticketbase'
+            )
+            and type(self).context.get(self._meta.model_name, None)
+        ):
 
             self._after = self.get_audit_values()
 

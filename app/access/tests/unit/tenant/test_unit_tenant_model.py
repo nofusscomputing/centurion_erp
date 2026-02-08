@@ -97,7 +97,7 @@ class TenantModelTestCases(
 
         model.objects.user(
             user = api_request_permissions['user']['view'],
-            permission = str( model._meta.app_label + '.view_' + model._meta.model_name )
+            permission = [ str( model._meta.app_label + '.view_' + model._meta.model_name ) ]
         ).all()
 
         assert any(

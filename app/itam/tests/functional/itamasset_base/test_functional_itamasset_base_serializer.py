@@ -7,22 +7,13 @@ from accounting.tests.functional.asset_base.test_functional_asset_base_serialize
 class MockView:
 
     _has_import: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has import permission.
-    """
+    """User Permission"""
 
     _has_purge: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has purge permission.
-    """
+    """User Permission"""
 
     _has_triage: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has triage permission.
-    """
+    """User Permission"""
 
 
 

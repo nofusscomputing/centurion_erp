@@ -2,7 +2,10 @@ import pytest
 
 from django.core.exceptions import ValidationError
 
-from access.tests.functional.entity.test_functional_entity_model import EntityModelInheritedCases
+from access.tests.functional.entity.test_functional_entity_model import (
+    EntityModelInheritedCases,
+    TicketSubscriberEntityTestCases
+)
 
 from settings.models.app_settings import (
     AppSettings
@@ -12,7 +15,8 @@ from settings.models.app_settings import (
 
 @pytest.mark.model_company
 class CompanyModelTestCases(
-    EntityModelInheritedCases
+    EntityModelInheritedCases,
+    TicketSubscriberEntityTestCases
 ):
 
 

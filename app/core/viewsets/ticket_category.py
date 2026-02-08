@@ -2,8 +2,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-# THis import only exists so that the migrations can be created
-from core.models.ticket.ticket_category_history import TicketCategoryHistory    # pylint: disable=W0611:unused-import
 from core.serializers.ticket_category import (    # pylint: disable=W0611:unused-import
     TicketCategory,
     TicketCategoryModelSerializer,

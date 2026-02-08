@@ -2,8 +2,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-# This import only exists so that the migrations can be created
-from itim.models.service_history import ServiceHistory    # pylint: disable=W0611:unused-import
 from itim.serializers.service import (    # pylint: disable=W0611:unused-import
     Service,
     ServiceModelSerializer,

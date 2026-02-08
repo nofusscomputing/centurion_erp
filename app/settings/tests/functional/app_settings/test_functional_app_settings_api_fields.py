@@ -82,6 +82,12 @@ class AppSettingsAPITestCases(
             'model_notes': {
                 'expected': models.NOT_PROVIDED
             },
+            'model_notes.markdown': {
+                'expected': models.NOT_PROVIDED
+            },
+            'model_notes.render': {
+                'expected': models.NOT_PROVIDED
+            },
             'organization': {
                 'expected': models.NOT_PROVIDED
             },
@@ -137,6 +143,17 @@ class AppSettingsAPITestCases(
                 'expected': str
             }
         }
+
+    def test_api_metadata_list_requires_auth(self):
+        pytest.xfail( reason = 'list view not available for model. test is N/A.' )
+
+
+    def test_api_metadata_list_ok(self):
+        pytest.xfail( reason = 'list view not available for model. test is N/A.' )
+
+
+    def test_api_metadata_list_has_table_fields(self):
+        pytest.xfail( reason = 'list view not available for model. test is N/A.' )
 
 
 

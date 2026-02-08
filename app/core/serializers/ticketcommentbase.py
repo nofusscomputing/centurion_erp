@@ -1,3 +1,5 @@
+import importlib
+
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
@@ -86,17 +88,19 @@ class ModelSerializer(
 
         if item.id is not None and item.__class__._meta.model_name != 'ticketcommentsolution':
 
-            urls.update({
-                'threads': reverse(
-                    'API:_api_ticket_comment_base_sub_thread-list',
-                    request = self._context['view'].request,
-                    kwargs={
-                        'ticket_id': ticket_id,
-                        'ticket_comment_model': 'comment',
-                        'parent_id': item.id
-                    }
-                )
-            })
+            if len(item.threads.all()) > 0:    # Only present threads URL when there are threads.
+
+                urls.update({
+                    'threads': reverse(
+                        'API:_api_ticket_comment_base_sub_thread-list',
+                        request = self._context['view'].request,
+                        kwargs={
+                            'ticket_id': ticket_id,
+                            'ticket_comment_model': 'comment',
+                            'parent_id': item.id
+                        }
+                    )
+                })
 
         return urls
 
@@ -210,6 +214,82 @@ class ModelSerializer(
                 ]
 
             self.Meta.read_only_fields = read_only_fields
+
+
+
+    def to_representation(self, instance):
+        """Dynamic Model De-serializer
+
+        If the model in question is a sub-model, update and use its serializer.
+
+        Args:
+            instance (Model): The model to deserialize
+
+        Returns:
+            dict: Returns the data using the correct serializer for sub-models.
+        """
+
+        serializer_name = self.__class__.__name__
+        
+        serializer_model = instance.get_related_model()
+
+        serializer_module = None
+
+        if(
+            (
+                serializer_model._meta.object_name != self.Meta.model._meta.object_name
+            )
+            and serializer_model._is_submodel
+            and self._context['view'].action in [ 'list', 'retrieve' ]
+        ):    # Sub-model does not match serializer model
+
+            serializer_module = (
+                    f'{serializer_model._meta.app_label}.serializers.'
+                    f'{serializer_model._base_model._meta.model_name}_'
+                    f'{serializer_model._meta.sub_model_type}'
+                )
+
+        # elif(
+        #     serializer_name != 'ViewSerializer'
+        #     and not serializer_model._is_submodel
+        #     and self._context['view'].action in [ 'list', 'retrieve' ]
+        # ):    # is a HTTP/GET request for model.
+
+        #     print(f'SET: model module action = {self._context["view"].action}')
+
+        #     # serializer_module = (
+        #     #     f'{instance._meta.app_label}.serializers.'
+        #     #     f'{instance._meta.model_name}'
+        #     # )
+
+        #     serializer_module = self.__module__
+
+
+        # if (
+        #     serializer_name != 'ViewSerializer'
+        # ):    # Is a HTTP/GET Request
+
+        #     print(f'SET: TicketCommentBase ViewSerializer action = {self._context["view"].action}')
+
+        #     serializer_name = 'ViewSerializer'
+
+
+        if serializer_module:    # Load and return the serialized data
+
+            serializer_module = importlib.import_module(
+                name = serializer_module
+            )
+
+            serializer = getattr(serializer_module, serializer_name, None)
+
+            if serializer:
+
+                return serializer(
+                    serializer_model,
+                    context = self.context
+                ).data
+
+        return super().to_representation(instance)
 
 
 

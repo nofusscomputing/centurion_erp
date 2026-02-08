@@ -1,3 +1,5 @@
+import inspect
+
 import pytest
 
 from django.db import models
@@ -98,3 +100,21 @@ class ClassTestCases:
         else:
 
             assert getattr(test_class, param_field_name) == param_value, getattr(test_class, param_field_name)
+
+
+
+    @pytest.mark.regression
+    def test_class_function_arg_names(self,
+        test_class,
+        parameterized, param_key_class_attributes, param_field_name,
+        param_function, param_arg_names
+    ):
+        """Test Function
+
+        Ensure a function has the specified arg names
+        """
+    
+        sig = inspect.signature( obj = getattr(test_class, param_field_name) )
+        
+
+        assert list(sig.parameters.keys()) == param_arg_names

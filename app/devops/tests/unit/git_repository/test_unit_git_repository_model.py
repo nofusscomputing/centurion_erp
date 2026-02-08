@@ -7,6 +7,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 )
 
 from devops.models.git_group import GitGroup
+from devops.models.git_repository.base import GitRepository
 
 
 @pytest.mark.model_gitrepository
@@ -19,6 +20,10 @@ class GitRepositoryBaseModelTestCases(
     def parameterized_class_attributes(self):
 
         return {
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': GitRepository,
+            },
             'model_tag': {
                 'type': str,
                 'value': 'git_repository'

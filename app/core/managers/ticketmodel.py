@@ -2,11 +2,12 @@ from django.contrib.auth.models import ContentType
 from django.db import models
 
 from access.managers.common import CommonManager
+from access.managers.tenancy import TenancyManager
 
 
 
 class TicketModelManager(
-    CommonManager
+    TenancyManager
 ):
     """TicketModel Object Manager
 
@@ -62,8 +63,8 @@ class TicketModelManager(
                             organization_id = int(tenancy.split('_')[1])
                         )
 
-
-            self._content_filter= content_filter
+            if len(content_filter.children):
+                self._content_filter= content_filter
 
 
         return self._content_filter
@@ -105,8 +106,8 @@ class TicketModelManager(
 
 
 
-        if content_filter:
-            return super().get_queryset().select_related( *fields )
+            else:
+                return super().get_queryset().select_related( *fields )
 
 
         return super().get_queryset()
