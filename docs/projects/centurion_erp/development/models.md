@@ -47,7 +47,7 @@ When creating models they must meet the following requirements:
 
 - No `queryset` is to return data that the user has not got access to.
 
-- Model Exceptions must be from `django.core.exceptions`
+- **All** Model Exceptions must be from `django.core.exceptions`
 
 !!! tip
     It's a good idea to create the initial model class, then create and add the model tests for that class. This way you can run the tests to ensure that the requirements are met. Of Note, the tests may not cover ALL of the requirements section, due diligence will need to be exercised.

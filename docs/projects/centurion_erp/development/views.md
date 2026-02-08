@@ -57,6 +57,8 @@ When working with viewsets the following requirements must be met:
 
 - No viewset inherits from the common viewset classes. ONLY inherit from the permission bassed classes.
 
+- **All** ViewSet exceptions must be from `rest_framework.exceptions`
+
 
 ## Permissions
 
