@@ -16,10 +16,6 @@ prepare-git-submodule:
 prepare-python: prepare-git-submodule
 	python3 -m venv ${PATH_VENV};
 	${ACTIVATE_VENV};
-	pip install -r website-template/gitlab-ci/mkdocs/requirements.txt;
-	pip install -r gitlab-ci/lint/requirements.txt;
-	pip install -r gitlab-ci/mkdocs/requirements.txt;
-	pip install -r requirements.txt;
 	pip install -r requirements_dev.txt;
 
 prepare-docs: prepare-git-submodule
