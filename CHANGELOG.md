@@ -1,3 +1,212 @@
+## 1.29.0 (2026-02-09)
+
+### Features
+
+- **core**: Convert comment with only time tracking command, to action comment
+- **core**: Enable linking ticket sub models to parent model
+- **base**: Add oauth token required claim check to sso pipeline
+- **core**: TicketPermission must check if user has perm for create
+- **access**: remove super user check from centurion user function has_perm
+- **access**: remove super user check from tenancy permission
+- **core**: Add post_migration signal for cleaning up stale permissions
+- **core**: Add triage check within TicketBase Serializer
+- **core**: TicketComment ViewSet Permission_classes updated to require Ticket or SuperUser
+- **core**: Ticket ViewSet Permission_classes updated to require Ticket or SuperUser
+- **core**: Add TicketPermissions Class
+- **access**: Cache the tenancy within Tenancy Permission class
+- **access**: Adjust permissions for Tenancy mixin to be Tenancy or SuperUser
+- **core**: Update Markdown Serializer field to provide render data for UI
+- **itim**: Add Menu Feature Flag to model ProblemTicket
+- **itim**: Add Menu Feature Flag to model IncidentTicket
+- **itim**: Add Menu Feature Flag to model ChangeTicket
+- **python**: Update django 5.1.14 -> 5.1.15
+- **core**: Task comment Permissions must also have ticket triage
+- **core**: Add parent_model to CenturionNote so that tenancy can be obtained during creation
+- **core**: Add ability to specify additional ViewSet permissions
+- **core**: remove `triage` permission from all ticket comment types
+- **itam**: Update `ticketmodel_device` serializer to corrrect inheritance.
+- **core**: Always return the sub-model serializer when accessing the TicketModel base serializer
+- **core**: Only add threads URL to comment if there are threads
+- **core**: Ticket Comment base endpoint to use sub-models serializer
+- **core**: Serializer model core.TicketCommentTask
+- **core**: migrations model core.TicketCommentTask
+- **core**: new model core.TicketCommentTask
+- **core**: Create an action comment when a dependency is removed from ticket
+- **core**: Create an action comment when a model link is removed from ticket
+- **core**: model audit_values must return ALL fields for a model
+- **core**: Add the ticket action comment signal
+- **core**: Add m2m field data to model get_audit_values function
+- **itim**: Add Feature Flag 2025-00011 for ProblemTicket
+- **itim**: Add Feature Flag 2025-00010 for IncidentTicket
+- **itim**: Add Feature Flag 2025-00009 for ChangeTicket
+- **itim**: Add Navigation entries for ticket models
+- **project_management**: Add Migrations for project task ticket models
+- **itim**: Add Migrations for ticket models
+- **project_management**: Add Serializer for model project_management.ProjectTaskTicket
+- **itim**: Add Serializer for model itim.IncidentTicket
+- **itim**: Add Serializer for model itim.ProblemTicket
+- **itim**: Add Serializer for model itim.ChangeTicket
+- **project_management**: Add model project_management.ProjectTaskTicket
+- **itim**: Add model itim.ProblemTicket
+- **itim**: Add model itim.ChangeTicket
+- **itim**: Add model itim.IncidentTicket
+- **core**: filter ticket linked models to that of the ticket viewing
+- **core**: Re-import new ticket model linking to slash commands
+- **core**: When a ticket depedency is added via ticket description, create Action comment
+- **core**: When a ticket depedency is added via comment, create Action comment
+- **python**: update django 5.1.13 -> 5.1.14
+- **core**: Add New slash command for ticket dependencies to new ticket model
+- **core**: Updated Migrations to create model core.TicketDependency
+- **core**: Depreciate old ticket linked items
+- **core**: Depreciate old related tickets/ticket dependencies
+- **core**: Migrations to create model core.TicketDependency
+- **core**: Add URL Route for model core.TicketDependency
+- **core**: Add ViewSet for model core.TicketDependency
+- **core**: Add Serializer for model core.TicketDependency
+- **core**: Add model core.TicketDependency
+
+### Fixes
+
+- **docker**: use pip and apk cache from build
+- **core**: Correct which fields are read-only for both import and triage user
+- **human_resources**: signal centurion_user_add_entity must use log instead of stdout
+- **core**: User requires access to add/update ticket urgency field
+- **core**: if user lacks tenancy permissions dont process additional for ticket
+- Correct permission inheritence
+- **core**: Capture errors in perms_map for TicketComment ViewSet
+- **core**: TicketModel manager must inherit from TenancyManager
+- **access**: Always filter tenancy objects to tenancy list even if empty
+- **access**: During permission get_tenancy, use the parent model if one exists and the action=create
+- **access**: When checking tenancy permissions and a tenancy is required, ensure it exists
+- **access**: Capture exceptions within tenancy permissions
+- **access**: Function has_perms for user model must cater for obj or direct tenancy passed, inc no tenancy
+- **core**: Ticket sub-model must return display_name as markdown model_tag
+- **core**: Add missing ticket type fields to ticket comment category serializer
+- **core**: when fetching related model ensure the model is of the correct type
+- **core**: If replying to a ticket comment, the parent comment must be set as not closed
+- **core**: dont create modelticket link tables for sub-models
+- **core**: use correct var for solution comment when checking type
+- **core**: When creating a standard ticket comment, set its status to closed
+- **core**: When creating a ticket action comment, set its status to closed
+- **core**: When cleaning viewset model context, dont remove if not exists
+- **core**: Allow HTTP/DELETE on ticket_model_link endpoint
+- **core**: When cleaning up request context from model, only remove the modifications instead of replacing with clean
+- **api**: Use correct field to determine ticket rendering options
+
+### Refactoring
+
+- use get_organization function instead of property
+- **api**: remove superflous code paths
+- **core**: Add time tracking slash command for new ticket models
+- **core**: instead of throwing an error for wrong comment type, set it as per meta
+- **access**: All TenancyPermission.has_permission() to be within try..catch
+- **accounting**: Update modelticket serializer inheritence for AssetBase model
+- **settings**: Update modelticket serializer inheritence for ExternalLink model
+- **project_management**: Update modelticket serializer inheritence for ProjectType model
+- **project_management**: Update modelticket serializer inheritence for ProjectState model
+- **itim**: Update modelticket serializer inheritence for Service model
+- **itim**: Update modelticket serializer inheritence for Port model
+- **itim**: Update modelticket serializer inheritence for ClusterType model
+- **itim**: Update modelticket serializer inheritence for Cluster model
+- **itam**: Update modelticket serializer inheritence for SoftwareVersion model
+- **itam**: Update modelticket serializer inheritence for SoftwareCategory model
+- **itam**: Update modelticket serializer inheritence for Software model
+- **itam**: Update modelticket serializer inheritence for OperatingSystemVersion model
+- **itam**: Update modelticket serializer inheritence for OperatingSystem model
+- **itam**: Update modelticket serializer inheritence for ITAMAssetBase model
+- **itam**: Update modelticket serializer inheritence for DeviceType model
+- **itam**: Update modelticket serializer inheritence for DeviceModel model
+- **itam**: Update modelticket serializer inheritence for Device model
+- **core**: Update modelticket serializer inheritence for TicketCommentCategory model
+- **core**: Update modelticket serializer inheritence for TicketCategory model
+- **devops**: Update modelticket serializer inheritence for GitRepository model
+- **devops**: Update modelticket serializer inheritence for GitlabRepository model
+- **devops**: Update modelticket serializer inheritence for GithubRepository model
+- **devops**: Update modelticket serializer inheritence for GitGroup model
+- **devops**: Update modelticket serializer inheritence for FeatureFlag model
+- **config_management**: Update modelticket serializer inheritence for ConfigGroups model
+- **assistance**: Update modelticket serializer inheritence for KnowledgeBaseCategory model
+- **assistance**: Update modelticket serializer inheritence for KnowledgeBase model
+- **accounting**: Update modelticket serializer inheritence for AssetBase model
+- **access**: Update modelticket serializer inheritence for Tenant model
+- **access**: Update modelticket serializer inheritence for Role model
+- **human_resources**: Update modelticket serializer inheritence for Employee model
+- **access**: Update modelticket serializer inheritence for Person model
+- **access**: Update modelticket serializer inheritence for Contact model
+- **access**: Update modelticket serializer inheritence for Company model
+- **access**: Update modelticket serializer inheritence for Entity model
+- **api**: set mock viewset kwargs before calling model within ComonViewSet test cases
+- **access**: When checking a list of user permissions, check ALL permissions first, then return the result.
+- **access**: User permissions checks to use plural check instead of singular permission check
+- **core**: remove superflous function `get_permission_required` from ViewSet
+- **api**: Update ticket model linking to use the new ticket sub-models for markdown rendering
+- **core**: Adjust ticket fields name to be single word for fields assigned and subscribed
+- **core**: Use Centurion fileds history for tickets
+- **api**: Update ticket linked models metadata to use refactored model
+- **core**: Dont use link model serializer within slash command for linkmodel
+- **core**: move model validation from serializer to model for TicketDependency model.
+
+### Tests
+
+- **core**: Add functional test suite for slash command time tracking
+- **base**: OAuth Pipeline required claim Test Suite
+- **core**: Ticket Model Test Case to ensure that triage user can update their designated fields.
+- **core**: Ticket Model Test Case to ensure that import user can update their designated fields.
+- **core**: Test fields created and modified as part of Ticket models serializer checks
+- **core**: TicketPermission Test Cases based off of action and HTTP method
+- **core**: TicketPermission Unit Test Suite
+- **api**: Serializer Unit test case to ensure `<user>.is_superuser` is not called
+- **api**: Ensure that common permission function `has_object_permission` does not call `<user>.is_superuser`
+- **api**: Ensure that common permission function `has_permission` does not call `<user>.is_superuser`
+- **core**: Unit Test suite for serializer field Markdown
+- **core**: Ensure that if a ticket comment has no threads, no url is in the API response
+- **core**: Ensure that TicketModel Manager filters to those the use has access to
+- **core**: Ensure that a user whom is add/edit/delete/update a ticket task also has triage permissions
+- **core**: Test Cases for ModelTicket to ensure sub-models serializer inherit from parent serializers
+- **core**: Update testcase for triage permission check for TicketCommment models to fetch the correct ticket type
+- **core**: Exclude depreciated model `manufacturer` from ModelTicket tests
+- **core**: ensure that the _base_model attribute of the model_ticket models returns the actual base model
+- **core**: API Fields render functional Test Suite for model core.TicketCommentTaskl
+- **core**: ViewSet functional Test Suite for model core.TicketCommentTaskl
+- **core**: Model functional Test Suite for model core.TicketCommentTaskl
+- **core**: ViewSet unit Test Suite for model core.TicketCommentTaskl
+- **core**: Serializer unit Test Suite for model core.TicketCommentTaskl
+- **core**: Model unit Test Suite for model core.TicketCommentTaskl
+- **core**: Functional Test Cases to ensure that editing a ticket field creates an action comment
+- **core**: Functional Test Cases to ensure that a ticket dependency add/remove creates an action commend
+- **core**: Unit Test Suite for signal  ticket_action_comment
+- **core**: Model Functional test case to ensure that when ticket when subscribers is updated an action comment is created
+- **core**: Model Functional test case to ensure that when ticket assignees is updated an action comment is created
+- **core**: Model Functional test case to ensure that when unlinked from ticket that an action comment is created on ticket
+- **core**: Functional model tests to ensure linking models to ticket via ticket comment creates an action comment
+- **core**: Add Unit ViewSet Test Suite for Centurion Audit
+- **core**: Add Unit Serializer Test Suite for Centurion Audit
+- **core**: Add Functional ViewSet Test Suite for Centurion Audit
+- **core**: Add Functional API Fields render Test Suite for Centurion Audit
+- **core**: Add Functional API Fields render Test Suite for Ticket Comment Category
+- **core**: Add Functional model Test Suite for Ticket Comment Category
+- **core**: Add Functional model Test Suite for Ticket Category
+- **core**: Add Functional API fields render Test Suite for Ticket Category
+- **core**: Add Unit Serializer Test Suite for Ticket Comment Category
+- **core**: Add Unit ViewSet Test Suite for Ticket Comment Category
+- **core**: Add Unit Serializer Test Suite for Ticket Category
+- **core**: Add Unit ViewSet Test Suite for Ticket Category
+- **core**: Add Functional ViewSet Test Suite for Ticket Comment Category
+- **core**: Add Functional ViewSet Test Suite for Ticket Category
+- **core**: Add Functional test suite for Link slash command
+- **core**: Add Ticket slash command test suit for relate command for ticket description
+- **core**: Add Ticket slash command test suit for relate command for ticket comment
+- **api**: Completed Test suite for API Metadata Fields
+- **core**: API MetaData Functional test suite for model TicketDependency
+- **api**: Initial Test suite for API Metadata Fields
+- **core**: ViewSet Functional test suite for model TicketDependency
+- **core**: API Fields render Functional test suite for model TicketDependency
+- **core**: Model Functional test suite for model TicketDependency
+- **core**: Serializer Unit test suite for model TicketDependency
+- **core**: ViewSet Unit test suite for model TicketDependency
+- **core**: Model Unit test suite for model TicketDependency
+- **core**: API functional permission test suite for model TicketDependency
+
 ## 1.28.1 (2026-02-01)
 
 ### Fixes
