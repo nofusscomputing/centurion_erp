@@ -109,7 +109,7 @@ class MarkdownField(CharField):
 
                 if self.context['request'].user.has_perm(
                     permission = f'{obj._meta.app_label}.view_{obj._meta.model_name}',
-                    tenancy = obj.organization
+                    tenancy = obj.get_organization()
                 ):
 
                     if model_type not in models:
