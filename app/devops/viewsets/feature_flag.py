@@ -1,7 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-# THis import only exists so that the migrations can be created
-from devops.models.feature_flag_history import FeatureFlagHistory    # pylint: disable=W0611:unused-import
 from devops.serializers.feature_flag import (
     FeatureFlag,
     ModelSerializer,

@@ -104,7 +104,7 @@ class ViewSet( ModelCreateViewSet ):
 
 
             obj = Device.objects.user(
-                user = self.request.user, permission = self._permission_required
+                user = self.request.user, permission = self.permissions_required
             ).filter(
                 Q(
                     name=str(data.validated_data['details']['name']).lower(),

@@ -5,6 +5,8 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
+from rest_framework.permissions import OperandHolder
+
 from api.tests.functional.test_functional_common_viewset import (
     MockRequest
 )
@@ -225,7 +227,7 @@ class ModelTicketMetaViewsetTestCases(
 
 
     @pytest.fixture( scope = 'function' )
-    def viewset_mock_request(self, django_db_blocker, viewset,
+    def viewset_mock_request(self, django_db_blocker, viewset, mocker,
         clean_model_from_db, api_request_permissions,
         model_user, kwargs_user, organization_one, organization_two,
         model_instance, model_kwargs, model, model_ticketcommentbase,
@@ -296,6 +298,17 @@ class ModelTicketMetaViewsetTestCases(
 
 
         view_set = viewset()
+
+        for permission_class in viewset.permission_classes:
+
+            if isinstance(permission_class, OperandHolder):
+                permission_class = permission_class.op1_class
+
+
+            view_set.permissions_required = permission_class().get_required_permissions(
+                method = 'GET',
+                model_cls = model
+            )
 
         request = MockRequest(
             user = user,

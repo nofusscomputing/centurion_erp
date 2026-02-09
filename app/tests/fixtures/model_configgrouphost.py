@@ -42,7 +42,6 @@ def kwargs_configgrouphosts(django_db_blocker,
                 **centurion_kwargs,
                 'host': host,
                 'group': group,
-                'modified': '2024-06-07T23:00:00Z',
                 }
 
         return kwargs

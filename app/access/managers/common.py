@@ -16,7 +16,7 @@ class CommonManager(
 
     _user = None
 
-    def user(self, user, permission):
+    def user(self, user, permission: list):
         """Set-up for Tenancy Queryset
 
         This method sets up the manager with the users details so that the queryset
@@ -29,6 +29,10 @@ class CommonManager(
         Returns:
             TenancyManager: Fresh TenancyManager instance
         """
+
+        if not isinstance(permission, list) and permission is not None:
+            raise TypeError(f'permission arg must be a list, not type {type(permission)}.')
+
         manager = self.__class__()
         manager._permission = permission
         manager._user = user
@@ -48,8 +52,8 @@ class CommonManager(
 
 
                 for tenancy in manager._user.get_tenancies(int_list = False):
-                    if manager._user.has_perm(
-                        permission = manager._permission,
+                    if manager._user.has_perms(
+                        permission_list = manager._permission,
                         tenancy = tenancy
                     ):
 

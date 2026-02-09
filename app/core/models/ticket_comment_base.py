@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.apps import apps
 from django.conf import settings
@@ -23,6 +24,10 @@ class TicketCommentBase(
     CenturionModel,
 ):
 
+
+    _linked_model_kwargs: tuple[ tuple[ str ] ]  = (
+        ( 'pk', ),
+    )
 
     _audit_enabled = False
 
@@ -53,7 +58,6 @@ class TicketCommentBase(
         permissions = [
             ('import_ticketcommentbase', 'Can import ticket comment.'),
             ('purge_ticketcommentbase', 'Can purge ticket comment.'),
-            ('triage_ticketcommentbase', 'Can triage ticket comment.'),
         ]
 
         sub_model_type = 'comment'
@@ -96,7 +100,7 @@ class TicketCommentBase(
         TicketBase,
         blank = False,
         help_text = 'Ticket this comment belongs to',
-        null = False,
+        null = True,
         on_delete = models.PROTECT,
         verbose_name = 'Ticket',
     )
@@ -268,20 +272,22 @@ class TicketCommentBase(
 
         if not self.is_template:
 
+            if(
+                self.pk is None
+                and self._meta.model_name == 'ticketcommentbase'
+            ):
+                self.is_closed = True
+
             if self.is_closed and self.date_closed is None:
 
                 self.date_closed = datetime.datetime.now(tz=datetime.timezone.utc).replace(
                     microsecond=0).isoformat()
 
+            elif not self.is_closed and self.date_closed is not None:
+                self.date_closed = None
 
-            if self.comment_type != self._meta.sub_model_type:
 
-                raise centurion_exception.ValidationError(
-                    detail = {
-                        'comment_type': 'Comment Type does not match. Check the http endpoint you are using.'
-                    },
-                    code = 'comment_type_wrong_endpoint'
-                )
+            self.comment_type = self._meta.sub_model_type
 
 
             if self.parent:
@@ -407,26 +413,64 @@ class TicketCommentBase(
 
         body = self.body
 
-        self.body = self.slash_command(self.body)
+        if self._meta.sub_model_type != 'action':
+            self.body = self.slash_command(self.body)
+
+        is_converted_action_comment = False
+        action_comment_time_track = re.match(self.time_track, body)
+        if(
+            self.body != body
+            and action_comment_time_track
+            and self.comment_type == 'comment'
+        ):
+
+            is_converted_action_comment = True
+           
+
+            if action_comment_time_track:    # Time Tracking comment
+                self.body = f"added {time_track.group('time')} of time spent"
+
 
         if(
            (
-                (
-                    body is not None
-                    and body != ''
-                )
+                body is not None
                 and (
                     self.body is not None
-                    and self.body != ''
                 )
             )
-            or self.comment_type == self.CommentType.SOLUTION
+            or self.comment_type == 'solution'
         ):
 
             super().save(force_insert=force_insert, force_update=force_update,
                 using=using, update_fields=update_fields)
 
+
+            if is_converted_action_comment:
+
+                action_comment = apps.get_model(
+                    app_label = 'core',
+                    model_name = 'ticketcommentaction'
+                )(
+                    id = self.id,
+                    pk = self.id,
+                    ticket = self.ticket
+                )
+
+                action_comment.full_clean()
+                action_comment.save()
+
+
             # clear ticket comment cache
             if hasattr(self.ticket, '_ticket_comments'):
 
                 del self.ticket._ticket_comments
+
+            if self.parent:
+
+                if(
+                    self.parent.is_closed
+                    and self.comment_type not in [ 'action', 'solution' ]
+                ):
+
+                    self.parent.is_closed = False
+                    self.parent.save()

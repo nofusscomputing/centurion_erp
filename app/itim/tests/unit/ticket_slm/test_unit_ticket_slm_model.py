@@ -27,10 +27,6 @@ class SLMTicketModelTestCases(
             '_is_submodel': {
                 'value': True
             },
-            'model_tag': {
-                'type': str,
-                'value': 'ticket'
-            },
             'url_model_name': {
                 'type': str,
                 'value': 'ticketbase'
@@ -63,7 +59,7 @@ class SLMTicketModelTestCases(
     def test_class_inherits_SLMTicket(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from slmticket
         """
 
         assert issubclass(model, SLMTicket)

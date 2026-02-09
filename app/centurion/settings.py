@@ -587,6 +587,7 @@ if DEBUG:
     ]
     DEBUG_TOOLBAR_CONFIG = {
         'TOOLBAR_STORE_CLASS': 'debug_toolbar.store.DatabaseStore',
+        'PROFILER_MAX_DEPTH': 15,
     }
 
 
@@ -624,7 +625,9 @@ if SSO_ENABLED:
     SOCIAL_AUTH_PIPELINE = (
         'social_core.pipeline.social_auth.social_details',
         'social_core.pipeline.social_auth.social_uid',
+        'social_core.pipeline.social_auth.auth_allowed',    # added
         'social_core.pipeline.social_auth.social_user',
+        'centurion.auth.oauth.required_claim',
         'social_core.pipeline.user.get_username',
         'social_core.pipeline.social_auth.associate_by_email',
         'social_core.pipeline.user.create_user',
@@ -738,6 +741,33 @@ if FEATURE_FLAGGING_ENABLED:
                     "modified": ""
                 }
             },
+            {
+                "2025-00009": {
+                    "name": "itim.ChangeTicket",
+                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
+            {
+                "2025-00010": {
+                    "name": "itim.IncidentTicket",
+                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
+            {
+                "2025-00011": {
+                    "name": "itim.ProblemTicket",
+                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            }
         ]
 
         feature_flag.update({

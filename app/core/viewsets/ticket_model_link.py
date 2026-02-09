@@ -1,6 +1,7 @@
 import importlib
 
 from django.apps import apps
+from django.core.exceptions import FieldDoesNotExist
 
 from drf_spectacular.utils import (
     extend_schema,
@@ -156,6 +157,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 class ViewSet( SubModelViewSet_ReWrite ):
 
     allowed_methods = [
+        'DELETE',
         'GET',
         'OPTIONS',
         'POST',
@@ -168,11 +170,53 @@ class ViewSet( SubModelViewSet_ReWrite ):
         'organization',
     ]
 
+    metadata_markdown = True
+
     model_kwarg = 'model_name'
 
     model_suffix = 'ticket'
 
+    @property
+    def parent_model(self):
+
+        try:
+
+            model = self.model._meta.get_field('model').related_model
+
+            return model
+
+        except FieldDoesNotExist:
+            
+            return None
+
+
+    parent_model_pk_kwarg = 'model_id'
+
     view_description = 'Models linked to ticket'
+
+    def get_queryset(self):
+
+        if self._queryset is None:
+
+            self._queryset = super().get_queryset()
+
+            if 'ticket_type' in self.kwargs:
+
+                self._queryset = self._queryset.filter(
+                    ticket_id = int(self.kwargs['model_id'])
+                )
+
+            elif(
+                'app_label' in self.kwargs
+                and 'model_name' in self.kwargs
+            ):
+
+                self._queryset = self._queryset.filter(
+                    model_id = int(self.kwargs['model_id'])
+                )
+
+
+        return self._queryset
 
 
 

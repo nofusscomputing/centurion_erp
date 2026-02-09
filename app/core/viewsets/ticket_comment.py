@@ -2,10 +2,14 @@ import importlib
 
 from django.apps import apps
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, PolymorphicProxySerializer
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes, OpenApiResponse, PolymorphicProxySerializer
+
+from access.permissions.super_user import SuperUserPermissions
 
 from api.viewsets.common.tenancy import SubModelViewSet
 
+from core.permissions.ticket import TicketPermission
+from core.serializers.ticketcommentbase import ModelSerializer
 from core.models.ticket_comment_base import (
     TicketBase,
     TicketCommentBase
@@ -36,7 +40,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             )
 
             serializers.update({
-                str(model._meta.verbose_name).lower().replace(' ', '_'): getattr(serializer_module, serializer_type + 'Serializer')
+                model._meta.sub_model_type: getattr(serializer_module, serializer_type + 'Serializer')
             })
 
     return serializers
@@ -49,14 +53,24 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description="""Ticket Comment API requests depend upon the users permission and comment type. 
         To view an examaple of a request, select the correct schema _Link above example, called schema_.
 
-Responses from the API are the same for all users when the request returns 
+        Responses from the API are the same for all users when the request returns 
         status `HTTP/20x`.
         """,
         parameters = [
             OpenApiParameter(
                 name = 'ticket_id',
                 location = 'path',
-                type = int
+                type = OpenApiTypes.INT64
+            ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'ticket_comment_model',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
             ),
         ],
         request = PolymorphicProxySerializer(
@@ -211,22 +225,13 @@ class ViewSet(
 ):
 
     _has_import: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has import permission.
-    """
+    """User Permission"""
 
     _has_purge: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has purge permission.
-    """
+    """User Permission"""
 
     _has_triage: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has triage permission.
-    """
+    """User Permission"""
 
     base_model = TicketCommentBase
 
@@ -251,59 +256,107 @@ class ViewSet(
 
     parent_model_pk_kwarg = 'ticket_id'
 
+    permission_classes = [
+        TicketPermission | SuperUserPermissions,
+    ]
+
+
+    @property
+    def perms_map(self) -> dict[str, list[str]] | dict:
+        """Additional Ticket Comment Permissions
+
+        The following additional permissions are required:
+
+        - Ticket Triage Permission required for interacting with `Task`
+          comment, with the exception of viewing the task comment.
+
+        Returns:
+            dict[str, list[str]]: Additional required permissions
+            dict: No Additional permissions required
+        """
+
+        if getattr(self, '_perms_map', None) is None:
+
+            try:
+
+                ticket = None
+
+                if(
+                    'pk' in self.kwargs
+                    and self.request.method in [
+                        'DELETE',
+                        'PATCH',
+                        'PUT',
+                        'POST'
+                    ]
+                ):
+
+                    ticket = self.model.ticket.get_related_model()
+
+                elif(
+                    self.model_kwarg in self.kwargs
+                    and self.parent_model_pk_kwarg in self.kwargs
+                ):
+
+                    ticket = self.parent_model.objects.get(
+                        pk = int( self.kwargs[self.parent_model_pk_kwarg] )
+                    ).get_related_model()
+
+
+                if ticket:
+
+                    triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
+
+                    if(
+                        self.model.comment_type == 'task'
+                        or self.model._meta.model_name == 'ticketcommenttask'
+                    ):
+
+                        self._perms_map: dict[str, list[str]] = {
+                            'POST': [ triage_permission ],
+                            'PUT': [ triage_permission ],
+                            'PATCH': [ triage_permission ],
+                            'DELETE': [ triage_permission ],
+                        }
+
+            except Exception:
+                self.get_log().exception(
+                    msg = 'Error occured whilst obtaining permission map.'
+                )
+
+
+        return getattr(self, '_perms_map', {})
+
+
     view_description = 'Comments made on Ticket'
 
-
-    def get_permission_required(self):
-
-        import_permission = self.model._meta.app_label + '.import_' + self.model._meta.model_name
-
-        if(import_permission in self.request.user.get_permissions( tenancy = False )):
-
-            self._has_import = True
-
-
-        purge_permission = self.model._meta.app_label + '.purge_' + self.model._meta.model_name
-
-        if(purge_permission in self.request.user.get_permissions( tenancy = False )):
-
-            self._has_purge = True
-
-
-        triage_permission = self.model._meta.app_label + '.triage_' + self.model._meta.model_name
-
-        if(triage_permission in self.request.user.get_permissions( tenancy = False )):
-
-            self._has_triage = True
-
-        return super().get_permission_required()
 
 
     def get_queryset(self):
 
-        if self.queryset is None:
+        if self._queryset is None:
 
-            self.queryset = super().get_queryset()
+            self._queryset = super().get_queryset()
 
             if 'parent_id' in self.kwargs:
 
-                self.queryset = self.queryset.filter(parent=self.kwargs['parent_id'])
+                self._queryset = self._queryset.filter(parent=self.kwargs['parent_id'])
 
             else:
 
-                self.queryset = self.queryset.filter(parent=None)
+                self._queryset = self._queryset.filter(parent=None)
 
 
             if 'ticket_id' in self.kwargs:
 
-                self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id'])
+                self._queryset = self._queryset.filter(ticket=self.kwargs['ticket_id'])
 
             if 'pk' in self.kwargs:
 
-                self.queryset = self.queryset.filter(pk = self.kwargs['pk'])
+                self._queryset = self._queryset.filter(pk = self.kwargs['pk'])
 
 
-        return self.queryset
+        return self._queryset
 
 
 

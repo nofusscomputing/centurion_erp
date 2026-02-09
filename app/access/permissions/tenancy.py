@@ -6,9 +6,10 @@ from rest_framework.exceptions import (
     ParseError,
     PermissionDenied
 )
-from rest_framework.permissions import DjangoObjectPermissions
 
 from access.models.tenancy import Tenant
+
+from api.permissions.common import CenturionObjectPermissions
 
 from core import exceptions as centurion_exceptions
 from core.mixins.centurion import Centurion
@@ -16,7 +17,7 @@ from core.mixins.centurion import Centurion
 
 
 class TenancyPermissions(
-    DjangoObjectPermissions,
+    CenturionObjectPermissions,
 ):
     """Tenant Permission Mixin
 
@@ -44,6 +45,8 @@ class TenancyPermissions(
     """
 
     _is_tenancy_model: bool = None
+
+    _tenant: Tenant = None
 
 
 
@@ -95,74 +98,82 @@ class TenancyPermissions(
             Tenant: Tenancy the object belongs or will belong to.
         """
 
-        tenant = None
+        if not self._tenant:
 
-        if obj:
+            tenant = None
 
-            tenant = obj.get_tenant()
+            if obj:
 
-        elif view.request:
+                self._tenant = obj.get_tenant()
 
-            pk = view.kwargs.get('pk', None)
+            elif view.request:
 
-            if not pk:
+                pk = view.kwargs.get('pk', None)
 
-                data = getattr(view.request, 'data', None)
+                if view.action == 'create' and view.get_parent_model():
 
-                tenant_kwarg = view.kwargs.get('organization_id', None)
-                tenant_id = tenant_kwarg
-                tenant_data = None
+                    self._tenant = view.get_parent_model().objects.get(
+                        pk = int(view.kwargs[view.parent_model_pk_kwarg])
+                    ).get_tenant()
 
-                if data:
+                elif not pk:
 
-                    tenant_data = data.get('organization_id', None)
+                    data = getattr(view.request, 'data', None)
+
+                    tenant_kwarg = view.kwargs.get('organization_id', None)
+                    tenant_id = tenant_kwarg
+                    tenant_data = None
+
+                    if data:
+
+                        tenant_data = data.get('organization_id', None)
 
 
-                    if not tenant_data:
+                        if not tenant_data:
 
-                        tenant_data = data.get('organization', None)
+                            tenant_data = data.get('organization', None)
 
 
-                    tenant_id = tenant_data
+                        tenant_id = tenant_data
 
-                if tenant_kwarg and tenant_data:
+                    if tenant_kwarg and tenant_data:
 
-                    if int(tenant_kwarg) != int(tenant_data):
+                        if int(tenant_kwarg) != int(tenant_data):
 
-                        view.get_log().getChild('authorization').warn(
-                            msg = str(
-                                'Tenant within supplied path and tenant within user supplied'
-                                'data do not match'
+                            view.get_log().getChild('authorization').warn(
+                                msg = str(
+                                    'Tenant within supplied path and tenant within user supplied'
+                                    'data do not match'
+                                )
                             )
+
+                            # if tenancy in path and user supplied data they should match.
+                            # if not, could indicate something untoward.
+                            raise ParseError(
+                                detail = (
+                                    'tenancy mismatch. both path and supplied tenancy must match'
+                                ),
+                                code = 'tenancy_mismatch'
+                            )
+
+
+                    if tenant_id:
+
+                        self._tenant = Tenant.objects.get(
+                            pk = int( tenant_id )
                         )
 
-                        # if tenancy in path and user supplied data they should match.
-                        # if not, could indicate something untoward.
-                        raise ParseError(
-                            detail = (
-                                'tenancy mismatch. both path and supplied tenancy must match'
-                            ),
-                            code = 'tenancy_mismatch'
-                        )
+
+                elif pk:
+
+                    obj = view.model.objects.get( pk = int( pk ) )
+
+                    if self.is_tenancy_model( view = view ):
+
+                        self._tenant = obj.get_tenant()
 
 
-                if tenant_id:
-
-                    tenant = Tenant.objects.get(
-                        pk = int( tenant_id )
-                    )
-
-
-            elif pk:
-
-                obj = view.model.objects.get( pk = int( pk ) )
-
-                if self.is_tenancy_model( view = view ):
-
-                    tenant = obj.get_tenant()
-
-
-        return tenant
+        return self._tenant
 
 
 
@@ -205,24 +216,30 @@ class TenancyPermissions(
             False (bool): User does not have the required permission
         """
 
-        if request.user.is_anonymous:
-
-            raise NotAuthenticated(
-                code = 'anonymouse_user'
-            )
-
-
-        if request.method not in view.allowed_methods:
-
-            raise MethodNotAllowed(method = request.method)
-
-
         try:
 
 
-            if not request.user.has_perm(
-                permission = view.get_permission_required(),
-                tenancy_permission = False
+            self._perms_map = getattr(view, 'perms_map', {})
+
+            view.permissions_required = self.get_required_permissions(
+                method = request.method,
+                model_cls = view.model
+            )
+
+            if request.user.is_anonymous:
+
+                raise NotAuthenticated(
+                    code = 'anonymouse_user'
+                )
+
+
+            if request.method not in view.allowed_methods:
+
+                raise MethodNotAllowed(method = request.method)
+
+
+            if not request.user.has_perms(
+                permission_list = view.permissions_required,
             ):
 
                 raise PermissionDenied(
@@ -246,9 +263,8 @@ class TenancyPermissions(
                 )
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy_permission = False
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                 )
                 and view.action in [ 'metadata', 'list' ]
             ):
@@ -256,9 +272,8 @@ class TenancyPermissions(
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
-                    tenancy_permission = False
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                 )
                 and not self.is_tenancy_model(view)
             ):
@@ -266,22 +281,23 @@ class TenancyPermissions(
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                     tenancy = obj_organization
                 )
                 and self.is_tenancy_model(view)
+                and obj_organization is not None
             ):
 
                 return True
 
             elif(
-                request.user.has_perm(
-                    permission = view.get_permission_required(),
+                request.user.has_perms(
+                    permission_list = view.permissions_required,
                     tenancy = obj_organization
                 )
                 and self.is_tenancy_model(view)
-                or request.user.is_superuser
+                and obj_organization is not None
             ):
 
                 return True
@@ -313,12 +329,17 @@ class TenancyPermissions(
 
             pass
 
+        except PermissionDenied:
+            pass
+
 
         return False
 
 
 
     def has_object_permission(self, request, view, obj):
+
+        self._perms_map = getattr(view, 'perms_map', {})
 
         try:
 
@@ -330,22 +351,14 @@ class TenancyPermissions(
             if self.is_tenancy_model( view ):
 
                 if(
-                    (
-                        request.user.has_perm(
-                            permission = view.get_permission_required(),
-                            obj = obj
-                        )
-                        or request.user.is_superuser
+                    request.user.has_perms(
+                        permission_list = view.permissions_required,
+                        obj = obj
                     )
                     and self.get_tenancy( view = view, obj = obj )
                 ):
 
                     return True
-
-
-            elif not self.is_tenancy_model( view ) or request.user.is_superuser:
-
-                return True
 
 
         except Exception as e:

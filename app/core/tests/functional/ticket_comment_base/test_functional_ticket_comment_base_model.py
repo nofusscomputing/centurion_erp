@@ -11,15 +11,13 @@ from core.tests.functional.slash_commands.test_slash_command_related import Slas
 
 
 @pytest.mark.model_ticketcommentbase
-class TicketCommentBaseModelTestCases(
-    SlashCommandsTicketCommentInheritedTestCases
-):
+class TicketCommentBaseModelTestCases:
 
 
 
     @pytest.fixture
     def ticket(self, request, django_db_blocker,
-        model_employee, kwargs_employee,
+        kwargs_ticketbase, model_employee, kwargs_employee,
     ):
         """ Ticket that requires body
 
@@ -31,22 +29,14 @@ class TicketCommentBaseModelTestCases(
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_employee()
-            kwargs['user'] = request.cls.ticket_user
-
-            employee = model_employee.objects.create( **kwargs )
-
-            ticket = TicketBase()
-
-            ticket.organization = request.cls.organization
-            ticket.title = 'A ticket for slash commands'
-            ticket.opened_by = employee
+            kwargs = kwargs_ticketbase()
 
             ticket = TicketBase.objects.create(
-                organization = request.cls.organization,
-                title = 'A ticket for slash commands',
-                opened_by = employee,
+
+                **kwargs
             )
+
+            request.cls.entity_user = ticket.opened_by
 
         yield ticket
 
@@ -82,12 +72,12 @@ class TicketCommentBaseModelTestCases(
             ticket_comment.ticket.status = TicketBase.TicketStatus.NEW
             ticket_comment.ticket.is_closed = False
             ticket_comment.ticket.is_solved = False
-            ticket_comment.ticket.save()
-
 
             ticket_comment.comment_type = model._meta.sub_model_type
 
             ticket_comment.body = 'body text'
+
+            ticket_comment.ticket.save()
 
         yield ticket_comment
 
@@ -307,10 +297,24 @@ class TicketCommentBaseModelInheritedTestCases(
     pass
 
 
+class TicketCommentBaseSlashCommandModelTestCases(
+    SlashCommandsTicketCommentInheritedTestCases,
+    TicketCommentBaseModelTestCases
+):
+    pass
+
+
+class TicketCommentBaseSlashCommandModelInheritedTestCases(
+    TicketCommentBaseSlashCommandModelTestCases
+):
+
+    pass
+
+
 
 @pytest.mark.module_core
 class TicketCommentBaseModelPyTest(
-    TicketCommentBaseModelTestCases
+    TicketCommentBaseSlashCommandModelTestCases
 ):
 
     pass

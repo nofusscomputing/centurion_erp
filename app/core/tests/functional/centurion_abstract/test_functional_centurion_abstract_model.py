@@ -9,6 +9,9 @@ from access.tests.functional.tenancy_abstract.test_functional_tenancy_abstract_m
 from core.tests.functional.mixin_centurion.test_functional_centurion_mixin import (
     CenturionAbstractMixinInheritedCases,
 )
+from core.tests.functional.slash_commands.test_linked_model import (
+    LinkedModelTicketCommentInheritedTestCases
+)
 
 
 
@@ -77,6 +80,7 @@ class CenturionAbstractModelTestCases(
 
 class CenturionAbstractTenancyModelInheritedCases(
     CenturionAbstractModelTestCases,
+    LinkedModelTicketCommentInheritedTestCases,
 ):
     pass
 

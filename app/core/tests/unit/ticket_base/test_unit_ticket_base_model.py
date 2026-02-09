@@ -41,8 +41,8 @@ class TicketBaseModelTestCases(
                 'value': False,
             },
             'model_tag': {
-                'type': str,
-                'value': 'ticket'
+                'type': type(None),
+                'value': None
             },
             'url_model_name': {
                 'type': str,
@@ -334,7 +334,7 @@ class TicketBaseModelTestCases(
     def test_class_inherits_ticketbase(self, model):
         """ Class inheritence
 
-        TenancyObject must inherit SaveHistory
+        Model Must Inherit from ticketbase
         """
 
         assert issubclass(model, TicketBase)
@@ -970,6 +970,15 @@ class TicketBaseModelTestCases(
             'pk': model_instance.id,
         }
 
+
+
+    def test_model_tag_defined(self, model):
+        """ Model Tag
+
+        Ensure that the model has a tag defined.
+        """
+
+        assert model.model_tag is None
 
 
 

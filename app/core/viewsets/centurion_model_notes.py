@@ -1,6 +1,7 @@
 import importlib
 
 from django.apps import apps
+from django.core.exceptions import FieldDoesNotExist
 
 from drf_spectacular.utils import (
     extend_schema,
@@ -265,6 +266,23 @@ class ViewSet(
     model_kwarg = 'model_name'
 
     model_suffix = 'centurionmodelnote'
+
+
+    @property
+    def parent_model(self):
+
+        try:
+
+            model = self.model._meta.get_field('model').related_model
+
+            return model
+
+        except FieldDoesNotExist:
+            
+            return None
+
+
+    parent_model_pk_kwarg = 'model_id'
 
     search_fields = [
         'body',

@@ -15,7 +15,11 @@ from access.models.tenant import Tenant
 from settings.models.app_settings import AppSettings
 
 
-
+#
+# Depreciated
+# refactored to file app/api/tests/functional/test_functional_api_metadata.py
+# When all models refactored to use new test suite, this file can be removed
+#
 class MetadataAttributesFunctionalBase:
     """ Functional Tests for API, HTTP/Options Method
     

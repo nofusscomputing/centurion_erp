@@ -71,8 +71,9 @@ def kwargs_ticketbase(django_db_blocker, kwargs_centurionmodel,
             # 'parent_ticket': None,
             'external_system': model_ticketbase.Ticket_ExternalSystem.GITHUB,
             'external_ref': int(random_str),
-            'impact': int(model_ticketbase.TicketImpact.MEDIUM),
-            'priority': int(model_ticketbase.TicketPriority.HIGH),
+            'impact': model_ticketbase.TicketImpact.MEDIUM,
+            'priority': model_ticketbase.TicketPriority.MEDIUM,
+            'urgency': model_ticketbase.TicketUrgency.LOW,
             'status': model_ticketbase.TicketStatus.NEW,
 
 
