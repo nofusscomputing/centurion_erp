@@ -1,16 +1,21 @@
 import re
 
-from .duration import Duration
-from .related_ticket import CommandRelatedTicket
+from .duration import Duration    # depreciated model
+from .related_ticket import CommandRelatedTicket    # depreciated model
 from .linked_model import CommandLinkedModel    # depreciated model
-# from .link_model import CommandLinkModelTicket
+from .link_model import CommandLinkModelTicket
+from .ticket_dependency import CommandTicketDependency
+from .time_track import CommandTimeTrack
+
 
 
 class SlashCommands(
-    Duration,
-    CommandRelatedTicket,
+    Duration,    # depreciated model
+    CommandRelatedTicket,    # depreciated model
     CommandLinkedModel,    # depreciated model
-    # CommandLinkModelTicket,
+    CommandLinkModelTicket,
+    CommandTicketDependency,
+    CommandTimeTrack,
 ):
     """Slash Commands Base Class
     
@@ -57,6 +62,12 @@ class SlashCommands(
 
         processed_lines = ''
 
+        base_model = getattr(self, '_base_model', None)
+
+        if base_model:
+            base_model = base_model._meta.model_name
+
+
         for line in lines:
 
             line = str(line).strip()
@@ -74,13 +85,25 @@ class SlashCommands(
                     or command == 'spent'
                 ):
 
-                    returned_line = re.sub(self.time_spent, self.command_duration, line)
+                    if base_model in ['ticketbase', 'ticketcommentbase']:
+
+                        returned_line = re.sub(self.time_track, self.command_time_track, line)
+
+                    else:    # Depreciated Ticket Model and Command
+
+                        returned_line = re.sub(self.time_spent, self.command_duration, line)
+
 
                 elif command == 'link':
 
-                    # returned_line = re.sub(self.link_model, self.command_link_model, line)
+                    if base_model in ['ticketbase', 'ticketcommentbase']:
 
-                    returned_line = re.sub(self.linked_item, self.command_linked_model, line)
+                        returned_line = re.sub(self.link_model, self.command_link_model, line)
+
+                    else:    # Depreciated Ticket Model and Command
+
+                        returned_line = re.sub(self.linked_item, self.command_linked_model, line)
+
 
                 elif(
                     command == 'relate'
@@ -88,14 +111,23 @@ class SlashCommands(
                     or command == 'blocked_by'
                 ):
 
-                    returned_line = re.sub(self.related_ticket, self.command_related_ticket, line)
+                    if base_model in ['ticketbase', 'ticketcommentbase']:
+
+                        returned_line = re.sub(self.ticket_dependency, self.command_ticket_dependency, line)
+
+                    else:    # Depreciated Ticket Model and Command
+
+                        returned_line = re.sub(self.related_ticket, self.command_related_ticket, line)
+
 
                 if returned_line != '':
 
                     processed_lines += line + nl
 
+
             else:
 
                 processed_lines += line + nl
+
 
         return str(processed_lines).strip()

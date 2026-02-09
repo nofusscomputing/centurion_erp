@@ -9,7 +9,7 @@ amqp==5.3.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   kombu
-asgiref==3.11.0
+asgiref==3.11.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -78,7 +78,7 @@ coreschema==0.0.4
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   coreapi
-cryptography==46.0.3
+cryptography==46.0.4
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -140,7 +140,7 @@ drf-spectacular-sidecar==2026.1.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   drf-spectacular
-greenlet==3.3.0
+greenlet==3.3.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -241,7 +241,7 @@ pygments==2.18.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-pyjwt[crypto]==2.10.1
+pyjwt[crypto]==2.11.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -312,7 +312,7 @@ sqlparse==0.5.5
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   django
-supervisor==4.2.5
+supervisor==4.3.0
     # via -r tools/requirements_docker.in
 typing-extensions==4.15.0
     # via
@@ -349,11 +349,8 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.3.1
+wcwidth==0.6.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   prompt-toolkit
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools

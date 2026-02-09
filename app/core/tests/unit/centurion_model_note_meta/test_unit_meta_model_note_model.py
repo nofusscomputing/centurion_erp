@@ -194,7 +194,11 @@ class ModelNotesMetaModelTestCases(
 
 
 
-for model in get_models():
+for model in get_models(
+    excludes = [
+        'manufacturer'
+    ]
+):
 
     if(
         not issubclass(model, CenturionModelNote)

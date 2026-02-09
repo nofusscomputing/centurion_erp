@@ -8,50 +8,57 @@ from api.permissions.default import (
     DefaultDenyPermission,
 )
 
+from api.tests.unit.permissions.test_unit_common_object_permission import (
+    CenturionObjectPermissionInheritedCases,
+    MockUser,
+    MockLogger,
+    MockObj,
+    MyMockView
+)
+
 
 
 @pytest.mark.permissions
-class DefaultDenyPermissionTestCases:
-
-
-    def test_function_has_permission(self, mocker,
-        viewset,
-    ):
-
-        viewset.get_log = None
-        mocker.patch.object(viewset, 'get_log')
-
-        assert viewset.permission_classes[0]().has_permission(None, viewset) == False
-
-
-    def test_function_has_object_permission(self, mocker,
-        viewset,
-    ):
-
-        viewset.get_log = None
-        mocker.patch.object(viewset, 'get_log')
-
-        assert viewset.permission_classes[0]().has_object_permission(None, viewset, None) == False
-
-
-
-class DefaultDenyPermissionPyTest(
-    DefaultDenyPermissionTestCases
+class DefaultDenyPermissionTestCases(
+    CenturionObjectPermissionInheritedCases
 ):
 
-    @pytest.fixture( scope = 'class' )
-    def permission(self):
+    @pytest.fixture( scope = 'class')
+    def test_class(self):
 
         yield DefaultDenyPermission
 
 
+    def test_class_inherits_model_permissions(self, test_class):
+        """Test Class inheritence
+        
+        Permission class must inherit from `DefaultDenyPermission`.
+        """
+
+        assert issubclass(test_class, DefaultDenyPermission)
+
+
+
+@pytest.mark.module_api
+class DefaultDenyPermissionPyTest(
+    DefaultDenyPermissionTestCases
+):
+
+
     @pytest.fixture
-    def viewset(self, permission):
-        view_set = MyMockView
+    def viewset(self, test_class):
 
         class MockView(
             MyMockView,
         ):
-            permission_classes = [ permission ]
+            allowed_methods = [ 'GET' ]
+            permission_classes = [ test_class, ]
 
-        yield MockView
+        yield MockView(
+            method = 'GET',
+            kwargs = {},
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = True
+            )
+        )

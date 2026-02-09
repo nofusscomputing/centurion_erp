@@ -8,15 +8,17 @@ from centurion.models.meta import (    # pylint: disable=E0401:import-error disa
 
 from core.serializers.modelticket import (    # pylint: disable=W0611:unused-import
     BaseSerializer,
-    ModelSerializer,
+    ModelSerializer as ModelTicketModelSerializer,
     ViewSerializer as ModelTicketViewSerializer,
 )
+
+from itam.serializers.device import DeviceBaseSerializer
 
 
 
 @extend_schema_serializer(component_name = 'DeviceTicketModelSerializer')
 class ModelSerializer(
-    ModelSerializer
+    ModelTicketModelSerializer,
 ):
 
 
@@ -59,9 +61,9 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'DeviceTicketViewSerializer')
 class ViewSerializer(
+    ModelTicketViewSerializer,
     ModelSerializer,
-    ModelTicketViewSerializer
 ):
     """DeviceTicket Base View Model"""
 
-    organization = TenantBaseSerializer( many = False, read_only = True )
+    model = DeviceBaseSerializer( many = False, read_only = True)

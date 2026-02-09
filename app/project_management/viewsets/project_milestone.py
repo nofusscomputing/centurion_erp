@@ -2,8 +2,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-# This import only exists so that the migrations can be created
-from project_management.models.project_milestone_history import ProjectMilestoneHistory    # pylint: disable=W0611:unused-import
 from project_management.serializers.project_milestone import (    # pylint: disable=W0611:unused-import
     ProjectMilestone,
     ProjectMilestoneModelSerializer,
@@ -126,15 +124,15 @@ class ViewSet( ModelViewSet ):
 
     def get_queryset(self):
 
-        if self.queryset is not None:
+        if self._queryset is not None:
 
-            return self.queryset
+            return self._queryset
 
-        self.queryset = super().get_queryset()
+        self._queryset = super().get_queryset()
 
-        self.queryset = self.queryset.filter( project_id = self.kwargs['project_id'])
+        self._queryset = self._queryset.filter( project_id = self.kwargs['project_id'])
 
-        return self.queryset
+        return self._queryset
 
 
     def get_serializer_class(self):

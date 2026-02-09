@@ -12,8 +12,11 @@ from drf_spectacular.utils import (
 
 from rest_framework.reverse import reverse
 
+from access.permissions.super_user import SuperUserPermissions
+
 from api.viewsets.common.tenancy import SubModelViewSet
 
+from core.permissions.ticket import TicketPermission
 from core.models.ticket_base import TicketBase
 
 
@@ -214,22 +217,13 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 class ViewSet( SubModelViewSet ):
 
     _has_import: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has import permission.
-    """
+    """User Permission"""
 
     _has_purge: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has purge permission.
-    """
+    """User Permission"""
 
     _has_triage: bool = False
-    """User Permission
-
-    get_permission_required() sets this to `True` when user has triage permission.
-    """
+    """User Permission"""
 
     base_model = TicketBase
 
@@ -239,6 +233,10 @@ class ViewSet( SubModelViewSet ):
     ]
 
     model_kwarg = 'ticket_type'
+
+    permission_classes = [
+        TicketPermission | SuperUserPermissions,
+    ]
 
     search_fields = [
         'title',
@@ -266,33 +264,6 @@ class ViewSet( SubModelViewSet ):
             )
 
         return self.back_url
-
-
-
-    def get_permission_required(self):
-
-
-        if not self._permission_required:
-
-            # tenancy = get from http/post data
-            # self._has_import = self.request.user.has_perm(
-            #     permission = self.model._meta.app_label + '.import_' + self.model._meta.model_name,
-            #     tenancy = tenancy
-            # )
-
-            # self._has_purge = self.request.user.has_perm(
-            #     permission = self.model._meta.app_label + '.purge_' + self.model._meta.model_name,
-            #     obj = self.get_queryset()[0]
-            # )
-
-            # self._has_triage = self.request.user.has_perm(
-            #     permission = self.model._meta.app_label + '.triage_' + self.model._meta.model_name,
-            #     obj = self.get_queryset()[0]
-            # )
-
-            self._permission_required = super().get_permission_required()
-
-        return self._permission_required
 
 
 

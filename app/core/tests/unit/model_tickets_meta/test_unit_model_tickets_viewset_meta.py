@@ -82,7 +82,7 @@ class ModelTicketViewsetMetaInheritedCases(
 
 
     @pytest.fixture( scope = 'function' )
-    def viewset_mock_request(self, django_db_blocker, viewset,
+    def viewset_mock_request(self, django_db_blocker, viewset, mocker,
         model_user, kwargs_user, organization_one, model,
         model_instance, model_kwargs, 
     ):
@@ -104,6 +104,7 @@ class ModelTicketViewsetMetaInheritedCases(
 
         view_set = viewset()
 
+
         request = MockRequest(
             user = user,
             model = model,
@@ -121,6 +122,7 @@ class ModelTicketViewsetMetaInheritedCases(
         with django_db_blocker.unblock():
 
             user.delete()
+
 
 
     def test_function_get_queryset_manager_calls_user(self, mocker,
@@ -143,8 +145,6 @@ class ModelTicketViewsetMetaInheritedCases(
 
         tester = obj.get_url_kwargs( many = True)
 
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
-
         view_set.get_queryset()
 
         manager.user.assert_called()
@@ -163,8 +163,6 @@ class ModelTicketViewsetMetaInheritedCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 
@@ -195,8 +193,6 @@ class ModelTicketViewsetMetaInheritedCases(
         manager = mocker.patch.object(model, 'objects' )
 
         view_set = viewset()
-
-        mocker.patch.object(view_set, 'get_permission_required', return_value = None)
 
         view_set.request = mocker.Mock()
 

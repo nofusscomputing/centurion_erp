@@ -231,7 +231,7 @@ class ViewSet(ModelViewSet):
 
 
         ticket = Ticket.objects.user(
-            user = self.request.user, permission = self._permission_required
+            user = self.request.user, permission = self.permissions_required
         ).get(pk = int(self.kwargs['ticket_id']))
 
         ticket_type = str(ticket.get_ticket_type_display()).lower().replace(' ' , '_')

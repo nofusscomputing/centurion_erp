@@ -90,6 +90,13 @@ class ModelSerializer(
                     'model_id': item.pk,
                 }
             ),
+            'ticket_dependencies': reverse(
+                viewname = "v2:_api_ticketdependency-list",
+                request = self._context['view'].request,
+                kwargs = {
+                    'ticket_id': item.pk
+                }
+            )
         }
 
         if item.project:
@@ -220,7 +227,7 @@ class ModelSerializer(
             read_only_fields = [
                 'id',
                 'display_name',
-                'created',
+                'ticket_type',
                 'modified',
                 '_urls',
             ]
@@ -230,7 +237,35 @@ class ModelSerializer(
                 read_only_fields += [
                     'external_system',
                     'external_ref',
-                    'ticket_type',
+                ]
+
+            if(
+                not self.context['view']._has_triage
+                and not self.context['view']._has_import
+            ):
+
+                read_only_fields += [
+                    'parent_ticket',
+                    'category',
+                    'project',
+                    'milestone',
+                    'impact',
+                    'priority',
+                    'opened_by',
+                    'assigned_to',
+                    'planned_start_date',
+                    'planned_finish_date',
+                    'real_start_date',
+                    'real_finish_date',
+                ]
+
+            if(
+                self.context['view']._has_triage
+                and not self.context['view']._has_import
+            ):
+
+                read_only_fields += [
+                    'created',
                 ]
 
             self.Meta.read_only_fields = read_only_fields

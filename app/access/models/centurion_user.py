@@ -300,12 +300,9 @@ class CenturionUser(
 
 
     def has_perm(
-        self, permission: Permission, obj = None, tenancy: Tenant = None,
+        self, permission: str, obj = None, tenancy: Tenant = None,
         tenancy_permission: bool = True
     ) -> bool:
-
-        if self.is_superuser:
-            return True
 
 
         if tenancy is None and obj is None and tenancy_permission:
@@ -332,12 +329,32 @@ class CenturionUser(
 
 
     def has_perms(
-        self, permission_list: list[ Permission ], obj = None, tenancy: Tenant = None
+        self, permission_list: list[ str ], obj = None, tenancy: Tenant = None
     ) -> bool:
+
+        has_perms = True
+
+        if not isinstance(permission_list, list):
+            raise TypeError(f'permissions list must be of type list, not type {type(permission_list)}')
 
         for perm in permission_list:
 
-            if not self.has_perm( perm, obj ):
-                return False
+            if obj:
 
-        return True
+                if not self.has_perm( permission = perm, obj = obj ):
+                    has_perms = False
+
+            elif tenancy:
+
+                if not self.has_perm( permission = perm, tenancy = tenancy ):
+                    has_perms = False
+
+            elif not obj and not tenancy:
+
+                if not self.has_perm( permission = perm, tenancy_permission = False ):
+                    has_perms = False
+
+            else:
+                has_perms = False
+
+        return has_perms

@@ -8,7 +8,7 @@ amqp==5.3.1
     # via
     #   -r requirements.txt
     #   kombu
-asgiref==3.11.0
+asgiref==3.11.1
     # via
     #   -r requirements.txt
     #   django
@@ -63,7 +63,7 @@ coreschema==0.0.4
     # via
     #   -r requirements.txt
     #   coreapi
-cryptography==46.0.3
+cryptography==46.0.4
     # via
     #   -r requirements.txt
     #   pyjwt
@@ -106,7 +106,7 @@ drf-spectacular-sidecar==2026.1.1
     # via
     #   -r requirements.txt
     #   drf-spectacular
-greenlet==3.3.0
+greenlet==3.3.1
     # via
     #   -r requirements.txt
     #   sqlalchemy
@@ -186,7 +186,7 @@ pycparser==3.0
     #   cffi
 pygments==2.18.0
     # via -r requirements.txt
-pyjwt[crypto]==2.10.1
+pyjwt[crypto]==2.11.0
     # via
     #   -r requirements.txt
     #   social-auth-core
@@ -269,7 +269,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.3.1
+wcwidth==0.6.0
     # via
     #   -r requirements.txt
     #   prompt-toolkit

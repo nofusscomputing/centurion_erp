@@ -6,7 +6,7 @@
 #
 amqp==5.3.1
     # via kombu
-asgiref==3.11.0
+asgiref==3.11.1
     # via
     #   django
     #   django-cors-headers
@@ -42,7 +42,7 @@ coreapi==2.3.3
     # via -r tools/requirements.in
 coreschema==0.0.4
     # via coreapi
-cryptography==46.0.3
+cryptography==46.0.4
     # via pyjwt
 defusedxml==0.7.1
     # via
@@ -80,7 +80,7 @@ drf-spectacular[sidecar]==0.28.0
     # via -r tools/requirements.in
 drf-spectacular-sidecar==2026.1.1
     # via drf-spectacular
-greenlet==3.3.0
+greenlet==3.3.1
     # via sqlalchemy
 idna==3.11
     # via requests
@@ -124,7 +124,7 @@ pycparser==3.0
     # via cffi
 pygments==2.18.0
     # via -r tools/requirements.in
-pyjwt[crypto]==2.10.1
+pyjwt[crypto]==2.11.0
     # via social-auth-core
 python-dateutil==2.9.0.post0
     # via celery
@@ -184,5 +184,5 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.3.1
+wcwidth==0.6.0
     # via prompt-toolkit

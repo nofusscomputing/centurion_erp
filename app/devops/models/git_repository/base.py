@@ -18,6 +18,11 @@ class GitRepository(
     model.
     """
 
+    @property
+    def _base_model(self):
+
+        return GitRepository
+
     app_namespace = 'devops'
 
     documentation = ''

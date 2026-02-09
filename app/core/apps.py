@@ -8,4 +8,8 @@ class CoreConfig(AppConfig):
     def ready(self):
 
         import core.models.meta
-        from core.signal import audit_history
+        from core.signal import (
+            audit_history,
+            ticket_action_comment,
+            migration_remove_permissions,
+        )

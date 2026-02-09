@@ -29,6 +29,7 @@ from project_management.models.project_states import ProjectState
 @extend_schema_view(
     create=extend_schema(
         summary = 'Create a Ticket Linked Item',
+        deprecated = True,
         description='',
         parameters = [
             OpenApiParameter(
@@ -44,6 +45,7 @@ from project_management.models.project_states import ProjectState
     ),
     destroy = extend_schema(
         summary = 'Delete a Ticket Linked Item',
+        deprecated = True,
         description = '',
         parameters = [
             OpenApiParameter(
@@ -64,6 +66,7 @@ from project_management.models.project_states import ProjectState
     ),
     list = extend_schema(
         summary = 'Fetch all Ticket Linked Items',
+        deprecated = True,
         description='',
         parameters = [
             OpenApiParameter(
@@ -79,6 +82,7 @@ from project_management.models.project_states import ProjectState
     ),
     retrieve = extend_schema(
         summary = 'Fetch a single Ticket Linked Item',
+        deprecated = True,
         description='',
         parameters = [
             OpenApiParameter(
@@ -100,6 +104,7 @@ from project_management.models.project_states import ProjectState
     update = extend_schema(exclude = True),
     partial_update = extend_schema(
         summary = 'Update a Ticket Linked Item',
+        deprecated = True,
         description = '',
         parameters = [
             OpenApiParameter(
@@ -261,14 +266,14 @@ class ViewSet(ModelViewSet):
         if 'ticket_id' in self.kwargs:
 
             self.queryset = TicketLinkedItem.objects.user(
-                user = self.request.user, permission = self._permission_required
+                user = self.request.user, permission = self.permissions_required
             ).filter(ticket=self.kwargs['ticket_id']).order_by('id')
 
         elif 'item_id' in self.kwargs:
 
 
             self.queryset = TicketLinkedItem.objects.user(
-                user = self.request.user, permission = self._permission_required
+                user = self.request.user, permission = self.permissions_required
             ).filter(
                 item=int(self.kwargs['item_id']),
                 item_type = self.item_type

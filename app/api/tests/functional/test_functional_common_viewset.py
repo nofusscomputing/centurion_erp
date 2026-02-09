@@ -2,6 +2,8 @@ import django
 import pytest
 import random
 
+from rest_framework.permissions import OperandHolder
+
 from django.contrib.auth.models import ContentType, Group, Permission
 
 from access.models.tenant import Tenant
@@ -213,6 +215,18 @@ class CommonViewSetTestCases:
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
         view_set = viewset()
+        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
+
+        for permission_class in viewset.permission_classes:
+
+            if isinstance(permission_class, OperandHolder):
+                permission_class = permission_class.op1_class
+
+            view_set.permissions_required = permission_class().get_required_permissions(
+                method = 'GET',
+                model_cls = model
+            )
+
         model = getattr(view_set, 'model', None)
 
         if not model:
@@ -226,7 +240,6 @@ class CommonViewSetTestCases:
         )
 
         view_set.request = request
-        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
 
 
         yield view_set
@@ -257,6 +270,17 @@ class CommonViewSetTestCases:
             pytest.xfail( reason = 'no model exists, assuming viewset is a base/mixin viewset.' )
 
         only_user_results_returned = True
+
+        for permission_class in viewset.permission_classes:
+
+            if isinstance(permission_class, OperandHolder):
+                permission_class = permission_class.op1_class
+
+
+            viewset.permissions_required = permission_class().get_required_permissions(
+                method = 'GET',
+                model_cls = model
+            )
 
         queryset = viewset.get_queryset()
 

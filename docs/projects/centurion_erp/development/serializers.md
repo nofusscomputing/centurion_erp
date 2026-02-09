@@ -62,6 +62,8 @@ When creating a serializer, the following requirements must be met:
 
 - `View` serializer must return a dict field called `_urls` which contains links to the models [core features](./models.md#core-features), including `_self`
 
+- **All** Serializer exceptions must be from `rest_framework.exceptions`
+
 
 ## Available Serializers
 
