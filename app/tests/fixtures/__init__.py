@@ -211,6 +211,7 @@ from .model_instance import (
 from .model_incidentticket import (
     kwargs_incidentticket,
     model_incidentticket,
+    serializer_incidentticket,
 )
 
 from .model_itamassetbase import (
