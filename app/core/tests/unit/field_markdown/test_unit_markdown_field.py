@@ -9,6 +9,18 @@ from core.fields.markdown import MarkdownField
 
 
 
+# ToDo: Add Testsuite for model rendering tests to be included within every models functional tests
+# ToDo: Add Test Suite for ticket rendering to be included within every ticket models function tests.
+#
+# Must:
+#   - confirm permission
+#   - correct rendering dict
+#   - correct model
+#   - no model, empty render dict
+#   - missing permission, empty render dict
+
+
+
 @pytest.mark.api
 @pytest.mark.fields
 @pytest.mark.markdown
