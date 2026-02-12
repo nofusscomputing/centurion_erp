@@ -141,7 +141,7 @@ class MarkdownField(CharField):
 
             try:
 
-                item = TicketBase.objects.get( pk = number )
+                item = TicketBase.objects.get( pk = number ).get_related_model()
 
 
                 if self.context['request'].user.has_perm(
