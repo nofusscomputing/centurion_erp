@@ -412,6 +412,7 @@ def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
             msg = str(
                 'unable to save action comment for a ticket '
                 'vars: '
+                f"sender={sender._meta.app_label}.{sender._meta.model_name} "
                 f"action_comment_source={action_comment_source} "
                 f"model={instance._meta.model_name} "
                 f"app_label={instance._meta.app_label} "
