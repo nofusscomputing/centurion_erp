@@ -51,15 +51,8 @@ class MarkdownField(CharField):
 
             if getattr(model, 'model_tag', '') == model_tag:
 
-                if self.context['request'].user.has_perm(
-                    permission = f'{model._meta.app_label}.view_{model._meta.model_name}',
-                    tenancy_permission = False
-                ):
+                return model
 
-                    return model
-
-                else:
-                    break
 
         return None
 

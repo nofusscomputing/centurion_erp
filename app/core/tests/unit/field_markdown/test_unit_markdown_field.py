@@ -379,7 +379,7 @@ class MarkdownFieldModelTestCases:
     @pytest.mark.markdown
     @pytest.mark.models
     @pytest.mark.serializer
-    def test_field_markdown_function_get_model_has_permission(self, model,
+    def test_field_markdown_function_get_model(self, model,
         mock_field_permission
     ):
         """Test Function
@@ -398,26 +398,6 @@ class MarkdownFieldModelTestCases:
 
 
         assert mock_field_permission.get_model(model_tag = model.model_tag) == expected_model
-
-
-
-    @pytest.mark.api
-    @pytest.mark.fields
-    @pytest.mark.markdown
-    @pytest.mark.models
-    @pytest.mark.serializer
-    def test_field_markdown_function_get_model_missing_permission(self, model,
-        mock_field_missing_permission
-    ):
-        """Test Function
-
-        Ensure that function get_model returns `None` if the user lacks permission.
-        """
-
-        if getattr(model, 'model_tag', None) is None:
-            pytest.xfail( reason = 'Model does not have a model_tag. test is N/A.' )
-
-        assert mock_field_missing_permission.get_model(model_tag = model.model_tag) == None
 
 
 
