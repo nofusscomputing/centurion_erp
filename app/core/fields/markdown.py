@@ -1,6 +1,3 @@
-from typing import Any
-
-
 import re
 
 from django.apps import apps
@@ -95,14 +92,27 @@ class MarkdownField(CharField):
                 if model is None:
                     continue
 
+
                 obj = model.objects.get(
                     id = int(model_id)
                 )
 
+                required_permission_base_model = f'{obj._meta.app_label}.view_{obj._meta.model_name}'
 
-                if self.context['request'].user.has_perm(
-                    permission = f'{obj._meta.app_label}.view_{obj._meta.model_name}',
-                    tenancy = obj.get_organization()
+                related_model = obj.get_related_model()
+
+                required_permission_related_model = f'{related_model._meta.app_label}.view_{related_model._meta.model_name}'
+
+
+                if(
+                    self.context['request'].user.has_perm(
+                        permission = required_permission_base_model,
+                        tenancy = obj.get_organization()
+                    )
+                    or  self.context['request'].user.has_perm(
+                        permission = required_permission_related_model,
+                        tenancy = obj.get_organization()
+                    )
                 ):
 
                     if model_type not in models:
