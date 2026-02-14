@@ -59,7 +59,7 @@ class MarkdownField(CharField):
                     return model
 
                 else:
-                    return None
+                    break
 
         return None
 

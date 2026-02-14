@@ -158,8 +158,8 @@ class MarkdownFieldTestCases(
 
         markdown = f'a random $model_tag-999999'
 
-        returned_data = mock_field_permission.get_markdown_render(
-            markdown = markdown
+        returned_data = mock_field_permission.to_representation(
+            value = markdown
         )
 
         get_markdown_render.assert_called_once_with(markdown = markdown)
@@ -171,7 +171,7 @@ class MarkdownFieldTestCases(
     ):
         """Test Function
 
-        Ensure that function get_model returns rendered data if the user has
+        Ensure that function get_markdown_render returns rendered data if the user has
         permission.
         """
 
@@ -214,26 +214,20 @@ class MarkdownFieldTestCases(
     ):
         """Test Function
 
-        Ensure that function get_model returns no rendered data if the user
-        does not have the required permission.
+        Ensure that function get_markdown_render returns no rendered data if the user
+        does not have the required permission when model is ticket.
         """
 
 
-        mocker.patch.object(mock_field_missing_permission, 'get_model', return_value = 'model')
-
-        # title = 'a-title'
-        # url = 'a-url'
-
-        # mock_model = model_ticketbase()
-
-        # mock_model.id = 1
-        # mock_model.status = mock_model.TicketStatus.NEW
-        # mock_model.ticket_type = 'request'
-        # mock_model.title = title
+        mocker.patch.object(
+            mock_field_missing_permission, 'get_model', return_value = model_ticketbase
+        )
 
 
-        # mocker.patch.object(mock_model, 'get_url', return_value = url)
-        mocker.patch.object(model_ticketbase.objects, 'get', side_effect = ObjectDoesNotExist())
+        mock_model = model_ticketbase()
+
+        mocker.patch.object(model_ticketbase.objects, 'get', return_value = mock_model)
+
 
         markdown = f'a random #1'
 
