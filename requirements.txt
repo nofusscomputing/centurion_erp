@@ -38,11 +38,7 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-coreapi==2.3.3
-    # via -r tools/requirements.in
-coreschema==0.0.4
-    # via coreapi
-cryptography==46.0.4
+cryptography==46.0.5
     # via pyjwt
 defusedxml==0.7.1
     # via
@@ -76,7 +72,7 @@ djangorestframework==3.16.0
     #   drf-spectacular
 djangorestframework-jsonapi==7.1.0
     # via -r tools/requirements.in
-drf-spectacular[sidecar]==0.28.0
+drf-spectacular[sidecar]==0.29.0
     # via -r tools/requirements.in
 drf-spectacular-sidecar==2026.1.1
     # via drf-spectacular
@@ -88,10 +84,6 @@ inflection==0.5.1
     # via
     #   djangorestframework-jsonapi
     #   drf-spectacular
-itypes==1.2.0
-    # via coreapi
-jinja2==3.1.6
-    # via coreschema
 jsonschema==4.26.0
     # via drf-spectacular
 jsonschema-specifications==2025.9.1
@@ -104,8 +96,6 @@ markdown-it-py[linkify,plugins]==3.0.0
     # via
     #   -r tools/requirements.in
     #   mdit-py-plugins
-markupsafe==3.0.3
-    # via jinja2
 mdit-py-plugins==0.5.0
     # via markdown-it-py
 mdurl==0.1.2
@@ -142,7 +132,6 @@ referencing==0.37.0
     #   jsonschema-specifications
 requests==2.32.5
     # via
-    #   coreapi
     #   requests-oauthlib
     #   social-auth-core
 requests-oauthlib==2.0.0
@@ -155,7 +144,7 @@ six==1.17.0
     # via python-dateutil
 social-auth-app-django==5.6.0
     # via -r tools/requirements.in
-social-auth-core==4.8.3
+social-auth-core==4.8.5
     # via social-auth-app-django
 sqlalchemy==2.0.31
     # via -r tools/requirements.in
@@ -172,11 +161,8 @@ tzdata==2025.1
     #   kombu
 uc-micro-py==1.0.3
     # via linkify-it-py
-uritemplate==4.1.1
-    # via
-    #   -r tools/requirements.in
-    #   coreapi
-    #   drf-spectacular
+uritemplate==4.2.0
+    # via drf-spectacular
 urllib3==2.6.3
     # via requests
 vine==5.1.0
