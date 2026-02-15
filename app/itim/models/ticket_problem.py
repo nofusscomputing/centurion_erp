@@ -1,11 +1,11 @@
 from django.db import models
 
-from itim.models.slm_ticket_base import SLMTicket
+from core.models.ticket_base import TicketBase
 
 
 
 class ProblemTicket(
-    SLMTicket
+    TicketBase
 ):
 
     _is_submodel = True

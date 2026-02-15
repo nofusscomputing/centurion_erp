@@ -6,5 +6,4 @@ template: project.html
 about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-!!! info
-    This feature is not yet production ready and is behind feature flag 2025-00010. see [#564](https://github.com/nofusscomputing/centurion_erp/issues/564)
+Incident tickets are part of Incident Management and are used by the infrastructure team for the recording, management and reporting of Incidents.

@@ -213,7 +213,10 @@ class ModelTicketMetaModelTestCases(
         with django_db_blocker.unblock():
 
             for obj in model_objs:
-                obj.delete()
+                try:
+                    obj.delete()
+                except Exception:
+                    pass
 
 
 

@@ -280,26 +280,26 @@ class ViewSet(
             try:
 
                 ticket = None
+                ticket_pk = None
 
                 if(
-                    'pk' in self.kwargs
-                    and self.request.method in [
-                        'DELETE',
-                        'PATCH',
-                        'PUT',
-                        'POST'
-                    ]
-                ):
-
-                    ticket = self.model.ticket.get_related_model()
-
-                elif(
                     self.model_kwarg in self.kwargs
                     and self.parent_model_pk_kwarg in self.kwargs
                 ):
 
+                    ticket_pk = int( self.kwargs[self.parent_model_pk_kwarg] )
+
+                elif 'pk' in self.kwargs:
+
+                    ticket_pk = self.model.objects.get(
+                        pk = int(self.kwargs['pk'])
+                    ).ticket.id
+
+
+                if ticket_pk:
+
                     ticket = self.parent_model.objects.get(
-                        pk = int( self.kwargs[self.parent_model_pk_kwarg] )
+                        pk = ticket_pk
                     ).get_related_model()
 
 

@@ -13,7 +13,6 @@ class IncidentTicketSerializerTestCases(
     pass
 
 
-
 class IncidentTicketSerializerInheritedCases(
     IncidentTicketSerializerTestCases
 ):

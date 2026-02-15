@@ -953,7 +953,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch('core.mixins.centurion.Centurion.full_clean', return_value = None)
 
@@ -986,7 +988,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch('django.db.models.base.Model.save', return_value = None)
 
@@ -1012,7 +1016,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -1052,7 +1058,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -1171,7 +1179,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch('django.db.models.base.Model.save', return_value = None)
 

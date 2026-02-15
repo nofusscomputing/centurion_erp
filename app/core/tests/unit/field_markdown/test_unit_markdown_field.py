@@ -1,6 +1,5 @@
 import pytest
 
-from django.db.models import ObjectDoesNotExist
 from rest_framework import serializers
 
 from centurion.tests.unit_class import ClassTestCases
@@ -146,8 +145,8 @@ class MarkdownFieldTestCases(
 
         markdown = f'a random $model_tag-999999'
 
-        returned_data = mock_field_permission.get_markdown_render(
-            markdown = markdown
+        returned_data = mock_field_permission.to_representation(
+            value = markdown
         )
 
         get_markdown_render.assert_called_once_with(markdown = markdown)
@@ -159,7 +158,7 @@ class MarkdownFieldTestCases(
     ):
         """Test Function
 
-        Ensure that function get_model returns rendered data if the user has
+        Ensure that function get_markdown_render returns rendered data if the user has
         permission.
         """
 
@@ -202,26 +201,20 @@ class MarkdownFieldTestCases(
     ):
         """Test Function
 
-        Ensure that function get_model returns no rendered data if the user
-        does not have the required permission.
+        Ensure that function get_markdown_render returns no rendered data if the user
+        does not have the required permission when model is ticket.
         """
 
 
-        mocker.patch.object(mock_field_missing_permission, 'get_model', return_value = 'model')
-
-        # title = 'a-title'
-        # url = 'a-url'
-
-        # mock_model = model_ticketbase()
-
-        # mock_model.id = 1
-        # mock_model.status = mock_model.TicketStatus.NEW
-        # mock_model.ticket_type = 'request'
-        # mock_model.title = title
+        mocker.patch.object(
+            mock_field_missing_permission, 'get_model', return_value = model_ticketbase
+        )
 
 
-        # mocker.patch.object(mock_model, 'get_url', return_value = url)
-        mocker.patch.object(model_ticketbase.objects, 'get', side_effect = ObjectDoesNotExist())
+        mock_model = model_ticketbase()
+
+        mocker.patch.object(model_ticketbase.objects, 'get', return_value = mock_model)
+
 
         markdown = f'a random #1'
 
@@ -261,12 +254,16 @@ class MarkdownFieldModelTestCases:
 
 
     @pytest.fixture(scope = 'class')
-    def mock_field_permission(self):
+    def mock_field_permission(self, model):
 
         class MockUser:
 
             def has_perm(self, **kwargs):
-                return True
+
+                if kwargs['permission'] == f"{model._meta.app_label}.view_{model._meta.model_name}":
+                    return True
+
+                return False
 
 
         class MockRequest:
@@ -325,12 +322,19 @@ class MarkdownFieldModelTestCases:
 
 
     @pytest.fixture(scope = 'class')
-    def mock_field_permission_wrong_org(self):
+    def mock_field_permission_wrong_org(self, model, organization_one):
 
         class MockUser:
 
             def has_perm(self, **kwargs):
-                return False
+
+                if(
+                    kwargs['permission'] == f"{model._meta.app_label}.view_{model._meta.model_name}"
+                    and kwargs['tenancy'] == organization_one
+                ):
+                    return False
+
+                return True
 
 
         class MockRequest:
@@ -362,7 +366,7 @@ class MarkdownFieldModelTestCases:
     @pytest.mark.markdown
     @pytest.mark.models
     @pytest.mark.serializer
-    def test_field_markdown_function_get_model_has_permission(self, model,
+    def test_field_markdown_function_get_model(self, model,
         mock_field_permission
     ):
         """Test Function
@@ -381,26 +385,6 @@ class MarkdownFieldModelTestCases:
 
 
         assert mock_field_permission.get_model(model_tag = model.model_tag) == expected_model
-
-
-
-    @pytest.mark.api
-    @pytest.mark.fields
-    @pytest.mark.markdown
-    @pytest.mark.models
-    @pytest.mark.serializer
-    def test_field_markdown_function_get_model_missing_permission(self, model,
-        mock_field_missing_permission
-    ):
-        """Test Function
-
-        Ensure that function get_model returns `None` if the user lacks permission.
-        """
-
-        if getattr(model, 'model_tag', None) is None:
-            pytest.xfail( reason = 'Model does not have a model_tag. test is N/A.' )
-
-        assert mock_field_missing_permission.get_model(model_tag = model.model_tag) == None
 
 
 
@@ -466,7 +450,7 @@ class MarkdownFieldModelTestCases:
         """Test Function
 
         Ensure that function get_markdown_render returns no render data if the
-        the object is not found.
+        the object is found.
         """
 
         if getattr(model, 'model_tag', None) is None:
@@ -543,7 +527,7 @@ class MarkdownFieldModelTestCases:
     @pytest.mark.models
     @pytest.mark.serializer
     def test_field_markdown_function_get_markdown_render_wrong_org_permission(self, model,
-        mocker, mock_field_permission_wrong_org
+        mocker, organization_one, mock_field_permission_wrong_org
     ):
         """Test Function
 
@@ -555,6 +539,13 @@ class MarkdownFieldModelTestCases:
             pytest.xfail( reason = 'Model does not have a model_tag. test is N/A.' )
 
         mocker.patch.object(mock_field_permission_wrong_org, 'get_model', return_value = model)
+
+
+        mock_model = model()
+
+        mocker.patch.object(model.objects, 'get', return_value = mock_model)
+        mocker.patch.object(model, 'get_organization', return_value = organization_one)
+
 
         markdown = f'a random ${model.model_tag}-999999'
 
