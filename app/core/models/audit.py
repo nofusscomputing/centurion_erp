@@ -154,6 +154,13 @@ class CenturionAudit(
 
         if(
             not hasattr(model, '_before')
+            and self.before != None
+        ):    # Model creation did not specify to save history
+
+            return True
+
+        if(
+            not hasattr(model, '_before')
             and self.before == None
         ):
 
@@ -171,13 +178,6 @@ class CenturionAudit(
                 code = 'model_missing_after_data',
                 message = 'Unable to save model history as the "after" data is missing.'
             )
-
-
-        if(
-            self.before is not None
-            and self.after is not None
-        ):
-            return True
 
 
         if(
