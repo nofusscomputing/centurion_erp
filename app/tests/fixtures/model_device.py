@@ -49,7 +49,13 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
             'device_model': device_model,
             'device_type': device_type,
             'config':  { 'a_dev_config_key': 'a_dev_config_value'},
-            'inventorydate': '2025-07-31T11:51:00Z',
+            'inventorydate': (
+                f'2025-{random.randint(1, 12):02d}'
+                f'-{random.randint(1, 28):02d}'
+                f'T{random.randint(0, 23):02d}:'
+                f'{random.randint(0, 59):02d}:'
+                f'{random.randint(0, 59):02d}Z'
+            ),
         }
 
         return kwargs

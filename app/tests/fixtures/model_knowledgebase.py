@@ -1,4 +1,5 @@
 import pytest
+import random
 
 from datetime import datetime
 
@@ -50,8 +51,20 @@ def kwargs_knowledgebase(django_db_blocker,
                 'summary': 'a summary',
                 'content': 'the kb body text',
                 'category': category,
-                'release_date': '2024-06-04T00:00:01Z',
-                'expiry_date': '2024-06-04T00:00:02Z',
+                'release_date': (
+                    f'2024-{random.randint(1, 12):02d}'
+                    f'-{random.randint(1, 28):02d}'
+                    f'T{random.randint(0, 23):02d}:'
+                    f'{random.randint(0, 59):02d}:'
+                    f'{random.randint(0, 59):02d}Z'
+                ),
+                'expiry_date': (
+                    f'2024-{random.randint(1, 12):02d}'
+                    f'-{random.randint(1, 28):02d}'
+                    f'T{random.randint(0, 23):02d}:'
+                    f'{random.randint(0, 59):02d}:'
+                    f'{random.randint(0, 59):02d}Z'
+                ),
                 'target_team': [ group ],
                 # 'target_user': ,
                 'responsible_user': user,
