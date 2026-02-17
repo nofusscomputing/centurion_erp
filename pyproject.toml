@@ -1399,6 +1399,7 @@ markers = [
     "model_company: Selects test for model Company.",
     "model_centurionaudit: Selects tests for model Centurion Audit",
     "model_centurionuser: Selects tests for model Centurion User",
+    "model_changeticket: Selects tests for model Change Ticket.",
     "model_configgroups: Selects Config Group tests.",
     "model_configgrouphosts: Selects Config Group Hosts tests.",
     "model_configgroupsoftware: Selects Config Group Software tests.",
