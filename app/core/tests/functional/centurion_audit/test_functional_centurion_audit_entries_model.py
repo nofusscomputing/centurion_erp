@@ -4,6 +4,7 @@ import pytest
 
 from django.apps import apps
 from django.db import models
+from django.utils.dateparse import parse_datetime
 
 
 
@@ -70,7 +71,7 @@ class CenturionAuditEntryModelTestCases:
                 if isinstance(getattr(instance, name), datetime.datetime):
 
                     kwargs_converted.update({
-                        name: datetime.datetime.fromisoformat(
+                        name: parse_datetime(
                             model_kwargs[name]
                         ).isoformat(timespec='seconds')
                     })
