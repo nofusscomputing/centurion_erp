@@ -72,6 +72,7 @@ from .model_centurionuser import (
 from .model_changeticket import (
     kwargs_changeticket,
     model_changeticket,
+    serializer_changeticket,
 )
 
 from .model_checkin import (
