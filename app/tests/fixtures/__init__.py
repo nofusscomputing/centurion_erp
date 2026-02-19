@@ -284,6 +284,7 @@ from .model_port import (
 from .model_problemticket import (
     kwargs_problemticket,
     model_problemticket,
+    serializer_problemticket,
 )
 
 from .model_project import (
