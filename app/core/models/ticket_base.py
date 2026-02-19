@@ -1,8 +1,6 @@
 import datetime
-import difflib
 
 from django.apps import apps
-from django.conf import settings
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -11,7 +9,6 @@ from access.models.entity import Entity
 from core import exceptions as centurion_exceptions
 from core.classes.badge import Badge
 from core.lib.slash_commands import SlashCommands
-from core.middleware.get_request import get_request
 from core.models.centurion import CenturionModel
 from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket.ticket_enum_values import TicketValues
