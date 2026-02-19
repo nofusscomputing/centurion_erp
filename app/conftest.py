@@ -584,6 +584,8 @@ def fake_view():
         This must be set to whatever is occuring
         """
 
+        kwargs: dict = {}
+
         request: MockRequest
 
         def __init__(cls,
