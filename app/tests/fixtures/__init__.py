@@ -305,6 +305,12 @@ from .model_projectstate import (
     serializer_projectstate,
 )
 
+from .model_projecttaskticket import (
+    kwargs_projecttaskticket,
+    model_projecttaskticket,
+    serializer_projecttaskticket,
+)
+
 from .model_projectticket import (
     kwargs_projecttaskticket,
     model_projecttaskticket,
