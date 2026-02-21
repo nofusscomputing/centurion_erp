@@ -228,8 +228,9 @@ class ViewSet( SubModelViewSet ):
     base_model = TicketBase
 
     filterset_fields = [
+        'is_deleted',
         'organization',
-        'is_deleted'
+        'project',
     ]
 
     model_kwarg = 'ticket_type'
@@ -252,6 +253,7 @@ class ViewSet( SubModelViewSet ):
         if(
             self.back_url is None
             and self.kwargs.get(self.model_kwarg, None) is not None
+            and self.kwargs.get('project_id', None) is None
         ):
 
             self.back_url = reverse(
@@ -263,7 +265,43 @@ class ViewSet( SubModelViewSet ):
                 }
             )
 
+        if(
+            self.back_url is None
+            and self.kwargs.get(self.model_kwarg, None) is not None
+            and self.kwargs.get('project_id', None) is not None
+        ):
+
+            self.back_url = reverse(
+                viewname = '_api_project-detail',
+                request = self.request,
+                kwargs = {
+                    'pk': self.kwargs['project_id'],
+                }
+            )
+
         return self.back_url
+
+
+
+    def get_queryset(self):
+
+        if self._queryset is None:
+
+            if(
+                'project_id' in self.kwargs
+            ):
+
+                self._queryset = super().get_queryset().filter(
+                    project_id = int( self.kwargs['project_id'] )
+                )
+
+            else:
+
+                self._queryset = super().get_queryset()
+
+
+        return self._queryset
+
 
 
 

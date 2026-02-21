@@ -440,6 +440,11 @@ class ModelSerializer(
                 attrs['status'] = self.Meta.model.TicketStatus.ASSIGNED
 
 
+        if 'project_id' in self.context['view'].kwargs:
+
+            attrs['project_id'] = int( self.context['view'].kwargs['project_id'] )
+
+
         return attrs
 
 
