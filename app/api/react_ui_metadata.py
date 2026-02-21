@@ -78,41 +78,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 metadata['documentation'] = str(settings.DOCS_ROOT) + str(view.get_model_documentation())
 
 
-        metadata['urls']: dict = {}
-
-        url_self = None
-
-        app_namespace = ''
-
-        base_model = getattr(view, 'base_model', None)
-
-        if getattr(view, 'model', None):
-
-            if getattr(view.model, 'app_namespace', None) not in [None, '']:
-
-                app_namespace = view.model().get_app_namespace() + ':'
-
-
-        if view.kwargs.get(getattr(view, 'lookup_field', 'pk'), None) is not None:
-
-            qs = view.get_queryset()[0]
-
-            if hasattr(qs, 'get_url'):
-
-                url_self = qs.get_url( request=request )
-
-
-        elif view.kwargs:
-
-            url_self = reverse('v2:' + app_namespace + view.basename + '-list', request = view.request, kwargs = view.kwargs )
-
-        else:
-
-            url_self = reverse('v2:' + app_namespace + view.basename + '-list', request = view.request )
-
-        if url_self:
-
-            metadata['urls'].update({'self': url_self})
+        metadata['urls']: dict = view.get_meta_urls()
 
         if view.get_back_url():
 

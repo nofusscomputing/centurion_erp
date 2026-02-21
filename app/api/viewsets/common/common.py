@@ -2,12 +2,14 @@ import django
 import importlib
 import rest_framework
 
+from django.apps import apps
 from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
 
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework import viewsets
 
 from centurion.logging import CenturionLogger
@@ -639,6 +641,145 @@ class CommonViewSet(
     view_description: str = None
 
     view_name: str = None
+
+    _meta_urls: dict[ str ] | dict[ str, dict[str] ] = None
+
+
+    def get_meta_urls(self) -> dict[ str ] | dict[ str, dict[str] ]:
+        """Metadata Add URL
+
+        Creates urls for metadata. the following keys are generated:
+
+        - `self` - URL for the Viewser itself
+
+        - `sub_models.<key>` - When the View detected is for the base model
+        submodels are added to this dict using the value of
+        <model>._meta.sub_model_type as the key name.
+
+        Returns:
+            dict[ str ]: list view `self` url
+            dict[ str, dict[str] ]: list view `self` and sub-model urls
+        """
+
+        if self._meta_urls is None:
+
+            add_url = {}
+
+            app_namespace = ''
+
+            if getattr(self.model, 'app_namespace', None) not in [None, '']:
+
+                app_namespace = self.model().get_app_namespace() + ':'
+
+
+            if self.kwargs.get(getattr(self, 'lookup_field', 'pk'), None) is not None:
+
+                qs = self.get_queryset()[0]
+
+                if hasattr(qs, 'get_url'):
+
+                    add_url.update({ 'self': qs.get_url( request = self.request ) })
+
+            elif self.kwargs:
+
+                add_url.update({
+                    'self': reverse(
+                        viewname = 'v2:' + app_namespace + self.basename + '-list',
+                        request = self.request,
+                        kwargs = self.kwargs
+                    )
+                })
+
+            else:
+
+                add_url.update({
+                    'self': reverse(
+                        viewname = 'v2:' + app_namespace + self.basename + '-list',
+                        request = self.request
+                    )
+                })
+
+
+            if(
+                getattr(self, 'base_model', '') == self.model
+            ):    # filter to only add sub-models when view is for `base_model`
+
+                sub_model_urls = {}
+
+                for sub_model in apps.get_models():
+
+                    if(
+                        issubclass(sub_model, self.base_model)
+                        and hasattr(sub_model._meta, 'sub_model_type')
+                    ):
+
+                        # if not self.request.user.has_perm(
+                        #     permission = f'{sub_model._meta.app_label}.add_{sub_model._meta.model_name}',
+                        #     tenancy_permission = False
+                        # ):
+                        #     continue
+
+                        kwargs = self.kwargs.copy()
+
+                        if 'pk' in kwargs:
+                            del kwargs['pk']
+
+
+                        if(
+                            self.base_model._meta.model_name in [ 'ticketbase' ]
+                            and sub_model._is_submodel
+                            and 'project_id' not in kwargs
+                        ):
+                            kwargs.update({
+                                'app_label': self.base_model._meta.app_label
+                            })
+
+
+                        basename = self.basename
+
+                        if sub_model._is_submodel:
+
+                            if self.base_model._meta.model_name in [ 'ticketbase', 'ticketcommentbase' ]:
+
+                                kwargs.update({
+                                    self.model_kwarg: getattr(sub_model._meta, 'sub_model_type'),
+                                })
+
+                            else:
+
+                                kwargs.update({
+                                    self.model_kwarg: getattr(sub_model._meta, self.model_kwarg),
+                                })
+
+
+                            if '_sub' not in basename:
+
+                                basename = f'{self.basename}_sub'
+
+
+                        url = reverse(
+                            viewname = 'v2:' + app_namespace + basename + '-list',
+                            request = self.request,
+                            kwargs = kwargs
+                        )
+
+                        if url != add_url['self']:
+
+                            sub_model_urls.update({
+                                getattr(sub_model._meta, 'sub_model_type'): url
+                            })
+
+
+                add_url.update({
+                    'sub_models': sub_model_urls
+                })
+
+
+            self._meta_urls = add_url
+
+
+        return self._meta_urls
+
 
     def get_back_url(self) -> str:
         """Metadata Back URL
