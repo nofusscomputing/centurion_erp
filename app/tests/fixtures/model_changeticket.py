@@ -1,11 +1,11 @@
 import pytest
 
 from itim.models.ticket_change import ChangeTicket
-# from itim.serializers.ticketbase_request import (
-#     BaseSerializer,
-#     ModelSerializer,
-#     ViewSerializer
-# )
+from itim.serializers.ticketbase_change import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -34,11 +34,11 @@ def kwargs_changeticket(kwargs_ticketbase,
 
 
 
-# @pytest.fixture( scope = 'class')
-# def serializer_changeticket():
+@pytest.fixture( scope = 'class')
+def serializer_changeticket():
 
-#     yield {
-#         'base': BaseSerializer,
-#         'model': ModelSerializer,
-#         'view': ViewSerializer
-#     }
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

@@ -62,10 +62,11 @@ class ProjectModelSerializer(
         get_url.update({
             'milestone': reverse("v2:_api_projectmilestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'tickets': reverse(
-                "v2:_api_v2_ticket_project_task-list",
+                "v2:_api_project_ticket-list",
                 request=self._context['view'].request,
                 kwargs={
-                    'project_id': item.pk
+                    'project_id': item.pk,
+                    'ticket_type': 'ticket'
                 }
             ),
         })

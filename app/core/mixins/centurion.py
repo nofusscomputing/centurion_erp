@@ -199,6 +199,9 @@ class Centurion(
                     for val in values:
                         data += [ val.id ]
 
+                    if data:
+                        data = sorted(data)
+
                 elif isinstance(field, models.DateTimeField):
                     if data and type(data) is not str:
                         data = data.isoformat(timespec='seconds')

@@ -6,6 +6,9 @@ from access.tests.functional.tenancy_abstract.test_functional_tenancy_abstract_m
     TenancyAbstractModelInheritedCases
 )
 
+from core.tests.functional.field_markdown.test_functional_markdown_field import (
+    MarkdownFieldModelTestCases
+)
 from core.tests.functional.mixin_centurion.test_functional_centurion_mixin import (
     CenturionAbstractMixinInheritedCases,
 )
@@ -79,6 +82,7 @@ class CenturionAbstractModelTestCases(
 
 
 class CenturionAbstractTenancyModelInheritedCases(
+    MarkdownFieldModelTestCases,
     CenturionAbstractModelTestCases,
     LinkedModelTicketCommentInheritedTestCases,
 ):

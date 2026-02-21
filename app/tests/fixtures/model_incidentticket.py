@@ -1,11 +1,11 @@
 import pytest
 
 from itim.models.ticket_incident import IncidentTicket
-# from itim.serializers.ticketbase_request import (
-#     BaseSerializer,
-#     ModelSerializer,
-#     ViewSerializer
-# )
+from itim.serializers.ticketbase_incident import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -18,14 +18,14 @@ def model_incidentticket(clean_model_from_db):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_incidentticket(kwargs_ticketbase,
+def kwargs_incidentticket(kwargs_slmticket,
 
 ):
 
     def factory():
 
         kwargs = {
-            **kwargs_ticketbase(),
+            **kwargs_slmticket(),
         }
 
         return kwargs
@@ -34,11 +34,11 @@ def kwargs_incidentticket(kwargs_ticketbase,
 
 
 
-# @pytest.fixture( scope = 'class')
-# def serializer_incidentticket():
+@pytest.fixture( scope = 'class')
+def serializer_incidentticket():
 
-#     yield {
-#         'base': BaseSerializer,
-#         'model': ModelSerializer,
-#         'view': ViewSerializer
-#     }
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

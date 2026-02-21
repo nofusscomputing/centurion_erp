@@ -1,11 +1,12 @@
 import pytest
+import random
 
 from itim.models.ticket_problem import ProblemTicket
-# from itim.serializers.ticketbase_request import (
-#     BaseSerializer,
-#     ModelSerializer,
-#     ViewSerializer
-# )
+from itim.serializers.ticketbase_problem import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -26,6 +27,10 @@ def kwargs_problemticket(kwargs_ticketbase,
 
         kwargs = {
             **kwargs_ticketbase(),
+            'business_impact': f'a{random.randint(1,9999)}{random.randint(1,9999)}',
+            'cause_analysis': f'b{random.randint(1,9999)}{random.randint(1,9999)}',
+            'observations': f'c{random.randint(1,9999)}{random.randint(1,9999)}',
+            'workaround': f'd{random.randint(1,9999)}{random.randint(1,9999)}',
         }
 
         return kwargs
@@ -34,11 +39,11 @@ def kwargs_problemticket(kwargs_ticketbase,
 
 
 
-# @pytest.fixture( scope = 'class')
-# def serializer_problemticket():
+@pytest.fixture( scope = 'class')
+def serializer_problemticket():
 
-#     yield {
-#         'base': BaseSerializer,
-#         'model': ModelSerializer,
-#         'view': ViewSerializer
-#     }
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

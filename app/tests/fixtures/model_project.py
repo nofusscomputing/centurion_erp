@@ -53,10 +53,34 @@ def kwargs_project(kwargs_centurionmodel, django_db_blocker,
             'priority': Project.Priority.LOW,
             'state': state,
             'project_type': pr_type,
-            'planned_start_date': '2025-08-04T00:00:01Z',
-            'planned_finish_date': '2025-08-04T00:00:02Z',
-            'real_start_date': '2025-08-04T00:00:03Z',
-            'real_finish_date': '2025-08-04T00:00:04Z',
+            'planned_start_date': (
+                f'2025-{random.randint(1, 12):02d}'
+                f'-{random.randint(1, 28):02d}'
+                f'T{random.randint(0, 23):02d}:'
+                f'{random.randint(0, 59):02d}:'
+                f'{random.randint(0, 59):02d}Z'
+            ),
+            'planned_finish_date': (
+                f'2025-{random.randint(1, 12):02d}'
+                f'-{random.randint(1, 28):02d}'
+                f'T{random.randint(0, 23):02d}:'
+                f'{random.randint(0, 59):02d}:'
+                f'{random.randint(0, 59):02d}Z'
+            ),
+            'real_start_date': (
+                f'2025-{random.randint(1, 12):02d}'
+                f'-{random.randint(1, 28):02d}'
+                f'T{random.randint(0, 23):02d}:'
+                f'{random.randint(0, 59):02d}:'
+                f'{random.randint(0, 59):02d}Z'
+            ),
+            'real_finish_date': (
+                f'2025-{random.randint(1, 12):02d}'
+                f'-{random.randint(1, 28):02d}'
+                f'T{random.randint(0, 23):02d}:'
+                f'{random.randint(0, 59):02d}:'
+                f'{random.randint(0, 59):02d}Z'
+            ),
             'manager_user': manager,
             'team_members': [ team_member ],
         }
