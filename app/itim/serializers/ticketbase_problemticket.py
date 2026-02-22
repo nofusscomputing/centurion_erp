@@ -1,32 +1,32 @@
 from drf_spectacular.utils import extend_schema_serializer
 
-from itim.serializers.ticketbase_slm import (
-    BaseSerializer as SLMTicketBaseSerializer,
-    ModelSerializer as SLMTicketModelSerializer,
-    ViewSerializer as SLMTicketViewSerializer
+from core.serializers.ticketbase import (
+    BaseSerializer as TicketBaseSerializer,
+    ModelSerializer as TicketModelSerializer,
+    ViewSerializer as TicketViewSerializer
 )
 
-from itim.models.ticket_change import ChangeTicket
+from itim.models.ticket_problem import ProblemTicket
 
 
 
-@extend_schema_serializer(component_name = 'ChangeTicketBaseSerializer')
+@extend_schema_serializer(component_name = 'ProblemTicketBaseSerializer')
 class BaseSerializer(
-    SLMTicketBaseSerializer
+    TicketBaseSerializer
 ):
     pass
 
 
-@extend_schema_serializer(component_name = 'ChangeTicketModelSerializer')
+@extend_schema_serializer(component_name = 'ProblemTicketModelSerializer')
 class ModelSerializer(
-    SLMTicketModelSerializer,
+    TicketModelSerializer,
     BaseSerializer,
 ):
-    """Service Change Ticket"""
+    """Service Problem Ticket"""
 
     class Meta:
 
-        model = ChangeTicket
+        model = ProblemTicket
 
         fields = [
             'id',
@@ -41,6 +41,10 @@ class ModelSerializer(
             'category',
             'title',
             'description',
+            'business_impact',
+            'cause_analysis',
+            'observations',
+            'workaround',
             'ticket_duration',
             'ticket_estimation',
             'project',
@@ -88,11 +92,11 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'ChangeTicketViewSerializer')
+@extend_schema_serializer(component_name = 'ProblemTicketViewSerializer')
 class ViewSerializer(
-    SLMTicketViewSerializer,
+    TicketViewSerializer,
     ModelSerializer,
     ):
-    """Service Change Ticket View Model"""
+    """Service Problem Ticket View Model"""
 
     pass

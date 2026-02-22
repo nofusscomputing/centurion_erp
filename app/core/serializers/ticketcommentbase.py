@@ -96,7 +96,7 @@ class ModelSerializer(
                         request = self._context['view'].request,
                         kwargs={
                             'ticket_id': ticket_id,
-                            'ticket_comment_model': 'comment',
+                            'model_name': 'comment',
                             'parent_id': item.id
                         }
                     )

@@ -1,7 +1,5 @@
 import pytest
 
-from itim.serializers.ticketbase_problem import ModelSerializer
-
 
 @pytest.fixture( scope = 'class')
 def model(request, model_problemticket):
@@ -25,10 +23,6 @@ def model_kwargs(request, kwargs_problemticket):
 
 
 @pytest.fixture
-def create_serializer():
+def create_serializer(serializer_problemticket):
 
-    serializer = ModelSerializer
-
-    yield serializer
-
-    del serializer
+    yield serializer_problemticket['model']

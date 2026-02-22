@@ -1,32 +1,32 @@
 from drf_spectacular.utils import extend_schema_serializer
 
-from itim.serializers.ticketbase_slm import (
+from itim.serializers.ticketbase_slmticket import (
     BaseSerializer as SLMTicketBaseSerializer,
     ModelSerializer as SLMTicketModelSerializer,
     ViewSerializer as SLMTicketViewSerializer
 )
 
-from project_management.models.ticket_project_task import ProjectTaskTicket
+from itim.models.request_ticket import RequestTicket
 
 
 
-@extend_schema_serializer(component_name = 'ProjectTaskTicketBaseSerializer')
+@extend_schema_serializer(component_name = 'RequestTicketBaseSerializer')
 class BaseSerializer(
     SLMTicketBaseSerializer
 ):
     pass
 
 
-@extend_schema_serializer(component_name = 'ProjectTaskTicketModelSerializer')
+@extend_schema_serializer(component_name = 'RequestTicketModelSerializer')
 class ModelSerializer(
     SLMTicketModelSerializer,
     BaseSerializer,
 ):
-    """Service ProjectTask Ticket"""
+    """Service Request Ticket"""
 
     class Meta:
 
-        model = ProjectTaskTicket
+        model = RequestTicket
 
         fields = [
             'id',
@@ -58,6 +58,8 @@ class ModelSerializer(
             'planned_finish_date',
             'real_start_date',
             'real_finish_date',
+            'tto',
+            'ttr',
             'is_deleted',
             'is_solved',
             'date_solved',
@@ -74,6 +76,8 @@ class ModelSerializer(
             'external_system',
             'external_ref',
             'ticket_type',
+            'tto',
+            'ttr',
             'is_deleted',
             'created',
             'modified',
@@ -84,11 +88,11 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'ProjectTaskTicketViewSerializer')
+@extend_schema_serializer(component_name = 'RequestTicketViewSerializer')
 class ViewSerializer(
     SLMTicketViewSerializer,
     ModelSerializer,
     ):
-    """Service ProjectTask Ticket View Model"""
+    """Service Request Ticket View Model"""
 
     pass

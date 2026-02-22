@@ -1,7 +1,6 @@
 import pytest
 
 from itim.models.slm_ticket_base import SLMTicket
-from itim.serializers.ticketbase_slm import ModelSerializer
 
 
 @pytest.fixture( scope = 'class')
@@ -15,13 +14,9 @@ def model(request):
 
 
 @pytest.fixture
-def create_serializer():
+def create_serializer(serializer_slmticket):
 
-    serializer = ModelSerializer
-
-    yield serializer
-
-    del serializer
+    yield serializer_slmticket['model']
 
 
 @pytest.fixture( scope = 'class', autouse = True)

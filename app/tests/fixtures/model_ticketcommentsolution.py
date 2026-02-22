@@ -1,7 +1,7 @@
 import pytest
 
 from core.models.ticket_comment_solution import TicketCommentSolution
-from core.serializers.ticketcommentbase_solution import (
+from core.serializers.ticketcommentbase_ticketcommentsolution import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer
