@@ -499,7 +499,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "display_name": "Requests New",
                         "name": "request_new",
                         "icon": "ticket_request",
-                        "link": "/itim/ticket/request"
+                        "link": "/itim/ticket/requestticket"
                     }
                 })
 
@@ -510,7 +510,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                             "display_name": "Changes New",
                             "name": "change_new",
                             "icon": "ticket_change",
-                            "link": "/itim/ticket/change"
+                            "link": "/itim/ticket/changeticket"
                         },
                     })
 
@@ -522,7 +522,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                             "display_name": "Incidents New",
                             "name": "incident_new",
                             "icon": "ticket_incident",
-                            "link": "/itim/ticket/incident"
+                            "link": "/itim/ticket/incidentticket"
                         },
                     })
 
@@ -534,7 +534,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                             "display_name": "Problems New",
                             "name": "problem_new",
                             "icon": "ticket_problem",
-                            "link": "/itim/ticket/problem"
+                            "link": "/itim/ticket/problemticket"
                         }
                     })
 

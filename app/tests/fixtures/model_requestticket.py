@@ -1,7 +1,7 @@
 import pytest
 
 from itim.models.request_ticket import RequestTicket
-from itim.serializers.ticketbase_request import (
+from itim.serializers.ticketbase_requestticket import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer

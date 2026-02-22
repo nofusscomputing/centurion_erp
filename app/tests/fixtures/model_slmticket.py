@@ -1,7 +1,7 @@
 import pytest
 
 from itim.models.slm_ticket_base import SLMTicket
-from itim.serializers.ticketbase_slm import (
+from itim.serializers.ticketbase_slmticket import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer

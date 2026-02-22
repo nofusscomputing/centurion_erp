@@ -34,7 +34,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             if model._meta.sub_model_type != 'ticket':
                 
-                serializer_name += '_' + model._meta.sub_model_type
+                serializer_name += '_' + model._meta.model_name
 
             serializer_module = importlib.import_module(
                 model._meta.app_label + '.serializers.' + str(
@@ -56,7 +56,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the Ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -97,7 +97,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -121,7 +121,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -153,7 +153,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -233,7 +233,7 @@ class ViewSet( SubModelViewSet ):
         'project',
     ]
 
-    model_kwarg = 'ticket_type'
+    model_kwarg = 'model_name'
 
     permission_classes = [
         TicketPermission | SuperUserPermissions,
@@ -261,7 +261,7 @@ class ViewSet( SubModelViewSet ):
                 request = self.request,
                 kwargs = {
                     'app_label': self.model._meta.app_label,
-                    'ticket_type': self.kwargs[self.model_kwarg],
+                    'model_name': self.kwargs[self.model_kwarg],
                 }
             )
 
