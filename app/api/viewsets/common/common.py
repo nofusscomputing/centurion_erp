@@ -739,17 +739,9 @@ class CommonViewSet(
 
                         if sub_model._is_submodel:
 
-                            if self.base_model._meta.model_name in [ 'ticketcommentbase' ]:
-
-                                kwargs.update({
-                                    self.model_kwarg: getattr(sub_model._meta, 'sub_model_type'),
-                                })
-
-                            else:
-
-                                kwargs.update({
-                                    self.model_kwarg: getattr(sub_model._meta, self.model_kwarg),
-                                })
+                            kwargs.update({
+                                self.model_kwarg: getattr(sub_model._meta, self.model_kwarg),
+                            })
 
 
                             if '_sub' not in basename:
