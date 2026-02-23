@@ -2,9 +2,10 @@ import django
 import pytest
 import random
 
-from rest_framework.permissions import OperandHolder
-
 from django.contrib.auth.models import ContentType, Group, Permission
+
+from rest_framework.test import APIClient
+from rest_framework.permissions import OperandHolder
 
 from access.models.tenant import Tenant
 from access.models.role import Role
@@ -186,7 +187,8 @@ class CommonViewSetTestCases:
     def viewset_mock_request(self, django_db_blocker, viewset,
         clean_model_from_db, api_request_permissions,
         model_user, kwargs_user, organization_one, organization_two,
-        model_instance, model_kwargs, model, model_ticketcommentbase
+        model_instance, model_kwargs, model, model_ticketcommentbase,
+        settings
     ):
 
         with django_db_blocker.unblock():
@@ -214,32 +216,16 @@ class CommonViewSetTestCases:
                 kwargs['user'] = user
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
-        view_set = viewset()
-        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
 
-        for permission_class in viewset.permission_classes:
 
-            if isinstance(permission_class, OperandHolder):
-                permission_class = permission_class.op1_class
+        settings.SITE_URL = 'http://testserver'
 
-            view_set.permissions_required = permission_class().get_required_permissions(
-                method = 'GET',
-                model_cls = model
-            )
+        client = APIClient()
+        client.force_authenticate(user=user)
 
-        model = getattr(view_set, 'model', None)
+        response = client.get(user_tenancy_item.get_url(many = True))
 
-        if not model:
-            model = Tenant
-
-        request = MockRequest(
-            user = user,
-            model = model,
-            viewset = viewset,
-            tenant = organization_one
-        )
-
-        view_set.request = request
+        view_set = response.renderer_context['view']
 
 
         yield view_set
@@ -255,7 +241,8 @@ class CommonViewSetTestCases:
 
     # parmeterize to view action
     def test_function_get_queryset_filtered_results_action_list(self,
-        viewset_mock_request, organization_one, organization_two, model
+        viewset_mock_request, organization_one, organization_two, model,
+        api_request_permissions,
     ):
         """Test class function
 
@@ -293,7 +280,11 @@ class CommonViewSetTestCases:
 
         for result in queryset:
 
-            if result.get_tenant() != organization_one:
+            
+            if result.get_tenant() not in [
+                api_request_permissions['tenancy']['global'],    # Global tenancy
+                organization_one
+            ]:
                 only_user_results_returned = False
 
         assert only_user_results_returned

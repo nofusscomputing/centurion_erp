@@ -5,7 +5,7 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
-from rest_framework.permissions import OperandHolder
+from rest_framework.test import APIClient
 
 from api.tests.functional.test_functional_common_viewset import (
     MockRequest
@@ -297,28 +297,15 @@ class ModelTicketMetaViewsetTestCases(
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
 
-        view_set = viewset()
+        settings.SITE_URL = 'http://testserver'
 
-        for permission_class in viewset.permission_classes:
+        client = APIClient()
+        client.force_authenticate(user=user)
 
-            if isinstance(permission_class, OperandHolder):
-                permission_class = permission_class.op1_class
+        response = client.get(user_tenancy_item.get_url(many = True))
 
+        view_set = response.renderer_context['view']
 
-            view_set.permissions_required = permission_class().get_required_permissions(
-                method = 'GET',
-                model_cls = model
-            )
-
-        request = MockRequest(
-            user = user,
-            model = model,
-            viewset = viewset,
-            tenant = organization_one
-        )
-
-        view_set.request = request
-        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
 
 
         yield view_set
