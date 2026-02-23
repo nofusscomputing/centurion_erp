@@ -33,4 +33,6 @@ class CenturionAuditViewsetPyTest(
     ViewsetTestCases,
 ):
 
-    pass
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+

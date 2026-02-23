@@ -2,8 +2,10 @@ import django
 import pytest
 import random
 
+from django.apps import apps
 from django.contrib.auth.models import ContentType, Group, Permission
 
+from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 from rest_framework.permissions import OperandHolder
 
@@ -291,6 +293,119 @@ class CommonViewSetTestCases:
 
 
 
+    def test_function_get_meta_urls_self_url(self,
+        viewset_mock_request, model, settings
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `self` key is the correct value
+        """
+
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        assert 'self' in urls, 'self key must exist, test cant continue.'
+
+        assert urls['self'] == settings.SITE_URL + reverse(
+            viewname = f'v2:{viewset_mock_request.basename}-list',
+            kwargs = viewset_mock_request.kwargs
+        )
+
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self,
+        viewset_mock_request, model
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `sub_models` key is not returned when the model
+        tested is not a base_model.
+        """
+
+
+        if model == model()._base_model:
+            pytest.xfail( reason = 'model is a base model, Test is N/A.' )
+
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        assert 'sub_models' not in urls, 'sub-models key should not exists for sub-model.'
+
+
+
+    def test_function_get_meta_urls_sub_models_keys(self,
+        viewset_mock_request, model,
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `sub_models` keys contain all of the models when the
+        model tested is the base_model.
+        """
+
+
+        if model != model()._base_model:
+            pytest.xfail( reason = 'model is not a base model, Test is N/A.' )
+
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        sub_models: list = []
+
+        for sub_model in apps.get_models():
+
+            if issubclass(sub_model, model) and sub_model != model:
+                sub_models.append(sub_model)
+
+
+        assert 'sub_models' in urls, 'Missing sub-models key. test cant continue'
+
+
+        assert sorted(
+            [ key for key, value in urls['sub_models'].items() ]
+        ) == sorted(
+            [ sub_model._meta.model_name for sub_model in sub_models ]
+        )
+
+
+
+    def test_function_get_meta_urls_sub_models_values(self,
+        viewset_mock_request, model
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `sub_models` key values contain the correct url for 
+        each of the sub_models.
+        """
+
+
+        if model != model()._base_model:
+            pytest.xfail( reason = 'model is not a base model' )
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        sub_models: list = []
+
+        for sub_model in apps.get_models():
+
+            if issubclass(sub_model, model) and sub_model != model:
+                sub_models.append(sub_model)
+
+
+        assert 'sub_models' in urls, 'Missing sub-models key. test cant continue'
+
+
+        assert sorted(
+            [ value for key, value in urls['sub_models'].items() ]
+        ) == sorted(
+            [
+                sub_model(
+                    **viewset_mock_request.kwargs
+                ).get_url(many = True) for sub_model in sub_models
+            ]
+        )
+
+
+
 class CommonViewSetPyTest(
     CommonViewSetTestCases,
 ):
@@ -302,6 +417,20 @@ class CommonViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
 
 
 @pytest.mark.api
@@ -323,6 +452,21 @@ class CommonModelViewSetBasePyTest(
         return ModelViewSetBase
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )
 
 
@@ -349,6 +493,21 @@ class CommonModelViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 class CommonSubModelViewSetTestCases(
@@ -366,6 +525,21 @@ class CommonSubModelViewSetPyTest(
         return CommonSubModelViewSet_ReWrite
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )
 
 
@@ -387,6 +561,21 @@ class CommonModelCreateViewSetPyTest(
         return CommonModelCreateViewSet
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )
 
 
@@ -412,6 +601,21 @@ class CommonModelListRetrieveDeleteViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 class ModelRetrieveUpdateViewSetTestCases(
@@ -432,6 +636,21 @@ class CommonModelRetrieveUpdateViewSetPyTest(
         return CommonModelRetrieveUpdateViewSet
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )
 
 
@@ -456,6 +675,21 @@ class CommonReadOnlyModelViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 class ReadOnlyListModelViewSetTestCases(
@@ -474,6 +708,21 @@ class CommonReadOnlyListModelViewSetPyTest(
         return CommonReadOnlyListModelViewSet
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )
 
 

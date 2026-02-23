@@ -82,6 +82,22 @@ class ViewsetTestCases(
 
 
 
+
+    def test_function_get_meta_urls_self_url(self,
+        viewset_mock_request, model, settings
+    ):
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        assert 'self' in urls, 'self key must exist, test cant continue.'
+
+        assert urls['self'] == settings.SITE_URL + reverse(
+            viewname = f'v2:{viewset_mock_request.basename}-detail',
+            kwargs = viewset_mock_request.kwargs
+        )
+
+
+
 class UserSettingsViewsetInheritedCases(
     ViewsetTestCases,
 ):
