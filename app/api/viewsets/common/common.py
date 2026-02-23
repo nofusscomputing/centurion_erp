@@ -725,19 +725,19 @@ class CommonViewSet(
                             del kwargs['pk']
 
 
-                        if(
-                            self.base_model._meta.model_name in [ 'ticketbase' ]
-                            and sub_model._is_submodel
-                            and 'project_id' not in kwargs
-                        ):
-                            kwargs.update({
-                                'app_label': self.base_model._meta.app_label
-                            })
-
-
                         basename = self.basename
 
                         if sub_model._is_submodel:
+
+                            if(
+                                self.base_model._meta.model_name in [ 'ticketbase' ]
+                                and sub_model._is_submodel
+                                and 'project_id' not in kwargs
+                            ):
+                                kwargs.update({
+                                    'app_label': sub_model._meta.app_label
+                                })
+
 
                             kwargs.update({
                                 self.model_kwarg: getattr(sub_model._meta, self.model_kwarg),
@@ -746,7 +746,7 @@ class CommonViewSet(
 
                             if '_sub' not in basename:
 
-                                basename = f'{self.basename}_sub'
+                                basename = f'{basename}_sub'
 
 
                         url = reverse(
