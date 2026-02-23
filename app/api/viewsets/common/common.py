@@ -758,7 +758,7 @@ class CommonViewSet(
                         if url != add_url['self']:
 
                             sub_model_urls.update({
-                                getattr(sub_model._meta, 'sub_model_type'): url
+                                getattr(sub_model._meta, 'model_name'): url
                             })
 
 
