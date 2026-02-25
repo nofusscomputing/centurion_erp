@@ -32,7 +32,6 @@ def kwargs_employee( django_db_blocker, kwargs_contact, model_user, kwargs_user 
 
         kwargs = {
             **kwargs_contact(),
-            'entity_type': 'employee',
             'employee_number':  int(random_str),
             'user': user,
         }

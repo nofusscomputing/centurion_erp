@@ -27,7 +27,6 @@ def kwargs_person( kwargs_entity ):
 
         kwargs = {
             **kwargs_entity(),
-            'entity_type': 'person',
             'f_name': 'pfn' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'm_name': 'pmn' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'l_name': 'pln' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),

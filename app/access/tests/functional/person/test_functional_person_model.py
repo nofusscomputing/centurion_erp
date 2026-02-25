@@ -40,7 +40,6 @@ class PersonModelInheritedCases(
         kwargs_person = kwargs.copy()
         del kwargs_person['email']
         del kwargs_person['directory']
-        kwargs_person['entity_type'] = 'person'
 
         person = model_person.objects.create( **kwargs_person )
 
@@ -69,7 +68,6 @@ class PersonModelInheritedCases(
         del kwargs_person['email']
         del kwargs_person['directory']
         del kwargs_person['m_name']
-        kwargs_person['entity_type'] = 'person'
 
         person = model_person.objects.create( **kwargs_person )
 
@@ -98,7 +96,6 @@ class PersonModelInheritedCases(
         del kwargs_person['email']
         del kwargs_person['directory']
         del kwargs_person['dob']
-        kwargs_person['entity_type'] = 'person'
 
         person = model_person.objects.create( **kwargs_person )
 
@@ -128,7 +125,6 @@ class PersonModelInheritedCases(
         del kwargs_person['directory']
         del kwargs_person['dob']
         del kwargs_person['m_name']
-        kwargs_person['entity_type'] = 'person'
 
         person = model_person.objects.create( **kwargs_person )
 

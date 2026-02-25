@@ -37,14 +37,6 @@ class Entity(
         verbose_name_plural = 'Entities'
 
 
-    entity_type = models.CharField(
-        blank = False,
-        help_text = 'Type this entity is',
-        max_length = 30,
-        unique = False,
-        verbose_name = 'Entity Type'
-    )
-
     modified = AutoLastModifiedField()
 
 
@@ -56,7 +48,7 @@ class Entity(
         if related_model is not self:
             return str( related_model )
         
-        return f'{self.entity_type} {self.pk}'
+        return f'{self._meta.verbose_name} {self.pk}'
  
 
 
@@ -64,24 +56,7 @@ class Entity(
 
     table_fields: list = [
         'organization',
-        'entity_type',
         'display_name',
         'created',
         'modified',
     ]
-
-
-
-    def clean_fields(self, exclude = None ):
-
-        related_model = self.get_related_model()
-
-        if related_model is None:
-
-            related_model = self
-
-        if self.entity_type != str(related_model._meta.verbose_name).lower().replace(' ', '_'):
-
-            self.entity_type = str(related_model._meta.verbose_name).lower().replace(' ', '_')
-
-        super().clean_fields( exclude = exclude )
