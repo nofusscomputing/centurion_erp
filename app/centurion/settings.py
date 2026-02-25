@@ -17,11 +17,8 @@ import sys
 
 from pathlib import Path
 from split_settings.tools import optional, include
-import django.db.models.options as options
 
 from .logging import CenturionLogger
-
-options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'itam_sub_model_type')
 
 ADDITIONAL_APPS: list = []    # Any additional Django apps to install
 APPEND_SLASH = False

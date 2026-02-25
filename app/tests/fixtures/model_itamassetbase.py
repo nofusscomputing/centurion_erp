@@ -21,7 +21,6 @@ def kwargs_itamassetbase( kwargs_assetbase, model_itamassetbase ):
 
         kwargs = {
             **kwargs_assetbase(),
-            'itam_type': "it_asset"
         }
 
         return kwargs

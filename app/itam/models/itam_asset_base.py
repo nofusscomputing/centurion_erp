@@ -34,59 +34,9 @@ class ITAMAssetBase(
             'id'
         ]
 
-        itam_sub_model_type = 'itam_base'
-
         verbose_name = "IT Asset"
 
         verbose_name_plural = "IT Assets"
-
-
-
-    @property
-    def get_itam_model_type(self):
-        """Fetch the ITAM Asset Type
-
-        Returns:
-            str: The models `Meta.m` in lowercase and without spaces
-            None: The ticket is for the Base class. Used to prevent creating a base ticket.
-        """
-
-        model_type = self._meta.model_name
-
-        if model_type == 'itam_base':
-
-            return None
-
-        return model_type
-
-
-    def get_itam_model_type_choices():
-
-        choices = []
-
-        if apps.ready:
-
-            all_models = apps.get_models()
-
-            for model in all_models:
-
-                if(
-                    ( isinstance(model, ITAMAssetBase) or issubclass(model, ITAMAssetBase) )
-
-                ):
-
-                    choices += [ (model._meta.model_name, model._meta.verbose_name) ]
-
-
-        return choices
-
-    itam_type = models.CharField(
-        blank = True,
-        help_text = 'IT Asset Type. (derived from IT asset model)',
-        max_length = 30,
-        null = False,
-        verbose_name = 'IT Asset Type',
-    )
 
 
 
@@ -100,7 +50,6 @@ class ITAMAssetBase(
                     "left": [
                         'organization',
                         'asset_type',
-                        'itam_type',
                         'asset_number',
                         'serial_number',
                     ],
@@ -147,7 +96,6 @@ class ITAMAssetBase(
             "type": "link",
             "key": "_self"
         },
-        'itam_type',
         'asset_number',
         'serial_number',
         'organization',
@@ -158,26 +106,6 @@ class ITAMAssetBase(
     def __str__(self):
 
         return self._meta.verbose_name + ' - ' + self.asset_number
-
-
-
-    def clean_fields(self, exclude = None):
-
-        related_model = self.get_related_model()
-
-        if related_model is None:
-
-            related_model = self
-
-        if(
-            self.itam_type != str(related_model._meta.model_name).lower().replace(' ', '_')
-            and str(related_model._meta.model_name).lower().replace(' ', '_') != 'itam_base'
-        ):
-
-            self.itam_type = str(related_model._meta.model_name).lower().replace(' ', '_')
-
-
-        super().clean_fields(exclude = exclude)
 
 
 

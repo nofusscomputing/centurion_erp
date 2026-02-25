@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS "django_celery_results_taskresult" ("id" integer NOT 
 CREATE TABLE IF NOT EXISTS "human_resources_employee_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "human_resources_employee" ("contact_ptr_id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "human_resources_employee_centurionmodelnote" ("centurionmodelnote_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_centurionmodelnote" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "human_resources_employee" ("contact_ptr_id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "human_resources_employee" ("contact_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "access_contact" ("person_ptr_id") DEFERRABLE INITIALLY DEFERRED, "user_id" bigint NULL UNIQUE REFERENCES "access_centurionuser" ("id") DEFERRABLE INITIALLY DEFERRED, "employee_number" bigint NOT NULL UNIQUE);
-CREATE TABLE IF NOT EXISTS "itam_itamassetbase" ("assetbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "accounting_assetbase" ("id") DEFERRABLE INITIALLY DEFERRED, "itam_type" varchar(30) NOT NULL);
+CREATE TABLE IF NOT EXISTS "itam_itamassetbase" ("assetbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "accounting_assetbase" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itim_changeticket" ("ticketbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_ticketbase" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itim_problemticket" ("ticketbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_ticketbase" ("id") DEFERRABLE INITIALLY DEFERRED, "business_impact" text NULL, "cause_analysis" text NULL, "observations" text NULL, "workaround" text NULL);
 CREATE TABLE IF NOT EXISTS "django_session" ("session_key" varchar(40) NOT NULL PRIMARY KEY, "session_data" text NOT NULL, "expire_date" datetime NOT NULL);
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS "social_auth_nonce" ("id" integer NOT NULL PRIMARY KE
 CREATE TABLE IF NOT EXISTS "social_auth_partial" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(32) NOT NULL, "next_step" smallint unsigned NOT NULL CHECK ("next_step" >= 0), "backend" varchar(32) NOT NULL, "timestamp" datetime NOT NULL, "data" text NOT NULL CHECK ((JSON_VALID("data") OR "data" IS NULL)));
 CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "provider" varchar(32) NOT NULL, "uid" varchar(255) NOT NULL, "user_id" bigint NOT NULL REFERENCES "access_centurionuser" ("id") DEFERRABLE INITIALLY DEFERRED, "created" datetime NOT NULL, "modified" datetime NOT NULL, "extra_data" text NOT NULL CHECK ((JSON_VALID("extra_data") OR "extra_data" IS NULL)), CONSTRAINT "user_social_auth_uid_required" CHECK (NOT ("uid" = '')));
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('django_migrations',229);
+INSERT INTO sqlite_sequence VALUES('django_migrations',230);
 INSERT INTO sqlite_sequence VALUES('django_content_type',186);
 INSERT INTO sqlite_sequence VALUES('auth_permission',804);
 INSERT INTO sqlite_sequence VALUES('auth_group',0);
