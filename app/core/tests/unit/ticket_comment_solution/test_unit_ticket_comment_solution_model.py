@@ -165,8 +165,7 @@ class TicketCommentSolutionModelTestCases(
 class TicketCommentSolutionModelInheritedCases(
     TicketCommentSolutionModelTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 
@@ -174,8 +173,6 @@ class TicketCommentSolutionModelInheritedCases(
 class TicketCommentSolutionModelPyTest(
     TicketCommentSolutionModelTestCases,
 ):
-
-    sub_model_type = 'solution'
 
 
     @pytest.mark.regression

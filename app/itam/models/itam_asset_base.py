@@ -34,8 +34,6 @@ class ITAMAssetBase(
             'id'
         ]
 
-        sub_model_type = 'it_asset'
-
         itam_sub_model_type = 'itam_base'
 
         verbose_name = "IT Asset"
@@ -53,7 +51,7 @@ class ITAMAssetBase(
             None: The ticket is for the Base class. Used to prevent creating a base ticket.
         """
 
-        model_type = str(self._meta.itam_sub_model_type).lower().replace(' ', '_')
+        model_type = self._meta.model_name
 
         if model_type == 'itam_base':
 
@@ -74,19 +72,16 @@ class ITAMAssetBase(
 
                 if(
                     ( isinstance(model, ITAMAssetBase) or issubclass(model, ITAMAssetBase) )
-                    # and ITAMAssetBase._meta.itam_sub_model_type != 'itam_base'
 
                 ):
 
-                    choices += [ (model._meta.itam_sub_model_type, model._meta.verbose_name) ]
+                    choices += [ (model._meta.model_name, model._meta.verbose_name) ]
 
 
         return choices
 
     itam_type = models.CharField(
         blank = True,
-        choices = get_itam_model_type_choices,
-        default = Meta.itam_sub_model_type,
         help_text = 'IT Asset Type. (derived from IT asset model)',
         max_length = 30,
         null = False,
@@ -175,11 +170,11 @@ class ITAMAssetBase(
             related_model = self
 
         if(
-            self.itam_type != str(related_model._meta.itam_sub_model_type).lower().replace(' ', '_')
-            and str(related_model._meta.sub_model_type).lower().replace(' ', '_') != 'itam_base'
+            self.itam_type != str(related_model._meta.model_name).lower().replace(' ', '_')
+            and str(related_model._meta.model_name).lower().replace(' ', '_') != 'itam_base'
         ):
 
-            self.itam_type = str(related_model._meta.itam_sub_model_type).lower().replace(' ', '_')
+            self.itam_type = str(related_model._meta.model_name).lower().replace(' ', '_')
 
 
         super().clean_fields(exclude = exclude)
@@ -204,7 +199,7 @@ class ITAMAssetBase(
 
         if (
             self._is_submodel
-            and self._meta.sub_model_type != 'it_asset'
+            and self._meta.model_name != 'itamassetbase'
         ):
 
             url_basename += '_sub'

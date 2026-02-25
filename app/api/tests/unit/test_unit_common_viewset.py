@@ -1144,7 +1144,7 @@ class CommonSubModelViewSetPyTest(
         checking the base classes, it's return is different to a class that
         has inherited from this or parent classes.
 
-        Attribute `model_kwarg` must be equal to model._meta.sub_model_type
+        Attribute `model_kwarg` must be equal to model._meta.model_name
         """
 
         assert viewset().model_kwarg is None

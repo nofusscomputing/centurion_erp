@@ -22,8 +22,6 @@ class TicketCommentTask(
             ('purge_ticketcommenttask', 'Can purge ticket task comment.'),
         ]
 
-        sub_model_type = 'task'
-
         verbose_name = "Ticket Comment Task"
 
         verbose_name_plural = "Ticket Comment Task"

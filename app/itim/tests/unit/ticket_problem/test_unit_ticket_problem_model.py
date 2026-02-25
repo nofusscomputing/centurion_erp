@@ -75,8 +75,7 @@ class ProblemTicketModelTestCases(
 class ProblemTicketModelInheritedCases(
     ProblemTicketModelTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 
@@ -84,5 +83,4 @@ class ProblemTicketModelInheritedCases(
 class ProblemTicketModelPyTest(
     ProblemTicketModelTestCases,
 ):
-
-    sub_model_type = 'problem'
+    pass

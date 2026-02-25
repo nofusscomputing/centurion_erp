@@ -14,13 +14,6 @@ class ContactModelTestCases(
     PersonModelInheritedCases,
 ):
 
-    sub_model_type = 'contact'
-    """Sub Model Type
-
-    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
-    """
-
-
     @property
     def parameterized_class_attributes(self):
 

@@ -11,8 +11,6 @@ class RequestTicketTestCases(
     SLMTicketModelInheritedCases
 ):
 
-    sub_model_type = 'request'
-
 
     @property
     def parameterized_class_attributes(self):
@@ -66,8 +64,7 @@ class RequestTicketTestCases(
 class RequestTicketInheritedCases(
     RequestTicketTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 

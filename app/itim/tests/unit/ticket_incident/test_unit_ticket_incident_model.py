@@ -11,8 +11,6 @@ class IncidentTicketTestCases(
     SLMTicketModelInheritedCases
 ):
 
-    sub_model_type = 'incident'
-
 
     @property
     def parameterized_class_attributes(self):
@@ -66,8 +64,7 @@ class IncidentTicketTestCases(
 class IncidentTicketInheritedCases(
     IncidentTicketTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 

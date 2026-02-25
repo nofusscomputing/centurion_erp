@@ -55,13 +55,6 @@ class CompanyMetadataInheritedCases(
             **self.kwargs_create_item_diff_org
         }
 
-        # self.url_kwargs = {
-        #     'model_name': self.model._meta.sub_model_type
-        # }
-
-        # self.url_view_kwargs = {
-        #     'model_name': self.model._meta.sub_model_type
-        # }
 
         super().setUpTestData()
 

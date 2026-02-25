@@ -37,7 +37,6 @@ class AssetBase(
             'id'
         ]
 
-        sub_model_type = 'asset'
 
         verbose_name = "Asset"
 
@@ -104,13 +103,13 @@ class AssetBase(
             None: The ticket is for the Base class. Used to prevent creating a base ticket.
         """
 
-        sub_model_type = str(self._meta.sub_model_type).lower().replace(' ', '_')
+        model_type = str(self._meta.model_name).lower().replace(' ', '_')
 
-        if sub_model_type == 'asset':
+        if model_type == 'assetbase':
 
             return None
 
-        return sub_model_type
+        return model_type
 
 
     def get_model_type_choices():
@@ -125,19 +124,16 @@ class AssetBase(
 
                 if(
                     ( isinstance(model, AssetBase) or issubclass(model, AssetBase) )
-                    # and AssetBase._meta.sub_model_type != 'asset'
 
                 ):
 
-                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
+                    choices += [ (model._meta.model_name, model._meta.verbose_name) ]
 
 
         return choices
 
     asset_type = models.CharField(
         blank = True,
-        choices = get_model_type_choices,
-        default = Meta.sub_model_type,
         help_text = 'Asset Type. (derived from asset model)',
         max_length = 30,
         null = False,
@@ -228,11 +224,11 @@ class AssetBase(
             related_model = self
 
         if (
-            self.asset_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_')
-            and str(related_model._meta.sub_model_type).lower().replace(' ', '_') != 'asset'
+            self.asset_type != related_model._meta.model_name
+            and related_model._meta.model_name != 'assetbase'
         ):
 
-            self.asset_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
+            self.asset_type = related_model._meta.model_name
 
 
         super().clean_fields(exclude = exclude)

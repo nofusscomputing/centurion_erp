@@ -52,8 +52,7 @@ class ChangeTicketModelTestCases(
 class ChangeTicketModelInheritedCases(
     ChangeTicketModelTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 
@@ -61,5 +60,4 @@ class ChangeTicketModelInheritedCases(
 class ChangeTicketModelPyTest(
     ChangeTicketModelTestCases,
 ):
-
-    sub_model_type = 'change'
+    pass

@@ -135,8 +135,6 @@ class TicketBase(
             ('triage_ticketbase', 'Can triage a ticket base'),
         ]
 
-        sub_model_type = 'ticket'
-
         unique_together = ('external_system', 'external_ref',)
 
         verbose_name = "Ticket"
@@ -189,9 +187,9 @@ class TicketBase(
             None: The ticket is for the Base class. Used to prevent creating a base ticket.
         """
 
-        ticket_type = str(self._meta.sub_model_type).lower().replace(' ', '_')
+        ticket_type = self._meta.model_name
 
-        if ticket_type == 'ticket':
+        if ticket_type == 'ticketbase':
 
             return None
 
@@ -210,7 +208,7 @@ class TicketBase(
 
                 if isinstance(model, TicketBase) or issubclass(model, TicketBase):
 
-                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
+                    choices += [ (model._meta.model_name, model._meta.verbose_name) ]
 
 
         return choices
@@ -218,9 +216,6 @@ class TicketBase(
 
     ticket_type = models.CharField(
         blank = True,
-        choices = get_ticket_type_choices,
-        # default = get_ticket_type_default,
-        default = Meta.sub_model_type,
         help_text = 'Ticket Type. (derived from ticket model)',
         max_length = 30,
         null = False,
@@ -645,9 +640,9 @@ class TicketBase(
 
             related_model = self
 
-        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
+        if self.ticket_type != related_model._meta.model_name:
 
-            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
+            self.ticket_type = related_model._meta.model_name
 
 
         if self.date_solved is None and self.is_solved:
@@ -775,7 +770,7 @@ class TicketBase(
 
             del kwargs['model_name']
 
-        if str(self._meta.sub_model_type) != 'ticket':
+        if self._meta.model_name != 'ticketbase':
 
             kwargs.update({
                 'app_label': self._meta.app_label,

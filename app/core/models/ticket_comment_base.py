@@ -60,8 +60,6 @@ class TicketCommentBase(
             ('purge_ticketcommentbase', 'Can purge ticket comment.'),
         ]
 
-        sub_model_type = 'comment'
-
         unique_together = ('external_system', 'external_ref',)
 
         verbose_name = "Ticket Comment"
@@ -123,9 +121,7 @@ class TicketCommentBase(
     @property
     def get_comment_type(self):
 
-        comment_type = str(self._meta.sub_model_type).lower().replace(
-            ' ', '_'
-        )
+        comment_type = self._meta.model_name
 
         return comment_type
 
@@ -141,7 +137,7 @@ class TicketCommentBase(
 
                 if isinstance(model, TicketCommentBase) or issubclass(model, TicketCommentBase):
 
-                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
+                    choices += [ (model._meta.model_name, model._meta.verbose_name) ]
 
 
         return choices
@@ -287,7 +283,7 @@ class TicketCommentBase(
                 self.date_closed = None
 
 
-            self.comment_type = self._meta.sub_model_type
+            self.comment_type = self._meta.model_name
 
 
             if self.parent:
@@ -413,7 +409,7 @@ class TicketCommentBase(
 
         body = self.body
 
-        if self._meta.sub_model_type != 'action':
+        if self._meta.model_name != 'ticketcommentaction':
             self.body = self.slash_command(self.body)
 
         is_converted_action_comment = False

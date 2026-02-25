@@ -52,8 +52,7 @@ class ProjectTaskTicketModelTestCases(
 class ProjectTaskTicketModelInheritedCases(
     ProjectTaskTicketModelTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 
@@ -61,5 +60,4 @@ class ProjectTaskTicketModelInheritedCases(
 class ProjectTaskTicketModelPyTest(
     ProjectTaskTicketModelTestCases,
 ):
-
-    sub_model_type = 'projecttask'
+    pass

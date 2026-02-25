@@ -23,8 +23,6 @@ class ProblemTicket(
             ('triage_problemticket', 'Can triage problem ticket'),
         ]
 
-        sub_model_type = 'problem'
-
         verbose_name = 'Problem'
 
         verbose_name_plural = 'Problems'

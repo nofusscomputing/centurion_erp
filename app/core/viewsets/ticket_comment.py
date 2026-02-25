@@ -40,7 +40,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             )
 
             serializers.update({
-                model._meta.sub_model_type: getattr(serializer_module, serializer_type + 'Serializer')
+                model._meta.model_name: getattr(serializer_module, serializer_type + 'Serializer')
             })
 
     return serializers

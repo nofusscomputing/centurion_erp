@@ -21,8 +21,6 @@ class ChangeTicket(
             ('triage_changeticket', 'Can triage change ticket'),
         ]
 
-        sub_model_type = 'change'
-
         verbose_name = 'Change'
 
         verbose_name_plural = 'Changes'

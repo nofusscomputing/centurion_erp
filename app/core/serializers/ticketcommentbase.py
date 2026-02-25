@@ -246,7 +246,7 @@ class ModelSerializer(
             serializer_module = (
                     f'{serializer_model._meta.app_label}.serializers.'
                     f'{serializer_model._base_model._meta.model_name}_'
-                    f'{serializer_model._meta.sub_model_type}'
+                    f'{serializer_model._meta.model_name}'
                 )
 
         # elif(
@@ -351,7 +351,7 @@ class ModelSerializer(
 
     def validate(self, attrs):
 
-        attrs['comment_type'] = self.context['view'].model._meta.sub_model_type
+        attrs['comment_type'] = self.context['view'].model._meta.model_name
 
         attrs['user'] = self.context['request'].user.get_entity()
 
