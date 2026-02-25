@@ -702,6 +702,10 @@ class CommonViewSet(
 
             if(
                 getattr(self, 'base_model', '') == self.model
+                and self.base_model._meta.model_name not in [
+                    'centurionaudit',
+                    'modelticket',
+                ]
             ):    # filter to only add sub-models when view is for `base_model`
 
                 sub_model_urls = {}
@@ -727,7 +731,9 @@ class CommonViewSet(
                         if sub_model._is_submodel:
 
                             if(
-                                self.base_model._meta.model_name in [ 'ticketbase' ]
+                                self.base_model._meta.model_name in [
+                                    'ticketbase'
+                                ]
                                 and sub_model._is_submodel
                                 and 'project_id' not in kwargs
                             ):
