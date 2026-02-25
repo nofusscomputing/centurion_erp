@@ -215,6 +215,7 @@ page_layout: list = [
                 "layout": "table",
                 "name": "Dependent Services",    # Heading for the section.
                 "field": "service",    # field name within the `_urls` dict of the api query. which is where the data will be fetched from.
+                "sub_models": []    # Optional, List of submodels using value of `<model>._meta.model_name` to create an `Add` button for. Only works for models that contain sub-models.
             },
             {    # single column section.
                 "layout": "single",
