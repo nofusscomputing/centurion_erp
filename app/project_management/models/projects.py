@@ -269,6 +269,13 @@ class Project(
             "slug": "ticket",
             "sections": [
                 {
+                    "sub_models": [
+                        'changeticket',
+                        'incidentticket',
+                        'problemticket',
+                        'projecttaskticket',
+                        'requestticket',
+                    ],
                     "layout": "table",
                     "field": "tickets",
                 }
