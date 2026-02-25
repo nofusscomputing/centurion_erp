@@ -30,7 +30,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             if model._meta.model_name != 'ticketcommentbase':
                 
-                serializer_name += '_' + model._meta.sub_model_type
+                serializer_name += '_' + model._meta.model_name
 
 
             serializer_module = importlib.import_module(
@@ -65,7 +65,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             OpenApiParameter(
                 allow_blank = False,
                 default = 'comment',
-                name = 'ticket_comment_model',
+                name = 'model_name',
                 type = OpenApiTypes.STR,
                 location = OpenApiParameter.PATH,
                 required = True,
@@ -250,7 +250,7 @@ class ViewSet(
         'body',
     ]
 
-    model_kwarg = 'ticket_comment_model'
+    model_kwarg = 'model_name'
 
     parent_model = TicketBase
 

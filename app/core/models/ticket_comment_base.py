@@ -377,7 +377,7 @@ class TicketCommentBase(
 
         if self._is_submodel:
             kwargs = {
-                'ticket_comment_model': self._meta.sub_model_type
+                'model_name': self._meta.model_name
             }
 
         kwargs.update({

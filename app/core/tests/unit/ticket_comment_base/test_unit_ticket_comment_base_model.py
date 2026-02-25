@@ -368,13 +368,13 @@ class TicketCommentBaseModelTestCases(
         if model_instance.parent:
 
             expected_value = '/core/ticket/' + str(
-                model_instance.ticket.id) + '/' + self.sub_model_type + '/' + str(
+                model_instance.ticket.id) + '/' + model_instance._meta.model_name + '/' + str(
                     model_instance.parent.id) + '/threads/' + str(model_instance.id)
 
         else:
 
             expected_value = '/core/ticket/' + str( 
-                model_instance.ticket.id) + '/' + self.sub_model_type + '/' + str(
+                model_instance.ticket.id) + '/' + model_instance._meta.model_name + '/' + str(
                     model_instance.id)
 
         assert model_instance.get_url(relative = True) == '/api/v2' + expected_value
@@ -398,7 +398,7 @@ class TicketCommentBaseModelTestCases(
 
         if model_instance._is_submodel:
             kwargs.update({
-                'ticket_comment_model': model_instance._meta.sub_model_type
+                'model_name': model_instance._meta.model_name
             })
 
         assert model_instance.get_url_kwargs() == kwargs

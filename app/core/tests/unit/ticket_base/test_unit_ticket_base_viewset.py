@@ -69,7 +69,7 @@ class ViewsetTestCases(
                 'type': NoneType,
             },
             'model_kwarg': {
-                'value':'ticket_type',
+                'value':'model_name',
             },
             'model_suffix': {
                 'type': NoneType,

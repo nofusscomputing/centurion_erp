@@ -1,7 +1,7 @@
 import pytest
 
 from project_management.models.ticket_project_task import ProjectTaskTicket
-from project_management.serializers.ticketbase_projecttask import (
+from project_management.serializers.ticketbase_projecttaskticket import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer

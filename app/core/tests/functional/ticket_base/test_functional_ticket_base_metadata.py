@@ -85,7 +85,7 @@ class MetadataTestCases(
         })
 
         if self.model._meta.sub_model_type != 'ticket':
-            self.url_view_kwargs.update({ 'ticket_type': self.model._meta.sub_model_type })
+            self.url_view_kwargs.update({ 'model_name': self.model._meta.model_name })
 
         super().setUpTestData()
 
@@ -131,12 +131,12 @@ class TicketBaseMetadataInheritedCases(
 
         self.url_kwargs = {
             'app_label': self.model._meta.app_label,
-            'ticket_type': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         self.url_view_kwargs = {
             'app_label': self.model._meta.app_label,
-            'ticket_type': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()

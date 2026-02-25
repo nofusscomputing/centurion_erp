@@ -86,7 +86,7 @@ class ModelSerializer(
                 viewname = "v2:_api_modelticket-list",
                 request = self._context['view'].request,
                 kwargs = {
-                    'ticket_type': item._meta.sub_model_type,
+                    'model_name': item._meta.model_name,
                     'model_id': item.pk,
                 }
             ),

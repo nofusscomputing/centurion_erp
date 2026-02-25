@@ -46,6 +46,21 @@ class TenancyPermissionsModelViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -71,6 +86,21 @@ class TenancyPermissionsModelCreateViewSetPyTest(
         return ModelCreateViewSet
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )
 
 
@@ -100,6 +130,21 @@ class TenancyPermissionsModelListRetrieveDeleteViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -125,6 +170,21 @@ class TenancyPermissionsModelRetrieveUpdateViewSetPyTest(
         return ModelRetrieveUpdateViewSet
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )
 
 
@@ -153,6 +213,21 @@ class TenancyPermissionsSubModelViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -178,6 +253,21 @@ class TenancyPermissionsReadOnlyModelViewSetPyTest(
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )
+
 
 
 @pytest.mark.permissions_tenancy
@@ -201,4 +291,19 @@ class TenancyPermissionsReadOnlyListModelViewSetPyTest(
         return ReadOnlyListModelViewSet
 
     def test_function_get_queryset_filtered_results_action_list(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
         pytest.xfail( reason = 'Base class does not require test' )

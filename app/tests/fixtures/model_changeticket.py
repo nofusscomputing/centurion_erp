@@ -1,7 +1,7 @@
 import pytest
 
 from itim.models.ticket_change import ChangeTicket
-from itim.serializers.ticketbase_change import (
+from itim.serializers.ticketbase_changeticket import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer

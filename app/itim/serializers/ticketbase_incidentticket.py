@@ -1,32 +1,32 @@
 from drf_spectacular.utils import extend_schema_serializer
 
-from itim.serializers.ticketbase_slm import (
+from itim.serializers.ticketbase_slmticket import (
     BaseSerializer as SLMTicketBaseSerializer,
     ModelSerializer as SLMTicketModelSerializer,
     ViewSerializer as SLMTicketViewSerializer
 )
 
-from itim.models.request_ticket import RequestTicket
+from itim.models.ticket_incident import IncidentTicket
 
 
 
-@extend_schema_serializer(component_name = 'RequestTicketBaseSerializer')
+@extend_schema_serializer(component_name = 'IncidentTicketBaseSerializer')
 class BaseSerializer(
     SLMTicketBaseSerializer
 ):
     pass
 
 
-@extend_schema_serializer(component_name = 'RequestTicketModelSerializer')
+@extend_schema_serializer(component_name = 'IncidentTicketModelSerializer')
 class ModelSerializer(
     SLMTicketModelSerializer,
     BaseSerializer,
 ):
-    """Service Request Ticket"""
+    """Service Incident Ticket"""
 
     class Meta:
 
-        model = RequestTicket
+        model = IncidentTicket
 
         fields = [
             'id',
@@ -88,11 +88,11 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'RequestTicketViewSerializer')
+@extend_schema_serializer(component_name = 'IncidentTicketViewSerializer')
 class ViewSerializer(
     SLMTicketViewSerializer,
     ModelSerializer,
     ):
-    """Service Request Ticket View Model"""
+    """Service Incident Ticket View Model"""
 
     pass

@@ -126,7 +126,7 @@ class ModelTicket(
                 del kwargs['model_name']
 
             kwargs.update({
-                'ticket_type': self.ticket._meta.sub_model_type,
+                'model_name': self.ticket._meta.model_name,
                 'model_id': self.ticket.id,
             })
 

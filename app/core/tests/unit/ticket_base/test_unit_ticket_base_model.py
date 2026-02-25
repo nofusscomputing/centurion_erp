@@ -951,7 +951,7 @@ class TicketBaseModelTestCases(
             url_basename,
             None,
             {
-                'ticket_type': model_instance._meta.sub_model_type,
+                'model_name': model_instance._meta.model_name,
                 'pk': model_instance.id,
             },
             None,
@@ -966,7 +966,7 @@ class TicketBaseModelTestCases(
         url = model_instance.get_url_kwargs()
 
         assert model_instance.get_url_kwargs() == {
-            'ticket_type': model_instance._meta.sub_model_type,
+            'model_name': model_instance._meta.model_name,
             'pk': model_instance.id,
         }
 
@@ -1004,7 +1004,7 @@ class TicketBaseModelInheritedCases(
 
         assert model_instance.get_url_kwargs() == {
             'app_label': model_instance._meta.app_label,
-            'ticket_type': model_instance._meta.sub_model_type,
+            'model_name': model_instance._meta.model_name,
             'pk': model_instance.id
         }
 
@@ -1037,7 +1037,7 @@ class TicketBaseModelInheritedCases(
             None,
             {
                 'app_label': model_instance._meta.app_label,
-                'ticket_type': model_instance._meta.sub_model_type,
+                'model_name': model_instance._meta.model_name,
                 'pk': model_instance.id,
             },
             None,

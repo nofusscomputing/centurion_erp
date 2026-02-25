@@ -2,7 +2,7 @@ import pytest
 import random
 
 from itim.models.ticket_problem import ProblemTicket
-from itim.serializers.ticketbase_problem import (
+from itim.serializers.ticketbase_problemticket import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer

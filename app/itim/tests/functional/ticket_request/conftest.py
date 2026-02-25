@@ -15,15 +15,9 @@ def model(request):
 
 
 @pytest.fixture
-def create_serializer():
+def create_serializer(serializer_requestticket):
 
-    from itim.serializers.ticketbase_request import ModelSerializer
-
-    serializer = ModelSerializer
-
-    yield serializer
-
-    del serializer
+    yield serializer_requestticket['model']
 
 
 @pytest.fixture( scope = 'class', autouse = True)

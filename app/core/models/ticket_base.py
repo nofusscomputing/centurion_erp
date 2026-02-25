@@ -779,7 +779,7 @@ class TicketBase(
 
             kwargs.update({
                 'app_label': self._meta.app_label,
-                'ticket_type': str(self._meta.sub_model_type),
+                'model_name': str(self._meta.model_name),
             })
 
 

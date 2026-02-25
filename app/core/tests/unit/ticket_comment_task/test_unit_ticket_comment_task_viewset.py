@@ -73,7 +73,7 @@ class ViewsetTestCases(
 
 
         view_set.kwargs = {
-            'ticket_comment_model': 'task',
+            'model_name': 'ticketcommenttask',
             'ticket_id': ticket.id
         }
 

@@ -1,32 +1,32 @@
 from drf_spectacular.utils import extend_schema_serializer
 
-from itim.serializers.ticketbase_slm import (
-    BaseSerializer as SLMTicketBaseSerializer,
-    ModelSerializer as SLMTicketModelSerializer,
-    ViewSerializer as SLMTicketViewSerializer
+from core.serializers.ticketbase import (
+    BaseSerializer as TicketBaseSerializer,
+    ModelSerializer as TicketModelSerializer,
+    ViewSerializer as TicketViewSerializer
 )
 
-from itim.models.ticket_incident import IncidentTicket
+from project_management.models.ticket_project_task import ProjectTaskTicket
 
 
 
-@extend_schema_serializer(component_name = 'IncidentTicketBaseSerializer')
+@extend_schema_serializer(component_name = 'ProjectTaskTicketBaseSerializer')
 class BaseSerializer(
-    SLMTicketBaseSerializer
+    TicketBaseSerializer
 ):
     pass
 
 
-@extend_schema_serializer(component_name = 'IncidentTicketModelSerializer')
+@extend_schema_serializer(component_name = 'ProjectTaskTicketModelSerializer')
 class ModelSerializer(
-    SLMTicketModelSerializer,
+    TicketModelSerializer,
     BaseSerializer,
 ):
-    """Service Incident Ticket"""
+    """Service ProjectTask Ticket"""
 
     class Meta:
 
-        model = IncidentTicket
+        model = ProjectTaskTicket
 
         fields = [
             'id',
@@ -58,8 +58,6 @@ class ModelSerializer(
             'planned_finish_date',
             'real_start_date',
             'real_finish_date',
-            'tto',
-            'ttr',
             'is_deleted',
             'is_solved',
             'date_solved',
@@ -76,8 +74,6 @@ class ModelSerializer(
             'external_system',
             'external_ref',
             'ticket_type',
-            'tto',
-            'ttr',
             'is_deleted',
             'created',
             'modified',
@@ -88,11 +84,11 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'IncidentTicketViewSerializer')
+@extend_schema_serializer(component_name = 'ProjectTaskTicketViewSerializer')
 class ViewSerializer(
-    SLMTicketViewSerializer,
+    TicketViewSerializer,
     ModelSerializer,
     ):
-    """Service Incident Ticket View Model"""
+    """Service ProjectTask Ticket View Model"""
 
     pass
