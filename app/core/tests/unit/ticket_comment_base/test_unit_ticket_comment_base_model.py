@@ -97,13 +97,6 @@ class TicketCommentBaseModelTestCases(
                 'null': True,
                 'unique': False,
             },
-            "comment_type": {
-                'blank': False,
-                'default': models.fields.NOT_PROVIDED,
-                'field_type': models.fields.CharField,
-                'null': False,
-                'unique': False,
-            },
             "category": {
                 'blank': True,
                 'default': models.fields.NOT_PROVIDED,
@@ -385,23 +378,6 @@ class TicketCommentBaseModelTestCases(
         """
 
         assert model_instance.parent_object == model_instance.ticket
-
-
-    def test_function_clean_validation_mismatch_comment_type_raises_exception(self, model):
-        """Function Check
-
-        Ensure function `clean` does validation
-        """
-
-        valid_data = self.kwargs_create_item.copy()
-
-        valid_data['comment_type'] = 'Nope'
-
-        with pytest.raises(DjangoValidationError) as err:
-
-            model.objects.create(
-                **valid_data
-            )
 
 
 

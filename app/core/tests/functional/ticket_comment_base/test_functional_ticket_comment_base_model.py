@@ -73,8 +73,6 @@ class TicketCommentBaseModelTestCases:
             ticket_comment.ticket.is_closed = False
             ticket_comment.ticket.is_solved = False
 
-            ticket_comment.comment_type = model._meta.model_name
-
             ticket_comment.body = 'body text'
 
             ticket_comment.ticket.save()

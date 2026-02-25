@@ -74,7 +74,6 @@ For this command to process the following conditions must be met:
 
             TicketCommentAction.objects.create(
                 ticket = self,
-                comment_type = TicketCommentAction._meta.model_name,
                 body = comment_text,
                 duration = duration,
                 user = self.opened_by,

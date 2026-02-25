@@ -21,7 +21,6 @@ def create_action_comment(ticket, text, user) -> None:
         organization = ticket.organization,
         ticket = ticket,
         is_closed = True,
-        comment_type = TicketCommentAction._meta.model_name,
         body = text,
         user = user,
     )

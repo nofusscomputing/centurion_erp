@@ -26,7 +26,6 @@ def kwargs_ticketcommentaction(
 
         kwargs = {
             **kwargs_ticketcommentbase(),
-            'comment_type': model_ticketcommentaction._meta.model_name,
         }
 
         return kwargs

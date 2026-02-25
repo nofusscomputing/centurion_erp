@@ -589,7 +589,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -662,7 +662,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -735,7 +735,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -808,7 +808,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -881,7 +881,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -954,7 +954,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -1027,7 +1027,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -1100,7 +1100,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 

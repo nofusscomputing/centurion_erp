@@ -307,10 +307,7 @@ class ViewSet(
 
                     triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
 
-                    if(
-                        self.model.comment_type == 'task'
-                        or self.model._meta.model_name == 'ticketcommenttask'
-                    ):
+                    if self.model._meta.model_name == 'ticketcommenttask':
 
                         self._perms_map: dict[str, list[str]] = {
                             'POST': [ triage_permission ],

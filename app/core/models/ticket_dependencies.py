@@ -177,7 +177,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.ticket,
-                comment_type = TicketCommentAction._meta.model_name,
                 body = comment_field_value_from,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,
@@ -189,7 +188,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.dependent_ticket,
-                comment_type = TicketCommentAction._meta.model_name,
                 body = comment_field_value_to,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,
@@ -242,7 +240,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.ticket,
-                comment_type = TicketCommentAction._meta.model_name,
                 body = comment_field_value_from,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,
@@ -254,7 +251,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.dependent_ticket,
-                comment_type = TicketCommentAction._meta.model_name,
                 body = comment_field_value_to,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,
