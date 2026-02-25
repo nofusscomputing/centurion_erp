@@ -66,12 +66,6 @@ class ProblemTicketModelTestCases(
 
 
 
-    def test_function_get_ticket_type(self, model):
-
-        assert model().get_ticket_type == 'problem'
-
-
-
 class ProblemTicketModelInheritedCases(
     ProblemTicketModelTestCases,
 ):

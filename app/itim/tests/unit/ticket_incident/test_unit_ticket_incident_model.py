@@ -48,18 +48,6 @@ class IncidentTicketTestCases(
         assert issubclass(model, IncidentTicket)
 
 
-    def test_function_get_ticket_type(self, model):
-        """Function test
-
-        As this model is intended to be used alone.
-
-        Ensure that function `get_ticket_type` returns `request` for model
-        `IncidentTicket`
-        """
-
-        assert model().get_ticket_type == 'incident'
-
-
 
 class IncidentTicketInheritedCases(
     IncidentTicketTestCases,

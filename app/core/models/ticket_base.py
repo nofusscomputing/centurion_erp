@@ -175,55 +175,6 @@ class TicketBase(
         verbose_name = 'Parent Ticket'
     )
 
-    @property
-    def get_ticket_type(self):
-        """Fetch the Ticket Type
-
-        You can safely override this function as long as it's called or the
-        logic is included in your over-ridden function.
-
-        Returns:
-            str: The models `Meta.verbose_name` in lowercase and without spaces
-            None: The ticket is for the Base class. Used to prevent creating a base ticket.
-        """
-
-        ticket_type = self._meta.model_name
-
-        if ticket_type == 'ticketbase':
-
-            return None
-
-        return ticket_type
-
-
-    def get_ticket_type_choices():
-
-        choices = []
-
-        if apps.ready:
-
-            all_models = apps.get_models()
-
-            for model in all_models:
-
-                if isinstance(model, TicketBase) or issubclass(model, TicketBase):
-
-                    choices += [ (model._meta.model_name, model._meta.verbose_name) ]
-
-
-        return choices
-
-
-    ticket_type = models.CharField(
-        blank = True,
-        help_text = 'Ticket Type. (derived from ticket model)',
-        max_length = 30,
-        null = False,
-        validators = [
-            validate_not_null
-        ],
-        verbose_name = 'Ticket Type',
-    )
 
     status = models.IntegerField( # will require validation by ticket type as status for types will be different
         blank = False,
@@ -639,10 +590,6 @@ class TicketBase(
         if related_model is None:
 
             related_model = self
-
-        if self.ticket_type != related_model._meta.model_name:
-
-            self.ticket_type = related_model._meta.model_name
 
 
         if self.date_solved is None and self.is_solved:

@@ -172,7 +172,6 @@ class MarkdownFieldTestCases(
 
         mock_model.id = 999999
         mock_model.status = mock_model.TicketStatus.NEW
-        mock_model.ticket_type = 'request'
         mock_model.title = title
 
 
@@ -187,7 +186,6 @@ class MarkdownFieldTestCases(
             'tickets':{
                 '999999':{
                     'status': mock_model.TicketStatus(mock_model.status).label,
-                    'ticket_type': mock_model.ticket_type,
                     'title': str(mock_model),
                     'url': url
                 }

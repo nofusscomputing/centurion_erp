@@ -83,14 +83,6 @@ class TicketBaseModelTestCases(
                 'null': True,
                 'unique': False,
             },
-            "ticket_type": {
-                'blank': True,
-                'default': 'ticket',
-                'field_type': models.fields.CharField,
-                'max_length': 50,
-                'null': False,
-                'unique': False,
-            },
             "status": {
                 'blank': False,
                 'default': TicketBase.TicketStatus.NEW,
@@ -411,29 +403,6 @@ class TicketBaseModelTestCases(
         assert model.validate_not_null(None) == False
 
 
-
-    def test_function_get_ticket_type(self, model):
-        """Function test
-
-        As this model is not intended to be used alone.
-
-        Ensure that function `get_ticket_type` returns None for model
-        `TicketBase`
-        """
-
-        assert model().get_ticket_type == None
-
-
-    def test_function_get_ticket_type_choices(self, model):
-        """Function test
-
-        Ensure that function `get_ticket_type_choices` returns a tuple of
-        the ticket type ( `Model.Meta.sub_ticket_type`, `Model.Meta.verbose_name` )
-        """
-
-        assert (model()._meta.model_name, model()._meta.verbose_name) in model.get_ticket_type_choices()
-
-
     def test_function_status_badge_type(self, model):
         """Function test
 
@@ -484,7 +453,7 @@ class TicketBaseModelTestCases(
     ):
         """Function test
 
-        Ensure that function `get_ticket_type_choices` returns a tuple of
+        Ensure that function `get_milestone_choices` returns a tuple of
         each projects milestones
         """
 
@@ -507,7 +476,7 @@ class TicketBaseModelTestCases(
     ):
         """Function test
 
-        Ensure that function `get_ticket_type_choices` returns the correct milestones per project
+        Ensure that function `get_milestone_choices` returns the correct milestones per project
         """
 
         mocker.patch.object(model, 'project', return_value = ticket_projects['one']['project'] )

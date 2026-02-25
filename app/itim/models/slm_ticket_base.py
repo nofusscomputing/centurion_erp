@@ -27,28 +27,6 @@ class SLMTicket(
 
 
 
-    @property
-    def get_ticket_type(self):
-        """Fetch the Ticket Type
-
-        Returns:
-            str: The models `Meta.verbose_name` in lowercase and without spaces
-            None: The ticket is for the Base class (TicketBase). Used to prevent creating a base ticket.
-            None: The ticket is for the Base class (SLMTicket). Used to prevent creating a base ticket.
-        """
-
-        ticket_type = super().get_ticket_type
-
-        if(
-            ticket_type is None
-            or ticket_type == 'slm'
-        ):
-
-            return None
-
-        return ticket_type
-
-
     # SLA = models.ForeignKey(
     #     ServiceLevelAgreement,
     #     blank = True,
