@@ -222,7 +222,6 @@ class ViewSet( SubModelViewSet_ReWrite ):
     base_model = AssetBase
 
     filterset_fields = [
-        'asset_type',
         'asset_number',
         'serial_number',
         'organization',

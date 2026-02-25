@@ -49,7 +49,6 @@ class ITAMAssetBase(
                     "layout": "double",
                     "left": [
                         'organization',
-                        'asset_type',
                         'asset_number',
                         'serial_number',
                     ],
