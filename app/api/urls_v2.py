@@ -43,7 +43,7 @@ for model in apps.get_models():
 
     if getattr(model, '_audit_enabled', False):
 
-        history_type_names += model._meta.model_name + '|'
+        history_type_names += str(model().get_history_model_name()).lower() + '|'
 
         if model._meta.app_label not in history_app_labels:
 
@@ -52,7 +52,7 @@ for model in apps.get_models():
 
     if getattr(model, '_notes_enabled', False):
 
-        notes_type_names += model._meta.model_name + '|'
+        notes_type_names += str(f'{model._meta.object_name}CenturionModelNote').lower() + '|'
 
         if model._meta.app_label not in notes_app_labels:
 
@@ -60,7 +60,7 @@ for model in apps.get_models():
 
     if getattr(model, '_ticket_linkable', False):
 
-        ticket_model_links_type_names += model._meta.model_name + '|'
+        ticket_model_links_type_names += str(f'{model._meta.object_name}Ticket').lower() + '|'
 
         if model._meta.app_label not in ticket_model_links_app_labels:
 

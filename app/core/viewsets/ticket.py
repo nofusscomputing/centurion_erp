@@ -32,7 +32,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             serializer_name = 'ticketbase'
 
-            if model._meta.sub_model_type != 'ticket':
+            if model._meta.model_name != 'ticketbase':
                 
                 serializer_name += '_' + model._meta.model_name
 

@@ -107,11 +107,11 @@ class EntityMetadataInheritedCases(
         }
 
         self.url_kwargs = {
-            'model_name': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         self.url_view_kwargs = {
-            'model_name': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()

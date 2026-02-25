@@ -324,9 +324,6 @@ class TicketBaseModelTestCases(
             'parent_ticket': {
                 'field': models.NOT_PROVIDED
             },
-            'ticket_type': {
-                'field': models.NOT_PROVIDED
-            },
             'status': {
                 'field': 'status',
                 'type': Enum,

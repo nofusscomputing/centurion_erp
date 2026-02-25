@@ -55,7 +55,6 @@ class TicketBaseSerializerTestCases:
             'permission_import_required': False,
             'permission_triage_required': True,
         },
-        # "ticket_type": "request",
         "status": {
             'will_create': True,
             'permission_import_required': False,

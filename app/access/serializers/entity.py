@@ -63,7 +63,6 @@ class ModelSerializer(
         fields = [
             'id',
             'organization',
-            'entity_type',
             'display_name',
             'model_notes',
             'created',
@@ -74,7 +73,6 @@ class ModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
-            'entity_type',
             'created',
             'modified',
             '_urls',

@@ -18,8 +18,6 @@ class TicketCommentAction(
             ('import_ticketcommentaction', 'Can import ticket action comment.'),
         ]
 
-        sub_model_type = 'action'
-
         verbose_name = "Ticket Comment Action"
 
         verbose_name_plural = "Ticket Comment Actions"

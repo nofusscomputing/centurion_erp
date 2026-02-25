@@ -97,13 +97,6 @@ class TicketCommentBaseModelTestCases(
                 'null': True,
                 'unique': False,
             },
-            "comment_type": {
-                'blank': False,
-                'default': models.fields.NOT_PROVIDED,
-                'field_type': models.fields.CharField,
-                'null': False,
-                'unique': False,
-            },
             "category": {
                 'blank': True,
                 'default': models.fields.NOT_PROVIDED,
@@ -331,33 +324,6 @@ class TicketCommentBaseModelTestCases(
         assert permission_found
 
 
-    def test_attribute_meta_type_sub_model_type(self, model):
-        """Attribute Check
-
-        Ensure attribute `Meta.sub_model_type` value is of type str
-        """
-
-        assert type(model._meta.sub_model_type) is str
-
-
-    def test_attribute_meta_value_sub_model_type(self, model):
-        """Attribute Check
-
-        Ensure attribute `Meta.sub_model_type` value is correct
-        """
-
-        assert model._meta.sub_model_type == self.sub_model_type
-
-
-    def test_attribute_type_get_comment_type(self, model_instance):
-        """Attribute Check
-
-        Ensure attribute `get_comment_type` value is correct
-        """
-
-        assert model_instance.get_comment_type == model_instance._meta.sub_model_type
-
-
 
     def test_function_get_url(self, model_instance):
         """Function Check
@@ -412,23 +378,6 @@ class TicketCommentBaseModelTestCases(
         """
 
         assert model_instance.parent_object == model_instance.ticket
-
-
-    def test_function_clean_validation_mismatch_comment_type_raises_exception(self, model):
-        """Function Check
-
-        Ensure function `clean` does validation
-        """
-
-        valid_data = self.kwargs_create_item.copy()
-
-        valid_data['comment_type'] = 'Nope'
-
-        with pytest.raises(DjangoValidationError) as err:
-
-            model.objects.create(
-                **valid_data
-            )
 
 
 
@@ -546,8 +495,6 @@ class TicketCommentBaseModelInheritedCases(
     TicketCommentBaseModelTestCases,
 ):
 
-    sub_model_type = None
-
     def test_method_delete_calls_super_keep_parent_matches_is_sub_model(self, mocker, model_instance):
         """Test Class Method
         
@@ -585,32 +532,6 @@ class TicketCommentBaseModelInheritedCases(
 class TicketCommentBaseModelPyTest(
     TicketCommentBaseModelTestCases,
 ):
-
-    sub_model_type = 'comment'
-
-
-
-    # def test_function_clean_validation_close_raises_exception(self, ticket):
-    #     """Function Check
-
-    #     Ensure function `clean` does validation
-    #     """
-
-    #     valid_data = self.kwargs_create_item.copy()
-
-    #     valid_data['ticket'] = ticket
-
-    #     valid_data['external_ref'] = 9842
-
-    #     del valid_data['date_closed']
-
-    #     with pytest.raises(ValidationError) as err:
-
-    #         self.model.objects.create(
-    #             **valid_data
-    #         )
-
-    #     assert err.value.get_codes()['date_closed'] == 'ticket_closed_no_date'
 
 
     def test_function_save_called_slash_command(self, model, mocker, ticket):

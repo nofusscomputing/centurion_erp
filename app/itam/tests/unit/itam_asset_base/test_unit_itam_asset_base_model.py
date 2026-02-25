@@ -41,16 +41,7 @@ class ITAMAssetModelTestCases(
     @property
     def parameterized_model_fields(self):
 
-        return {
-        'itam_type': {
-            'blank': True,
-            'default': 'itam_base',
-            'field_type': models.CharField,
-            'max_length': 30,
-            'null': False,
-            'unique': False,
-        }
-    }
+        return {}
 
 
     def test_class_inherits_itamassetbase(self, model):

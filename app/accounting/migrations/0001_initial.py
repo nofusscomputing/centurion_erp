@@ -25,7 +25,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(help_text='Ticket ID Number', primary_key=True, serialize=False, unique=True, verbose_name='Number')),
                 ('asset_number', models.CharField(blank=True, help_text='Number or tag to use to track this asset', max_length=30, null=True, unique=True, verbose_name='Asset Number')),
                 ('serial_number', models.CharField(blank=True, help_text='Serial number of this asset assigned by manufacturer.', max_length=30, null=True, unique=True, verbose_name='Serial Number')),
-                ('asset_type', models.CharField(blank=True, choices=accounting.models.asset_base.AssetBase.get_model_type_choices, default='asset', help_text='Asset Type. (derived from asset model)', max_length=30, validators=[accounting.models.asset_base.AssetBase.validate_not_null], verbose_name='Asset Type')),
+                # ('asset_type', models.CharField(blank=True, choices=accounting.models.asset_base.AssetBase.get_model_type_choices, default='asset', help_text='Asset Type. (derived from asset model)', max_length=30, validators=[accounting.models.asset_base.AssetBase.validate_not_null], verbose_name='Asset Type')),
+                ('asset_type', models.CharField(blank=True, default='asset', help_text='Asset Type. (derived from asset model)', max_length=30, validators=[accounting.models.asset_base.AssetBase.validate_not_null], verbose_name='Asset Type')),
                 ('created', access.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, help_text='Date and time of creation', verbose_name='Created')),
                 ('modified', access.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, help_text='Date and time of last modification', verbose_name='Modified')),
                 ('organization', models.ForeignKey(help_text='Tenancy this belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='+', to='access.tenant', validators=[access.models.tenancy.TenancyObject.validatate_organization_exists], verbose_name='Tenant')),
@@ -34,7 +35,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Asset',
                 'verbose_name_plural': 'Assets',
                 'ordering': ['id'],
-                'sub_model_type': 'asset',
+                # 'sub_model_type': 'asset',
             },
         ),
         migrations.CreateModel(

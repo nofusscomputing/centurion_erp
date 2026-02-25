@@ -83,14 +83,6 @@ class TicketBaseModelTestCases(
                 'null': True,
                 'unique': False,
             },
-            "ticket_type": {
-                'blank': True,
-                'default': 'ticket',
-                'field_type': models.fields.CharField,
-                'max_length': 50,
-                'null': False,
-                'unique': False,
-            },
             "status": {
                 'blank': False,
                 'default': TicketBase.TicketStatus.NEW,
@@ -391,33 +383,6 @@ class TicketBaseModelTestCases(
         assert err.value.get_codes()['milestone'] == 'milestone_different_project'
 
 
-    def test_meta_attribute_exists_sub_model_type(self, model):
-        """Test for existance of field in `<model>.Meta`
-
-        Attribute `Meta.sub_model_type` must be defined in `Meta` class.
-        """
-
-        assert 'sub_model_type' in model._meta.original_attrs
-
-
-    def test_meta_attribute_type_sub_model_type(self, model):
-        """Test for existance of field in `<model>.Meta`
-
-        Attribute `Meta.sub_model_type` must be of type str.
-        """
-
-        assert type(model._meta.original_attrs['sub_model_type']) is str
-
-
-    def test_meta_attribute_value_sub_model_type(self, model):
-        """Test for existance of field in `<model>.Meta`
-
-        Attribute `Meta.sub_model_type` must be the correct value (self.sub_model_type).
-        """
-
-        assert model._meta.original_attrs['sub_model_type'] == self.sub_model_type
-
-
     def test_function_validate_not_null_is_true(self, model):
         """Function test
 
@@ -436,29 +401,6 @@ class TicketBaseModelTestCases(
         """
 
         assert model.validate_not_null(None) == False
-
-
-
-    def test_function_get_ticket_type(self, model):
-        """Function test
-
-        As this model is not intended to be used alone.
-
-        Ensure that function `get_ticket_type` returns None for model
-        `TicketBase`
-        """
-
-        assert model().get_ticket_type == None
-
-
-    def test_function_get_ticket_type_choices(self, model):
-        """Function test
-
-        Ensure that function `get_ticket_type_choices` returns a tuple of
-        the ticket type ( `Model.Meta.sub_ticket_type`, `Model.Meta.verbose_name` )
-        """
-
-        assert (model()._meta.sub_model_type, model()._meta.verbose_name) in model.get_ticket_type_choices()
 
 
     def test_function_status_badge_type(self, model):
@@ -511,7 +453,7 @@ class TicketBaseModelTestCases(
     ):
         """Function test
 
-        Ensure that function `get_ticket_type_choices` returns a tuple of
+        Ensure that function `get_milestone_choices` returns a tuple of
         each projects milestones
         """
 
@@ -534,7 +476,7 @@ class TicketBaseModelTestCases(
     ):
         """Function test
 
-        Ensure that function `get_ticket_type_choices` returns the correct milestones per project
+        Ensure that function `get_milestone_choices` returns the correct milestones per project
         """
 
         mocker.patch.object(model, 'project', return_value = ticket_projects['one']['project'] )
@@ -847,18 +789,6 @@ class TicketBaseModelTestCases(
         assert type(model().get_comments()) is QuerySet
 
 
-
-    def test_meta_attribute_sub_model_type_length(self, model):
-        """Meta Attribute Check
-
-        Ensure that attribute `Meta.sub_model_type` is not longer than the
-        field that stores the value.
-        """
-
-        assert len(model._meta.sub_model_type) <= int(model._meta.get_field('ticket_type').max_length)
-
-
-
     def test_function_called_clean_ticketbase(self, model, mocker, model_kwargs):
         """Function Check
 
@@ -942,7 +872,7 @@ class TicketBaseModelTestCases(
             url_model_name = model_instance.url_model_name
 
         url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
-        if model_instance._meta.sub_model_type != 'ticket':
+        if model_instance._meta.model_name != 'ticketbase':
             url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
 
         url = model_instance.get_url( relative = True)
@@ -986,8 +916,6 @@ class TicketBaseModelInheritedCases(
     TicketBaseModelTestCases,
 ):
 
-    sub_model_type = None
-
     @property
     def parameterized_class_attributes(self):
 
@@ -1027,7 +955,7 @@ class TicketBaseModelInheritedCases(
             url_model_name = model_instance.url_model_name
 
         url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
-        if model_instance._meta.sub_model_type != 'ticket':
+        if model_instance._meta.model_name != 'ticketbase':
             url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
 
         url = model_instance.get_url( relative = True)
@@ -1050,8 +978,6 @@ class TicketBaseModelInheritedCases(
 class TicketBaseModelPyTest(
     TicketBaseModelTestCases,
 ):
-
-    sub_model_type = 'ticket'
 
 
     def test_function_save_called_slash_command(self, model, mocker, ticket, model_kwargs):
@@ -1095,7 +1021,7 @@ class TicketBaseModelPyTest(
             url_model_name = model_instance.url_model_name
 
         url_basename = f'v2:{app_namespace}_api_{url_model_name}-detail'
-        if model_instance._meta.sub_model_type != 'ticket':
+        if model_instance._meta.model_name != 'ticketbase':
             url_basename = f'v2:{app_namespace}_api_{url_model_name}_sub-detail'
 
         url = model_instance.get_url( relative = True)

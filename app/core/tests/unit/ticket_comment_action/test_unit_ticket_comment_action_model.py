@@ -131,14 +131,11 @@ class TicketCommentActionModelTestCases(
 class TicketCommentActionModelInheritedCases(
     TicketCommentActionModelTestCases,
 ):
-
-    sub_model_type = None
-
+    pass
 
 
 @pytest.mark.module_core
 class TicketCommentActionModelPyTest(
     TicketCommentActionModelTestCases,
 ):
-
-    sub_model_type = 'action'
+    pass

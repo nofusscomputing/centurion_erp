@@ -11,8 +11,6 @@ class IncidentTicketTestCases(
     SLMTicketModelInheritedCases
 ):
 
-    sub_model_type = 'incident'
-
 
     @property
     def parameterized_class_attributes(self):
@@ -50,24 +48,11 @@ class IncidentTicketTestCases(
         assert issubclass(model, IncidentTicket)
 
 
-    def test_function_get_ticket_type(self, model):
-        """Function test
-
-        As this model is intended to be used alone.
-
-        Ensure that function `get_ticket_type` returns `request` for model
-        `IncidentTicket`
-        """
-
-        assert model().get_ticket_type == 'incident'
-
-
 
 class IncidentTicketInheritedCases(
     IncidentTicketTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 

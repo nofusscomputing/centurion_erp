@@ -32,16 +32,12 @@ class AssetBaseSerializerTestCases:
         "serial_number": {
             'will_create': True,
         },
-        "asset_type": {
-            'will_create': True,
-        },
     }
 
     valid_data: dict = {
         'asset_number': 'abc',
         'serial_number': 'def',
         'model_notes': 'sdasds',
-        'asset_type': 'random',
     }
     """Valid data used by serializer to create object"""
 

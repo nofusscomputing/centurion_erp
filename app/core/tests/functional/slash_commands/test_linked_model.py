@@ -51,7 +51,6 @@ class LinkedModelFixtures:
 
             ticket_comment.ticket = ticket
 
-            ticket_comment.comment_type = ticket_comment._meta.sub_model_type
 
         yield ticket_comment
 

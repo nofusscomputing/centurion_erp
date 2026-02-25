@@ -119,7 +119,6 @@ class ModelSerializer(
             'ticket',
             'external_ref',
             'external_system',
-            'comment_type',
             'category',
             'body',
             'private',
@@ -147,7 +146,6 @@ class ModelSerializer(
             # 'parent',
             'external_ref',
             'external_system',
-            # 'comment_type',
             # 'private',
             'duration',
             # # 'category',
@@ -246,7 +244,7 @@ class ModelSerializer(
             serializer_module = (
                     f'{serializer_model._meta.app_label}.serializers.'
                     f'{serializer_model._base_model._meta.model_name}_'
-                    f'{serializer_model._meta.sub_model_type}'
+                    f'{serializer_model._meta.model_name}'
                 )
 
         # elif(
@@ -350,8 +348,6 @@ class ModelSerializer(
 
 
     def validate(self, attrs):
-
-        attrs['comment_type'] = self.context['view'].model._meta.sub_model_type
 
         attrs['user'] = self.context['request'].user.get_entity()
 

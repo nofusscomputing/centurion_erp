@@ -654,7 +654,7 @@ class CommonViewSet(
 
         - `sub_models.<key>` - When the View detected is for the base model
         submodels are added to this dict using the value of
-        <model>._meta.sub_model_type as the key name.
+        <model>._meta.model_name as the key name.
 
         Returns:
             dict[ str ]: list view `self` url
@@ -702,16 +702,17 @@ class CommonViewSet(
 
             if(
                 getattr(self, 'base_model', '') == self.model
+                and self.base_model._meta.model_name not in [
+                    'centurionaudit',
+                    'modelticket',
+                ]
             ):    # filter to only add sub-models when view is for `base_model`
 
                 sub_model_urls = {}
 
                 for sub_model in apps.get_models():
 
-                    if(
-                        issubclass(sub_model, self.base_model)
-                        and hasattr(sub_model._meta, 'sub_model_type')
-                    ):
+                    if issubclass(sub_model, self.base_model):
 
                         # if not self.request.user.has_perm(
                         #     permission = f'{sub_model._meta.app_label}.add_{sub_model._meta.model_name}',
@@ -730,7 +731,9 @@ class CommonViewSet(
                         if sub_model._is_submodel:
 
                             if(
-                                self.base_model._meta.model_name in [ 'ticketbase' ]
+                                self.base_model._meta.model_name in [
+                                    'ticketbase'
+                                ]
                                 and sub_model._is_submodel
                                 and 'project_id' not in kwargs
                             ):
@@ -1134,8 +1137,8 @@ class CommonSubModelViewSet_ReWrite(
                     ) == self.base_model._meta.model_name
                 or not issubclass(related_object.related_model, self.base_model)
                 or getattr(
-                        related_object.related_model._meta,'sub_model_type', ''
-                    ) == getattr(self.base_model._meta,'sub_model_type', '-not-exist')
+                        related_object.related_model._meta,'model_name', ''
+                    ) == getattr(self.base_model._meta,'model_name', '-not-exist')
             ):
                 continue
 
@@ -1147,7 +1150,7 @@ class CommonSubModelViewSet_ReWrite(
                     related_object.related_model._meta.model_name
                 ).lower().replace(' ', '_') == model_kwarg
                 or str(
-                    getattr(related_object.related_model._meta, 'sub_model_type', '-not-exist')
+                    getattr(related_object.related_model._meta, 'model_name', '-not-exist')
                 ).lower().replace(' ', '_') == model_kwarg
             ):
 
@@ -1167,12 +1170,10 @@ class CommonSubModelViewSet_ReWrite(
                     related_model = None
 
                 elif(
-                    str(
-                        getattr(related_model._meta, 'model_name', '')
-                    ).lower().replace(' ', '_') == model_kwarg
-                    or str(
-                        getattr(related_model._meta, 'sub_model_type', '')
-                    ).lower().replace(' ', '_') == model_kwarg
+                    getattr(related_model._meta, 'model_name', ''
+                        ) == model_kwarg
+                    or getattr(related_model._meta, 'model_name', ''
+                        ) == model_kwarg
                 ):
 
                     break

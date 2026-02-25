@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                     ("purge_projecttaskticket", "Can purge project task ticket"),
                     ("triage_projecttaskticket", "Can triage project task ticket"),
                 ],
-                "sub_model_type": "projecttask",
+                # "sub_model_type": "projecttask",
             },
             bases=("core.ticketbase",),
         ),

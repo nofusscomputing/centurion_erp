@@ -1,5 +1,7 @@
 ## Version v1.30.0
 
+- Audit History now captures fields that are related to the model being edited.
+
 
 ## Version v1.29.0
 

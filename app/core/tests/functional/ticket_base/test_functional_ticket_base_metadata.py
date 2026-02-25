@@ -84,7 +84,7 @@ class MetadataTestCases(
             'organization': self.different_organization
         })
 
-        if self.model._meta.sub_model_type != 'ticket':
+        if self.model._meta.model_name != 'ticketbase':
             self.url_view_kwargs.update({ 'model_name': self.model._meta.model_name })
 
         super().setUpTestData()

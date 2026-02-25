@@ -27,8 +27,6 @@ class Company(
             'name',
         ]
 
-        sub_model_type = 'company'
-
         verbose_name = 'Company'
 
         verbose_name_plural = 'Companies'

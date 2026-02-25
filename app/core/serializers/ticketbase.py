@@ -69,7 +69,7 @@ class ModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        ticket_type = str(item.ticket_type)
+        ticket_type = str(item._meta.model_name)
 
         model_name = str(item._meta.model_name)
         if model_name.endswith('ticket') and len(model_name) > 6:
@@ -176,7 +176,6 @@ class ModelSerializer(
             'external_system',
             'external_ref',
             'parent_ticket',
-            'ticket_type',
             'status',
             'status_badge',
             'category',
@@ -227,7 +226,6 @@ class ModelSerializer(
             read_only_fields = [
                 'id',
                 'display_name',
-                'ticket_type',
                 'modified',
                 '_urls',
             ]

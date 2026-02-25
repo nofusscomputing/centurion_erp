@@ -43,7 +43,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             if model != Entity:
 
-                serializer_name += '_' + model._meta.sub_model_type
+                serializer_name += '_' + model._meta.model_name
 
             serializer_module = importlib.import_module(
                 model._meta.app_label + '.serializers.' + str(

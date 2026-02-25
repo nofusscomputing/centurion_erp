@@ -65,7 +65,6 @@ class ModelSerializer(
             'id',
             'display_name',
             'organization',
-            'asset_type',
             'asset_number',
             'serial_number',
             # 'status',
@@ -79,7 +78,6 @@ class ModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
-            'asset_type',
             'created',
             'modified',
             '_urls',

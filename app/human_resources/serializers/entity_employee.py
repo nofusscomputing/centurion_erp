@@ -41,7 +41,6 @@ class ModelSerializer(
             'id',
             'person_ptr_id',
             'organization',
-            'entity_type',
             'display_name',
             'employee_number',
             'f_name',
@@ -60,7 +59,6 @@ class ModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
-            'entity_type',
             'created',
             'modified',
             '_urls',

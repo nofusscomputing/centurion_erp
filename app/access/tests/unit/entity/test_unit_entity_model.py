@@ -42,14 +42,6 @@ class EntityModelTestCases(
     def parameterized_fields(self):
 
         return {
-        'entity_type': {
-            'blank': False,
-            'default': models.fields.NOT_PROVIDED,
-            'field_type': models.CharField,
-            'length': 50,
-            'null': False,
-            'unique': True,
-        },
         'modified': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,

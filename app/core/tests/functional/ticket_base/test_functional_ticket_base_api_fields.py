@@ -105,9 +105,6 @@ class APITestCases(
             'parent_ticket.url': {
                 'expected': str
             },
-            'ticket_type': {
-                'expected': str
-            },
             'status': {
                 'expected': int
             },
@@ -327,18 +324,6 @@ class APITestCases(
             },
 
         }
-
-
-    # def test_api_field_value_ticket_type(self):
-    #     """ Test for value of an API Field
-
-    #     **note:** you must override this test with the correct value for
-    #     your ticket type
-
-    #     ticket_type field must be 'ticket'
-    #     """
-
-    #     assert self.api_data['ticket_type'] == 'ticket'
 
 
 

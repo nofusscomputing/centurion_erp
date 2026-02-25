@@ -21,8 +21,6 @@ class ProjectTaskTicket(
             ('triage_projecttaskticket', 'Can triage project task ticket'),
         ]
 
-        sub_model_type = 'projecttask'
-
         verbose_name = 'Project Task'
 
         verbose_name_plural = 'Project Tasks'
