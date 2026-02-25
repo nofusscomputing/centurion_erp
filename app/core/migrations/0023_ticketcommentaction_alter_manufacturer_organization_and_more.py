@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Ticket Comment Actions',
                 'ordering': ['id'],
                 'permissions': [('import_ticketcommentaction', 'Can import ticket action comment.')],
-                'sub_model_type': 'action',
+                # 'sub_model_type': 'action',
             },
             bases=('core.ticketcommentbase',),
         ),

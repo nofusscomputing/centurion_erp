@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Asset',
                 'verbose_name_plural': 'Assets',
                 'ordering': ['id'],
-                'sub_model_type': 'asset',
+                # 'sub_model_type': 'asset',
             },
         ),
         migrations.CreateModel(

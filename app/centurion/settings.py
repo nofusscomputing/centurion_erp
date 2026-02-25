@@ -21,7 +21,7 @@ import django.db.models.options as options
 
 from .logging import CenturionLogger
 
-options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'sub_model_type', 'itam_sub_model_type')
+options.DEFAULT_NAMES = (*options.DEFAULT_NAMES, 'itam_sub_model_type')
 
 ADDITIONAL_APPS: list = []    # Any additional Django apps to install
 APPEND_SLASH = False

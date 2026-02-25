@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'IT Asset',
                 'verbose_name_plural': 'IT Assets',
                 'ordering': ['id'],
-                'sub_model_type': 'it_asset',
+                # 'sub_model_type': 'it_asset',
                 'itam_sub_model_type': 'itam_base',
             },
             bases=('accounting.assetbase',),
