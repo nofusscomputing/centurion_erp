@@ -242,7 +242,7 @@ class Project(
                         'planned_finish_date',
                         'real_start_date',
                         'real_finish_date',
-                        'duration_project'
+                        'duration_project',
                         'created',
                         'modified',
                     ]
