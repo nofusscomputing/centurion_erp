@@ -1,16 +1,18 @@
 import pytest
 
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
+
 from access.permissions.super_user import SuperUserPermissions
 from access.permissions.tenancy import TenancyPermissions
-
-from centurion.tests.unit_class import ClassTestCases
 
 
 
 @pytest.mark.mixin
 @pytest.mark.mixin_tenancy
 class TenancyMixinTestCases(
-    ClassTestCases
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
 
 

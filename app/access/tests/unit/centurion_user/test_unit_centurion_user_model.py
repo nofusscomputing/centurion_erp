@@ -3,14 +3,17 @@ import pytest
 from django.apps import apps
 from django.contrib.auth.models import ContentType, Permission
 
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
+
 from access.models.tenant import Tenant
-from centurion.tests.unit_class import ClassTestCases
 
 
 
 @pytest.mark.model_centurionuser
 class CenturionUserModelTestCases(
-    ClassTestCases
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
 
 

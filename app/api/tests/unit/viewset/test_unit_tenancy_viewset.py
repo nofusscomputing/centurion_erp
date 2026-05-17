@@ -1,6 +1,8 @@
 import django
 import pytest
 
+from pytest_simplified import NOT_USED
+
 from access.tests.unit.mixin_tenancy.test_unit_tenancy_permission_mixin import (
     TenancyMixinInheritedCases
 )
@@ -409,8 +411,8 @@ class TenancyPermissionsSubModelViewSetPyTest(
                 'value': None
             },
             'model': {
-                'type': django.db.models.NOT_PROVIDED,
-                'value': django.db.models.NOT_PROVIDED
+                'type': NOT_USED,
+                'value': NOT_USED
             },
             'model_suffix': {
                 'type': type(None),

@@ -2,7 +2,8 @@ import pytest
 
 from rest_framework import serializers
 
-from centurion.tests.unit_class import ClassTestCases
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
 
 from core.fields.markdown import MarkdownField
 
@@ -14,7 +15,8 @@ from core.fields.markdown import MarkdownField
 @pytest.mark.serializer
 @pytest.mark.unit
 class MarkdownFieldTestCases(
-    ClassTestCases
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
 
 
