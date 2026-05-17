@@ -25,7 +25,7 @@ class RoleGroupsInline(admin.TabularInline):
 class RoleAdmin(admin.ModelAdmin):
     inlines = [RoleGroupsInline]
     fields = ['name', 'organization', 'created', 'modified']  #
-    readonly_fields = [ 'name', 'created', 'modified' ]
+    readonly_fields = [ 'created', 'modified' ]
 
 
 
