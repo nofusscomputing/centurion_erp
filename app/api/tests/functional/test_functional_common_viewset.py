@@ -395,7 +395,7 @@ class CommonViewSetTestCases:
 
 
         assert sorted(
-            [ value for key, value in urls['sub_models'].items() ]
+            [ value['url'] for key, value in urls['sub_models'].items() ]
         ) == sorted(
             [
                 sub_model(

@@ -761,7 +761,10 @@ class CommonViewSet(
                         if url != add_url['self']:
 
                             sub_model_urls.update({
-                                getattr(sub_model._meta, 'model_name'): url
+                                getattr(sub_model._meta, 'model_name'): {
+                                    "display_name": getattr(sub_model._meta, 'verbose_name'),
+                                    "url": url
+                                }
                             })
 
 
