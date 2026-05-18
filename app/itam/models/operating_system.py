@@ -57,91 +57,95 @@ class OperatingSystem(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'publisher',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'publisher',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Versions",
-            "slug": "version",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "version",
-                }
-            ]
-        },
-        # {
-        #     "name": "Licences",
-        #     "slug": "licence",
-        #     "sections": [
-        #         {
-        #             "layout": "table",
-        #             "field": "licence",
-        #         }
-        #     ]
-        # },
-        {
-            "name": "Installations",
-            "slug": "installs",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "installations",
-                }
-            ]
-        },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "ticket",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'publisher',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'publisher',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Versions",
+                "slug": "version",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "version",
+                    }
+                ]
+            },
+            # {
+            #     "name": "Licences",
+            #     "slug": "licence",
+            #     "sections": [
+            #         {
+            #             "layout": "table",
+            #             "field": "licence",
+            #         }
+            #     ]
+            # },
+            {
+                "name": "Installations",
+                "slug": "installs",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "installations",
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "ticket",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ]
+    }
 
 
     def __str__(self):
@@ -186,51 +190,62 @@ class OperatingSystemVersion(
     modified = AutoLastModifiedField()
 
 
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'operating_system',
-                        'name',
-                        'created',
-                        'modified',
-                    ],
-                    "right": [
-                        'model_notes',
-                    ]
-                },
+    page_layout: dict = {
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'operating_system',
+                            'name',
+                            'created',
+                            'modified',
+                        ],
+                        "right": [
+                            'model_notes',
+                        ]
+                    },
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "tickets",
+                "sections": [
+                    # {
+                    #     "layout": "table",
+                    #     "field": "tickets",
+                    # }
+                ],
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+
+
+        ],
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'installations',
+                    'created',
+                    'modified',
+                ]
             ]
         },
-        {
-            "name": "Tickets",
-            "slug": "tickets",
-            "sections": [
-                # {
-                #     "layout": "table",
-                #     "field": "tickets",
-                # }
-            ],
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-
-
-    ]
-
-    table_fields: list = [
-        'name',
-        'installations',
-        'created',
-        'modified',
-    ]
+        "table": [
+            'name',
+            'installations',
+            'created',
+            'modified',
+        ]
+    }
 
 
     def get_url_kwargs(self, many = False ) -> dict:
