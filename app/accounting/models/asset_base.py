@@ -94,7 +94,7 @@ class AssetBase(
     modified = AutoLastModifiedField()
 
 
-    page_layout: list = {
+    page_layout: dict = {
         "dataset": {
             "columns": [
                 [

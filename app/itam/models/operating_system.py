@@ -144,6 +144,13 @@ class OperatingSystem(
                 "slug": "notes",
                 "sections": []
             },
+        ],
+        "table": [
+            'name',
+            'publisher',
+            'organization',
+            'created',
+            'modified'
         ]
     }
 

@@ -90,29 +90,29 @@ class UserSettings(
 
     modified = AutoLastModifiedField()
 
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        'browser_mode',
-                        'default_organization',
-                        'timezone',
-                    ],
-                },
-                {
-                    "name": "Auth Tokens",
-                    "layout": "table",
-                    "field": "tokens",
-                }
-            ]
-        },
-    ]
-
-    table_fields = []
+    page_layout: dict = {
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'browser_mode',
+                            'default_organization',
+                            'timezone',
+                        ],
+                    },
+                    {
+                        "name": "Auth Tokens",
+                        "layout": "table",
+                        "field": "tokens",
+                    }
+                ]
+            },
+        ]
+    }
 
 
     def is_owner(self, user: int) -> bool:

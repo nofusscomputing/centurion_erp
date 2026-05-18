@@ -48,45 +48,57 @@ class ViewSet(AuthUserReadOnlyModelViewSet):
 
     model = TaskResult
 
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'task_id',
-                        'periodic_task_name',
-                        'task_name',
-                        'status',
-                    ],
-                    "right": [
-                        'worker',
-                        'task_kwargs',
-                        'date_created',
-                        'date_done',
-                        'result',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        "task_args"
-                    ]
-                }
+    layout: dict = {
+        'dataset': {
+            "columns": [
+                [
+                    'task_id',
+                    'task_name',
+                    'status',
+                    'date_done',
+                    'date_created',
+                ]
             ]
         },
-    ]
-
-    table_fields: list = [
-        'id',
-        'task_id',
-        'task_name',
-        'status',
-        'date_done',
-        'date_created',
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'task_id',
+                            'periodic_task_name',
+                            'task_name',
+                            'status',
+                        ],
+                        "right": [
+                            'worker',
+                            'task_kwargs',
+                            'date_created',
+                            'date_done',
+                            'result',
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            "task_args"
+                        ]
+                    }
+                ]
+            },
+        ],
+        'table': [
+            'id',
+            'task_id',
+            'task_name',
+            'status',
+            'date_done',
+            'date_created',
+        ]
+    }
 
     view_description = 'Task Logs'
 

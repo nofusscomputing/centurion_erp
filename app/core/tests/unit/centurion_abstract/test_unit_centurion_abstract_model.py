@@ -224,10 +224,6 @@ class CenturionAbstractTenancyModelPyTest(
                 'type': NOT_USED,
                 'value': NOT_USED,
             },
-            'table_fields': {
-                'type': NOT_USED,
-                'value': NOT_USED,
-            }
         }
 
 

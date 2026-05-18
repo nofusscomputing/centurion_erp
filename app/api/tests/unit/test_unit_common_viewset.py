@@ -440,19 +440,15 @@ class CommonViewSetTestCases(
                 'type': str,
                 'value': None
             },
-            'page_layout': {
+            'layout': {
                 'type': dict,
-                'value': []
+                'value': {}
             },
             'permission_classes': {
                 'type': list,
                 'value': [
                     DefaultDenyPermission,
                 ]
-            },
-            'table_fields': {
-                'type': list,
-                'value': []
             },
             'view_description': {
                 'type': str,
@@ -531,11 +527,9 @@ class CommonViewSetTestCases(
 
     # ToDo: get_model_documentation
 
-    # ToDo: get_page_layout
+    # ToDo: get_layout
 
     # ToDo: get_return_url
-
-    # ToDo: get_table_fields
 
     # ToDo: get_view_description
 

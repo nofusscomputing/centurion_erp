@@ -604,7 +604,7 @@ class CommonViewSet(
 
     _Optional_, if specified will be add to detail view metadata"""
 
-    page_layout: dict = {}
+    layout: dict = {}
     """ Page layout class
 
     _Optional_, used by metadata to add the page layout to the HTTP/Options method
@@ -629,13 +629,6 @@ class CommonViewSet(
 
     Permissions in this map will be added in addition to the common CRUD
     permissions. This will force the user to require **ALL** permissions.
-    """
-
-    table_fields: list = []
-    """ Table layout list
-
-    _Optional_, used by metadata for the table fields and added to the HTTP/Options
-    method for detail view, Enables the UI can setup the table.
     """
 
     view_description: str = None
@@ -835,21 +828,21 @@ class CommonViewSet(
 
 
 
-    def get_page_layout(self) -> dict:
+    def get_layout(self) -> dict:
 
-        if len(self.page_layout) < 1:
+        if len(self.layout) < 1:
 
             if hasattr(self, 'model'):
 
                 if hasattr(self.model, 'page_layout'):
 
-                    self.page_layout = self.model.page_layout
+                    self.layout = self.model.page_layout
 
                 else:
 
-                    self.page_layout = {}
+                    self.layout = {}
 
-        return self.page_layout
+        return self.layout
 
 
 
@@ -914,23 +907,6 @@ class CommonViewSet(
         """
 
         return None
-
-
-    def get_table_fields(self):
-
-        if len(self.table_fields) < 1:
-
-            if hasattr(self, 'model'):
-
-                if hasattr(self.model, 'table_fields'):
-
-                    self.table_fields = self.model.table_fields
-
-                else:
-
-                    self.table_fields = []
-
-        return self.table_fields
 
 
     def get_view_description(self, html=False) -> str:

@@ -130,12 +130,12 @@ class GitHubRepository(
                 "slug": "notes",
                 "sections": []
             },
+        ],
+        'table': [
+            'name',
+            'provider',
+            'path',
+            'organization',
+            'created',
         ]
     }
-    # table_fields: list = [
-    #     'name',
-    #     'provider',
-    #     'path',
-    #     'organization',
-    #     'created',
-    # ]

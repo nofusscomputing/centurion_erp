@@ -116,32 +116,32 @@ class TenantAPIPyTest(
 
 
     def test_api_metadata_detail_field_exists(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 
 
     def test_api_metadata_detail_field_type(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 
     def test_api_metadata_detail_requires_auth(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 
 
     def test_api_metadata_list_requires_auth(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 
 
     def test_api_metadata_detail_ok(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 
 
     def test_api_metadata_list_ok(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 
 
     def test_api_metadata_detail_has_layout(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 
 
-    def test_api_metadata_list_has_table_fields(self):
-        pytest.skip( reason = 'not required until test_functional_tenant_metadata.py removed')
+    def test_api_metadata_list_has_layout_table(self):
+        pytest.xfail( reason = 'not required until test_functional_tenant_metadata.py removed')
 

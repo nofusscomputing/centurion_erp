@@ -107,7 +107,11 @@ class TicketDependency(
 
     def __str__(self):
 
-        return str( '#' + str(self.ticket.id) )
+        if getattr(self, 'ticket', None):
+
+            return str( '#' + str(self.ticket.id) )
+
+        return ''
 
 
 

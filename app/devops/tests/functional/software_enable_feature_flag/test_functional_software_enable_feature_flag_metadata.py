@@ -100,4 +100,22 @@ class Metadata(
     TestCase
 ):
 
-    pass
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_name(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view it should be displayed as a table in software detail view')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_sections(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view it should be displayed as a table in software detail view')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_name(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view it should be displayed as a table in software detail view')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_sections(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view it should be displayed as a table in software detail view')
+
+
+    def test_method_options_request_detail_data_key_layout_is_list_of_dict(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view it should be displayed as a table in software detail view')

@@ -79,11 +79,7 @@ class TicketDependencyAPITestCases(
     @property
     def parameterized_api_metadata_fields(self) -> dict:
 
-        return {
-            # 'table_fields': {
-            #     'expected': models.NOT_PROVIDED
-            # },
-        }
+        return {}
 
 
 

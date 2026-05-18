@@ -1,3 +1,5 @@
+import pytest
+
 from django.test import TestCase
 
 from access.models.person import Person
@@ -72,4 +74,23 @@ class PersonMetadataTest(
     TestCase,
 
 ):
-    pass
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_name(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its considered a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_sections(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its considered a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_name(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its considered a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_sections(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its considered a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_is_list_of_dict(self):
+        pytest.xfail(reason = 'Model not intended to be displayed in detail view as its considered a base model.')

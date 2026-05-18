@@ -125,7 +125,7 @@ class TenancyObject(SaveHistory):
     """
 
 
-    def get_page_layout(self):
+    def get_page_layout(self) -> dict:
         """ FEtch the page layout"""
 
         return self.page_layout
