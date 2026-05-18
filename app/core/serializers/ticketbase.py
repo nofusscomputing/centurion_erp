@@ -37,6 +37,9 @@ class BaseSerializer(serializers.ModelSerializer):
         return item.get_url( request = self.context['view'].request )
 
 
+    title = centurion_field.CharField( autolink = True )
+
+
     class Meta:
 
         model = TicketBase
