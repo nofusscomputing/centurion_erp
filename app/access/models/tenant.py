@@ -84,50 +84,60 @@ class Tenant(
         return self
 
 
-    table_fields: list = [
-        'nbsp',
-        'name',
-        'created',
-        'modified',
-        'nbsp'
-    ]
-
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'name',
-                        'manager',
-                        'created',
-                        'modified',
-                    ],
-                    "right": [
-                        'model_notes',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'created',
+                    'modified',
+                    'nbsp'
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        }
-    ]
-
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'name',
+                            'manager',
+                            'created',
+                            'modified',
+                        ],
+                        "right": [
+                            'model_notes',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            }
+        ],
+        "table": [
+            'nbsp',
+            'name',
+            'created',
+            'modified',
+            'nbsp'
+        ]
+    }
 
 
 Organization = Tenant

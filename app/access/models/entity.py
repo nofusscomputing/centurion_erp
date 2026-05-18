@@ -52,11 +52,21 @@ class Entity(
  
 
 
-    page_layout: dict = []
-
-    table_fields: list = [
-        'organization',
-        'display_name',
-        'created',
-        'modified',
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'display_name',
+                    'organization',
+                    'created',
+                    'modified',
+                ]
+            ]
+        },
+        "table": [
+            'organization',
+            'display_name',
+            'created',
+            'modified',
+        ]
+    }

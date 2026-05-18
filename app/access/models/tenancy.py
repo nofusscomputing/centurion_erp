@@ -116,7 +116,7 @@ class TenancyObject(SaveHistory):
 
         return self._log
 
-    page_layout: list = None
+    page_layout: dict = None
 
     note_basename: str = None
     """URL BaseName for the notes endpoint.

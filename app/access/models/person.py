@@ -72,15 +72,27 @@ class Person(
 
         return self.f_name + ' ' + self.l_name + f' (DOB: {self.dob})'
 
-    page_layout: dict = []
-
-    table_fields: list = [
-        'organization',
-        'f_name',
-        'l_name',
-        'dob',
-        'created',
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'display_name',
+                    'organization',
+                    'f_name',
+                    'l_name',
+                    'dob',
+                    'created',
+                ]
+            ]
+        },
+        "table": [
+            'organization',
+            'f_name',
+            'l_name',
+            'dob',
+            'created',
+        ]
+    }
 
 
     def clean(self):
