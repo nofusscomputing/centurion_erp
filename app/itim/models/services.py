@@ -68,60 +68,70 @@ class Port(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'display_name',
-                        'description',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                },
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'display_name',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Services",
-            "slug": "services",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "services",
-                }
-            ]
-        },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'display_name',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'display_name',
+                            'description',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                ]
+            },
+            {
+                "name": "Services",
+                "slug": "services",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "services",
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'display_name',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     def __str__(self):
@@ -238,104 +248,115 @@ class Service(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'name',
-                        'config_key_variable',
-                        'template',
-                        'is_template',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "name": "cluster / Device",
-                    "layout": "double",
-                    "left": [
-                        'cluster',
-                    ],
-                    "right": [
-                        'device',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'config',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'dependent_service'
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "name": "Ports",
-                    "fields": [
-                        'port'
-                    ],
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'deployed_to',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Rendered Config",
-            "slug": "config_management",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        "rendered_config",
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "ticket",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'deployed_to'
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'name',
+                            'config_key_variable',
+                            'template',
+                            'is_template',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "name": "cluster / Device",
+                        "layout": "double",
+                        "left": [
+                            'cluster',
+                        ],
+                        "right": [
+                            'device',
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'config',
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'dependent_service'
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "name": "Ports",
+                        "fields": [
+                            'port'
+                        ],
+                    }
+                ]
+            },
+            {
+                "name": "Rendered Config",
+                "slug": "config_management",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            "rendered_config",
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "ticket",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'deployed_to',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     def __str__(self):

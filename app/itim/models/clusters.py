@@ -46,65 +46,75 @@ class ClusterType(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'config',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "ticket",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'config',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "ticket",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     def __str__(self):
@@ -183,97 +193,109 @@ class Cluster(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'parent_cluster',
-                        'cluster_type',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'resources',
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "layout": "double",
-                    "name": "Nodes / Devices",
-                    "left": [
-                        'nodes',
-                    ],
-                    "right": [
-                        'devices',
-                    ]
-                },
-                {
-                    "layout": "table",
-                    "name": "Services",
-                    "field": "service",
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'config',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+               [
+                    'name',
+                    'parent_cluster',
+                    'cluster_type',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Rendered Config",
-            "slug": "config_management",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        "rendered_config",
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "ticket",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'parent_cluster',
-        'cluster_type',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'parent_cluster',
+                            'cluster_type',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'resources',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "layout": "double",
+                        "name": "Nodes / Devices",
+                        "left": [
+                            'nodes',
+                        ],
+                        "right": [
+                            'devices',
+                        ]
+                    },
+                    {
+                        "layout": "table",
+                        "name": "Services",
+                        "field": "service",
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'config',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Rendered Config",
+                "slug": "config_management",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            "rendered_config",
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "ticket",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'parent_cluster',
+            'cluster_type',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     @property
