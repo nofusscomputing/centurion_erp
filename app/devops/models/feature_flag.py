@@ -76,51 +76,63 @@ class FeatureFlag(
 
         return self.name
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'software',
-                        'name',
-                        'enabled',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'description',
-                        'created',
-                        'modified',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'enabled',
+                    'software',
+                    'organization',
+                    'created',
+                    # 'modified'
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'enabled',
-        'software',
-        'organization',
-        'created',
-        # 'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'software',
+                            'name',
+                            'enabled',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'description',
+                            'created',
+                            'modified',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'enabled',
+            'software',
+            'organization',
+            'created',
+            # 'modified'
+        ]
+    }
