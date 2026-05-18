@@ -604,7 +604,7 @@ class CommonViewSet(
 
     _Optional_, if specified will be add to detail view metadata"""
 
-    page_layout: list = []
+    page_layout: dict = {}
     """ Page layout class
 
     _Optional_, used by metadata to add the page layout to the HTTP/Options method
@@ -835,7 +835,7 @@ class CommonViewSet(
 
 
 
-    def get_page_layout(self):
+    def get_page_layout(self) -> dict:
 
         if len(self.page_layout) < 1:
 
@@ -847,7 +847,7 @@ class CommonViewSet(
 
                 else:
 
-                    self.page_layout = []
+                    self.page_layout = {}
 
         return self.page_layout
 

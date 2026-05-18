@@ -441,7 +441,7 @@ class CommonViewSetTestCases(
                 'value': None
             },
             'page_layout': {
-                'type': list,
+                'type': dict,
                 'value': []
             },
             'permission_classes': {
