@@ -94,65 +94,78 @@ class AssetBase(
     modified = AutoLastModifiedField()
 
 
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'asset_number',
-                        'serial_number',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                }
+    page_layout: list = {
+        "dataset": {
+            "columns": [
+                [
+                    "display_name",
+                    'asset_number',
+                    'serial_number',
+                    'organization',
+                    'created'
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "tickets",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ],
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'asset_number',
+                            'serial_number',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "tickets",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ],
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'id',
+            {
+                "field": "display_name",
+                "type": "link",
+                "key": "_self"
+            },
+            'asset_number',
+            'serial_number',
+            'organization',
+            'created'
+        ]
+    }
 
-    table_fields: list = [
-        'id',
-        {
-            "field": "display_name",
-            "type": "link",
-            "key": "_self"
-        },
-        'asset_number',
-        'serial_number',
-        'organization',
-        'created'
-    ]
 
 
     def __str__(self):
