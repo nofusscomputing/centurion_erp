@@ -75,14 +75,22 @@ class ModelTicket(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = []
-
-
-    table_fields: list = [
-        'ticket',
-        'status_badge',
-        'created'
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'ticket',
+                    'status_badge',
+                    'created'
+                ]
+            ]
+        },
+        "table": [
+            'ticket',
+            'status_badge',
+            'created'
+        ]
+    }
 
 
     def __str__(self) -> str:

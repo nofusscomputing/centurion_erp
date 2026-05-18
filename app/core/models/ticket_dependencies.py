@@ -80,16 +80,28 @@ class TicketDependency(
     )
 
 
-    table_fields: list = [
-        'id',
-        'title',
-        'status_badge',
-        'opened_by',
-        'organization',
-        'created'
-    ]
-
-    page_layout = None
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'id',
+                    'title',
+                    'status_badge',
+                    'opened_by',
+                    'organization',
+                    'created'
+                ]
+            ]
+        },
+        "table": [
+            'id',
+            'title',
+            'status_badge',
+            'opened_by',
+            'organization',
+            'created'
+        ]
+    }
 
 
 

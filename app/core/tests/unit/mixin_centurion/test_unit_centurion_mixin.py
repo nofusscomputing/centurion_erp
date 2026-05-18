@@ -318,14 +318,10 @@ class CenturionMixnInheritedCases(
 
     @property
     def parameterized_class_attributes(self):
-        
         return {
         'page_layout': {
-            'type': list,
+            'type': dict,
         },
-        'table_fields': {
-            'type': list,
-        }
     }
 
 
