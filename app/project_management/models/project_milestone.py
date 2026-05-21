@@ -72,62 +72,72 @@ class ProjectMilestone(
 
     # model not intended to be vieable on its own page
     # as this model is a sub-model.
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'project',
-                        'name',
-                        'start_date',
-                        'finish_date',
-                        'created',
-                        'modified',
-                    ],
-                    "right": [
-                        'description',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'percent_completed'
+                    'start_date',
+                    'finish_date',
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "tickets",
-            "sections": [
-                # {
-                #     "layout": "table",
-                #     "field": "tickets",
-                # }
-            ],
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'percent_completed'
-        'start_date',
-        'finish_date',
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'project',
+                            'name',
+                            'start_date',
+                            'finish_date',
+                            'created',
+                            'modified',
+                        ],
+                        "right": [
+                            'description',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "tickets",
+                "sections": [
+                    # {
+                    #     "layout": "table",
+                    #     "field": "tickets",
+                    # }
+                ],
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'percent_completed'
+            'start_date',
+            'finish_date',
+        ]
+    }
 
 
     def __str__(self):

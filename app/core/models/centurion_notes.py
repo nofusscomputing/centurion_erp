@@ -88,12 +88,7 @@ class CenturionModelNote(
 
     # this model is not intended to have its own viewable page as
     # it's a sub model
-    page_layout: dict = []
-
-    # This model is not expected to be viewable in a table
-    # as it's a sub-model
-    table_fields: list = []
-
+    page_layout: dict = {}
 
     def clean_fields(self, exclude = None):
 

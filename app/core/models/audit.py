@@ -117,19 +117,19 @@ class CenturionAudit(
 
 
 
-    page_layout: list = []
-
-    table_fields: list  = [
-        'created',
-        'action',
-        'content',
-        'user',
-        'nbsp',
-        [
-            'before',
-            'after'
+    page_layout: dict = {
+        "table": [
+            'created',
+            'action',
+            'content',
+            'user',
+            'nbsp',
+            [
+                'before',
+                'after'
+            ]
         ]
-    ]
+    }
 
 
 

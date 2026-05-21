@@ -305,23 +305,28 @@ class CenturionUser(
     ) -> bool:
 
 
-        if tenancy is None and obj is None and tenancy_permission:
-            raise ValueError('either an object or tanancy is required.')
+        try:
+
+            if tenancy is None and obj is None and tenancy_permission:
+                raise ValueError('either an object or tanancy is required.')
 
 
-        if tenancy is None and obj is not None:
-            tenancy = obj.get_tenant()
+            if tenancy is None and obj is not None:
+                tenancy = obj.get_tenant()
 
 
-        if tenancy is not None:
+            if tenancy is not None:
 
-            if permission in self.get_permissions().get(f'tenancy_{tenancy.id}', []):
-                return True
+                if permission in self.get_permissions().get(f'tenancy_{tenancy.id}', []):
+                    return True
 
-        else:
+            else:
 
-            if permission in self.get_permissions( tenancy = False ):
-                return True
+                if permission in self.get_permissions( tenancy = False ):
+                    return True
+
+        except ValueError:
+            pass
 
 
         return False

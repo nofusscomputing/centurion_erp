@@ -40,8 +40,29 @@ class TicketDependencyModelTestCases(
                 'value': None,
             },
             'page_layout': {
-                'type': type(None),
-                'value': None,
+                'type': dict,
+                'value': {
+                    "dataset": {
+                        "columns": [
+                            [
+                                'id',
+                                'title',
+                                'status_badge',
+                                'opened_by',
+                                'organization',
+                                'created'
+                            ]
+                        ]
+                    },
+                    "table": [
+                        'id',
+                        'title',
+                        'status_badge',
+                        'opened_by',
+                        'organization',
+                        'created'
+                    ]
+                },
             },
         }
 

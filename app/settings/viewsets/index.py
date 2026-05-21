@@ -16,79 +16,81 @@ class Index(IndexViewset):
         'OPTIONS'
     ]
 
-    page_layout: list = [
-        {
-            "name": "Application",
-            "links": [
-                {
-                    "name": "Settings",
-                    "model": "app_settings"
-                }
-            ]
-        },
-        {
-            "name": "Assistanace",
-            "links": [
-                {
-                    "name": "Knowledge Base Categories",
-                    "model": "knowledge_base_category"
-                }
-            ]
-        },
-        {
-            "name": "Core",
-            "links": [
-                {
-                    "name": "External Links",
-                    "model": "external_link"
-                },
-            ]
-        },
-        {
-            "name": "ITAM",
-            "links": [
-                {
-                    "name": "Device Model",
-                    "model": "device_model"
-                },
-                {
-                    "name": "Device Type",
-                    "model": "device_type"
-                },
-                {
-                    "name": "Software Category",
-                    "model": "software_category"
-                }
-            ]
-        },
-        {
-            "name": "ITIM",
-            "links": [
-                {
-                    "name": "Cluster Type",
-                    "model": "cluster_type"
-                },
-                {
-                    "name": "Service Port",
-                    "model": "port"
-                },
-            ]
-        },
-        {
-            "name": "Project Management",
-            "links": [
-                {
-                    "name": "Project State",
-                    "model": "project_state"
-                },
-                {
-                    "name": "Project Type",
-                    "model": "project_type"
-                },
-            ]
-        }
-    ]
-
+    layout: dict = {
+        
+        "card": [
+            {
+                "title": "Application",
+                "body": [
+                    {
+                        "name": "Settings",
+                        "model": "app_settings"
+                    }
+                ]
+            },
+            {
+                "title": "Assistanace",
+                "body": [
+                    {
+                        "name": "Knowledge Base Categories",
+                        "model": "knowledge_base_category"
+                    }
+                ]
+            },
+            {
+                "title": "Core",
+                "body": [
+                    {
+                        "name": "External Links",
+                        "model": "external_link"
+                    },
+                ]
+            },
+            {
+                "title": "ITAM",
+                "body": [
+                    {
+                        "name": "Device Model",
+                        "model": "device_model"
+                    },
+                    {
+                        "name": "Device Type",
+                        "model": "device_type"
+                    },
+                    {
+                        "name": "Software Category",
+                        "model": "software_category"
+                    }
+                ]
+            },
+            {
+                "title": "ITIM",
+                "body": [
+                    {
+                        "name": "Cluster Type",
+                        "model": "cluster_type"
+                    },
+                    {
+                        "name": "Service Port",
+                        "model": "port"
+                    },
+                ]
+            },
+            {
+                "title": "Project Management",
+                "body": [
+                    {
+                        "name": "Project State",
+                        "model": "project_state"
+                    },
+                    {
+                        "name": "Project Type",
+                        "model": "project_type"
+                    },
+                ]
+            }
+        ]
+    }
     view_description = "Centurion ERP Settings"
 
     view_name = "Settings"

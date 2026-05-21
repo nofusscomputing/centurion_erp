@@ -76,21 +76,32 @@ class SoftwareEnableFeatureFlag(
 
         return str(enabled)
 
-    page_layout: dict = []
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'display_name',
+                    'organization',
+                    'checkins',
+                    'created',
+                    '-action_delete-',
+                ]
+            ]
+        },
+        "table": [
+            # {
+            #     "field": "display_name",
+            #     "type": "link",
+            #     "key": "_self"
+            # },
+            'display_name',
+            'organization',
+            'checkins',
+            'created',
+            '-action_delete-',
+        ]
+    }
 
-
-    table_fields: list = [
-        # {
-        #     "field": "display_name",
-        #     "type": "link",
-        #     "key": "_self"
-        # },
-        'display_name',
-        'organization',
-        'checkins',
-        'created',
-        '-action_delete-',
-    ]
 
     @property
     def get_daily_checkins(self):

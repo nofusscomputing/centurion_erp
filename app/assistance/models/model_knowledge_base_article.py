@@ -136,15 +136,26 @@ class ModelKnowledgeBaseArticle(TenancyObject):
     modified = AutoLastModifiedField()
 
 
-    page_layout: list = []
-
-    table_fields: list = [
-        'article',
-        'category',
-        'organization',
-        'created',
-        'modified',
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'article',
+                    'category',
+                    'organization',
+                    'created',
+                    'modified',
+                ]
+            ]
+        },
+        "table": [
+            'article',
+            'category',
+            'organization',
+            'created',
+            'modified',
+        ]
+    }
 
 
     def clean(self):

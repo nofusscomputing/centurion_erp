@@ -131,64 +131,76 @@ class KnowledgeBase(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Content",
-            "slug": "content",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        'summary',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'content',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'title',
+                    'category',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'title',
-                        'category',
-                        'responsible_user',
-                        'responsible_teams',
-                        'created',
-                        'modified',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'release_date',
-                        'expiry_date',
-                        'target_user',
-                        'target_team',
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-    table_fields: list = [
-        'title',
-        'category',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Content",
+                "slug": "content",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'summary',
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'content',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'title',
+                            'category',
+                            'responsible_user',
+                            'responsible_teams',
+                            'created',
+                            'modified',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'release_date',
+                            'expiry_date',
+                            'target_user',
+                            'target_team',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'title',
+            'category',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     def __str__(self):

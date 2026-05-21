@@ -78,73 +78,83 @@ class Role(
         return str( self.organization ) + ' / ' + self.name
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'name',
-                        'created',
-                        'modified',
-                    ],
-                    "right": [
-                        'model_notes',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "name": "Permissions",
-                    "fields": [
-                        "permissions",
-                    ]
-                },
-                {
-                    "layout": "double",
-                    "name": "Users / Groups",
-                    "left": [
-                        "users",
-                    ],
-                    "right": [
-                        'groups',
-                    ]
-                },
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'organization',
+                    'created',
+                    'modified',
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "tickets",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ],
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'organization',
-        'name',
-        'created',
-        'modified',
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'name',
+                            'created',
+                            'modified',
+                        ],
+                        "right": [
+                            'model_notes',
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "name": "Permissions",
+                        "fields": [
+                            "permissions",
+                        ]
+                    },
+                    {
+                        "layout": "double",
+                        "name": "Users / Groups",
+                        "left": [
+                            "users",
+                        ],
+                        "right": [
+                            'groups',
+                        ]
+                    },
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "tickets",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ],
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'organization',
+            'name',
+            'created',
+            'modified',
+        ]
+    }

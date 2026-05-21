@@ -7,6 +7,11 @@ from django.contrib.auth.models import ContentType, Permission
 
 from rest_framework import viewsets
 
+from pytest_simplified import NOT_USED
+
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
+
 from api.permissions.default import DefaultDenyPermission
 from access.models.tenant import Tenant as Organization, Tenant
 from access.models.team import Team
@@ -36,8 +41,6 @@ from api.viewsets.common.common import (
     # CommonIndexViewset,
     # CommonPublicReadOnlyViewSet,
 )
-
-from centurion.tests.unit_class import ClassTestCases
 
 from settings.models.app_settings import AppSettings
 
@@ -338,7 +341,8 @@ class CommonUpdatePyTest(
 @pytest.mark.api
 @pytest.mark.viewset
 class CommonViewSetTestCases(
-    ClassTestCases,
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
     """Test Suite for class CommonViewSet"""
 
@@ -436,19 +440,15 @@ class CommonViewSetTestCases(
                 'type': str,
                 'value': None
             },
-            'page_layout': {
-                'type': list,
-                'value': []
+            'layout': {
+                'type': dict,
+                'value': {}
             },
             'permission_classes': {
                 'type': list,
                 'value': [
                     DefaultDenyPermission,
                 ]
-            },
-            'table_fields': {
-                'type': list,
-                'value': []
             },
             'view_description': {
                 'type': str,
@@ -527,11 +527,9 @@ class CommonViewSetTestCases(
 
     # ToDo: get_model_documentation
 
-    # ToDo: get_page_layout
+    # ToDo: get_layout
 
     # ToDo: get_return_url
-
-    # ToDo: get_table_fields
 
     # ToDo: get_view_description
 
@@ -1078,8 +1076,8 @@ class CommonSubModelViewSetPyTest(
                 'value': None
             },
             'model': {
-                'type': django.db.models.NOT_PROVIDED,
-                'value': django.db.models.NOT_PROVIDED
+                'type': NOT_USED,
+                'value': NOT_USED
             },
             'model_suffix': {
                 'type': type(None),

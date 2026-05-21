@@ -90,108 +90,117 @@ class ConfigGroups(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified'
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'config',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'child_count',
+                    'organization',
+                ]
             ]
         },
-        {
-            "name": "Child Groups",
-            "slug": "child_groups",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "child_groups",
-                }
-            ]
-        },
-        {
-            "name": "Hosts",
-            "slug": "hosts",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        "hosts"
-                    ],
-                }
-            ]
-        },
-        {
-            "name": "Software",
-            "slug": "software",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "group_software",
-                }
-            ]
-        },
-        {
-            "name": "Configuration",
-            "slug": "configuration",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        "rendered_config"
-                    ],
-                }
-            ]
-        },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "tickets",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'child_count',
-        'organization',
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified'
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'config',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Child Groups",
+                "slug": "child_groups",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "child_groups",
+                    }
+                ]
+            },
+            {
+                "name": "Hosts",
+                "slug": "hosts",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            "hosts"
+                        ],
+                    }
+                ]
+            },
+            {
+                "name": "Software",
+                "slug": "software",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "group_software",
+                    }
+                ]
+            },
+            {
+                "name": "Configuration",
+                "slug": "configuration",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            "rendered_config"
+                        ],
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "tickets",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'child_count',
+            'organization',
+        ]
+    }
 
 
 
@@ -384,8 +393,7 @@ class ConfigGroupHosts(
         return self.group
 
 
-    page_layout: list = []
-    table_fields: list = []
+    page_layout: dict = {}
 
 
 
@@ -451,15 +459,14 @@ class ConfigGroupSoftware(
 
     # This model is not intended to be viewable on it's own page
     # as it's a sub model for config groups
-    page_layout: list = []
-
-
-    table_fields: list = [
-        'software',
-        'category',
-        'action',
-        'version'
-    ]
+    page_layout: dict = {
+        "table": [
+            'software',
+            'category',
+            'action',
+            'version'
+        ]
+    }
 
 
     def get_url_kwargs(self, many = False) -> dict:

@@ -102,26 +102,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             metadata['fields'] = self.get_serializer_info(serializer)
 
 
-        if view.suffix == 'Instance':
-
-            metadata['layout'] = view.get_page_layout()
-
-        elif view.suffix == 'List':
-
-            if hasattr(view, 'table_fields'):
-
-                metadata['table_fields'] = view.get_table_fields()
-
-            if hasattr(view, 'page_layout'):
-
-                metadata['layout'] = view.get_page_layout()
+        metadata['layout'] = view.get_layout()
 
 
         if metadata.get('layout', None) is None:
-            metadata['layout'] = []
-
-        if metadata.get('table_fields', None) is None:
-            metadata['table_fields'] = []
+            metadata['layout'] = {}
 
         build_repo: str = None
 

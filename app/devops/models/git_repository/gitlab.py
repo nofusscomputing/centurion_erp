@@ -37,51 +37,64 @@ class GitLabRepository(
     )
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'provider',
-                        'git_group',
-                        'path',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'description',
-                        'provider_id',
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "name": "Settings",
-                    "layout": "double",
-                    "left": [
-                        'visibility',
-                    ],
-                    "right": []
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'provider_badge',
+                    'path',
+                    'organization',
+                    'created',
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'provider',
+                            'git_group',
+                            'path',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'description',
+                            'provider_id',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "name": "Settings",
+                        "layout": "double",
+                        "left": [
+                            'visibility',
+                        ],
+                        "right": []
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ]
+    }

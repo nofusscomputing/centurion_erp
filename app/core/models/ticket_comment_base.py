@@ -205,12 +205,7 @@ class TicketCommentBase(
 
     # this model is not intended to be viewable on its
     # own page due to being a sub model
-    page_layout: list = []
-
-
-    # this model is not intended to be viewable via
-    # a table as it's a sub-model
-    table_fields: list = []
+    page_layout: dict = {}
 
 
     def clean(self):

@@ -4,6 +4,8 @@ from django.db import models
 
 from django.utils.timezone import now
 
+from pytest_simplified import NOT_USED
+
 from access.tests.unit.tenancy_abstract.test_unit_tenancy_abstract_model import (
     TenancyAbstractModelInheritedCases
 )
@@ -212,20 +214,16 @@ class CenturionAbstractTenancyModelPyTest(
         
         return {
             'model_tag': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
+                'type': NOT_USED,
+                'value': NOT_USED,
             },
             'url_model_name': {
-                'type': models.NOT_PROVIDED,
+                'type': NOT_USED,
             },
             'page_layout': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
+                'type': NOT_USED,
+                'value': NOT_USED,
             },
-            'table_fields': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
-            }
         }
 
 

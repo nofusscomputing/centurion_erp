@@ -75,16 +75,26 @@ class CheckIn(
 
         return self.feature + '.' + self.deployment_id
 
-    page_layout: dict = []
-
-
-    table_fields: list = [
-        'software',
-        'feature',
-        'deployment_id',
-        'organization',
-        'created',
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'software',
+                    'feature',
+                    'deployment_id',
+                    'organization',
+                    'created',
+                ]
+            ]
+        },
+        "table": [
+            'software',
+            'feature',
+            'deployment_id',
+            'organization',
+            'created',
+        ]
+    }
 
 
 

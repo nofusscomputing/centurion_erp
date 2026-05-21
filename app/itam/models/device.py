@@ -51,49 +51,59 @@ class DeviceType(
 
     modified = AutoLastModifiedField()
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     def clean(self):
@@ -246,107 +256,124 @@ class Device(
 
     modified = AutoLastModifiedField()
 
-    table_fields: list = [
-        'status_icon',
-        "name",
-        "device_model",
-        "device_type",
-        "organization",
-        "created",
-        "modified",
-        "model",
-        "nbsp"
-    ]
-
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'device_type',
-                        'device_model',
-                        'name',
-                        'serial_number',
-                        'uuid',
-                        'inventorydate',
-                        'created',
-                        'modified',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'is_virtual',
-                    ]
-                },
-                {
-                    "layout": "table",
-                    "name": "Operating System",
-                    "field": "operating_system",
-                },
-                {
-                    "layout": "table",
-                    "name": "Dependent Services",
-                    "field": "service",
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'config',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset":{
+            "columns": [
+                [
+                    "name",
+                    "device_model",
+                    "device_type",
+                    'status_icon',
+                ],
+                [
+                    "organization",
+                    "created",
+                    "modified",
+                    "model"
+                ]
             ]
         },
-        {
-            "name": "Software",
-            "slug": "software",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "software",
-                }
-            ]
-        },
-        {
-            "name": "Tickets",
-            "slug": "tickets",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ],
-        },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-        {
-            "name": "Config Management",
-            "slug": "config_management",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        "rendered_config",
-                    ]
-                }
-            ]
-        }
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'device_type',
+                            'device_model',
+                            'name',
+                            'serial_number',
+                            'uuid',
+                            'inventorydate',
+                            'created',
+                            'modified',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'is_virtual',
+                        ]
+                    },
+                    {
+                        "layout": "table",
+                        "name": "Operating System",
+                        "field": "operating_system",
+                    },
+                    {
+                        "layout": "table",
+                        "name": "Dependent Services",
+                        "field": "service",
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'config',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Software",
+                "slug": "software",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "software",
+                    }
+                ]
+            },
+            {
+                "name": "Tickets",
+                "slug": "tickets",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ],
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+            {
+                "name": "Config Management",
+                "slug": "config_management",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            "rendered_config",
+                        ]
+                    }
+                ]
+            }
+        ],
+        "table": [
+            'status_icon',
+            "name",
+            "device_model",
+            "device_type",
+            "organization",
+            "created",
+            "modified",
+            "model",
+            "nbsp"
+        ]
+    }
 
 
     def clean_fields(self, exclude = None):
@@ -621,19 +648,18 @@ class DeviceSoftware(
     modified = AutoLastModifiedField()
 
 
-    page_layout: list = []
-
-
-    table_fields: list = [
-        "nbsp",
-        "software",
-        "category",
-        "action_badge",
-        "version",
-        "installedversion",
-        "installed",
-        "nbsp"
-    ]
+    page_layout: dict = {
+        "table": [
+            "nbsp",
+            "software",
+            "category",
+            "action_badge",
+            "version",
+            "installedversion",
+            "installed",
+            "nbsp"
+        ]
+    }
 
 
     @property
@@ -734,29 +760,30 @@ class DeviceOperatingSystem(
 
     modified = AutoLastModifiedField()
 
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "single",
-                    "fields": [
-                        'operating_system_version',
-                        'version',
-                        'installdate'
-                    ],
-                }
-            ]
-        }
-    ]
-
-    table_fields: list = [
-        'device',
-        'operating_system_version',
-        'version',
-        'installdate',
-    ]
+    page_layout: dict = {
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'operating_system_version',
+                            'version',
+                            'installdate'
+                        ],
+                    }
+                ]
+            }
+        ],
+        "table": [
+            'device',
+            'operating_system_version',
+            'version',
+            'installdate',
+        ]
+    }
 
 
     def get_url_kwargs(self, many = False) -> dict:

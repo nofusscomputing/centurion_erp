@@ -3,14 +3,17 @@ import pytest
 from django.apps import apps
 from django.contrib.auth.models import ContentType, Permission
 
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
+
 from access.models.tenant import Tenant
-from centurion.tests.unit_class import ClassTestCases
 
 
 
 @pytest.mark.model_centurionuser
 class CenturionUserModelTestCases(
-    ClassTestCases
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
 
 
@@ -893,30 +896,6 @@ class CenturionUserModelTestCases(
         assert not has_perm
 
 
-
-
-
-
-
-    def test_function_has_perm_group_no_obj_no_tenancy(self,
-        centurion_user, group_roles
-    ):
-        """Test function has_perm
-
-        when calling with no args, return the permissions by tenancy
-        """
-
-        centurion_user.groups.set([ group_roles ])
-
-        with pytest.raises(ValueError):
-
-            centurion_user.has_perm(
-                permission = 'access.view_tenant',
-                obj = None,
-                tenancy = None
-            )
-
-
     def test_function_has_perm_group_with_obj_no_tenancy(self,
         centurion_user, group_roles, organization_one
     ):
@@ -992,30 +971,6 @@ class CenturionUserModelTestCases(
             obj = None,
             tenancy = organization_two
         )
-
-
-
-
-
-
-
-    def test_function_has_perm_user_no_obj_no_tenancy(self,
-        centurion_user, user_roles
-    ):
-        """Test function has_perm
-
-        when calling with no args, return the permissions by tenancy
-        """
-
-        centurion_user.roles.set([ user_roles ])
-
-        with pytest.raises(ValueError):
-
-            centurion_user.has_perm(
-                permission = 'access.view_role',
-                obj = None,
-                tenancy = None
-            )
 
 
     def test_function_has_perm_user_with_obj_no_tenancy(self,

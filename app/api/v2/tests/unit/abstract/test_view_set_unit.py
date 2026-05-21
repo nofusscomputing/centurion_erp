@@ -11,30 +11,30 @@ class ViewSetAttributesUnit:
     """
 
 
-    def test_attribute_exists_page_layout(self):
+    def test_attribute_exists_layout(self):
         """Attrribute Test, Exists
 
-        Ensure attribute `page_layout` exists
+        Ensure attribute `layout` exists
         """
 
         pass
 
 
-    def test_attribute_type_page_layout(self):
+    def test_attribute_type_layout(self):
         """Attrribute Test, Type
 
-        Ensure attribute `page_layout` is of type `list`
+        Ensure attribute `layout` is of type `list`
         """
 
         pass
 
 
-    def test_attribute_not_callable_page_layout(self):
+    def test_attribute_not_callable_layout(self):
         """Attrribute Test, Not Callable
 
         Attribute must be a property
 
-        Ensure attribute `page_layout` is not callable.
+        Ensure attribute `layout` is not callable.
         """
 
         pass

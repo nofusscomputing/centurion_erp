@@ -489,20 +489,36 @@ class TicketBase(
 
 
 
-    # this model uses a custom page layout
-    page_layout: list = []
-
-    table_fields: list = [
-        'id',
-        'title',
-        'status_badge',
-        'priority_badge',
-        'impact_badge',
-        'urgency_badge',
-        'opened_by',
-        'organization',
-        'created'
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'title',
+                    'opened_by',
+                    'status_badge',
+                    'created',
+                    'modified',
+                ],
+                [
+                    'organization',
+                    'priority_badge',
+                    'impact_badge',
+                    'urgency_badge',
+                ],
+            ]
+        },
+        "table": [
+            'id',
+            'title',
+            'status_badge',
+            'priority_badge',
+            'impact_badge',
+            'urgency_badge',
+            'opened_by',
+            'organization',
+            'created'
+        ]
+    }
 
 
     def __str__(self):

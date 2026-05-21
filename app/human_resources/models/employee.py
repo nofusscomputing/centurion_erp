@@ -48,84 +48,97 @@ class Employee(
 
         return self.f_name + ' ' + self.l_name
 
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'created',
-                        'modified',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'directory',
-                    ]
-                },
-                {
-                    "name": "Personal Details",
-                    "layout": "double",
-                    "left": [
-                        'display_name',
-                        'dob',
-                    ],
-                    "right": [
-                        'f_name',
-                        'm_name',
-                        'l_name',
-                    ]
-                },
-                {
-                    "name": "Contact Details",
-                    "layout": "double",
-                    "left": [
-                        'email',
-                    ],
-                    "right": [
-                        '',
-                    ]
-                },
-                {
-                    "name": "Employee Details",
-                    "layout": "double",
-                    "left": [
-                        'employee_number',
-                    ],
-                    "right": [
-                        'user',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    "employee_number",
+                    'f_name',
+                    'l_name',
+                    'email',
+                    'organization',
+                    'created',
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-    table_fields: list = [
-        {
-            "field": "employee_number",
-            "type": "link",
-            "key": "_self"
-        },
-        'f_name',
-        'l_name',
-        'email',
-        'organization',
-        'created',
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'created',
+                            'modified',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'directory',
+                        ]
+                    },
+                    {
+                        "name": "Personal Details",
+                        "layout": "double",
+                        "left": [
+                            'display_name',
+                            'dob',
+                        ],
+                        "right": [
+                            'f_name',
+                            'm_name',
+                            'l_name',
+                        ]
+                    },
+                    {
+                        "name": "Contact Details",
+                        "layout": "double",
+                        "left": [
+                            'email',
+                        ],
+                        "right": [
+                            '',
+                        ]
+                    },
+                    {
+                        "name": "Employee Details",
+                        "layout": "double",
+                        "left": [
+                            'employee_number',
+                        ],
+                        "right": [
+                            'user',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            {
+                "field": "employee_number",
+                "type": "link",
+                "key": "_self"
+            },
+            'f_name',
+            'l_name',
+            'email',
+            'organization',
+            'created',
+        ]
+    }

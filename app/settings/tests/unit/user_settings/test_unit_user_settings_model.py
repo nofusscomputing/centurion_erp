@@ -4,6 +4,8 @@ from django.db import models
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
+from pytest_simplified import NOT_USED
+
 from access.tests.unit.managers.test_unit_user_manager import (
     UserManagerInheritedCases
 )
@@ -37,8 +39,8 @@ class UserSettingsModelTestCases(
                 'value': False,
             },
             'model_tag': {
-                'type': models.fields.NOT_PROVIDED,
-                'value': models.fields.NOT_PROVIDED
+                'type': NOT_USED,
+                'value': NOT_USED
             },
         }
 

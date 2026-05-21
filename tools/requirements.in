@@ -55,4 +55,4 @@ tzdata==2025.1
 
 markdown-it-py[plugins]==3.0.0
 markdown-it-py[linkify]==3.0.0
-Pygments==2.18.0
+Pygments==2.20.0

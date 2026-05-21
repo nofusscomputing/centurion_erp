@@ -4,13 +4,16 @@ import pytest
 from django.apps import apps
 from django.db import models
 
-from centurion.tests.unit_class import ClassTestCases
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
+
 
 
 @pytest.mark.models
 @pytest.mark.unit
 class ModelTestCases(
-    ClassTestCases
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
     """Model Common Test Suite
 

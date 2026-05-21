@@ -80,22 +80,38 @@ class TicketDependency(
     )
 
 
-    table_fields: list = [
-        'id',
-        'title',
-        'status_badge',
-        'opened_by',
-        'organization',
-        'created'
-    ]
-
-    page_layout = None
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'id',
+                    'title',
+                    'status_badge',
+                    'opened_by',
+                    'organization',
+                    'created'
+                ]
+            ]
+        },
+        "table": [
+            'id',
+            'title',
+            'status_badge',
+            'opened_by',
+            'organization',
+            'created'
+        ]
+    }
 
 
 
     def __str__(self):
 
-        return str( '#' + str(self.ticket.id) )
+        if getattr(self, 'ticket', None):
+
+            return str( '#' + str(self.ticket.id) )
+
+        return ''
 
 
 

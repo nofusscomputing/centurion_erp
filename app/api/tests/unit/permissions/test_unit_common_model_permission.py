@@ -2,11 +2,13 @@ import pytest
 
 from unittest.mock import PropertyMock
 
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
+
 from api.permissions.common import (
     CenturionModelPermissions,
 )
 
-from centurion.tests.unit_class import ClassTestCases
 
 
 class MockObj:
@@ -203,7 +205,8 @@ class MyMockView:
 
 @pytest.mark.permissions
 class CenturionModelPermissionTestCases(
-    ClassTestCases
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
 
     @pytest.fixture( scope = 'class')

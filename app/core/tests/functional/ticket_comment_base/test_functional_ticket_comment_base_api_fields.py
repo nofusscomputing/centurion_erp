@@ -266,6 +266,9 @@ class TicketCommentBaseAPIFieldsTestCases(
         assert api_data_two['key'] not in api_data_two['obj'], 'Thread URL was found in comment'
 
 
+    def test_api_metadata_list_has_layout_table(self, metadata_request_list):
+        pytest.xfail( reason = 'Model is part of a ticket and will never be displayed in table view as it uses ticket view')
+
 
 class TicketCommentBaseAPIFieldsInheritedCases(
     TicketCommentBaseAPIFieldsTestCases,

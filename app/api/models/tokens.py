@@ -146,14 +146,24 @@ class AuthToken(
 
         return 'users token'
 
-    page_layout = []
-
-    table_fields: list = [
-        'note',
-        'created',
-        'expires',
-        '-action_delete-',
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'note',
+                    'created',
+                    'expires',
+                    '-action_delete-',
+                ]
+            ]
+        },
+        "table": [
+            'note',
+            'created',
+            'expires',
+            '-action_delete-',
+        ]
+    }
 
 
     def get_url_kwargs(self, many = False) -> dict:
