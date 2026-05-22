@@ -351,7 +351,6 @@ class Service(
         ],
         "table": [
             'name',
-            'deployed_to',
             'organization',
             'created',
             'modified'

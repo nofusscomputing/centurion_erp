@@ -87,7 +87,6 @@ class ModelTicket(
         },
         "table": [
             'ticket',
-            'status_badge',
             'created'
         ]
     }

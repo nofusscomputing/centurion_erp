@@ -370,7 +370,6 @@ class Device(
             "organization",
             "created",
             "modified",
-            "model",
             "nbsp"
         ]
     }

@@ -121,7 +121,6 @@ class CenturionAudit(
         "table": [
             'created',
             'action',
-            'content',
             'user',
             'nbsp',
             [

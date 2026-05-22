@@ -133,7 +133,7 @@ class ProjectMilestone(
         ],
         "table": [
             'name',
-            'percent_completed'
+            'percent_completed',
             'start_date',
             'finish_date',
         ]
