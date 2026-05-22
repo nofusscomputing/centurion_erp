@@ -245,3 +245,6 @@ class CenturionAbstractTenancyModelPyTest(
 
     def test_attribute_page_layout_table_fields(self):
         pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_attribute_page_layout_dataset_columns_fields(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )

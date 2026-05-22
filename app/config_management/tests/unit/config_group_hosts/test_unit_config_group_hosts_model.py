@@ -92,3 +92,6 @@ class ConfigGroupHostModelPyTest(
 
     def test_attribute_page_layout_table_fields(self):
         pytest.xfail( reason = 'This model has no endpoint' )
+
+    def test_attribute_page_layout_dataset_columns_fields(self):
+        pytest.xfail( reason = 'This model has no endpoint' )
