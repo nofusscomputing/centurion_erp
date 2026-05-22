@@ -253,7 +253,6 @@ class Service(
             "columns": [
                 [
                     'name',
-                    'deployed_to',
                     'organization',
                     'created',
                     'modified'

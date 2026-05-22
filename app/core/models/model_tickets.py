@@ -80,7 +80,6 @@ class ModelTicket(
             "columns": [
                 [
                     'ticket',
-                    'status_badge',
                     'created'
                 ]
             ]
