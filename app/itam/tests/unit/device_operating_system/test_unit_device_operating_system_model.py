@@ -129,3 +129,6 @@ class DeviceOperatingSystemModelPyTest(
         """
 
         pytest.xfail( reason = 'model does not require' )
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'This model has no endpoint' )

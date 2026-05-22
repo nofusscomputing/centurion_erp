@@ -159,4 +159,6 @@ class ConfigGroupSoftwareModelInheritedCases(
 class ConfigGroupSoftwareModelPyTest(
     ConfigGroupSoftwareModelTestCases,
 ):
-    pass
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'This model has no endpoint' )

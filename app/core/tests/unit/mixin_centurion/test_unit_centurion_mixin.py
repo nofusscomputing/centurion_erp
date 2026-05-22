@@ -440,6 +440,69 @@ class CenturionMixnInheritedCases(
         # Fail-Safe to ensure test writer fills all fields
 
 
+    def test_attribute_page_layout_table_fields(self, model, model_serializer):
+        """Test page_layout key
+        
+        Ensure that all table columns use valid model fields.
+        """
+
+        if 'table' not in model.page_layout:
+            pytest.xfail( reason = 'model does not use any layout.' )
+
+
+
+        allowed_unknown_fields = [
+            '-action_delete-',    # Adds delete button to UI
+            'nbsp',    # blank cell
+        ]
+
+        def check(field) -> list:
+
+            return_val = []
+
+            if model_serializer['view'].Meta.fields == '__all__':
+
+                if not hasattr(model, field):
+
+                    return_val += [ field ]
+
+
+            elif(
+                not field in model_serializer['view'].Meta.fields
+                and field not in allowed_unknown_fields
+            ):
+
+                return_val += [ field ]
+
+            return return_val
+
+
+
+        unknown_fields = []
+
+        for field in model.page_layout['table']:
+
+            if isinstance(field, list):
+
+                for sub_field in field:
+
+                    unknown_fields += check(sub_field)
+
+            elif isinstance(field, dict):
+
+                field = field['field']
+
+                unknown_fields += check(field)
+
+            else:
+
+                unknown_fields += check(field)
+
+
+        assert len(unknown_fields) == 0, f"The following field(s) are not a model field {unknown_fields}"
+
+
+
 
 @pytest.mark.module_core
 class CenturionMixnPyTest(

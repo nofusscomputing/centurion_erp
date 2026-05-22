@@ -1,3 +1,5 @@
+import importlib
+
 import pytest
 
 from django.apps import apps
@@ -183,7 +185,24 @@ class AuditHistoryMetaModelTestCases(
 
         yield request.cls.model_class
 
-    
+
+    @pytest.fixture( scope = 'class')
+    def model_serializer(self, model):
+
+        serializer_name: str =  'centurionaudit_' + str(model._meta.model_name)[0:( len(model._meta.model_name) - len('audithistory') )]
+
+        serializer_module = importlib.import_module(
+                    name = model._meta.app_label + '.serializers.' + str(
+                        serializer_name
+                    )
+                )
+
+
+        yield {
+            'view': getattr( serializer_module, 'ViewSerializer' )
+        }
+
+
     @pytest.mark.skip( reason = 'ToDo: Figure out how to dynomagic add audit_model instance' )
     def test_model_creation(self, model, user):
         pass

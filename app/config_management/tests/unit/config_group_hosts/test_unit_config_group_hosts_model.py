@@ -89,3 +89,6 @@ class ConfigGroupHostModelPyTest(
     def test_method_get_url_returns_str(self, mocker, model_instance):
         
         pytest.xfail( reason = 'This model has no endpoint' )
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'This model has no endpoint' )

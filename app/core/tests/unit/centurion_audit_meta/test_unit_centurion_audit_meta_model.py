@@ -264,3 +264,6 @@ class MetaAbstractModelPyTest(
 
     def test_method_clean_fields_calls_super_tenancy_abstract(self):
         pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )

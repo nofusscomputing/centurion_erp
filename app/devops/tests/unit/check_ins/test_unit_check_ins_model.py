@@ -120,3 +120,6 @@ class CheckInModelPyTest(
             'organization_id': model_instance.organization.id,
             'software_id': model_instance.software.id
         }
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'This model has no endpoint' )

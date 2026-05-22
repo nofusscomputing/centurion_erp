@@ -164,3 +164,6 @@ class CenturionNoteModelPyTest(
         """
 
         pytest.xfail( reason = 'Test not required as model does not have direct endpoint.' )
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
