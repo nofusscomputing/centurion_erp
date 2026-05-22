@@ -269,7 +269,6 @@ class Device(
                     "organization",
                     "created",
                     "modified",
-                    "model"
                 ]
             ]
         },
@@ -370,7 +369,6 @@ class Device(
             "organization",
             "created",
             "modified",
-            "model",
             "nbsp"
         ]
     }

@@ -67,6 +67,7 @@ class ProjectMilestoneModelSerializer(
             'start_date',
             'finish_date',
             'project',
+            'percent_completed',
             'created',
             'modified',
             '_urls',
@@ -75,6 +76,7 @@ class ProjectMilestoneModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
+            'percent_completed',
             'created',
             'modified',
             '_urls',

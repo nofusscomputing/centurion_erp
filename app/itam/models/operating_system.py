@@ -240,7 +240,6 @@ class OperatingSystemVersion(
             "columns": [
                 [
                     'name',
-                    'installations',
                     'created',
                     'modified',
                 ]
@@ -248,7 +247,6 @@ class OperatingSystemVersion(
         },
         "table": [
             'name',
-            'installations',
             'created',
             'modified',
         ]

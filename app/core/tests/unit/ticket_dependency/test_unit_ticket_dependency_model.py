@@ -160,4 +160,11 @@ class TicketDependencyModelPyTest(
     TicketDependencyModelTestCases,
 ):
 
-    pass
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'Model will never be in table view due to being part of ticket view.' )
+
+    def test_attribute_page_layout_dataset_columns_fields(self):
+        pytest.xfail( reason = 'Model will never be in table view due to being part of ticket view.' )
+
+    def test_attribute_page_layout_detail_section_columns(self):
+        pytest.xfail( reason = 'Model will never be in table view due to being part of ticket view.' )
