@@ -35,7 +35,7 @@ class TicketBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -71,7 +71,7 @@ class TicketModelSerializer(
         ticket_type = str(item.get_ticket_type_display()).lower().replace(' ', '_')
 
         url_dict: dict = {
-            '_self': item.get_url( request = self._context['view'].request ),
+            '_self': item.get_url(),
             'comments': reverse('v2:_api_v2_ticket_comment-list', request = None, kwargs={'ticket_id': item.pk}),
             'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request = None, kwargs={'ticket_id': item.pk}),
         }

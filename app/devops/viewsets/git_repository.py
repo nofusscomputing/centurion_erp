@@ -226,7 +226,7 @@ class ViewSet(
 
         if 'pk' in self.kwargs:
 
-            return self._queryset[0].get_url( request = self.request )
+            return self._queryset[0].get_url()
 
         return None
 

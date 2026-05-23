@@ -26,7 +26,7 @@ class ConfigGroupSoftwareBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:

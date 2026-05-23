@@ -34,7 +34,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -83,7 +83,7 @@ class ModelSerializer(
 
 
         urls: dict = {
-            '_self': item.get_url( request = self._context['view'].request )
+            '_self': item.get_url()
         }
 
         if item.id is not None and item.__class__._meta.model_name != 'ticketcommentsolution':

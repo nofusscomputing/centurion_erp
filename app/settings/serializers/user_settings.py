@@ -47,7 +47,7 @@ class UserSettingsModelSerializer(UserSettingsBaseSerializer):
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse("v2:_api_usersettings-detail", request = None, kwargs={'user_id': item.user.id}),
+            '_self': item.get_url(),
             'tokens': reverse(
                 "v2:_api_authtoken-list",
                 request = None,

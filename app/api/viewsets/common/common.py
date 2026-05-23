@@ -671,7 +671,7 @@ class CommonViewSet(
 
                 if hasattr(qs, 'get_url'):
 
-                    add_url.update({ 'self': qs.get_url( request = self.request ) })
+                    add_url.update({ 'self': qs.get_url() })
 
             elif self.kwargs:
 

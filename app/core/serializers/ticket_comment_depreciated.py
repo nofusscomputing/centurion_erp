@@ -79,7 +79,7 @@ class TicketCommentModelSerializer(
 
 
         urls: dict = {
-            '_self': item.get_url( request = self._context['view'].request )
+            '_self': item.get_url()
         }
 
         if item.id is not None:

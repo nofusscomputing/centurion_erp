@@ -65,7 +65,7 @@ class CommonModelSerializer(CommonBaseSerializer):
     def get_url(self, item) -> dict:
 
         get_url = {
-            '_self': item.get_url( request = self._context['view'].request ),
+            '_self': item.get_url(),
         }
 
         kb_model_name = self.Meta.model._meta.model_name

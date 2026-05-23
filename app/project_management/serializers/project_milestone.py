@@ -24,7 +24,7 @@ class ProjectMilestoneBaseSerializer(serializers.ModelSerializer):
 
         context = self.context.copy()
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:

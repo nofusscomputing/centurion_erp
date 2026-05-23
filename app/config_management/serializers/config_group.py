@@ -22,15 +22,7 @@ class ConfigGroupBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        request = None
-
-        if 'view' in self._context:
-
-            if hasattr(self._context['view'], 'request'):
-
-                request = self._context['view'].request
-
-        return item.get_url( request = request )
+        return item.get_url()
 
 
     class Meta:

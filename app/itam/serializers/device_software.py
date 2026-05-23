@@ -79,7 +79,7 @@ class DeviceSoftwareModelSerializer(
             elif 'device_id' in self._context['view'].kwargs:
 
                 get_url.update({
-                    '_self': item.get_url( request = self._context['view'].request )
+                    '_self': item.get_url()
                 })
 
         return get_url

@@ -26,7 +26,7 @@ class DeviceOperatingSystemBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self._context['request'] )
+        return item.get_url()
 
 
     class Meta:
@@ -69,7 +69,7 @@ class DeviceOperatingSystemModelSerializer(
             if self.context['view'].kwargs.get('device_id'):
 
                 get_url.update({
-                    '_self': item.get_url( request = self._context['view'].request )
+                    '_self': item.get_url()
                 })
 
             elif self.context['view'].kwargs.get('operating_system_id'):
