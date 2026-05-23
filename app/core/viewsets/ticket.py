@@ -258,7 +258,7 @@ class ViewSet( SubModelViewSet ):
 
             self.back_url = reverse(
                 viewname = '_api_ticketbase_sub-list',
-                request = self.request,
+                request = None,
                 kwargs = {
                     'app_label': self.model._meta.app_label,
                     'model_name': self.kwargs[self.model_kwarg],
@@ -273,7 +273,7 @@ class ViewSet( SubModelViewSet ):
 
             self.back_url = reverse(
                 viewname = '_api_project-detail',
-                request = self.request,
+                request = None,
                 kwargs = {
                     'pk': self.kwargs['project_id'],
                 }

@@ -1038,7 +1038,7 @@ class CenturionMixnPyTest(
     def test_method_get_url_default_attributes(self, mocker, model_instance):
         """Test Class Method
         
-        Ensure method `get_url`  has the defined default attributes.
+        Ensure method `get_url` has the defined default attributes.
         """
 
         sig = inspect.signature(model_instance.get_url)
@@ -1047,7 +1047,7 @@ class CenturionMixnPyTest(
         api_version = sig.parameters['api_version'].default
 
         assert(
-            relative == False
+            relative == True
             and api_version == 2
         )
 

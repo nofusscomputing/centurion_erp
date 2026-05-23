@@ -67,7 +67,7 @@ class ConfigGroupSoftwareModelSerializer(
         get_url.update({
             'organization': reverse(
                 'v2:_api_tenant-list',
-                request=self.context['view'].request,
+                request = None,
             ),
             'softwareversion': 'ToDo',
         })

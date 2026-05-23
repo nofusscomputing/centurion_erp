@@ -24,9 +24,9 @@ class Index(IndexViewset):
 
         return Response(
             {
-                "content_type": reverse('v2:_api_v2_content_type-list', request=request),
-                "groups": reverse('v2:_api_group-list', request=request),
-                "permission": reverse('v2:_api_permission-list', request=request),
-                "user": reverse('v2:_api_user-list', request=request)
+                "content_type": reverse('v2:_api_v2_content_type-list', request = None),
+                "groups": reverse('v2:_api_group-list', request = None),
+                "permission": reverse('v2:_api_permission-list', request = None),
+                "user": reverse('v2:_api_user-list', request = None)
             }
         )

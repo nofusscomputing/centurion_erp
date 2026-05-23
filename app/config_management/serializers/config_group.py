@@ -68,29 +68,29 @@ class ConfigGroupModelSerializer(
         get_url.update({
             'child_groups': reverse(
                 'v2:_api_configgroups_child-list',
-                request = self.context['view'].request,
+                request = None,
                 kwargs = {
                     'parent_group': item.pk
                 }
             ),
             'configgroups': reverse(
                 'v2:_api_configgroups-list',
-                request = self.context['view'].request,
+                request = None,
             ),
             'group_software': reverse(
                 'v2:_api_configgroupsoftware-list',
-                request=self.context['view'].request,
+                request = None,
                 kwargs = {
                     'config_group_id': item.pk
                 }
             ),
             'organization': reverse(
                 'v2:_api_tenant-list',
-                request=self.context['view'].request,
+                request = None,
             ),
             'parent': reverse(
                 'v2:_api_configgroups-list',
-                request=self.context['view'].request,
+                request = None,
             ),
         })
 

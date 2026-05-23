@@ -322,7 +322,7 @@ class Centurion(
 
 
     def get_url(
-        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+        self, relative: bool = True, api_version: int = 2, many = False, request: any = None
     ) -> str:
         """Return the models API URL
 

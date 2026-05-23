@@ -82,12 +82,12 @@ class ModelSerializer(
             '_self': item.get_url( request = self._context['view'].request ),
             'comments': reverse(
                 viewname = 'v2:_api_ticket_comment_base-list',
-                request = self._context['view'].request,
+                request = None,
                 kwargs = {'ticket_id': item.pk}
             ),
             'linked_models': reverse(
                 viewname = "v2:_api_modelticket-list",
-                request = self._context['view'].request,
+                request = None,
                 kwargs = {
                     'model_name': item._meta.model_name,
                     'model_id': item.pk,
@@ -95,7 +95,7 @@ class ModelSerializer(
             ),
             'ticket_dependencies': reverse(
                 viewname = "v2:_api_ticketdependency-list",
-                request = self._context['view'].request,
+                request = None,
                 kwargs = {
                     'ticket_id': item.pk
                 }
@@ -107,7 +107,7 @@ class ModelSerializer(
             url_dict.update({
                 'project': reverse(
                     viewname = "v2:_api_project-list",
-                    request = self._context['view'].request,
+                    request = None,
                     kwargs = {}
                 ),
             })
@@ -117,7 +117,7 @@ class ModelSerializer(
             url_dict.update({
             'ticketcategory': reverse(
                 viewname = 'v2:_api_ticketcategory-list',
-                request = self._context['view'].request,
+                request = None,
                 kwargs = {},
             ) + '?' + ticket_type + '=true',
             })

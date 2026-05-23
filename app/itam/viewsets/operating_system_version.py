@@ -131,7 +131,7 @@ class ViewSet( ModelViewSet ):
 
 
         return reverse('v2:_api_operatingsystem-detail',
-            request = self.request,
+            request = None,
             kwargs = {
                 'pk': self.kwargs['operating_system_id']
             }

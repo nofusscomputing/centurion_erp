@@ -70,15 +70,15 @@ class KnowledgeBaseModelSerializer(
         get_url.update({
             'category': reverse(
                 'v2:_api_knowledgebasecategory-list',
-                request=self.context['view'].request,
+                request = None,
             ),
             'organization': reverse(
                 'v2:_api_tenant-list',
-                request=self.context['view'].request,
+                request = None,
             ),
             'user': reverse(
                 'v2:_api_user-list',
-                request=self.context['view'].request,
+                request = None,
             )
         })
 

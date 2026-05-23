@@ -47,7 +47,7 @@ class AppSettingsModelSerializer(AppSettingsBaseSerializer):
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse("v2:_api_appsettings-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("v2:_api_appsettings-detail", request = None, kwargs={'pk': item.pk}),
         }
 
 

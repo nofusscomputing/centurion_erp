@@ -218,7 +218,7 @@ class ViewSet(
     def get_back_url(self) -> str:
 
 
-        return reverse('v2:devops:_api_gitrepository-list', request = self.request )
+        return reverse('v2:devops:_api_gitrepository-list', request = None )
 
 
 

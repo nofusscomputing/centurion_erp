@@ -91,7 +91,7 @@ class TicketCommentModelSerializer(
                 urls.update({
                     'threads': reverse(
                         'API:_api_v2_ticket_comment_threads-list',
-                        request = self._context['view'].request,
+                        request = None,
                         kwargs={
                             'ticket_id': ticket_id,
                             'parent_id': item.id

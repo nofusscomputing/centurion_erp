@@ -75,7 +75,7 @@ class DeviceOperatingSystemModelSerializer(
             elif self.context['view'].kwargs.get('operating_system_id'):
 
                 get_url.update({
-                    '_self': reverse("v2:_api_v2_operating_system_installs-detail", request = self._context['view'].request, kwargs = {
+                    '_self': reverse("v2:_api_v2_operating_system_installs-detail", request = None, kwargs = {
                         'operating_system_id': item.operating_system_version.operating_system.pk,
                         'pk': item.pk
                     } )
