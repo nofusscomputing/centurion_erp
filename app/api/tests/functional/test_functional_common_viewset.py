@@ -306,7 +306,7 @@ class CommonViewSetTestCases:
 
         assert 'self' in urls, 'self key must exist, test cant continue.'
 
-        assert urls['self'] == settings.SITE_URL + reverse(
+        assert urls['self'] == reverse(
             viewname = f'v2:{viewset_mock_request.basename}-list',
             kwargs = viewset_mock_request.kwargs
         )
