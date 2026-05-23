@@ -517,7 +517,10 @@ class CommonViewSet(
 
             exc = rest_framework.exceptions.PermissionDenied(ex.error_dict)
 
-        elif isinstance(ex, django.core.exceptions.ValidationError):
+        elif(
+            isinstance(ex, django.core.exceptions.ValidationError)
+            or isinstance(ex, django.db.utils.IntegrityError)
+        ):
 
 
             exc = rest_framework.exceptions.ValidationError(ex.error_dict)
