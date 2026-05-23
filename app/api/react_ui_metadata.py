@@ -6,7 +6,6 @@ from django.utils.encoding import force_str
 
 from rest_framework import serializers
 from rest_framework_json_api.metadata import JSONAPIMetadata
-from rest_framework.reverse import reverse
 from rest_framework.utils.field_mapping import ClassLookupDict
 
 from rest_framework_json_api.utils import get_related_resource_type
