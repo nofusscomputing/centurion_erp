@@ -131,10 +131,10 @@ class UserSettings(
 
 
     def get_url(
-        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+        self, relative: bool = True, api_version: int = 2, many = False
     ) -> str:
 
-        return super().get_url( relative = relative, api_version = api_version, many = False, request = request)
+        return super().get_url( relative = relative, api_version = api_version, many = False,)
 
 
 

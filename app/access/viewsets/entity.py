@@ -251,8 +251,8 @@ class ViewSet(
         ):
 
             self.back_url = reverse(
-                viewname = '_api_entity_sub-list',
-                request = self.request,
+                viewname = 'v2:_api_entity_sub-list',
+                request = None,
                 kwargs = {
                     'model_name': self.kwargs[self.model_kwarg],
                 }

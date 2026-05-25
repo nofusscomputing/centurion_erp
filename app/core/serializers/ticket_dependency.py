@@ -29,7 +29,7 @@ class BaseSerializer(
 
     def get_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -64,16 +64,8 @@ class ModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        request = None
-
-        if 'view' in self._context:
-
-            if hasattr(self._context['view'], 'request'):
-
-                request = self._context['view'].request
-
         return {
-            '_self': item.get_url( request = request ),
+            '_self': item.get_url(),
         }
 
 

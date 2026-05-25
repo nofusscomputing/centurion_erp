@@ -23,7 +23,7 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self._context['view'].request )
+        return item.get_url()
 
 
     created = serializers.DateTimeField( source = 'ticket.created', read_only = True )
@@ -59,7 +59,7 @@ class TicketLinkedItemModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': item.get_url( request = self._context['view'].request )
+            '_self': item.get_url()
         }
 
 

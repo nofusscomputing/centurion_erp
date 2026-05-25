@@ -218,7 +218,7 @@ class ViewSet(
     def get_back_url(self) -> str:
 
 
-        return reverse('v2:devops:_api_gitrepository-list', request = self.request )
+        return reverse('v2:devops:_api_gitrepository-list', request = None )
 
 
 
@@ -226,7 +226,7 @@ class ViewSet(
 
         if 'pk' in self.kwargs:
 
-            return self._queryset[0].get_url( request = self.request )
+            return self._queryset[0].get_url()
 
         return None
 

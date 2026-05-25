@@ -1,4 +1,3 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
@@ -23,7 +22,7 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:

@@ -25,6 +25,6 @@ class Index(IndexViewset):
 
         return Response(
             {
-                "group": reverse('v2:_api_configgroups-list', request=request),
+                "group": reverse('v2:_api_configgroups-list', request = None),
             }
         )

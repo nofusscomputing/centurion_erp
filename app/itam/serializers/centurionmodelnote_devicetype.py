@@ -25,7 +25,7 @@ class ModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': item.get_url( request = self._context['view'].request ),
+            '_self': item.get_url(),
         }
 
 

@@ -57,7 +57,7 @@ class ServiceModelSerializer(
 
 
         get_url.update({
-            'external_links': reverse("v2:_api_externallink-list", request=self._context['view'].request) + '?service=true',
+            'external_links': reverse("v2:_api_externallink-list", request = None) + '?service=true',
         })
 
         return get_url

@@ -135,7 +135,7 @@ class ViewSet( ModelViewSet ):
 
 
         return reverse('v2:_api_software-detail',
-            request = self.request,
+            request = None,
             kwargs = {
                 'pk': self.kwargs['software_id']
             }
@@ -159,7 +159,7 @@ class ViewSet( ModelViewSet ):
 
 
         return reverse('v2:_api_software-detail',
-            request = self.request,
+            request = None,
             kwargs = {
                 'pk': self.kwargs['software_id']
             }

@@ -522,6 +522,11 @@ class CommonViewSet(
 
             exc = rest_framework.exceptions.ValidationError(ex.error_dict)
 
+        elif isinstance(ex, django.db.utils.IntegrityError):
+
+
+            exc = rest_framework.exceptions.ValidationError({str(ex.__class__.__name__).lower(): ex})
+
         else:
 
             msg = f"20250704-Unknown Exception Type. Unable to convert." \
@@ -671,14 +676,14 @@ class CommonViewSet(
 
                 if hasattr(qs, 'get_url'):
 
-                    add_url.update({ 'self': qs.get_url( request = self.request ) })
+                    add_url.update({ 'self': qs.get_url() })
 
             elif self.kwargs:
 
                 add_url.update({
                     'self': reverse(
                         viewname = 'v2:' + app_namespace + self.basename + '-list',
-                        request = self.request,
+                        request = None,
                         kwargs = self.kwargs
                     )
                 })
@@ -688,7 +693,7 @@ class CommonViewSet(
                 add_url.update({
                     'self': reverse(
                         viewname = 'v2:' + app_namespace + self.basename + '-list',
-                        request = self.request
+                        request = None
                     )
                 })
 
@@ -747,7 +752,7 @@ class CommonViewSet(
 
                         url = reverse(
                             viewname = 'v2:' + app_namespace + basename + '-list',
-                            request = self.request,
+                            request = None,
                             kwargs = kwargs
                         )
 
@@ -783,10 +788,10 @@ class CommonViewSet(
         Defining this URL will predominatly be for sub-models. It's
         recommended that the `reverse` function
         (rest_framework.reverse.reverse) be used with a `request`
-        object.
+        object with a value of `None` so that the URL is relative.
 
         Returns:
-            str: Full url in format `<protocol>://<doman name>.<tld>/api/<API version>/<model url>`
+            str: Full url in format `/api/<API version>/<model url>`
         """
 
         return None
@@ -900,10 +905,10 @@ class CommonViewSet(
         Defining this URL will predominatly be for sub-models. It's
         recommended that the `reverse` function
         (rest_framework.reverse.reverse) be used with a `request`
-        object.
+        object with a value of `None` so the URL is relative.
 
         Returns:
-            str: Full url in format `<protocol>://<doman name>.<tld>/api/<API version>/<model url>`
+            str: Full url in format `/api/<API version>/<model url>`
         """
 
         return None

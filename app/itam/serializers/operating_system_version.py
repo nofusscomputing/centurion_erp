@@ -22,7 +22,7 @@ class OperatingSystemVersionBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self.context['request'] )
+        return item.get_url()
 
 
     class Meta:

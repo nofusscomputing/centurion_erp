@@ -46,7 +46,7 @@ class ContentTypeViewSerializer(ContentTypeBaseSerializer):
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse("v2:_api_v2_content_type-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("v2:_api_v2_content_type-detail", request = None, kwargs={'pk': item.pk}),
         }
 
 

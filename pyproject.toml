@@ -1379,6 +1379,7 @@ markers = [
     "audit_models: Selects Audit models.",
     "authentication: Selects all authentication tests.",
     "centurion_models: Selects Centurion models",
+    "exception: Selects all tests related to exceptions",
     "fields: Selects all field related tests",
     "functional: Selects all Functional tests.",
     "integration: Selects all Integration tests.",

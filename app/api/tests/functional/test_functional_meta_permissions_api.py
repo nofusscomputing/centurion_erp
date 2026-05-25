@@ -4,6 +4,9 @@ from django.apps import apps
 from django.conf import settings
 from django.utils.module_loading import import_string
 
+from api.tests.functional.test_functional_exception_capture_api import (
+    APIExceptionsInheritedCases
+)
 from api.tests.functional.test_functional_permissions_api import (
     APIPermissionsInheritedCases
 )
@@ -123,6 +126,7 @@ exclude_model_from_test = [
 
 
 class APIPermissionsTestCases(
+    APIExceptionsInheritedCases,
     APIPermissionsInheritedCases
 ):
     """API Permission Test Cases
