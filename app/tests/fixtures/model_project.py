@@ -47,7 +47,12 @@ def kwargs_project(kwargs_centurionmodel, django_db_blocker,
 
         kwargs = {
             **kwargs,
-            'code': 'aCODE' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
+            'code': 'aCODE' + (
+                f'{random.randint(1,99)}'
+                f'{random.randint(1,99)}'
+                f'{random.randint(1,99)}'
+                f'{random.randint(1,99)}'
+            ),
             'name': 'project_' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             'description': 'a description',
             'priority': Project.Priority.LOW,
