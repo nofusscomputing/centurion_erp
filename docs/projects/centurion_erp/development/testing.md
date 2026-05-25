@@ -11,6 +11,25 @@ Unit and functional tests are written to aid in application stability and to ass
 We use PyTest as the testing framework. As such, All available features of pytest are available. We have slightly deviated from the standard naming convention wherein test class must be suffixed with `PyTest`. Please [see below](#writing-tests) for more details.
 
 
+## Testing Methodology
+
+There are many ways to structure tests for an application. The structure of our tests follows the structure of:
+
+- unit
+
+    A logic test. These tests are to be completely isolated. This is achieved by mocking the object that is external to the object being tested. On occasion, you may not be able to isolate a unit test. in this instance, the unit test case will be written as a functional test.
+
+- functional
+
+    inter-object tests. These tests don't mock any code, unless it is from an external module. They are similar to the unit test, however test all of the code that is below the object being tested. They should begin at the lowest point in the path being tested, until they reach the upper-most object in the path. for example and for a django project, a model would be the lowest object in the path, and the viewset would be the highest object in the path. So to fully test this youd write functional tests for model, serializer, viewset. Obviously there are forks in the code path, so additional test suites would need to be written. i.e. data in vs data out.
+
+- integration.
+
+    Inter-application tests. These tests ensure that our code/logic works against an external application. for example postgreSQL. Unlike functional and unit test suites, this type of test only tests the path between our application and the external application. This is because unit and functional tests have already been written and cover the logic at the lower level.
+
+Once the tests are written, we combine unit and functional test results to obtain our test coverage.
+
+
 ## Directory Structure
 
 Each module is to contain a tests directory of the model being tested with a single file for grouping of what is being tested. for items that depend upon a parent model, the test file is to be within the child-models test directory named with format `test_<type>_<model name>_<component name>`. Format for the test filename is as follows:
