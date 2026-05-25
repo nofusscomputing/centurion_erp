@@ -217,3 +217,58 @@ class AdditionalTestCases:
         """
 
         pytest.xfail( reason = 'model is not org based' )
+
+
+
+    def test_api_add_exception(self,
+        parameterized, param_key_exceptions, param_value,
+        param_exception, param_http_status,
+    ):
+        pytest.xfail( reason = 'Model does not support adding' )
+
+
+
+    def test_api_change_exception(self, mocker, model,
+        parameterized, param_key_exceptions, param_value,
+        param_exception, param_http_status,
+        model_instance, api_request_permissions
+    ):
+        """ Check correct permission for change
+
+        Make change with user who has change permission
+        """
+
+        client = Client()
+
+        api_request_permissions['user']['change'].is_superuser = True
+        api_request_permissions['user']['change'].save()
+
+        client.force_login( api_request_permissions['user']['change'] )
+
+        change_item = model_instance(
+            kwargs_create = {
+                'organization': api_request_permissions['tenancy']['user']
+            },
+        )
+
+        kwargs = self.change_data.copy()
+        kwargs.update({ 'device_model_is_global': True })
+
+        mocker.patch(
+            f"{model.__module__}.{model.__name__}.save",
+            side_effect = param_exception("an integrity error occured....")
+        )
+
+        response = client.patch(
+            path = change_item.get_url( many = False ),
+            data = kwargs,
+            content_type = 'application/json'
+        )
+
+        api_request_permissions['user']['change'].is_superuser = False
+        api_request_permissions['user']['change'].save()
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == param_http_status, response.content
