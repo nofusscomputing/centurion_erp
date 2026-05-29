@@ -3,6 +3,7 @@ import inspect
 
 from enum import Enum
 
+from django.core.exceptions import ValidationError
 import pytest
 
 from django.apps import apps
@@ -579,6 +580,47 @@ class TicketBaseModelTestCases(
                 '`core.tests.functional.ticket_base.test_functional_ticket_base_model.TicketBaseModelTestCases.parameterized_model_fields` '
                 'with the missing field(s).'
             )
+
+
+
+    def test_field_assigned_to_not_type_entity_person(self,
+        ticket,
+        model_company, kwargs_company,
+    ):
+
+        ticket.save()
+
+        non_person_entity = model_company.objects.create(
+            **kwargs_company(),
+        )
+
+        with pytest.raises(ValidationError) as ex:
+
+            ticket.assigned_to.add(
+                non_person_entity
+            )
+
+        assert ex.value.args[1] == 'assigned_to_must_be_person', ex
+
+
+
+    def test_field_assigned_to_is_type_entity_person(self,
+        ticket,
+        model_person, kwargs_person,
+    ):
+
+        ticket.save()
+
+        person_entity = model_person.objects.create(
+            **kwargs_person(),
+        )
+
+        ticket.assigned_to.add(
+            person_entity
+        )
+
+        assert person_entity.entity_ptr in ticket.assigned_to.all(), ex
+
 
 
 
