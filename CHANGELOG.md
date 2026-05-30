@@ -1,3 +1,116 @@
+## 1.30.0 (2026-05-30)
+
+### Features
+
+- **core**: Test Case for Ticket Models to ensure assigned_to field can only be a person
+- **core**: Add validator in form of signal for ticketbase field assigned_to
+- **api**: Capture django Integrity error and display as drf exception
+- **api**: Add submodels to meta
+- **project_management**: Add ticket types to project tabs
+- **core**: Add meta_urls function to add sub-models to meta.urls
+- **project_management**: SPT Project Ticket Endpoint from Ticket ViewSet
+- **project_management**: Add URL route for project tickets
+- **itim**: Complete model ProblemTicket
+- **core**: Capture Many2Many Field changes
+
+### Fixes
+
+- **itim**: Update Port model link field so it correctly renders in UI
+- **human_resources**: Update Employee model link field so it correctly renders in UI
+- **assistance**: Update Knowledge Base model link field so it correctly renders in UI
+- **access**: Update Entity model link field so it correctly renders in UI
+- **access**: Update Contact model link field so it correctly renders in UI
+- **access**: When fetching entity back url, use v2 namespace
+- Remove fields that dont exist for models page_layout.dataset columns
+- Remove fields that dont exist for models page_layout.table
+- **core**: TicketBase title must autolinh within ui
+- **access**: User Perms must return boolean not an exception
+- **admin**: Allow role admin name should not be read-only
+- **api**: Added missing thread sub route
+- **project_management**: Add missing comma in layout right pane for duration
+- **api**: Exclude meta models from sub_models key within get_meta_urls
+- **core**: Action Comment signal must not run on base model
+- **core**: When creating permission map for ticket comment, when partent pk not supplied, query comment to obtain ticket
+- **core**: Use sub-model for ticket dependency field render
+- **itim**: Change and Problem tickets must use TicketBase
+
+### Refactoring
+
+- Squash migrations
+- remove request parameter from model get_url fn
+- URLs now to default to relative URLs
+- **settings**: Update models layout for UI v0.10.0
+- **project_management**: Update models layout for UI v0.10.0
+- **itim**: Update models layout for UI v0.10.0
+- **itam**: Update models layout for UI v0.10.0
+- **human_resources**: Update models layout for UI v0.10.0
+- **devops**: Update models layout for UI v0.10.0
+- **core**: Update models layout for UI v0.10.0
+- **config_management**: Update models layout for UI v0.10.0
+- **assistance**: Update models layout for UI v0.10.0
+- **api**: Update models layout for UI v0.10.0
+- **accounting**: Update models layout for UI v0.10.0
+- **access**: Update models layout for UI v0.10.0
+- **core**: Remove model field `comment_type`
+- **core**: Remove model field `ticket_type`
+- **access**: Remove model field `entity_type`
+- **accounting**: Remove model field `asset_type`
+- Remove field `Meta.itam_sub_model_type`
+- Remove Meta property sub_model_type
+- Remove field `Meta.sub_model_type`
+- **api**: use sub_model when adding app_label kwarg
+- **api**: use model_name for sub_models key
+- **api**: Instead of mocking the viewset, use the apiclient rendered viewset
+- Use Serializer common to add ticket link to relevant models
+- **core**: Use model_name instead of ticket_comment_model for url kwarg
+- **core**: Use model_name instead of ticket_type for url kwarg
+- **project_management**: filter project tickets endpoint to valid ticket types
+- **core**: as part of CenturionMixin Unit Test Suite, mock the model context
+- **core**: Remove Permission check when fetching the Model type
+
+### Tests
+
+- **api**: Functional test suite for capturing Django Integrity Errors
+- **api**: Update self URL test case to check for relative URLs instead
+- Unit test case for ensuing that layout.detail sections columns contains valid fields
+- Unit test case for ensuing that layout.dataset columns contains valid fields
+- Unit test case for ensuing that layout.table contains valid fields
+- **class**: Class tests must derive from pytest plugin pytest_dimplified
+- **api**: ViewSet functional Test Cases for function get_meta_urls
+- **project_management**: ViewSet Render Functional Test Suite for model ProblemTicket
+- **project_management**: Serializer Render Functional Test Suite for model ProblemTicket
+- **project_management**: Mdoel Render Functional Test Suite for model ProblemTicket
+- **project_management**: API Fields Render Functional Test Suite for model ProblemTicket
+- **project_management**: ViewSet Unit Test Suite for model ProblemTicket
+- **project_management**: Serializer Unit Test Suite for model ProblemTicket
+- **project_management**: Model Unit Test Suite for model ProblemTicket
+- **itim**: API Fields Functional Test Suite for model ProblemTicket
+- **itim**: ViewSet Functional Test Suite for model ProblemTicket
+- **itim**: Serialiser Functional Test Suite for model ProblemTicket
+- **itim**: Model Functional Test Suite for model ProblemTicket
+- **itim**: ViewSet Unit Test Suite for model ProblemTicket
+- **itim**: Serializer Unit Test Suite for model ProblemTicket
+- **itim**: Model Unit Test Suite for model ProblemTicket
+- **itim**: ViewSet Functional Test Suite for model ChangeTicket
+- **itim**: Serializer Functional Test Suite for model ChangeTicket
+- **itim**: Model Functional Test Suite for model ChangeTicket
+- **itim**: API Fields Functional Test Suite for model ChangeTicket
+- **itim**: ViewSet Unit Test Suite for model ChangeTicket
+- **itim**: Serializer Unit Test Suite for model ChangeTicket
+- **itim**: Unit Test Suite for model ChangeTicket
+- **core**: Functional Test Suite for Model Audit Entries
+- **core**: Functional test suite for MarkdownField model_tag rendering
+- **core**: Correct Test logic for MarkdownField unit test suite
+- **core**: Correct Test logic for MarkdownFiled Model tag rendering test suite
+- **itim**: Remove depreciated unit test suites for model IncidentTicket
+- **itim**: Remove depreciated functional test suites for model IncidentTicket
+- **itim**: ViewSet functional test Suite for IncidnetTicket
+- **itim**: Model functional test Suite for IncidnetTicket
+- **itim**: APIFields functional test Suite for IncidnetTicket
+- **itim**: ViewSet unit test Suite for IncidnetTicket
+- **itim**: Serializer unit test Suite for IncidnetTicket
+- **itim**: Model unit test Suite for IncidnetTicket
+
 ## 1.29.0 (2026-02-09)
 
 ### Features
