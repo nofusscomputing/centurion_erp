@@ -52,7 +52,11 @@ class Contact(
         "dataset": {
             "columns": [
                 [
-                    "display_name",
+                    {
+                        "field": "display_name",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'f_name',
                     'l_name',
                     'email',
