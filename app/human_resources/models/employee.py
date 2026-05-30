@@ -52,7 +52,11 @@ class Employee(
         "dataset": {
             "columns": [
                 [
-                    "employee_number",
+                    {
+                        "field": "employee_number",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'f_name',
                     'l_name',
                     'email',
