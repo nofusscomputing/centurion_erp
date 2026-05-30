@@ -1,8 +1,6 @@
 import datetime
-import difflib
 
 from django.apps import apps
-from django.conf import settings
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -11,7 +9,6 @@ from access.models.entity import Entity
 from core import exceptions as centurion_exceptions
 from core.classes.badge import Badge
 from core.lib.slash_commands import SlashCommands
-from core.middleware.get_request import get_request
 from core.models.centurion import CenturionModel
 from core.models.ticket.ticket_category import TicketCategory
 from core.models.ticket.ticket_enum_values import TicketValues
@@ -138,8 +135,6 @@ class TicketBase(
             ('triage_ticketbase', 'Can triage a ticket base'),
         ]
 
-        sub_model_type = 'ticket'
-
         unique_together = ('external_system', 'external_ref',)
 
         verbose_name = "Ticket"
@@ -180,58 +175,6 @@ class TicketBase(
         verbose_name = 'Parent Ticket'
     )
 
-    @property
-    def get_ticket_type(self):
-        """Fetch the Ticket Type
-
-        You can safely override this function as long as it's called or the
-        logic is included in your over-ridden function.
-
-        Returns:
-            str: The models `Meta.verbose_name` in lowercase and without spaces
-            None: The ticket is for the Base class. Used to prevent creating a base ticket.
-        """
-
-        ticket_type = str(self._meta.sub_model_type).lower().replace(' ', '_')
-
-        if ticket_type == 'ticket':
-
-            return None
-
-        return ticket_type
-
-
-    def get_ticket_type_choices():
-
-        choices = []
-
-        if apps.ready:
-
-            all_models = apps.get_models()
-
-            for model in all_models:
-
-                if isinstance(model, TicketBase) or issubclass(model, TicketBase):
-
-                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
-
-
-        return choices
-
-
-    ticket_type = models.CharField(
-        blank = True,
-        choices = get_ticket_type_choices,
-        # default = get_ticket_type_default,
-        default = Meta.sub_model_type,
-        help_text = 'Ticket Type. (derived from ticket model)',
-        max_length = 30,
-        null = False,
-        validators = [
-            validate_not_null
-        ],
-        verbose_name = 'Ticket Type',
-    )
 
     status = models.IntegerField( # will require validation by ticket type as status for types will be different
         blank = False,
@@ -546,20 +489,36 @@ class TicketBase(
 
 
 
-    # this model uses a custom page layout
-    page_layout: list = []
-
-    table_fields: list = [
-        'id',
-        'title',
-        'status_badge',
-        'priority_badge',
-        'impact_badge',
-        'urgency_badge',
-        'opened_by',
-        'organization',
-        'created'
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'title',
+                    'opened_by',
+                    'status_badge',
+                    'created',
+                    'modified',
+                ],
+                [
+                    'organization',
+                    'priority_badge',
+                    'impact_badge',
+                    'urgency_badge',
+                ],
+            ]
+        },
+        "table": [
+            'id',
+            'title',
+            'status_badge',
+            'priority_badge',
+            'impact_badge',
+            'urgency_badge',
+            'opened_by',
+            'organization',
+            'created'
+        ]
+    }
 
 
     def __str__(self):
@@ -647,10 +606,6 @@ class TicketBase(
         if related_model is None:
 
             related_model = self
-
-        if self.ticket_type != str(related_model._meta.sub_model_type).lower().replace(' ', '_'):
-
-            self.ticket_type = str(related_model._meta.sub_model_type).lower().replace(' ', '_')
 
 
         if self.date_solved is None and self.is_solved:
@@ -778,11 +733,11 @@ class TicketBase(
 
             del kwargs['model_name']
 
-        if str(self._meta.sub_model_type) != 'ticket':
+        if self._meta.model_name != 'ticketbase':
 
             kwargs.update({
                 'app_label': self._meta.app_label,
-                'ticket_type': str(self._meta.sub_model_type),
+                'model_name': str(self._meta.model_name),
             })
 
 

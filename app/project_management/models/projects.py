@@ -210,106 +210,125 @@ class Project(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "name": "Status",
-                    "layout": "double",
-                    "left": [
-                        'state',
-                        'completed',
-                        'priority',
-                    ],
-                    "right": [
-                        'estimation_project',
-                        'duration_project',
-                    ]
-                },
-                {
-                    "name": "Details",
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'code',
-                        'name',
-                        'project_type',
-                    ],
-                    "right": [
-                        'planned_start_date',
-                        'planned_finish_date',
-                        'real_start_date',
-                        'real_finish_date',
-                        'duration_project'
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "layout": "double",
-                    "left": [
-                        'manager_user',
-                    ],
-                    "right": [
-                        'manager_team',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'description'
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'code',
+                    'project_type',
+                    'state',
+                    'organization',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Tasks",
-            "slug": "ticket",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "tickets",
-                }
-            ]
-        },
-        {
-            "name": "Milestones",
-            "slug": "milestone",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "milestone",
-                }
-            ]
-        },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'code',
-        'name',
-        'project_type'
-        'state',
-        'organization',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "name": "Status",
+                        "layout": "double",
+                        "left": [
+                            'state',
+                            'completed',
+                            'priority',
+                        ],
+                        "right": [
+                            'estimation_project',
+                            'duration_project',
+                        ]
+                    },
+                    {
+                        "name": "Details",
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'code',
+                            'name',
+                            'project_type',
+                        ],
+                        "right": [
+                            'planned_start_date',
+                            'planned_finish_date',
+                            'real_start_date',
+                            'real_finish_date',
+                            'duration_project',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "layout": "double",
+                        "left": [
+                            'manager_user',
+                        ],
+                        "right": [
+                            'manager_team',
+                        ]
+                    },
+                    {
+                        "layout": "single",
+                        "fields": [
+                            'description'
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Tasks",
+                "slug": "ticket",
+                "sections": [
+                    {
+                        "sub_models": [
+                            'changeticket',
+                            'incidentticket',
+                            'problemticket',
+                            'projecttaskticket',
+                            'requestticket',
+                        ],
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ]
+            },
+            {
+                "name": "Milestones",
+                "slug": "milestone",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "milestone",
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'code',
+            'name',
+            'project_type',
+            'state',
+            'organization',
+            'modified'
+        ]
+    }
 
 
     fields_all: list = []

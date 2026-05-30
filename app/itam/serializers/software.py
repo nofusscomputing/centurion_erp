@@ -57,17 +57,17 @@ class SoftwareModelSerializer(
         get_url = super().get_url( item = item )
 
         get_url.update({
-            'external_links': reverse("v2:_api_externallink-list", request=self._context['view'].request) + '?software=true',
+            'external_links': reverse("v2:_api_externallink-list", request = None) + '?software=true',
             'feature_flagging': reverse(
                 "v2:_api_softwareenablefeatureflag-list",
                 kwargs={'software_id': item.pk},
-                request=self._context['view'].request
+                request = None
             ) + '',
-            'installations': reverse("v2:_api_v2_software_installs-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
+            'installations': reverse("v2:_api_v2_software_installs-list", request = None, kwargs={'software_id': item.pk}),
             'services': 'ToDo',
             'version': reverse(
                 "v2:_api_softwareversion-list",
-                request=self._context['view'].request,
+                request = None,
                 kwargs={
                     'software_id': item.pk
                 }
@@ -78,18 +78,6 @@ class SoftwareModelSerializer(
 
             get_url.update({
                 'publisher': item.publisher.get_url( many = False ),
-            })
-
-        if not self.context['request'].feature_flag['2025-00006']:
-            get_url.update({
-                'tickets': reverse(
-                    "v2:_api_v2_item_tickets-list",
-                    request=self._context['view'].request,
-                    kwargs={
-                        'item_class': 'software',
-                        'item_id': item.pk
-                        }
-                )
             })
 
 

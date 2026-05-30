@@ -24,11 +24,11 @@ class Index(IndexViewset):
     def list(self, request, pk=None):
 
         response = {
-                "organization": reverse('v2:_api_tenant-list', request=request),
-                "role": reverse( 'v2:_api_role-list', request=request ),
+                "organization": reverse('v2:_api_tenant-list', request = None),
+                "role": reverse( 'v2:_api_role-list', request = None ),
                 "directory": reverse(
                     'v2:_api_entity_sub-list',
-                    request=request,
+                    request = None,
                     kwargs = { 'model_name': 'contact' }
                 ),
             }

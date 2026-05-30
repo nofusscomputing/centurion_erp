@@ -86,52 +86,62 @@ class TicketCommentCategory(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'name',
-                        'is_global',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "layout": "double",
-                    "name": "Comment Types",
-                    "left": [
-                        'comment',
-                        'notification',
-                    ],
-                    "right": [
-                        'solution',
-                        'task',
-                    ]
-                },
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'name',
+                            'is_global',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "layout": "double",
+                        "name": "Comment Types",
+                        "left": [
+                            'comment',
+                            'notification',
+                        ],
+                        "right": [
+                            'solution',
+                            'task',
+                        ]
+                    },
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     def __str__(self):

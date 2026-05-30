@@ -2,6 +2,7 @@ import pytest
 
 from django.db import models
 
+from pytest_simplified import NOT_USED
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractTenancyModelInheritedCases
@@ -79,8 +80,8 @@ class ConfigGroupSoftwareModelTestCases(
                 'value': False,
             },
             'model_tag': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
+                'type': NOT_USED,
+                'value': NOT_USED,
             },
         }
 
@@ -158,4 +159,12 @@ class ConfigGroupSoftwareModelInheritedCases(
 class ConfigGroupSoftwareModelPyTest(
     ConfigGroupSoftwareModelTestCases,
 ):
-    pass
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'This model has no endpoint' )
+
+    def test_attribute_page_layout_dataset_columns_fields(self):
+        pytest.xfail( reason = 'This model has no endpoint' )
+
+    def test_attribute_page_layout_detail_section_columns(self):
+        pytest.xfail( reason = 'This model has no endpoint' )

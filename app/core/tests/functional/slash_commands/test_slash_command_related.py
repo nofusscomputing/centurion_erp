@@ -589,7 +589,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -662,7 +662,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -735,7 +735,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -808,7 +808,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -881,7 +881,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -954,7 +954,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -1027,7 +1027,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -1100,7 +1100,7 @@ class SlashCommandsTicketTestCases(
 
         assert len(action_comment) == 1
 
-        assert action_comment[0].comment_type == 'action'
+        assert action_comment[0].get_related_model()._meta.model_name == 'ticketcommentaction'
 
 
 
@@ -2157,7 +2157,7 @@ class SlashCommandsPyTest(
 
             ticket_comment.ticket = ticket
 
-            ticket_comment.comment_type = ticket_comment._meta.sub_model_type
+            ticket_comment.comment_type = ticket_comment._meta.model_name
 
         yield ticket_comment
 

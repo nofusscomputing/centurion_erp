@@ -46,8 +46,7 @@ class TicketCommentTaskModelTestCases(
 class TicketCommentTaskModelInheritedCases(
     TicketCommentTaskModelTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 
@@ -55,5 +54,4 @@ class TicketCommentTaskModelInheritedCases(
 class TicketCommentTaskModelPyTest(
     TicketCommentTaskModelTestCases,
 ):
-
-    sub_model_type = 'task'
+    pass

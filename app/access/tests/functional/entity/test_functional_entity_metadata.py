@@ -1,4 +1,6 @@
 import django
+import pytest
+
 from django.test import TestCase
 
 from access.models.entity import Entity
@@ -107,11 +109,11 @@ class EntityMetadataInheritedCases(
         }
 
         self.url_kwargs = {
-            'model_name': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         self.url_view_kwargs = {
-            'model_name': self.model._meta.sub_model_type
+            'model_name': self.model._meta.model_name
         }
 
         super().setUpTestData()
@@ -125,3 +127,23 @@ class EntityMetadataTest(
 ):
 
     url_name = '_api_entity'
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_name(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_sections(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_name(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_sections(self):
+        pytest.xfail( reason = 'Model not intended to be displayed in detail view as its a base model.')
+
+
+    def test_method_options_request_detail_data_key_layout_is_list_of_dict(self):
+        pytest.xfail(reason = 'Model not intended to be displayed in detail view as its a base model.')

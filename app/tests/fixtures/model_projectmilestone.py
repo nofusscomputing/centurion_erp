@@ -1,4 +1,5 @@
 import pytest
+import random
 
 from datetime import datetime
 
@@ -67,8 +68,20 @@ def kwargs_projectmilestone(django_db_blocker,
             **kwargs,
             'name': 'pm_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'project': project,
-            'start_date': '2025-08-04T00:00:01Z',
-            'finish_date': '2025-08-04T00:00:02Z',
+            'start_date': (
+                f'2025-{random.randint(1, 12):02d}'
+                f'-{random.randint(1, 28):02d}'
+                f'T{random.randint(0, 23):02d}:'
+                f'{random.randint(0, 59):02d}:'
+                f'{random.randint(0, 59):02d}Z'
+            ),
+            'finish_date': (
+                f'2025-{random.randint(1, 12):02d}'
+                f'-{random.randint(1, 28):02d}'
+                f'T{random.randint(0, 23):02d}:'
+                f'{random.randint(0, 59):02d}:'
+                f'{random.randint(0, 59):02d}Z'
+            ),
         }
 
         return kwargs

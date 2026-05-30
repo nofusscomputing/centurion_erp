@@ -19,14 +19,15 @@ class Migration(migrations.Migration):
             name='ITAMAssetBase',
             fields=[
                 ('assetbase_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='accounting.assetbase')),
-                ('itam_type', models.CharField(blank=True, choices=itam.models.itam_asset_base.ITAMAssetBase.get_itam_model_type_choices, default='itam_base', help_text='IT Asset Type. (derived from IT asset model)', max_length=30, verbose_name='IT Asset Type')),
+                # ('itam_type', models.CharField(blank=True, choices=itam.models.itam_asset_base.ITAMAssetBase.get_itam_model_type_choices, default='itam_base', help_text='IT Asset Type. (derived from IT asset model)', max_length=30, verbose_name='IT Asset Type')),
+                ('itam_type', models.CharField(blank=True, default='itam_base', help_text='IT Asset Type. (derived from IT asset model)', max_length=30, verbose_name='IT Asset Type')),
             ],
             options={
                 'verbose_name': 'IT Asset',
                 'verbose_name_plural': 'IT Assets',
                 'ordering': ['id'],
-                'sub_model_type': 'it_asset',
-                'itam_sub_model_type': 'itam_base',
+                # 'sub_model_type': 'it_asset',
+                # 'itam_sub_model_type': 'itam_base',
             },
             bases=('accounting.assetbase',),
         ),

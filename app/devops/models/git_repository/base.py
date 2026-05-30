@@ -130,15 +130,26 @@ class GitRepository(
 
     modified = AutoLastModifiedField()
 
-    page_layout = []
-
-    table_fields: list = [
-        'name',
-        'provider_badge',
-        'path',
-        'organization',
-        'created',
-    ]
+    page_layout = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'provider_badge',
+                    'path',
+                    'organization',
+                    'created',
+                ]
+            ]
+        },
+        "table": [
+            'name',
+            'provider_badge',
+            'path',
+            'organization',
+            'created',
+        ]
+    }
 
 
     def __str__(self) -> str:

@@ -57,8 +57,9 @@ class ViewsetTestCases(
             },
             'filterset_fields': {
                 'value': [
+                    'is_deleted',
                     'organization',
-                    'is_deleted'
+                    'project',
                 ]
             },
             'model': {
@@ -68,7 +69,7 @@ class ViewsetTestCases(
                 'type': NoneType,
             },
             'model_kwarg': {
-                'value':'ticket_type',
+                'value':'model_name',
             },
             'model_suffix': {
                 'type': NoneType,

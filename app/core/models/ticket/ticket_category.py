@@ -95,54 +95,64 @@ class TicketCategory(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'parent'
-                        'name'
-                        'runbook',
-                        'is_global',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "layout": "double",
-                    "left": [
-                        'change',
-                        'problem'
-                        'request'
-                    ],
-                    "right": [
-                        'incident',
-                        'project_task',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'organization',
+                    'created',
+                    'modified'
+                ]
             ]
         },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-
-    table_fields: list = [
-        'name',
-        'organization',
-        'created',
-        'modified'
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'parent'
+                            'name'
+                            'runbook',
+                            'is_global',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "layout": "double",
+                        "left": [
+                            'change',
+                            'problem'
+                            'request'
+                        ],
+                        "right": [
+                            'incident',
+                            'project_task',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'organization',
+            'created',
+            'modified'
+        ]
+    }
 
 
     @property

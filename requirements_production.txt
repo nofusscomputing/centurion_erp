@@ -13,7 +13,7 @@ asgiref==3.11.1
     #   -r requirements.txt
     #   django
     #   django-cors-headers
-attrs==25.4.0
+attrs==26.1.0
     # via
     #   -r requirements.txt
     #   jsonschema
@@ -26,7 +26,7 @@ celery==5.4.0
     # via
     #   -r requirements.txt
     #   django-celery-results
-certifi==2026.1.4
+certifi==2026.5.20
     # via
     #   -r requirements.txt
     #   requests
@@ -34,11 +34,11 @@ cffi==2.0.0
     # via
     #   -r requirements.txt
     #   cryptography
-charset-normalizer==3.4.4
+charset-normalizer==3.4.7
     # via
     #   -r requirements.txt
     #   requests
-click==8.3.1
+click==8.4.0
     # via
     #   -r requirements.txt
     #   celery
@@ -57,16 +57,11 @@ click-repl==0.3.0
     # via
     #   -r requirements.txt
     #   celery
-coreapi==2.3.3
-    # via -r requirements.txt
-coreschema==0.0.4
-    # via
-    #   -r requirements.txt
-    #   coreapi
-cryptography==46.0.4
+cryptography==48.0.0
     # via
     #   -r requirements.txt
     #   pyjwt
+    #   social-auth-core
 defusedxml==0.7.1
     # via
     #   -r requirements.txt
@@ -100,19 +95,19 @@ djangorestframework==3.16.0
     #   drf-spectacular
 djangorestframework-jsonapi==7.1.0
     # via -r requirements.txt
-drf-spectacular[sidecar]==0.28.0
+drf-spectacular[sidecar]==0.29.0
     # via -r requirements.txt
-drf-spectacular-sidecar==2026.1.1
+drf-spectacular-sidecar==2026.5.1
     # via
     #   -r requirements.txt
     #   drf-spectacular
-greenlet==3.3.1
+greenlet==3.5.1
     # via
     #   -r requirements.txt
     #   sqlalchemy
 gunicorn==23.0.0
     # via -r tools/requirements_production.in
-idna==3.11
+idna==3.15
     # via
     #   -r requirements.txt
     #   requests
@@ -121,14 +116,6 @@ inflection==0.5.1
     #   -r requirements.txt
     #   djangorestframework-jsonapi
     #   drf-spectacular
-itypes==1.2.0
-    # via
-    #   -r requirements.txt
-    #   coreapi
-jinja2==3.1.6
-    # via
-    #   -r requirements.txt
-    #   coreschema
 jsonschema==4.26.0
     # via
     #   -r requirements.txt
@@ -141,7 +128,7 @@ kombu==5.5.1
     # via
     #   -r requirements.txt
     #   celery
-linkify-it-py==2.0.3
+linkify-it-py==2.1.0
     # via
     #   -r requirements.txt
     #   markdown-it-py
@@ -149,11 +136,7 @@ markdown-it-py[linkify,plugins]==3.0.0
     # via
     #   -r requirements.txt
     #   mdit-py-plugins
-markupsafe==3.0.3
-    # via
-    #   -r requirements.txt
-    #   jinja2
-mdit-py-plugins==0.5.0
+mdit-py-plugins==0.6.1
     # via
     #   -r requirements.txt
     #   markdown-it-py
@@ -168,7 +151,7 @@ oauthlib==3.3.1
     #   -r requirements.txt
     #   requests-oauthlib
     #   social-auth-core
-packaging==26.0
+packaging==26.2
     # via gunicorn
 prometheus-client==0.21.1
     # via
@@ -184,9 +167,9 @@ pycparser==3.0
     # via
     #   -r requirements.txt
     #   cffi
-pygments==2.18.0
+pygments==2.20.0
     # via -r requirements.txt
-pyjwt[crypto]==2.11.0
+pyjwt[crypto]==2.12.1
     # via
     #   -r requirements.txt
     #   social-auth-core
@@ -209,10 +192,9 @@ referencing==0.37.0
     #   -r requirements.txt
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.5
+requests==2.34.2
     # via
     #   -r requirements.txt
-    #   coreapi
     #   requests-oauthlib
     #   social-auth-core
 requests-oauthlib==2.0.0
@@ -230,7 +212,7 @@ six==1.17.0
     #   python-dateutil
 social-auth-app-django==5.6.0
     # via -r requirements.txt
-social-auth-core==4.8.3
+social-auth-core==4.9.1
     # via
     #   -r requirements.txt
     #   social-auth-app-django
@@ -250,16 +232,15 @@ tzdata==2025.1
     #   -r requirements.txt
     #   celery
     #   kombu
-uc-micro-py==1.0.3
+uc-micro-py==2.0.0
     # via
     #   -r requirements.txt
     #   linkify-it-py
-uritemplate==4.1.1
+uritemplate==4.2.0
     # via
     #   -r requirements.txt
-    #   coreapi
     #   drf-spectacular
-urllib3==2.6.3
+urllib3==2.7.0
     # via
     #   -r requirements.txt
     #   requests
@@ -269,7 +250,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.6.0
+wcwidth==0.7.0
     # via
     #   -r requirements.txt
     #   prompt-toolkit

@@ -6,5 +6,4 @@ template: project.html
 about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-!!! info
-    This feature is not yet production ready and is behind feature flag 2025-00011. see [#564](https://github.com/nofusscomputing/centurion_erp/issues/564)
+A Problem Ticket is part of Problem Management and are used to record known problems and aby workabouts if knwon.

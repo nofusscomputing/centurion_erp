@@ -15,11 +15,7 @@ class ITAMAssetBaseAPITestCases(
     @property
     def parameterized_api_fields(self):
 
-        return {
-            'itam_type': {
-                'expected': str
-            },
-        }
+        return {}
 
 
 

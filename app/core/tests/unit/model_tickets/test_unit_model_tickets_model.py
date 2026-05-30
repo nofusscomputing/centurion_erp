@@ -98,7 +98,7 @@ class ModelTicketModelTestCases(
             pytest.xfail( reason = 'Model is an abstract model. test not required.' )
 
         assert model_instance.get_url_kwargs() == {
-            'ticket_type': model_instance.ticket._meta.sub_model_type,
+            'model_name': model_instance.ticket._meta.model_name,
             'model_id': model_instance.ticket.pk,
             'pk': model_instance.id 
         }

@@ -32,9 +32,9 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             serializer_name = 'ticketbase'
 
-            if model._meta.sub_model_type != 'ticket':
+            if model._meta.model_name != 'ticketbase':
                 
-                serializer_name += '_' + model._meta.sub_model_type
+                serializer_name += '_' + model._meta.model_name
 
             serializer_module = importlib.import_module(
                 model._meta.app_label + '.serializers.' + str(
@@ -56,7 +56,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the Ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -97,7 +97,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description = '.',
         parameters =[
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -121,7 +121,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -153,7 +153,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
         description='.',
         parameters = [
             OpenApiParameter(
-                name = 'ticket_type',
+                name = 'model_name',
                 description = 'Enter the ticket type. This is the name of the Ticket sub-model.',
                 location = OpenApiParameter.PATH,
                 type = str,
@@ -228,11 +228,12 @@ class ViewSet( SubModelViewSet ):
     base_model = TicketBase
 
     filterset_fields = [
+        'is_deleted',
         'organization',
-        'is_deleted'
+        'project',
     ]
 
-    model_kwarg = 'ticket_type'
+    model_kwarg = 'model_name'
 
     permission_classes = [
         TicketPermission | SuperUserPermissions,
@@ -252,18 +253,55 @@ class ViewSet( SubModelViewSet ):
         if(
             self.back_url is None
             and self.kwargs.get(self.model_kwarg, None) is not None
+            and self.kwargs.get('project_id', None) is None
         ):
 
             self.back_url = reverse(
-                viewname = '_api_ticketbase_sub-list',
-                request = self.request,
+                viewname = 'v2:_api_ticketbase_sub-list',
+                request = None,
                 kwargs = {
                     'app_label': self.model._meta.app_label,
-                    'ticket_type': self.kwargs[self.model_kwarg],
+                    'model_name': self.kwargs[self.model_kwarg],
+                }
+            )
+
+        if(
+            self.back_url is None
+            and self.kwargs.get(self.model_kwarg, None) is not None
+            and self.kwargs.get('project_id', None) is not None
+        ):
+
+            self.back_url = reverse(
+                viewname = '_api_project-detail',
+                request = None,
+                kwargs = {
+                    'pk': self.kwargs['project_id'],
                 }
             )
 
         return self.back_url
+
+
+
+    def get_queryset(self):
+
+        if self._queryset is None:
+
+            if(
+                'project_id' in self.kwargs
+            ):
+
+                self._queryset = super().get_queryset().filter(
+                    project_id = int( self.kwargs['project_id'] )
+                )
+
+            else:
+
+                self._queryset = super().get_queryset()
+
+
+        return self._queryset
+
 
 
 

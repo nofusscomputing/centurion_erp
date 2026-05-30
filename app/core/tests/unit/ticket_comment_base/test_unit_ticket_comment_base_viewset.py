@@ -76,7 +76,7 @@ class ViewsetTestCases(
                 'type': NoneType,
             },
             'model_kwarg': {
-                'value':'ticket_comment_model',
+                'value':'model_name',
             },
             'model_suffix': {
                 'type': NoneType,

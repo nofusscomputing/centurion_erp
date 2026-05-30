@@ -1,4 +1,3 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
@@ -23,7 +22,7 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -55,18 +54,6 @@ class SoftwareVersionModelSerializer(
     def get_url(self, item) -> dict:
 
         get_url = super().get_url( item = item )
-
-        if not self.context['request'].feature_flag['2025-00006']:
-            get_url.update({
-                'tickets': reverse(
-                    "v2:_api_v2_item_tickets-list",
-                    request=self._context['view'].request,
-                    kwargs={
-                        'item_class': 'software_version',
-                        'item_id': item.pk
-                        }
-                )
-            })
 
 
         return get_url

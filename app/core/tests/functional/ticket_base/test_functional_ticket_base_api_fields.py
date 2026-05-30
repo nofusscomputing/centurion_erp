@@ -19,16 +19,16 @@ class APITestCases(
 
     @pytest.fixture( scope = 'class')
     def create_model(self, request, django_db_blocker,
-        model, model_kwargs, model_entity
+        model, model_kwargs, model_person, kwargs_person
     ):
 
         item = None
 
         with django_db_blocker.unblock():
 
-            entity_user = model_entity.objects.create(
-                organization = model_kwargs()['organization'],
-                model_notes = 'asdas'
+
+            entity_person = model_person.objects.create(
+                **kwargs_person()
             )
 
             parent_ticket = model.objects.create(
@@ -53,8 +53,8 @@ class APITestCases(
             )
 
 
-            item.assigned_to.add(entity_user)
-            item.subscribed_to.add(entity_user)
+            item.assigned_to.add(entity_person)
+            item.subscribed_to.add(entity_person)
 
 
             request.cls.item = item
@@ -67,7 +67,7 @@ class APITestCases(
 
             parent_ticket.delete()
 
-            entity_user.delete()
+            entity_person.delete()
 
 
 
@@ -103,9 +103,6 @@ class APITestCases(
                 'expected': str
             },
             'parent_ticket.url': {
-                'expected': str
-            },
-            'ticket_type': {
                 'expected': str
             },
             'status': {
@@ -327,18 +324,6 @@ class APITestCases(
             },
 
         }
-
-
-    # def test_api_field_value_ticket_type(self):
-    #     """ Test for value of an API Field
-
-    #     **note:** you must override this test with the correct value for
-    #     your ticket type
-
-    #     ticket_type field must be 'ticket'
-    #     """
-
-    #     assert self.api_data['ticket_type'] == 'ticket'
 
 
 

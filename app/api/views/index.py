@@ -29,7 +29,7 @@ class Index(viewsets.ViewSet):
     def list(self, request, pk=None):
 
         API: dict = {
-            'v2': reverse("v2:_api_v2_home-list", request=request)
+            'v2': reverse("v2:_api_v2_home-list", request = None)
         }
 
         return Response( API )

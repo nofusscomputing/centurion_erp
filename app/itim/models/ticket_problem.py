@@ -1,11 +1,11 @@
 from django.db import models
 
-from itim.models.slm_ticket_base import SLMTicket
+from core.models.ticket_base import TicketBase
 
 
 
 class ProblemTicket(
-    SLMTicket
+    TicketBase
 ):
 
     _is_submodel = True
@@ -22,8 +22,6 @@ class ProblemTicket(
             ('purge_problemticket', 'Can purge problem ticket'),
             ('triage_problemticket', 'Can triage problem ticket'),
         ]
-
-        sub_model_type = 'problem'
 
         verbose_name = 'Problem'
 

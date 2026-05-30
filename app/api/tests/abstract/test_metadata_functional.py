@@ -528,10 +528,10 @@ class MetadataAttributesFunctionalTable:
     """
 
 
-    def test_method_options_request_list_data_has_key_table_fields(self):
+    def test_method_options_request_list_data_has_key_layout_table(self):
         """Test HTTP/Options Method
 
-        Ensure the request data returned has key `table_fields`
+        Ensure the request data returned has key `layout.table`
         """
 
         client = Client()
@@ -547,13 +547,13 @@ class MetadataAttributesFunctionalTable:
 
         response = client.options( url, content_type='application/json' )
 
-        assert 'table_fields' in response.data
+        assert 'table' in response.data['layout']
 
 
-    def test_method_options_request_list_data_key_table_fields_is_list(self):
+    def test_method_options_request_list_data_key_layout_table_is_list(self):
         """Test HTTP/Options Method
 
-        Ensure the request data['table_fields'] is of type `list`
+        Ensure the request data['layout']['table'] is of type `list`
         """
 
         client = Client()
@@ -569,13 +569,13 @@ class MetadataAttributesFunctionalTable:
 
         response = client.options( url, content_type='application/json' )
 
-        assert type(response.data['table_fields']) is list
+        assert type(response.data['layout']['table']) is list
 
 
-    def test_method_options_request_list_data_key_table_fields_is_list_of_str(self):
+    def test_method_options_request_list_data_key_layout_table_is_list_of_str(self):
         """Test HTTP/Options Method
 
-        Ensure the request data['table_fields'] list is of `str`
+        Ensure the request data['layout']['table'] list is of `str`
         """
 
         client = Client()
@@ -593,7 +593,7 @@ class MetadataAttributesFunctionalTable:
 
         all_string = True
 
-        for item in response.data['table_fields']:
+        for item in response.data['layout']['table']:
 
             if( 
                 type(item) is not str
@@ -621,7 +621,7 @@ class MetadataAttributesFunctionalEndpoint:
     """
 
 
-    def test_method_options_request_detail_data_has_key_page_layout(self):
+    def test_method_options_request_detail_data_has_key_layout(self):
         """Test HTTP/Options Method
 
         Ensure the request data returned has key `layout`
@@ -641,10 +641,10 @@ class MetadataAttributesFunctionalEndpoint:
         assert 'layout' in response.data
 
 
-    def test_method_options_request_detail_data_key_page_layout_is_list(self):
+    def test_method_options_request_detail_data_key_layout_is_list(self):
         """Test HTTP/Options Method
 
-        Ensure the request data['layout'] is of type `list`
+        Ensure the request data['layout'] is of type `dict`
         """
 
         client = Client()
@@ -658,10 +658,10 @@ class MetadataAttributesFunctionalEndpoint:
             content_type='application/json'
         )
 
-        assert type(response.data['layout']) is list
+        assert type(response.data['layout']) is dict
 
 
-    def test_method_options_request_detail_data_key_page_layout_is_list_of_dict(self):
+    def test_method_options_request_detail_data_key_layout_is_list_of_dict(self):
         """Test HTTP/Options Method
 
         Ensure the request data['layout'] list is of `dict`
@@ -680,7 +680,7 @@ class MetadataAttributesFunctionalEndpoint:
 
         all_dict = True
 
-        for item in response.data['layout']:
+        for item in response.data['layout']['detail']:
 
             if type(item) is not dict:
 
@@ -690,7 +690,7 @@ class MetadataAttributesFunctionalEndpoint:
         assert all_dict
 
 
-    def test_method_options_request_detail_data_key_page_layout_dicts_key_exists_name(self):
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_name(self):
         """Test HTTP/Options Method
 
         Ensure the request data['layout'].x has key `name`
@@ -709,7 +709,7 @@ class MetadataAttributesFunctionalEndpoint:
 
         has_key = True
 
-        for item in response.data['layout']:
+        for item in response.data['layout']['detail']:
 
             if 'name' not in item:
 
@@ -719,7 +719,7 @@ class MetadataAttributesFunctionalEndpoint:
         assert has_key
 
 
-    def test_method_options_request_detail_data_key_page_layout_dicts_key_type_name(self):
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_name(self):
         """Test HTTP/Options Method
 
         Ensure the request data['layout'].x.[name] is of type `str`
@@ -738,7 +738,7 @@ class MetadataAttributesFunctionalEndpoint:
 
         all_are_str = True
 
-        for item in response.data['layout']:
+        for item in response.data['layout']['detail']:
 
             if type(item['name']) is not str:
 
@@ -748,7 +748,7 @@ class MetadataAttributesFunctionalEndpoint:
         assert all_are_str
 
 
-    def test_method_options_request_detail_data_key_page_layout_dicts_key_exists_sections(self):
+    def test_method_options_request_detail_data_key_layout_dicts_key_exists_sections(self):
         """Test HTTP/Options Method
 
         Ensure the request data['layout'].x has key `sections`
@@ -767,7 +767,7 @@ class MetadataAttributesFunctionalEndpoint:
 
         has_key = True
 
-        for item in response.data['layout']:
+        for item in response.data['layout']['detail']:
 
             if 'sections' not in item:
 
@@ -777,7 +777,7 @@ class MetadataAttributesFunctionalEndpoint:
         assert has_key
 
 
-    def test_method_options_request_detail_data_key_page_layout_dicts_key_type_sections(self):
+    def test_method_options_request_detail_data_key_layout_dicts_key_type_sections(self):
         """Test HTTP/Options Method
 
         Ensure the request data['layout'].x.[sections] is of type `list`
@@ -796,7 +796,7 @@ class MetadataAttributesFunctionalEndpoint:
 
         all_are_str = True
 
-        for item in response.data['layout']:
+        for item in response.data['layout']['detail']:
 
             if type(item['sections']) is not list:
 

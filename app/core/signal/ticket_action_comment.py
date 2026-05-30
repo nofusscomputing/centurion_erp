@@ -21,7 +21,6 @@ def create_action_comment(ticket, text, user) -> None:
         organization = ticket.organization,
         ticket = ticket,
         is_closed = True,
-        comment_type = TicketCommentAction._meta.sub_model_type,
         body = text,
         user = user,
     )
@@ -75,8 +74,7 @@ def filter_models(instance, created) -> str | None:
     user = get_action_user(instance = instance)
 
     if(
-        str(instance._meta.model_name).endswith('ticket')
-        and base_model != 'ticketbase'
+        base_model == 'modelticket'
         and user
     ):
 
@@ -91,8 +89,10 @@ def filter_models(instance, created) -> str | None:
             model_check = (model_name == str(model_name).replace('ticket', ''))
 
         if(
-            model_check
-            and not model_field._ticket_linkable
+            (
+                model_check
+                and not model_field._ticket_linkable
+            ) or instance.__class__ == instance._base_model
         ):
             return None
 
@@ -412,6 +412,7 @@ def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
             msg = str(
                 'unable to save action comment for a ticket '
                 'vars: '
+                f"sender={sender._meta.app_label}.{sender._meta.model_name} "
                 f"action_comment_source={action_comment_source} "
                 f"model={instance._meta.model_name} "
                 f"app_label={instance._meta.app_label} "

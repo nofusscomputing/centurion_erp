@@ -80,22 +80,38 @@ class TicketDependency(
     )
 
 
-    table_fields: list = [
-        'id',
-        'title',
-        'status_badge',
-        'opened_by',
-        'organization',
-        'created'
-    ]
-
-    page_layout = None
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'id',
+                    'title',
+                    'status_badge',
+                    'opened_by',
+                    'organization',
+                    'created'
+                ]
+            ]
+        },
+        "table": [
+            'id',
+            'title',
+            'status_badge',
+            'opened_by',
+            'organization',
+            'created'
+        ]
+    }
 
 
 
     def __str__(self):
 
-        return str( '#' + str(self.ticket.id) )
+        if getattr(self, 'ticket', None):
+
+            return str( '#' + str(self.ticket.id) )
+
+        return ''
 
 
 
@@ -177,7 +193,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.ticket,
-                comment_type = TicketCommentAction._meta.sub_model_type,
                 body = comment_field_value_from,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,
@@ -189,7 +204,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.dependent_ticket,
-                comment_type = TicketCommentAction._meta.sub_model_type,
                 body = comment_field_value_to,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,
@@ -242,7 +256,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.ticket,
-                comment_type = TicketCommentAction._meta.sub_model_type,
                 body = comment_field_value_from,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,
@@ -254,7 +267,6 @@ class TicketDependency(
 
             TicketCommentAction.objects.create(
                 ticket = self.dependent_ticket,
-                comment_type = TicketCommentAction._meta.sub_model_type,
                 body = comment_field_value_to,
                 source = TicketBase.TicketSource.DIRECT,
                 user = self.user,

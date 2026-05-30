@@ -70,7 +70,7 @@ class DeviceSoftwareModelSerializer(
             if 'software_id' in self._context['view'].kwargs:
 
                 get_url.update({
-                    '_self': reverse("v2:_api_v2_software_installs-detail", request = self._context['view'].request, kwargs = {
+                    '_self': reverse("v2:_api_v2_software_installs-detail", request = None, kwargs = {
                         'software_id': item.software.pk,
                         'pk': item.pk
                     } )
@@ -79,7 +79,7 @@ class DeviceSoftwareModelSerializer(
             elif 'device_id' in self._context['view'].kwargs:
 
                 get_url.update({
-                    '_self': item.get_url( request = self._context['view'].request )
+                    '_self': item.get_url()
                 })
 
         return get_url

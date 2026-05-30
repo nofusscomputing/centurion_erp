@@ -22,15 +22,7 @@ class ConfigGroupBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        request = None
-
-        if 'view' in self._context:
-
-            if hasattr(self._context['view'], 'request'):
-
-                request = self._context['view'].request
-
-        return item.get_url( request = request )
+        return item.get_url()
 
 
     class Meta:
@@ -68,44 +60,31 @@ class ConfigGroupModelSerializer(
         get_url.update({
             'child_groups': reverse(
                 'v2:_api_configgroups_child-list',
-                request = self.context['view'].request,
+                request = None,
                 kwargs = {
                     'parent_group': item.pk
                 }
             ),
             'configgroups': reverse(
                 'v2:_api_configgroups-list',
-                request = self.context['view'].request,
+                request = None,
             ),
             'group_software': reverse(
                 'v2:_api_configgroupsoftware-list',
-                request=self.context['view'].request,
+                request = None,
                 kwargs = {
                     'config_group_id': item.pk
                 }
             ),
             'organization': reverse(
                 'v2:_api_tenant-list',
-                request=self.context['view'].request,
+                request = None,
             ),
             'parent': reverse(
                 'v2:_api_configgroups-list',
-                request=self.context['view'].request,
+                request = None,
             ),
         })
-
-        if not self.context['request'].feature_flag['2025-00006']:
-
-            get_url.update({
-                'tickets': reverse(
-                    "v2:_api_v2_item_tickets-list",
-                    request=self._context['view'].request,
-                    kwargs={
-                        'item_class': 'config_group',
-                        'item_id': item.pk
-                        }
-                ),
-            })
 
 
         return get_url

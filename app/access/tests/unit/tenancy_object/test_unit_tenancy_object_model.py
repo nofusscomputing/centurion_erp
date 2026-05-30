@@ -402,10 +402,10 @@ class TenancyObjectTestCases(
     def test_attribute_type_get_page_layout(self):
         """Attribute Type
 
-        get_page_layout is of type list
+        get_page_layout is of type dict
         """
 
-        assert type(self.item.get_page_layout()) is list
+        assert type(self.item.get_page_layout()) is dict
 
 
 

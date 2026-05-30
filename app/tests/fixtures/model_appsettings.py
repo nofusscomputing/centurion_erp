@@ -18,7 +18,7 @@ def model_appsettings(clean_model_from_db):
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_appsettings( django_db_blocker, model_user ):
+def kwargs_appsettings( django_db_blocker, model_user, organization_one ):
 
     def factory():
 
@@ -33,6 +33,7 @@ def kwargs_appsettings( django_db_blocker, model_user ):
 
         kwargs = {
             'device_model_is_global': False,
+            'owner_organization': organization_one
         }
 
         return kwargs

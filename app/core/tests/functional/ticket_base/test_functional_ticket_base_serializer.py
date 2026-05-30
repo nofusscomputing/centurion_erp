@@ -55,7 +55,6 @@ class TicketBaseSerializerTestCases:
             'permission_import_required': False,
             'permission_triage_required': True,
         },
-        # "ticket_type": "request",
         "status": {
             'will_create': True,
             'permission_import_required': False,
@@ -268,13 +267,14 @@ class TicketBaseSerializerTestCases:
 
 
     @pytest.fixture( scope = 'class')
-    def setup_model_data(self, request, django_db_blocker):
+    def setup_model_data(self, request, django_db_blocker,
+        model_person, kwargs_person,
+    ):
 
         with django_db_blocker.unblock():
 
-            request.cls.entity_user = Entity.objects.create(
-                organization = request.cls.organization,
-                model_notes = 'asdas'
+            request.cls.entity_user = model_person.objects.create(
+                **kwargs_person()
             )
 
             project = Project.objects.create(

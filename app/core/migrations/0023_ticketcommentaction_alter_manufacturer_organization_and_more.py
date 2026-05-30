@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Ticket Comment Actions',
                 'ordering': ['id'],
                 'permissions': [('import_ticketcommentaction', 'Can import ticket action comment.')],
-                'sub_model_type': 'action',
+                # 'sub_model_type': 'action',
             },
             bases=('core.ticketcommentbase',),
         ),
@@ -85,10 +85,15 @@ class Migration(migrations.Migration):
             name='category',
             field=models.ForeignKey(blank=True, help_text='Category of the comment', null=True, on_delete=django.db.models.deletion.PROTECT, to='core.ticketcommentcategory', verbose_name='Category'),
         ),
+        # migrations.AlterField(
+        #     model_name='ticketcommentbase',
+        #     name='comment_type',
+        #     field=models.CharField(choices=core.models.ticket_comment_base.TicketCommentBase.get_comment_type_choices, help_text='Type this comment is. derived from Meta.verbose_name', max_length=30, validators=[core.models.ticket_comment_base.TicketCommentBase.field_validation_not_empty], verbose_name='Type'),
+        # ),
         migrations.AlterField(
             model_name='ticketcommentbase',
             name='comment_type',
-            field=models.CharField(choices=core.models.ticket_comment_base.TicketCommentBase.get_comment_type_choices, help_text='Type this comment is. derived from Meta.verbose_name', max_length=30, validators=[core.models.ticket_comment_base.TicketCommentBase.field_validation_not_empty], verbose_name='Type'),
+            field=models.CharField(help_text='Type this comment is. derived from Meta.verbose_name', max_length=30, verbose_name='Type'),
         ),
         migrations.AlterField(
             model_name='ticketcommentbase',

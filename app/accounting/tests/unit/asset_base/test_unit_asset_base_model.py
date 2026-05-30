@@ -59,14 +59,6 @@ class AssetBaseModelTestCases(
             'null': True,
             'unique': True,
         },
-        'asset_type': {
-            'blank': True,
-            'default': 'asset',
-            'field_type': models.CharField,
-            'max_length': 30,
-            'null': False,
-            'unique': False,
-        }
     }
 
 

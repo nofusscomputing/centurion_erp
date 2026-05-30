@@ -113,7 +113,7 @@ class ViewSet( ModelViewSet ):
                     if item:
 
                         self.back_url = str(
-                            item.get_url( self.request )
+                            item.get_url()
                         )
 
 

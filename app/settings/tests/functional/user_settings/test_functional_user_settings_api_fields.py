@@ -97,6 +97,10 @@ class UserSettingsAPITestCases(
         }
 
 
+    def test_api_metadata_list_has_layout_table(self):
+        pytest.xfail( reason = 'list view not available for model. test is N/A.' )
+
+
 
 class UserSettingsAPIInheritedCases(
     UserSettingsAPITestCases,

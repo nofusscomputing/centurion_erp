@@ -82,3 +82,58 @@ class AdditionalTestCases:
         )
 
         assert response.status_code == 200, response.content
+
+
+
+    def test_api_change_exception(self, mocker, model,
+        parameterized, param_key_exceptions, param_value,
+        param_exception, param_http_status,
+        model_instance, api_request_permissions, model_kwargs
+    ):
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['change'] )
+
+        change_item = api_request_permissions['tenancy']['user']
+
+        mocker.patch(
+            f"{model.__module__}.{model.__name__}.save",
+            side_effect = param_exception("an integrity error occured....")
+        )
+
+        response = client.patch(
+            path = change_item.get_url( many = False ),
+            data = self.change_data,
+            content_type = 'application/json'
+        )
+
+        assert response.status_code == param_http_status, response.content
+
+
+
+    def test_api_delete_exception(self, mocker, model,
+        parameterized, param_key_exceptions, param_value,
+        param_exception, param_http_status,
+        model_instance, api_request_permissions, model_kwargs
+    ):
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['delete'] )
+
+        delete_item = api_request_permissions['tenancy']['user']
+
+        mocker.patch(
+            f"{model.__module__}.{model.__name__}.delete",
+            side_effect = param_exception("an integrity error occured....")
+        )
+
+        response = client.delete(
+            path = delete_item.get_url( many = False ),
+        )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == param_http_status, response.content

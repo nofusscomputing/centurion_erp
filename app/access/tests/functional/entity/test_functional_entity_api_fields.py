@@ -20,9 +20,6 @@ class EntityAPITestCases(
     def parameterized_api_fields(self):
 
         return {
-            'entity_type': {
-                'expected': str
-            },
             '_urls.history': {
                 'expected': str
             },

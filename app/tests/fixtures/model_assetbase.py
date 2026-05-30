@@ -21,7 +21,6 @@ def kwargs_assetbase( kwargs_centurionmodel, model_assetbase ):
             **kwargs_centurionmodel(),
             'asset_number': 'ab_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'serial_number': 'ab_' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
-            # 'asset_type': (model_assetbase._meta.sub_model_type, model_assetbase._meta.verbose_name),
         }
 
         return kwargs

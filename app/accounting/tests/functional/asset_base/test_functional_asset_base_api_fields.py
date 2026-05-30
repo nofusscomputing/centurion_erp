@@ -26,9 +26,6 @@ class AssetBaseAPITestCases(
             'serial_number': {
                 'expected': str
             },
-            'asset_type': {
-                'expected': str
-            }
         }
 
 

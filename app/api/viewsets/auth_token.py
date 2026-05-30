@@ -108,7 +108,7 @@ class ViewSet(
             kwargs = {
                 'user_id': self.kwargs['model_id']
             },
-            request = self.request,
+            request = None,
         )
 
         return self._get_return_url

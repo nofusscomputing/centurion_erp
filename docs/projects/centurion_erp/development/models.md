@@ -132,7 +132,7 @@ As part of the linking, if there is data in the existing fields, it'll be used i
 
 ## Core Features
 
-All models must contain the core features, being:
+All models have access to the core features, being:
 
 - [Assosiate model to ticket](./core/ticket.md#assosiate-object-to-ticket)
 
@@ -157,6 +157,8 @@ All models must contain the core features, being:
 - [Ticket Linking](../user/core/tickets.md#linking-items-to-a-ticket)
 
     _Provides the ability to link a model to a ticket._
+
+On occasion a model may not require access to or need the model core feature. in that case and preferably after discussion with a maintainer. The core feature may be disabled.
 
 
 ### History
@@ -215,6 +217,7 @@ page_layout: list = [
                 "layout": "table",
                 "name": "Dependent Services",    # Heading for the section.
                 "field": "service",    # field name within the `_urls` dict of the api query. which is where the data will be fetched from.
+                "sub_models": []    # Optional, List of submodels using value of `<model>._meta.model_name` to create an `Add` button for. Only works for models that contain sub-models.
             },
             {    # single column section.
                 "layout": "single",
@@ -300,93 +303,3 @@ Each model has the following Test Suites auto-magic created:
     - Customization of the model fields to check are done under property `parameterized_api_metadata_fields`
 
 Unless otherwise specified, these auto-magic tests require no input and will be created on a model inheriting from [`CenturionModel`](./api/models/centurion.md) and run every time the tests are run.
-
-
-## Depreciated Docs undergoing re-write
-
-- ToDo
-
-    - Avoid:
-
-        - adding `model.delete()` method
-
-        - adding `model.save()` method
-
-    - Do
-
-        - Add `model.clean()` To set/modify any field values, _if required_
-
-
-<!-- markdownlint-disable -->
-## Requirements
-<!-- markdownlint-restore -->
-
-- `clean()` method within a model is **only** used to ensure that the data entered into the DB is valid and/or to ensure application wide changes/validation is conducted prior to saving model.
-
-- Tenancy models must have the ability to have a [knowledge base article](#knowledge-base-article-linking) linked to it.
-
-- Models must save audit history
-
-
-<!-- markdownlint-disable -->
-#### Requirements
-<!-- markdownlint-restore -->
-
-- Must **not** be an abstract class
-
-- Attribute `sub_model_type` must be specified within the models `Meta` sub-class
-
-- File name is `<base model>_<sub_model_type>` where `base model` is the value of `Meta.sub_model_type` or the first model in the chain.
-
-
-## Checklist
-
-This section details the additional items that may need to be done when adding a new model:
-
-- If the model is a primary model, add it to model reference rendering in `app/core/lib/markdown_plugins/model_reference.py` function `tag_html`
-
-- If the model is a primary model, add it to the model link slash command in `app/core/lib/slash_commands/linked_model.py` function `command_linked_model`
-
-
-## Knowledge Base Article linking
-
-All Tenancy Models must have the ability to be able to have a knowledge base article linked to it. To do so the following must be done:
-
-- Add to the serializer as part of dictionary `_urls` key `knowledge_base` that resolves to the article url.
-
-    ``` python
-
-    def get_url(self, obj) -> dict:
-
-        return {
-            '_self': ...,
-            'knowledge_base': reverse(
-                "v2:_api_v2_model_kb-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
-                }
-            ),
-        }
-
-    ```
-
-- Add to the models `page_layout` attirubute a tab called `Knowledge Base`
-
-    ``` python
-
-    page_layout: dict = [
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-    ]
-
-    ```

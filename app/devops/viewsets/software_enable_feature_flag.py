@@ -91,7 +91,7 @@ class ViewSet(ModelViewSet):
             )
 
             self._back_url = str(
-                return_model.get_url( self.request )
+                return_model.get_url()
             )
 
         return self._back_url
@@ -108,7 +108,7 @@ class ViewSet(ModelViewSet):
             )
 
             self._return_url = str(
-                return_model.get_url( self.request )
+                return_model.get_url()
             )
 
         return self._return_url
