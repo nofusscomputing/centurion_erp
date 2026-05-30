@@ -46,7 +46,7 @@ class TaskResultModelSerializer(TaskResultBaseSerializer):
 
         return {
             '_self': reverse("v2:_api_v2_celery_log-detail", 
-                request=self._context['view'].request,
+                request = None,
                 kwargs={
                     'pk': item.pk
                 }

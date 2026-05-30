@@ -51,7 +51,7 @@ class AssetBaseViewsetTestCases(
         if self.model is not AssetBase:
 
             self.kwargs = {
-                'model_name': self.model._meta.sub_model_type
+                'model_name': self.model._meta.model_name
             }
 
             self.viewset.kwargs = self.kwargs
@@ -75,7 +75,7 @@ class AssetBaseViewsetTestCases(
     def test_view_attr_value_model_kwarg(self):
         """Attribute Test
 
-        Attribute `model_kwarg` must be equal to model._meta.sub_model_type
+        Attribute `model_kwarg` must be equal to model._meta.model_name
         """
 
         view_set = self.viewset()

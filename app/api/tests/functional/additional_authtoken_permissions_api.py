@@ -375,3 +375,111 @@ class AdditionalTestCases:
     def test_returned_data_from_user_and_global_organizations_only(self):
         pytest.xfail( reason = 'This model is not tenancy based. It is user based.' )
         assert False
+
+
+
+    def test_api_add_exception(self, mocker, model,
+        parameterized, param_key_exceptions, param_value,
+        param_exception, param_http_status,
+        model_instance, api_request_permissions,
+        model_kwargs, kwargs_api_create
+    ):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+
+        user = api_request_permissions['user']['add']
+
+        client.force_login( user )
+
+        kwargs = model_kwargs()
+        kwargs.update({
+            'user': user
+        })
+
+        the_model = model_instance( kwargs_create = kwargs )
+
+        context_user = mocker.patch.object(
+            the_model, 'context'
+        )
+
+        context_user.__getitem__.side_effect = {
+            'logger': None,
+            the_model._meta.model_name: user
+        }.__getitem__
+
+        # the_model.user = api_request_permissions['user']['add']
+
+
+        url = the_model.get_url( many = True )
+
+        mocker.patch(
+            # "access.managers.tenancy.TenancyManager.create",
+            f"{model.__module__}.{model.__name__}.objects.create",
+            side_effect = param_exception("an integrity error occured....")
+        )
+
+        # the_model.delete()
+
+        response = client.post(
+            path = url,
+            data = kwargs_api_create,
+            content_type = 'application/json'
+        )
+
+        assert response.status_code == param_http_status, response.content
+
+
+
+    def test_api_delete_exception(self, mocker, model,
+        parameterized, param_key_exceptions, param_value,
+        param_exception, param_http_status,
+        model_instance, model_kwargs, api_request_permissions
+    ):
+        """ Check correct permission for delete
+
+        Delete item as user with delete permission
+        """
+
+        client = Client()
+
+        user = api_request_permissions['user']['delete']
+
+        client.force_login( user )
+
+        kwargs = model_kwargs()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user'],
+            'user': user
+        })
+
+        delete_item = model_instance(
+            kwargs_create = kwargs
+        )
+
+        context_user = mocker.patch.object(
+            delete_item, 'context'
+        )
+
+        context_user.__getitem__.side_effect = {
+            'logger': None,
+            delete_item._meta.model_name: user
+        }.__getitem__
+
+        mocker.patch(
+            f"{model.__module__}.{model.__name__}.delete",
+            side_effect = param_exception("an integrity error occured....")
+        )
+
+
+        response = client.delete(
+            path = delete_item.get_url( many = False ),
+        )
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == param_http_status, response.content

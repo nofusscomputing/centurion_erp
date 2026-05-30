@@ -2,6 +2,10 @@ import pytest
 
 from centurion.tests.functional_models import ModelTestCases
 
+from core.tests.functional.centurion_audit.test_functional_centurion_audit_entries_model import (
+    CenturionAuditEntryModelTestCases
+)
+
 
 
 @pytest.mark.mixin
@@ -53,6 +57,7 @@ class CenturionAbstractMixinTestCases(
 
 
 class CenturionAbstractMixinInheritedCases(
+    CenturionAuditEntryModelTestCases,
     CenturionAbstractMixinTestCases,
 ):
     pass

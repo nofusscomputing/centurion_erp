@@ -4,6 +4,8 @@ from django.db import models
 
 from django.utils.timezone import now
 
+from pytest_simplified import NOT_USED
+
 from access.tests.unit.tenancy_abstract.test_unit_tenancy_abstract_model import (
     TenancyAbstractModelInheritedCases
 )
@@ -212,20 +214,16 @@ class CenturionAbstractTenancyModelPyTest(
         
         return {
             'model_tag': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
+                'type': NOT_USED,
+                'value': NOT_USED,
             },
             'url_model_name': {
-                'type': models.NOT_PROVIDED,
+                'type': NOT_USED,
             },
             'page_layout': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
+                'type': NOT_USED,
+                'value': NOT_USED,
             },
-            'table_fields': {
-                'type': models.NOT_PROVIDED,
-                'value': models.NOT_PROVIDED,
-            }
         }
 
 
@@ -243,4 +241,13 @@ class CenturionAbstractTenancyModelPyTest(
         pytest.xfail( reason = 'base model, test is n/a.' )
 
     def test_manager_tenancy_select_related(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_attribute_page_layout_dataset_columns_fields(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_attribute_page_layout_detail_section_columns(self):
         pytest.xfail( reason = 'base model, test is n/a.' )

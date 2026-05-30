@@ -24,7 +24,6 @@ def kwargs_entity( model_entity, kwargs_centurionmodel ):
 
         kwargs = {
             **kwargs_centurionmodel(),
-            'entity_type': 'entity',
         }
 
         return kwargs

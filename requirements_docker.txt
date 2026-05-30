@@ -15,7 +15,7 @@ asgiref==3.11.1
     #   -r requirements_production.txt
     #   django
     #   django-cors-headers
-attrs==25.4.0
+attrs==26.1.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -31,7 +31,7 @@ celery==5.4.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   django-celery-results
-certifi==2026.1.4
+certifi==2026.5.20
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -41,12 +41,12 @@ cffi==2.0.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   cryptography
-charset-normalizer==3.4.4
+charset-normalizer==3.4.7
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   requests
-click==8.3.1
+click==8.4.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -69,20 +69,12 @@ click-repl==0.3.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   celery
-coreapi==2.3.3
-    # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
-coreschema==0.0.4
-    # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
-    #   coreapi
-cryptography==46.0.4
+cryptography==48.0.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   pyjwt
+    #   social-auth-core
 defusedxml==0.7.1
     # via
     #   -r requirements.txt
@@ -131,23 +123,23 @@ djangorestframework-jsonapi==7.1.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-drf-spectacular[sidecar]==0.28.0
+drf-spectacular[sidecar]==0.29.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-drf-spectacular-sidecar==2026.1.1
+drf-spectacular-sidecar==2026.5.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   drf-spectacular
-greenlet==3.3.1
+greenlet==3.5.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   sqlalchemy
 gunicorn==23.0.0
     # via -r requirements_production.txt
-idna==3.11
+idna==3.15
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -158,16 +150,6 @@ inflection==0.5.1
     #   -r requirements_production.txt
     #   djangorestframework-jsonapi
     #   drf-spectacular
-itypes==1.2.0
-    # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
-    #   coreapi
-jinja2==3.1.6
-    # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
-    #   coreschema
 jsonschema==4.26.0
     # via
     #   -r requirements.txt
@@ -183,7 +165,7 @@ kombu==5.5.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   celery
-linkify-it-py==2.0.3
+linkify-it-py==2.1.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -193,12 +175,7 @@ markdown-it-py[linkify,plugins]==3.0.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   mdit-py-plugins
-markupsafe==3.0.3
-    # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
-    #   jinja2
-mdit-py-plugins==0.5.0
+mdit-py-plugins==0.6.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -216,7 +193,7 @@ oauthlib==3.3.1
     #   -r requirements_production.txt
     #   requests-oauthlib
     #   social-auth-core
-packaging==26.0
+packaging==26.2
     # via
     #   -r requirements_production.txt
     #   gunicorn
@@ -237,11 +214,11 @@ pycparser==3.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   cffi
-pygments==2.18.0
+pygments==2.20.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-pyjwt[crypto]==2.11.0
+pyjwt[crypto]==2.12.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -271,11 +248,10 @@ referencing==0.37.0
     #   -r requirements_production.txt
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.5
+requests==2.34.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-    #   coreapi
     #   requests-oauthlib
     #   social-auth-core
 requests-oauthlib==2.0.0
@@ -298,7 +274,7 @@ social-auth-app-django==5.6.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-social-auth-core==4.8.3
+social-auth-core==4.9.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -326,18 +302,17 @@ tzdata==2025.1
     #   -r requirements_production.txt
     #   celery
     #   kombu
-uc-micro-py==1.0.3
+uc-micro-py==2.0.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   linkify-it-py
-uritemplate==4.1.1
+uritemplate==4.2.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-    #   coreapi
     #   drf-spectacular
-urllib3==2.6.3
+urllib3==2.7.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -349,7 +324,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.6.0
+wcwidth==0.7.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt

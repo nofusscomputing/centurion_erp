@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from drf_spectacular.utils import extend_schema_serializer
 
@@ -29,7 +28,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -63,19 +62,6 @@ class ModelSerializer(
     def get_url(self, item) -> dict:
 
         get_url = super().get_url( item = item )
-
-        if not self.context['request'].feature_flag['2025-00006']:
-
-            get_url.update({
-                'tickets': reverse(
-                    "v2:_api_v2_item_tickets-list",
-                    request=self._context['view'].request,
-                    kwargs={
-                        'item_class': self.Meta.model._meta.model_name,
-                        'item_id': item.pk
-                        }
-                )
-            })
 
 
         return get_url

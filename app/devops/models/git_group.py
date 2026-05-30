@@ -19,54 +19,66 @@ class GitGroup(
 
     model_tag = 'git_group'
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'provider',
-                        'parent_group',
-                        'path',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'description',
-                        'provider_pk',
-                        'created',
-                        'modified',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'provider_badge',
+                    'path',
+                    'organization',
+                    'created',
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-    table_fields: list = [
-        'name',
-        'provider_badge',
-        'path',
-        'organization',
-        'created',
-    ]
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'provider',
+                            'parent_group',
+                            'path',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'description',
+                            'provider_pk',
+                            'created',
+                            'modified',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        "table": [
+            'name',
+            'provider_badge',
+            'path',
+            'organization',
+            'created',
+        ]
+    }
 
 
     class Meta:

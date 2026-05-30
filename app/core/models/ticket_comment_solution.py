@@ -25,8 +25,6 @@ class TicketCommentSolution(
             ('purge_ticketcommentsolution', 'Can purge ticket solution comment.'),
         ]
 
-        sub_model_type = 'solution'
-
         verbose_name = "Ticket Comment Solution"
 
         verbose_name_plural = "Ticket Comment Solutions"

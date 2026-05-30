@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Company',
                 'verbose_name_plural': 'Companies',
                 'ordering': ['name'],
-                'sub_model_type': 'company',
+                # 'sub_model_type': 'company',
             },
             bases=('access.entity',),
         ),

@@ -313,3 +313,13 @@ class CenturionAuditModelPyTest(
         del model_instance._before
 
         assert model_instance.before == test_value
+
+
+    def test_attribute_page_layout_table_fields(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_attribute_page_layout_dataset_columns_fields(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )
+
+    def test_attribute_page_layout_detail_section_columns(self):
+        pytest.xfail( reason = 'base model, test is n/a.' )

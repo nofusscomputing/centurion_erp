@@ -1,9 +1,9 @@
-from itim.models.slm_ticket_base import SLMTicket
+from core.models.ticket_base import TicketBase
 
 
 
 class ChangeTicket(
-    SLMTicket
+    TicketBase
 ):
 
     _is_submodel = True
@@ -20,8 +20,6 @@ class ChangeTicket(
             ('purge_changeticket', 'Can purge change ticket'),
             ('triage_changeticket', 'Can triage change ticket'),
         ]
-
-        sub_model_type = 'change'
 
         verbose_name = 'Change'
 

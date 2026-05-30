@@ -51,7 +51,7 @@ class Index(
 
             endpoints[str(item.organization.name)][str(item.software.name)] = reverse(
                     'v2:public:devops:_api_checkin-list',
-                    request=request,
+                    request = None,
                     kwargs = {
                         'organization_id': int(item.organization.id),
                         'software_id': int(item.software.id)

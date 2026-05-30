@@ -1,3 +1,10 @@
+## Version v1.30.0
+
+- Audit History now captures fields that are related to the model being edited.
+
+- Refactored Metadata to support using [Centurion UI](https://github.com/nofusscomputing/centurion_erp_ui) v0.9.0+
+
+
 ## Version v1.29.0
 
 - New models:

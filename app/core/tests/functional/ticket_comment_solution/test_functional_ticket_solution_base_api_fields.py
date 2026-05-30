@@ -56,7 +56,6 @@ class TicketCommentSolutionAPITestCases(
             del kwargs['external_system']
             del kwargs['category']
 
-            kwargs['comment_type'] = model._meta.sub_model_type
             kwargs['is_template'] = True
 
             template_comment = model.objects.create(
@@ -85,7 +84,6 @@ class TicketCommentSolutionAPITestCases(
 
             kwargs = model_kwargs()
             kwargs['body'] = 'the child comment'
-            kwargs['comment_type'] = model._meta.sub_model_type
             # kwargs['parent'] = request.cls.item
 
             del kwargs['external_ref']

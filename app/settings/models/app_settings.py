@@ -96,31 +96,29 @@ class AppSettings(
 
     modified = AutoLastModifiedField()
 
-    table_fields: list = []
-
-    page_layout: list = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'global_organization',
-                    ],
-                    "right": [
-                        'device_model_is_global',
-                        'device_type_is_global',
-                        'manufacturer_is_global',
-                        'software_is_global',
-                        'software_categories_is_global',
-
-                    ]
-                }
-            ]
-        }
-    ]
-
+    page_layout: dict = {
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'global_organization',
+                        ],
+                        "right": [
+                            'device_model_is_global',
+                            'device_type_is_global',
+                            'manufacturer_is_global',
+                            'software_is_global',
+                            'software_categories_is_global',
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 
     def get_tenant(self):
 

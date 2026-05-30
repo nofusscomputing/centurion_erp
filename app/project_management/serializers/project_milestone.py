@@ -24,7 +24,7 @@ class ProjectMilestoneBaseSerializer(serializers.ModelSerializer):
 
         context = self.context.copy()
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -67,6 +67,7 @@ class ProjectMilestoneModelSerializer(
             'start_date',
             'finish_date',
             'project',
+            'percent_completed',
             'created',
             'modified',
             '_urls',
@@ -75,6 +76,7 @@ class ProjectMilestoneModelSerializer(
         read_only_fields = [
             'id',
             'display_name',
+            'percent_completed',
             'created',
             'modified',
             '_urls',

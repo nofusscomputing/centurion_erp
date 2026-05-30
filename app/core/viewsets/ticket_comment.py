@@ -30,7 +30,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             if model._meta.model_name != 'ticketcommentbase':
                 
-                serializer_name += '_' + model._meta.sub_model_type
+                serializer_name += '_' + model._meta.model_name
 
 
             serializer_module = importlib.import_module(
@@ -40,7 +40,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             )
 
             serializers.update({
-                model._meta.sub_model_type: getattr(serializer_module, serializer_type + 'Serializer')
+                model._meta.model_name: getattr(serializer_module, serializer_type + 'Serializer')
             })
 
     return serializers
@@ -65,7 +65,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             OpenApiParameter(
                 allow_blank = False,
                 default = 'comment',
-                name = 'ticket_comment_model',
+                name = 'model_name',
                 type = OpenApiTypes.STR,
                 location = OpenApiParameter.PATH,
                 required = True,
@@ -250,7 +250,7 @@ class ViewSet(
         'body',
     ]
 
-    model_kwarg = 'ticket_comment_model'
+    model_kwarg = 'model_name'
 
     parent_model = TicketBase
 
@@ -280,26 +280,26 @@ class ViewSet(
             try:
 
                 ticket = None
+                ticket_pk = None
 
                 if(
-                    'pk' in self.kwargs
-                    and self.request.method in [
-                        'DELETE',
-                        'PATCH',
-                        'PUT',
-                        'POST'
-                    ]
-                ):
-
-                    ticket = self.model.ticket.get_related_model()
-
-                elif(
                     self.model_kwarg in self.kwargs
                     and self.parent_model_pk_kwarg in self.kwargs
                 ):
 
+                    ticket_pk = int( self.kwargs[self.parent_model_pk_kwarg] )
+
+                elif 'pk' in self.kwargs:
+
+                    ticket_pk = self.model.objects.get(
+                        pk = int(self.kwargs['pk'])
+                    ).ticket.id
+
+
+                if ticket_pk:
+
                     ticket = self.parent_model.objects.get(
-                        pk = int( self.kwargs[self.parent_model_pk_kwarg] )
+                        pk = ticket_pk
                     ).get_related_model()
 
 
@@ -307,10 +307,7 @@ class ViewSet(
 
                     triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
 
-                    if(
-                        self.model.comment_type == 'task'
-                        or self.model._meta.model_name == 'ticketcommenttask'
-                    ):
+                    if self.model._meta.model_name == 'ticketcommenttask':
 
                         self._perms_map: dict[str, list[str]] = {
                             'POST': [ triage_permission ],

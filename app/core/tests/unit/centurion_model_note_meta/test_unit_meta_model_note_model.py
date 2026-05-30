@@ -1,3 +1,5 @@
+import importlib
+
 import pytest
 
 from django.apps import apps
@@ -186,6 +188,24 @@ class ModelNotesMetaModelTestCases(
     def model(self, request):
 
         return request.cls.model_class
+
+
+    @pytest.fixture( scope = 'class')
+    def model_serializer(self, model):
+
+        serializer_name: str =  'centurionmodelnote_' + str(model._meta.model_name).replace('centurionmodelnote', '')
+
+        serializer_module = importlib.import_module(
+                    name = model._meta.app_label + '.serializers.' + str(
+                        serializer_name
+                    )
+                )
+
+
+        yield {
+            'view': getattr( serializer_module, 'ViewSerializer' )
+        }
+
 
 
     @pytest.mark.skip( reason = 'ToDo: Figure out how to dynomagic add note_model instance' )

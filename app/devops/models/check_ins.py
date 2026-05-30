@@ -75,21 +75,31 @@ class CheckIn(
 
         return self.feature + '.' + self.deployment_id
 
-    page_layout: dict = []
-
-
-    table_fields: list = [
-        'software',
-        'feature',
-        'deployment_id',
-        'organization',
-        'created',
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'software',
+                    'feature',
+                    'deployment_id',
+                    'organization',
+                    'created',
+                ]
+            ]
+        },
+        "table": [
+            'software',
+            'feature',
+            'deployment_id',
+            'organization',
+            'created',
+        ]
+    }
 
 
 
     def get_url(
-        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+        self, relative: bool = True, api_version: int = 2, many = False
     ) -> str:
         """ Fetch the Models URL.
 
@@ -100,8 +110,7 @@ class CheckIn(
         return super().get_url(
             relative = relative,
             api_version = api_version,
-            many = True,
-            request = request
+            many = True
         )
 
 

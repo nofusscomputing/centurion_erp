@@ -24,21 +24,15 @@ class RelatedTicketBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        request = None
-
         ticket_id: int = None
 
         if 'view' in self._context:
-
-            if hasattr(self._context['view'], 'request'):
-
-                request = self._context['view'].request
 
             if 'ticket_id' in self._kwargs['context']['view'].kwargs:
 
                 ticket_id = int(self._kwargs['context']['view'].kwargs['ticket_id'])
 
-        return item.get_url( ticket_id = ticket_id,request = request )
+        return item.get_url( ticket_id = ticket_id )
 
 
     class Meta:
@@ -71,22 +65,8 @@ class RelatedTicketModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        request = None
-
-        ticket_id: int = None
-
-        if 'view' in self._context:
-
-            if hasattr(self._context['view'], 'request'):
-
-                request = self._context['view'].request
-
-            if 'ticket_id' in self._kwargs['context']['view'].kwargs:
-
-                ticket_id = int(self._kwargs['context']['view'].kwargs['ticket_id'])
-
         return {
-            '_self': item.get_url( request = request ),
+            '_self': item.get_url(),
         }
 
 

@@ -60,27 +60,11 @@ class TicketCommentBase(
             ('purge_ticketcommentbase', 'Can purge ticket comment.'),
         ]
 
-        sub_model_type = 'comment'
-
         unique_together = ('external_system', 'external_ref',)
 
         verbose_name = "Ticket Comment"
 
         verbose_name_plural = "Ticket Comments"
-
-
-    def field_validation_not_empty(value):
-
-        if value == '' or value is None:
-
-            raise centurion_exception.ValidationError(
-                    detail = {
-                        'comment_type': 'Comment Type requires a value.'
-                    },
-                    code = 'comment_type_empty_or_null'
-                )
-
-        return True
 
 
     model_notes = None
@@ -118,45 +102,6 @@ class TicketCommentBase(
         help_text = 'External system this item derives',
         null=True,
         verbose_name = 'External System',
-    )
-
-    @property
-    def get_comment_type(self):
-
-        comment_type = str(self._meta.sub_model_type).lower().replace(
-            ' ', '_'
-        )
-
-        return comment_type
-
-    def get_comment_type_choices():
-
-        choices = []
-
-        if apps.ready:
-
-            all_models = apps.get_models()
-
-            for model in all_models:
-
-                if isinstance(model, TicketCommentBase) or issubclass(model, TicketCommentBase):
-
-                    choices += [ (model._meta.sub_model_type, model._meta.verbose_name) ]
-
-
-        return choices
-
-    comment_type = models.CharField(
-        blank = False,
-        choices = get_comment_type_choices,
-        # default = get_comment_type,
-        help_text = 'Type this comment is. derived from Meta.verbose_name',
-        max_length = 30,
-        null = False,
-        validators = [
-            field_validation_not_empty
-        ],
-        verbose_name = 'Type',
     )
 
     category = models.ForeignKey(
@@ -260,12 +205,7 @@ class TicketCommentBase(
 
     # this model is not intended to be viewable on its
     # own page due to being a sub model
-    page_layout: list = []
-
-
-    # this model is not intended to be viewable via
-    # a table as it's a sub-model
-    table_fields: list = []
+    page_layout: dict = {}
 
 
     def clean(self):
@@ -285,9 +225,6 @@ class TicketCommentBase(
 
             elif not self.is_closed and self.date_closed is not None:
                 self.date_closed = None
-
-
-            self.comment_type = self._meta.sub_model_type
 
 
             if self.parent:
@@ -328,7 +265,7 @@ class TicketCommentBase(
 
 
     def get_url(
-        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+        self, relative: bool = True, api_version: int = 2, many = False
     ) -> str:
 
         namespace = f'v{api_version}'
@@ -361,7 +298,7 @@ class TicketCommentBase(
             url_basename += '-detail'
 
 
-        url = reverse( viewname = url_basename, kwargs = self.get_url_kwargs( many = many ) )
+        url = reverse( viewname = url_basename, request = None, kwargs = self.get_url_kwargs( many = many ) )
 
         if not relative:
 
@@ -377,7 +314,7 @@ class TicketCommentBase(
 
         if self._is_submodel:
             kwargs = {
-                'ticket_comment_model': self._meta.sub_model_type
+                'model_name': self._meta.model_name
             }
 
         kwargs.update({
@@ -413,7 +350,7 @@ class TicketCommentBase(
 
         body = self.body
 
-        if self._meta.sub_model_type != 'action':
+        if self._meta.model_name != 'ticketcommentaction':
             self.body = self.slash_command(self.body)
 
         is_converted_action_comment = False
@@ -421,7 +358,7 @@ class TicketCommentBase(
         if(
             self.body != body
             and action_comment_time_track
-            and self.comment_type == 'comment'
+            and self._meta.model_name == 'ticketcommentbase'
         ):
 
             is_converted_action_comment = True
@@ -438,7 +375,7 @@ class TicketCommentBase(
                     self.body is not None
                 )
             )
-            or self.comment_type == 'solution'
+            or self._meta.model_name == 'ticketcommentsolution'
         ):
 
             super().save(force_insert=force_insert, force_update=force_update,
@@ -469,7 +406,7 @@ class TicketCommentBase(
 
                 if(
                     self.parent.is_closed
-                    and self.comment_type not in [ 'action', 'solution' ]
+                    and self._meta.model_name not in [ 'ticketcommentaction', 'ticketcommentsolution' ]
                 ):
 
                     self.parent.is_closed = False

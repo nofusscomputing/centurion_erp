@@ -41,7 +41,6 @@ class TicketCommentBaseAPIFieldsTestCases(
             del kwargs['external_system']
             del kwargs['category']
 
-            kwargs['comment_type'] = model._meta.sub_model_type
             kwargs['is_template'] = True
 
             template_comment = model.objects.create(
@@ -70,7 +69,6 @@ class TicketCommentBaseAPIFieldsTestCases(
 
             kwargs = model_kwargs()
             kwargs['body'] = 'the child comment'
-            kwargs['comment_type'] = model._meta.sub_model_type
             kwargs['parent'] = request.cls.item
 
             del kwargs['external_ref']
@@ -137,9 +135,6 @@ class TicketCommentBaseAPIFieldsTestCases(
             },
             'external_system': {
                 'expected': int
-            },
-            'comment_type': {
-                'expected': str
             },
             'category': {
                 'expected': dict
@@ -270,6 +265,9 @@ class TicketCommentBaseAPIFieldsTestCases(
         
         assert api_data_two['key'] not in api_data_two['obj'], 'Thread URL was found in comment'
 
+
+    def test_api_metadata_list_has_layout_table(self, metadata_request_list):
+        pytest.xfail( reason = 'Model is part of a ticket and will never be displayed in table view as it uses ticket view')
 
 
 class TicketCommentBaseAPIFieldsInheritedCases(

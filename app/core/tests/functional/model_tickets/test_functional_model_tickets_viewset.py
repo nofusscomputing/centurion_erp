@@ -39,3 +39,18 @@ class ModelTicketViewsetPyTest(
 
     def test_function_get_queryset_filtered_results_action_list(self):
         pytest.xfail( reason = 'test n/a as model does not have `model` field' )
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_no_sub_models_key(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+
+
+    def test_function_get_meta_urls_sub_models_values(self,):
+        pytest.xfail( reason = 'Base class does not require test' )

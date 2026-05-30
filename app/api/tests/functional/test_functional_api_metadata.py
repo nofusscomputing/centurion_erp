@@ -46,12 +46,8 @@ class APIMetadataTestCases:
             'fields': {
                 'expected': dict
             },
-
-            'table_fields': {
-                'expected': list
-            },
             'layout': {
-                'expected': list
+                'expected': dict
             },
             'version': {
                 'expected': dict
@@ -202,13 +198,13 @@ class APIMetadataTestCases:
 
     @pytest.mark.metadata
     @pytest.mark.regression
-    def test_api_metadata_list_has_table_fields(self, metadata_request_list):
+    def test_api_metadata_list_has_layout_table(self, metadata_request_list):
         """API Metadata check
 
         Ensure that a list request contains the table fields
         """
 
-        assert 'table_fields' in metadata_request_list.data
+        assert 'table' in metadata_request_list.data['layout']
 
 
 

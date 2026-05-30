@@ -1,0 +1,63 @@
+import pytest
+
+from itim.tests.unit.ticket_slm.test_unit_ticket_slm_model import SLMTicketModelInheritedCases
+
+from itim.models.ticket_incident import IncidentTicket
+
+
+
+@pytest.mark.model_incidentticket
+class IncidentTicketTestCases(
+    SLMTicketModelInheritedCases
+):
+
+
+    @property
+    def parameterized_class_attributes(self):
+
+        return {
+            '_audit_enabled': {
+                'value': False
+            },
+            '_notes_enabled': {
+                'value': False
+            },
+            '_is_submodel': {
+                'value': True
+            },
+            'url_model_name': {
+                'type': str,
+                'value': 'ticketbase'
+            },
+        }
+
+
+    @property
+    def parameterized_model_fields(self):
+
+        return {}
+
+
+
+    def test_class_inherits_incidentticket(self, model):
+        """ Class inheritence
+
+        Model Must Inherit from requestticket
+        """
+
+        assert issubclass(model, IncidentTicket)
+
+
+
+class IncidentTicketInheritedCases(
+    IncidentTicketTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_itim
+class IncidentTicketPyTest(
+    IncidentTicketTestCases,
+):
+    pass

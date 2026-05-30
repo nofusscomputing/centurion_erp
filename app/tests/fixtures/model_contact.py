@@ -26,7 +26,6 @@ def kwargs_contact( kwargs_person ):
 
         kwargs = {
             **kwargs_person(),
-            'entity_type': 'contact',
             'email': 'p' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ) + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ) + '@domain.tld',
             'directory': True,
         }

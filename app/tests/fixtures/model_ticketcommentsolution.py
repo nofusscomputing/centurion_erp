@@ -1,7 +1,7 @@
 import pytest
 
 from core.models.ticket_comment_solution import TicketCommentSolution
-from core.serializers.ticketcommentbase_solution import (
+from core.serializers.ticketcommentbase_ticketcommentsolution import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer
@@ -26,7 +26,6 @@ def kwargs_ticketcommentsolution(
 
         kwargs = {
             **kwargs_ticketcommentbase(),
-            'comment_type': model_ticketcommentsolution._meta.sub_model_type,
         }
 
         return kwargs

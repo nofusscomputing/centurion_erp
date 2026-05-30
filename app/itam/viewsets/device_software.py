@@ -182,26 +182,6 @@ class ViewSet( ModelViewSet ):
 
 
 
-
-    @property
-    def table_fields(self):
-
-        table_fields: list = self.model.table_fields
-
-        if 'software_id' in self.kwargs:
-
-            table_fields: list = [
-            "device",
-            "organization",
-            "action_badge",
-            "installedversion",
-            "installed",
-            ]
-
-        return table_fields
-
-
-
     def get_view_serializer_name(self) -> str:
         """Get the Models `View` Serializer name.
 

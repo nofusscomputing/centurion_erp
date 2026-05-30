@@ -30,7 +30,7 @@ for model in apps.get_models():
 
     if issubclass(model, asset.AssetBase):
         
-        if model._meta.sub_model_type == 'asset':
+        if model._meta.model_name == 'assetbase':
             continue
 
         asset_type_names += model._meta.model_name + '|'

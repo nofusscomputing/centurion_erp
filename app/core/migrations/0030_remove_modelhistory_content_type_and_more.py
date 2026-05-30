@@ -260,7 +260,7 @@ class Migration(migrations.Migration):
                     ("import_ticketcommenttask", "Can import ticket task comment."),
                     ("purge_ticketcommenttask", "Can purge ticket task comment."),
                 ],
-                "sub_model_type": "task",
+                # "sub_model_type": "task",
             },
             bases=("core.ticketcommentbase",),
         ),

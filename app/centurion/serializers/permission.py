@@ -49,7 +49,7 @@ class PermissionViewSerializer(PermissionBaseSerializer):
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse("v2:_api_permission-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("v2:_api_permission-detail", request = None, kwargs={'pk': item.pk}),
         }
 
 

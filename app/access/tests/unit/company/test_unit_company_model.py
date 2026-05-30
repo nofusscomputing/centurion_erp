@@ -14,14 +14,6 @@ class CompanyModelTestCases(
     EntityModelInheritedCases,
 ):
 
-
-    sub_model_type = 'company'
-    """Sub Model Type
-    
-    sub-models must have this attribute defined in `ModelName.Meta.sub_model_type`
-    """
-
-
     @property
     def parameterized_class_attributes(self):
 

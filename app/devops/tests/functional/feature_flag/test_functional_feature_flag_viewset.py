@@ -32,4 +32,7 @@ class FeatureFlagViewsetPyTest(
     ViewsetTestCases,
 ):
 
-    pass
+
+    def test_function_get_meta_urls_self_url(self):
+        pytest.xfail( reason = 'Base class does not require test' )
+

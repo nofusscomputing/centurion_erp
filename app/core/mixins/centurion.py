@@ -199,6 +199,9 @@ class Centurion(
                     for val in values:
                         data += [ val.id ]
 
+                    if data:
+                        data = sorted(data)
+
                 elif isinstance(field, models.DateTimeField):
                     if data and type(data) is not str:
                         data = data.isoformat(timespec='seconds')
@@ -319,7 +322,7 @@ class Centurion(
 
 
     def get_url(
-        self, relative: bool = False, api_version: int = 2, many = False, request: any = None
+        self, relative: bool = True, api_version: int = 2, many = False
     ) -> str:
         """Return the models API URL
 
@@ -361,7 +364,7 @@ class Centurion(
             url_basename += '-detail'
 
 
-        url = reverse( viewname = url_basename, kwargs = model.get_url_kwargs( many = many ) )
+        url = reverse( viewname = url_basename, request = None, kwargs = model.get_url_kwargs( many = many ) )
 
         if not relative:
 

@@ -19,7 +19,7 @@ for model in apps.get_models():
 
     if issubclass(model, entity.Entity):
 
-        entity_type_names += model._meta.sub_model_type + '|'
+        entity_type_names += model._meta.model_name + '|'
 
 
 entity_type_names = str(entity_type_names)[:-1]

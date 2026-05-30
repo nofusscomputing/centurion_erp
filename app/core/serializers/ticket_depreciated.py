@@ -35,7 +35,7 @@ class TicketBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -71,15 +71,15 @@ class TicketModelSerializer(
         ticket_type = str(item.get_ticket_type_display()).lower().replace(' ', '_')
 
         url_dict: dict = {
-            '_self': item.get_url( request = self._context['view'].request ),
-            'comments': reverse('v2:_api_v2_ticket_comment-list', request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
-            'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            '_self': item.get_url(),
+            'comments': reverse('v2:_api_v2_ticket_comment-list', request = None, kwargs={'ticket_id': item.pk}),
+            'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request = None, kwargs={'ticket_id': item.pk}),
         }
 
         if item.project:
 
             url_dict.update({
-                'project': reverse("v2:_api_project-list", request=self._context['view'].request, kwargs={}),
+                'project': reverse("v2:_api_project-list", request = None, kwargs={}),
             })
 
         if item.category:
@@ -87,14 +87,14 @@ class TicketModelSerializer(
             url_dict.update({
             'ticketcategory': reverse(
                 'v2:_api_ticketcategory-list',
-                request=self._context['view'].request,
+                request = None,
                 kwargs={},
             ) + '?' + ticket_type + '=true',
             })
 
 
         url_dict.update({
-            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request = None, kwargs={'ticket_id': item.pk}),
         })
 
 

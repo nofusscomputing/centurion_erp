@@ -75,14 +75,20 @@ class ModelTicket(
     modified = AutoLastModifiedField()
 
 
-    page_layout: dict = []
-
-
-    table_fields: list = [
-        'ticket',
-        'status_badge',
-        'created'
-    ]
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'ticket',
+                    'created'
+                ]
+            ]
+        },
+        "table": [
+            'ticket',
+            'created'
+        ]
+    }
 
 
     def __str__(self) -> str:
@@ -126,7 +132,7 @@ class ModelTicket(
                 del kwargs['model_name']
 
             kwargs.update({
-                'ticket_type': self.ticket._meta.sub_model_type,
+                'model_name': self.ticket._meta.model_name,
                 'model_id': self.ticket.id,
             })
 

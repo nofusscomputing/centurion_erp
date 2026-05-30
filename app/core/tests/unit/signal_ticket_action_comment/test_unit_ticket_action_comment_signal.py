@@ -4,12 +4,15 @@ from types import FunctionType
 
 from django.apps import apps
 
-from centurion.tests.unit_class import ClassTestCases
+from pytest_simplified.suites.attributes import ClassAttributesTestCases
+from pytest_simplified.suites.functions import ClassFunctionsTestCases
+
 
 
 @pytest.mark.model_ticketcategory
 class TickActionCommentSignalTestCases(
-    ClassTestCases
+    ClassAttributesTestCases,
+    ClassFunctionsTestCases
 ):
 
 

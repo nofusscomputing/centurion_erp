@@ -27,6 +27,9 @@ from core.viewsets import (
 app_name = "API"
 
 
+router = DefaultRouter(trailing_slash=False)
+
+
 history_type_names = ''
 history_app_labels = ''
 notes_type_names = ''
@@ -40,7 +43,7 @@ for model in apps.get_models():
 
     if getattr(model, '_audit_enabled', False):
 
-        history_type_names += model._meta.model_name + '|'
+        history_type_names += str(model().get_history_model_name()).lower() + '|'
 
         if model._meta.app_label not in history_app_labels:
 
@@ -49,7 +52,7 @@ for model in apps.get_models():
 
     if getattr(model, '_notes_enabled', False):
 
-        notes_type_names += model._meta.model_name + '|'
+        notes_type_names += str(f'{model._meta.object_name}CenturionModelNote').lower() + '|'
 
         if model._meta.app_label not in notes_app_labels:
 
@@ -57,15 +60,25 @@ for model in apps.get_models():
 
     if getattr(model, '_ticket_linkable', False):
 
-        ticket_model_links_type_names += model._meta.model_name + '|'
+        ticket_model_links_type_names += str(f'{model._meta.object_name}Ticket').lower() + '|'
 
         if model._meta.app_label not in ticket_model_links_app_labels:
 
             ticket_model_links_app_labels += model._meta.app_label + '|'
 
     if issubclass(model, ticket.TicketBase):
+
+        if(
+            (not router._feature_flagging['2025-00006'] and 'request' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00010'] and 'incident' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00011'] and 'problem' in model._meta.model_name)
+        ):
+            continue
+
+
         ticket_app_names += model._meta.app_label + '|'
-        ticket_type_names += model._meta.sub_model_type + '|'
+        ticket_type_names += model._meta.model_name + '|'
 
 
 history_app_labels = str(history_app_labels)[:-1]
@@ -79,23 +92,6 @@ ticket_model_links_type_names = str(ticket_model_links_type_names)[:-1]
 
 ticket_app_names = str(ticket_app_names)[:-1]
 ticket_type_names = str(ticket_type_names)[:-1]
-
-router = DefaultRouter(trailing_slash=False)
-
-if not router._feature_flagging['2025-00006']:
-    ticket_type_names = str( ticket_type_names ).replace('request', '').replace('||', '')
-
-
-if not router._feature_flagging['2025-00009']:
-    ticket_type_names = str( ticket_type_names ).replace('change', '').replace('||', '')
-
-
-if not router._feature_flagging['2025-00010']:
-    ticket_type_names = str( ticket_type_names ).replace('incident', '').replace('||', '')
-
-
-if not router._feature_flagging['2025-00011']:
-    ticket_type_names = str( ticket_type_names ).replace('problem', '').replace('||', '|')
 
 
 router.register('', v2.Index, basename='_api_v2_home')
@@ -132,7 +128,7 @@ router.register(
 
 router.register(
     prefix = f'/(?P<app_label>[{ticket_app_names} \
-        ]+)/ticket/(?P<ticket_type>[{ticket_type_names}]+)',
+        ]+)/ticket/(?P<model_name>[{ticket_type_names}]+)',
     viewset = ticket.ViewSet,
     feature_flag = '2025-00006', basename = '_api_ticketbase_sub'
 )

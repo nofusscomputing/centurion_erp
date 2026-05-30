@@ -1,5 +1,7 @@
 import pytest
 
+from rest_framework.test import APIClient
+
 from access.viewsets.organization import (
     ViewSet,
 )
@@ -22,54 +24,30 @@ class ViewsetTestCases(
         return ViewSet
 
     @pytest.fixture( scope = 'function' )
-    def viewset_mock_request(self, django_db_blocker, viewset,
-        model_user, kwargs_user, organization_one, organization_two,
-        model_instance, model_kwargs
+    def viewset_mock_request(self,
+        api_request_permissions,
+        settings
     ):
 
-        with django_db_blocker.unblock():
+        user = api_request_permissions['user']['view']
 
-            user = model_user.objects.create( **kwargs_user() )
+        user_tenancy_item = api_request_permissions['tenancy']['user']
 
-            user_tenancy_item = organization_one
+        other_tenancy_item = api_request_permissions['tenancy']['different']
 
-            other_tenancy_item = organization_two
+        settings.SITE_URL = 'http://testserver'
 
-        view_set = viewset()
-        model = getattr(view_set, 'model', None)
+        client = APIClient()
+        client.force_authenticate(user=user)
 
-        # if not model:
-        #     model = Tenant
+        response = client.get(user_tenancy_item.get_url(many = True))
 
-        request = MockRequest(
-            user = user,
-            model = model,
-            viewset = viewset,
-            tenant = organization_one
-        )
-
-        view_set.request = request
-        view_set.kwargs = user_tenancy_item.get_url_kwargs( many = True )
+        view_set = response.renderer_context['view']
 
 
         yield view_set
 
-        del view_set.request
         del view_set
-
-        with django_db_blocker.unblock():
-
-            for group in user.groups.all():
-
-                for role in group.roles.all():
-                    role.delete()
-
-                group.delete()
-
-            user.delete()
-
-            # user_tenancy_item.delete()
-            # other_tenancy_item.delete()
 
 
 

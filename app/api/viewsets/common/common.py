@@ -2,12 +2,14 @@ import django
 import importlib
 import rest_framework
 
+from django.apps import apps
 from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
 
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework import viewsets
 
 from centurion.logging import CenturionLogger
@@ -520,6 +522,11 @@ class CommonViewSet(
 
             exc = rest_framework.exceptions.ValidationError(ex.error_dict)
 
+        elif isinstance(ex, django.db.utils.IntegrityError):
+
+
+            exc = rest_framework.exceptions.ValidationError({str(ex.__class__.__name__).lower(): ex})
+
         else:
 
             msg = f"20250704-Unknown Exception Type. Unable to convert." \
@@ -602,7 +609,7 @@ class CommonViewSet(
 
     _Optional_, if specified will be add to detail view metadata"""
 
-    page_layout: list = []
+    layout: dict = {}
     """ Page layout class
 
     _Optional_, used by metadata to add the page layout to the HTTP/Options method
@@ -629,16 +636,146 @@ class CommonViewSet(
     permissions. This will force the user to require **ALL** permissions.
     """
 
-    table_fields: list = []
-    """ Table layout list
-
-    _Optional_, used by metadata for the table fields and added to the HTTP/Options
-    method for detail view, Enables the UI can setup the table.
-    """
-
     view_description: str = None
 
     view_name: str = None
+
+    _meta_urls: dict[ str ] | dict[ str, dict[str] ] = None
+
+
+    def get_meta_urls(self) -> dict[ str ] | dict[ str, dict[str] ]:
+        """Metadata Add URL
+
+        Creates urls for metadata. the following keys are generated:
+
+        - `self` - URL for the Viewser itself
+
+        - `sub_models.<key>` - When the View detected is for the base model
+        submodels are added to this dict using the value of
+        <model>._meta.model_name as the key name.
+
+        Returns:
+            dict[ str ]: list view `self` url
+            dict[ str, dict[str] ]: list view `self` and sub-model urls
+        """
+
+        if self._meta_urls is None:
+
+            add_url = {}
+
+            app_namespace = ''
+
+            if getattr(self.model, 'app_namespace', None) not in [None, '']:
+
+                app_namespace = self.model().get_app_namespace() + ':'
+
+
+            if self.kwargs.get(getattr(self, 'lookup_field', 'pk'), None) is not None:
+
+                qs = self.get_queryset()[0]
+
+                if hasattr(qs, 'get_url'):
+
+                    add_url.update({ 'self': qs.get_url() })
+
+            elif self.kwargs:
+
+                add_url.update({
+                    'self': reverse(
+                        viewname = 'v2:' + app_namespace + self.basename + '-list',
+                        request = None,
+                        kwargs = self.kwargs
+                    )
+                })
+
+            else:
+
+                add_url.update({
+                    'self': reverse(
+                        viewname = 'v2:' + app_namespace + self.basename + '-list',
+                        request = None
+                    )
+                })
+
+
+            if(
+                getattr(self, 'base_model', '') == self.model
+                and self.base_model._meta.model_name not in [
+                    'centurionaudit',
+                    'modelticket',
+                ]
+            ):    # filter to only add sub-models when view is for `base_model`
+
+                sub_model_urls = {}
+
+                for sub_model in apps.get_models():
+
+                    if issubclass(sub_model, self.base_model):
+
+                        # if not self.request.user.has_perm(
+                        #     permission = f'{sub_model._meta.app_label}.add_{sub_model._meta.model_name}',
+                        #     tenancy_permission = False
+                        # ):
+                        #     continue
+
+                        kwargs = self.kwargs.copy()
+
+                        if 'pk' in kwargs:
+                            del kwargs['pk']
+
+
+                        basename = self.basename
+
+                        if sub_model._is_submodel:
+
+                            if(
+                                self.base_model._meta.model_name in [
+                                    'ticketbase'
+                                ]
+                                and sub_model._is_submodel
+                                and 'project_id' not in kwargs
+                            ):
+                                kwargs.update({
+                                    'app_label': sub_model._meta.app_label
+                                })
+
+
+                            kwargs.update({
+                                self.model_kwarg: getattr(sub_model._meta, self.model_kwarg),
+                            })
+
+
+                            if '_sub' not in basename:
+
+                                basename = f'{basename}_sub'
+
+
+                        url = reverse(
+                            viewname = 'v2:' + app_namespace + basename + '-list',
+                            request = None,
+                            kwargs = kwargs
+                        )
+
+                        if url != add_url['self']:
+
+                            sub_model_urls.update({
+                                getattr(sub_model._meta, 'model_name'): {
+                                    "display_name": getattr(sub_model._meta, 'verbose_name'),
+                                    "url": url
+                                }
+                            })
+
+
+                add_url.update({
+                    'sub_models': sub_model_urls
+                })
+
+
+            self._meta_urls = add_url
+
+
+        return self._meta_urls
+
 
     def get_back_url(self) -> str:
         """Metadata Back URL
@@ -651,10 +788,10 @@ class CommonViewSet(
         Defining this URL will predominatly be for sub-models. It's
         recommended that the `reverse` function
         (rest_framework.reverse.reverse) be used with a `request`
-        object.
+        object with a value of `None` so that the URL is relative.
 
         Returns:
-            str: Full url in format `<protocol>://<doman name>.<tld>/api/<API version>/<model url>`
+            str: Full url in format `/api/<API version>/<model url>`
         """
 
         return None
@@ -696,21 +833,21 @@ class CommonViewSet(
 
 
 
-    def get_page_layout(self):
+    def get_layout(self) -> dict:
 
-        if len(self.page_layout) < 1:
+        if len(self.layout) < 1:
 
             if hasattr(self, 'model'):
 
                 if hasattr(self.model, 'page_layout'):
 
-                    self.page_layout = self.model.page_layout
+                    self.layout = self.model.page_layout
 
                 else:
 
-                    self.page_layout = []
+                    self.layout = {}
 
-        return self.page_layout
+        return self.layout
 
 
 
@@ -768,30 +905,13 @@ class CommonViewSet(
         Defining this URL will predominatly be for sub-models. It's
         recommended that the `reverse` function
         (rest_framework.reverse.reverse) be used with a `request`
-        object.
+        object with a value of `None` so the URL is relative.
 
         Returns:
-            str: Full url in format `<protocol>://<doman name>.<tld>/api/<API version>/<model url>`
+            str: Full url in format `/api/<API version>/<model url>`
         """
 
         return None
-
-
-    def get_table_fields(self):
-
-        if len(self.table_fields) < 1:
-
-            if hasattr(self, 'model'):
-
-                if hasattr(self.model, 'table_fields'):
-
-                    self.table_fields = self.model.table_fields
-
-                else:
-
-                    self.table_fields = []
-
-        return self.table_fields
 
 
     def get_view_description(self, html=False) -> str:
@@ -1001,8 +1121,8 @@ class CommonSubModelViewSet_ReWrite(
                     ) == self.base_model._meta.model_name
                 or not issubclass(related_object.related_model, self.base_model)
                 or getattr(
-                        related_object.related_model._meta,'sub_model_type', ''
-                    ) == getattr(self.base_model._meta,'sub_model_type', '-not-exist')
+                        related_object.related_model._meta,'model_name', ''
+                    ) == getattr(self.base_model._meta,'model_name', '-not-exist')
             ):
                 continue
 
@@ -1014,7 +1134,7 @@ class CommonSubModelViewSet_ReWrite(
                     related_object.related_model._meta.model_name
                 ).lower().replace(' ', '_') == model_kwarg
                 or str(
-                    getattr(related_object.related_model._meta, 'sub_model_type', '-not-exist')
+                    getattr(related_object.related_model._meta, 'model_name', '-not-exist')
                 ).lower().replace(' ', '_') == model_kwarg
             ):
 
@@ -1034,12 +1154,10 @@ class CommonSubModelViewSet_ReWrite(
                     related_model = None
 
                 elif(
-                    str(
-                        getattr(related_model._meta, 'model_name', '')
-                    ).lower().replace(' ', '_') == model_kwarg
-                    or str(
-                        getattr(related_model._meta, 'sub_model_type', '')
-                    ).lower().replace(' ', '_') == model_kwarg
+                    getattr(related_model._meta, 'model_name', ''
+                        ) == model_kwarg
+                    or getattr(related_model._meta, 'model_name', ''
+                        ) == model_kwarg
                 ):
 
                     break

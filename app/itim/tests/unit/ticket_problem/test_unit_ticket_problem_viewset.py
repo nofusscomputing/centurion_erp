@@ -1,44 +1,53 @@
 import pytest
 
-from django.test import Client, TestCase
+from core.tests.unit.ticket_base.test_unit_ticket_base_viewset import (
+    TicketBaseViewsetInheritedCases
+)
+from core.viewsets.ticket import (
+    TicketBase,
+    ViewSet,
+)
 
-from rest_framework.reverse import reverse
-
-from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
-
-from itim.viewsets.problem import ViewSet
+from itim.models.ticket_problem import (
+    ProblemTicket
+)
 
 
 
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
-class IncidentTicketViewsetList(
-    ModelViewSetInheritedCases,
-    TestCase,
+@pytest.mark.model_slmticket
+class ViewsetTestCases(
+    TicketBaseViewsetInheritedCases,
 ):
 
-    viewset = ViewSet
 
-    route_name = 'v2:_api_v2_ticket_problem'
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-        super().setUpTestData()
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'base_model': {
+                'value': TicketBase,
+            },
+            'model': {
+                'value': ProblemTicket
+            },
+        }
 
 
-        client = Client()
-        
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
 
-        client.force_login(self.view_user)
+class ProblemTicketBaseViewsetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
 
-        self.http_options_response_list = client.options(url)
+
+
+@pytest.mark.module_itim
+class ProblemTicketBaseViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    pass

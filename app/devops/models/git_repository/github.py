@@ -65,66 +65,77 @@ class GitHubRepository(
     documentation = ''
 
 
-    page_layout: dict = [
-        {
-            "name": "Details",
-            "slug": "details",
-            "sections": [
-                {
-                    "layout": "double",
-                    "left": [
-                        'organization',
-                        'provider',
-                        'git_group',
-                        'path',
-                        'name',
-                    ],
-                    "right": [
-                        'model_notes',
-                        'description',
-                        'provider_id',
-                        'created',
-                        'modified',
-                    ]
-                },
-                {
-                    "name": "Settings",
-                    "layout": "double",
-                    "left": [
-                        'wiki',
-                        'issues',
-                        'sponsorships',
-                    ],
-                    "right": [
-                        'preserve_this_repository',
-                        'discussions',
-                        'projects',
-                    ]
-                }
+    page_layout: dict = {
+        "dataset": {
+            "columns": [
+                [
+                    'name',
+                    'provider_badge',
+                    'path',
+                    'organization',
+                    'created',
+                ]
             ]
         },
-        {
-            "name": "Knowledge Base",
-            "slug": "kb_articles",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "knowledge_base",
-                }
-            ]
-        },
-        {
-            "name": "Notes",
-            "slug": "notes",
-            "sections": []
-        },
-    ]
-
-    # table_fields: list = [
-    #     'name',
-    #     'provider',
-    #     'path',
-    #     'organization',
-    #     'created',
-    # ]
-
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'organization',
+                            'provider',
+                            'git_group',
+                            'path',
+                            'name',
+                        ],
+                        "right": [
+                            'model_notes',
+                            'description',
+                            'provider_id',
+                            'created',
+                            'modified',
+                        ]
+                    },
+                    {
+                        "name": "Settings",
+                        "layout": "double",
+                        "left": [
+                            'wiki',
+                            'issues',
+                            'sponsorships',
+                        ],
+                        "right": [
+                            'preserve_this_repository',
+                            'discussions',
+                            'projects',
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Knowledge Base",
+                "slug": "kb_articles",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "knowledge_base",
+                    }
+                ]
+            },
+            {
+                "name": "Notes",
+                "slug": "notes",
+                "sections": []
+            },
+        ],
+        'table': [
+            'name',
+            'provider',
+            'path',
+            'organization',
+            'created',
+        ]
+    }

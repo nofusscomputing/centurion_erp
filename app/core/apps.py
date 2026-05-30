@@ -8,8 +8,12 @@ class CoreConfig(AppConfig):
     def ready(self):
 
         import core.models.meta
+
         from core.signal import (
             audit_history,
-            ticket_action_comment,
             migration_remove_permissions,
+            ticket_action_comment,
+        )
+        from core.signal.ticketbase_validation_m2m_assigned_to import (
+            ticketbase_validation_m2m_assigned_to
         )

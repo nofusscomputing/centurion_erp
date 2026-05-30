@@ -69,8 +69,7 @@ class SLMTicketModelTestCases(
 class SLMTicketModelInheritedCases(
     SLMTicketModelTestCases,
 ):
-
-    sub_model_type = None
+    pass
 
 
 
@@ -78,5 +77,4 @@ class SLMTicketModelInheritedCases(
 class SLMTicketModelPyTest(
     SLMTicketModelTestCases,
 ):
-
-    sub_model_type = 'slm'
+    pass

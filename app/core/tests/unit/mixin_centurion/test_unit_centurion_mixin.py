@@ -318,14 +318,10 @@ class CenturionMixnInheritedCases(
 
     @property
     def parameterized_class_attributes(self):
-        
         return {
         'page_layout': {
-            'type': list,
+            'type': dict,
         },
-        'table_fields': {
-            'type': list,
-        }
     }
 
 
@@ -442,6 +438,204 @@ class CenturionMixnInheritedCases(
                 *model_instance._meta.many_to_many
             ])
         # Fail-Safe to ensure test writer fills all fields
+
+
+    def test_attribute_page_layout_table_fields(self, model, model_serializer):
+        """Test page_layout key
+        
+        Ensure that all table columns use valid serializer fields.
+        """
+
+        if 'table' not in model.page_layout:
+            pytest.xfail( reason = 'model does not use any layout.' )
+
+
+
+        allowed_unknown_fields = [
+            '-action_delete-',    # Adds delete button to UI
+            'nbsp',    # blank cell
+        ]
+
+        def check(field) -> list:
+
+            return_val = []
+
+            if model_serializer['view'].Meta.fields == '__all__':
+
+                if not hasattr(model, field):
+
+                    return_val += [ field ]
+
+
+            elif(
+                not field in model_serializer['view'].Meta.fields
+                and field not in allowed_unknown_fields
+            ):
+
+                return_val += [ field ]
+
+            return return_val
+
+
+
+        unknown_fields = []
+
+        for field in model.page_layout['table']:
+
+            if isinstance(field, list):
+
+                for sub_field in field:
+
+                    unknown_fields += check(sub_field)
+
+            elif isinstance(field, dict):
+
+                field = field['field']
+
+                unknown_fields += check(field)
+
+            else:
+
+                unknown_fields += check(field)
+
+
+        assert len(unknown_fields) == 0, f"The following field(s) are not a model field {unknown_fields}"
+
+
+    def test_attribute_page_layout_dataset_columns_fields(self, model, model_serializer):
+        """Test page_layout key
+        
+        Ensure that all dataset columns use valid serializer fields.
+        """
+
+        if 'dataset' not in model.page_layout:
+            pytest.xfail( reason = 'model does not use any layout.' )
+
+
+
+        allowed_unknown_fields = [
+            '-action_delete-',    # Adds delete button to UI
+            'nbsp',    # blank cell
+        ]
+
+        def check(field) -> list:
+
+            return_val = []
+
+            if model_serializer['view'].Meta.fields == '__all__':
+
+                if not hasattr(model, field):
+
+                    return_val += [ field ]
+
+
+            elif(
+                not field in model_serializer['view'].Meta.fields
+                and field not in allowed_unknown_fields
+            ):
+
+                return_val += [ field ]
+
+            return return_val
+
+
+
+        unknown_fields = []
+
+        for column in model.page_layout['dataset']['columns']:
+
+            for field in column:
+
+                if isinstance(field, list):
+
+                    for sub_field in field:
+
+                        unknown_fields += check(sub_field)
+
+                elif isinstance(field, dict):
+
+                    field = field['field']
+
+                    unknown_fields += check(field)
+
+                else:
+
+                    unknown_fields += check(field)
+
+
+        assert len(unknown_fields) == 0, f"The following field(s) are not a model field {unknown_fields}"
+
+
+
+    def test_attribute_page_layout_detail_section_columns(self, model, model_serializer):
+        """Test page_layout key
+        
+        Ensure that all detail section columns use valid serializer fields.
+        """
+
+        if 'detail' not in model.page_layout:
+            pytest.xfail( reason = 'model does not use any layout.' )
+
+
+
+        allowed_unknown_fields = [
+            '-action_delete-',    # Adds delete button to UI
+            'nbsp',    # blank cell
+        ]
+
+        def check(field) -> list:
+
+            return_val = []
+
+            if model_serializer['view'].Meta.fields == '__all__':
+
+                if not hasattr(model, field):
+
+                    return_val += [ field ]
+
+
+            elif(
+                not field in model_serializer['view'].Meta.fields
+                and field not in allowed_unknown_fields
+            ):
+
+                return_val += [ field ]
+
+            return return_val
+
+
+
+        unknown_fields = []
+
+        for tab in model.page_layout['detail']:
+
+            for section in tab:
+
+                for section_layout in ['fields', 'left', 'right']:
+
+                    if section_layout not in section:
+                        continue
+
+                    for field in section[section_layout]:
+
+                        if isinstance(field, list):
+
+                            for sub_field in field:
+
+                                unknown_fields += check(sub_field)
+
+                        elif isinstance(field, dict):
+
+                            field = field['field']
+
+                            unknown_fields += check(field)
+
+                        else:
+
+                            unknown_fields += check(field)
+
+
+        assert len(unknown_fields) == 0, f"The following field(s) are not a model field {unknown_fields}"
 
 
 
@@ -844,7 +1038,7 @@ class CenturionMixnPyTest(
     def test_method_get_url_default_attributes(self, mocker, model_instance):
         """Test Class Method
         
-        Ensure method `get_url`  has the defined default attributes.
+        Ensure method `get_url` has the defined default attributes.
         """
 
         sig = inspect.signature(model_instance.get_url)
@@ -853,7 +1047,7 @@ class CenturionMixnPyTest(
         api_version = sig.parameters['api_version'].default
 
         assert(
-            relative == False
+            relative == True
             and api_version == 2
         )
 
@@ -953,7 +1147,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch('core.mixins.centurion.Centurion.full_clean', return_value = None)
 
@@ -986,7 +1182,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch('django.db.models.base.Model.save', return_value = None)
 
@@ -1012,7 +1210,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -1052,7 +1252,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch(
             'django.db.models.query.QuerySet.get', return_value = model_instance
@@ -1171,7 +1373,9 @@ class CenturionMixnPyTest(
             password = 'password'
         )
 
-        type(model_instance).context[model_instance._meta.model_name] = user
+        mocker.patch.object(type(model_instance), 'context', {
+            model_instance._meta.model_name: user
+        })
 
         mocker.patch('django.db.models.base.Model.save', return_value = None)
 

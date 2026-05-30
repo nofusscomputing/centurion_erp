@@ -65,7 +65,7 @@ class CommonModelSerializer(CommonBaseSerializer):
     def get_url(self, item) -> dict:
 
         get_url = {
-            '_self': item.get_url( request = self._context['view'].request ),
+            '_self': item.get_url(),
         }
 
         kb_model_name = self.Meta.model._meta.model_name
@@ -76,7 +76,7 @@ class CommonModelSerializer(CommonBaseSerializer):
 
         get_url['knowledge_base'] = reverse(
             'v2:_api_v2_model_kb-list',
-            request=self._context['view'].request,
+            request = None,
             kwargs={
                 'model': kb_model_name,
                 'model_pk': item.pk
@@ -101,7 +101,7 @@ class CommonModelSerializer(CommonBaseSerializer):
 
                 get_url['history'] = reverse(
                     "v2:_api_centurionaudit_sub-list",
-                    request = self._context['view'].request,
+                    request = None,
                     kwargs = {
                         'app_label': history_app_label,
                         'model_name': history_model_name,
@@ -166,7 +166,7 @@ class CommonModelSerializer(CommonBaseSerializer):
 
             get_url['notes'] = reverse(
                 "v2:_api_centurionmodelnote_sub-list",
-                request = self._context['view'].request,
+                request = None,
                 kwargs = {
                     'app_label': item._meta.app_label,
                     'model_name': item._meta.model_name,
@@ -180,7 +180,7 @@ class CommonModelSerializer(CommonBaseSerializer):
             if getattr(item, '_ticket_linkable', False):
                 get_url['tickets'] = reverse(
                     "v2:_api_modelticket_sub-list",
-                    request = self._context['view'].request,
+                    request = None,
                     kwargs = {
                         'app_label': item._meta.app_label,
                         'model_name': item._meta.model_name,

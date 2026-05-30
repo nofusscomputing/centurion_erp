@@ -34,7 +34,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        return item.get_url( request = self.context['view'].request )
+        return item.get_url()
 
 
     class Meta:
@@ -83,7 +83,7 @@ class ModelSerializer(
 
 
         urls: dict = {
-            '_self': item.get_url( request = self._context['view'].request )
+            '_self': item.get_url()
         }
 
         if item.id is not None and item.__class__._meta.model_name != 'ticketcommentsolution':
@@ -93,10 +93,10 @@ class ModelSerializer(
                 urls.update({
                     'threads': reverse(
                         'API:_api_ticket_comment_base_sub_thread-list',
-                        request = self._context['view'].request,
+                        request = None,
                         kwargs={
                             'ticket_id': ticket_id,
-                            'ticket_comment_model': 'comment',
+                            'model_name': 'comment',
                             'parent_id': item.id
                         }
                     )
@@ -119,7 +119,6 @@ class ModelSerializer(
             'ticket',
             'external_ref',
             'external_system',
-            'comment_type',
             'category',
             'body',
             'private',
@@ -147,7 +146,6 @@ class ModelSerializer(
             # 'parent',
             'external_ref',
             'external_system',
-            # 'comment_type',
             # 'private',
             'duration',
             # # 'category',
@@ -246,7 +244,7 @@ class ModelSerializer(
             serializer_module = (
                     f'{serializer_model._meta.app_label}.serializers.'
                     f'{serializer_model._base_model._meta.model_name}_'
-                    f'{serializer_model._meta.sub_model_type}'
+                    f'{serializer_model._meta.model_name}'
                 )
 
         # elif(
@@ -350,8 +348,6 @@ class ModelSerializer(
 
 
     def validate(self, attrs):
-
-        attrs['comment_type'] = self.context['view'].model._meta.sub_model_type
 
         attrs['user'] = self.context['request'].user.get_entity()
 

@@ -43,7 +43,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
             if model != Entity:
 
-                serializer_name += '_' + model._meta.sub_model_type
+                serializer_name += '_' + model._meta.model_name
 
             serializer_module = importlib.import_module(
                 model._meta.app_label + '.serializers.' + str(
@@ -251,8 +251,8 @@ class ViewSet(
         ):
 
             self.back_url = reverse(
-                viewname = '_api_entity_sub-list',
-                request = self.request,
+                viewname = 'v2:_api_entity_sub-list',
+                request = None,
                 kwargs = {
                     'model_name': self.kwargs[self.model_kwarg],
                 }
