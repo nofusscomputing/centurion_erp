@@ -56,7 +56,11 @@ class Entity(
         "dataset": {
             "columns": [
                 [
-                    'display_name',
+                    {
+                        "field": "display_name",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'organization',
                     'created',
                     'modified',
@@ -65,7 +69,11 @@ class Entity(
         },
         "table": [
             'organization',
-            'display_name',
+            {
+                "field": "display_name",
+                "type": "link",
+                "key": "_self"
+            },
             'created',
             'modified',
         ]
