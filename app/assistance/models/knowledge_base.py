@@ -135,7 +135,11 @@ class KnowledgeBase(
         "dataset": {
             "columns": [
                 [
-                    'title',
+                    {
+                        "field": "title",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'category',
                     'organization',
                     'created',
@@ -194,7 +198,11 @@ class KnowledgeBase(
             },
         ],
         "table": [
-            'title',
+            {
+                "field": "title",
+                "type": "link",
+                "key": "_self"
+            },
             'category',
             'organization',
             'created',
