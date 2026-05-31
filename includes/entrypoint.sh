@@ -31,6 +31,19 @@ if [ "$1" == "" ]; then
 
     else
 
+        if [ -d ${CENTURION_STATIC_ROOT} ]; then
+
+            echo '[info] Creating static contents.';
+
+            mkdir -p "${CENTURION_STATIC_ROOT}";
+
+            rm -fr /data/static/*;
+
+            manage collectstatic --no-input;
+
+
+        fi
+
         echo '[info] Creating gunicorn service config';
 
         cp /etc/supervisor/conf.source/gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf;
