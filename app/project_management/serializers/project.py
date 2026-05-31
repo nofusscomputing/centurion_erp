@@ -61,15 +61,21 @@ class ProjectModelSerializer(
 
         get_url.update({
             'milestone': reverse("v2:_api_projectmilestone-list", request = None, kwargs={'project_id': item.pk}),
-            'tickets': reverse(
-                "v2:_api_project_ticket_sub-list",
-                request = None,
-                kwargs={
-                    'project_id': item.pk,
-                    'model_name': 'ticket'
-                }
-            ),
         })
+
+        if self.context['request'].feature_flag['2025-00006']:
+
+            get_url.update({
+                'tickets': reverse(
+                    "v2:_api_project_ticket_sub-list",
+                    request = None,
+                    kwargs={
+                        'project_id': item.pk,
+                        'model_name': 'ticket'
+                    }
+                ),
+            })
+
 
         return get_url
 

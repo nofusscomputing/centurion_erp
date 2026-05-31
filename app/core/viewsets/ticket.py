@@ -272,7 +272,7 @@ class ViewSet( SubModelViewSet ):
         ):
 
             self.back_url = reverse(
-                viewname = '_api_project-detail',
+                viewname = 'v2:_api_project-detail',
                 request = None,
                 kwargs = {
                     'pk': self.kwargs['project_id'],
