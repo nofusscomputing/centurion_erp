@@ -1,3 +1,11 @@
+## 1.30.1 (2026-05-31)
+
+### Fixes
+
+- **core**: Add route namespace to Ticket metadata `back_url`
+- **build**: Add env var `CENTURION_STATIC_ROOT` for setting the static root path
+- **project_management**: Ticket url must be behind feature flag 2025-00006
+
 ## 1.30.0 (2026-05-30)
 
 ### Features
