@@ -283,6 +283,12 @@ The following Unit test suites exists for models:
 
         - Tenancy Permissions `api.tests.functional.viewset.test_functional_tenancy_viewset.*`
 
+- Integration Tests
+
+    - CRUD (Create, Read, Update and Delete) Actions `api.tests.integration.test_integration_model_endpoints.ModelTestCases`
+
+        This test suite is automatic for **all** models within Centurion ERP via the dynamic class `APIModelTestCases`. Any models not part of Centurion will need to create their own test suite inheriting from `ModelTestCases`.
+
 !!! info
     If you add a feature you will have to [write the test cases](./testing.md) for that feature if they are not covered by existing test cases.
 
