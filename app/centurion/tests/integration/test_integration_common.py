@@ -105,9 +105,13 @@ class IntegrationCommon:
         connections._settings = connections.configure_settings(settings.DATABASES)
         # open a connection to the database with the new database config
         connections["default"] = connections.create_connection("default")
+
+
+
+    @pytest.fixture(autouse=True, scope='session')
     def ensure_real_db(self):
-        assert settings.DATABASES['default']['ENGINE'] != 'django.db.backends.sqlite3' or \
-            settings.DATABASES['default']['NAME'] != ':memory:', \
+        assert 'sqlite' not in str(settings.DATABASES['default']['ENGINE']) and \
+            'memory' not in str(settings.DATABASES['default']['NAME']), \
             "Tests are using in-memory SQLite, not your real DB"
 
 
