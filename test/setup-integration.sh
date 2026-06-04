@@ -3,16 +3,12 @@
 set -e
 
 echo "Installing python test requirements......";
-docker exec -i centurion-erp pip install -r /requirements_dev.txt;
 pip install -r ../requirements_production.txt;
 echo "Complete: Installing python test requirements.";
 echo "**************************************************************";
 pip freeze;
 echo "**************************************************************";
 
-echo "Restarting Gunicorn";
-docker exec -i centurion-erp supervisorctl restart gunicorn;
-echo "Complete: Restarting Gunicorn";
 
 
 CONTAINER_NAME="centurion-erp-init"
