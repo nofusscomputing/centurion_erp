@@ -153,26 +153,9 @@ class IntegrationCommon:
         def login( user = admin_user):
             login_session = requests.Session()
 
-            resp = None
+            resp = login_session.get(login_page_url)
 
-            for i in range(1,3):
-
-                try:
-
-                    resp = login_session.get(login_page_url)
-
-                    resp.raise_for_status()
-
-                    break
-
-                except Exception as ex:
-
-                    print(f"try {i}: {ex}")
-
-                    if i == 3:
-                        resp.raise_for_status()
-
-                    sleep( 5 )
+            resp.raise_for_status()
 
 
             # Extract CSRF token from cookies (Django sets csrftoken cookie)
@@ -191,25 +174,9 @@ class IntegrationCommon:
                 "X-CSRFToken": csrf_token,  # Include CSRF token header
             }
 
-            resp = None
-            for i in range(1, 3):
+            resp = login_session.post(login_post_url, data=login_data, headers=headers, allow_redirects=True)
 
-                try:
-
-                    resp = login_session.post(login_post_url, data=login_data, headers=headers, allow_redirects=True)
-
-                    resp.raise_for_status()
-
-                    break
-
-                except Exception as ex:
-
-                    print(f"try {i}: {ex}")
-
-                    if i == 3:
-                        resp.raise_for_status()
-
-                    sleep( 5 )
+            resp.raise_for_status()
 
             return login_session
 
