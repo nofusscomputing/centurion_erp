@@ -46,7 +46,7 @@ def api_request_permissions( django_db_blocker,
 
             kwargs = kwargs_employee()
             kwargs['user'] = add_user
-            model_employee.objects.create( **kwargs )
+            add_employee = model_employee.objects.create( **kwargs )
 
 
             add_group = model_group.objects.create(
@@ -86,7 +86,7 @@ def api_request_permissions( django_db_blocker,
 
             kwargs = kwargs_employee()
             kwargs['user'] = change_user
-            model_employee.objects.create( **kwargs )
+            change_employee = model_employee.objects.create( **kwargs )
 
 
             change_group = model_group.objects.create(
@@ -121,7 +121,7 @@ def api_request_permissions( django_db_blocker,
 
             kwargs = kwargs_employee()
             kwargs['user'] = delete_user
-            model_employee.objects.create( **kwargs )
+            delete_employee = model_employee.objects.create( **kwargs )
 
 
             delete_group = model_group.objects.create(
@@ -156,7 +156,7 @@ def api_request_permissions( django_db_blocker,
 
             kwargs = kwargs_employee()
             kwargs['user'] = view_user
-            model_employee.objects.create( **kwargs )
+            view_employee = model_employee.objects.create( **kwargs )
 
 
             view_group = model_group.objects.create(
@@ -234,18 +234,22 @@ def api_request_permissions( django_db_blocker,
             #
             add_role.delete()
             add_group.delete()
+            add_employee.delete()
             add_user.delete()
 
             change_role.delete()
             change_group.delete()
+            change_employee.delete()
             change_user.delete()
 
             delete_role.delete()
             delete_group.delete()
+            delete_employee.delete()
             delete_user.delete()
 
             view_role.delete()
             view_group.delete()
+            view_employee.delete()
             view_user.delete()
 
             different_organization_role.delete()
