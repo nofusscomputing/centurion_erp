@@ -16,6 +16,7 @@ def api_request_permissions( django_db_blocker,
     organization_one,
     organization_two,
     organization_three,
+    model_employee, kwargs_employee
 ):
 
     with django_db_blocker.unblock():
@@ -41,6 +42,11 @@ def api_request_permissions( django_db_blocker,
             add_user = model_user.objects.create_user(
                 username="api_rp_user_add" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
+
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = add_user
+            model_employee.objects.create( **kwargs )
 
 
             add_group = model_group.objects.create(
@@ -77,6 +83,12 @@ def api_request_permissions( django_db_blocker,
                 username="api_rp_user_change" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = change_user
+            model_employee.objects.create( **kwargs )
+
+
             change_group = model_group.objects.create(
                 name = 'change_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
@@ -106,6 +118,12 @@ def api_request_permissions( django_db_blocker,
                 username="api_rp_user_delete" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = delete_user
+            model_employee.objects.create( **kwargs )
+
+
             delete_group = model_group.objects.create(
                 name = 'delete_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
@@ -134,6 +152,12 @@ def api_request_permissions( django_db_blocker,
             view_user = model_user.objects.create_user(
                 username="api_r_perm_user_view" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
+
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = view_user
+            model_employee.objects.create( **kwargs )
+
 
             view_group = model_group.objects.create(
                 name = 'view_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
