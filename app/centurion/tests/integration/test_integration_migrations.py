@@ -283,7 +283,12 @@ class MigrationsTestCases:
         # perform the upgrade migration
 
         result = run_command(
-            command = 'docker exec -i centurion-erp manage migrate',
+            command = (
+                "sh -c '"
+                "docker exec -i centurion-erp manage migrate; "
+                "sleep 15;"
+                "'"
+            ),
             description = 'perform upgrade migrations'
         )
 
