@@ -46,13 +46,7 @@ DATABASES = {
     }
 }
 
-if os.getenv('DJANGO_DEBUG') == 'False':
-
-    DEBUG = False
-
-else:
-
-    DEBUG = True
+RUNNING_TESTS = True
 
 
 FEATURE_FLAGGING_ENABLED = True    # Turn Feature Flagging on/off
