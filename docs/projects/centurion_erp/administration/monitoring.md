@@ -39,7 +39,7 @@ The Django exporter provides metrics on the Django application and a small numbe
 # Metrics default values
 METRICS_ENABLED = False                      # Enable Metrics
 METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
-METRICS_MULTIPROC_DIR = '/tmp/prometheus'    # path the metrics from multiple-process' save to
+METRICS_MULTIPROC_DIR = '/data/prometheus'   # path the metrics from multiple-process' save to
 
 ```
 

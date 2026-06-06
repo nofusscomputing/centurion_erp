@@ -44,17 +44,17 @@ if [ "$1" == "" ]; then
 
         fi
 
-        echo '[info] Creating gunicorn service config';
+        echo '[info] Creating uwsgi service config';
 
-        cp /etc/supervisor/conf.source/gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf;
+        cp /etc/supervisor/conf.source/uwsgi.conf /etc/supervisor/conf.d/uwsgi.conf;
 
-        if [ -f '/etc/supervisor/conf.d/gunicorn.conf' ]; then
+        if [ -f '/etc/supervisor/conf.d/uwsgi.conf' ]; then
 
-            echo '[info] Gunicorn service config Created';
+            echo '[info] uwsgi service config Created';
 
         else
 
-            echo '[crit] Gunicorn service config not created';
+            echo '[crit] uwsgi service config not created';
 
         fi;
 

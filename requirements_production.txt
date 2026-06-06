@@ -105,8 +105,6 @@ greenlet==3.5.1
     # via
     #   -r requirements.txt
     #   sqlalchemy
-gunicorn==23.0.0
-    # via -r tools/requirements_production.in
 idna==3.15
     # via
     #   -r requirements.txt
@@ -151,8 +149,6 @@ oauthlib==3.3.1
     #   -r requirements.txt
     #   requests-oauthlib
     #   social-auth-core
-packaging==26.2
-    # via gunicorn
 prometheus-client==0.21.1
     # via
     #   -r requirements.txt
@@ -244,6 +240,8 @@ urllib3==2.7.0
     # via
     #   -r requirements.txt
     #   requests
+uwsgi==2.0.31
+    # via -r tools/requirements_production.in
 vine==5.1.0
     # via
     #   -r requirements.txt
