@@ -22,6 +22,8 @@ class AdditionalTestCases:
 
         model_relative_url = the_model.get_url( many = True )
 
+        the_model.delete()
+
         kwargs_create = kwargs_api_create.copy()
         kwargs_create['organization'] = api_request_permissions['tenancy']['user'].id
 
@@ -40,5 +42,5 @@ class AdditionalTestCases:
         )
 
 
-        assert response.status_code == 200, response.content
+        assert response.status_code == 201, response.content
 
