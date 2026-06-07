@@ -211,6 +211,24 @@ class MigrationsTestCases:
             description = 'set centurion image to the current git tag'
         )
 
+        debug_result1 = None
+        debug_result2 = None
+        if result['returncode'] != 0:
+
+            debug_result1 = run_command(
+                command = 'docker logs -f centurion-erp ',
+                description = 'perform initial migrations for latest release'
+            )
+
+            print( debug_result1 )
+
+            debug_result2 = run_command(
+                command = 'docker ps -a',
+                description = 'perform initial migrations for latest release'
+            )
+
+            print( debug_result2 )
+
         assert result['returncode'] == 0, print( result )
 
         result = run_command(
@@ -219,6 +237,24 @@ class MigrationsTestCases:
             ),
             description = 'fetch centurion-erp container tag, should be most recent git tag sha'
         )
+
+        debug_result1 = None
+        debug_result2 = None
+        if result['returncode'] != 0:
+
+            debug_result1 = run_command(
+                command = 'docker logs -f centurion-erp ',
+                description = 'perform initial migrations for latest release'
+            )
+
+            print( debug_result1 )
+
+            debug_result2 = run_command(
+                command = 'docker ps -a',
+                description = 'perform initial migrations for latest release'
+            )
+
+            print( debug_result2 )
 
         assert str(result['stdout']).strip() == last_git_tag_sha, print( result )
 
@@ -244,6 +280,25 @@ class MigrationsTestCases:
                 description = 'perform initial migrations for latest release'
             )
 
+            debug_result1 = None
+            debug_result2 = None
+            if result['returncode'] != 0:
+
+                debug_result1 = run_command(
+                    command = 'docker logs -f centurion-erp ',
+                    description = 'perform initial migrations for latest release'
+                )
+
+                print( debug_result1 )
+
+                debug_result2 = run_command(
+                    command = 'docker ps -a',
+                    description = 'perform initial migrations for latest release'
+                )
+
+                print( debug_result2 )
+
+
         assert result['returncode'] == 0, print( result )
 
 
@@ -266,6 +321,24 @@ class MigrationsTestCases:
             ),
             description = 'set centurion image to the current git tag'
         )
+
+        debug_result1 = None
+        debug_result2 = None
+        if result['returncode'] != 0:
+
+            debug_result1 = run_command(
+                command = 'docker logs -f centurion-erp ',
+                description = 'perform initial migrations for latest release'
+            )
+
+            print( debug_result1 )
+
+            debug_result2 = run_command(
+                command = 'docker ps -a',
+                description = 'perform initial migrations for latest release'
+            )
+
+            print( debug_result2 )
 
         assert result['returncode'] == 0, print( result )
 
