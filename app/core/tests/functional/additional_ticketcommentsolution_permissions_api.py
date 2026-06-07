@@ -51,7 +51,6 @@ class AdditionalTestCases:
 
     def test_permission_add(self, model_instance, api_request_permissions,
         kwargs_api_create, model_kwargs,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for add 
 
@@ -59,10 +58,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['add']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['add'] )
 
@@ -105,7 +100,6 @@ class AdditionalTestCases:
     def test_permission_no_add(
         self, kwargs_api_create, model_instance, model_kwargs,
         api_request_permissions, test_name, user, expected,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for add
 
@@ -115,10 +109,6 @@ class AdditionalTestCases:
         client = Client()
 
         if user != 'anon':
-
-            kwargs = kwargs_employee()
-            kwargs['user'] = api_request_permissions['user'][user]
-            emplyoee = model_employee.objects.create( **kwargs )
 
             client.force_login( api_request_permissions['user'][user] )
 
@@ -140,7 +130,6 @@ class AdditionalTestCases:
 
 
     def test_permission_change(self, model_instance, api_request_permissions, model_kwargs,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for change
 
@@ -148,10 +137,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['change'] 
-        emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['change'] )
 
@@ -196,7 +181,6 @@ class AdditionalTestCases:
     )
     def test_permission_no_change(self, model_instance, api_request_permissions, test_name,
         user, expected, model_kwargs,
-        model_employee, kwargs_employee,
     ):
         """ Ensure permission view cant make change
 
@@ -221,10 +205,6 @@ class AdditionalTestCases:
 
         if user != 'anon':
 
-            kwargs = kwargs_employee()
-            kwargs['user'] = api_request_permissions['user'][user]
-            emplyoee = model_employee.objects.create( **kwargs )
-
             client.force_login( api_request_permissions['user'][user] )
 
         response = client.patch(
@@ -238,7 +218,6 @@ class AdditionalTestCases:
 
 
     def test_permission_delete(self, model_instance, api_request_permissions, model_kwargs,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for delete
 
@@ -246,10 +225,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['delete']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['delete'] )
 
@@ -288,7 +263,6 @@ class AdditionalTestCases:
     )
     def test_permission_no_delete(self, model_instance, api_request_permissions,
         test_name, user, expected, model_kwargs,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for delete
 
@@ -298,10 +272,6 @@ class AdditionalTestCases:
         client = Client()
 
         if user != 'anon':
-
-            kwargs = kwargs_employee()
-            kwargs['user'] = api_request_permissions['user'][user]
-            emplyoee = model_employee.objects.create( **kwargs )
 
             client.force_login( api_request_permissions['user'][user] )
 
@@ -326,7 +296,6 @@ class AdditionalTestCases:
 
 
     def test_permission_view(self, model_instance, api_request_permissions, model_kwargs,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for view
 
@@ -334,10 +303,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['view']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['view'] )
 
@@ -358,8 +323,7 @@ class AdditionalTestCases:
 
 
     def test_function_fetch_feature_flag_not_called(self, mocker, model_instance,
-        api_request_permissions, model_kwargs,
-        model_employee, kwargs_employee,
+        api_request_permissions, model_kwargs
     ):
         """ Check function calls durin api request
 
@@ -369,10 +333,6 @@ class AdditionalTestCases:
         ff_get = mocker.spy(CenturionFeatureFlagging, 'get')
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['view']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['view'] )
 
@@ -414,7 +374,6 @@ class AdditionalTestCases:
     )
     def test_permission_no_view(self, model_instance, api_request_permissions,
         test_name, model_kwargs, user, expected,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for view
 
@@ -424,10 +383,6 @@ class AdditionalTestCases:
         client = Client()
 
         if user != 'anon':
-
-            kwargs = kwargs_employee()
-            kwargs['user'] = api_request_permissions['user'][user]
-            emplyoee = model_employee.objects.create( **kwargs )
 
             client.force_login( api_request_permissions['user'][user] )
 
@@ -452,7 +407,6 @@ class AdditionalTestCases:
 
 
     def test_returned_results_only_user_orgs(self, model_instance, model_kwargs, api_request_permissions,
-        model_employee, kwargs_employee,
     ):
         """Returned results check
 
@@ -471,10 +425,6 @@ class AdditionalTestCases:
 
             viewable_organizations += [ api_request_permissions['tenancy']['global'] ]
 
-
-            kwargs = kwargs_employee()
-            kwargs['user'] = api_request_permissions['user']['view']
-            emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['view'] )
 

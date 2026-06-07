@@ -50,3 +50,12 @@ if settings.DEBUG:
 
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
     ]
+
+if settings.METRICS_ENABLED:
+
+    urlpatterns += [
+
+        path(route = '', view = include('django_prometheus.urls')),
+    ]
+
+

@@ -112,12 +112,7 @@ test-integration:
 
 			ls -laR test/;
 
-			echo 'Stoping Gunicorn.';
-			docker exec -i centurion-erp supervisorctl stop gunicorn;
-			echo 'Cleaning artifacts dir.';
 			docker exec -i centurion-erp sh -c 'rm -rf /app/artifacts/* /app/artifacts/.[!.]*';
-			echo 'Starting Gunicorn.';
-			docker exec -i centurion-erp supervisorctl start gunicorn;
 			sleep 60;
 			docker ps -a;
 			curl --trace-ascii - http://localhost:8003/api;
@@ -128,8 +123,6 @@ test-integration:
 			docker logs centurion-erp;
 			echo 'Starting integration tests.';
 			pytest --override-ini addopts= --no-migrations --reuse-db --tb=long --verbosity=2 --showlocals --junit-xml="${START_PWD}/integration.JUnit.xml" app/*/tests/integration;
-			echo 'Restarting Gunicorn.';
-			docker exec -i centurion-erp supervisorctl restart gunicorn;
 			echo 'Creating Coverage reports.';
 			docker exec -i centurion-erp sh -c 'coverage combine; coverage report --skip-covered; coverage html -d artifacts/html/;';
 
@@ -176,6 +169,12 @@ test-integration:
 		docker exec -i postgres psql -Uadmin -d itsm -c "\dt" > "${START_PWD}/test/volumes/log/postgres-tables.log";
 		docker logs rabbitmq > "${START_PWD}/test/volumes/log/docker-log-rabbitmq.log";
 		export exit_code=20;
+
+	fi;
+
+	if [ "0${GITHUB_SHA}"!="0" ]; then
+
+		sudo chmod 777 -R "${START_PWD}/test"
 
 	fi;
 

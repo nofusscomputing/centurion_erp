@@ -91,7 +91,6 @@ LOG_FILES = {    # defaults for devopment. docker includes settings has correct 
     "centurion_trace": "log/trace.log",
     "centurion": "log/centurion.log",
     "error": "log/error.log",
-    "gunicorn": "log/gunicorn.log",
     "rest_api": "log/rest_api.log",
     "weblog": "log/weblog.log",
 }
@@ -155,12 +154,6 @@ CENTURION_LOGGING = {
                 "filename": "error.log",
                 "formatter": "verbose",
             },
-            "file_gunicorn": {
-                "level": "DEBUG",
-                "class": "logging.FileHandler",
-                "filename": "gunicorn.log",
-                "formatter": "verbose",
-            },
             "file_rest_api": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
@@ -200,12 +193,6 @@ CENTURION_LOGGING = {
                 "level": "INFO",
                 "propagate": False,
             },
-            "gunicorn": {
-                # "handlers": ['console', 'file_centurion', 'file_error'],
-                "handlers": ['file_gunicorn', 'file_error'],
-                "level": "NOTICE",
-                "propagate": False,
-            },
             'rest_framework': {
                 'handlers': ['file_rest_api', 'console', 'file_error'],
                 'level': 'INFO',
@@ -221,7 +208,7 @@ CENTURION_LOGGING = {
 
 METRICS_ENABLED = False                      # Enable Metrics
 METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
-METRICS_MULTIPROC_DIR = '/tmp/prometheus'    # path the metrics from multiple-process' save to
+METRICS_MULTIPROC_DIR = '/data/prometheus'    # path the metrics from multiple-process' save to
 
 
 RUNNING_TESTS = 'test' in str(sys.argv)
@@ -524,6 +511,30 @@ if os.path.isdir(SETTINGS_DIR):
     settings_files = os.path.join(SETTINGS_DIR, '*.py')
     include(optional(settings_files))
 
+
+
+if METRICS_ENABLED:    # Setup Metrics directory
+
+    proc_path = None
+
+    try:
+        proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
+    except:
+        pass
+
+
+    if not proc_path:
+
+        os.environ["PROMETHEUS_MULTIPROC_DIR"] = METRICS_MULTIPROC_DIR
+
+        proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
+
+
+    prometheus_dir = Path(os.environ["PROMETHEUS_MULTIPROC_DIR"])
+    prometheus_dir.mkdir(parents=True, exist_ok=True)
+
+
+
 #
 # Settings to reset to prevent user from over-riding
 #
@@ -542,7 +553,6 @@ CENTURION_LOGGING['handlers']['file_catch_all']['filename'] = LOG_FILES['catch_a
 CENTURION_LOGGING['handlers']['file_centurion']['filename'] = LOG_FILES['centurion']
 CENTURION_LOGGING['handlers']['file_centurion_trace']['filename'] = LOG_FILES['centurion_trace']
 CENTURION_LOGGING['handlers']['file_error']['filename'] = LOG_FILES['error']
-CENTURION_LOGGING['handlers']['file_gunicorn']['filename'] = LOG_FILES['gunicorn']
 CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api']
 CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 

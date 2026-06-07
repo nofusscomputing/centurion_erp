@@ -16,6 +16,8 @@ def api_request_permissions( django_db_blocker,
     organization_one,
     organization_two,
     organization_three,
+    model_employee, kwargs_employee,
+    model_centurionmodelnote,
 ):
 
     with django_db_blocker.unblock():
@@ -41,6 +43,11 @@ def api_request_permissions( django_db_blocker,
             add_user = model_user.objects.create_user(
                 username="api_rp_user_add" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
+
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = add_user
+            add_employee = model_employee.objects.create( **kwargs )
 
 
             add_group = model_group.objects.create(
@@ -77,6 +84,12 @@ def api_request_permissions( django_db_blocker,
                 username="api_rp_user_change" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = change_user
+            change_employee = model_employee.objects.create( **kwargs )
+
+
             change_group = model_group.objects.create(
                 name = 'change_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
@@ -106,6 +119,12 @@ def api_request_permissions( django_db_blocker,
                 username="api_rp_user_delete" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
 
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = delete_user
+            delete_employee = model_employee.objects.create( **kwargs )
+
+
             delete_group = model_group.objects.create(
                 name = 'delete_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
             )
@@ -134,6 +153,12 @@ def api_request_permissions( django_db_blocker,
             view_user = model_user.objects.create_user(
                 username="api_r_perm_user_view" + str( random.randint(1,999) ) + str( random.randint(1,999) ), password="password"
             )
+
+
+            kwargs = kwargs_employee()
+            kwargs['user'] = view_user
+            view_employee = model_employee.objects.create( **kwargs )
+
 
             view_group = model_group.objects.create(
                 name = 'view_team' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
@@ -210,18 +235,43 @@ def api_request_permissions( django_db_blocker,
             #
             add_role.delete()
             add_group.delete()
+            add_employee.delete()
+
+            for audit_entry in add_user.centurionaudit_set.all():
+                audit_entry.delete()
+
+            for model_note in model_centurionmodelnote.objects.filter( created_by = add_user):
+                model_note.delete()
+
             add_user.delete()
 
             change_role.delete()
             change_group.delete()
+            change_employee.delete()
+
+            for audit_entry in change_user.centurionaudit_set.all():
+                audit_entry.delete()
+
+            for model_note in model_centurionmodelnote.objects.filter( created_by = change_user):
+                model_note.delete()
+
             change_user.delete()
 
             delete_role.delete()
             delete_group.delete()
+            delete_employee.delete()
+
+            for audit_entry in delete_user.centurionaudit_set.all():
+                audit_entry.delete()
+
+            for model_note in model_centurionmodelnote.objects.filter( created_by = delete_user):
+                model_note.delete()
+
             delete_user.delete()
 
             view_role.delete()
             view_group.delete()
+            view_employee.delete()
             view_user.delete()
 
             different_organization_role.delete()
