@@ -511,6 +511,30 @@ if os.path.isdir(SETTINGS_DIR):
     settings_files = os.path.join(SETTINGS_DIR, '*.py')
     include(optional(settings_files))
 
+
+
+if METRICS_ENABLED:    # Setup Metrics directory
+
+    proc_path = None
+
+    try:
+        proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
+    except:
+        pass
+
+
+    if not proc_path:
+
+        os.environ["PROMETHEUS_MULTIPROC_DIR"] = METRICS_MULTIPROC_DIR
+
+        proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
+
+
+    prometheus_dir = Path(os.environ["PROMETHEUS_MULTIPROC_DIR"])
+    prometheus_dir.mkdir(parents=True, exist_ok=True)
+
+
+
 #
 # Settings to reset to prevent user from over-riding
 #
