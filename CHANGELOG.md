@@ -1,3 +1,33 @@
+## 1.31.0 (2026-06-07)
+
+### Features
+
+- **docker**: migrate from gunicorn -> uWSGI
+
+### Fixes
+
+- **metrics**: Correct metrics logic to work with uWSGI
+
+### Tests
+
+- **integration**: Re-Add missing gunicorn log file key for prev version related tests
+- **integration**: API Endpoint Integration Test Suite updated to include history and model notes endpoints
+- **integration**: RUNNING_TEST var must be true
+- **integration**: Cleanup the restarts and extra cmds that now run in test dockerfile during build
+- **integration**: remove code that was written to mitigate webserver HTTP/502
+- **devops**: Update Integration Test Suite test cases for SoftwareEnableFeatureFlag Model
+- **core**: Update Integration Test Suite test cases for TicketCommentTask Model
+- **core**: Update Integration Test Suite test cases for TicketCommentSolution Model
+- **devops**: Update Integration Test Suite test cases for CheckIn Model
+- **itam**: Update Integration Test Suite test cases for DeviceOperatingSystem Model
+- **access**: Update Integration Test Suite test cases for Tenant Model
+- **settings**: Update Integration Test Suite test cases for UserSettings Model
+- **settings**: Update Integration Test Suite test cases for AppSettings Model
+- **api**: Update Integration Test Suite test cases for AuthToken Model
+- **integration**: Add meta Integration Test Suite for all models CRUD endpoints
+- **integration**: Correct the real database check fixture
+- **integration**: Created Common test class for ALL integration tests
+
 ## 1.30.1 (2026-05-31)
 
 ### Fixes
