@@ -138,7 +138,8 @@ RUN --mount=type=bind,from=build,source=/tmp/python_builds,target=/tmp/python_bu
         mariadb-client \
         mariadb-dev \
         postgresql16-client \
-        nginx@nginx=${NGINX_VERSION}; \
+        nginx@nginx=${NGINX_VERSION} \
+        libxml2; \
     pip install \
         --no-cache-dir \
         --no-index \

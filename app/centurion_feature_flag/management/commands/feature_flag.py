@@ -48,9 +48,9 @@ class Command(BaseCommand):
 
                     self.stdout.write('restarting Centurion')
 
-                    restart = subprocess.run(["supervisorctl", "restart", "gunicorn"], capture_output = True)
+                    restart = subprocess.run(["supervisorctl", "restart", "wsgi"], capture_output = True)
 
-                    status = subprocess.run(["supervisorctl", "status", "gunicorn"], capture_output = True)
+                    status = subprocess.run(["supervisorctl", "status", "wsgi"], capture_output = True)
 
                     if status.returncode == 0:
 

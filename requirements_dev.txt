@@ -166,8 +166,6 @@ greenlet==3.5.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   sqlalchemy
-gunicorn==23.0.0
-    # via -r requirements_production.txt
 idna==3.15
     # via
     #   -r requirements.txt
@@ -234,11 +232,9 @@ oauthlib==3.3.1
     #   social-auth-core
 packaging==26.2
     # via
-    #   -r requirements_production.txt
     #   build
     #   check-wheel-contents
     #   commitizen
-    #   gunicorn
     #   pytest
     #   wheel
 pip-tools==7.5.3
@@ -406,6 +402,8 @@ urllib3==2.7.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   requests
+uwsgi==2.0.31
+    # via -r requirements_production.txt
 vine==5.1.0
     # via
     #   -r requirements.txt

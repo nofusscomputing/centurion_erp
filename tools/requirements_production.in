@@ -12,4 +12,4 @@ psycopg2==2.9.9 # postgresql16-dev postgresql16-client libpq-dev
 # ##################################################
 
 # Production Web server
-gunicorn==23.0.0
+uwsgi==2.0.31

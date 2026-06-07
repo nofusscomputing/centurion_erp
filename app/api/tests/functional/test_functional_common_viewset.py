@@ -219,7 +219,6 @@ class CommonViewSetTestCases:
             other_tenancy_item = model_instance( kwargs_create = kwargs )
 
 
-
         settings.SITE_URL = 'http://testserver'
 
         client = APIClient()

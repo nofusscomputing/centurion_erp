@@ -16,7 +16,6 @@ class AdditionalTestCases:
 
     def test_permission_add(self, model_instance, api_request_permissions,
         model_kwargs, kwargs_api_create,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for add 
 
@@ -24,10 +23,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['add']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['add'] )
 
@@ -80,7 +75,6 @@ class AdditionalTestCases:
 
 
     def test_permission_change(self, model_instance, api_request_permissions, model_kwargs,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for change
 
@@ -88,10 +82,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['change']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         client.force_login( api_request_permissions['user']['change'] )
 

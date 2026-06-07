@@ -17,7 +17,6 @@ class AdditionalTestCases:
     def test_permission_add(self, model_instance, api_request_permissions,
         model_kwargs, kwargs_api_create,
         model_permission, model_contenttype,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for add 
 
@@ -25,11 +24,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['add']
-        emplyoee = model_employee.objects.create( **kwargs )
-
 
 
         kwargs = model_kwargs()
@@ -96,7 +90,6 @@ class AdditionalTestCases:
 
 
     def test_permission_change(self, model_instance, api_request_permissions, model_kwargs,
-        model_employee, kwargs_employee,
         model_permission, model_contenttype,
     ):
         """ Check correct permission for change
@@ -105,10 +98,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['change']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         kwargs = model_kwargs()
         kwargs.update({
@@ -202,7 +191,6 @@ class AdditionalTestCases:
         param_exception, param_http_status,
         model_kwargs, kwargs_api_create,
         model_permission, model_contenttype,
-        model_employee, kwargs_employee,
     ):
         """ Check correct permission for add 
 
@@ -210,10 +198,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['add']
-        emplyoee = model_employee.objects.create( **kwargs )
 
 
 
@@ -287,7 +271,6 @@ class AdditionalTestCases:
 
     def test_api_change_exception(
         self, mocker, model, model_instance,
-        model_employee, kwargs_employee,
         model_permission, model_contenttype,
         parameterized, param_key_exceptions, param_value,
         param_exception, param_http_status,
@@ -299,10 +282,6 @@ class AdditionalTestCases:
         """
 
         client = Client()
-
-        kwargs = kwargs_employee()
-        kwargs['user'] = api_request_permissions['user']['change']
-        emplyoee = model_employee.objects.create( **kwargs )
 
         kwargs = model_kwargs()
         kwargs.update({

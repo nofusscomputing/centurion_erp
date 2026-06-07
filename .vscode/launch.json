@@ -17,19 +17,12 @@
             "program": "${workspaceFolder}/app/manage.py"
         },
         {
-            "name": "Debug: Gunicorn",
+            "name": "Debug: uWSGI",
             "type": "debugpy",
             "request": "launch",
-            "module": "gunicorn",
+            "module": "uwsgi",
             "args": [
-                "--config=../includes/etc/gunicorn.conf.py",
-                "--access-logfile",
-                "-",
-                "--workers",
-                "3",
-                "--bind",
-                "0.0.0.0:8002",
-                "centurion.wsgi:application",
+                "../includes/etc/uwsgi.ini",
             ],
             "django": true,
             "autoStartBrowser": false,

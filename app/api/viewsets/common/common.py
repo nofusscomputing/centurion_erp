@@ -529,8 +529,8 @@ class CommonViewSet(
 
         else:
 
-            msg = f"20250704-Unknown Exception Type. Unable to convert." \
-                f"Please report this error as a bug. msg was {getattr(ex, 'msg', None)}"
+            msg = f"20250704-Unknown Exception Type [class={ex.__class__.__name__}]. Unable to convert." \
+                f"Please report this error as a bug. msg was {getattr(ex, 'msg', ex)}"
             self.get_log().exception(
                 msg = msg
             )

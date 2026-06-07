@@ -12,6 +12,25 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'centurion.settings')
+
+
+try:
+
+    import prometheus_client
+    import uwsgi
+
+    from django.conf import settings
+
+    if getattr(settings, 'METRICS_ENABLED', False):
+
+        # metric filename suffix
+        prometheus_client.values.ValueClass = prometheus_client.values.MultiProcessValue(
+            process_identifier=uwsgi.worker_id)
+
+except ImportError:
+    pass  # not running in uwsgi
+
+
 #
 # Set working directory
 # This is required due to src dir mappped to module name `centurion_erp`

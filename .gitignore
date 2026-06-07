@@ -28,3 +28,6 @@ app/counter_**
 **.egg-info
 dist/
 test/requirements_dev.txt
+
+# Metrics
+app/prometheus/

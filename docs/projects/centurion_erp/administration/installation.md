@@ -42,9 +42,9 @@ Basic installation steps are as follows:
 
 Deploying Centurion ERP is intended to be done behind a reverse proxy that conducts the TLS termination. This is by design and due to the following reasons:
 
-- gunicorn has been setup to serve Centurion ERP via a websocket within the API container. The local Nginx installation proxies directly to this.
+- wsgi has been setup to serve Centurion ERP via a websocket within the API container. The local Nginx installation proxies directly to this.
 
-- Proxy headers have been setup to pass on the required information to gunicorn so that Centurion ERP functions correctly.
+- Proxy headers have been setup to pass on the required information to wsgi so that Centurion ERP functions correctly.
 
 - The API container does not serve HTTP/443 (TLS), only HTTP/80 (insecure http).
 
