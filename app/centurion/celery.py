@@ -38,20 +38,6 @@ def setup_prometheus(**kwargs):
     if not getattr(settings, 'METRICS_ENABLED', False):
         return
 
-    proc_path = None
-
-    try:
-        proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
-    except:
-        pass
-
-
-    if not proc_path:
-
-        os.environ["PROMETHEUS_MULTIPROC_DIR"] = settings.METRICS_MULTIPROC_DIR
-
-        proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
-
 
     logger.info(f'Setting up prometheus metrics HTTP server on port {str(settings.METRICS_EXPORT_PORT)}.')
 
