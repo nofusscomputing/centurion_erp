@@ -208,7 +208,6 @@ CENTURION_LOGGING = {
 
 METRICS_ENABLED = False                      # Enable Metrics
 METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
-METRICS_MULTIPROC_DIR = '/data/prometheus'    # path the metrics from multiple-process' save to
 
 
 RUNNING_TESTS = 'test' in str(sys.argv)
@@ -519,19 +518,12 @@ if METRICS_ENABLED:    # Setup Metrics directory
 
     try:
         proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
+
+        prometheus_dir = Path(os.environ["PROMETHEUS_MULTIPROC_DIR"])
+        prometheus_dir.mkdir(parents=True, exist_ok=True)
+
     except:
         pass
-
-
-    if not proc_path:
-
-        os.environ["PROMETHEUS_MULTIPROC_DIR"] = METRICS_MULTIPROC_DIR
-
-        proc_path = os.environ["PROMETHEUS_MULTIPROC_DIR"]
-
-
-    prometheus_dir = Path(os.environ["PROMETHEUS_MULTIPROC_DIR"])
-    prometheus_dir.mkdir(parents=True, exist_ok=True)
 
 
 
