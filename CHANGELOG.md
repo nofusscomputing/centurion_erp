@@ -1,3 +1,11 @@
+## 1.31.1 (2026-06-08)
+
+### Fixes
+
+- **metrics**: Re-Implement usage of Prometheus python client global registry
+- **docker**: Use Correct Header for Protocol for uwsgi params
+- **docker**: Add option to prevent HTTPS redirect
+
 ## 1.31.0 (2026-06-07)
 
 ### Features
