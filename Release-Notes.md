@@ -1,3 +1,15 @@
+## Version v1.31.1
+
+- Correct the x-Forwarded-Proto header
+
+- Correct missing python process metrics.
+
+
+## Version v1.31.0
+
+- Switch from Gunicorn to uWSGI as the WSGI server.
+
+
 ## Version v1.30.0
 
 - Audit History now captures fields that are related to the model being edited.

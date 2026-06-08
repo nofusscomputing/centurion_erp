@@ -111,6 +111,8 @@ ENV PYTHONWARNINGS=ignore
 
 ENV IS_WORKER=False
 
+ENV PROMETHEUS_MULTIPROC_DIR='/data/prometheus'
+
 
 COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
