@@ -66,6 +66,7 @@ services:
       - ./volumes/artifacts:/app/artifacts:rw
     ports:
       - "8003:8000"
+      - "8080:8080"
     depends_on:
       - postgres
       - rabbitmq

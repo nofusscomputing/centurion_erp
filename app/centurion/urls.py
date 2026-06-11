@@ -9,7 +9,6 @@ from django.http import HttpResponse
 from django.views.static import serve
 from django.urls import include, path, re_path
 
-from prometheus_client import multiprocess
 
 from rest_framework import urls
 
@@ -72,15 +71,10 @@ if settings.METRICS_ENABLED:
 
         see: https://github.com/django-commons/django-prometheus/blob/d63a6d8803d5d88e4939788192edbebb2de354f0/django_prometheus/exports.py#L111-L122
         see: https://github.com/nofusscomputing/centurion_erp/issues/1156
+        see: https://github.com/nofusscomputing/centurion_erp/issues/1162
         """
 
-        registry = prometheus_client.REGISTRY
-
-        if "PROMETHEUS_MULTIPROC_DIR" in os.environ or "prometheus_multiproc_dir" in os.environ:
-
-            multiprocess.MultiProcessCollector(registry)
-
-        metrics_page = prometheus_client.generate_latest(registry)
+        metrics_page = prometheus_client.generate_latest(prometheus_client.REGISTRY)
 
         return HttpResponse(metrics_page, content_type=prometheus_client.CONTENT_TYPE_LATEST)
 
