@@ -1,3 +1,19 @@
+## 1.31.2 (2026-06-11)
+
+### Fixes
+
+- **metrics**: CleanUp db files and register multi-process collector globally
+
+### Refactoring
+
+- **settings**: Dont perform actions within settings
+- **docker**: use existing PROMETHEUS_MULTIPROC_DIR env var declaration
+
+### Tests
+
+- **integration**: Ensure View metrics is not accessible.
+- **integration**: Ensure metrics endpoint is functional
+
 ## 1.31.1 (2026-06-08)
 
 ### Fixes
