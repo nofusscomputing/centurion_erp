@@ -104,14 +104,13 @@ ENV PYTHONTZPATH=""
 
 # Var must exist, even empty so that the metrics settings logic functions
 # correctly
-ENV PROMETHEUS_MULTIPROC_DIR=""
+ENV PROMETHEUS_MULTIPROC_DIR="/data/prometheus"
 
 # Prevent python depreciation warnings
 ENV PYTHONWARNINGS=ignore
 
 ENV IS_WORKER=False
 
-ENV PROMETHEUS_MULTIPROC_DIR='/data/prometheus'
 
 
 COPY requirements.txt requirements.txt

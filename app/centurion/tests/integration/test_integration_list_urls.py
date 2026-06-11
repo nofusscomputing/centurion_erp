@@ -95,3 +95,28 @@ class URLChecksPyTest(
             response = auto_login_client.request("GET", url)
 
         assert response.status_code == 200, response
+
+
+    def test_urls_metrics(self, auto_login_client):
+        """ Test Endpoint Metrics
+
+        Ensure that the page returns HTTP/200
+        """
+        url = f"{IntegrationCommon.API_URL[0:-5]}:8080/metrics"
+
+        response = auto_login_client.request(method = "GET", url = url, auth = False)
+
+        assert response.status_code == 200, response
+
+
+    def test_urls_metric_view_http_404(self, auto_login_client):
+        """ Test Metrics Django view
+
+        The django metrics view must not be viewable. If it is than it is
+        visible on the interwebs.
+        """
+        url = f"{IntegrationCommon.API_URL}/metrics"
+
+        response = auto_login_client.request(method = "GET", url = url, auth = False)
+
+        assert response.status_code == 404, response
