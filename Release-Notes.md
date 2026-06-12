@@ -4,6 +4,8 @@
 
     Action comment has been split up into types so as to provide permission control per action comment type and for ease of extensibility. New models are:
 
+    - Ticket Dependency Action Comment
+
     - Ticket Field Edit Action Comment
 
     - Ticket Link Model Action Comment
