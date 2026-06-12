@@ -1173,11 +1173,11 @@ class CommonSubModelViewSet_ReWrite(
 
     def get_serializer_class(self):
 
-        serializer_name = self.base_model._meta.model_name
+        serializer_name = self.model._meta.model_name
 
-        if self.base_model != self.model:
+        if self.model._meta.model_name != self.base_model._meta.model_name:
 
-            serializer_name += '_' + str( self.kwargs[self.model_kwarg] )
+            serializer_name = f"{self.model()._base_model._meta.model_name}_{self.model._meta.model_name}"
 
 
         serializer_module = importlib.import_module(
