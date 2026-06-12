@@ -6,6 +6,8 @@
 
     - Ticket Field Edit Action Comment
 
+    - Ticket Link Model Action Comment
+
     **Note:** These models are locked behind feature flag `2025-00006` and will remain so until Ticketing is ready for production usage.
 
 
