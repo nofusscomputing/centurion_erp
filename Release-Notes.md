@@ -1,3 +1,6 @@
+## Version v1.32.0
+
+
 ## Version v1.31.1
 
 - Correct the x-Forwarded-Proto header
