@@ -1,5 +1,13 @@
 ## Version v1.32.0
 
+- New Models
+
+    Action comment has been split up into types so as to provide permission control per action comment type and for ease of extensibility. New models are:
+
+    - Ticket Field Edit Action Comment
+
+    **Note:** These models are locked behind feature flag `2025-00006` and will remain so until Ticketing is ready for production usage.
+
 
 ## Version v1.31.1
 
