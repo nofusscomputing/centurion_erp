@@ -183,7 +183,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
         if self.model._meta.model_name != self.base_model._meta.model_name:
 
             if str(serializer_name).endswith('audithistory'):
-                serializer_name = str(serializer_name)[0:-14]
+                serializer_name = str(serializer_name)[0:-12]
 
             serializer_name = f"{self.model()._base_model._meta.model_name}_{serializer_name}"
 
