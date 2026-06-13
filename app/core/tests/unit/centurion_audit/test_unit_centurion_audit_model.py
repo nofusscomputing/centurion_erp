@@ -8,7 +8,7 @@ from django.core.exceptions import (
 )
 from django.db import models
 
-# from core.models.audit import CenturionAudit
+from core.models.audit import CenturionAudit
 
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractTenancyModelInheritedCases
@@ -27,6 +27,10 @@ class CenturionAuditModelTestCases(
         return {
             '_audit_enabled': {
                 'value': False,
+            },
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': CenturionAudit,
             },
             '_notes_enabled': {
                 'value': False,
