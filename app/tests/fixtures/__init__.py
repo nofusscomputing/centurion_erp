@@ -394,6 +394,12 @@ from .model_ticketcommentactionmodellink import (
     serializer_ticketcommentactionmodellink,
 )
 
+from .model_ticketcommentactionticketdependency import (
+    kwargs_ticketcommentactionticketdependency,
+    model_ticketcommentactionticketdependency,
+    serializer_ticketcommentactionticketdependency,
+)
+
 from .model_ticketcommentbase import (
     kwargs_ticketcommentbase,
     model_ticketcommentbase,
