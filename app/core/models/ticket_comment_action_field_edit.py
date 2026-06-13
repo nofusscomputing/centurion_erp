@@ -38,7 +38,7 @@ class TicketCommentActionFieldEdit(
         blank = False,
         help_text = 'Name of the field that was changed',
         max_length = 50,
-        unique = True,
+        unique = False,
         verbose_name = 'Field Name'
     )
 

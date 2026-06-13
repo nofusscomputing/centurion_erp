@@ -52,7 +52,7 @@ class TicketCommentActionModelLink(
         verbose_name = 'Model ID',
     )
 
-    content_id = models.ForeignKey(
+    content_type = models.ForeignKey(
         to = ContentType,
         blank = False,
         help_text = 'Content ID of the model',
