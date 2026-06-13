@@ -26,6 +26,9 @@ class ModelSerializer(
 
         fields = TicketCommentBaseModelSerializer.Meta.fields + [
             'display_name',
+            'is_create',
+            'model_id',
+            'content_type',
         ]
 
 
