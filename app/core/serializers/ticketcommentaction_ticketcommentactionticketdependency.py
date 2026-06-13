@@ -26,6 +26,9 @@ class ModelSerializer(
 
         fields = TicketCommentBaseModelSerializer.Meta.fields + [
             'display_name',
+            'is_create',
+            'link_type',
+            'dependent_ticket_id',
         ]
 
 
