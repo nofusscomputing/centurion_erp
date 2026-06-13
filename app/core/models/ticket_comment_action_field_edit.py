@@ -60,6 +60,10 @@ class TicketCommentActionFieldEdit(
         verbose_name = 'New Value'
     )
 
+    @property
+    def display_name(self) :
+        return str(self)
+
 
 
     def __str__(self):
