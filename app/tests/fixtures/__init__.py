@@ -388,6 +388,12 @@ from .model_ticketcommentactionfieldedit import (
     serializer_ticketcommentactionfieldedit,
 )
 
+from .model_ticketcommentactionmodellink import (
+    kwargs_ticketcommentactionmodellink,
+    model_ticketcommentactionmodellink,
+    serializer_ticketcommentactionmodellink,
+)
+
 from .model_ticketcommentbase import (
     kwargs_ticketcommentbase,
     model_ticketcommentbase,
