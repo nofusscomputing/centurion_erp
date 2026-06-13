@@ -62,6 +62,10 @@ class TicketCommentActionModelLink(
         verbose_name = 'Content ID for model',
     )
 
+    @property
+    def display_name(self) :
+        return str(self)
+
 
 
     def __str__(self):
