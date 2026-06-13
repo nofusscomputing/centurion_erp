@@ -26,6 +26,9 @@ class ModelSerializer(
 
         fields = TicketCommentBaseModelSerializer.Meta.fields + [
             'display_name',
+            'field_name',
+            'previous_value',
+            'new_value',
         ]
 
 
