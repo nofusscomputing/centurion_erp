@@ -56,6 +56,10 @@ class TicketCommentActionTicketDependency(
         verbose_name = 'Ticket ID',
     )
 
+    @property
+    def display_name(self) :
+        return str(self)
+
 
 
     def __str__(self):

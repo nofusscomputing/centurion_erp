@@ -17,7 +17,7 @@ class ModelSerializer(
 ):
 
 
-    display_name = centurion_field.MarkdownField( required = True )
+    display_name = centurion_field.MarkdownField( required = False, read_only = True )
 
 
     class Meta(TicketCommentBaseModelSerializer.Meta):
