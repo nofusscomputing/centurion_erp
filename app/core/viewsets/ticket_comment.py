@@ -117,6 +117,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 location = 'path',
                 type = int
             ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
+            ),
         ],
         responses = {
             204: OpenApiResponse(description=''),
@@ -131,6 +141,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 name = 'ticket_id',
                 location = 'path',
                 type = int
+            ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
             ),
         ],
         request = PolymorphicProxySerializer(
@@ -166,6 +186,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 location = 'path',
                 type = int
             ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
+            ),
         ],
         request = PolymorphicProxySerializer(
             component_name = 'Ticket Comment',
@@ -200,6 +230,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 name = 'ticket_id',
                 location = 'path',
                 type = int
+            ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
             ),
         ],
         request = PolymorphicProxySerializer(
