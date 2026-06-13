@@ -1177,7 +1177,7 @@ class CommonSubModelViewSet_ReWrite(
 
         if self.model._meta.model_name != self.base_model._meta.model_name:
 
-            serializer_name = f"{self.model()._base_model._meta.model_name}_{self.model._meta.model_name}"
+            serializer_name = f"{self.model()._base_model._meta.model_name}_{serializer_name}"
 
 
         serializer_module = importlib.import_module(
