@@ -176,6 +176,40 @@ class ViewSet( SubModelViewSet_ReWrite ):
     view_description = 'Audit History entries'
 
 
+    def get_serializer_class(self):
+
+        serializer_name = self.model._meta.model_name
+
+        if self.model._meta.model_name != self.base_model._meta.model_name:
+
+            if str(serializer_name).endswith('centurionaudit'):
+                serializer_name = str(serializer_name)[0:-14]
+
+            serializer_name = f"{self.model()._base_model._meta.model_name}_{serializer_name}"
+
+
+        serializer_module = importlib.import_module(
+            self.model._meta.app_label + '.serializers.' + str(
+                serializer_name
+            )
+        )
+
+        if (
+            self.action == 'list'
+            or self.action == 'retrieve'
+        ):
+
+            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
+
+
+        else:
+
+            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
+
+
+        return self.serializer_class
+
+
 
 @extend_schema_view( # prevent duplicate documentation of both /access/entity endpoints
     create = extend_schema(exclude = True),
