@@ -107,9 +107,9 @@ class TicketDependency(
 
     def __str__(self):
 
-        if getattr(self, 'ticket', None):
+        if getattr(self, 'dependent_ticket', None):
 
-            return str( '#' + str(self.ticket.id) )
+            return str( '#' + str(self.dependent_ticket.id) )
 
         return ''
 
@@ -126,11 +126,6 @@ class TicketDependency(
             models.Q(
                 ticket = self.ticket,
                 dependent_ticket = self.dependent_ticket
-            )
-                |
-            models.Q(
-                ticket = self.dependent_ticket,
-                dependent_ticket = self.ticket
             )
         )
 
@@ -225,7 +220,7 @@ class TicketDependency(
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.ticket
 
 
