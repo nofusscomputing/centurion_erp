@@ -2,6 +2,7 @@ import pytest
 import random
 
 from django.test import Client
+from django.urls.exceptions import NoReverseMatch
 
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly
