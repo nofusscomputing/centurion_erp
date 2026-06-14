@@ -103,12 +103,25 @@ class Create(
                 },
             )
 
+
             serializer_data = serializer.data
 
             if response is None:
 
                 headers = self.get_success_headers(serializer.data)
                 status_code = rest_framework.status.HTTP_200_OK
+
+            elif instance.id is None:    # response.data.serializer.instance
+                """
+                This section specifically caters for code paths that change the
+                standard flow wherein they dont create the model requested, but
+                use the data to create other models and/or objects.
+                """
+
+                headers = response.headers
+                status_code = rest_framework.status.HTTP_200_OK
+
+                serializer_data = {}
 
             else:
 

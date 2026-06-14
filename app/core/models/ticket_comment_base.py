@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from django.urls.exceptions import NoReverseMatch
 from rest_framework.reverse import reverse
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -268,6 +269,8 @@ class TicketCommentBase(
         self, relative: bool = True, api_version: int = 2, many = False
     ) -> str:
 
+        url = ''
+
         namespace = f'v{api_version}'
 
         if self.get_app_namespace():
@@ -297,8 +300,15 @@ class TicketCommentBase(
 
             url_basename += '-detail'
 
+        try:
 
-        url = reverse( viewname = url_basename, request = None, kwargs = self.get_url_kwargs( many = many ) )
+            url = reverse( viewname = url_basename, request = None, kwargs = self.get_url_kwargs( many = many ) )
+
+        except NoReverseMatch as e:
+            if self.pk is None:
+                pass
+            else:
+                raise e
 
         if not relative:
 
