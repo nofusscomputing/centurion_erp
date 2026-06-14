@@ -51,11 +51,6 @@ def ticket_action_comment_ticket_dependency(
     sender, instance, **kwargs
 ) -> None:
 
-    action: str = kwargs.get('action', '')
-
-    if kwargs.get('signal') is post_delete:
-        action = 'post_delete'
-
 
     try:
 
@@ -71,7 +66,7 @@ def ticket_action_comment_ticket_dependency(
             body = '',
             user = get_action_user( instance = instance ).get_entity(),
 
-            is_create = (action != 'post_delete'),
+            is_create = ( kwargs.get('signal') == post_save ),
             link_type = instance.how_related,
             dependent_ticket_id = instance.dependent_ticket,
         )

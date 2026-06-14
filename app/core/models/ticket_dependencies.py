@@ -162,6 +162,19 @@ class TicketDependency(
 
 
 
+    def delete(self, using = None, keep_parents = None):
+
+        super().delete(using = using, keep_parents = keep_parents)
+
+        dependencies = self.__class__.objects.filter(    # Select the inverse dependency for removal
+            ticket = self.dependent_ticket, dependent_ticket_id = self.ticket
+        )
+
+        for dependency in dependencies:
+            dependency.delete()
+
+
+
     def get_url_kwargs(self, many = False) -> dict:
 
         kwargs = super().get_url_kwargs( many = many )
