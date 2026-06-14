@@ -56,21 +56,17 @@ class TicketCommentActionTicketDependency(
         verbose_name = 'Ticket ID',
     )
 
-    @property
-    def display_name(self) :
-        return str(self)
-
 
 
     def __str__(self):
 
-        comment = f"{self.user} added {self.dependent_ticket_id} as " \
-            f"{self.get_link_type_display()}"
+        comment = f"added #{self.ticket.id} as " \
+            f"{self.get_link_type_display()} #{self.dependent_ticket_id}"
 
         if not self.is_create:
 
-            comment = f"{self.user} removed {self.dependent_ticket_id} as " \
-                f"{self.get_link_type_display()}"
+            comment = f"removed #{self.ticket.id} as " \
+                f"{self.get_link_type_display()} #{self.dependent_ticket_id}"
 
 
         return comment

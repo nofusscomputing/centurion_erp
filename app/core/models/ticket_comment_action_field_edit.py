@@ -60,23 +60,19 @@ class TicketCommentActionFieldEdit(
         verbose_name = 'New Value'
     )
 
-    @property
-    def display_name(self) :
-        return str(self)
-
 
 
     def __str__(self):
 
         comment = (
-            f"{self.user} changed {self.field_name} changed from _{self.previous_value}_"
+            f"Changed {self.field_name} changed from _{self.previous_value}_"
             f" to **{self.new_value}**"
         )
 
         if not self.previous_value:
 
             comment = (
-                f"{self.user} set {self.field_name} to **{self.new_value}**"
+                f"Set {self.field_name} to **{self.new_value}**"
             )
 
         elif not self.new_value:

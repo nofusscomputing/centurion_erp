@@ -62,19 +62,15 @@ class TicketCommentActionModelLink(
         verbose_name = 'Content ID for model',
     )
 
-    @property
-    def display_name(self) :
-        return str(self)
-
 
 
     def __str__(self):
 
-        comment = f"{self.user} Linked model {self.model_id}"
+        comment = f"Linked model {self.model_id}"
 
         if not self.is_create:
 
-            comment = f"{self.user} Unlinked model {self.model_id}"
+            comment = f"Unlinked model {self.model_id}"
 
 
         return comment
