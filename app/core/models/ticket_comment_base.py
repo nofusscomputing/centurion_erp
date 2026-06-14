@@ -355,6 +355,8 @@ class TicketCommentBase(
             model_name = 'ticketcommentaction'
         )
 
+        action_comment_time_track = None
+
         if not issubclass(self.__class__, action_comment_model):
 
             self.body = self.slash_command(self.body)
@@ -363,8 +365,10 @@ class TicketCommentBase(
                 self.body = None
 
 
+            action_comment_time_track = re.match(self.time_track, body)
+
+
         is_converted_action_comment = False
-        action_comment_time_track = re.match(self.time_track, body)
 
         if(
             self.body != body
