@@ -350,11 +350,22 @@ class TicketCommentBase(
 
         body = self.body
 
-        if self._meta.model_name != 'ticketcommentaction':
+        action_comment_model = apps.get_model(
+            app_label = 'core',
+            model_name = 'ticketcommentaction'
+        )
+
+        if not issubclass(self.__class__, action_comment_model):
+
             self.body = self.slash_command(self.body)
+
+            if self.body == '':    # No comment made, was only slash command.
+                self.body = None
+
 
         is_converted_action_comment = False
         action_comment_time_track = re.match(self.time_track, body)
+
         if(
             self.body != body
             and action_comment_time_track
@@ -362,7 +373,7 @@ class TicketCommentBase(
         ):
 
             is_converted_action_comment = True
-           
+
 
             if action_comment_time_track:    # Time Tracking comment
                 self.body = f"added {time_track.group('time')} of time spent"
@@ -384,10 +395,7 @@ class TicketCommentBase(
 
             if is_converted_action_comment:
 
-                action_comment = apps.get_model(
-                    app_label = 'core',
-                    model_name = 'ticketcommentaction'
-                )(
+                action_comment = action_comment_model(
                     id = self.id,
                     pk = self.id,
                     ticket = self.ticket
@@ -407,6 +415,7 @@ class TicketCommentBase(
                 if(
                     self.parent.is_closed
                     and self._meta.model_name not in [ 'ticketcommentaction', 'ticketcommentsolution' ]
+                    and not issubclass(self.__class__, action_comment_model)
                 ):
 
                     self.parent.is_closed = False
