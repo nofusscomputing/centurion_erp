@@ -35,8 +35,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'TicketCommentActionTicketDependencyViewSerializer')
 class ViewSerializer(
-    ModelSerializer,
     TicketCommentBaseViewSerializer,
+    ModelSerializer,
 ):
 
-    pass
+    body = centurion_field.MarkdownField( read_only = True, required = False, source = '__str__' )
