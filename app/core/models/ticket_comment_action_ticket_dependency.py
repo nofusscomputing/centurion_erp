@@ -61,12 +61,12 @@ class TicketCommentActionTicketDependency(
     def __str__(self):
 
         comment = f"added #{self.ticket.id} as " \
-            f"{self.get_link_type_display()} #{self.dependent_ticket_id}"
+            f"{str(self.get_link_type_display()).lower()} -> #{self.dependent_ticket_id}"
 
         if not self.is_create:
 
             comment = f"removed #{self.ticket.id} as " \
-                f"{self.get_link_type_display()} #{self.dependent_ticket_id}"
+                f"{str(self.get_link_type_display()).lower()} -> #{self.dependent_ticket_id}"
 
 
         return comment
