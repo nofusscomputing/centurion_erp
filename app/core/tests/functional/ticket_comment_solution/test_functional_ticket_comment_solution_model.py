@@ -15,6 +15,45 @@ class TicketCommentSolutionModelTestCases(
 ):
 
 
+    @pytest.fixture
+    def ticket_comment(self, request, django_db_blocker, ticket, model):
+        """ Ticket Comment that requires body
+
+        when using this fixture, set the `body` then call ticket_comment.save()
+        before use.
+        """
+
+        with django_db_blocker.unblock():
+
+            ticket.title = 'slash command ticket with comment'
+
+            ticket.save()
+
+            ticket_comment = model()
+
+            ticket_comment.user = request.cls.entity_user
+
+            ticket_comment.ticket = ticket
+
+            ticket_comment.ticket.status = TicketBase.TicketStatus.NEW
+            ticket_comment.ticket.is_closed = False
+            ticket_comment.ticket.is_solved = False
+
+            ticket_comment.body = 'body text'
+
+            ticket_comment.ticket.save()
+
+        yield ticket_comment
+
+        with django_db_blocker.unblock():
+
+            for thread in ticket_comment.threads.all():
+                thread.delete()
+
+            ticket_comment.delete()
+
+
+
     def test_can_reply_to_comment(self):
         pytest.xfail(
             reason = 'solution comment must not be able to be a thread as it\'s for the ticket.'
