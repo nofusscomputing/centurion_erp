@@ -56,7 +56,7 @@ class TicketCommentActionModelLink(
         to = ContentType,
         blank = False,
         help_text = 'Content ID of the model',
-        null = True,
+        null = False,
         on_delete = models.PROTECT,
         related_name = '+',
         verbose_name = 'Content ID for model',
