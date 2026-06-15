@@ -13,6 +13,7 @@ class CoreConfig(AppConfig):
             audit_history,
             migration_remove_permissions,
             ticket_action_comment,
+            ticket_action_comment_ticket_dependency,
         )
         from core.signal.ticketbase_validation_m2m_assigned_to import (
             ticketbase_validation_m2m_assigned_to

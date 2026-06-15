@@ -17,7 +17,7 @@ class ModelSerializer(
 ):
 
 
-    display_name = centurion_field.MarkdownField( required = False, read_only = True )
+    body = centurion_field.MarkdownField( read_only = True, required = False, source = '__str__' )
 
 
     class Meta(TicketCommentBaseModelSerializer.Meta):
@@ -25,7 +25,7 @@ class ModelSerializer(
         model = TicketCommentActionTicketDependency
 
         fields = TicketCommentBaseModelSerializer.Meta.fields + [
-            'display_name',
+            # 'display_name',
             'is_create',
             'link_type',
             'dependent_ticket_id',
@@ -39,4 +39,4 @@ class ViewSerializer(
     ModelSerializer,
 ):
 
-    pass
+    body = centurion_field.MarkdownField( read_only = True, required = False, source = '__str__' )

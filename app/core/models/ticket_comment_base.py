@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from django.urls.exceptions import NoReverseMatch
 from rest_framework.reverse import reverse
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -268,6 +269,8 @@ class TicketCommentBase(
         self, relative: bool = True, api_version: int = 2, many = False
     ) -> str:
 
+        url = ''
+
         namespace = f'v{api_version}'
 
         if self.get_app_namespace():
@@ -297,8 +300,15 @@ class TicketCommentBase(
 
             url_basename += '-detail'
 
+        try:
 
-        url = reverse( viewname = url_basename, request = None, kwargs = self.get_url_kwargs( many = many ) )
+            url = reverse( viewname = url_basename, request = None, kwargs = self.get_url_kwargs( many = many ) )
+
+        except NoReverseMatch as e:
+            if self.pk is None:
+                pass
+            else:
+                raise e
 
         if not relative:
 
@@ -350,11 +360,26 @@ class TicketCommentBase(
 
         body = self.body
 
-        if self._meta.model_name != 'ticketcommentaction':
+        action_comment_model = apps.get_model(
+            app_label = 'core',
+            model_name = 'ticketcommentaction'
+        )
+
+        action_comment_time_track = None
+
+        if not issubclass(self.__class__, action_comment_model):
+
             self.body = self.slash_command(self.body)
 
+            if self.body == '':    # No comment made, was only slash command.
+                self.body = None
+
+
+            action_comment_time_track = re.match(self.time_track, body)
+
+
         is_converted_action_comment = False
-        action_comment_time_track = re.match(self.time_track, body)
+
         if(
             self.body != body
             and action_comment_time_track
@@ -362,7 +387,7 @@ class TicketCommentBase(
         ):
 
             is_converted_action_comment = True
-           
+
 
             if action_comment_time_track:    # Time Tracking comment
                 self.body = f"added {time_track.group('time')} of time spent"
@@ -384,10 +409,7 @@ class TicketCommentBase(
 
             if is_converted_action_comment:
 
-                action_comment = apps.get_model(
-                    app_label = 'core',
-                    model_name = 'ticketcommentaction'
-                )(
+                action_comment = action_comment_model(
                     id = self.id,
                     pk = self.id,
                     ticket = self.ticket
@@ -407,6 +429,7 @@ class TicketCommentBase(
                 if(
                     self.parent.is_closed
                     and self._meta.model_name not in [ 'ticketcommentaction', 'ticketcommentsolution' ]
+                    and not issubclass(self.__class__, action_comment_model)
                 ):
 
                     self.parent.is_closed = False
