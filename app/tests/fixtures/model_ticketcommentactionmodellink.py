@@ -19,14 +19,17 @@ def model_ticketcommentactionmodellink(clean_model_from_db):
 
 @pytest.fixture( scope = 'class')
 def kwargs_ticketcommentactionmodellink( kwargs_ticketcommentaction,
-    model_entity, kwargs_entity, model_contenttype,
+    model_entity, kwargs_entity, model_contenttype, django_db_blocker,
 ):
 
     def factory():
 
-        model_to_link = model_entity.objects.create( **kwargs_entity() )
 
-        model_content_type = model_contenttype.objects.get_for_model(model_to_link)
+        with django_db_blocker.unblock():
+
+            model_to_link = model_entity.objects.create( **kwargs_entity() )
+
+            model_content_type = model_contenttype.objects.get_for_model(model_to_link)
 
         kwargs = kwargs_ticketcommentaction()
         kwargs['is_create'] = True
