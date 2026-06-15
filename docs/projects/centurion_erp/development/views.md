@@ -59,6 +59,8 @@ When working with viewsets the following requirements must be met:
 
 - **All** ViewSet exceptions must be from `rest_framework.exceptions`
 
+- If you are replacing a model, ensure you mark it with decorator `centurion.lib.decorators.depreciated`
+
 
 ## Permissions
 

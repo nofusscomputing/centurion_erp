@@ -64,6 +64,8 @@ When creating a serializer, the following requirements must be met:
 
 - **All** Serializer exceptions must be from `rest_framework.exceptions`
 
+- If you are replacing a model, ensure you mark it with decorator `centurion.lib.decorators.depreciated`
+
 
 ## Available Serializers
 
