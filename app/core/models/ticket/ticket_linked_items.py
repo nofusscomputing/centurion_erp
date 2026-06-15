@@ -9,6 +9,8 @@ from access.models.tenancy import TenancyObject
 
 from assistance.models.knowledge_base import KnowledgeBase
 
+from centurion.lib.decorators import depreciate
+
 from core.lib.feature_not_used import FeatureNotUsed
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket import Ticket
@@ -17,6 +19,11 @@ deleted_model = dispatch.Signal()
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+    replacement = 'core.models.models_ticket',
+)
 class TicketLinkedItem(TenancyObject):
 
     class Meta:

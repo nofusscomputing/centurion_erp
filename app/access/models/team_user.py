@@ -14,13 +14,18 @@ from access.fields import (
 from access.models.tenant import Tenant
 from access.models.team import Team
 
+from centurion.lib.decorators import depreciate
+
 from core.lib.feature_not_used import FeatureNotUsed
 from core.mixins.history_save import SaveHistory
 
 User = django.contrib.auth.get_user_model()
 
 
-
+@depreciate(
+    depreciated_in = '1.21.0',
+    removed_in = '2.0',
+)
 class TeamUsers(SaveHistory):
 
     class Meta:

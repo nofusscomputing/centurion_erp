@@ -8,6 +8,7 @@ from access.serializers.organization import TenantBaseSerializer
 from api.serializers import common
 from api.exceptions import UnknownTicketType
 
+from centurion.lib.decorators import depreciate
 from centurion.serializers.group import GroupBaseSerializer
 from centurion.serializers.user import UserBaseSerializer
 
@@ -18,6 +19,10 @@ from core.serializers.ticket_comment_category import TicketCommentCategoryBaseSe
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -50,6 +55,10 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentModelSerializer(
     common.CommonModelSerializer,
     TicketCommentBaseSerializer,
@@ -289,6 +298,10 @@ class TicketCommentModelSerializer(
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentAddModelSerializer(
     TicketCommentModelSerializer,
 ):
@@ -299,6 +312,10 @@ class TicketCommentAddModelSerializer(
 
     pass
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentChangeModelSerializer(
     TicketCommentModelSerializer,
 ):
@@ -311,6 +328,10 @@ class TicketCommentChangeModelSerializer(
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILModelSerializer(TicketCommentModelSerializer):
     """ITIL Comment Model Base
 
@@ -381,6 +402,10 @@ class TicketCommentITILModelSerializer(TicketCommentModelSerializer):
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILFollowUpAddModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Followup Comment
 
@@ -419,12 +444,20 @@ class TicketCommentITILFollowUpAddModelSerializer(TicketCommentITILModelSerializ
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILFollowUpChangeModelSerializer(TicketCommentITILFollowUpAddModelSerializer):
 
     pass
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILFollowUpTriageModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Followup Comment
 
@@ -468,6 +501,10 @@ class TicketCommentITILFollowUpTriageModelSerializer(TicketCommentITILModelSeria
         return attrs
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILSolutionAddModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Solution Comment
 
@@ -504,12 +541,20 @@ class TicketCommentITILSolutionAddModelSerializer(TicketCommentITILModelSerializ
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILSolutionChangeModelSerializer(TicketCommentITILSolutionAddModelSerializer):
 
     pass
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILSolutionTriageModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Solution Comment
 
@@ -552,6 +597,10 @@ class TicketCommentITILSolutionTriageModelSerializer(TicketCommentITILModelSeria
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILTaskAddModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Task Comment
 
@@ -590,12 +639,20 @@ class TicketCommentITILTaskAddModelSerializer(TicketCommentITILModelSerializer):
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILTaskChangeModelSerializer(TicketCommentITILTaskAddModelSerializer):
 
     pass
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentITILTaskTriageModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Task Comment
 
@@ -641,6 +698,10 @@ class TicketCommentITILTaskTriageModelSerializer(TicketCommentITILModelSerialize
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentImportModelSerializer(TicketCommentModelSerializer):
     """Import User Serializer
 
@@ -681,6 +742,10 @@ class TicketCommentImportModelSerializer(TicketCommentModelSerializer):
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketCommentViewSerializer(TicketCommentModelSerializer):
 
     organization = TenantBaseSerializer( many = False )
