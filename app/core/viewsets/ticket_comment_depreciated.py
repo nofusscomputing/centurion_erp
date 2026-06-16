@@ -2,6 +2,8 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from api.viewsets.common.tenancy import ModelViewSet
 
+from centurion.lib.decorators import depreciate
+
 from core import exceptions as centurion_exceptions
 from core.serializers.ticket_comment_depreciated import (    # pylint: disable=W0611:unused-import
     Ticket,
@@ -150,6 +152,10 @@ Responses from the API are the same for all users when the request returns
             403: OpenApiResponse(description='User is missing change permissions'),
         }
     ),
+)
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
 )
 class ViewSet(ModelViewSet):
 

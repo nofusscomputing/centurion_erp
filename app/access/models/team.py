@@ -11,9 +11,17 @@ from access.fields import (
 from access.models.tenant import Tenant
 from access.models.tenancy import TenancyObject
 
+from centurion.lib.decorators import depreciate
+
 from core import exceptions as centurion_exceptions
 
 
+
+@depreciate(
+    depreciated_in = '1.21.0',
+    removed_in = '2.0',
+    replacement = 'access.models.roles',
+)
 class Team(Group, TenancyObject):
 
     class Meta:

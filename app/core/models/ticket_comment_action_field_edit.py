@@ -24,7 +24,7 @@ class TicketCommentActionFieldEdit(
 
         permissions = [
             (
-                'import_ticketcommentactionfieldchange',
+                'import_ticketcommentactionfieldedit',
                 'Can import ticket field change action comment.'
             ),
         ]

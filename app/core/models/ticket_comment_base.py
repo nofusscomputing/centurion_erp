@@ -395,10 +395,13 @@ class TicketCommentBase(
 
         if(
            (
-                body is not None
-                and (
-                    self.body is not None
+                (
+                    body is not None
+                    and (
+                        self.body is not None
+                    )
                 )
+                or issubclass(self.__class__, action_comment_model)
             )
             or self._meta.model_name == 'ticketcommentsolution'
         ):

@@ -1,0 +1,1 @@
+from .depreciated import depreciate
