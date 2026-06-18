@@ -240,17 +240,15 @@ class TenancyPermissions(
             _perms_map = {    # Expand variables
                     method: [
                         perm % kwargs for perm in perms
-                            if request.user.has_perm(
-                                permission = perm % kwargs,
-                                tenancy_permission = False,
-                            )
                     ]
                         for method, perms in self.perms_map.items()
             }
 
             view.allowed_methods = [
                 method for method in view.allowed_methods
-                    if _perms_map.get(method, None)
+                    if request.user.has_perms(
+                        permission_list = _perms_map.get(method, None),
+                    )
             ]
 
             # Update AllowedMthods header as it may have changed
