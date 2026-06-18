@@ -115,6 +115,16 @@ class MockLogger:
 
 class MyMockView:
 
+    default_response_headers = [
+        'DELETE',
+        'GET',
+        'HEAD',
+        'OPTIONS',
+        'PATCH',
+        'POST',
+        'PUT'
+    ]
+
     class MockModel:
 
         class Meta:
