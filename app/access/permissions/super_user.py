@@ -1,5 +1,4 @@
 from rest_framework.exceptions import (
-    MethodNotAllowed,
     NotAuthenticated,
 )
 
@@ -25,11 +24,6 @@ class SuperUserPermissions(
             raise NotAuthenticated(
                 code = 'anonymouse_user'
             )
-
-
-        if request.method not in view.allowed_methods:
-
-            raise MethodNotAllowed(method = request.method)
 
 
         if request.user.is_superuser:

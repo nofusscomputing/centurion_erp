@@ -13,56 +13,77 @@ class CenturionModelPermissions(
     This is the base class for model permissions within Centurion.
     """
 
+    _perms_map: dict[str, list[str]] | None = None
+
+    _view_perms_map: dict[str, list[str]] | None = None
+
 
     @property
     def perms_map(self) -> dict[str, list[str]]:
 
-        default: dict[str, list[str]] = {
-            'GET': [
-                '%(app_label)s.view_%(model_name)s',
-                *getattr(self, '_perms_map', {}).get(
-                    'GET', []
-                )
-            ],
-            'OPTIONS': [
-                '%(app_label)s.view_%(model_name)s',
-                *getattr(self, '_perms_map', {}).get(
-                    'OPTIONS', []
-                )
-            ],
-            'HEAD': [
-                '%(app_label)s.view_%(model_name)s',
-                *getattr(self, '_perms_map', {}).get(
-                    'HEAD', []
-                )
-            ],
-            'POST': [
-                '%(app_label)s.add_%(model_name)s',
-                *getattr(self, '_perms_map', {}).get(
-                    'POST', []
-                )
-            ],
-            'PUT': [
-                '%(app_label)s.change_%(model_name)s',
-                *getattr(self, '_perms_map', {}).get(
-                    'PUT', []
-                )
-            ],
-            'PATCH': [
-                '%(app_label)s.change_%(model_name)s',
-                *getattr(self, '_perms_map', {}).get(
-                    'PATCH', []
-                )
-            ],
-            'DELETE': [
-                '%(app_label)s.delete_%(model_name)s',
-                *getattr(self, '_perms_map', {}).get(
-                    'DELETE', []
-                )
-            ],
-        }
 
-        return default
+        if self._perms_map is None:
+
+            self._perms_map = {
+                'GET': [
+                    '%(app_label)s.view_%(model_name)s',
+                    *(
+                        getattr(self, '_view_perms_map', {}).get('GET', [] )
+                        if self._view_perms_map is not None
+                        else []
+                    )
+                ],
+                'OPTIONS': [
+                    '%(app_label)s.view_%(model_name)s',
+                    *(
+                        getattr(self, '_view_perms_map', {}).get('OPTIONSGET', [] )
+                        if self._view_perms_map is not None
+                        else []
+                    )
+                ],
+                'HEAD': [
+                    '%(app_label)s.view_%(model_name)s',
+                    *(
+                        getattr(self, '_view_perms_map', {}).get('HEAD', [] )
+                        if self._view_perms_map is not None
+                        else []
+                    )
+                ],
+                'POST': [
+                    '%(app_label)s.add_%(model_name)s',
+                    *(
+                        getattr(self, '_view_perms_map', {}).get('POST', [] )
+                        if self._view_perms_map is not None
+                        else []
+                    )
+                ],
+                'PUT': [
+                    '%(app_label)s.change_%(model_name)s',
+                    *(
+                        getattr(self, '_view_perms_map', {}).get('PUT', [] )
+                        if self._view_perms_map is not None
+                        else []
+                    )
+                ],
+                'PATCH': [
+                    '%(app_label)s.change_%(model_name)s',
+                    *(
+                        getattr(self, '_view_perms_map', {}).get('PATCH', [] )
+                        if self._view_perms_map is not None
+                        else []
+                    )
+                ],
+                'DELETE': [
+                    '%(app_label)s.delete_%(model_name)s',
+                    *(
+                        getattr(self, '_view_perms_map', {}).get('DELETE', [] )
+                        if self._view_perms_map is not None
+                        else []
+                    )
+                ],
+            }
+
+        return self._perms_map
 
 
 

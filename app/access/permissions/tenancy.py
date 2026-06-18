@@ -1,7 +1,6 @@
 import traceback
 
 from rest_framework.exceptions import (
-    MethodNotAllowed,
     NotAuthenticated,
     ParseError,
     PermissionDenied
@@ -218,8 +217,8 @@ class TenancyPermissions(
 
         try:
 
+            self._view_perms_map = getattr(view, 'perms_map', {})
 
-            self._perms_map = getattr(view, 'perms_map', {})
 
             view.permissions_required = self.get_required_permissions(
                 method = request.method,
@@ -233,10 +232,29 @@ class TenancyPermissions(
                 )
 
 
-            if request.method not in view.allowed_methods:
+            kwargs = {
+                'app_label': view.model._meta.app_label,
+                'model_name': view.model._meta.model_name
+            }
 
-                raise MethodNotAllowed(method = request.method)
+            _perms_map = {    # Expand variables
+                    method: [
+                        perm % kwargs for perm in perms
+                            if request.user.has_perm(
+                                permission = perm % kwargs,
+                                tenancy_permission = False,
+                            )
+                    ]
+                        for method, perms in self.perms_map.items()
+            }
 
+            view.allowed_methods = [
+                method for method in view.allowed_methods
+                    if _perms_map.get(method, None)
+            ]
+
+            # Update AllowedMthods header as it may have changed
+            view.headers = view.default_response_headers
 
             if not request.user.has_perms(
                 permission_list = view.permissions_required,
