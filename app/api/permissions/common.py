@@ -36,7 +36,7 @@ class CenturionModelPermissions(
                 'OPTIONS': [
                     '%(app_label)s.view_%(model_name)s',
                     *(
-                        getattr(self, '_view_perms_map', {}).get('OPTIONSGET', [] )
+                        getattr(self, '_view_perms_map', {}).get('OPTIONS', [] )
                         if self._view_perms_map is not None
                         else []
                     )
