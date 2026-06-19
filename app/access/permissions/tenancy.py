@@ -219,11 +219,7 @@ class TenancyPermissions(
 
             self._view_perms_map = getattr(view, 'perms_map', {})
 
-
-            view.permissions_required = self.get_required_permissions(
-                method = request.method,
-                model_cls = view.model
-            )
+            self._view_allowed_methods = getattr(view, 'allowed_methods', {})
 
             if request.user.is_anonymous:
 
@@ -232,24 +228,11 @@ class TenancyPermissions(
                 )
 
 
-            kwargs = {
-                'app_label': view.model._meta.app_label,
-                'model_name': view.model._meta.model_name
-            }
+            view.permissions_required = self.get_required_permissions(
+                method = request.method,
+                model_cls = view.model
+            )
 
-            _perms_map = {    # Expand variables
-                    method: [
-                        perm % kwargs for perm in perms
-                    ]
-                        for method, perms in self.perms_map.items()
-            }
-
-            view.allowed_methods = [
-                method for method in view.allowed_methods
-                    if request.user.has_perms(
-                        permission_list = _perms_map.get(method, None),
-                    )
-            ]
 
             # Update AllowedMthods header as it may have changed
             view.headers = view.default_response_headers
@@ -285,7 +268,10 @@ class TenancyPermissions(
                 and view.action in [ 'metadata', 'list' ]
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
             elif(
                 request.user.has_perms(
@@ -294,7 +280,10 @@ class TenancyPermissions(
                 and not self.is_tenancy_model(view)
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
             elif(
                 request.user.has_perms(
@@ -305,7 +294,10 @@ class TenancyPermissions(
                 and obj_organization is not None
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
             elif(
                 request.user.has_perms(
@@ -316,7 +308,10 @@ class TenancyPermissions(
                 and obj_organization is not None
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
 
             raise PermissionDenied(

@@ -394,6 +394,69 @@ class TenancyPermissionsTestCases(
 
 
 
+    def test_function_called_permission_allowed_finaliser(self, viewset, mocker,
+        parameterized, param_key_users,
+        param_not_used, param_request_method, param_raised_exception, param_object_tenancy,
+        param_user_tenancy,param_required_permission, param_user_permissions, param_is_superuser,
+        param_is_tenancy_model, param_kwargs, param_exec_code
+    ):
+        """Test Function called
+
+        Ensure that fn `permission_allowed_finaliser` is called for user with
+        permission.
+        """
+
+
+        mocker.patch.object(
+            viewset.permission_classes[0], 'is_tenancy_model',
+            return_value = param_is_tenancy_model
+        )
+        mocker.patch.object(
+            viewset.permission_classes[0], 'get_tenancy',
+            return_value = param_object_tenancy
+        )
+
+        view = viewset(
+            kwargs = param_kwargs,
+            method = param_request_method,
+            obj_organization = param_object_tenancy,
+            permission_required = param_required_permission,
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = param_is_superuser,
+                tenancy = param_user_tenancy,
+                permissions = param_user_permissions,
+            )
+        )
+
+        mocker.patch('rest_framework.permissions.DjangoModelPermissions.get_required_permissions', return_value = [ param_required_permission ] )
+
+        view.allowed_methods = [ param_request_method ]
+
+        finaliser = mocker.spy(view.permission_classes[0],'permission_allowed_finaliser')
+
+        view.permission_classes[0]().has_permission(request = view.request, view = view)
+
+        if param_raised_exception is None:
+
+            finaliser.assert_called_once()
+            
+
+        else:
+            finaliser.assert_not_called()
+
+            # not called
+
+        # if param_raised_exception:
+
+        #     assert not view.permission_classes[0]().has_permission(request = view.request, view = view)
+
+        # else:
+
+        #     assert view.permission_classes[0]().has_permission(request = view.request, view = view)
+
+
+
     @property
     def parameterized_object(self) -> dict:
 
