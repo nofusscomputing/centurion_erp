@@ -26,7 +26,7 @@ celery==5.4.0
     # via
     #   -r requirements.txt
     #   django-celery-results
-certifi==2026.5.20
+certifi==2026.6.17
     # via
     #   -r requirements.txt
     #   requests
@@ -38,7 +38,7 @@ charset-normalizer==3.4.7
     # via
     #   -r requirements.txt
     #   requests
-click==8.4.0
+click==8.4.1
     # via
     #   -r requirements.txt
     #   celery
@@ -57,7 +57,7 @@ click-repl==0.3.0
     # via
     #   -r requirements.txt
     #   celery
-cryptography==48.0.0
+cryptography==49.0.0
     # via
     #   -r requirements.txt
     #   pyjwt
@@ -97,15 +97,15 @@ djangorestframework-jsonapi==7.1.0
     # via -r requirements.txt
 drf-spectacular[sidecar]==0.29.0
     # via -r requirements.txt
-drf-spectacular-sidecar==2026.5.1
+drf-spectacular-sidecar==2026.6.1
     # via
     #   -r requirements.txt
     #   drf-spectacular
-greenlet==3.5.1
+greenlet==3.5.2
     # via
     #   -r requirements.txt
     #   sqlalchemy
-idna==3.15
+idna==3.18
     # via
     #   -r requirements.txt
     #   requests
@@ -165,7 +165,7 @@ pycparser==3.0
     #   cffi
 pygments==2.20.0
     # via -r requirements.txt
-pyjwt[crypto]==2.12.1
+pyjwt[crypto]==2.13.0
     # via
     #   -r requirements.txt
     #   social-auth-core
@@ -248,7 +248,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.7.0
+wcwidth==0.8.1
     # via
     #   -r requirements.txt
     #   prompt-toolkit

@@ -120,3 +120,66 @@ class SuperUserPermissionPyTest(
                 is_superuser = True
             )
         )
+
+
+
+    def test_function_called_permission_allowed_finaliser_has_permission(self, mocker,
+        viewset,
+    ):
+
+        permission_required = 'boo'
+
+        view = viewset.__class__(
+            method = 'GET',
+            kwargs = {},
+            permission_required = permission_required,
+            obj_organization = 1,
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = True,
+                permissions = [ permission_required ],
+                tenancy = 1,
+            )
+        )
+
+        view.get_log = None
+        mocker.patch.object(view, 'get_log')
+
+        mocker.patch('rest_framework.permissions.DjangoModelPermissions.get_required_permissions', return_value = [ permission_required ] )
+
+        finaliser = mocker.spy(view.permission_classes[0],'permission_allowed_finaliser')
+
+        view.permission_classes[0]().has_permission(
+            request = view.request,
+            view = view
+        )
+
+        finaliser.assert_called_once()
+
+
+    def test_function_called_permission_allowed_finaliser_anon_denied(self, mocker,
+        viewset,
+    ):
+
+        view = viewset.__class__(
+            method = 'GET',
+            kwargs = {},
+            user = MockUser(
+                is_anonymous = True,
+                is_superuser = True
+            )
+        )
+
+        view.get_log = None
+        mocker.patch.object(view, 'get_log')
+
+        finaliser = mocker.spy(view.permission_classes[0],'permission_allowed_finaliser')
+
+        with pytest.raises( NotAuthenticated ):
+
+            view.permission_classes[0]().has_permission(
+                request = view.request,
+                view = view
+            )
+
+        finaliser.assert_not_called()

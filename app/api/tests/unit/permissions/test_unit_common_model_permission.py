@@ -5,6 +5,10 @@ from unittest.mock import PropertyMock
 from pytest_simplified.suites.attributes import ClassAttributesTestCases
 from pytest_simplified.suites.functions import ClassFunctionsTestCases
 
+from rest_framework.exceptions import (
+    NotAuthenticated,
+)
+
 from api.permissions.common import (
     CenturionModelPermissions,
 )
@@ -114,6 +118,16 @@ class MockLogger:
 
 
 class MyMockView:
+
+    default_response_headers = [
+        'DELETE',
+        'GET',
+        'HEAD',
+        'OPTIONS',
+        'PATCH',
+        'POST',
+        'PUT'
+    ]
 
     class MockModel:
 
@@ -229,6 +243,88 @@ class CenturionModelPermissionTestCases(
         assert issubclass(test_class, CenturionModelPermissions)
 
 
+
+    def test_function_called_permission_allowed_finaliser_has_permission(self, mocker,
+        viewset,
+    ):
+        """Test Function called
+
+        Ensure that fn `permission_allowed_finaliser` is called for user with
+        permission.
+        """
+
+        mocker.patch.object(
+            viewset.permission_classes[0], 'is_tenancy_model',
+            return_value = True
+        )
+        mocker.patch.object(
+            viewset.permission_classes[0], 'get_tenancy',
+            return_value = 1
+        )
+
+        permission_required = 'boo'
+
+        view = viewset(
+            method = 'GET',
+            kwargs = {},
+            permission_required = permission_required,
+            obj_organization = 1,
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = False,
+                permissions = [ permission_required ],
+                tenancy = 1,
+            )
+        )
+
+        view.get_log = None
+        mocker.patch.object(view, 'get_log')
+
+        mocker.patch('rest_framework.permissions.DjangoModelPermissions.get_required_permissions', return_value = [ permission_required ] )
+
+        finaliser = mocker.spy(view.permission_classes[0],'permission_allowed_finaliser')
+
+        view.permission_classes[0]().has_permission(
+            request = view.request,
+            view = view
+        )
+
+        finaliser.assert_called_once()
+
+
+    def test_function_called_permission_allowed_finaliser_anon_denied(self, mocker,
+        viewset,
+    ):
+        """Test Function called
+
+        Ensure that fn `permission_allowed_finaliser` is Not called for anon
+        user, as they should be denied access.
+        """
+
+        view = viewset(
+            method = 'GET',
+            kwargs = {},
+            user = MockUser(
+                is_anonymous = True,
+                is_superuser = False
+            )
+        )
+
+        view.get_log = None
+        mocker.patch.object(view, 'get_log')
+
+        finaliser = mocker.spy(view.permission_classes[0],'permission_allowed_finaliser')
+
+        with pytest.raises( NotAuthenticated ):
+
+            view.permission_classes[0]().has_permission(
+                request = view.request,
+                view = view
+            )
+
+        finaliser.assert_not_called()
+
+
     def test_function_has_permission_no_call_is_superuser(self, viewset, mocker):
         """Test Function
 
@@ -310,3 +406,11 @@ class CenturionModelPermissionPyTest(
     @pytest.mark.xfail( reason = 'Common permissions raises notimplemented exception. Test is N/A.' )
     def test_function_has_permission_no_call_is_superuser(self, viewset, mocker):
         assert False
+
+
+    def test_function_called_permission_allowed_finaliser_has_permission(self):
+        pytest.xfail( reason = 'test is N/A for base class.')
+
+
+    def test_function_called_permission_allowed_finaliser_anon_denied(self):
+        pytest.xfail( reason = 'test is N/A for base class.')

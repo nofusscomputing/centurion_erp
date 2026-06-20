@@ -345,17 +345,28 @@ class ViewSet(
                     ).get_related_model()
 
 
-                if ticket:
+                if(
+                    self.model()._base_model._meta.model_name == 'ticketcommentaction'
+                    or self.model._meta.model_name == 'ticketcommentaction'
+                    ):
 
-                    triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
+                    action_comment_import_permission: str = f'{self.model._meta.app_label}.import_{self.model._meta.model_name}'
+
+                    self._perms_map: dict[str, list[str]] = {
+                        'POST': [ action_comment_import_permission ],
+                    }
+
+                elif ticket:
+
+                    ticket_triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
 
                     if self.model._meta.model_name == 'ticketcommenttask':
 
                         self._perms_map: dict[str, list[str]] = {
-                            'POST': [ triage_permission ],
-                            'PUT': [ triage_permission ],
-                            'PATCH': [ triage_permission ],
-                            'DELETE': [ triage_permission ],
+                            'POST': [ ticket_triage_permission ],
+                            'PUT': [ ticket_triage_permission ],
+                            'PATCH': [ ticket_triage_permission ],
+                            'DELETE': [ ticket_triage_permission ],
                         }
 
             except Exception:

@@ -19,6 +19,8 @@ class UserPermissions(
 
     def has_permission(self, request, view):
 
+        self._view_allowed_methods = getattr(view, 'allowed_methods', {})
+
         if request.user.is_anonymous:
 
             raise NotAuthenticated(
@@ -33,15 +35,24 @@ class UserPermissions(
 
         if view.action in [ 'create' ]:
 
-            return True
+            return self.permission_allowed_finaliser(
+                view,
+                user = request.user
+            )
 
         elif view.action in [ 'list', 'metadata' ]:
 
-            return True
+            return self.permission_allowed_finaliser(
+                view,
+                user = request.user
+            )
 
         elif view.action in [ 'retrieve', 'destroy', 'partial_update', 'update' ]:
 
-            return True
+            return self.permission_allowed_finaliser(
+                view,
+                user = request.user
+            )
 
 
         return False

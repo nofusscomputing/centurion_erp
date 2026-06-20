@@ -116,7 +116,7 @@ Feature table uses the following keys:
 | | Test Management | :x: |  |
 | | Release Management | :x: |  |
 | | [Repository Management](./user/devops/git_repository.md) | :recycle: | _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_ |
-| | Requirements Management | :x: |  |
+| | Requirements Management | :x: | _[see #1175](https://github.com/nofusscomputing/centurion_erp/issues/1175)_ |
 | | Version Control / Source Code Management | :x: |  |
 | | Public Repository Management | :x: | _[see #998](https://github.com/nofusscomputing/centurion_erp/issues/998)_ |
 | Facilities Management ||| _[see #574](https://github.com/nofusscomputing/centurion_erp/issues/574)_ |
