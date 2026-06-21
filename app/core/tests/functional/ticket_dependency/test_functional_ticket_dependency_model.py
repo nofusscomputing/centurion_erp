@@ -72,6 +72,46 @@ class TicketDependencyModelTestCases(
 
 
 
+    @pytest.mark.signal_action_comment
+    @pytest.mark.tickets
+    def test_signal_delete_model_creates_action_comment_on_ticket(self, model,
+        created_model, model_ticketcommentactionticketdependency
+    ):
+        """Model Delete Check
+
+        When a ticket dependency is deleted, it must also create an action
+        comment on the ticket.
+
+        When any side of a dependency is deleted, the other side is concurrently
+        removed as well.
+
+        The action comment is create via signal `ticket_action_comment_ticket_dependency`
+        """
+
+        # Create inverse dependency
+        model.objects.create(
+            ticket = created_model.dependent_ticket,
+            how_related = created_model.how_related,
+            dependent_ticket = created_model.ticket,
+            organization = created_model.dependent_ticket.organization,
+            user = created_model.user
+        )
+
+        created_model.delete()
+
+
+        db_check = model_ticketcommentactionticketdependency.objects.filter(
+            is_create = False,
+            ticket = created_model.ticket,
+            link_type = created_model.how_related,
+            dependent_ticket_id = created_model.dependent_ticket
+        )
+
+
+        assert len(db_check) == 1
+
+
+
 class TicketDependencyModelInheritedCases(
     TicketDependencyModelTestCases,
 ):
