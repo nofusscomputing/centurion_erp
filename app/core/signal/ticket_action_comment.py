@@ -10,6 +10,7 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
+from core.models.model_tickets import ModelTicket
 from core.models.ticket_base import TicketBase
 from core.models.ticket_comment_action import TicketCommentAction
 
@@ -46,77 +47,6 @@ def get_action_user(instance):
                 break
 
     return user
-
-
-def filter_models(instance, created) -> str | None:
-    """Filter Models / Get Comment source
-
-    Not all models should create an action comment. This function filters those
-    models out. On the inverse, will return the comment source for the action.
-
-    Args:
-        instance (Model): The model to check
-        created (bool): was the save action a Creation.
-
-    Returns:
-        str: The action source
-        None: Dont create an action comment
-    """
-
-    action_comment_models: list = []
-
-    base_model = getattr(instance, '_base_model', None)
-
-    if base_model:
-
-        base_model = base_model._meta.model_name
-
-    user = get_action_user(instance = instance)
-
-    if(
-        base_model == 'modelticket'
-        and user
-    ):
-
-        model_field = getattr(instance, 'model', None)
-
-        model_name = getattr(model_field, '_meta', '')
-        model_check = False
-
-        if model_name:
-            model_name = model_name.model_name
-
-            model_check = (model_name == str(model_name).replace('ticket', ''))
-
-        if(
-            (
-                model_check
-                and not model_field._ticket_linkable
-            ) or instance.__class__ == instance._base_model
-        ):
-            return None
-
-        return 'model'    # Action comment for linking model
-
-
-    elif(
-        base_model == 'ticketbase'
-        and not created
-        and user
-    ):
-
-        return 'ticket'    # Action comment ticket save
-
-
-    elif(
-        instance._meta.model_name not in action_comment_models
-        and base_model != 'ticketbase'
-    ):
- 
-        return None
-
-
-    return None
 
 
 
@@ -324,86 +254,54 @@ def ticket_m2m(instance, field, model, action:str, ids: list[int] ) -> None:
 
 
 
-def link_model_ticket(instance, action:str) -> None:
-    """Create action comment when model linked
-
-    Args:
-        instance (Model): Model that was linked to ticket
-        action (str): What action occured. choice: '' | delete.
-    """
-
-    text: str = 'Linked model'
-    if action == 'delete':
-
-        text: str = 'Un-linked model'
-
-
-    create_action_comment(
-        ticket = instance.ticket,
-        user = get_action_user( instance = instance ).get_entity(),
-        text = f'{text} ${instance.model.model_tag}-{instance.model.id}'
-    )
-
-
-
 @receiver(signal=m2m_changed, sender=TicketBase.assigned_to.through, dispatch_uid="ticket_action_comment_save")
 @receiver(signal=m2m_changed, sender=TicketBase.subscribed_to.through, dispatch_uid="ticket_action_comment_save")
 @receiver(signal=post_delete, dispatch_uid="ticket_action_comment_save")
 @receiver(signal=post_save, dispatch_uid="ticket_action_comment_save")
 def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
 
+    if isinstance(instance, ModelTicket):
+        return
+
     action: str = kwargs.get('action', '')
 
     if kwargs.get('signal') is post_delete:
         action = 'post_delete'
-
-    action_comment_source = filter_models(instance, created)
 
     try:
 
         log: Logger = settings.CENTURION_LOG.getChild('ticket_action_comment')
 
         if(
-            action_comment_source is None
-            or kwargs.get('created', False)
+            kwargs.get('created', False)
             or action.startswith('pre_')
         ):
 
             return
 
-        elif action_comment_source == 'ticket':
 
-            if action in ['post_add', 'post_remove']:    # m2m field edit
+        if action in ['post_add', 'post_remove']:    # m2m field edit
 
-                field = None
+            field = None
 
-                for m2m_field in instance._meta.many_to_many:
+            for m2m_field in instance._meta.many_to_many:
 
-                    if m2m_field.remote_field.through == sender:
+                if m2m_field.remote_field.through == sender:
 
-                        field = m2m_field
-
-
-                ticket_m2m(
-                    instance = instance,
-                    field = field,
-                    model = kwargs['model'],
-                    action = str(action)[5:],
-                    ids = list(kwargs['pk_set']),
-                    
-                )
-
-            elif action == '':    # Ticket edit
-
-                ticket( instance )
+                    field = m2m_field
 
 
-        elif action_comment_source == 'model':    # Model linked / un-linked
-
-            link_model_ticket(
-                instance = instance, 
+            ticket_m2m(
+                instance = instance,
+                field = field,
+                model = kwargs['model'],
                 action = str(action)[5:],
+                ids = list(kwargs['pk_set']),
             )
+
+        elif action == '':    # Ticket edit
+
+            ticket( instance )
 
 
     except Exception as e:
@@ -413,7 +311,6 @@ def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
                 'unable to save action comment for a ticket '
                 'vars: '
                 f"sender={sender._meta.app_label}.{sender._meta.model_name} "
-                f"action_comment_source={action_comment_source} "
                 f"model={instance._meta.model_name} "
                 f"app_label={instance._meta.app_label} "
                 f"context={instance.context} "
