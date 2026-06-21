@@ -29,12 +29,19 @@ class ModelTestCases:
 
     @pytest.fixture( scope = 'function')
     def created_model(self, request, django_db_blocker,
-        model, model_kwargs, mocker, model_user, kwargs_user
+        model, model_kwargs, mocker, model_user, kwargs_user,
+        model_employee, kwargs_employee
     ):
 
         item = None
 
         if not model._meta.abstract:
+
+            employee = model_employee.objects.create( **kwargs_employee() )
+
+            mocker.patch.object(model, 'context', {
+                model._meta.model_name: employee.user,
+            })
 
             with django_db_blocker.unblock():
 
