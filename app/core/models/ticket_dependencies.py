@@ -46,7 +46,7 @@ class TicketDependency(
         blank = False,
         help_text = 'This Ticket',
         null = False,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         related_name = 'ticket',
         verbose_name = 'Ticket',
     )
@@ -65,7 +65,7 @@ class TicketDependency(
         blank = False,
         help_text = 'The Related Ticket',
         null = False,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         related_name = 'dependent_ticket',
         verbose_name = 'Related Ticket',
     )
