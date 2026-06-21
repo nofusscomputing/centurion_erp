@@ -10,9 +10,9 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
-from core.models.model_tickets import ModelTicket
 from core.models.ticket_base import TicketBase
 from core.models.ticket_comment_action import TicketCommentAction
+from core.models.ticket_comment_base import TicketCommentBase
 
 
 
@@ -260,7 +260,11 @@ def ticket_m2m(instance, field, model, action:str, ids: list[int] ) -> None:
 @receiver(signal=post_save, dispatch_uid="ticket_action_comment_save")
 def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
 
-    if isinstance(instance, ModelTicket):
+    if(
+        (instance.__class__ not in instance._meta.many_to_many
+        and not isinstance(instance, TicketBase))
+        or isinstance(instance, TicketCommentBase)
+    ):
         return
 
     action: str = kwargs.get('action', '')
