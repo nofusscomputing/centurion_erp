@@ -26,6 +26,11 @@ class TicketDependency(
             'id'
         ]
 
+        unique_together = [
+            'ticket',
+            'dependent_ticket'
+        ]
+
         verbose_name = 'Ticket Dependency'
 
         verbose_name_plural = 'Ticket Dependencies'
