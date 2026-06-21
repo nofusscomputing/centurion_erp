@@ -11,22 +11,6 @@ from core.tests.functional.centurion_abstract.test_functional_centurion_abstract
 class TicketDependencyModelTestCases(
     CenturionAbstractTenancyModelInheritedCases
 ):
-    pass
-
-
-
-class TicketDependencyModelInheritedCases(
-    TicketDependencyModelTestCases,
-):
-    pass
-
-
-
-@pytest.mark.module_core
-class TicketDependencyModelPyTest(
-    TicketDependencyModelTestCases,
-):
-
 
 
     def test_model_delete_removes_inverse_dependency(self, model, created_model):
@@ -61,3 +45,42 @@ class TicketDependencyModelPyTest(
 
         assert len(db_check) == 0
 
+
+    @pytest.mark.signal_action_comment
+    @pytest.mark.tickets
+    def test_signal_new_dependency_creates_action_comment_on_ticket(
+        self, model, created_model,
+        model_ticketcommentactionticketdependency
+    ):
+        """Ticket Action Comment Signal
+
+        When a new dependency is created, an action comment must be made on the
+        dependent ticket the dependency was created.
+
+        The action comment is create via signal `ticket_action_comment_ticket_dependency`
+        """
+
+        db_check = model_ticketcommentactionticketdependency.objects.filter(
+            is_create = True,
+            ticket = created_model.ticket,
+            link_type = created_model.how_related,
+            dependent_ticket_id = created_model.dependent_ticket
+        )
+
+
+        assert len(db_check) == 1
+
+
+
+class TicketDependencyModelInheritedCases(
+    TicketDependencyModelTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_core
+class TicketDependencyModelPyTest(
+    TicketDependencyModelTestCases,
+):
+    pass
