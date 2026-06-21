@@ -50,6 +50,10 @@ class TicketCommentBaseModelTestCases:
             for dependent_ticket in ticket.dependent_ticket.model.objects.all():
                 dependent_ticket.delete()
 
+
+            for model_link in ticket.linked_models.model.objects.all():
+                model_link.delete()
+
             ticket.delete()
 
 

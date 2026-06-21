@@ -58,13 +58,40 @@ def ticket_action_comment_ticket_dependency(
             'ticket_action_comment_ticket_dependency'
         )
 
+        inverse_exists = TicketDependency.objects.filter(
+            ticket = instance.dependent_ticket,
+            dependent_ticket = instance.ticket
+        )
+
+        user = get_action_user( instance = instance ).get_entity()
+
+        if len( inverse_exists ) == 0 and kwargs.get('signal') == post_save :
+
+            inverse_how_related = instance.how_related
+
+            if instance.how_related == TicketDependency.Related.BLOCKS:
+
+                inverse_how_related = TicketDependency.Related.BLOCKED_BY
+
+            elif instance.how_related == TicketDependency.Related.BLOCKED_BY:
+
+                inverse_how_related = TicketDependency.Related.BLOCKS
+
+            TicketDependency.objects.create(
+                ticket = instance.dependent_ticket,
+                how_related = inverse_how_related,
+                dependent_ticket = instance.ticket,
+                organization = instance.dependent_ticket.organization,
+                user = user
+            )
+
         TicketCommentActionTicketDependency.objects.create(
             organization = instance.organization,
 
             ticket = instance.ticket,
             is_closed = True,
             body = '',
-            user = get_action_user( instance = instance ).get_entity(),
+            user = user,
 
             is_create = ( kwargs.get('signal') == post_save ),
             link_type = instance.how_related,

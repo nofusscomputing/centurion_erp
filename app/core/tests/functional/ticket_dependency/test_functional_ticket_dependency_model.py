@@ -26,15 +26,6 @@ class TicketDependencyModelTestCases(
 
         dependent_ticket = db_model.dependent_ticket
 
-
-        model.objects.create(
-            ticket = dependent_ticket,
-            how_related = db_model.how_related,
-            dependent_ticket = ticket,
-            organization = dependent_ticket.organization,
-            user = db_model.user
-        )
-
         db_model.delete()
 
         db_check = model.objects.filter(
@@ -88,15 +79,6 @@ class TicketDependencyModelTestCases(
         The action comment is create via signal `ticket_action_comment_ticket_dependency`
         """
 
-        # Create inverse dependency
-        model.objects.create(
-            ticket = created_model.dependent_ticket,
-            how_related = created_model.how_related,
-            dependent_ticket = created_model.ticket,
-            organization = created_model.dependent_ticket.organization,
-            user = created_model.user
-        )
-
         created_model.delete()
 
 
@@ -127,15 +109,6 @@ class TicketDependencyModelTestCases(
 
         The action comment is create via signal `ticket_action_comment_ticket_dependency`
         """
-
-        # Create inverse dependency
-        model.objects.create(
-            ticket = created_model.dependent_ticket,
-            how_related = created_model.how_related,
-            dependent_ticket = created_model.ticket,
-            organization = created_model.dependent_ticket.organization,
-            user = created_model.user
-        )
 
         created_model.delete()
 
