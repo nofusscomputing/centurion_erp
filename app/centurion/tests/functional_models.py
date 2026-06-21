@@ -85,8 +85,10 @@ class ModelTestCases:
         if item:
 
             with django_db_blocker.unblock():
-
-                item.delete()
+                try:
+                    item.delete()
+                except:
+                    pass
 
 
 
