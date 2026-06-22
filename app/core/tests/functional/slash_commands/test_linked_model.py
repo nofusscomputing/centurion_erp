@@ -247,7 +247,7 @@ class LinkedModelTicketCommentTestCases(
         parameterized, param_key_slash_command,
         param_link, param_slash_command,
         param_text, param_stays_in_comment,
-        model_ticketcommentaction, model_ticketcommentbase
+        model_ticketcommentactionmodellink, model_ticketcommentbase,
     ):
         """Slash command Check
 
@@ -283,9 +283,10 @@ class LinkedModelTicketCommentTestCases(
 
         ticket_comment.save()
 
-        action_comment = model_ticketcommentaction.objects.filter(
+        action_comment = model_ticketcommentactionmodellink.objects.filter(
+            is_create = True,
             ticket = ticket_comment.ticket,
-            body = f'Linked model {command_obj}'
+            model_id = created_model.id
         )
 
 
@@ -298,13 +299,13 @@ class LinkedModelTicketCommentTestCases(
     @pytest.mark.slash_command
     @pytest.mark.slash_command_linked_model
     @pytest.mark.tickets
-    def test_slash_command_link_ticket_comment_creates_action_comment_on_remove(self, 
+    def test_slash_command_link_ticket_comment_creates_action_comment_on_remove(self,
         mocker, model,
         created_model, ticket_comment,
         parameterized, param_key_slash_command,
         param_link, param_slash_command,
         param_text, param_stays_in_comment,
-        model_ticketcommentaction, model_ticketcommentbase
+        model_ticketcommentactionmodellink, model_ticketcommentbase,
     ):
         """Slash command Check
 
@@ -341,9 +342,10 @@ class LinkedModelTicketCommentTestCases(
 
         ticket_comment.save()
 
-        action_comment = model_ticketcommentaction.objects.filter(
+        action_comment = model_ticketcommentactionmodellink.objects.filter(
+            is_create = True,
             ticket = ticket_comment.ticket,
-            body = f'Linked model {command_obj}'
+            model_id = created_model.id
         )
 
 
@@ -365,9 +367,10 @@ class LinkedModelTicketCommentTestCases(
 
         ticket_link.delete()
 
-        action_comment = model_ticketcommentaction.objects.filter(
+        model_ticketcommentactionmodellink.objects.filter(
+            is_create = False,
             ticket = ticket_comment.ticket,
-            body = f'Un-linked model {command_obj}'
+            model_id = created_model.id
         )
 
 
