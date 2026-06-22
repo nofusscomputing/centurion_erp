@@ -120,26 +120,6 @@ For this command to process the following conditions must be met:
                         )
 
 
-                        inverse_how_related = how_related
-
-                        if how_related == TicketDependency.Related.BLOCKS:
-
-                            inverse_how_related = TicketDependency.Related.BLOCKED_BY
-
-                        elif how_related == TicketDependency.Related.BLOCKED_BY:
-
-                            inverse_how_related = TicketDependency.Related.BLOCKS
-
-
-                        TicketDependency.objects.create(
-                            ticket = to_ticket,
-                            how_related = inverse_how_related,
-                            dependent_ticket = from_ticket,
-                            organization = to_ticket.organization,
-                            user = comment_user
-                        )
-
-
                 except centurion_exceptions.ValidationError as err:
 
                     error = err.get_codes().get('non_field_errors', None)

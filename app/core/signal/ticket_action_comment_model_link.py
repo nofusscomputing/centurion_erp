@@ -7,10 +7,10 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
-from core.models.ticket_comment_action_ticket_dependency import (
-    TicketCommentActionTicketDependency
+from core.models.ticket_comment_action_model_link import (
+    TicketCommentActionModelLink
 )
-from core.models.ticket_dependencies import TicketDependency
+from core.models.model_tickets import ModelTicket
 
 
 
@@ -39,18 +39,18 @@ def get_action_user(instance):
 
 @receiver(
     signal=post_delete,
-    sender = TicketDependency,
-    dispatch_uid="ticket_action_comment_ticket_dependency_save"
+    dispatch_uid="ticket_action_comment_model_link_save"
 )
 @receiver(
     signal=post_save,
-    sender = TicketDependency,
-    dispatch_uid="ticket_action_comment_ticket_dependency_save"
+    dispatch_uid="ticket_action_comment_model_link_save"
 )
-def ticket_action_comment_ticket_dependency(
+def ticket_action_comment_model_link(
     sender, instance, **kwargs
 ) -> None:
 
+    if not isinstance(instance, ModelTicket):
+        return
 
     try:
 
@@ -58,44 +58,18 @@ def ticket_action_comment_ticket_dependency(
             'ticket_action_comment_ticket_dependency'
         )
 
-        inverse_exists = TicketDependency.objects.filter(
-            ticket = instance.dependent_ticket,
-            dependent_ticket = instance.ticket
-        )
 
-        user = get_action_user( instance = instance ).get_entity()
-
-        if len( inverse_exists ) == 0 and kwargs.get('signal') == post_save :
-
-            inverse_how_related = instance.how_related
-
-            if instance.how_related == TicketDependency.Related.BLOCKS:
-
-                inverse_how_related = TicketDependency.Related.BLOCKED_BY
-
-            elif instance.how_related == TicketDependency.Related.BLOCKED_BY:
-
-                inverse_how_related = TicketDependency.Related.BLOCKS
-
-            TicketDependency.objects.create(
-                ticket = instance.dependent_ticket,
-                how_related = inverse_how_related,
-                dependent_ticket = instance.ticket,
-                organization = instance.dependent_ticket.organization,
-                user = user
-            )
-
-        TicketCommentActionTicketDependency.objects.create(
+        TicketCommentActionModelLink.objects.create(
             organization = instance.organization,
 
             ticket = instance.ticket,
             is_closed = True,
             body = '',
-            user = user,
+            user = get_action_user( instance = instance ).get_entity(),
 
             is_create = ( kwargs.get('signal') == post_save ),
-            link_type = instance.how_related,
-            dependent_ticket_id = instance.dependent_ticket,
+            model_id = instance.model.id,
+            content_type = instance.content_type,
         )
 
 

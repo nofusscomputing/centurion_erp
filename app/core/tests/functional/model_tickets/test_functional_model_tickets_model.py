@@ -114,6 +114,60 @@ class ModelTicketModelInheritedCases(
 
 
 
+    @pytest.mark.signal_action_comment
+    @pytest.mark.tickets
+    def test_signal_ticket_link_model_creates_action_comment(self, model,
+        created_model, model_ticketcommentactionmodellink
+    ):
+        """Action Comment Signal
+
+        Whenever a model is linked to a ticket, an action comment must be
+        created.
+        """
+
+        if model._meta.abstract:
+
+            pytest.xfail( reason = 'Model is an Abstract Model and can not be created.' )
+
+
+        db_model = model.objects.get( id = created_model.id )
+
+        db_check = model_ticketcommentactionmodellink.objects.filter(
+            is_create = True,
+            ticket = db_model.ticket,
+            model_id = db_model.model_id
+        )
+
+        assert len(db_check) == 1
+
+
+
+    @pytest.mark.signal_action_comment
+    @pytest.mark.tickets
+    def test_signal_ticket_unlink_model_creates_action_comment(self, model,
+        created_model, model_ticketcommentactionmodellink
+    ):
+        """Action Comment Signal
+
+        Whenever a model is un-linked from a ticket, an action comment must be
+        created.
+        """
+
+        if model._meta.abstract:
+
+            pytest.xfail( reason = 'Model is an Abstract Model and can not be created.' )
+
+
+        created_model.delete()
+
+        db_check = model_ticketcommentactionmodellink.objects.filter(
+            is_create = False,
+            ticket = created_model.ticket,
+            model_id = created_model.model_id
+        )
+
+        assert len(db_check) == 1
+
 
 
 @pytest.mark.module_core

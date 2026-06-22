@@ -5,6 +5,11 @@ from core.models.ticket.ticket_linked_items import deleted_model, TicketLinkedIt
 
 
 
+
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 @receiver(deleted_model)
 def signal_deleted_model(sender, item_id, item_type, **kwargs):
     """Clean up model TicketLinkedItems
