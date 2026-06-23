@@ -42,6 +42,18 @@ class TicketCommentActionFieldEdit(
         verbose_name = 'Field Name'
     )
 
+    edit_type = models.IntegerField(
+        blank = False,
+        choices = [
+            (0, 'Add'),
+            (1, 'Edit'),
+            (2, 'Remove'),
+        ],
+        default = 1,
+        help_text = 'Enables distinguishing between m2m (Add, Remove) and other fields (Edit)',
+        verbose_name = 'Edit Type'
+    )
+
     previous_value = models.CharField(
         blank = True,
         help_text = 'Value changed from',
