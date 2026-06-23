@@ -19,7 +19,14 @@ class TickActionCommentSignalTestCases(
 
         return {
             'create_action_comment': {
-                'arg_names': [ 'ticket', 'text', 'user' ],
+                'arg_names': [
+                    'ticket',
+                    'user',
+                    'edit_type',
+                    'field_name',
+                    'previous_value',
+                    'new_value'
+                ],
                 'function': True,
                 'type': FunctionType,
             },
@@ -62,17 +69,21 @@ class TickActionCommentSignalTestCases(
     ):
         """Test Function
 
-        Ensure that method does call create for the action comment.
+        Ensure that method does call create for the action field edit comment.
         """
 
         ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
 
-        create = mocker.patch('core.models.ticket_comment_action.TicketCommentAction.objects.create')
+        create = mocker.patch('core.models.ticket_comment_action_field_edit.TicketCommentActionFieldEdit.objects.create')
 
         test_class.create_action_comment(
             ticket = ticket,
-            text = 'an action comment',
-            user = ticket.opened_by
+            user = ticket.opened_by,
+
+            field_name = 'field_name',
+            edit_type = 1,
+            previous_value = 'previous_value',
+            new_value = 'new_value',
         )
 
         create.assert_called_once()
