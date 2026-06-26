@@ -1,3 +1,5 @@
+import difflib
+
 from django.db import models
 
 from core.models.ticket_comment_action import TicketCommentAction
@@ -42,6 +44,18 @@ class TicketCommentActionFieldEdit(
         verbose_name = 'Field Name'
     )
 
+    edit_type = models.IntegerField(
+        blank = False,
+        choices = [
+            (0, 'Add'),
+            (1, 'Edit'),
+            (2, 'Remove'),
+        ],
+        default = 1,
+        help_text = 'Enables distinguishing between m2m (Add, Remove) and other fields (Edit)',
+        verbose_name = 'Edit Type'
+    )
+
     previous_value = models.CharField(
         blank = True,
         help_text = 'Value changed from',
@@ -65,22 +79,64 @@ class TicketCommentActionFieldEdit(
     def __str__(self):
 
         comment = (
-            f"Changed {self.field_name} changed from _{self.previous_value}_"
+            f"changed {self.ticket.get_related_model()._meta.get_field(self.field_name).verbose_name} from _{self.previous_value}_"
             f" to **{self.new_value}**"
         )
 
-        if not self.previous_value:
+        if self.edit_type != 1:
+
+            type_label = 'added'
+            modifier = 'to'
+
+            if self.edit_type == 2:
+
+                type_label = 'removed'
+                modifier = 'from'
 
             comment = (
-                f"Set {self.field_name} to **{self.new_value}**"
+                f"{type_label} {self.previous_value} {modifier} {self.new_value}"
+            )
+
+        if(
+            not self.previous_value
+            and isinstance(
+                self.ticket.get_related_model()._meta.get_field(self.field_name),
+                models.ForeignKey
+            )
+        ):
+
+            comment = (
+                f"set {self.ticket.get_related_model()._meta.get_field(self.field_name).verbose_name} to **{self.new_value}**"
             )
 
         elif not self.new_value:
 
             comment = (
-                f"{self.user} removed ~~{self.previous_value}~~ "
-                f"from {self.field_name}"
+                f"removed ~~{self.previous_value}~~ "
+                f"from {self.ticket.get_related_model()._meta.get_field(self.field_name).verbose_name}"
             )
+
+
+        if self.field_name == 'description':
+
+            comment_field_value = ''.join(
+                str(x) for x in list(
+                    difflib.unified_diff(
+                        str(self.previous_value + '\n').splitlines(keepends=True),
+                        str(self.new_value + '\n').splitlines(keepends=True),
+                        fromfile = 'before',
+                        tofile = 'after',
+                        n = 10000,
+                        lineterm = '\n'
+                    )
+                )
+            ) + ''
+
+            comment = (
+                '<details><summary>Changed the Description</summary>'
+                    f'\n\n``` diff \n\n{comment_field_value}\n\n```\n\n'
+                '</details>'
+                )
 
 
         return comment

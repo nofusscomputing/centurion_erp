@@ -457,7 +457,7 @@ class TicketBaseModelTestCases(
     def test_action_comment_exists_edit_ticket_field(self, mocker,
         parameterized, param_key_model_fields, param_field, param_type,
         model, model_kwargs,
-        ticket, model_ticketcommentbase,
+        ticket, model_ticketcommentactionfieldedit,
     ):
         """Test Action Comment Creation
 
@@ -516,10 +516,12 @@ class TicketBaseModelTestCases(
 
         if param_type is models.ForeignKey:
 
+            new_value_text = f'${field.related_model.model_tag}-{new_value.id}'
+
             if old_value != None:
                 old_value_text = f'${field.related_model.model_tag}-{old_value.id}'
-
-            new_value_text = f'${field.related_model.model_tag}-{new_value.id}'
+            else:
+                comment = f'set {field.verbose_name} to **{new_value_text}**'
 
         elif param_type is 'diff':
 
@@ -558,15 +560,17 @@ class TicketBaseModelTestCases(
         ticket.save()
 
         if not comment:
-            comment = f'Changed {field.verbose_name} from _{old_value_text}_ to **{new_value_text}**'
+            comment = f'changed {field.verbose_name} from _{old_value_text}_ to **{new_value_text}**'
 
 
-        action_comment = model_ticketcommentbase.objects.get(
+        action_comment = model_ticketcommentactionfieldedit.objects.get(
             ticket = ticket,
-            body = comment
+            field_name = param_field,
+            edit_type = 1,
+            # body = comment
         )
 
-        assert action_comment.body == comment
+        assert str(action_comment) == comment
 
 
 
