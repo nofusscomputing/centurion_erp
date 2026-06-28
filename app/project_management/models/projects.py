@@ -347,15 +347,15 @@ class Project(
 
         duration_project: int = 0
 
-        from core.models.ticket.ticket import Ticket
+        from core.models.ticket_base import TicketBase
 
-        tickets = Ticket.objects.filter(
+        tickets = TicketBase.objects.filter(
             project = self.id
         )
 
         for ticket in tickets:
 
-            duration_project = duration_project + int(ticket.duration_ticket)
+            duration_project = duration_project + int(ticket.ticket_duration)
 
 
         return int(duration_project)
