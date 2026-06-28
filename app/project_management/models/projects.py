@@ -366,17 +366,17 @@ class Project(
 
         estimation_project: int = 0
 
-        from core.models.ticket.ticket import Ticket
+        from core.models.ticket_base import TicketBase
 
-        tickets = Ticket.objects.filter(
+        tickets = TicketBase.objects.filter(
             project = self.id
         )
 
         for ticket in tickets:
 
-            estimation = ticket.estimate
+            estimation = ticket.ticket_estimation
 
-            if ticket.estimate is None:
+            if ticket.ticket_estimation is None:
 
                 estimation = 0
 
