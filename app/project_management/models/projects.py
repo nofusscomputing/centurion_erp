@@ -395,7 +395,7 @@ class Project(
             str: Calculated percentage of project completion.
         """
 
-        from core.models.ticket.ticket import Ticket
+        from core.models.ticket_base import TicketBase
 
         ticket_status_closed = [
             TicketValues._CANCELLED_INT,
@@ -403,11 +403,11 @@ class Project(
             TicketValues._SOLVED_INT,
         ]
 
-        all_tickets = Ticket.objects.filter(
+        all_tickets = TicketBase.objects.filter(
             project = self.id,
         )
 
-        closed_tickets = Ticket.objects.filter(
+        closed_tickets = TicketBase.objects.filter(
             project = self.id,
             status__in = ticket_status_closed
         )
