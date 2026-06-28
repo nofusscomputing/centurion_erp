@@ -46,9 +46,6 @@ class ModelSerializer(
 ):
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     checkins = serializers.IntegerField(
         read_only = True,
         source = 'get_daily_checkins',

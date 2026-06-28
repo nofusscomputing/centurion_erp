@@ -76,8 +76,6 @@ class ModelSerializer(
 
     software = SoftwareField(required = True, write_only = True)
 
-    _urls = serializers.SerializerMethodField('get_url')
-
 
     class Meta:
 

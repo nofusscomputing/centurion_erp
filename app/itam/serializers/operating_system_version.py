@@ -51,10 +51,6 @@ class OperatingSystemVersionModelSerializer(
 ):
 
 
-
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     class Meta:
 
         model = OperatingSystemVersion

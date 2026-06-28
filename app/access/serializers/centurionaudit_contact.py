@@ -22,9 +22,6 @@ class ModelSerializer(
     """Git Group Audit History Base Model"""
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     class Meta:
 
         model = ContactAuditHistory

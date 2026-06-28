@@ -382,6 +382,28 @@ class ViewSet(
 
 
 
+    def get_meta_urls(self) -> dict[ str ] | dict[ str, dict[str] ]:
+
+        meta_urls = super().get_meta_urls()
+
+        if 'sub_models' in meta_urls:
+
+            sub_models = {}
+            for key, value in meta_urls['sub_models'].items():
+
+                if str(key).startswith('ticketcommentaction'):
+                    continue
+
+
+                sub_models[key] = value
+
+
+            meta_urls['sub_models'] = sub_models
+
+        return meta_urls
+
+
+
     def get_queryset(self):
 
         if self._queryset is None:

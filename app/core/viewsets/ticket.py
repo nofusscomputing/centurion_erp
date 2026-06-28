@@ -283,6 +283,17 @@ class ViewSet( SubModelViewSet ):
 
 
 
+    def get_meta_urls(self) -> dict[ str ] | dict[ str, dict[str] ]:
+
+        _meta_urls = super().get_meta_urls()
+
+        if 'sub_models' in _meta_urls:
+            del _meta_urls['sub_models']['projecttaskticket']
+
+        return self._meta_urls
+
+
+
     def get_queryset(self):
 
         if self._queryset is None:

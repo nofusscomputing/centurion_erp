@@ -48,8 +48,6 @@ class ProjectStateModelSerializer(
     ProjectStateBaseSerializer
 ):
 
-    _urls = serializers.SerializerMethodField('get_url')
-
 
     class Meta:
 

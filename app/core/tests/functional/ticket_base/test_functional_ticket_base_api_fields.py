@@ -31,11 +31,13 @@ class APITestCases(
                 **kwargs_person()
             )
 
+            kwargs = model_kwargs()
+            kwargs['organization'] = model_kwargs()['organization']
+            kwargs['title'] = 'parent ticket' + str(random.randint(9999,999999))
+
+
             parent_ticket = model.objects.create(
-                organization = model_kwargs()['organization'],
-                title = 'parent ticket' + str(random.randint(9999,999999)),
-                description = 'bla bla',
-                opened_by = model_kwargs()['opened_by'],
+                **kwargs
             )
 
 

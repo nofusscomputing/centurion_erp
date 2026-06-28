@@ -53,9 +53,6 @@ class ModelSerializer(
     """Entity Base Model"""
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     class Meta:
 
         model = Entity
