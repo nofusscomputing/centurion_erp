@@ -4,6 +4,8 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from api.viewsets.common.tenancy import ModelListRetrieveDeleteViewSet
 
+from centurion.lib.decorators import depreciate
+
 from core.models.ticket.ticket import Ticket
 from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-import
     RelatedTickets,
@@ -67,6 +69,10 @@ from core.serializers.ticket_related import (    # pylint: disable=W0611:unused-
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
+)
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
 )
 class ViewSet(ModelListRetrieveDeleteViewSet):
 

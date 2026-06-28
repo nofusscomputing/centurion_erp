@@ -1,7 +1,6 @@
 import traceback
 
 from rest_framework.exceptions import (
-    MethodNotAllowed,
     NotAuthenticated,
     ParseError,
     PermissionDenied
@@ -218,13 +217,9 @@ class TenancyPermissions(
 
         try:
 
+            self._view_perms_map = getattr(view, 'perms_map', {})
 
-            self._perms_map = getattr(view, 'perms_map', {})
-
-            view.permissions_required = self.get_required_permissions(
-                method = request.method,
-                model_cls = view.model
-            )
+            self._view_allowed_methods = getattr(view, 'allowed_methods', {})
 
             if request.user.is_anonymous:
 
@@ -233,10 +228,14 @@ class TenancyPermissions(
                 )
 
 
-            if request.method not in view.allowed_methods:
+            view.permissions_required = self.get_required_permissions(
+                method = request.method,
+                model_cls = view.model
+            )
 
-                raise MethodNotAllowed(method = request.method)
 
+            # Update AllowedMthods header as it may have changed
+            view.headers = view.default_response_headers
 
             if not request.user.has_perms(
                 permission_list = view.permissions_required,
@@ -269,7 +268,10 @@ class TenancyPermissions(
                 and view.action in [ 'metadata', 'list' ]
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
             elif(
                 request.user.has_perms(
@@ -278,7 +280,10 @@ class TenancyPermissions(
                 and not self.is_tenancy_model(view)
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
             elif(
                 request.user.has_perms(
@@ -289,7 +294,10 @@ class TenancyPermissions(
                 and obj_organization is not None
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
             elif(
                 request.user.has_perms(
@@ -300,7 +308,10 @@ class TenancyPermissions(
                 and obj_organization is not None
             ):
 
-                return True
+                return self.permission_allowed_finaliser(
+                    view,
+                    user = request.user
+                )
 
 
             raise PermissionDenied(

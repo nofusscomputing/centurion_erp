@@ -26,6 +26,10 @@ class CenturionAudit(
     _audit_enabled: bool = False
     """Don't Save audit history for audit history model"""
 
+    @property
+    def _base_model(self):
+        return CenturionAudit
+
     _notes_enabled: bool = False
     """Don't create notes table for istory model"""
 

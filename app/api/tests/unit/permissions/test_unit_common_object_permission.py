@@ -141,3 +141,11 @@ class CenturionObjectPermissionPyTest(
     @pytest.mark.xfail( reason = 'Common permissions raises notimplemented exception. Test is N/A.' )
     def test_function_has_object_permission_no_call_is_superuser(self):
         assert False
+
+
+    def test_function_called_permission_allowed_finaliser_has_permission(self):
+        pytest.xfail( reason = 'test is N/A for base class.')
+
+
+    def test_function_called_permission_allowed_finaliser_anon_denied(self):
+        pytest.xfail( reason = 'test is N/A for base class.')

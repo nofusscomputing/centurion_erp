@@ -69,7 +69,6 @@ class ModelSerializer(
         UnknownTicketType: Ticket type is undetermined.
     """
 
-    _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item) -> dict:
 

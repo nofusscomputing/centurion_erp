@@ -10,6 +10,8 @@ from api.serializers import common
 from api.serializers.common import OrganizationField
 from api.exceptions import UnknownTicketType
 
+from centurion.lib.decorators import depreciate
+
 from core import exceptions as centurion_exception
 from core import fields as centurion_field
 from core.models.ticket.ticket import Ticket
@@ -22,6 +24,10 @@ from project_management.serializers.project_milestone import ProjectMilestoneBas
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -59,6 +65,10 @@ class TicketBaseSerializer(serializers.ModelSerializer):
     is_import: bool = False
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketModelSerializer(
     common.CommonModelSerializer,
     TicketBaseSerializer
@@ -338,6 +348,10 @@ class TicketModelSerializer(
         return data
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketViewSerializer(TicketModelSerializer):
 
     assigned_teams = GroupBaseSerializer(many=True)

@@ -116,9 +116,7 @@ class ViewSet(
             self._queryset = super().get_queryset()
 
             self._queryset = self._queryset.filter(
-                Q(ticket_id=self.kwargs['ticket_id'])
-                    |
-                Q(dependent_ticket_id=self.kwargs['ticket_id'])
+                ticket_id=self.kwargs['ticket_id']
             )
 
         return self._queryset

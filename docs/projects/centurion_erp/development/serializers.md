@@ -40,7 +40,7 @@ The View serializer as the name implies is for viewing a model. Unlike the model
 
 ## Creating a Serializer
 
-All serializers are placed within a module under a directory called `serializers`. For clarification serializers are named according to its models name (`<model>._meta.model_name`). for sub-models this name is prefixed with `<base model>._meta.model_name_`.
+All serializers are placed within a module under a directory called `serializers`. For clarification serializers are named according to its models name (`<model>._meta.model_name`). for sub-models this name is prefixed with `<base model>._meta.model_name_`. Base model is derived from the models `_base_model` property.
 
 !!! danger
     Failing to use this naming schema will caused a crash as the serializers cant be located by the _"loader"_
@@ -63,6 +63,8 @@ When creating a serializer, the following requirements must be met:
 - `View` serializer must return a dict field called `_urls` which contains links to the models [core features](./models.md#core-features), including `_self`
 
 - **All** Serializer exceptions must be from `rest_framework.exceptions`
+
+- If you are replacing a model, ensure you mark it with decorator `centurion.lib.decorators.depreciated`
 
 
 ## Available Serializers

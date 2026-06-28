@@ -53,7 +53,6 @@ class ProjectModelSerializer(
     ProjectBaseSerializer,
 ):
 
-    _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item) -> dict:
 

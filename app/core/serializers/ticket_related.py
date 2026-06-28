@@ -4,6 +4,8 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
+from centurion.lib.decorators import depreciate
+
 from core.serializers.ticket_depreciated import TicketBaseSerializer
 
 from core import exceptions as centurion_exceptions
@@ -12,6 +14,10 @@ from core.models.ticket.ticket import RelatedTickets
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class RelatedTicketBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -54,6 +60,10 @@ class RelatedTicketBaseSerializer(serializers.ModelSerializer):
         ]
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class RelatedTicketModelSerializer(
     common.CommonModelSerializer,
     RelatedTicketBaseSerializer
@@ -125,6 +135,10 @@ class RelatedTicketModelSerializer(
         return attrs
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class RelatedTicketViewSerializer(RelatedTicketModelSerializer):
 
     from_ticket_id = TicketBaseSerializer()

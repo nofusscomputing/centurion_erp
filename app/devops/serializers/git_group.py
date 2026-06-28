@@ -48,7 +48,6 @@ class ModelSerializer(
     BaseSerializer
 ):
     """Base Git Repository"""
-    _urls = serializers.SerializerMethodField('get_url')
 
     provider_badge = BadgeField(label='Provider')
 

@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from django.core.exceptions import (
     ValidationError as DjangoValidationError,
 )
@@ -61,8 +63,20 @@ class CommonModelSerializer(CommonBaseSerializer):
 
     organization = OrganizationField(required = False)
 
+    _urls = serializers.SerializerMethodField( method_name = 'get_url_fields' )
+
 
     def get_url(self, item) -> dict:
+        """Build a models URL dict
+
+        Dynamically build a models URL dict for the API response.
+
+        Args:
+            item (CenturionModel): Centurion model to build for.
+
+        Returns:
+            dict: URLs dict for model in question
+        """
 
         get_url = {
             '_self': item.get_url(),
@@ -190,6 +204,24 @@ class CommonModelSerializer(CommonBaseSerializer):
 
 
         return get_url
+
+
+    def get_url_fields(self, item) -> dict:
+
+        url_dict = self.get_url( item = item )
+
+        urls = {}
+
+        if self.context['request'].accepted_media_type == 'text/html':
+
+            return {
+                name: f"{settings.SITE_URL}{url}"
+                for name, url in url_dict.items()
+            }
+
+
+        return url_dict
+
 
 
     def is_valid(self, *, raise_exception=False):

@@ -57,6 +57,8 @@ services:
         CENTURION_IMAGE: ${CENTURION_IMAGE:-ghcr.io/nofusscomputing/centurion-erp}
         CENTURION_IMAGE_TAG: ${CENTURION_IMAGE_TAG:-dev}
     container_name: centurion-erp
+    environment:
+      - PROMETHEUS_MULTIPROC_DIR=/data/prometheus
     restart: always
     hostname: centurion-erp
     volumes:
@@ -78,7 +80,14 @@ services:
     restart: always
     environment:
       - IS_WORKER=true
+      - PROMETHEUS_MULTIPROC_DIR=/data/prometheus
     hostname: centurion-worker
+    volumes:
+      - ./volumes/log-worker:/var/log:rw
+      - ./volumes/data-worker:/data:rw
+      - ./docker/settings.py:/etc/itsm/settings.py:ro
+    ports:
+      - "8081:8080"
     depends_on:
       - postgres
       - rabbitmq

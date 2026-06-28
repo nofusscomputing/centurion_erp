@@ -48,7 +48,6 @@ class ModelSerializer(
     BaseSerializer
 ):
     """Base Git Repository"""
-    _urls = serializers.SerializerMethodField('get_url')
 
     organization = serializers.PrimaryKeyRelatedField( read_only = True)
 

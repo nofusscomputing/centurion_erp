@@ -21,10 +21,11 @@ class TicketAssigneeEntityTestCases:
     @pytest.mark.module_core
     @pytest.mark.model_ticketbase
     @pytest.mark.model_ticketcommentaction
+    @pytest.mark.model_ticketcommentactionfieldedit
     @pytest.mark.tickets
     def test_ticket_assignee_add_action_comment(self, mocker,
         created_model, ticket,
-        model_ticketbase, model_ticketcommentaction,
+        model_ticketbase, model_ticketcommentactionfieldedit,
     ):
         """Ticket Action Check
 
@@ -40,10 +41,14 @@ class TicketAssigneeEntityTestCases:
 
         ticket.assigned_to.add( created_model )
 
-        action_comment = model_ticketcommentaction.objects.filter(
+        action_comment = model_ticketcommentactionfieldedit.objects.filter(
             ticket = ticket,
-            body = f'Added $entity-{created_model.id} to Assignees'
+            field_name = 'assigned_to',
+            edit_type = 0,
+            previous_value = f'$entity-{created_model.id}',
+            new_value = f'Assignees',
         )
+
 
         assert len(action_comment) == 1
 
@@ -52,10 +57,11 @@ class TicketAssigneeEntityTestCases:
     @pytest.mark.module_core
     @pytest.mark.model_ticketbase
     @pytest.mark.model_ticketcommentaction
+    @pytest.mark.model_ticketcommentactionfieldedit
     @pytest.mark.tickets
     def test_ticket_assignee_remove_action_comment(self, mocker,
         created_model, ticket,
-        model_ticketbase, model_ticketcommentaction,
+        model_ticketbase, model_ticketcommentactionfieldedit,
     ):
         """Ticket Action Check
 
@@ -73,10 +79,12 @@ class TicketAssigneeEntityTestCases:
 
         ticket.assigned_to.remove( created_model )
 
-
-        action_comment = model_ticketcommentaction.objects.filter(
+        action_comment = model_ticketcommentactionfieldedit.objects.filter(
             ticket = ticket,
-            body = f'Removed $entity-{created_model.id} from Assignees'
+            field_name = 'assigned_to',
+            edit_type = 2,
+            previous_value = f'$entity-{created_model.id}',
+            new_value = f'Assignees',
         )
 
         assert len(action_comment) == 1
@@ -97,7 +105,7 @@ class TicketSubscriberEntityTestCases:
     @pytest.mark.tickets
     def test_ticket_subscriber_add_action_comment(self, mocker,
         created_model, ticket,
-        model_ticketbase, model_ticketcommentaction,
+        model_ticketbase, model_ticketcommentactionfieldedit,
     ):
         """Ticket Action Check
 
@@ -113,9 +121,12 @@ class TicketSubscriberEntityTestCases:
 
         ticket.subscribed_to.add( created_model )
 
-        action_comment = model_ticketcommentaction.objects.filter(
+        action_comment = model_ticketcommentactionfieldedit.objects.filter(
             ticket = ticket,
-            body = f'Added $entity-{created_model.id} to Subscribers'
+            field_name = 'subscribed_to',
+            edit_type = 0,
+            previous_value = f'$entity-{created_model.id}',
+            new_value = f'Subscribers',
         )
 
 
@@ -129,7 +140,7 @@ class TicketSubscriberEntityTestCases:
     @pytest.mark.tickets
     def test_ticket_subscriber_remove_action_comment(self, mocker,
         created_model, ticket,
-        model_ticketbase, model_ticketcommentaction,
+        model_ticketbase, model_ticketcommentactionfieldedit,
     ):
         """Ticket Action Check
 
@@ -147,10 +158,12 @@ class TicketSubscriberEntityTestCases:
 
         ticket.subscribed_to.remove( created_model )
 
-
-        action_comment = model_ticketcommentaction.objects.filter(
+        action_comment = model_ticketcommentactionfieldedit.objects.filter(
             ticket = ticket,
-            body = f'Removed $entity-{created_model.id} from Subscribers'
+            field_name = 'subscribed_to',
+            edit_type = 2,
+            previous_value = f'$entity-{created_model.id}',
+            new_value = f'Subscribers',
         )
 
 

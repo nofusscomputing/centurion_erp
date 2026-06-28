@@ -270,11 +270,94 @@ class TicketCommentBaseAPIFieldsTestCases(
         pytest.xfail( reason = 'Model is part of a ticket and will never be displayed in table view as it uses ticket view')
 
 
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_detail_no_action_comments(self, recursearray,
+        metadata_request_detail,
+    ):
+        """Test for existance of API metadata Field"""
+
+        api_data = recursearray(metadata_request_detail.data, 'urls.sub_models')
+
+        action_comments_in_submodels = []
+        for name, details in api_data['obj'][api_data['key']].items():
+
+            if name.startswith('ticketcommentaction'):
+
+                action_comments_in_submodels += [ name ]
+
+
+        assert len(action_comments_in_submodels) == 0, action_comments_in_submodels
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    def test_api_metadata_list_no_action_comments(self, recursearray,
+        metadata_request_list,
+    ):
+        """Test for existance of API metadata Field"""
+
+        api_data = recursearray(metadata_request_list.data, 'urls.sub_models')
+
+        action_comments_in_submodels = []
+        for name, details in api_data['obj'][api_data['key']].items():
+
+            if name.startswith('ticketcommentaction'):
+
+                action_comments_in_submodels += [ name ]
+
+
+        assert len(action_comments_in_submodels) == 0, action_comments_in_submodels
+
+
+
 class TicketCommentBaseAPIFieldsInheritedCases(
     TicketCommentBaseAPIFieldsTestCases,
 ):
 
-    pass
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'Only base model for ticket comments are to contain sub_models key' )
+    def test_api_metadata_detail_no_action_comments(self, recursearray,
+        metadata_request_detail,
+    ):
+
+        api_data = recursearray(metadata_request_detail.data, 'urls.sub_models')
+
+        action_comments_in_submodels = []
+        for name, details in api_data['obj'][api_data['key']].items():
+
+            if name.startswith('ticketcommentaction'):
+
+                action_comments_in_submodels += [ name ]
+
+
+        assert len(action_comments_in_submodels) == 0, action_comments_in_submodels
+
+
+
+    @pytest.mark.metadata
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'Only base model for ticket comments are to contain sub_models key' )
+    def test_api_metadata_list_no_action_comments(self, recursearray,
+        metadata_request_list,
+    ):
+
+        api_data = recursearray(metadata_request_list.data, 'urls.sub_models')
+
+        action_comments_in_submodels = []
+        for name, details in api_data['obj'][api_data['key']].items():
+
+            if name.startswith('ticketcommentaction'):
+
+                action_comments_in_submodels += [ name ]
+
+
+        assert len(action_comments_in_submodels) == 0, action_comments_in_submodels
 
 
 
@@ -283,4 +366,17 @@ class TicketCommentBaseAPIFieldsPyTest(
     TicketCommentBaseAPIFieldsTestCases,
 ):
 
-    pass
+    @property
+    def parameterized_api_metadata_fields(self) -> dict:
+
+        return {
+            'urls.sub_models': {
+                'expected': dict
+            },
+            'urls.sub_models.ticketcommentsolution': {
+                'expected': dict
+            },
+            'urls.sub_models.ticketcommenttask': {
+                'expected': dict
+            }
+        }

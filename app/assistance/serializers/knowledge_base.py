@@ -58,9 +58,6 @@ class KnowledgeBaseModelSerializer(
     KnowledgeBaseBaseSerializer
 ):
 
-
-    _urls = serializers.SerializerMethodField('get_url')
-
     def get_url(self, item) -> dict:
 
         get_url = super().get_url( item = item )

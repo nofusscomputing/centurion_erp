@@ -145,7 +145,7 @@ class TicketDependencyModelTestCases(
 
         model_instance.save()
 
-        assert save.call_count == 3, 'There must be three calls,: initial model, dependency and action comment'
+        assert save.call_count == 1, 'There must be one call: initial model Only as signal is used'
 
 
 

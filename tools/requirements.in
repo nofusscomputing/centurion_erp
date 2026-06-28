@@ -56,3 +56,10 @@ tzdata==2025.1
 markdown-it-py[plugins]==3.0.0
 markdown-it-py[linkify]==3.0.0
 Pygments==2.20.0
+
+
+# ##################################################
+#  Freeze deps of deps to specified version
+# ##################################################
+
+rpds-py==0.30.0    # v2026.5.1 does not work with python 3.10

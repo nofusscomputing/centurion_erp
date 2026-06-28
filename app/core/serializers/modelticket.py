@@ -69,8 +69,6 @@ class ModelSerializer(
 
     organization = common.OrganizationField(read_only = True)
 
-    _urls = serializers.SerializerMethodField('get_url')
-
 
     class Meta:
 

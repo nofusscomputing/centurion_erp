@@ -4,12 +4,18 @@ from access.serializers.organization import TenantBaseSerializer
 
 from assistance.serializers.request import TicketBaseSerializer
 
+from centurion.lib.decorators import depreciate
+
 from core import fields as centurion_field
 from core.models.ticket.ticket import Ticket
 from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -47,6 +53,10 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
         ]
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketLinkedItemModelSerializer(
     TicketLinkedItemBaseSerializer,
 ):
@@ -151,6 +161,10 @@ class TicketLinkedItemModelSerializer(
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
 
 

@@ -7,11 +7,17 @@ from rest_framework.reverse import reverse
 from access.managers.tenancy import TenancyManager
 from access.models.tenant import Tenant
 
+from centurion.lib.decorators import depreciate
+
 from core import exceptions as centurion_exceptions
 from core.mixins.history_save import SaveHistory
 
 
-
+@depreciate(
+    depreciated_in = '1.19.0',
+    removed_in = '2.0',
+    replacement = 'access.models.roles',
+)
 class TenancyObject(SaveHistory):
     """ Tenancy Model Abstrct class.
 

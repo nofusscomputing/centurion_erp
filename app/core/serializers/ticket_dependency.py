@@ -60,7 +60,6 @@ class ModelSerializer(
 
     display_name = centurion_field.MarkdownField(source='__str__', required = False, read_only= True )
 
-    _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item) -> dict:
 

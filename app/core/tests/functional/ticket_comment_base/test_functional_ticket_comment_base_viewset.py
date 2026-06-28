@@ -71,4 +71,77 @@ class TicketCommentBaseViewsetPyTest(
     ViewsetTestCases,
 ):
 
-    pass
+
+    @pytest.mark.xfail( reason = 'Action comments are excluded as user should not create via api.' )
+    def test_function_get_meta_urls_sub_models_keys(self,
+        viewset_mock_request, model,
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `sub_models` keys contain all of the models when the
+        model tested is the base_model.
+        """
+
+
+        if model != model()._base_model:
+            pytest.xfail( reason = 'model is not a base model, Test is N/A.' )
+
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        sub_models: list = []
+
+        for sub_model in apps.get_models():
+
+            if issubclass(sub_model, model) and sub_model != model:
+                sub_models.append(sub_model)
+
+
+        assert 'sub_models' in urls, 'Missing sub-models key. test cant continue'
+
+
+        assert sorted(
+            [ key for key, value in urls['sub_models'].items() ]
+        ) == sorted(
+            [ sub_model._meta.model_name for sub_model in sub_models ]
+        )
+
+
+
+    @pytest.mark.xfail( reason = 'Action comments are excluded as user should not create via api.' )
+    def test_function_get_meta_urls_sub_models_values(self,
+        viewset_mock_request, model
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `sub_models` key values contain the correct url for 
+        each of the sub_models.
+        """
+
+
+        if model != model()._base_model:
+            pytest.xfail( reason = 'model is not a base model' )
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        sub_models: list = []
+
+        for sub_model in apps.get_models():
+
+            if issubclass(sub_model, model) and sub_model != model:
+                sub_models.append(sub_model)
+
+
+        assert 'sub_models' in urls, 'Missing sub-models key. test cant continue'
+
+
+        assert sorted(
+            [ value['url'] for key, value in urls['sub_models'].items() ]
+        ) == sorted(
+            [
+                sub_model(
+                    **viewset_mock_request.kwargs
+                ).get_url(many = True) for sub_model in sub_models
+            ]
+        )
+

@@ -128,20 +128,6 @@ class ViewSet( ModelViewSet ):
     view_description = 'Device Operating System'
 
 
-    @property
-    def allowed_methods(self):
-
-        allowed_methods = super().allowed_methods
-
-        if self.kwargs.get('operating_system_id', None):
-
-            if 'PATCH' in allowed_methods: allowed_methods.remove('PATCH')
-            if 'POST' in allowed_methods: allowed_methods.remove('POST')
-            if 'PUT' in allowed_methods: allowed_methods.remove('PUT')
-
-        return allowed_methods
-
-
     def get_queryset(self):
 
         if self.queryset is not None:
