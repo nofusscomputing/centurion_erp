@@ -95,6 +95,17 @@ class AppSettingsSerializerTestCases(
     #     assert err.value.get_codes()['name'][0] == 'required'
 
 
+    def test_only_base_defines__urls_object(self,
+        model_serializer,
+    ):
+        """BaseSerializer field check
+
+        ensure that the `get_url_fields` is the method name to be called.
+        """
+
+        assert model_serializer['model']._declared_fields['_urls'].method_name == 'get_url'
+
+
 
 class AppSettingsSerializerInheritedCases(
     AppSettingsSerializerTestCases

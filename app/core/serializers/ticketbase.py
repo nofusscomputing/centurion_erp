@@ -68,18 +68,16 @@ class ModelSerializer(
     """Ticket Base Model"""
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
     def get_url(self, item) -> dict:
 
         ticket_type = str(item._meta.model_name)
 
-        model_name = str(item._meta.model_name)
-        if model_name.endswith('ticket') and len(model_name) > 6:
-            model_name = str(model_name)[0:len(model_name)-len(str('ticket'))]
+        url_dict = super().get_url( item = item )
+        del url_dict['knowledge_base']
+
 
         url_dict: dict = {
-            '_self': item.get_url(),
+            **url_dict,
             'comments': reverse(
                 viewname = 'v2:_api_ticket_comment_base-list',
                 request = None,

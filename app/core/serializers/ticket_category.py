@@ -46,9 +46,6 @@ class TicketCategoryModelSerializer(
 ):
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     class Meta:
 
         model = TicketCategory

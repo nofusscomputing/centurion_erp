@@ -44,8 +44,6 @@ class ClusterTypeModelSerializer(
     ClusterTypeBaseSerializer
 ):
 
-    _urls = serializers.SerializerMethodField('get_url')
-
 
     class Meta:
 
