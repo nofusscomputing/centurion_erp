@@ -742,6 +742,15 @@ if FEATURE_FLAGGING_ENABLED:
                     "created": "",
                     "modified": ""
                 }
+            },
+            {
+                "2026-00012": {
+                    "name": "itim.RequestTicket",
+                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
             }
         ]
 
