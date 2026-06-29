@@ -1,3 +1,127 @@
+## 1.32.0 (2026-06-29)
+
+### Features
+
+- **api**: Adjust _urls field so that for browsable API displays full url and for JSON request outputs relative URL
+- **core**: Dont show action comment model in TicketComment meta.urlssub_models
+- **core**: Add signal to create an action comment when a model is (un-)linked to ticket
+- **core**: when or where ever model TicketDependency is created, always create the inverse
+- **core**: DB Migrations for dependent ticket model
+- **core**: TicketDependencies must be unique between ticket <> dependent_ticket
+- **core**: Prevent removal of a ticket if it has dependencies
+- **core**: Limit ability to user whom has `import` permission for mode TicketCommentAction
+- Add has_permission finaliser
+- **api**: Update ViewSet `allowed_methods` based off of user permissions
+- **api**: Allow cusomisation of allowed http methods
+- **devlopment**: Add depreciated decorator
+- **api**: Support as part of HTTP/POST (create) when a model is not created
+- **core**: When deleting a ticket dependency delete its inverse
+- **core**: Add TicketDependency signal for Action Commenting
+- **core**: Add/update body field for new ActionComment models
+- **core**: When adding a ticket dependency also create the inverse dependency for the other ticket
+- **core**: Correct field errors for new models TicketActionCommentFieldEdit TicketActionCommentModelLink and TicketActionCommentTicketDependency
+- **core**: Migrations for new models TicketActionCommentFieldEdit TicketActionCommentModelLink and TicketActionCommentTicketDependency
+- **core**: Add serializer for model TicketACtionCommentTicketDependency
+- **core**: Add serializer for model TicketACtionCommentModelLink
+- **core**: Add serializer for model TicketActionCommentFieldEdit
+- **core**: Add new model TicketACtionCommentTicketDependency
+- **core**: Add new model TicketACtionCommentModelLink
+- **core**: Add new model TicketACtionCommentFieldEdit
+
+### Fixes
+
+- **project_management**: Correct the URL generation and route for project task ticket
+- **api**: Correct typo  in perms_map `OPTIONS` object
+- **itam**: Remove allowed_methods fn from DeviceOperatingSystem ViewSet
+- **api**: allowed_methods must be ALL defined permissions
+- **core**: field content_type is a required field for model TicketCommentActionModelLink
+- **core**: During ticket comment creation if there is no comment and comment type is action allow creation
+- **core**: Correct import permission name for model TicketActionCommentFieldEdit
+- **core**: View Serializer for model TicketCommentActionModelLink must have body field declared
+- **core**: View Serializer for model TicketCommentActionFieldEdit must have body field declared
+- **core**: View Serializer for model TicketCommentActionTicketDependency must have body field declared
+- **core**: Don't check action comments for slash command
+- **core**: Use correct suffix for model within method get_serializer_class for CenturionAudit ViewSet
+- **core**: Use correct suffix for model within method get_serializer_class for CenturionAudit ViewSet
+- **core**: Update method get_serializer_class for CenturionModelNote ViewSet
+- **core**: Update method get_serializer_class for CenturionAudit ViewSet
+- **core**: Add missing fields to serializer for model TicketActionCommentTicketDependency
+- **core**: Add missing fields to serializer model TicketActionCommentModelLink
+- **core**: Add missing fields to serializer for model TicketActionCommentFieldEdit
+- **core**: Update method get_serializer_class for ModelTicket ViewSet
+- **core**: Add missing field display_name to model TicketActionCommentTicketDependency
+- **core**: Add missing field display_name to model TicketActionCommentModelLink
+- **core**: Add missing field display_name to model TicketActionCommentFieldEdit
+
+### Refactoring
+
+- **project_management**: Update project field percent_completed to use new ticket model
+- **project_management**: Update project field estimation_project to use new ticket model
+- **project_management**: Update project field duration_project to use new ticket model
+- **core**: Migrate signal for ticket field edit to use model TickeCommennttActionFieldEdit
+- **core**: Add field edit_type to model TicketCommentActionFieldEdit
+- **core**: Only allow TicketBase instances and "related" fields for ticket_action_comment signal
+- **core**: When creating the marldown for a TicketModelLink Action Comment, use the correct model_tag syntax
+- **core**: Update serializer "getter" to use models _base_model attribute
+
+### Tests
+
+- **core**: Functional test cases for API Metadata urls.sub_models for models TicketComment<*>
+- **core**: When setting up test suits for slash commands, use the actual ticket model for the ticket being tested
+- **core**: Update Model Functional test cases for linking model to ticket to use new ticket link action comment
+- **core**: Remove unit test cases from original Ticket Action Comment Signal as whats tested no longer exist
+- **core**: Test cases to ensure that an action comment is created when a model is (un-)linked to ticket
+- **core**: When a ticket dependency is deleted, ensure action comment on dependent ticket is also created
+- **core**: When a ticket dependency is deleted, ensure action comment on ticket is also created
+- **core**: When a new ticket dependency is created, ensure action comment on ticket is also created
+- **core**: Integration Test Case to cover API create for user with import permission for model TicketCommentAction
+- **core**: Integration Test Case to cover API create for user with import permission for model TicketCommentActionTicketDependency
+- **core**: Integration Test Case to cover API create for user with import permission for model TicketCommentActionModelLink
+- **core**: Integration Test Case to cover API create for user with import permission for model TicketCommentActionFieldEdit
+- **core**: Functional Test Case, delete removes inverse dependency for model TicketDependency
+- **core**: Functional Test Cases cover API CRUD import permission for model TicketCommentActionTicketDependency
+- **core**: Functional Test Cases cover API CRUD import permission for model TicketCommentActionModelLink
+- **core**: Functional Test Cases cover API CRUD import permission for model TicketCommentActionFieldEdit
+- **core**: Functional Test Cases cover API CRUD import permission for model TicketCommentAction
+- **core**: Function Test Cases cover API CRUD permissions for model TicketCommentActionTicketDependency
+- **core**: Function Test Cases cover API CRUD permissions for model TicketCommentActionModelLink
+- **core**: Function Test Cases cover API CRUD permissions for model TicketCommentActionFieldEdit
+- **api**: add missing property to mock ViewSet
+- **Unit**: Add missing test cases for field checks for model TicketCommentActionTicketDependency
+- **Unit**: Add missing test cases for field checks for model TicketCommentActionModelLink
+- **Unit**: Add missing test cases for field checks for model TicketCommentActionFieldEdit
+- **functional**: Correct test fixture ticket_comment to use base comment model for ticket comment test suites
+- **functional**: ViewSet Test Suite for model TicketCommentActionTicketDependency
+- **functional**: Model Test Suite for model TicketCommentActionTicketDependency
+- **functional**: APIFields Test Suite for model TicketCommentActionTicketDependency
+- **functional**: ViewSet Test Suite for model TicketCommentActionModelLink
+- **functional**: Model Test Suite for model TicketCommentActionModelLink
+- **functional**: APIFields Test Suite for model TicketCommentActionModelLink
+- **functional**: ViewSet Test Suite for model TicketCommentActionFieldEdit
+- **functional**: Model Test Suite for model TicketCommentActionFieldEdit
+- **functional**: APIFields Test Suite for model TicketCommentActionFieldEdit
+- **unit**: Remove superfluous Test case where use is checked as entity
+- **unit**: ViewSet Test Suite for model TicketCommentActionTicketDependency
+- **unit**: Serializer Test Suite for model TicketCommentActionTicketDependency
+- **unit**: Model Test Suite for model TicketCommentActionTicketDependency
+- **unit**: ViewSet Test Suite for model TicketCommentActionModelLink
+- **unit**: Serializer Test Suite for model TicketCommentActionModelLink
+- **unit**: Model Test Suite for model TicketCommentActionModelLink
+- **unit**: ViewSet Test Suite for model TicketCommentActionFieldEdit
+- **unit**: Serializer Test Suite for model TicketCommentActionFieldEdit
+- **unit**: Model Test Suite for model TicketCommentActionFieldEdit
+- **functional**: Update Test case for ticket dependency Action Comments
+- **functional**: Test case for ADD permission returns HTTP/200 for model TicketCommentActionTicketDependency must have body field declared
+- **functional**: Test case for ADD permission returns HTTP/200 for model TicketCommentActionModelLink must have body field declared
+- **functional**: Test case for ADD permission returns HTTP/200 for model TicketCommentActionFieldEdit must have body field declared
+- **unit**: TicketDependency save call count update to one
+- **functional**: CenturionAudit model does not require test cases for meta `urls.sub_models`
+- **unit**: Update class attribute `_base_model` test case for models CenturionModelNote
+- **unit**: Update class attribute `_base_model` test case for models CenturionAudit
+- Add test fixture for model TicketACtionCommentTicketDependency
+- Add test fixture for model TicketACtionCommentModelLink
+- Add test fixture for model TicketActionCommentFieldEdit
+
 ## 1.31.2 (2026-06-11)
 
 ### Fixes
