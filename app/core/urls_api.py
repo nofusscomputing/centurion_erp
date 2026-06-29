@@ -15,6 +15,12 @@ from core.viewsets import (
 )
 
 
+# app_name = "core"
+
+
+router: DefaultRouter = DefaultRouter(trailing_slash=False)
+
+
 ticket_type_names = ''
 ticket_comment_names = ''
 
@@ -22,6 +28,13 @@ for model in apps.get_models():
 
 
     if issubclass(model, ticket.TicketBase):
+
+        if(
+            (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00010'] and 'incident' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00011'] and 'problem' in model._meta.model_name)
+        ):
+            continue
 
         ticket_type_names += model._meta.model_name + '|'
 
@@ -35,12 +48,6 @@ ticket_comment_names = str(ticket_comment_names)[:-1]
 ticket_type_names = str(ticket_type_names)[:-1]
 
 
-# app_name = "core"
-
-
-router: DefaultRouter = DefaultRouter(trailing_slash=False)
-
-
 
 router.register(
     '/history', audit_history.NoDocsViewSet,
@@ -51,22 +58,22 @@ router.register(
 
 router.register(
     prefix=f'/ticket', viewset = ticket.NoDocsViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticketbase'
+    basename = '_api_ticketbase'
 )
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/comment', viewset = ticket_comment.NoDocsViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticket_comment_base'
+    basename = '_api_ticket_comment_base'
 )
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/comment/(?P<parent_id>[0-9]+)/threads',
     viewset = ticket_comment.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticket_comment_base_thread'
+    basename = '_api_ticket_comment_base_thread'
 )
 router.register(
     prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>[{ticket_comment_names} \
         ]+)/(?P<parent_id>[0-9]+)/threads',
     viewset = ticket_comment.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticket_comment_base_thread_sub'
+    basename = '_api_ticket_comment_base_thread_sub'
 )
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/comments', viewset = ticket_comment_depreciated.ViewSet,
@@ -83,7 +90,7 @@ router.register(
 )
 router.register(
     prefix=f'/ticket/(?P<model_name>[{ticket_type_names}]+)/(?P<model_id>[0-9]+)/models', viewset = ticket_model_link.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_modelticket'
+    basename = '_api_modelticket'
 )
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/related_ticket', viewset = related_ticket.ViewSet,
@@ -92,13 +99,13 @@ router.register(
 router.register(
     prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>[{ticket_comment_names}]+)',
     viewset = ticket_comment.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticket_comment_base_sub'
+    basename = '_api_ticket_comment_base_sub'
 )
 router.register(
     prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>[{ticket_comment_names} \
         ]+)/(?P<parent_id>[0-9]+)/threads',
     viewset = ticket_comment.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticket_comment_base_sub_thread'
+    basename = '_api_ticket_comment_base_sub_thread'
 )
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/ticket_dependency', viewset = ticket_dependency.ViewSet,
