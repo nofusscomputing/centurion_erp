@@ -708,15 +708,6 @@ if FEATURE_FLAGGING_ENABLED:
                 }
             },
             {
-                "2025-00006": {
-                    "name": "Ticket Models",
-                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
-                    "enabled": True,
-                    "created": "",
-                    "modified": ""
-                }
-            },
-            {
                 "2025-00007": {
                     "name": "itam.ITAMAssetBase",
                     "description": "ITAM Asset Base model. see https://github.com/nofusscomputing/centurion_erp/issues/692",

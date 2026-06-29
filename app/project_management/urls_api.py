@@ -14,27 +14,32 @@ from project_management.viewsets import (
 )
 
 
+# app_name = "project_management"
+
+
+
+router: DefaultRouter = DefaultRouter(trailing_slash=False)
 
 
 ticket_type_names = ''
 
 for model in apps.get_models():
 
-
     if issubclass(model, ticket.TicketBase):
+
+        if(
+            (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00010'] and 'incident' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00011'] and 'problem' in model._meta.model_name)
+            or (not router._feature_flagging['2025-00012'] and 'request' in model._meta.model_name)
+        ):
+            continue
+
 
         ticket_type_names += model._meta.model_name + '|'
 
 
 ticket_type_names = str(ticket_type_names)[:-1]
-
-
-
-# app_name = "project_management"
-
-
-
-router: DefaultRouter = DefaultRouter(trailing_slash=False)
 
 
 router.register(
@@ -59,7 +64,7 @@ router.register(
 router.register(
     prefix = f'/project/(?P<project_id>[0-9]+)/ticket/(?P<model_name>[{ticket_type_names}]+)',
     viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_project_ticket_sub'
+    basename = '_api_project_ticket_sub'
 )
 
 
