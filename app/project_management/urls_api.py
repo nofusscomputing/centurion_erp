@@ -31,7 +31,7 @@ for model in apps.get_models():
             (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
             or (not router._feature_flagging['2025-00010'] and 'incident' in model._meta.model_name)
             or (not router._feature_flagging['2025-00011'] and 'problem' in model._meta.model_name)
-            or (not router._feature_flagging['2025-00012'] and 'request' in model._meta.model_name)
+            or (not router._feature_flagging['2026-00012'] and 'request' in model._meta.model_name)
         ):
             continue
 
