@@ -22,10 +22,6 @@ class ModelSerializer(
     """IT Asset Base Model"""
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
-
     class Meta:
 
         model = ITAMAssetBase

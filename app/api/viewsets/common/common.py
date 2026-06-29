@@ -103,12 +103,25 @@ class Create(
                 },
             )
 
+
             serializer_data = serializer.data
 
             if response is None:
 
                 headers = self.get_success_headers(serializer.data)
                 status_code = rest_framework.status.HTTP_200_OK
+
+            elif instance.id is None:    # response.data.serializer.instance
+                """
+                This section specifically caters for code paths that change the
+                standard flow wherein they dont create the model requested, but
+                use the data to create other models and/or objects.
+                """
+
+                headers = response.headers
+                status_code = rest_framework.status.HTTP_200_OK
+
+                serializer_data = {}
 
             else:
 
@@ -550,18 +563,51 @@ class CommonViewSet(
 
 
 
+    _viewset_allowed_methods: list[str] | None = None
+    """Allowed HTTP Methods
+    
+    Initially set to match the value of the default Django method
+    `_allowed_methods`.
+    If the allowed methods for the viewset require modification, use the
+    `allowed_methods` setter. i.e. `allowed_methods = ['POST', 'PATCH']`
+    """
+
+
+    def _allowed_methods(self) -> list[str]:
+        """Override Base
+
+        Overrides the base function of the same name. THis exists so that
+        the HTTP methods allowed can be customised.
+        """
+
+        if self._viewset_allowed_methods is None:    # set to base default
+
+            self._viewset_allowed_methods = [
+                m.upper() for m in self.http_method_names if hasattr(self, m)
+            ]
+
+        return self._viewset_allowed_methods
+
 
     @property
-    def allowed_methods(self):
+    def allowed_methods(self) -> list[str]:
         """Allowed HTTP Methods
 
-        _Optional_, HTTP Methods allowed for the `viewSet`.
+        Init the default function of the same name.
 
-        Returns:
-            list: Allowed HTTP Methods
+        Initialising the default method enables the default "featurre set"
+        to still be utilised.
         """
 
         return super().allowed_methods
+
+
+    @allowed_methods.setter
+    def allowed_methods(self, value) -> None:
+
+        self._viewset_allowed_methods = value
+
+        super().allowed_methods
 
 
     back_url: str = None
@@ -1173,11 +1219,11 @@ class CommonSubModelViewSet_ReWrite(
 
     def get_serializer_class(self):
 
-        serializer_name = self.base_model._meta.model_name
+        serializer_name = self.model._meta.model_name
 
-        if self.base_model != self.model:
+        if self.model._meta.model_name != self.base_model._meta.model_name:
 
-            serializer_name += '_' + str( self.kwargs[self.model_kwarg] )
+            serializer_name = f"{self.model()._base_model._meta.model_name}_{serializer_name}"
 
 
         serializer_module = importlib.import_module(

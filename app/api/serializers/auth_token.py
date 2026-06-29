@@ -46,7 +46,6 @@ class AuthTokenModelSerializer(
     AuthTokenBaseSerializer
 ):
 
-    _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item) -> dict:
 

@@ -26,11 +26,13 @@ def spectacular_request_serializers( serializer_type = 'Model'):
 
         if issubclass(model, TicketCommentBase):
 
-            serializer_name = 'ticketcommentbase'
+            serializer_name = model._meta.model_name
 
             if model._meta.model_name != 'ticketcommentbase':
+
+                base_model = model()._base_model._meta.model_name
                 
-                serializer_name += '_' + model._meta.model_name
+                serializer_name = f"{base_model}_{model._meta.model_name}"
 
 
             serializer_module = importlib.import_module(
@@ -115,6 +117,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 location = 'path',
                 type = int
             ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
+            ),
         ],
         responses = {
             204: OpenApiResponse(description=''),
@@ -129,6 +141,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 name = 'ticket_id',
                 location = 'path',
                 type = int
+            ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
             ),
         ],
         request = PolymorphicProxySerializer(
@@ -164,6 +186,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 location = 'path',
                 type = int
             ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
+            ),
         ],
         request = PolymorphicProxySerializer(
             component_name = 'Ticket Comment',
@@ -198,6 +230,16 @@ def spectacular_request_serializers( serializer_type = 'Model'):
                 name = 'ticket_id',
                 location = 'path',
                 type = int
+            ),
+            OpenApiParameter(
+                allow_blank = False,
+                default = 'comment',
+                name = 'model_name',
+                type = OpenApiTypes.STR,
+                location = OpenApiParameter.PATH,
+                required = True,
+                description = 'Type of comment being made.',
+                enum = list( spectacular_request_serializers().keys() ),
             ),
         ],
         request = PolymorphicProxySerializer(
@@ -303,17 +345,28 @@ class ViewSet(
                     ).get_related_model()
 
 
-                if ticket:
+                if(
+                    self.model()._base_model._meta.model_name == 'ticketcommentaction'
+                    or self.model._meta.model_name == 'ticketcommentaction'
+                    ):
 
-                    triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
+                    action_comment_import_permission: str = f'{self.model._meta.app_label}.import_{self.model._meta.model_name}'
+
+                    self._perms_map: dict[str, list[str]] = {
+                        'POST': [ action_comment_import_permission ],
+                    }
+
+                elif ticket:
+
+                    ticket_triage_permission: str = f'{ticket._meta.app_label}.triage_{ticket._meta.model_name}'
 
                     if self.model._meta.model_name == 'ticketcommenttask':
 
                         self._perms_map: dict[str, list[str]] = {
-                            'POST': [ triage_permission ],
-                            'PUT': [ triage_permission ],
-                            'PATCH': [ triage_permission ],
-                            'DELETE': [ triage_permission ],
+                            'POST': [ ticket_triage_permission ],
+                            'PUT': [ ticket_triage_permission ],
+                            'PATCH': [ ticket_triage_permission ],
+                            'DELETE': [ ticket_triage_permission ],
                         }
 
             except Exception:
@@ -326,6 +379,28 @@ class ViewSet(
 
 
     view_description = 'Comments made on Ticket'
+
+
+
+    def get_meta_urls(self) -> dict[ str ] | dict[ str, dict[str] ]:
+
+        meta_urls = super().get_meta_urls()
+
+        if 'sub_models' in meta_urls:
+
+            sub_models = {}
+            for key, value in meta_urls['sub_models'].items():
+
+                if str(key).startswith('ticketcommentaction'):
+                    continue
+
+
+                sub_models[key] = value
+
+
+            meta_urls['sub_models'] = sub_models
+
+        return meta_urls
 
 
 

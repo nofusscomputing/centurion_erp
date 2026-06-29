@@ -19,6 +19,10 @@ class CenturionModelNote(
 
     _audit_enabled = False
 
+    @property
+    def _base_model(self):
+        return CenturionModelNote
+
     _notes_enabled = False
 
     _ticket_linkable = False

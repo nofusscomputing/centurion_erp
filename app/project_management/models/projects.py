@@ -347,15 +347,15 @@ class Project(
 
         duration_project: int = 0
 
-        from core.models.ticket.ticket import Ticket
+        from core.models.ticket_base import TicketBase
 
-        tickets = Ticket.objects.filter(
+        tickets = TicketBase.objects.filter(
             project = self.id
         )
 
         for ticket in tickets:
 
-            duration_project = duration_project + int(ticket.duration_ticket)
+            duration_project = duration_project + int(ticket.ticket_duration)
 
 
         return int(duration_project)
@@ -366,17 +366,17 @@ class Project(
 
         estimation_project: int = 0
 
-        from core.models.ticket.ticket import Ticket
+        from core.models.ticket_base import TicketBase
 
-        tickets = Ticket.objects.filter(
+        tickets = TicketBase.objects.filter(
             project = self.id
         )
 
         for ticket in tickets:
 
-            estimation = ticket.estimate
+            estimation = ticket.ticket_estimation
 
-            if ticket.estimate is None:
+            if ticket.ticket_estimation is None:
 
                 estimation = 0
 
@@ -395,7 +395,7 @@ class Project(
             str: Calculated percentage of project completion.
         """
 
-        from core.models.ticket.ticket import Ticket
+        from core.models.ticket_base import TicketBase
 
         ticket_status_closed = [
             TicketValues._CANCELLED_INT,
@@ -403,11 +403,11 @@ class Project(
             TicketValues._SOLVED_INT,
         ]
 
-        all_tickets = Ticket.objects.filter(
+        all_tickets = TicketBase.objects.filter(
             project = self.id,
         )
 
-        closed_tickets = Ticket.objects.filter(
+        closed_tickets = TicketBase.objects.filter(
             project = self.id,
             status__in = ticket_status_closed
         )

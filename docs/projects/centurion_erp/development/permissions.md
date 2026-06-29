@@ -33,6 +33,8 @@ All Permission Classes must meet the following requirements:
 
 - No Merge request that contains a permissions class will be merged unless the permissions class is [tested](./testing.md). This includes **all** branches.
 
+- Function `api.permissions.common.permission_allowed_finaliser` must be called for a user granted permission. This function has been designed so that it can be used as part of the return call for the `has_permission` function of the permission class.
+
 
 ## Centurion Model Permissions
 

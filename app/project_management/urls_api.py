@@ -57,7 +57,7 @@ router.register(
 )
 
 router.register(
-    prefix = f'/project/(?P<project_id>[0-9]+)/(?P<model_name>[{ticket_type_names}]+)',
+    prefix = f'/project/(?P<project_id>[0-9]+)/ticket/(?P<model_name>[{ticket_type_names}]+)',
     viewset = ticket.ViewSet,
     feature_flag = '2025-00006', basename = '_api_project_ticket_sub'
 )

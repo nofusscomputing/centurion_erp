@@ -49,6 +49,8 @@ When creating models they must meet the following requirements:
 
 - **All** Model Exceptions must be from `django.core.exceptions`
 
+- If you are replacing a model, ensure you mark it with decorator `centurion.lib.decorators.depreciated`
+
 !!! tip
     It's a good idea to create the initial model class, then create and add the model tests for that class. This way you can run the tests to ensure that the requirements are met. Of Note, the tests may not cover ALL of the requirements section, due diligence will need to be exercised.
 

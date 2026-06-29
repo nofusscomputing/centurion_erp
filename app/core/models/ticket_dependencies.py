@@ -26,6 +26,11 @@ class TicketDependency(
             'id'
         ]
 
+        unique_together = [
+            'ticket',
+            'dependent_ticket'
+        ]
+
         verbose_name = 'Ticket Dependency'
 
         verbose_name_plural = 'Ticket Dependencies'
@@ -46,7 +51,7 @@ class TicketDependency(
         blank = False,
         help_text = 'This Ticket',
         null = False,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         related_name = 'ticket',
         verbose_name = 'Ticket',
     )
@@ -65,7 +70,7 @@ class TicketDependency(
         blank = False,
         help_text = 'The Related Ticket',
         null = False,
-        on_delete = models.CASCADE,
+        on_delete = models.PROTECT,
         related_name = 'dependent_ticket',
         verbose_name = 'Related Ticket',
     )
@@ -107,9 +112,9 @@ class TicketDependency(
 
     def __str__(self):
 
-        if getattr(self, 'ticket', None):
+        if getattr(self, 'dependent_ticket', None):
 
-            return str( '#' + str(self.ticket.id) )
+            return str( '#' + str(self.dependent_ticket.id) )
 
         return ''
 
@@ -126,11 +131,6 @@ class TicketDependency(
             models.Q(
                 ticket = self.ticket,
                 dependent_ticket = self.dependent_ticket
-            )
-                |
-            models.Q(
-                ticket = self.dependent_ticket,
-                dependent_ticket = self.ticket
             )
         )
 
@@ -171,45 +171,12 @@ class TicketDependency(
 
         super().delete(using = using, keep_parents = keep_parents)
 
-        if self.how_related == self.Related.BLOCKED_BY:
+        dependencies = self.__class__.objects.filter(    # Select the inverse dependency for removal
+            ticket = self.dependent_ticket, dependent_ticket_id = self.ticket
+        )
 
-            comment_field_value_from = f"Removed #{self.ticket.id} as blocked by #{self.dependent_ticket.id}"
-            comment_field_value_to = f"Removed #{self.dependent_ticket.id} as blocking #{self.ticket.id}"
-
-        elif self.how_related == self.Related.BLOCKS:
-
-            comment_field_value_from = f"Removed #{self.ticket.id} as blocking #{self.dependent_ticket.id}"
-            comment_field_value_to = f"Removed #{self.dependent_ticket.id} as blocked by #{self.ticket.id}"
-
-        elif self.how_related == self.Related.RELATED:
-
-            comment_field_value_from = f"Removed #{self.ticket.id} as related to #{self.dependent_ticket.id}"
-            comment_field_value_to = f"Removed #{self.dependent_ticket.id} as related to #{self.ticket.id}"
-
-
-        from core.models.ticket_comment_action import TicketCommentAction
-
-        if comment_field_value_from:
-
-            TicketCommentAction.objects.create(
-                ticket = self.ticket,
-                body = comment_field_value_from,
-                source = TicketBase.TicketSource.DIRECT,
-                user = self.user,
-                is_closed = True,
-            )
-
-
-        if comment_field_value_to:
-
-            TicketCommentAction.objects.create(
-                ticket = self.dependent_ticket,
-                body = comment_field_value_to,
-                source = TicketBase.TicketSource.DIRECT,
-                user = self.user,
-                is_closed = True,
-            )
-
+        for dependency in dependencies:
+            dependency.delete()
 
 
 
@@ -225,50 +192,5 @@ class TicketDependency(
     @property
     def parent_object(self):
         """ Fetch the parent object """
-        
+
         return self.ticket
-
-
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-
-        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-
-        if self.how_related == self.Related.BLOCKED_BY:
-
-            comment_field_value_from = f"added #{self.ticket.id} as blocked by #{self.dependent_ticket.id}"
-            comment_field_value_to = f"added #{self.dependent_ticket.id} as blocking #{self.ticket.id}"
-
-        elif self.how_related == self.Related.BLOCKS:
-
-            comment_field_value_from = f"added #{self.ticket.id} as blocking #{self.dependent_ticket.id}"
-            comment_field_value_to = f"added #{self.dependent_ticket.id} as blocked by #{self.ticket.id}"
-
-        elif self.how_related == self.Related.RELATED:
-
-            comment_field_value_from = f"added #{self.ticket.id} as related to #{self.dependent_ticket.id}"
-            comment_field_value_to = f"added #{self.dependent_ticket.id} as related to #{self.ticket.id}"
-
-
-        from core.models.ticket_comment_action import TicketCommentAction
-
-        if comment_field_value_from:
-
-            TicketCommentAction.objects.create(
-                ticket = self.ticket,
-                body = comment_field_value_from,
-                source = TicketBase.TicketSource.DIRECT,
-                user = self.user,
-                is_closed = True,
-            )
-
-
-        if comment_field_value_to:
-
-            TicketCommentAction.objects.create(
-                ticket = self.dependent_ticket,
-                body = comment_field_value_to,
-                source = TicketBase.TicketSource.DIRECT,
-                user = self.user,
-                is_closed = True,
-            )

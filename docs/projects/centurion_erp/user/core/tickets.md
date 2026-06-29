@@ -13,6 +13,8 @@ A ticket within Centurion ERP is an item of work. Its intent is to capture all o
 
 - Commenting
 
+- Change Tracking
+
 - Linked Items to ticket
 
 - [Markdown](./markdown.md) support within the ticket description and comment(s)
@@ -176,6 +178,11 @@ Ticket comments support [markdown](./markdown.md) as well as slash commands. Com
 
     !!! info
         To add this type of comment, you will require the `triage` permission for the ticket type the comment is for.
+
+
+## Ticket Change Tracking
+
+Every change made to a ticket is tracked. These changes are tracked by means of a special comment type called an "Action Comment." These action comments will appear within the comment section of a ticket denotng what was changed.
 
 
 ## Slash Commands

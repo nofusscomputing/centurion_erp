@@ -40,7 +40,7 @@ celery==5.4.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   django-celery-results
-certifi==2026.5.20
+certifi==2026.6.17
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -58,7 +58,7 @@ charset-normalizer==3.4.7
     #   requests
 check-wheel-contents==0.6.3
     # via -r tools/requirements_dev.in
-click==8.4.0
+click==8.4.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -91,7 +91,7 @@ coverage[toml]==7.8.0
     # via
     #   -r tools/requirements_dev.in
     #   pytest-cov
-cryptography==48.0.0
+cryptography==49.0.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -156,17 +156,17 @@ drf-spectacular[sidecar]==0.29.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-drf-spectacular-sidecar==2026.5.1
+drf-spectacular-sidecar==2026.6.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   drf-spectacular
-greenlet==3.5.1
+greenlet==3.5.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   sqlalchemy
-idna==3.15
+idna==3.18
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -239,7 +239,7 @@ packaging==26.2
     #   wheel
 pip-tools==7.5.3
     # via -r tools/requirements_dev.in
-platformdirs==4.9.6
+platformdirs==4.10.0
     # via pylint
 pluggy==1.6.0
     # via pytest
@@ -269,7 +269,7 @@ pygments==2.20.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-pyjwt[crypto]==2.12.1
+pyjwt[crypto]==2.13.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -411,7 +411,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.7.0
+wcwidth==0.8.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt

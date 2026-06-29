@@ -4,6 +4,8 @@ from api.viewsets.common.tenancy import ModelViewSet
 
 from assistance.models.knowledge_base import KnowledgeBase
 
+from centurion.lib.decorators import depreciate
+
 from config_management.models.groups import ConfigGroups
 
 from core.models.ticket.ticket_category import TicketCategory
@@ -123,6 +125,10 @@ from project_management.models.project_states import ProjectState
             403: OpenApiResponse(description='User is missing change permissions'),
         }
     ),
+)
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
 )
 class ViewSet(ModelViewSet):
 

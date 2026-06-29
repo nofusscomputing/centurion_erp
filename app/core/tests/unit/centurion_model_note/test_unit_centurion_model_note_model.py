@@ -3,6 +3,7 @@ import pytest
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from core.models.centurion_notes import CenturionModelNote
 from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model import (
     CenturionAbstractTenancyModelInheritedCases
 )
@@ -20,6 +21,10 @@ class CenturionNoteModelTestCases(
         return {
             '_audit_enabled': {
                 'value': False,
+            },
+            '_base_model': {
+                'type': models.base.ModelBase,
+                'value': CenturionModelNote,
             },
             '_notes_enabled': {
                 'value': False,

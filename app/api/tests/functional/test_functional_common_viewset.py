@@ -254,6 +254,8 @@ class CommonViewSetTestCases:
 
         viewset.action = 'list'
 
+        viewset.allowed_methods = [ 'GET' ]
+
         if not viewset.model:
             pytest.xfail( reason = 'no model exists, assuming viewset is a base/mixin viewset.' )
 
@@ -265,10 +267,7 @@ class CommonViewSetTestCases:
                 permission_class = permission_class.op1_class
 
 
-            viewset.permissions_required = permission_class().get_required_permissions(
-                method = 'GET',
-                model_cls = model
-            )
+            permission_class().has_permission(request = viewset.request, view = viewset)
 
         queryset = viewset.get_queryset()
 

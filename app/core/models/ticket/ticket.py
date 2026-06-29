@@ -14,6 +14,8 @@ from .ticket_enum_values import TicketValues
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models.tenancy import TenancyObject
 
+from centurion.lib.decorators import depreciate
+
 from core import exceptions as centurion_exceptions
 from core.lib.feature_not_used import FeatureNotUsed
 from core.lib.slash_commands import SlashCommands
@@ -45,6 +47,11 @@ class TicketCommonFields(models.Model):
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+    replacement = 'core.models.ticket_base',
+)
 class Ticket(
     SlashCommands,
     TenancyObject,

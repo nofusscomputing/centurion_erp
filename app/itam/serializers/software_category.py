@@ -45,9 +45,6 @@ class SoftwareCategoryModelSerializer(
 ):
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     def get_rendered_config(self, item) -> dict:
 
         return item.get_configuration(0)

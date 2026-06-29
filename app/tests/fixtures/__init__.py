@@ -382,6 +382,24 @@ from .model_ticketcommentaction import (
     serializer_ticketcommentaction,
 )
 
+from .model_ticketcommentactionfieldedit import (
+    kwargs_ticketcommentactionfieldedit,
+    model_ticketcommentactionfieldedit,
+    serializer_ticketcommentactionfieldedit,
+)
+
+from .model_ticketcommentactionmodellink import (
+    kwargs_ticketcommentactionmodellink,
+    model_ticketcommentactionmodellink,
+    serializer_ticketcommentactionmodellink,
+)
+
+from .model_ticketcommentactionticketdependency import (
+    kwargs_ticketcommentactionticketdependency,
+    model_ticketcommentactionticketdependency,
+    serializer_ticketcommentactionticketdependency,
+)
+
 from .model_ticketcommentbase import (
     kwargs_ticketcommentbase,
     model_ticketcommentbase,

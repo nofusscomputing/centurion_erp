@@ -58,9 +58,6 @@ class ModelSerializer(
     """AuditHistory Base Model"""
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     class Meta:
 
         model = CenturionAudit

@@ -12,6 +12,8 @@ from assistance.serializers.request import (    # pylint: disable=W0611:unused-i
     RequestTicketViewSerializer
 )
 
+from centurion.lib.decorators import depreciate
+
 from core.serializers.ticket_depreciated import (
     Ticket,
 )
@@ -54,6 +56,10 @@ from project_management.serializers.project_task import (    # pylint: disable=W
 
 
 
+@depreciate(
+    depreciated_in = '1.16.0',
+    removed_in = '2.0',
+)
 class TicketViewSet(ModelViewSet):
 
     filterset_fields = [

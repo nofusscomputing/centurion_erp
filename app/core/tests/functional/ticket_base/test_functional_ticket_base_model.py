@@ -126,9 +126,10 @@ class TicketBaseModelTestCases(
     @pytest.mark.slash_command
     @pytest.mark.slash_command_dependency
     @pytest.mark.tickets
-    def test_action_comment_for_link_ticket_on_source_ticket(self, model,
+    def test_action_comment_for_link_ticket_on_source_ticket(self, mocker,
         model_ticketbase, kwargs_ticketbase,
         model_ticketcommentbase, kwargs_ticketcommentbase,
+        model_ticketcommentactionticketdependency, model_ticketdependency,
         ticket,
     ):
         """Test Action Comment Creation
@@ -141,18 +142,27 @@ class TicketBaseModelTestCases(
 
         ticket.save()
 
+        mocker.patch('core.mixins.centurion.Centurion.context', {
+            'logger': None,
+            ticket._meta.model_name + 'ddd': ticket.opened_by.user
+        })
+
         kwargs = kwargs_ticketcommentbase()
         kwargs['ticket'] = ticket
         kwargs['body'] = f"{kwargs['body']}\n\n/relate #{dest_ticket.id}"
 
         comment = model_ticketcommentbase.objects.create( **kwargs )
 
-        action_comment = model_ticketcommentbase.objects.get(
+
+        action_comment = model_ticketcommentactionticketdependency.objects.get(
             ticket = ticket,
-            body = f'added #{ticket.id} as related to #{dest_ticket.id}'
+
+            is_create = True,
+            link_type = model_ticketdependency.Related.RELATED,
+            dependent_ticket_id = dest_ticket.id
         )
 
-        assert action_comment.body == f'added #{ticket.id} as related to #{dest_ticket.id}'
+        assert str(action_comment) == f'added #{ticket.id} as related -> #{dest_ticket.id}'
 
 
 
@@ -163,9 +173,10 @@ class TicketBaseModelTestCases(
     @pytest.mark.slash_command
     @pytest.mark.slash_command_dependency
     @pytest.mark.tickets
-    def test_action_comment_for_unlink_ticket_on_source_ticket(self, model,
+    def test_action_comment_for_unlink_ticket_on_source_ticket(self, mocker,
         model_ticketbase, kwargs_ticketbase,
         model_ticketcommentbase, kwargs_ticketcommentbase,
+        model_ticketcommentactionticketdependency, model_ticketdependency,
         ticket,
     ):
         """Test Action Comment Creation
@@ -177,6 +188,11 @@ class TicketBaseModelTestCases(
         dest_ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
 
         ticket.save()
+
+        mocker.patch('core.mixins.centurion.Centurion.context', {
+            'logger': None,
+            ticket._meta.model_name + 'ddd': ticket.opened_by.user
+        })
 
         kwargs = kwargs_ticketcommentbase()
         kwargs['ticket'] = ticket
@@ -194,12 +210,16 @@ class TicketBaseModelTestCases(
 
         dependency_model.delete()
 
-        action_comment = model_ticketcommentbase.objects.get(
+
+        action_comment = model_ticketcommentactionticketdependency.objects.get(
             ticket = ticket,
-            body = f'Removed #{ticket.id} as related to #{dest_ticket.id}'
+
+            is_create = False,
+            link_type = model_ticketdependency.Related.RELATED,
+            dependent_ticket_id = dest_ticket.id
         )
 
-        assert action_comment.body == f'Removed #{ticket.id} as related to #{dest_ticket.id}'
+        assert str(action_comment) == f'removed #{ticket.id} as related -> #{dest_ticket.id}'
 
 
 
@@ -210,9 +230,10 @@ class TicketBaseModelTestCases(
     @pytest.mark.slash_command
     @pytest.mark.slash_command_dependency
     @pytest.mark.tickets
-    def test_action_comment_for_link_ticket_on_dest_ticket(self, model,
+    def test_action_comment_for_link_ticket_on_dest_ticket(self, mocker,
         model_ticketbase, kwargs_ticketbase,
         model_ticketcommentbase, kwargs_ticketcommentbase,
+        model_ticketcommentactionticketdependency, model_ticketdependency,
         ticket,
     ):
         """Test Action Comment Creation
@@ -224,6 +245,11 @@ class TicketBaseModelTestCases(
         dest_ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
 
         ticket.save()
+
+        mocker.patch('core.mixins.centurion.Centurion.context', {
+            'logger': None,
+            ticket._meta.model_name + 'ddd': ticket.opened_by.user
+        })
 
         kwargs = kwargs_ticketcommentbase()
         kwargs['ticket'] = ticket
@@ -231,12 +257,16 @@ class TicketBaseModelTestCases(
 
         comment = model_ticketcommentbase.objects.create( **kwargs )
 
-        action_comment = model_ticketcommentbase.objects.get(
-            ticket = dest_ticket,
-            body = f'added #{dest_ticket.id} as related to #{ticket.id}'
+
+        action_comment = model_ticketcommentactionticketdependency.objects.get(
+            ticket = dest_ticket.id,
+
+            is_create = True,
+            link_type = model_ticketdependency.Related.RELATED,
+            dependent_ticket_id = ticket
         )
 
-        assert action_comment.body == f'added #{dest_ticket.id} as related to #{ticket.id}'
+        assert str(action_comment) == f'added #{dest_ticket.id} as related -> #{ticket.id}'
 
 
 
@@ -247,9 +277,10 @@ class TicketBaseModelTestCases(
     @pytest.mark.slash_command
     @pytest.mark.slash_command_dependency
     @pytest.mark.tickets
-    def test_action_comment_for_un_link_ticket_on_dest_ticket(self, model,
+    def test_action_comment_for_un_link_ticket_on_dest_ticket(self, mocker,
         model_ticketbase, kwargs_ticketbase,
         model_ticketcommentbase, kwargs_ticketcommentbase,
+        model_ticketcommentactionticketdependency, model_ticketdependency,
         ticket,
     ):
         """Test Action Comment Creation
@@ -261,6 +292,11 @@ class TicketBaseModelTestCases(
         dest_ticket = model_ticketbase.objects.create( **kwargs_ticketbase() )
 
         ticket.save()
+
+        mocker.patch('core.mixins.centurion.Centurion.context', {
+            'logger': None,
+            ticket._meta.model_name + 'ddd': ticket.opened_by.user
+        })
 
         kwargs = kwargs_ticketcommentbase()
         kwargs['ticket'] = ticket
@@ -278,12 +314,16 @@ class TicketBaseModelTestCases(
 
         dependency_model.delete()
 
-        action_comment = model_ticketcommentbase.objects.get(
-            ticket = dest_ticket,
-            body = f'Removed #{dest_ticket.id} as related to #{ticket.id}'
+
+        action_comment = model_ticketcommentactionticketdependency.objects.get(
+            ticket = dest_ticket.id,
+
+            is_create = False,
+            link_type = model_ticketdependency.Related.RELATED,
+            dependent_ticket_id = ticket
         )
 
-        assert action_comment.body == f'Removed #{dest_ticket.id} as related to #{ticket.id}'
+        assert str(action_comment) == f'removed #{dest_ticket.id} as related -> #{ticket.id}'
 
 
 
@@ -417,7 +457,7 @@ class TicketBaseModelTestCases(
     def test_action_comment_exists_edit_ticket_field(self, mocker,
         parameterized, param_key_model_fields, param_field, param_type,
         model, model_kwargs,
-        ticket, model_ticketcommentbase,
+        ticket, model_ticketcommentactionfieldedit,
     ):
         """Test Action Comment Creation
 
@@ -476,10 +516,12 @@ class TicketBaseModelTestCases(
 
         if param_type is models.ForeignKey:
 
+            new_value_text = f'${field.related_model.model_tag}-{new_value.id}'
+
             if old_value != None:
                 old_value_text = f'${field.related_model.model_tag}-{old_value.id}'
-
-            new_value_text = f'${field.related_model.model_tag}-{new_value.id}'
+            else:
+                comment = f'set {field.verbose_name} to **{new_value_text}**'
 
         elif param_type is 'diff':
 
@@ -518,15 +560,17 @@ class TicketBaseModelTestCases(
         ticket.save()
 
         if not comment:
-            comment = f'Changed {field.verbose_name} from _{old_value_text}_ to **{new_value_text}**'
+            comment = f'changed {field.verbose_name} from _{old_value_text}_ to **{new_value_text}**'
 
 
-        action_comment = model_ticketcommentbase.objects.get(
+        action_comment = model_ticketcommentactionfieldedit.objects.get(
             ticket = ticket,
-            body = comment
+            field_name = param_field,
+            edit_type = 1,
+            # body = comment
         )
 
-        assert action_comment.body == comment
+        assert str(action_comment) == comment
 
 
 

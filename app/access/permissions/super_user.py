@@ -1,5 +1,4 @@
 from rest_framework.exceptions import (
-    MethodNotAllowed,
     NotAuthenticated,
 )
 
@@ -20,6 +19,13 @@ class SuperUserPermissions(
 
     def has_permission(self, request, view):
 
+        self._view_allowed_methods = getattr(view, 'allowed_methods', {})
+
+        view.permissions_required = self.get_required_permissions(
+            method = request.method,
+            model_cls = view.model
+        )
+
         if request.user.is_anonymous:
 
             raise NotAuthenticated(
@@ -27,14 +33,9 @@ class SuperUserPermissions(
             )
 
 
-        if request.method not in view.allowed_methods:
-
-            raise MethodNotAllowed(method = request.method)
-
-
         if request.user.is_superuser:
 
-            return True
+            return self.permission_allowed_finaliser(view)
 
 
         return False

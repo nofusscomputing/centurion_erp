@@ -62,3 +62,11 @@ class DefaultDenyPermissionPyTest(
                 is_superuser = True
             )
         )
+
+
+    def test_function_called_permission_allowed_finaliser_has_permission(self):
+        pytest.xfail( reason = 'test is N/A for base class.')
+
+
+    def test_function_called_permission_allowed_finaliser_anon_denied(self):
+        pytest.xfail( reason = 'test is N/A for base class.')

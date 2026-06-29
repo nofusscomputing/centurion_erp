@@ -1,4 +1,3 @@
-import importlib
 import re
 
 from django.apps import apps

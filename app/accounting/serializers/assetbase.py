@@ -54,9 +54,6 @@ class ModelSerializer(
     """Ticket Base Model"""
 
 
-    _urls = serializers.SerializerMethodField('get_url')
-
-
     class Meta:
 
         model = AssetBase

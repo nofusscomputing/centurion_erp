@@ -1,5 +1,7 @@
 import re
 
+from centurion.lib.decorators import depreciate
+
 from core import exceptions as centurion_exceptions
 
 
@@ -33,6 +35,11 @@ For this command to process the following conditions must be met:
     single_item: str = r'\$(?P<type>[a-z_]+)-(?P<id>\d+)'
 
 
+    @depreciate(
+        depreciated_in = '1.16.0',
+        removed_in = '2.0',
+        replacement = 'core.libe.tslash_commands.link_model',
+    )
     def command_linked_model(self, match) -> str:
         """/link processor
 

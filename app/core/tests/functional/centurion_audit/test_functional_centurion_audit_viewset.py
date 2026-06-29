@@ -36,3 +36,8 @@ class CenturionAuditViewsetPyTest(
     def test_function_get_meta_urls_no_sub_models_key(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
+    def test_function_get_meta_urls_sub_models_keys(self):
+        pytest.xfail( reason = 'Model is not creatable by user so sub_models not required.' )
+
+    def test_function_get_meta_urls_sub_models_values(self):
+        pytest.xfail( reason = 'Model is not creatable by user so sub_models not required.' )

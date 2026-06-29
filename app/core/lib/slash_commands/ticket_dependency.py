@@ -1,5 +1,6 @@
 import re
 
+from django.apps import apps
 from core import exceptions as centurion_exceptions
 
 
@@ -59,6 +60,11 @@ For this command to process the following conditions must be met:
 
         base_model = getattr(self, '_base_model', None)
 
+        comment_model = apps.get_model(
+            app_label = 'core',
+            model_name = 'ticketcommentbase'
+        )
+
         if base_model:
             base_model = base_model._meta.model_name
 
@@ -98,7 +104,7 @@ For this command to process the following conditions must be met:
 
                             to_ticket = self._base_model.objects.get(pk = ticket_id)
 
-                        elif base_model == 'ticketcommentbase':
+                        elif issubclass(self.__class__, comment_model):
 
                             from_ticket = self.ticket
 
@@ -111,8 +117,8 @@ For this command to process the following conditions must be met:
                             dependent_ticket = to_ticket,
                             organization = from_ticket.organization,
                             user = comment_user
-
                         )
+
 
                 except centurion_exceptions.ValidationError as err:
 

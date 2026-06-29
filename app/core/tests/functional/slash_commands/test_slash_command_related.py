@@ -2111,7 +2111,10 @@ class SlashCommandsPyTest(
 
 
     @pytest.fixture
-    def ticket(self, request, model_ticketbase, django_db_blocker):
+    def ticket(self, request,
+        model_ticketbase, django_db_blocker,
+        model, model_kwargs
+    ):
         """ Ticket that requires body
 
         when using this fixture, set the `description` then call ticket.save()
@@ -2120,17 +2123,15 @@ class SlashCommandsPyTest(
 
         with django_db_blocker.unblock():
 
-            ticket = TicketBase()
+            kwargs = model_kwargs()
+            
+            kwargs['organization'] = request.cls.organization
+            kwargs['title'] = 'A ticket for slash commands'
+            kwargs['opened_by'] = request.cls.entity_user
+            kwargs['description'] = 'a ticket descr'
 
-            ticket.organization = request.cls.organization
-            ticket.title = 'A ticket for slash commands'
-            ticket.opened_by = request.cls.entity_user
-
-            ticket = TicketBase.objects.create(
-                organization = request.cls.organization,
-                title = 'A ticket for slash commands',
-                opened_by = request.cls.entity_user,
-                description = 'a ticket descr'
+            ticket = model.objects.create(
+                **kwargs,
             )
 
         yield ticket

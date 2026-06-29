@@ -2,6 +2,7 @@ from django.db import models
 
 from access.fields import AutoLastModifiedField
 
+from centurion.lib.decorators import depreciate
 from core.models.centurion import CenturionModel
 
 from settings.models.app_settings import AppSettings
@@ -12,6 +13,11 @@ from settings.models.app_settings import AppSettings
 #    - Migrated: https://github.com/nofusscomputing/centurion_erp/issues/914
 #    - Removal: https://github.com/nofusscomputing/centurion_erp/issues/1049
 #
+@depreciate(
+    depreciated_in = '1.27.0',
+    removed_in = '2.0',
+    replacement = 'access.models.company',
+)
 class Manufacturer(
     CenturionModel,
 ):
