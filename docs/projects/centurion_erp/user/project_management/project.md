@@ -3,7 +3,7 @@ title: Project
 description: No Fuss Computings Project User Documentation for Django ITSM
 date: 2024-06-17
 template: project.html
-about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
+about: https://github.com/nofusscomputing/centurion_erp
 ---
 
 Projects enable the grouping and management of tasks within a single location/item.
