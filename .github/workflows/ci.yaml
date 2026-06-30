@@ -15,8 +15,29 @@ on:
 
 env:
   GIT_SYNC_URL: "https://${{ secrets.GITLAB_USERNAME_ROBOT }}:${{ secrets.GITLAB_TOKEN_ROBOT }}@gitlab.com/nofusscomputing/projects/centurion_erp.git"
+  PYTHON_VERSION: '3.11'
+  PYTHON_VERSIONS: '["3.10","3.11","3.12","3.13"]'
 
 jobs:
+
+
+  init:
+    if: ${{ github.repository == 'nofusscomputing/centurion_erp' }}
+    runs-on: ubuntu-latest
+    outputs:
+      PYTHON_VERSION: ${{ steps.python-vars.outputs.ENV_PYTHON_VERSION }}
+      PYTHON_VERSIONS: ${{ steps.python-vars.outputs.ENV_PYTHON_VERSIONS }}
+    steps:
+
+
+      - name: Use Workflow env vars
+        id: python-vars
+        shell: bash
+        run: |
+          echo 'ENV_PYTHON_VERSION=${{ env.PYTHON_VERSION }}' >> $GITHUB_OUTPUT
+
+          echo 'ENV_PYTHON_VERSIONS=${{ env.PYTHON_VERSIONS }}' >> $GITHUB_OUTPUT
+
 
 
   mkdocs:
@@ -34,8 +55,18 @@ jobs:
   python:
     name: 'Python'
     uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
+    needs:
+      - init
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+    with:
+      DEFAULT_ONLY: ${{
+        github.ref_type != 'tag'
+        && github.ref_name != 'master'
+        && github.ref_name != 'development'
+        && ! startsWith(github.ref_name, 'feat-') }}
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
+      PYTHON_VERSIONS: ${{ needs.init.outputs.PYTHON_VERSIONS }}
 
 
   python-build:
@@ -92,10 +123,11 @@ jobs:
       )
     uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
     needs:
+      - init
       - docker
     with:
       POSTGRES_VERSIONS: '[ "13", "14", "15", "16", "17" ]'
-      PYTHON_VERSION: '3.11'
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
       RABBITMQ_VERSIONS: '[ "3.12", "3.13", "4.0", "4.1" ]'
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
@@ -113,10 +145,11 @@ jobs:
       )
     uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
     needs:
+      - init
       - docker_tag
     with:
       POSTGRES_VERSIONS: '[ "13", "14", "15", "16", "17" ]'
-      PYTHON_VERSION: '3.11'
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
       RABBITMQ_VERSIONS: '[ "3.12", "3.13", "4.0", "4.1" ]'
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
