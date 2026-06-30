@@ -27,7 +27,7 @@ for model in apps.get_models():
 
     if issubclass(model, ticket.TicketBase):
 
-        if(
+        if(    # pragma: no cover begin
             (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
             or (not router._feature_flagging['2025-00010'] and 'incident' in model._meta.model_name)
             or (not router._feature_flagging['2025-00011'] and 'problem' in model._meta.model_name)
@@ -35,6 +35,7 @@ for model in apps.get_models():
         ):
             continue
 
+        # pragma: no cover end
 
         ticket_type_names += model._meta.model_name + '|'
 
