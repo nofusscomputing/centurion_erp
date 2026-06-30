@@ -12,6 +12,7 @@ from api.tests.functional.test_functional_permissions_api import (
 )
 
 from core.mixins.centurion import Centurion
+from core.models.model_tickets import ModelTicket
 
 
 
@@ -58,7 +59,7 @@ def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
 
         if(
             model._meta.app_label not in model_apps
-            or model_name.endswith('ticket') and len(model_name) > 6
+            or issubclass(model ,ModelTicket)
         ):
             continue
 
