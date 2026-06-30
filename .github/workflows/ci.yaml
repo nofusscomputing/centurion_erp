@@ -79,6 +79,10 @@ jobs:
 
   integration-test:
     name: 'Integration Test'
+    if: github.ref_type != 'tag'
+        || github.ref_name == 'master'
+        || github.ref_name == 'development'
+        || startsWith(github.ref_name, 'feat-')
     uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
     needs:
       - docker
@@ -92,6 +96,10 @@ jobs:
 
   integration-test_tag:
     name: 'Integration Test'
+    if: github.ref_type == 'tag'
+        || github.ref_name == 'master'
+        || github.ref_name == 'development'
+        || startsWith(github.ref_name, 'feat-')
     uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
     needs:
       - docker_tag
