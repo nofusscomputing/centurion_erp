@@ -44,8 +44,12 @@ class ITAMAssetBase(
         "dataset": {
             "columns": [
                 [
+                    {
+                        "field": "display_name",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'id',
-                    "display_name",
                     'asset_number',
                     'serial_number',
                     'organization',
