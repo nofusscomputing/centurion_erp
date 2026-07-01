@@ -33,6 +33,24 @@ jobs:
           echo 'ENV_PYTHON_VERSIONS=${{ env.PYTHON_VERSIONS }}' >> $GITHUB_OUTPUT
 
 
+  vuln-master:
+    name: '"master" branch'
+    uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
+    needs:
+      - init
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+    with:
+      BRANCH: master
+      DEFAULT_ONLY: ${{
+        github.ref_type != 'tag'
+        && github.ref_name != 'master'
+        && github.ref_name != 'development'
+        && ! startsWith(github.ref_name, 'feat-') }}
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
+      PYTHON_VERSIONS: ${{ needs.init.outputs.PYTHON_VERSIONS }}
+
+
   vuln-development:
     name: '"development" branch'
     uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
