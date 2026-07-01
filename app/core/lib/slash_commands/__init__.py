@@ -1,6 +1,5 @@
 import re
 
-from .linked_model import CommandLinkedModel    # depreciated model
 from .link_model import CommandLinkModelTicket
 from .ticket_dependency import CommandTicketDependency
 from .time_track import CommandTimeTrack
@@ -8,7 +7,6 @@ from .time_track import CommandTimeTrack
 
 
 class SlashCommands(
-    CommandLinkedModel,    # depreciated model
     CommandLinkModelTicket,
     CommandTicketDependency,
     CommandTimeTrack,
