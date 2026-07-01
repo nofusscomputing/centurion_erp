@@ -1,0 +1,51 @@
+---
+
+name: 'Vulnerability Scan'
+
+
+on:
+  schedule:
+    # Every day at 14:30 UTC / 00:00 +09:30
+    - cron: "30 14 * * *"
+
+env:
+  PYTHON_VERSION: '3.11'
+  PYTHON_VERSIONS: '["3.10","3.11","3.12","3.13"]'
+
+jobs:
+
+
+  init:
+    if: ${{ github.repository == 'nofusscomputing/centurion_erp' }}
+    runs-on: ubuntu-latest
+    outputs:
+      PYTHON_VERSION: ${{ steps.python-vars.outputs.ENV_PYTHON_VERSION }}
+      PYTHON_VERSIONS: ${{ steps.python-vars.outputs.ENV_PYTHON_VERSIONS }}
+    steps:
+
+
+      - name: Use Workflow env vars
+        id: python-vars
+        shell: bash
+        run: |
+          echo 'ENV_PYTHON_VERSION=${{ env.PYTHON_VERSION }}' >> $GITHUB_OUTPUT
+
+          echo 'ENV_PYTHON_VERSIONS=${{ env.PYTHON_VERSIONS }}' >> $GITHUB_OUTPUT
+
+
+  vuln-development:
+    name: '"development" branch'
+    uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
+    needs:
+      - init
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+    with:
+      BRANCH: development
+      DEFAULT_ONLY: ${{
+        github.ref_type != 'tag'
+        && github.ref_name != 'master'
+        && github.ref_name != 'development'
+        && ! startsWith(github.ref_name, 'feat-') }}
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
+      PYTHON_VERSIONS: ${{ needs.init.outputs.PYTHON_VERSIONS }}
