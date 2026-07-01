@@ -10,7 +10,6 @@ from project_management.viewsets import (
     index as project_management,
     project,
     project_milestone,
-    project_task,
 )
 
 
@@ -55,11 +54,6 @@ router.register(
     prefix = '/project/(?P<project_id>[0-9]+)/milestone',
     viewset = project_milestone.ViewSet,
     basename = '_api_projectmilestone'
-)
-router.register(
-    prefix = '/project/(?P<project_id>[0-9]+)/project_task',
-    viewset = project_task.ViewSet,
-    basename = '_api_v2_ticket_project_task'
 )
 
 router.register(
