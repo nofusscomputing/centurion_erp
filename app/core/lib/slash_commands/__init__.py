@@ -1,6 +1,5 @@
 import re
 
-from .duration import Duration    # depreciated model
 from .related_ticket import CommandRelatedTicket    # depreciated model
 from .linked_model import CommandLinkedModel    # depreciated model
 from .link_model import CommandLinkModelTicket
@@ -10,7 +9,6 @@ from .time_track import CommandTimeTrack
 
 
 class SlashCommands(
-    Duration,    # depreciated model
     CommandRelatedTicket,    # depreciated model
     CommandLinkedModel,    # depreciated model
     CommandLinkModelTicket,
