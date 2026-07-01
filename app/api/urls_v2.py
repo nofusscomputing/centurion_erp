@@ -69,10 +69,10 @@ for model in apps.get_models():
     if issubclass(model, ticket.TicketBase):
 
         if(
-            (not router._feature_flagging['2025-00006'] and 'request' in model._meta.model_name)
-            or (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
+            (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
             or (not router._feature_flagging['2025-00010'] and 'incident' in model._meta.model_name)
             or (not router._feature_flagging['2025-00011'] and 'problem' in model._meta.model_name)
+            or (not router._feature_flagging['2026-00012'] and 'request' in model._meta.model_name)
         ):
             continue
 
@@ -123,14 +123,14 @@ router.register(
     prefix = f'/(?P<app_label>[{ticket_model_links_app_labels} \
         ]+)/(?P<model_name>[{ticket_model_links_type_names}]+)/(?P<model_id>[0-9]+)/tickets',
     viewset = ticket_model_link.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_modelticket_sub'
+    basename = '_api_modelticket_sub'
 )
 
 router.register(
     prefix = f'/(?P<app_label>[{ticket_app_names} \
         ]+)/ticket/(?P<model_name>[{ticket_type_names}]+)',
     viewset = ticket.ViewSet,
-    feature_flag = '2025-00006', basename = '_api_ticketbase_sub'
+    basename = '_api_ticketbase_sub'
 )
 
 

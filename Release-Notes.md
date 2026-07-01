@@ -1,3 +1,10 @@
+## Version v1.33.0
+
+- remove feature flag `2025-00006`.
+
+- place model Request Ticket behind feature flag `2026-00012` until model ready for production use.
+
+
 ## Version v1.32.0
 
 - New Models
