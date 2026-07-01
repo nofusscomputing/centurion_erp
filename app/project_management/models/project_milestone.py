@@ -165,16 +165,3 @@ class ProjectMilestone(
         """
 
         return 'xx %'
-
-    def save_history(self, before: dict, after: dict) -> bool:
-
-        from project_management.models.project_milestone_history import ProjectMilestoneHistory
-
-        history = super().save_history(
-            before = before,
-            after = after,
-            history_model = ProjectMilestoneHistory,
-        )
-
-
-        return history

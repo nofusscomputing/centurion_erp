@@ -10,7 +10,6 @@ from project_management.viewsets import (
     index as project_management,
     project,
     project_milestone,
-    project_task,
 )
 
 
@@ -27,7 +26,7 @@ for model in apps.get_models():
 
     if issubclass(model, ticket.TicketBase):
 
-        if(
+        if(    # pragma: no cover begin
             (not router._feature_flagging['2025-00009'] and 'change' in model._meta.model_name)
             or (not router._feature_flagging['2025-00010'] and 'incident' in model._meta.model_name)
             or (not router._feature_flagging['2025-00011'] and 'problem' in model._meta.model_name)
@@ -35,6 +34,7 @@ for model in apps.get_models():
         ):
             continue
 
+        # pragma: no cover end
 
         ticket_type_names += model._meta.model_name + '|'
 
@@ -54,11 +54,6 @@ router.register(
     prefix = '/project/(?P<project_id>[0-9]+)/milestone',
     viewset = project_milestone.ViewSet,
     basename = '_api_projectmilestone'
-)
-router.register(
-    prefix = '/project/(?P<project_id>[0-9]+)/project_task',
-    viewset = project_task.ViewSet,
-    basename = '_api_v2_ticket_project_task'
 )
 
 router.register(

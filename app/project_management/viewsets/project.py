@@ -92,11 +92,11 @@ class ViewSet( ModelViewSet ):
                 user = self.request.user, permission = self.permissions_required
             ).get( pk = organization )
 
-        elif self.queryset:
+        elif self.get_queryset():
 
-            if list(self.queryset) == 1:
+            if len(self.get_queryset()) >= 1:
 
-                obj = list(self.queryset)[0]
+                obj = list(self.get_queryset())[0]
 
                 organization = obj.get_organization()
 
