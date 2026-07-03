@@ -69,7 +69,7 @@ class ProjectModelSerializer(
                 request = None,
                 kwargs={
                     'project_id': item.pk,
-                    'model_name': 'ticket'
+                    'model_name': 'ticketbase'
                 }
             ),
         })
