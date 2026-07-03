@@ -32,12 +32,12 @@ router = DefaultRouter(trailing_slash=False)
 router.register('', access_v2.Index, basename = '_api_access_home')
 
 router.register(
-    prefix = '/(?P<model_name>[company]+)', viewset = entity.ViewSet,
+    prefix = '/(?P<model_name>(company)+)', viewset = entity.ViewSet,
     basename = '_api_v2_company'
 )
 
 router.register(
-    prefix=f'/entity/(?P<model_name>[{entity_type_names}]+)?', viewset = entity.ViewSet,
+    prefix=f'/entity/(?P<model_name>({entity_type_names})+)?', viewset = entity.ViewSet,
     basename = '_api_entity_sub'
 )
 

@@ -71,8 +71,8 @@ router.register(
     basename = '_api_ticket_comment_base_thread'
 )
 router.register(
-    prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>[{ticket_comment_names} \
-        ]+)/(?P<parent_id>[0-9]+)/threads',
+    prefix=(f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>({ticket_comment_names}'
+        ')+)/(?P<parent_id>[0-9]+)/threads'),
     viewset = ticket_comment.ViewSet,
     basename = '_api_ticket_comment_base_thread_sub'
 )
@@ -90,7 +90,7 @@ router.register(
     basename = '_api_v2_ticket_linked_item'
 )
 router.register(
-    prefix=f'/ticket/(?P<model_name>[{ticket_type_names}]+)/(?P<model_id>[0-9]+)/models', viewset = ticket_model_link.ViewSet,
+    prefix=f'/ticket/(?P<model_name>({ticket_type_names})+)/(?P<model_id>[0-9]+)/models', viewset = ticket_model_link.ViewSet,
     basename = '_api_modelticket'
 )
 router.register(
@@ -98,13 +98,13 @@ router.register(
     basename = '_api_v2_ticket_related'
 )
 router.register(
-    prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>[{ticket_comment_names}]+)',
+    prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>({ticket_comment_names})+)',
     viewset = ticket_comment.ViewSet,
     basename = '_api_ticket_comment_base_sub'
 )
 router.register(
-    prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>[{ticket_comment_names} \
-        ]+)/(?P<parent_id>[0-9]+)/threads',
+    prefix=(f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>({ticket_comment_names}'
+        ')+)/(?P<parent_id>[0-9]+)/threads'),
     viewset = ticket_comment.ViewSet,
     basename = '_api_ticket_comment_base_sub_thread'
 )
