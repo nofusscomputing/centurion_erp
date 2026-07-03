@@ -43,7 +43,7 @@ for model in apps.get_models():
 
     if getattr(model, '_audit_enabled', False):
 
-        history_type_names += str(model().get_history_model_name()).lower() + '|'
+        history_type_names += str(model().get_history_model_name()).lower()[:-12] + '|'
 
         if model._meta.app_label not in history_app_labels:
 
@@ -52,7 +52,7 @@ for model in apps.get_models():
 
     if getattr(model, '_notes_enabled', False):
 
-        notes_type_names += str(f'{model._meta.object_name}CenturionModelNote').lower() + '|'
+        notes_type_names += str(f'{model._meta.object_name}').lower() + '|'
 
         if model._meta.app_label not in notes_app_labels:
 
@@ -60,7 +60,7 @@ for model in apps.get_models():
 
     if getattr(model, '_ticket_linkable', False):
 
-        ticket_model_links_type_names += str(f'{model._meta.object_name}Ticket').lower() + '|'
+        ticket_model_links_type_names += str(f'{model._meta.object_name}').lower() + '|'
 
         if model._meta.app_label not in ticket_model_links_app_labels:
 
@@ -106,29 +106,29 @@ router.register('/base/user', user.ViewSet, basename='_api_user')
 
 
 router.register(
-    prefix = f'/(?P<app_label>[{history_app_labels}]+)/(?P<model_name>[{history_type_names} \
-        ]+)/(?P<model_id>[0-9]+)/history',
+    prefix = (f'/(?P<app_label>({history_app_labels})+)/(?P<model_name>({history_type_names}'
+        ')+)/(?P<model_id>[0-9]+)/history'),
     viewset = audit_history.ViewSet,
     basename = '_api_centurionaudit_sub'
 )
 
 router.register(
-    prefix = f'/(?P<app_label>[{notes_app_labels}]+)/(?P<model_name>[{notes_type_names} \
-        ]+)/(?P<model_id>[0-9]+)/notes',
+    prefix = (f'/(?P<app_label>({notes_app_labels})+)/(?P<model_name>({notes_type_names}'
+        ')+)/(?P<model_id>[0-9]+)/notes'),
     viewset = centurion_model_notes.ViewSet,
     basename = '_api_centurionmodelnote_sub'
 )
 
 router.register(
-    prefix = f'/(?P<app_label>[{ticket_model_links_app_labels} \
-        ]+)/(?P<model_name>[{ticket_model_links_type_names}]+)/(?P<model_id>[0-9]+)/tickets',
+    prefix = (f'/(?P<app_label>({ticket_model_links_app_labels}'
+        f')+)/(?P<model_name>({ticket_model_links_type_names})+)/(?P<model_id>[0-9]+)/tickets'),
     viewset = ticket_model_link.ViewSet,
     basename = '_api_modelticket_sub'
 )
 
 router.register(
-    prefix = f'/(?P<app_label>[{ticket_app_names} \
-        ]+)/ticket/(?P<model_name>[{ticket_type_names}]+)',
+    prefix = (f'/(?P<app_label>({ticket_app_names}'
+        f')+)/ticket/(?P<model_name>({ticket_type_names})+)'),
     viewset = ticket.ViewSet,
     basename = '_api_ticketbase_sub'
 )

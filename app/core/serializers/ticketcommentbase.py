@@ -95,7 +95,7 @@ class ModelSerializer(
                         request = None,
                         kwargs={
                             'ticket_id': ticket_id,
-                            'model_name': 'comment',
+                            'model_name': 'ticketcommentbase',
                             'parent_id': item.id
                         }
                     )
