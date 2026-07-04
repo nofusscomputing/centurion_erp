@@ -117,13 +117,20 @@ class ProjectMilestone(
             },
             {
                 "name": "Tickets",
-                "slug": "tickets",
+                "slug": "ticket",
                 "sections": [
-                    # {
-                    #     "layout": "table",
-                    #     "field": "tickets",
-                    # }
-                ],
+                    {
+                        "sub_models": [
+                            'changeticket',
+                            'incidentticket',
+                            'problemticket',
+                            'projecttaskticket',
+                            'requestticket',
+                        ],
+                        "layout": "table",
+                        "field": "tickets",
+                    }
+                ]
             },
             {
                 "name": "Notes",
