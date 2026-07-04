@@ -229,6 +229,7 @@ class ViewSet( SubModelViewSet ):
 
     filterset_fields = [
         'is_deleted',
+        'milestone',
         'organization',
         'project',
     ]
