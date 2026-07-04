@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import empty
+from rest_framework.reverse import reverse
 
 from access.serializers.organization import TenantBaseSerializer
 
@@ -50,6 +51,26 @@ class ProjectMilestoneModelSerializer(
     common.CommonModelSerializer,
     ProjectMilestoneBaseSerializer
 ):
+
+
+    def get_url(self, item) -> dict:
+
+        get_url = super().get_url( item = item )
+
+        get_url.update({
+            'tickets': reverse(
+                viewname = "v2:_api_project_ticket_sub-list",
+                request = None,
+                kwargs={
+                    'project_id': item.project.pk,
+                    'model_name': 'ticketbase'
+                },
+            ) + f'?milestone={item.pk}',
+        })
+
+
+        return get_url
+
 
 
     class Meta:
