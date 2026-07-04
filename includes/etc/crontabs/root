@@ -4,4 +4,4 @@
 # Fetch the Feature flags and restart Centurion
 #
 # min	hour	day	month	weekday	command
-*       */4     *    *    *   manage feature_flag --reload &>/dev/null
+0       */4     *    *    *   manage feature_flag --reload &>/dev/null
