@@ -4,6 +4,8 @@
 
 - place model Request Ticket behind feature flag `2026-00012` until model ready for production use.
 
+- Support added whe updating role permissions to use format `<app>.<permission>_<model>`
+
 
 ## Version v1.32.0
 
