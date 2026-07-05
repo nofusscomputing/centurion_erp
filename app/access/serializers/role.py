@@ -1,4 +1,11 @@
+from functools import reduce
+
+from operator import or_
+
+from django.db import models
+
 from rest_framework import serializers
+from rest_framework.exceptions import ParseError
 
 from drf_spectacular.utils import extend_schema_serializer
 
@@ -95,6 +102,47 @@ class ModelSerializer(
             'modified',
             '_urls',
         ]
+
+
+
+    def to_internal_value(self, data):
+        """Convert Permission Names
+
+        Permission may be added in format `<app>.<permission>_<model>` this
+        function converts to the permission pk.
+        """
+
+        if(
+            'permissions' in data
+            and isinstance(data['permissions'][0], str)
+        ):
+
+            filters = [
+                models.Q(
+                    content_type__app_label=app, codename=codename
+                ) for app, codename in (
+                    perm.split(".", 1) for perm in data['permissions']
+                )
+            ]
+
+            PermissionModel = self.Meta.model.permissions.field.related_model
+
+            permissions_id = [
+                permission.id for permission in PermissionModel.objects.filter(
+                    reduce(or_, filters)
+                )
+            ]
+
+
+            if len(permissions_id) != len(data['permissions']):
+                raise ParseError(
+                    detail = 'A Permission was supplied that could not be found',
+                    code = 'supplied_permission_does_not_exist'
+                )
+
+            data['permissions'] = permissions_id
+
+        return super().to_internal_value(data)
 
 
 
