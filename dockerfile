@@ -25,8 +25,6 @@ RUN apk add --update \
         curl-dev \
         libxml2-dev \
         gettext \
-        mariadb-client \
-        mariadb-dev \
         pkgconf \
         postgresql16-dev \
         postgresql16-client \
@@ -107,8 +105,6 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
     apk update; \
     apk upgrade; \
     apk add \
-        mariadb-client \
-        mariadb-dev \
         nginx@nginx=${NGINX_VERSION} \
         postgresql16-client \
         libxml2; \

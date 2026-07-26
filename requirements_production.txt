@@ -142,8 +142,6 @@ mdurl==0.1.2
     # via
     #   -r requirements.txt
     #   markdown-it-py
-mysqlclient==2.2.4
-    # via -r tools/requirements_production.in
 oauthlib==3.3.1
     # via
     #   -r requirements.txt
