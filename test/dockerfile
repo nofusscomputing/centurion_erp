@@ -22,8 +22,6 @@ RUN \
         curl-dev \
         libxml2-dev \
         gettext \
-        mariadb-client \
-        mariadb-dev \
         pkgconf \
         postgresql16-dev \
         postgresql16-client \
