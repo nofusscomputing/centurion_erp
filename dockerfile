@@ -6,13 +6,12 @@ ARG ALPINE_VERSION=3.20
 ARG NGINX_VERSION=1.27.2-r1
 ARG PYTHON_VERSION=3.11.10
 
-FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} as build
+FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS build
 
 
 RUN pip --disable-pip-version-check list --outdated --format=json | \
     python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
     xargs -n1 pip install --upgrade;
-
 
 RUN apk add --update \
         bash \
@@ -46,17 +45,12 @@ RUN printf "%s%s%s%s\n" \
 
 RUN curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub; \
   openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout;
-
-
   
 RUN pip install --upgrade \
     setuptools \
     wheel \
     setuptools-rust \
     twine
-
-
-
 
 RUN mkdir -p /tmp/python_modules /tmp/python_builds
 
@@ -79,14 +73,90 @@ RUN cd /tmp/python_modules \
 
 
 
+FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS prepare
 
-FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION}
+
+ARG NGINX_VERSION
+
+ENV CENTURION_STATIC_ROOT=/data/static
+ENV PYTHONTZPATH=""
+
+
+COPY requirements.txt requirements.txt
+
+COPY requirements_dev.txt requirements_dev.txt
+
+COPY --from=build /etc/apk/repositories /etc/apk/repositories
+
+COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
+
+COPY includes/ /
+
+COPY --from=build /tmp/python_builds /tmp/python_builds 
+
+COPY --from=build /var/cache/apk /var/cache/apk
+
+COPY --from=build /root/.cache/pip /root/.cache/pip
+
+# Install / Update packages
+RUN pip --disable-pip-version-check list --outdated --format=json | \
+        python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
+        xargs -n1 pip install  \
+            --no-cache-dir \
+            --upgrade; \
+    apk update; \
+    apk upgrade; \
+    apk add \
+        mariadb-client \
+        mariadb-dev \
+        nginx@nginx=${NGINX_VERSION} \
+        postgresql16-client \
+        libxml2; \
+    pip install \
+        --no-cache-dir \
+        --no-index \
+        --find-links /tmp/python_builds \
+        centurion_erp[docker]; \
+    chmod +x /entrypoint.sh; \
+    export
+
+# Setup nginx
+RUN rm -rf /tmp/python_builds; \
+    rm /etc/nginx/sites-enabled; \
+    rm /etc/nginx/conf.d/default.conf; \
+    mv /etc/nginx/conf.d/centurion.conf /etc/nginx/conf.d/default.conf;
+
+# Check for nginx errors. (will fail if so)
+RUN nginx -t;
+
+# sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
+RUN if [ ! $(python -m django --version) ]; then \
+        echo "Django not Installed"; \
+        exit 1; \
+    fi;
+
+
+ENV DJANGO_SETTINGS_MODULE=centurion_erp.centurion.settings
+
+
+# Generate static content
+RUN manage collectstatic --noinput;
+
+# Remove packages not required.
+RUN apk del --no-interactive \
+        perl;
+
+# Setup SupervisorD conf dir
+RUN mkdir -p /etc/supervisor/conf.d;
+
+
+FROM scratch
+
 
 LABEL \
   org.opencontainers.image.vendor="No Fuss Computing" \
   org.opencontainers.image.title="Centurion ERP" \
   org.opencontainers.image.description="An ERP with a focus on ITSM and automation" \
-  org.opencontainers.image.vendor="No Fuss Computing" \
   io.artifacthub.package.license="AGPL-3.0-only"
 
 
@@ -94,7 +164,6 @@ ARG CI_PROJECT_URL
 ARG CI_COMMIT_SHA
 ARG CI_COMMIT_TAG
 
-ARG NGINX_VERSION
 
 ENV CENTURION_STATIC_ROOT=/data/static
 ENV CI_PROJECT_URL=${CI_PROJECT_URL}
@@ -111,71 +180,27 @@ ENV PYTHONWARNINGS=ignore
 
 ENV IS_WORKER=False
 
+ENV DJANGO_SETTINGS_MODULE=centurion_erp.centurion.settings
 
 
-COPY requirements.txt requirements.txt
-COPY requirements_dev.txt requirements_dev.txt
-
-
-COPY --from=build /etc/apk/repositories /etc/apk/repositories
-
-COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
-
-
-COPY includes/ /
-
-RUN --mount=type=bind,from=build,source=/tmp/python_builds,target=/tmp/python_builds \
-    --mount=type=bind,from=build,source=/var/cache/apk,target=/var/cache/apk \
-    --mount=type=bind,from=build,source=/root/.cache/pip,target=/root/.cache/pip \
-    \
-    pip --disable-pip-version-check list --outdated --format=json | \
-        python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
-        xargs -n1 pip install  \
-            --no-cache-dir \
-            --upgrade; \
-    apk update --no-cache; \
-    apk upgrade --no-cache; \
-    apk add --no-cache \
-        mariadb-client \
-        mariadb-dev \
-        postgresql16-client \
-        nginx@nginx=${NGINX_VERSION} \
-        libxml2; \
-    pip install \
-        --no-cache-dir \
-        --no-index \
-        --find-links /tmp/python_builds \
-        centurion_erp[docker]; \
-    manage collectstatic --noinput; \
-    rm -rf /tmp/python_builds; \
-    rm /etc/nginx/sites-enabled; \
-    rm /etc/nginx/conf.d/default.conf; \
-    mv /etc/nginx/conf.d/centurion.conf /etc/nginx/conf.d/default.conf; \
-    # Check for errors and fail if so
-    nginx -t; \
-    # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
-    if [ ! $(python -m django --version) ]; then \
-        echo "Django not Installed"; \
-        exit 1; \
-    fi; \
-    chmod +x /entrypoint.sh; \
-    mkdir -p /etc/supervisor/conf.d; \
-    export
-
+COPY \
+    --from=prepare \
+    --exclude=root/.cache/*/* \
+    --exclude=var/cache/*/* \
+    / /
 
 WORKDIR /data
 
+
 # In future, adjust port to 80 as nginX is now used (Will be breaking change)
 EXPOSE 8000
+
 
 VOLUME [ "/data", "/etc/itsm" ]
 
 
 HEALTHCHECK --interval=10s --timeout=30s --start-period=30s --retries=3 CMD \
   supervisorctl status || exit 1
-
-
-ENV DJANGO_SETTINGS_MODULE=centurion_erp.centurion.settings
 
 
 ENTRYPOINT ["/entrypoint.sh"]
