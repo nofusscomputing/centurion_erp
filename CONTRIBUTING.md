@@ -92,8 +92,7 @@ are available:
 
 - `prepare-python`
 
-    _Initialises the git submodules and sets up the python virtual environment
-    and the other make targets._
+    _Sets up the python virtual environment._
 
 - `docs`
 
@@ -137,7 +136,9 @@ All linting must pass before a merge can be conducted:
 make lint
 
 ```
-
+> [!TIP]
+>
+> In your forked repo of Centurion ERP, if you activate github actions, every time you push a commit the CI lint job will run.
 
 ## Testing
 
