@@ -10,6 +10,7 @@ from access.serializers.organization import TenantBaseSerializer
 
 
 
+@extend_schema_serializer(component_name = 'PersonEntityBaseSerializer')
 class BaseSerializer(
     BaseBaseSerializer,
 ):
