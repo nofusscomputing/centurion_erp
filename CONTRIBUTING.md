@@ -1,18 +1,56 @@
 # Contribution Guide
 
-Development of this project has been setup to be done from VSCodium. This guide
-covers the requirements, how to start a local development server, the available
-`make` targets, linting, testing and running the stack under Docker.
-
-Further development documentation relevant to the code itself is available at
+Development of this project has been setup to be done from VSCodium. This guide covers how to
+develop Centurion ERP locally. Further development documentation relevant to the code itself is available at
 <https://nofusscomputing.com/projects/centurion_erp/development/>.
+
+The following assumptions are made in relation to developing Centurion ERP:
+
+- You can code in python.
+
+- You are familiar with Github.
+
+- You are familiar with git
+
+- You are familiar with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+
+- That development will be conducted within VSCodium / VSCode. _(Optional, not really required. Only here as everything setup to work with it)_
+
+- You know what a `make` file is.
+
+- You know how to operate you local machines package manager.
+
+- You are familiar with docker. _(Optional, only required if doing Docker "things")_
+
+- You are familiar with kubernetes. _(Optional, only required if doing Kubernetes "things")_
+
+- Development is being conducted from linux. If you are stuck using spyware (You know who you are mister OS that shall remain un-named), then... shit. All commands and thing-a-ma-jiggies have been written for linux. They may work on your spyware (You know who you are mister OS that shall remain un-named) host, or they may not. We **won't** be changing this.
+
+If these assumptions are incorrect in relation to you, the onus is upon you to rectify these as this is beyond the scope of this guide.
+
+
+## First steps
+
+You are encouraged to do the following as they will assist in the development workflow:
+
+- Read Centurion ERP docs <https://nofusscomputing.com/projects/centurion_erp/>. **Yes** all of it.
+
+- Make yourself familiar with the code base
+
+- Read / View open Issues.
+
+    **Note:** We always have an epic open titled _"Planning Document: [whatever next version is]."_ There is one always part of a milestone prefixed with `Next Release - `. This epic is a working document for every release and notates the current goals, direction etc.
+
+- Read / View open Pull/Merge requests. This provides insight into many different areas.
+
+If you **are not a developer** you can still contribute. You can do this by using Centurion ERP and reporting any issues with it.
+
+
+## Development
 
 > [!IMPORTANT]
 >
 > It is a requirement that CI Jobs pass on Github. If any **required** CI job fails or does not run, you will be required to fix this. In your forked repo of Centurion ERP, activate github actions. Then, every time you push a commit the CI jobs will run and be reported on the PR.
-
-
-## Development Environment Setup
 
 This section details how to setup your development environment.
 
