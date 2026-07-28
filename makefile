@@ -78,7 +78,7 @@ PATH_VENV     := ${PWD}/.venv
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
 
-#See dockerfile arg `PYTHON_VERSION` for current version
+# See dockerfile arg `PYTHON_VERSION` for current version
 PYTHON_BIN    := python3.11
 
 START_PWD     := ${PWD}
@@ -165,7 +165,7 @@ docs-lint: docker-installed
 	fi;
 
 
-fixtures:
+fixtures: prepare-python
 	${ACTIVATE_VENV}
 	mv app/db.sqlite3 app/db.sqlite3-current
 	if [ ! -f app/db.sqlite3-current ]; then echo "failed to save current db"; exit 1; fi;
@@ -193,20 +193,26 @@ fixtures:
 	if [ -f app/db.sqlite3 ]; then rm -f app/db.sqlite3-current; fi;
 
 
-pip-file:
+pip-file: prepare-python
 	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv
 	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv
 	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv
 	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv
 
-pip:
+
+pip: prepare-python
 	pip-sync requirements_dev.txt -vv
+
 
 test:
 	pytest --cov-report xml:artifacts/coverage_unit_functional.xml --cov-report html:artifacts/coverage/unit_functional/ --junit-xml=artifacts/unit_functional.JUnit.xml app/**/tests/unit app/**/tests/functional
 
 
-
+#
+# Do not make this user friendly. This primarily exists for CI jobs.
+# It can be run locally, however ensure that the venv as been activated prior
+# to running this target
+#
 test-integration:
 	export exit_code=0;
 	cp pyproject.toml app/;
@@ -317,7 +323,6 @@ test-integration:
 	docker-compose down -v;
 	cd "${START_PWD}";
 	exit ${exit_code};
-
 
 
 test-functional:

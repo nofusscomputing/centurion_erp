@@ -73,12 +73,13 @@ If you have made model changes, generate the migrations and regenerate the
 database test fixtures (migrations are disabled for tests, so the fixtures are
 what the test suite relies upon):
 
+> [!WARNING]
+>
+> Ensure that there is **no** development server running before creating fixtures.
+
 ``` bash
 
 python manage.py makemigrations
-
-# Only required if not already setup
-make prepare-python
 
 # Generates the DB test fixtures
 # app/fixtures/fresh_db.json <- Dont commit this file as the only thing that should change is the date
@@ -100,8 +101,7 @@ pygmentize -S default -f html -a .codehilite > project-static/code.css
 
 
 > [!TIP]
-> Common `make` commands are `make prepare-python` then `make docs` and
-> `make lint`.
+> Common `make` commands are `make prepare-python` and `make pip`.
 
 Included within the root of the repository is a makefile that can be used during
 development to check/run different items as required. The following make targets
