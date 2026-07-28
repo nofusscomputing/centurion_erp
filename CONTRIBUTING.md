@@ -79,8 +79,6 @@ what the test suite relies upon):
 
 ``` bash
 
-python manage.py makemigrations
-
 # Generates the DB test fixtures
 # app/fixtures/fresh_db.json <- Dont commit this file as the only thing that should change is the date
 # app/fixtures/fresh_db.sql <- only commit this file if there are actual changes i.e. Tables are different or the django_migrations count has changed.
