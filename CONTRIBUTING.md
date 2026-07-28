@@ -152,42 +152,6 @@ See the [testing documentation](https://nofusscomputing.com/projects/centurion_e
 for further information.
 
 
-## Docker
-
-To build and run a single Centurion image:
-
-``` bash
-
-cd app
-
-docker build . --tag centurion-erp:dev
-
-docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app centurion-erp:dev
-
-```
-
-
-## Page speed tests
-
-To run page speed tests (requires a working prometheus and grafana setup) use
-the following:
-
-``` bash
-
-clear; \
-  K6_PROMETHEUS_RW_TREND_STATS="p(99),p(95),p(90),max,min" \
-  K6_PROMETHEUS_RW_SERVER_URL=http://<prometheus url>:9090/api/v1/write \
-  BASE_URL="http://127.0.0.1:8002" \
-  AUTH_TOKEN="<api token of superuser>" \
-  k6 run \
-    -o experimental-prometheus-rw \
-    --tag "commit=$(git rev-parse HEAD)" \
-    --tag "testid=<name of test for ref>" \
-    test/page_speed.js
-
-```
-
-
 ## Tips / Handy info
 
 - To obtain a list of models _(in the same order as the file system)_ using the
@@ -198,3 +162,36 @@ clear; \
     SELECT model FROM django_content_type ORDER BY app_label ASC, model ASC;
 
     ```
+
+- To build and run a single Centurion image:
+
+    ``` bash
+
+    cd app
+
+    docker build . --tag centurion-erp:dev
+
+    docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app centurion-erp:dev
+
+    ```
+
+- Page speed tests
+
+    To run page speed tests (requires a working prometheus and grafana setup) use
+    the following:
+
+    ``` bash
+
+    clear; \
+    K6_PROMETHEUS_RW_TREND_STATS="p(99),p(95),p(90),max,min" \
+    K6_PROMETHEUS_RW_SERVER_URL=http://<prometheus url>:9090/api/v1/write \
+    BASE_URL="http://127.0.0.1:8002" \
+    AUTH_TOKEN="<api token of superuser>" \
+    k6 run \
+        -o experimental-prometheus-rw \
+        --tag "commit=$(git rev-parse HEAD)" \
+        --tag "testid=<name of test for ref>" \
+        test/page_speed.js
+
+    ```
+
