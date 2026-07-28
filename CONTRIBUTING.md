@@ -20,9 +20,6 @@ The following additional requirements need to be met:
 
     ```
 
-- Setup of the remaining requirements is done with `make prepare-python`. This
-    initialises the git submodules and sets up the Python virtual environment.
-
 - **ALL** linting must pass for a merge to be conducted (`make lint`).
 
 

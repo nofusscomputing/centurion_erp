@@ -83,12 +83,8 @@ START_PWD     := ${PWD}
 
 .PHONY: clean prepare docs ansible-lint lint test
 
-prepare-git-submodule:
-	git submodule update --init;
-	git submodule foreach git submodule update --init;
 
-
-prepare-python: prepare-git-submodule
+prepare-python:
 	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
 	if [ ! -f ${PATH_VENV}/bin/activate ]; then
 
@@ -113,7 +109,7 @@ prepare-python: prepare-git-submodule
 		echo "    ${BLUE}prepare-python complete.${RESET}";
 
 
-prepare-docs: prepare-git-submodule
+prepare-docs:
 	npm install markdownlint-cli2;
 	npm install markdownlint-cli2-formatter-junit;
 	cp -f "website-template/.markdownlint.json" ".markdownlint.json";
