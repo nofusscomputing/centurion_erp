@@ -111,6 +111,10 @@ are available:
 
     _Sets up the python virtual environment._
 
+- `prepare-ui`
+
+    _Clones the Centurion UI locally._
+
 - `build-pip`
 
     _Compiles the pip files in the `tools/` directory._

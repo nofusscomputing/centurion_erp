@@ -1,6 +1,6 @@
 .ONESHELL:
 
-.PHONY: build-pip clean clean-docs clean-make clean-test docs-lint prepare-python
+.PHONY: build-pip clean clean-docs clean-make clean-test clean-ui docs-lint prepare-python prepare-ui
 
 .SILENT:
 
@@ -112,6 +112,24 @@ check-docker-installed: dir-make-tmp
 
 
 
+check-git-installed: dir-make-tmp
+	echo -n "${BLUE}Checking if git is installed: ${RESET}";
+	if [ `which git` ]; then
+
+		echo "${GREEN}Yes${RESET}";
+
+		touch ${WORKDIR}/GIT_IS_INSTALLED;
+
+	else
+
+		echo "${RED}No${RESET}";
+
+		rm -f ${WORKDIR}/GIT_IS_INSTALLED;
+
+	fi;
+
+
+
 prepare-python:
 	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
 
@@ -139,6 +157,46 @@ prepare-python:
 
 
 
+prepare-ui: check-git-installed
+	echo "${BLUE}Preparing Centurion UI...${RESET}";
+
+	if [ -f ${WORKDIR}/GIT_IS_INSTALLED ]; then
+
+		echo -n "    ${BLUE}Centurion UI already cloned: ${RESET}";
+
+		if [ ! -d ${WORKDIR}/centurion-ui/.git ]; then
+
+			echo "${YELLOW}No${RESET}";
+
+			echo "    ${BLUE}Cloning...${RESET}";
+
+			git clone https://github.com/nofusscomputing/centurion_erp_ui.git ${WORKDIR}/centurion-ui \
+				|| echo "    ${RED}Check above for errors${RESET}";
+
+		else
+
+			echo "${GREEN}Yes${RESET}";
+
+		fi;
+
+		echo "    ${BLUE}prepare-ui complete.${RESET}";
+
+		echo "${MAGENTA}To activate the ui, do the following:${RESET}";
+
+		echo "    ${CYAN_BRIGHT}1. cd ${WORKDIR}/centurion-ui${RESET}";
+
+		echo "    ${CYAN_BRIGHT}2. run npm start${RESET}";
+
+		echo "    ${CYAN_BRIGHT}3. UI can be viewed at http://127.0.0.1:3000/${RESET}";
+
+	else
+
+		echo "    ${YELLOW}Unable to prepare the UI as git is not installed${RESET}";
+
+	fi;
+
+
+
 build-pip: prepare-python
 	echo "${BLUE}Compiling pip files in tools/${RESET}";
 	${ACTIVATE_VENV};
@@ -162,7 +220,7 @@ build-pip: prepare-python
 docs-lint: check-docker-installed
 	echo "${BLUE}Lint document files${RESET}";
 
-	if [ -f ${WORKDIR}/DOjCKER_IS_INSTALLED ]; then
+	if [ -f ${WORKDIR}/DOCKER_IS_INSTALLED ]; then
 
 		docker run -t --rm \
 		-e IS_BUILD=1 \
@@ -381,5 +439,10 @@ clean-test:
 
 
 
-clean: clean-docs clean-make clean-test
+clean-ui:
+	echo "${BLUE}Cleaning UI${RESET}";
+	rm -rf ${WORKDIR}/centurion-ui;
+
+
+clean: clean-docs clean-make clean-test clean-ui
 	echo "${BLUE}Full Clean complete${RESET}";
