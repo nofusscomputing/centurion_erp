@@ -213,7 +213,10 @@ pip-file: prepare-python
 
 
 pip: prepare-python
-	pip-sync requirements_dev.txt -vv
+	echo "${BLUE}Syncing Python packages from repository requirements._dev.txt to Virtual Environment...${RESET}";
+	${ACTIVATE_VENV};
+	pip-sync requirements_dev.txt -vv;
+	echo "${BLUE}    pip complete.${RESET}";
 
 
 test:

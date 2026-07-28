@@ -126,8 +126,7 @@ are available:
 
 - `pip`
 
-    _Synchronises pip packages. Note: uses the current python, i.e. if a virtual
-    env is activated it will sync packages within the virtual env._
+    _Synchronises pip packages within the virtual env._
 
 - `clean`
 
