@@ -1,6 +1,6 @@
 .ONESHELL:
 
-.PHONY: build-pip clean clean-docs clean-make clean-test clean-ui docs-lint prepare-python prepare-ui
+.PHONY: build build-pip clean clean-docs clean-make clean-test clean-ui docs-lint prepare-python prepare-ui
 
 .SILENT:
 
@@ -87,10 +87,31 @@ WORKDIR       := ${PWD}/.tmp
 
 
 
-dir-make-tmp:
-	echo "${BLUE}Creating temp working directory [${WORKDIR}]: ${RESET}";
+build: prepare-python clean-build
+	echo "${BLUE}Building Centurion ERP PIP Package${RESET}";
+	${ACTIVATE_VENV};
 
-	mkdir -p ${WORKDIR} || echo "${RED}Failed to create temp working directory. ${RESET}";
+	python -m build --wheel;
+
+
+
+build-pip: prepare-python
+	echo "${BLUE}Compiling pip files in tools/${RESET}";
+	${ACTIVATE_VENV};
+
+	echo "${BLUE}    tools/requirements.in...${RESET}";
+	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv || echo "${RED}    tools/requirements.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_production.in...${RESET}";
+	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv || echo "${RED}    tools/requirements_production.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_dev.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv || echo "${RED}    tools/requirements_dev.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_docker.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv || echo "${RED}    tools/requirements_docker.in  FAILED${RESET}";
+
+	echo "${BLUE}    build-pip complete${RESET}";
 
 
 
@@ -130,90 +151,10 @@ check-git-installed: dir-make-tmp
 
 
 
-prepare-python:
-	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
+dir-make-tmp:
+	echo "${BLUE}Creating temp working directory [${WORKDIR}]: ${RESET}";
 
-	if [ ! -f ${PATH_VENV}/bin/activate ]; then
-
-		echo "    ${BLUE}Setting up Python Virtual Environment...${RESET}";
-
-		${PYTHON_BIN} -m venv ${PATH_VENV} || echo "${RED}Failed to create Virtual Environment. ${RESET}";
-
-		echo "    ${BLUE}Activating Python Virtual Environment...${RESET}";
-
-		${ACTIVATE_VENV} || echo "${RED}Failed to activate Virtual Environment. ${RESET}";
-
-		echo "    ${BLUE}Installing Python dependencies in Virtual Environment...${RESET}";
-
-		pip install -r requirements_dev.txt || echo "${RED}Failed to install Python Dependencies in Virtual Environment. ${RESET}";
-
-	else
-
-		echo "    ${GREEN}Python Virtual Environment already setup. Nothing to do.${RESET}";
-
-	fi;
-
-		echo "    ${BLUE}prepare-python complete.${RESET}";
-
-
-
-prepare-ui: check-git-installed
-	echo "${BLUE}Preparing Centurion UI...${RESET}";
-
-	if [ -f ${WORKDIR}/GIT_IS_INSTALLED ]; then
-
-		echo -n "    ${BLUE}Centurion UI already cloned: ${RESET}";
-
-		if [ ! -d ${WORKDIR}/centurion-ui/.git ]; then
-
-			echo "${YELLOW}No${RESET}";
-
-			echo "    ${BLUE}Cloning...${RESET}";
-
-			git clone https://github.com/nofusscomputing/centurion_erp_ui.git ${WORKDIR}/centurion-ui \
-				|| echo "    ${RED}Check above for errors${RESET}";
-
-		else
-
-			echo "${GREEN}Yes${RESET}";
-
-		fi;
-
-		echo "    ${BLUE}prepare-ui complete.${RESET}";
-
-		echo "${MAGENTA}To activate the ui, do the following:${RESET}";
-
-		echo "    ${CYAN_BRIGHT}1. cd ${WORKDIR}/centurion-ui${RESET}";
-
-		echo "    ${CYAN_BRIGHT}2. run npm start${RESET}";
-
-		echo "    ${CYAN_BRIGHT}3. UI can be viewed at http://127.0.0.1:3000/${RESET}";
-
-	else
-
-		echo "    ${YELLOW}Unable to prepare the UI as git is not installed${RESET}";
-
-	fi;
-
-
-
-build-pip: prepare-python
-	echo "${BLUE}Compiling pip files in tools/${RESET}";
-	${ACTIVATE_VENV};
-
-	echo "${BLUE}    tools/requirements.in...${RESET}";
-	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv || echo "${RED}    tools/requirements.in FAILED${RESET}";
-	
-	echo "${BLUE}    tools/requirements_production.in...${RESET}";
-	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv || echo "${RED}    tools/requirements_production.in FAILED${RESET}";
-	
-	echo "${BLUE}    tools/requirements_dev.in...${RESET}";
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv || echo "${RED}    tools/requirements_dev.in FAILED${RESET}";
-	
-	echo "${BLUE}    tools/requirements_docker.in...${RESET}";
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv || echo "${RED}    tools/requirements_docker.in  FAILED${RESET}";
-
-	echo "${BLUE}    build-pip complete${RESET}";
+	mkdir -p ${WORKDIR} || echo "${RED}Failed to create temp working directory. ${RESET}";
 
 
 
@@ -283,6 +224,73 @@ pip: prepare-python
 	${ACTIVATE_VENV};
 	pip-sync requirements_dev.txt -vv;
 	echo "${BLUE}    pip complete.${RESET}";
+
+
+
+prepare-python:
+	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
+
+	if [ ! -f ${PATH_VENV}/bin/activate ]; then
+
+		echo "    ${BLUE}Setting up Python Virtual Environment...${RESET}";
+
+		${PYTHON_BIN} -m venv ${PATH_VENV} || echo "${RED}Failed to create Virtual Environment. ${RESET}";
+
+		echo "    ${BLUE}Activating Python Virtual Environment...${RESET}";
+
+		${ACTIVATE_VENV} || echo "${RED}Failed to activate Virtual Environment. ${RESET}";
+
+		echo "    ${BLUE}Installing Python dependencies in Virtual Environment...${RESET}";
+
+		pip install -r requirements_dev.txt || echo "${RED}Failed to install Python Dependencies in Virtual Environment. ${RESET}";
+
+	else
+
+		echo "    ${GREEN}Python Virtual Environment already setup. Nothing to do.${RESET}";
+
+	fi;
+
+		echo "    ${BLUE}prepare-python complete.${RESET}";
+
+
+
+prepare-ui: check-git-installed
+	echo "${BLUE}Preparing Centurion UI...${RESET}";
+
+	if [ -f ${WORKDIR}/GIT_IS_INSTALLED ]; then
+
+		echo -n "    ${BLUE}Centurion UI already cloned: ${RESET}";
+
+		if [ ! -d ${WORKDIR}/centurion-ui/.git ]; then
+
+			echo "${YELLOW}No${RESET}";
+
+			echo "    ${BLUE}Cloning...${RESET}";
+
+			git clone https://github.com/nofusscomputing/centurion_erp_ui.git ${WORKDIR}/centurion-ui \
+				|| echo "    ${RED}Check above for errors${RESET}";
+
+		else
+
+			echo "${GREEN}Yes${RESET}";
+
+		fi;
+
+		echo "    ${BLUE}prepare-ui complete.${RESET}";
+
+		echo "${MAGENTA}To activate the ui, do the following:${RESET}";
+
+		echo "    ${CYAN_BRIGHT}1. cd ${WORKDIR}/centurion-ui${RESET}";
+
+		echo "    ${CYAN_BRIGHT}2. run npm start${RESET}";
+
+		echo "    ${CYAN_BRIGHT}3. UI can be viewed at http://127.0.0.1:3000/${RESET}";
+
+	else
+
+		echo "    ${YELLOW}Unable to prepare the UI as git is not installed${RESET}";
+
+	fi;
 
 
 
@@ -418,6 +426,11 @@ test-unit:
 	pytest --cov-report xml:${PWD}/artifacts/coverage_unit.xml --cov-report html:${PWD}/artifacts/coverage/unit/ --junit-xml=${PWD}/artifacts/unit.JUnit.xml app/**/tests/unit
 
 
+
+clean-build:
+	echo "${BLUE}Cleaning build${RESET}";
+	rm -rf *.egg-info/;
+	rm -rf dist/;
 
 clean-docs:
 	echo "${BLUE}Cleaning docs${RESET}";

@@ -109,11 +109,15 @@ are available:
 
 - `prepare-python`
 
-    _Sets up the python virtual environment._
+    _Sets up the python virtual environment ready for dev._
 
 - `prepare-ui`
 
-    _Clones the Centurion UI locally._
+    _Clones the Centurion UI locally. Enables viewing your dev work in the UI._
+
+- `build`
+
+    _Build Centurion ERP wheel._
 
 - `build-pip`
 
@@ -130,7 +134,7 @@ are available:
 
 - `pip`
 
-    _Synchronises pip packages within the virtual env._
+    _Synchronises pip packages within the virtual env. Enables you to update the python dependencies if they have been updated in dev without having to recreate the environment._
 
 - `clean`
 
