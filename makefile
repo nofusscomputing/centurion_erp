@@ -1,5 +1,7 @@
 .ONESHELL:
 
+.PHONY: clean clean-docs clean-make clean-test prepare-python docs-lint
+
 .SILENT:
 
 # ANSI Terminal Colours
@@ -72,7 +74,7 @@ RESET_HIDDEN := \033[28m
 RESET_STRIKETHROUGH := \033[29m
 
 
-PATH_VENV := ${PWD}/.venv
+PATH_VENV     := ${PWD}/.venv
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
 
@@ -81,11 +83,34 @@ PYTHON_BIN    := python3.11
 
 START_PWD     := ${PWD}
 
-.PHONY: clean prepare docs ansible-lint lint test
+WORKDIR       := ${PWD}/.tmp
 
+
+dir-make-tmp:
+	echo "${BLUE}Creating temp working directory [${WORKDIR}]: ${RESET}";
+
+	mkdir -p ${WORKDIR} || echo "${RED}Failed to create temp working directory. ${RESET}";
+
+
+docker-installed: dir-make-tmp
+	echo -n "${BLUE}Checking if docker is installed: ${RESET}";
+	if [ `which docker` ]; then
+
+		echo "${GREEN}Yes${RESET}";
+
+		touch ${WORKDIR}/DOCKER_IS_INSTALLED;
+
+	else
+
+		echo "${RED}No${RESET}";
+
+		rm -f ${WORKDIR}/DOCKER_IS_INSTALLED;
+
+	fi;
 
 prepare-python:
 	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
+
 	if [ ! -f ${PATH_VENV}/bin/activate ]; then
 
 		echo "    ${BLUE}Setting up Python Virtual Environment...${RESET}";
@@ -109,23 +134,35 @@ prepare-python:
 		echo "    ${BLUE}prepare-python complete.${RESET}";
 
 
-prepare-docs:
-	npm install markdownlint-cli2;
-	npm install markdownlint-cli2-formatter-junit;
-	cp -f "website-template/.markdownlint.json" ".markdownlint.json";
-	cp -f "gitlab-ci/lint/.markdownlint-cli2.jsonc" ".markdownlint-cli2.jsonc";
+docs-lint: docker-installed
+	echo "${BLUE}Lint document files${RESET}";
 
+	if [ -f ${WORKDIR}/DOjCKER_IS_INSTALLED ]; then
 
-markdown-mkdocs-lint: prepare-docs
-	PATH=${PATH}:node_modules/.bin markdownlint-cli2 docs/*.md docs/**/*.md docs/**/**/*.md docs/**/**/**/*.md docs/**/**/**/**/**/*.md !docs/pull_request_template.md !CHANGELOG.md !gitlab-ci !website-template || true
+		docker run -t --rm \
+		-e IS_BUILD=1 \
+		-ti \
+		--entrypoint "" \
+		--volume ${PWD}:/workdir \
+		--workdir /workdir \
+		nofusscomputing/mkdocs-ci:latest \
+		markdownlint-cli2 \
+			docs/*.md \
+			docs/**/*.md \
+			docs/**/**/*.md \
+			docs/**/**/**/*.md \
+			docs/**/**/**/**/**/*.md \
+			!CHANGELOG.md \
+			!docs/pull_request_template.md\
+			!docs-template \
+			!.venv \
+		|| echo "    ${RED}Check above for errors${RESET}";
 
+	else
 
-docs-lint: markdown-mkdocs-lint
+		echo "    ${YELLOW}No linting will occur as docker is not installed${RESET}";
 
-
-docs: docs-lint
-	${ACTIVATE_VENV}
-	mkdocs build --clean
+	fi;
 
 
 fixtures:
@@ -154,10 +191,6 @@ fixtures:
 	rm -f app/db.sqlite3
 	if [ ! -f app/db.sqlite3 ]; then cp app/db.sqlite3-current app/db.sqlite3; fi;
 	if [ -f app/db.sqlite3 ]; then rm -f app/db.sqlite3-current; fi;
-
-
-
-lint: markdown-mkdocs-lint
 
 
 pip-file:
@@ -295,13 +328,22 @@ test-unit:
 	pytest --cov-report xml:${PWD}/artifacts/coverage_unit.xml --cov-report html:${PWD}/artifacts/coverage/unit/ --junit-xml=${PWD}/artifacts/unit.JUnit.xml app/**/tests/unit
 
 
+clean-docs:
+	echo "${BLUE}Cleaning docs${RESET}";
+	rm -rf pages;
+	rm -rf build;
 
-clean:
-	rm -rf ${PATH_VENV}
-	rm -rf artifacts
-	rm -rf pages
-	rm -rf build
-	rm -rf node_modules
-	rm -f package-lock.json
-	rm -f package.json
-	rm -rf .pytest_cache
+
+clean-make:
+	echo "${BLUE}Cleaning make temp dir${RESET}";
+	rm -rf ${PWD}/.tmp;
+
+
+clean-test:
+	echo "${BLUE}Cleaning tests${RESET}";
+	rm -rf artifacts;
+	rm -rf .pytest_cache;
+
+
+clean: clean-docs clean-make clean-test
+	echo "${BLUE}Full Clean complete${RESET}";

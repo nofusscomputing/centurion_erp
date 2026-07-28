@@ -3,6 +3,7 @@
 website-template/
 gitlab-ci/
 .venv/
+.tmp/
 docs/
 **/*.sqlite3
 **/*.sqlite3-*

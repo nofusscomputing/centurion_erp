@@ -7,27 +7,18 @@ covers the requirements, how to start a local development server, the available
 Further development documentation relevant to the code itself is available at
 <https://nofusscomputing.com/projects/centurion_erp/development/>.
 
-
-## Requirements
-
-The following additional requirements need to be met:
-
-- `npm` is installed. _required for `markdown` linting_
-
-    ``` bash
-
-    sudo apt install -y --no-install-recommends npm
-
-    ```
-
-- **ALL** linting must pass for a merge to be conducted (`make lint`).
+> [!IMPORTANT]
+>
+> It is a requirement that CI Jobs pass on Github. If any **required** CI job fails or does not run, you will be required to fix this. In your forked repo of Centurion ERP, activate github actions. Then, every time you push a commit the CI jobs will run and be reported on the PR.
 
 
 ## Development Environment Setup
 
 This section details how to setup your development environment.
 
-- Clone the repository
+- Fork Centurion-erp, so you have a copy.
+
+- Clone your fork of the repository
 
 - Setup the python environment
 
@@ -120,19 +111,10 @@ are available:
 
     _Sets up the python virtual environment._
 
-- `docs`
+- `docs-lint`
 
-    _Builds the docs and places them within a directory called `build`, which
-    can be viewed within a web browser._
-
-- `lint`
-
-    _Conducts all required linting._
-
-    - `docs-lint`
-
-        _Lints the markdown documents within the docs directory for formatting
-        errors that MkDocs may/will have an issue with._
+    _Lints the markdown documents within the docs directory for formatting
+    errors that MkDocs may/will have an issue with. It is quicker to lint the docs locally if you are working on them._
 
 - `fixtures`
 
@@ -152,20 +134,6 @@ are available:
     _Cleans up build artifacts and removes the python virtual environment._
 
 
-## Linting
-
-
-All linting must pass before a merge can be conducted:
-
-``` bash
-
-make lint
-
-```
-> [!TIP]
->
-> In your forked repo of Centurion ERP, if you activate github actions, every time you push a commit the CI lint job will run.
-
 ## Testing
 
 
@@ -181,7 +149,6 @@ for further information.
 
 ## Docker
 
-
 To build and run a single Centurion image:
 
 ``` bash
@@ -196,7 +163,6 @@ docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app 
 
 
 ## Page speed tests
-
 
 To run page speed tests (requires a working prometheus and grafana setup) use
 the following:
@@ -218,7 +184,6 @@ clear; \
 
 
 ## Tips / Handy info
-
 
 - To obtain a list of models _(in the same order as the file system)_ using the
     db shell `python3 manage.py dbshell`, run the following SQL command:

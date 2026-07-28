@@ -1,4 +1,5 @@
 .venv/
+.tmp/
 */static/**
 __pycache__
 **.sqlite*
@@ -31,3 +32,4 @@ test/requirements_dev.txt
 
 # Metrics
 app/prometheus/
+
