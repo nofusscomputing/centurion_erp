@@ -1,5 +1,7 @@
 .ONESHELL:
 
+.SILENT:
+
 PATH_VENV := ${PWD}/.venv
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
