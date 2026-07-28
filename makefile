@@ -94,7 +94,7 @@ dir-make-tmp:
 
 
 
-docker-installed: dir-make-tmp
+check-docker-installed: dir-make-tmp
 	echo -n "${BLUE}Checking if docker is installed: ${RESET}";
 	if [ `which docker` ]; then
 
@@ -159,7 +159,7 @@ build-pip: prepare-python
 
 
 
-docs-lint: docker-installed
+docs-lint: check-docker-installed
 	echo "${BLUE}Lint document files${RESET}";
 
 	if [ -f ${WORKDIR}/DOjCKER_IS_INSTALLED ]; then
