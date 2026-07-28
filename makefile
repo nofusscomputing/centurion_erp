@@ -2,6 +2,76 @@
 
 .SILENT:
 
+# ANSI Terminal Colours
+
+BLACK         := \033[30m
+BLACK_BRIGHT  := \033[90m
+
+BLUE          := \033[34m
+BLUE_BRIGHT   := \033[94m
+
+CYAN          := \033[36m
+CYAN_BRIGHT   := \033[96m
+
+GREEN         := \033[32m
+GREEN_BRIGHT  := \033[92m
+
+MAGENTA       := \033[35m
+MAGENTA_BRIGHT := \033[95m
+
+RED           := \033[31m
+RED_BRIGHT    := \033[91m
+
+RESET         := \033[0m
+
+WHITE         := \033[37m
+WHITE_BRIGHT  := \033[97m
+
+YELLOW        := \033[33m
+YELLOW_BRIGHT := \033[93m
+
+
+# ANSI Terminal Background colours.
+BG_BLACK          := \033[40m
+BG_BLACK_BRIGHT   := \033[100m
+
+BG_BLUE           := \033[44m
+BG_BLUE_BRIGHT    := \033[104m
+
+BG_CYAN           := \033[46m
+BG_CYAN_BRIGHT    := \033[106m
+
+BG_GREEN          := \033[42m
+BG_GREEN_BRIGHT   := \033[102m
+
+BG_MAGENTA        := \033[45m
+BG_MAGENTA_BRIGHT := \033[105m
+
+BG_RED            := \033[41m
+BG_RED_BRIGHT     := \033[101m
+
+
+# ANSI Terminal Text formatting
+BOLD       := \033[1m
+DIM        := \033[2m
+ITALIC     := \033[3m
+UNDERLINE  := \033[4m
+BLINK      := \033[5m
+REVERSE    := \033[7m
+HIDDEN     := \033[8m
+STRIKETHROUGH := \033[9m
+
+RESET      := \033[0m
+RESET_BOLD := \033[21m
+RESET_DIM  := \033[22m
+RESET_ITALIC := \033[23m
+RESET_UNDERLINE := \033[24m
+RESET_BLINK := \033[25m
+RESET_REVERSE := \033[27m
+RESET_HIDDEN := \033[28m
+RESET_STRIKETHROUGH := \033[29m
+
+
 PATH_VENV := ${PWD}/.venv
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
@@ -19,19 +89,28 @@ prepare-git-submodule:
 
 
 prepare-python: prepare-git-submodule
+	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
 	if [ ! -f ${PATH_VENV}/bin/activate ]; then
 
-		echo "Setting up Python Virtual Environment...";
+		echo "    ${BLUE}Setting up Python Virtual Environment...${RESET}";
 
-		${PYTHON_BIN} -m venv ${PATH_VENV};
-		${ACTIVATE_VENV};
-		pip install -r requirements_dev.txt;
+		${PYTHON_BIN} -m venv ${PATH_VENV} || echo "${RED}Failed to create Virtual Environment. ${RESET}";
+
+		echo "    ${BLUE}Activating Python Virtual Environment...${RESET}";
+
+		${ACTIVATE_VENV} || echo "${RED}Failed to activate Virtual Environment. ${RESET}";
+
+		echo "    ${BLUE}Installing Python dependencies in Virtual Environment...${RESET}";
+
+		pip install -r requirements_dev.txt || echo "${RED}Failed to install Python Dependencies in Virtual Environment. ${RESET}";
 
 	else
 
-		echo "Python Virtual Environment already setup.";
+		echo "    ${GREEN}Python Virtual Environment already setup. Nothing to do.${RESET}";
 
 	fi;
+
+		echo "    ${BLUE}prepare-python complete.${RESET}";
 
 
 prepare-docs: prepare-git-submodule
