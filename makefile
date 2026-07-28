@@ -1,6 +1,6 @@
 .ONESHELL:
 
-.PHONY: clean clean-docs clean-make clean-test prepare-python docs-lint
+.PHONY: clean clean-docs clean-make clean-test docs-lint prepare-python pip-file
 
 .SILENT:
 
@@ -194,10 +194,22 @@ fixtures: prepare-python
 
 
 pip-file: prepare-python
-	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv
-	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv
+	echo "${BLUE}Compiling pip files in tools/${RESET}";
+	${ACTIVATE_VENV};
+
+	echo "${BLUE}    tools/requirements.in...${RESET}";
+	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv || echo "${RED}    tools/requirements.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_production.in...${RESET}";
+	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv || echo "${RED}    tools/requirements_production.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_dev.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv || echo "${RED}    tools/requirements_dev.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_docker.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv || echo "${RED}    tools/requirements_docker.in  FAILED${RESET}";
+
+	echo "${BLUE}    pip-file complete${RESET}";
 
 
 pip: prepare-python
