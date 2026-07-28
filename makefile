@@ -1,6 +1,6 @@
 .ONESHELL:
 
-.PHONY: clean clean-docs clean-make clean-test docs-lint prepare-python pip-file
+.PHONY: build-pip clean clean-docs clean-make clean-test docs-lint prepare-python
 
 .SILENT:
 
@@ -86,10 +86,12 @@ START_PWD     := ${PWD}
 WORKDIR       := ${PWD}/.tmp
 
 
+
 dir-make-tmp:
 	echo "${BLUE}Creating temp working directory [${WORKDIR}]: ${RESET}";
 
 	mkdir -p ${WORKDIR} || echo "${RED}Failed to create temp working directory. ${RESET}";
+
 
 
 docker-installed: dir-make-tmp
@@ -107,6 +109,8 @@ docker-installed: dir-make-tmp
 		rm -f ${WORKDIR}/DOCKER_IS_INSTALLED;
 
 	fi;
+
+
 
 prepare-python:
 	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
@@ -132,6 +136,27 @@ prepare-python:
 	fi;
 
 		echo "    ${BLUE}prepare-python complete.${RESET}";
+
+
+
+build-pip: prepare-python
+	echo "${BLUE}Compiling pip files in tools/${RESET}";
+	${ACTIVATE_VENV};
+
+	echo "${BLUE}    tools/requirements.in...${RESET}";
+	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv || echo "${RED}    tools/requirements.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_production.in...${RESET}";
+	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv || echo "${RED}    tools/requirements_production.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_dev.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv || echo "${RED}    tools/requirements_dev.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_docker.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv || echo "${RED}    tools/requirements_docker.in  FAILED${RESET}";
+
+	echo "${BLUE}    build-pip complete${RESET}";
+
 
 
 docs-lint: docker-installed
@@ -165,6 +190,7 @@ docs-lint: docker-installed
 	fi;
 
 
+
 fixtures: prepare-python
 	${ACTIVATE_VENV}
 	mv app/db.sqlite3 app/db.sqlite3-current
@@ -193,24 +219,6 @@ fixtures: prepare-python
 	if [ -f app/db.sqlite3 ]; then rm -f app/db.sqlite3-current; fi;
 
 
-pip-file: prepare-python
-	echo "${BLUE}Compiling pip files in tools/${RESET}";
-	${ACTIVATE_VENV};
-
-	echo "${BLUE}    tools/requirements.in...${RESET}";
-	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv || echo "${RED}    tools/requirements.in FAILED${RESET}";
-	
-	echo "${BLUE}    tools/requirements_production.in...${RESET}";
-	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv || echo "${RED}    tools/requirements_production.in FAILED${RESET}";
-	
-	echo "${BLUE}    tools/requirements_dev.in...${RESET}";
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv || echo "${RED}    tools/requirements_dev.in FAILED${RESET}";
-	
-	echo "${BLUE}    tools/requirements_docker.in...${RESET}";
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv || echo "${RED}    tools/requirements_docker.in  FAILED${RESET}";
-
-	echo "${BLUE}    pip-file complete${RESET}";
-
 
 pip: prepare-python
 	echo "${BLUE}Syncing Python packages from repository requirements._dev.txt to Virtual Environment...${RESET}";
@@ -219,8 +227,10 @@ pip: prepare-python
 	echo "${BLUE}    pip complete.${RESET}";
 
 
+
 test:
 	pytest --cov-report xml:artifacts/coverage_unit_functional.xml --cov-report html:artifacts/coverage/unit_functional/ --junit-xml=artifacts/unit_functional.JUnit.xml app/**/tests/unit app/**/tests/functional
+
 
 
 #
@@ -340,12 +350,15 @@ test-integration:
 	exit ${exit_code};
 
 
+
 test-functional:
 	pytest --cov-report xml:${PWD}/artifacts/coverage_functional.xml --cov-report html:${PWD}/artifacts/coverage/functional/ --junit-xml=${PWD}/artifacts/functional.JUnit.xml app/**/tests/functional
 
 
+
 test-unit:
 	pytest --cov-report xml:${PWD}/artifacts/coverage_unit.xml --cov-report html:${PWD}/artifacts/coverage/unit/ --junit-xml=${PWD}/artifacts/unit.JUnit.xml app/**/tests/unit
+
 
 
 clean-docs:
@@ -354,15 +367,18 @@ clean-docs:
 	rm -rf build;
 
 
+
 clean-make:
 	echo "${BLUE}Cleaning make temp dir${RESET}";
 	rm -rf ${PWD}/.tmp;
+
 
 
 clean-test:
 	echo "${BLUE}Cleaning tests${RESET}";
 	rm -rf artifacts;
 	rm -rf .pytest_cache;
+
 
 
 clean: clean-docs clean-make clean-test

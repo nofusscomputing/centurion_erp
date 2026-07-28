@@ -111,6 +111,10 @@ are available:
 
     _Sets up the python virtual environment._
 
+- `build-pip`
+
+    _Compiles the pip files in the `tools/` directory._
+
 - `docs-lint`
 
     _Lints the markdown documents within the docs directory for formatting
@@ -119,10 +123,6 @@ are available:
 - `fixtures`
 
     _Generates the database test fixtures (`app/fixtures/`)._
-
-- `pip-file`
-
-    _Compiles the pip files in the `tools/` directory._
 
 - `pip`
 
