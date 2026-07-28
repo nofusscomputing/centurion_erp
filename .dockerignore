@@ -2,7 +2,7 @@
 .git*
 website-template/
 gitlab-ci/
-venv/
+.venv/
 docs/
 **/*.sqlite3
 **/*.sqlite3-*

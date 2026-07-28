@@ -1,6 +1,5 @@
 # Contribution Guide
 
-
 Development of this project has been setup to be done from VSCodium. This guide
 covers the requirements, how to start a local development server, the available
 `make` targets, linting, testing and running the stack under Docker.
@@ -10,7 +9,6 @@ Further development documentation relevant to the code itself is available at
 
 
 ## Requirements
-
 
 The following additional requirements need to be met:
 
@@ -28,29 +26,60 @@ The following additional requirements need to be met:
 - **ALL** linting must pass for a merge to be conducted (`make lint`).
 
 
-## Quick Start
+## Development Environment Setup
 
+This section details how to setup your development environment.
 
-From the root of the project, to start a test server use:
+- Clone the repository
 
-``` bash
+- Setup the python environment
 
-# Activate the python venv
-source /tmp/centurion_erp/bin/activate
+    ``` bash
 
-# Enter the app dir
-cd app
+    # Enter repository directory
+    cd centurion-erp
 
-# Start the dev server, viewable at http://127.0.0.1:8002
-python manage.py runserver 8002
+    # Setup python
+    make prepare-python
 
-# Run any migrations, if required
-python manage.py migrate
+    ```
 
-# Create a super user, if required
-python manage.py createsuperuser
+- Open Repository in VSCodium
 
-```
+    ``` bash
+
+    . codium
+
+    ```
+
+    VSCodium will open with centurion-erp loaded and is ready for development.
+
+    > [!TIP]
+    >
+    > VSCodium must be installed for the above command to work. If you use VSCode instead use `. code`.
+
+- Return to the terminal to start the development server
+
+    ``` bash
+
+    # Activate the python venv
+    source .venv/bin/activate
+
+    # Enter the app dir
+    cd app
+
+    # Start the dev server, viewable at http://127.0.0.1:8002
+    python manage.py runserver 8002
+
+    # Run any migrations, if required
+    python manage.py migrate
+
+    # Create a super user, if required
+    python manage.py createsuperuser
+
+    ```
+
+## Notes
 
 If you have made model changes, generate the migrations and regenerate the
 database test fixtures (migrations are disabled for tests, so the fixtures are

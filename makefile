@@ -1,8 +1,11 @@
 .ONESHELL:
 
-PATH_VENV := /tmp/centurion_erp
+PATH_VENV := ${PWD}/.venv
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
+
+#See dockerfile arg `PYTHON_VERSION` for current version
+PYTHON_BIN    := python3.11
 
 START_PWD     := ${PWD}
 
@@ -14,9 +17,20 @@ prepare-git-submodule:
 
 
 prepare-python: prepare-git-submodule
-	python3 -m venv ${PATH_VENV};
-	${ACTIVATE_VENV};
-	pip install -r requirements_dev.txt;
+	if [ ! -f ${PATH_VENV}/bin/activate ]; then
+
+		echo "Setting up Python Virtual Environment...";
+
+		${PYTHON_BIN} -m venv ${PATH_VENV};
+		${ACTIVATE_VENV};
+		pip install -r requirements_dev.txt;
+
+	else
+
+		echo "Python Virtual Environment already setup.";
+
+	fi;
+
 
 prepare-docs: prepare-git-submodule
 	npm install markdownlint-cli2;
