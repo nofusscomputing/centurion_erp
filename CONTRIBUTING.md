@@ -1,67 +1,121 @@
 # Contribution Guide
 
-
-Development of this project has been setup to be done from VSCodium. This guide
-covers the requirements, how to start a local development server, the available
-`make` targets, linting, testing and running the stack under Docker.
-
-Further development documentation relevant to the code itself is available at
+Development of this project has been setup to be done from VSCodium. This guide covers how to
+develop Centurion ERP locally. Further development documentation relevant to the code itself is available at
 <https://nofusscomputing.com/projects/centurion_erp/development/>.
 
+The following assumptions are made in relation to developing Centurion ERP:
 
-## Requirements
+- You can code in python.
+
+- You are familiar with Github.
+
+- You are familiar with git
+
+- You are familiar with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+
+- That development will be conducted within VSCodium / VSCode. _(Optional, not really required. Only here as everything setup to work with it)_
+
+- You know what a `make` file is.
+
+- You know how to operate you local machines package manager.
+
+- You are familiar with docker. _(Optional, only required if doing Docker "things")_
+
+- You are familiar with kubernetes. _(Optional, only required if doing Kubernetes "things")_
+
+- Development is being conducted from linux. If you are stuck using spyware (You know who you are mister OS that shall remain un-named), then... shit. All commands and thing-a-ma-jiggies have been written for linux. They may work on your spyware (You know who you are mister OS that shall remain un-named) host, or they may not. We **won't** be changing this.
+
+If these assumptions are incorrect in relation to you, the onus is upon you to rectify these as this is beyond the scope of this guide.
 
 
-The following additional requirements need to be met:
+## First steps
 
-- `npm` is installed. _required for `markdown` linting_
+You are encouraged to do the following as they will assist in the development workflow:
+
+- Read Centurion ERP docs <https://nofusscomputing.com/projects/centurion_erp/>. **Yes** all of it.
+
+- Make yourself familiar with the code base
+
+- Read / View open Issues.
+
+    **Note:** We always have an epic open titled _"Planning Document: [whatever next version is]."_ There is one always part of a milestone prefixed with `Next Release - `. This epic is a working document for every release and notates the current goals, direction etc.
+
+- Read / View open Pull/Merge requests. This provides insight into many different areas.
+
+If you **are not a developer** you can still contribute. You can do this by using Centurion ERP and reporting any issues with it.
+
+
+## Development
+
+> [!IMPORTANT]
+>
+> It is a requirement that CI Jobs pass on Github. If any **required** CI job fails or does not run, you will be required to fix this. In your forked repo of Centurion ERP, activate github actions. Then, every time you push a commit the CI jobs will run and be reported on the PR.
+
+This section details how to setup your development environment.
+
+- Fork Centurion-erp, so you have a copy.
+
+- Clone your fork of the repository
+
+- Setup the python environment
 
     ``` bash
 
-    sudo apt install -y --no-install-recommends npm
+    # Enter repository directory
+    cd centurion-erp
+
+    # Setup python
+    make prepare-python
 
     ```
 
-- Setup of the remaining requirements is done with `make prepare-python`. This
-    initialises the git submodules and sets up the Python virtual environment.
+- Open Repository in VSCodium
 
-- **ALL** linting must pass for a merge to be conducted (`make lint`).
+    ``` bash
 
+    . codium
 
-## Quick Start
+    ```
 
+    VSCodium will open with centurion-erp loaded and is ready for development.
 
-From the root of the project, to start a test server use:
+    > [!TIP]
+    >
+    > VSCodium must be installed for the above command to work. If you use VSCode instead use `. code`.
 
-``` bash
+- Return to the terminal to start the development server
 
-# Activate the python venv
-source /tmp/centurion_erp/bin/activate
+    ``` bash
 
-# Enter the app dir
-cd app
+    # Activate the python venv
+    source .venv/bin/activate
 
-# Start the dev server, viewable at http://127.0.0.1:8002
-python manage.py runserver 8002
+    # Enter the app dir
+    cd app
 
-# Run any migrations, if required
-python manage.py migrate
+    # Start the dev server, viewable at http://127.0.0.1:8002
+    python manage.py runserver 8002
 
-# Create a super user, if required
-python manage.py createsuperuser
+    # Run any migrations, if required
+    python manage.py migrate
 
-```
+    # Create a super user, if required
+    python manage.py createsuperuser
+
+    ```
+
+## Notes
 
 If you have made model changes, generate the migrations and regenerate the
 database test fixtures (migrations are disabled for tests, so the fixtures are
 what the test suite relies upon):
 
+> [!WARNING]
+>
+> Ensure that there is **no** development server running before creating fixtures.
+
 ``` bash
-
-python manage.py makemigrations
-
-# Only required if not already setup
-make prepare-python
 
 # Generates the DB test fixtures
 # app/fixtures/fresh_db.json <- Dont commit this file as the only thing that should change is the date
@@ -83,8 +137,7 @@ pygmentize -S default -f html -a .codehilite > project-static/code.css
 
 
 > [!TIP]
-> Common `make` commands are `make prepare-python` then `make docs` and
-> `make lint`.
+> Common `make` commands are `make prepare-python` and `make pip`.
 
 Included within the root of the repository is a makefile that can be used during
 development to check/run different items as required. The following make targets
@@ -92,53 +145,37 @@ are available:
 
 - `prepare-python`
 
-    _Sets up the python virtual environment._
+    _Sets up the python virtual environment ready for dev._
 
-- `docs`
+- `prepare-ui`
 
-    _Builds the docs and places them within a directory called `build`, which
-    can be viewed within a web browser._
+    _Clones the Centurion UI locally. Enables viewing your dev work in the UI._
 
-- `lint`
+- `build`
 
-    _Conducts all required linting._
+    _Build Centurion ERP wheel._
 
-    - `docs-lint`
+- `build-pip`
 
-        _Lints the markdown documents within the docs directory for formatting
-        errors that MkDocs may/will have an issue with._
+    _Compiles the pip files in the `tools/` directory._
+
+- `docs-lint`
+
+    _Lints the markdown documents within the docs directory for formatting
+    errors that MkDocs may/will have an issue with. It is quicker to lint the docs locally if you are working on them._
 
 - `fixtures`
 
     _Generates the database test fixtures (`app/fixtures/`)._
 
-- `pip-file`
-
-    _Compiles the pip files in the `tools/` directory._
-
 - `pip`
 
-    _Synchronises pip packages. Note: uses the current python, i.e. if a virtual
-    env is activated it will sync packages within the virtual env._
+    _Synchronises pip packages within the virtual env. Enables you to update the python dependencies if they have been updated in dev without having to recreate the environment._
 
 - `clean`
 
     _Cleans up build artifacts and removes the python virtual environment._
 
-
-## Linting
-
-
-All linting must pass before a merge can be conducted:
-
-``` bash
-
-make lint
-
-```
-> [!TIP]
->
-> In your forked repo of Centurion ERP, if you activate github actions, every time you push a commit the CI lint job will run.
 
 ## Testing
 
@@ -153,46 +190,7 @@ See the [testing documentation](https://nofusscomputing.com/projects/centurion_e
 for further information.
 
 
-## Docker
-
-
-To build and run a single Centurion image:
-
-``` bash
-
-cd app
-
-docker build . --tag centurion-erp:dev
-
-docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app centurion-erp:dev
-
-```
-
-
-## Page speed tests
-
-
-To run page speed tests (requires a working prometheus and grafana setup) use
-the following:
-
-``` bash
-
-clear; \
-  K6_PROMETHEUS_RW_TREND_STATS="p(99),p(95),p(90),max,min" \
-  K6_PROMETHEUS_RW_SERVER_URL=http://<prometheus url>:9090/api/v1/write \
-  BASE_URL="http://127.0.0.1:8002" \
-  AUTH_TOKEN="<api token of superuser>" \
-  k6 run \
-    -o experimental-prometheus-rw \
-    --tag "commit=$(git rev-parse HEAD)" \
-    --tag "testid=<name of test for ref>" \
-    test/page_speed.js
-
-```
-
-
 ## Tips / Handy info
-
 
 - To obtain a list of models _(in the same order as the file system)_ using the
     db shell `python3 manage.py dbshell`, run the following SQL command:
@@ -202,3 +200,36 @@ clear; \
     SELECT model FROM django_content_type ORDER BY app_label ASC, model ASC;
 
     ```
+
+- To build and run a single Centurion image:
+
+    ``` bash
+
+    cd app
+
+    docker build . --tag centurion-erp:dev
+
+    docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app centurion-erp:dev
+
+    ```
+
+- Page speed tests
+
+    To run page speed tests (requires a working prometheus and grafana setup) use
+    the following:
+
+    ``` bash
+
+    clear; \
+    K6_PROMETHEUS_RW_TREND_STATS="p(99),p(95),p(90),max,min" \
+    K6_PROMETHEUS_RW_SERVER_URL=http://<prometheus url>:9090/api/v1/write \
+    BASE_URL="http://127.0.0.1:8002" \
+    AUTH_TOKEN="<api token of superuser>" \
+    k6 run \
+        -o experimental-prometheus-rw \
+        --tag "commit=$(git rev-parse HEAD)" \
+        --tag "testid=<name of test for ref>" \
+        test/page_speed.js
+
+    ```
+
