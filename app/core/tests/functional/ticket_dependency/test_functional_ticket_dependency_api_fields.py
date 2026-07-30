@@ -55,6 +55,9 @@ class TicketDependencyAPITestCases(
             'how_related': {
                 'expected': int
             },
+            'how_related_icon': {
+                'expected': list
+            },
             'dependent_ticket': {
                 'expected': dict
             },
