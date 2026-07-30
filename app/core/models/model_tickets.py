@@ -79,8 +79,7 @@ class ModelTicket(
         "dataset": {
             "columns": [
                 [
-                    'ticket',
-                    'created'
+                    'display_name',
                 ]
             ]
         },
