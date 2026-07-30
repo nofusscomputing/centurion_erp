@@ -46,6 +46,22 @@ class ModelTicketModelTestCases(
                 'type': type(None),
                 'value': None
             },
+            'page_layout': {
+                'type': dict,
+                'value': {
+                    "dataset": {
+                        "columns": [
+                            [
+                                'display_name',
+                            ]
+                        ]
+                    },
+                    "table": [
+                        'ticket',
+                        'created'
+                    ]
+                }
+            },
             'url_model_name': {
                 'type': str,
                 'value': 'modelticket'
