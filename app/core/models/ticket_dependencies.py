@@ -91,6 +91,9 @@ class TicketDependency(
             "columns": [
                 [
                     'how_related_icon',
+                ],
+                [
+                    'display_name',
                 ]
             ]
         },
