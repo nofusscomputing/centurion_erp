@@ -212,7 +212,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
             ):
 
                 self._queryset = self._queryset.filter(
-                    model_id = int(self.kwargs['model_id'])
+                    model_id = int( self.kwargs[self.parent_model_pk_kwarg] )
                 )
 
 
