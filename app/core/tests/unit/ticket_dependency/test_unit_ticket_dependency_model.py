@@ -46,6 +46,9 @@ class TicketDependencyModelTestCases(
                         "columns": [
                             [
                                 'how_related_icon'
+                            ],
+                            [
+                                'display_name'
                             ]
                         ]
                     },
