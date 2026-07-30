@@ -45,12 +45,7 @@ class TicketDependencyModelTestCases(
                     "dataset": {
                         "columns": [
                             [
-                                'id',
-                                'title',
-                                'status_badge',
-                                'opened_by',
-                                'organization',
-                                'created'
+                                'how_related_icon'
                             ]
                         ]
                     },

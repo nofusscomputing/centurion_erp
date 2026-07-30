@@ -6,9 +6,9 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
+from core.fields.icon import IconField
 from core.serializers.ticket_depreciated import TicketBaseSerializer
 
-from core import exceptions as centurion_exceptions
 from core import fields as centurion_field
 from core.models.ticket_dependencies import TicketDependency
 
@@ -58,7 +58,9 @@ class ModelSerializer(
     BaseSerializer
 ):
 
-    display_name = centurion_field.MarkdownField(source='__str__', required = False, read_only= True )
+    display_name = centurion_field.MarkdownField(
+        source='__str__', required = False, read_only= True
+    )
 
 
     def get_url(self, item) -> dict:
@@ -68,16 +70,20 @@ class ModelSerializer(
         }
 
 
+    how_related_icon = IconField(read_only = True, label='')
+
+
     class Meta:
 
         model = TicketDependency
 
         fields =  [
-             'id',
+            'id',
             'display_name',
             'dependent_ticket',
             'ticket',
             'how_related',
+            'how_related_icon',
             'user',
             'organization',
             '_urls',
@@ -86,6 +92,7 @@ class ModelSerializer(
         read_only_fields = [
              'id',
             'display_name',
+            'how_related_icon',
             '_urls',
         ]
 
