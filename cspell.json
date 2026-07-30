@@ -19,14 +19,16 @@
         "colors",
         "organization",
         "organizational",
-        "organizations"
+        "organizations",
+        "visualization"
     ],
     "suggestWords": [
         "color: colour",
         "colors: colours",
         "organization: organisation",
         "organizational: organisational",
-        "organizations: organisations"
+        "organizations: organisations",
+        "visualization: visualisation"
     ],
     "dictionaries": [
         "en-common-misspellings",
