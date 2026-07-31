@@ -200,10 +200,10 @@ class ViewSet( SubModelViewSet_ReWrite ):
 
             self._queryset = super().get_queryset()
 
-            if 'ticket_type' in self.kwargs:
+            if 'ticket_id' in self.kwargs:
 
                 self._queryset = self._queryset.filter(
-                    ticket_id = int(self.kwargs['model_id'])
+                    ticket_id = int( self.kwargs['ticket_id'] )
                 )
 
             elif(
@@ -212,7 +212,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
             ):
 
                 self._queryset = self._queryset.filter(
-                    model_id = int(self.kwargs['model_id'])
+                    model_id = int( self.kwargs[self.parent_model_pk_kwarg] )
                 )
 
 
