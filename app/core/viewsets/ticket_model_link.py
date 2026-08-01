@@ -186,7 +186,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
             return model
 
         except FieldDoesNotExist:
-            
+
             return None
 
 
@@ -200,13 +200,7 @@ class ViewSet( SubModelViewSet_ReWrite ):
 
             self._queryset = super().get_queryset()
 
-            if 'ticket_id' in self.kwargs:
-
-                self._queryset = self._queryset.filter(
-                    ticket_id = int( self.kwargs['ticket_id'] )
-                )
-
-            elif(
+            if(
                 'app_label' in self.kwargs
                 and 'model_name' in self.kwargs
             ):
@@ -214,6 +208,13 @@ class ViewSet( SubModelViewSet_ReWrite ):
                 self._queryset = self._queryset.filter(
                     model_id = int( self.kwargs[self.parent_model_pk_kwarg] )
                 )
+
+            else:
+
+                self._queryset = self._queryset.filter(
+                    ticket_id = int( self.kwargs['model_id'] )
+                )
+
 
 
         return self._queryset
