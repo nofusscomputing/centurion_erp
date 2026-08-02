@@ -4,6 +4,17 @@ name: 'CI'
 
 
 on:
+  # Pull Requests
+  #
+  # Must only run on event `pull_request` as there are jobs that are required
+  # to pass to meet QA. Forked PR's to only go to `feat-` branches which are
+  # intended to be merged to dev.
+  #
+  pull_request:
+    branches:
+      - feat-*
+    types:
+      - synchronize    # covers commits
   push:
     branches:
       - '**'
