@@ -110,6 +110,7 @@ jobs:
           name: unit-test-results-3.11
           repository: nofusscomputing/centurion_erp
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
 
 
       - name: Unit Test Report
@@ -144,3 +145,4 @@ jobs:
           reporter: java-junit
           # fail-on-error: false
           use-actions-summary: false
+          github-token: ${{ github.token }}
