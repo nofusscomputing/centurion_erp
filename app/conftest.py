@@ -75,6 +75,8 @@ def pytest_fixture_setup(fixturedef, request):
 
 
 
+
+
 def pytest_fixture_post_finalizer(fixturedef, request):
     logger.getChild("fixture").info(
         "TEARDOWN: fixture %s for %s",
