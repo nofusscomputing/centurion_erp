@@ -29,6 +29,8 @@ jobs:
   #
   python-report-test:
     name: Python Test - Status
+    if: >-
+      github.event.workflow_run.conclusion != 'cancelled'
     runs-on: ubuntu-latest
     steps:
 
