@@ -99,8 +99,19 @@ jobs:
 
 
 
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1    # v7.0.1
+
+
+      - name: Download Unit Test Report
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c    # V8.0.1
+        with:
+          name: unit-test-results-3.11
+          repository: nofusscomputing/centurion_erp
+          run-id: ${{ github.event.workflow_run.id }}
+
+
       - name: Unit Test Report
-        if: success() || failure()
+        if: success()
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2    # v3.0.0
         id: test-report-unit
         with:
@@ -111,8 +122,17 @@ jobs:
           use-actions-summary: false
 
 
+      - name: Download Functional Test Report
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c    # V8.0.1
+        if: success() || failure()
+        with:
+          name: functional-test-results-3.11
+          repository: nofusscomputing/centurion_erp
+          run-id: ${{ github.event.workflow_run.id }}
+
 
       - name: Functional Test Report
+        if: success() || failure()
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2    # v3.0.0
         id: test-report-functional
         with:
