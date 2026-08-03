@@ -127,6 +127,11 @@ jobs:
           use-actions-summary: false
 
 
+      - name: Clean-up Report
+        shell: bash
+        run:
+          rm -f '*.xml
+
       - name: Download Functional Test Report
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c    # V8.0.1
         if: success() || failure()
@@ -148,3 +153,9 @@ jobs:
           reporter: java-junit
           # fail-on-error: false
           use-actions-summary: false
+
+
+      - name: Clean-up Report
+        shell: bash
+        run:
+          rm -f '*.xml
