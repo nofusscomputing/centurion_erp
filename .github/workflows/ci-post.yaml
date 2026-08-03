@@ -33,6 +33,8 @@ jobs:
     name: Python Test - Status
     if: >-
       github.event.workflow_run.conclusion == 'success'
+        &&
+      github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
     steps:
 
