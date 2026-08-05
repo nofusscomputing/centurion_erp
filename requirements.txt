@@ -6,7 +6,7 @@
 #
 amqp==5.3.1
     # via kombu
-asgiref==3.11.1
+asgiref==3.12.1
     # via
     #   django
     #   django-cors-headers
@@ -20,13 +20,13 @@ celery==5.4.0
     # via
     #   -r tools/requirements.in
     #   django-celery-results
-certifi==2026.6.17
+certifi==2026.7.22
     # via requests
-cffi==2.0.0
+cffi==2.1.1
     # via cryptography
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via requests
-click==8.4.1
+click==8.4.2
     # via
     #   celery
     #   click-didyoumean
@@ -38,7 +38,7 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-cryptography==49.0.0
+cryptography==50.0.0
     # via
     #   pyjwt
     #   social-auth-core
@@ -76,9 +76,9 @@ djangorestframework-jsonapi==7.1.0
     # via -r tools/requirements.in
 drf-spectacular[sidecar]==0.29.0
     # via -r tools/requirements.in
-drf-spectacular-sidecar==2026.6.1
+drf-spectacular-sidecar==2026.8.1
     # via drf-spectacular
-greenlet==3.5.2
+greenlet==3.5.4
     # via sqlalchemy
 idna==3.18
     # via requests
@@ -110,14 +110,16 @@ prometheus-client==0.21.1
     # via
     #   -r tools/requirements.in
     #   django-prometheus
-prompt-toolkit==3.0.52
+prompt-toolkit==3.0.53
     # via click-repl
 pycparser==3.0
     # via cffi
 pygments==2.20.0
     # via -r tools/requirements.in
 pyjwt[crypto]==2.13.0
-    # via social-auth-core
+    # via
+    #   pyjwt
+    #   social-auth-core
 python-dateutil==2.9.0.post0
     # via celery
 python3-openid==3.2.0
@@ -153,7 +155,7 @@ sqlalchemy==2.0.31
     # via -r tools/requirements.in
 sqlparse==0.5.5
     # via django
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   referencing
     #   sqlalchemy
@@ -173,5 +175,5 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.8.1
+wcwidth==0.8.2
     # via prompt-toolkit
