@@ -9,7 +9,8 @@ pip-tools>=7.5.2
 pylint==3.3.7
 check-wheel-contents==0.6.3
 
-
+# Pinned so that pip-tools works. v26 causes error on 7.5.2 -> 7.6.0
+pip<26    
 
 # ##################################################
 #  Testing
