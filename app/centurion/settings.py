@@ -534,7 +534,7 @@ CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api
 CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 
 
-if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log'):
+if os.getenv('PWD', None):   # Running locally, create log dir.
 
     if os.getenv('PWD', None) is None:
         raise LookupError("Unable to determine the current calling/working directory.")
