@@ -315,11 +315,15 @@ class ModelTicketMetaViewsetTestCases(
         del view_set
         del self.user
 
-        clean_model_from_db(model)
-        clean_model_from_db(model_user)
-        clean_model_from_db(user_tenancy_item.__class__)
-        clean_model_from_db(kwargs['model'].__class__)
-        clean_model_from_db(kwargs['ticket'].__class__)
+
+        # reset user object caching (fixture is class scoped)
+        user._global_organization = None
+        user._group_permissions = False
+        user._tenancies = None
+        user._tenancies_int = None
+        user._permissions = None
+        user._permissions_by_tenancy = None
+
 
 
 
