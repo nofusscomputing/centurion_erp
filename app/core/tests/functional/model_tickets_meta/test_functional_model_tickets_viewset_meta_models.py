@@ -226,6 +226,7 @@ class ModelTicketMetaViewsetTestCases(
         clean_model_from_db(ticket_model)
 
 
+
     @pytest.fixture( scope = 'function' )
     def viewset_mock_request(self, django_db_blocker, viewset, mocker,
         clean_model_from_db, api_request_permissions,
@@ -246,27 +247,27 @@ class ModelTicketMetaViewsetTestCases(
             self.user = user
 
             kwargs = model_kwargs()
-            kwargs['organization'] = organization_one
+            kwargs['organization'] = api_request_permissions['tenancy']['user']
 
             if kwargs['model']._meta.model_name == 'tenant':
-                kwargs['model'] = organization_one
+                kwargs['model'] = api_request_permissions['tenancy']['user']
 
             if 'user' in kwargs and not issubclass(model, model_ticketcommentbase):
                 kwargs['user'] = user2
 
             user_tenancy_item = model_instance( kwargs_create = kwargs )
 
-            kwargs = model_kwargs( organization = organization_two)
+            kwargs = model_kwargs( organization = api_request_permissions['tenancy']['different'])
 
             kwargs_ticket = kwargs_ticketbase()
             kwargs_ticket['title'] = 'other org ticket'
-            kwargs_ticket['organization'] = organization_two
+            kwargs_ticket['organization'] = api_request_permissions['tenancy']['different']
 
             kwargs['ticket'] = kwargs['ticket'].__class__.objects.create(
                 **kwargs_ticket
             )
 
-            kwargs['organization'] = organization_two
+            kwargs['organization'] = api_request_permissions['tenancy']['different']
 
 
             if(
@@ -277,15 +278,15 @@ class ModelTicketMetaViewsetTestCases(
                 ]
             ):
 
-                kwargs['model'].git_group.organization = organization_two
+                kwargs['model'].git_group.organization = api_request_permissions['tenancy']['different']
 
             elif hasattr(kwargs['model'], 'organization'):
 
-                kwargs['model'].organization = organization_two
+                kwargs['model'].organization = api_request_permissions['tenancy']['different']
 
             elif kwargs['model']._meta.model_name == 'tenant':
 
-                kwargs['model'] = organization_two
+                kwargs['model'] = api_request_permissions['tenancy']['different']
 
 
             kwargs['model'].save()
