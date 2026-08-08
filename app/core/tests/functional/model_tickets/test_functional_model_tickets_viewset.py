@@ -74,7 +74,17 @@ class ModelTicketViewsetInheritedCases(
 
             kwargs['organization'] = api_request_permissions['tenancy']['different']
 
-            if hasattr(kwargs['model'], 'organization'):
+            if(
+                kwargs['model']._meta.model_name in [
+                    'gitrepository',
+                    'githubrepository',
+                    'gitlabrepository',
+                ]
+            ):
+
+                kwargs['model'].git_group.organization = api_request_permissions['tenancy']['different']
+
+            elif hasattr(kwargs['model'], 'organization'):
 
                 kwargs['model'].organization = api_request_permissions['tenancy']['different']
 
@@ -142,6 +152,62 @@ class ModelTicketViewsetInheritedCases(
         """
 
         viewset = viewset_mock_request_ticket
+
+        viewset.action = 'list'
+
+        viewset.allowed_methods = [ 'GET' ]
+
+        queryset = viewset.get_queryset()
+
+        assert len(
+            model.objects.all()
+        ) >= 2, 'multiple objects must exist for test to work'
+
+        assert len( queryset ) > 0, 'Empty queryset returned. Test not possible'
+
+        test_obj = model.objects.filter(
+            organization = api_request_permissions['tenancy']['user']
+        )
+
+
+        if model._meta.model_name != 'tenant':
+
+            assert len(
+                test_obj
+            ) > 0, 'objects in user org required for test to work.'
+
+            assert len(
+                model.objects.filter(
+                    organization = api_request_permissions['tenancy']['different']
+                )
+            ) > 0, 'objects in different org required for test to work.'
+
+
+        only_user_results_returned = True
+
+        for result in queryset:
+
+            if result.ticket.id != test_obj[0].ticket.id:
+                only_user_results_returned = False
+
+
+        assert only_user_results_returned
+
+
+
+    def test_function_get_queryset_filtered_results_action_list_for_model(self,
+        viewset_mock_request, model, api_request_permissions,
+    ):
+        """Test class function
+
+        Ensure that when function `get_queryset` returns values thay are
+        filtered to the model in question.
+
+        This test is for `list` of sub-model (<modelname>Ticket) for all
+        related tickets.
+        """
+
+        viewset = viewset_mock_request
 
         viewset.action = 'list'
 
