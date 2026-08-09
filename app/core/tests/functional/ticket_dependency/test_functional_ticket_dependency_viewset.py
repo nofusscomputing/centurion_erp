@@ -24,7 +24,7 @@ class ViewsetTestCases(
 
 
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'model is not multi-tenancy capable, test is N/A.' )
 
     def test_function_get_meta_urls_self_url(self):

@@ -15,7 +15,7 @@ class ModelRetrieveUpdateViewSetTestCases(
     CommonModelRetrieveUpdateViewSetInheritedCases,
 ):
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'No filtering conducted when super user is used. test is n/a.' )
 
     def test_function_get_meta_urls_self_url(self):

@@ -20,7 +20,7 @@ class ModelCreateViewSetTestCases(
 ):
 
     # parmeterize to view action
-    def test_function_get_queryset_filtered_results_action_list(self,
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self,
         viewset_mock_request, organization_one, model
     ):
         """Test class function
@@ -62,7 +62,7 @@ class UserPermissionsModelCreateViewSetPyTest(
     def viewset(self):
         yield ModelCreateViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -89,7 +89,7 @@ class ModelListRetrieveDeleteViewSetTestCases(
 ):
 
     # parmeterize to view action
-    def test_function_get_queryset_filtered_results_action_list(self,
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self,
         viewset_mock_request, organization_one, model
     ):
         """Test class function
@@ -131,7 +131,7 @@ class UserPermissionsModelListRetrieveDeleteViewSetPyTest(
     def viewset(self):
         yield ModelListRetrieveDeleteViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -158,7 +158,7 @@ class ModelRetrieveUpdateViewSetTestCases(
 ):
 
     # parmeterize to view action
-    def test_function_get_queryset_filtered_results_action_list(self,
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self,
         viewset_mock_request, organization_one, model
     ):
         """Test class function
@@ -200,7 +200,7 @@ class UserPermissionsModelRetrieveUpdateViewSetPyTest(
     def viewset(self):
         yield ModelRetrieveUpdateViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):

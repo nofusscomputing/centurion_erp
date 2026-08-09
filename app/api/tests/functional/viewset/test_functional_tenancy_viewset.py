@@ -43,7 +43,7 @@ class TenancyPermissionsModelViewSetPyTest(
     def viewset(self):
         return ModelViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -85,7 +85,7 @@ class TenancyPermissionsModelCreateViewSetPyTest(
     def viewset(self):
         return ModelCreateViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -127,7 +127,7 @@ class TenancyPermissionsModelListRetrieveDeleteViewSetPyTest(
     def viewset(self):
         return ModelListRetrieveDeleteViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -169,7 +169,7 @@ class TenancyPermissionsModelRetrieveUpdateViewSetPyTest(
     def viewset(self):
         return ModelRetrieveUpdateViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -210,7 +210,7 @@ class TenancyPermissionsSubModelViewSetPyTest(
     def viewset(self):
         return SubModelViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -250,7 +250,7 @@ class TenancyPermissionsReadOnlyModelViewSetPyTest(
     def viewset(self):
         return ReadOnlyModelViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
@@ -290,7 +290,7 @@ class TenancyPermissionsReadOnlyListModelViewSetPyTest(
     def viewset(self):
         return ReadOnlyListModelViewSet
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'Base class does not require test' )
 
     def test_function_get_meta_urls_self_url(self):
