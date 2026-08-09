@@ -71,6 +71,18 @@ class ViewsetTestCases(
 
 
 
+    @pytest.mark.skip( reason = 'test to be written' )
+    def test_function_get_queryset_filtered_results_action_list_ticket(self,
+        viewset_mock_request, model, api_request_permissions,
+    ):
+        """Test class function
+
+        Ensure that when function `get_queryset` returns values that are filtered
+        to the ticket in question.
+        """
+        pass
+
+
 class TicketDependencyViewsetInheritedCases(
     ViewsetTestCases,
 ):
