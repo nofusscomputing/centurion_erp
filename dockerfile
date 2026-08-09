@@ -2,9 +2,9 @@ ARG CI_PROJECT_URL=''
 ARG CI_COMMIT_SHA=''
 ARG CI_COMMIT_TAG=''
 
-ARG ALPINE_VERSION=3.20
-ARG NGINX_VERSION=1.27.2-r1
-ARG PYTHON_VERSION=3.11.10
+ARG ALPINE_VERSION=3.24
+ARG NGINX_VERSION=1.31.3-r1
+ARG PYTHON_VERSION=3.11.15
 
 FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS build
 
@@ -144,6 +144,13 @@ RUN apk del --no-interactive \
 
 # Setup SupervisorD conf dir
 RUN mkdir -p /etc/supervisor/conf.d;
+
+# Remove Python Packages not required
+RUN pip uninstall -y \
+    pip \
+    setuptools \
+    wheel;
+
 
 
 FROM scratch
