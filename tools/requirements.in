@@ -12,13 +12,13 @@ social-auth-app-django==5.6.0
 # ##################################################
 #  DRF
 # ##################################################
-djangorestframework==3.16.0
+djangorestframework==3.16.0    # 3.18.0 dropped django 5.1 support
 djangorestframework-jsonapi==7.1.0
 
 pyyaml>=6.0.2
 django-filter==24.2
 
-
+KmNL$pZ#YcM7$vl0
 # ##################################################
 #  OpenAPI Schema / Swagger
 # ##################################################
