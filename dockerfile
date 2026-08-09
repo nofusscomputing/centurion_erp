@@ -147,6 +147,7 @@ RUN mkdir -p /etc/supervisor/conf.d;
 
 # Remove Python Packages not required
 RUN pip uninstall -y \
+    pip \
     setuptools \
     wheel;
 
