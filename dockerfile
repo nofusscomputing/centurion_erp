@@ -145,6 +145,12 @@ RUN apk del --no-interactive \
 # Setup SupervisorD conf dir
 RUN mkdir -p /etc/supervisor/conf.d;
 
+# Remove Python Packages not required
+RUN pip uninstall -y \
+    setuptools \
+    wheel;
+
+
 
 FROM scratch
 
