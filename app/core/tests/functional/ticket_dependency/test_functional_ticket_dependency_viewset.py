@@ -71,7 +71,6 @@ class ViewsetTestCases(
 
 
 
-    @pytest.mark.skip( reason = 'test to be written' )
     def test_function_get_queryset_filtered_results_action_list_ticket(self,
         viewset_mock_request, model, api_request_permissions,
     ):
@@ -80,7 +79,47 @@ class ViewsetTestCases(
         Ensure that when function `get_queryset` returns values that are filtered
         to the ticket in question.
         """
-        pass
+
+        viewset = viewset_mock_request
+
+        viewset.action = 'list'
+
+        viewset.allowed_methods = [ 'GET' ]
+
+        queryset = viewset.get_queryset()
+
+        assert len(
+            model.objects.all()
+        ) >= 2, 'multiple objects must exist for test to work'
+
+        assert len( queryset ) > 0, 'Empty queryset returned. Test not possible'
+
+        test_obj = model.objects.filter(
+            organization = api_request_permissions['tenancy']['user']
+        )
+
+
+        assert len(
+            test_obj
+        ) > 0, 'objects in user org required for test to work.'
+
+        assert len(
+            model.objects.filter(
+                organization = api_request_permissions['tenancy']['different']
+            )
+        ) > 0, 'objects in different org required for test to work.'
+
+
+        only_user_results_returned = True
+
+        for result in queryset:
+
+            if result.ticket.id != test_obj[0].ticket.id:
+                only_user_results_returned = False
+
+
+        assert only_user_results_returned
+
 
 
 class TicketDependencyViewsetInheritedCases(
