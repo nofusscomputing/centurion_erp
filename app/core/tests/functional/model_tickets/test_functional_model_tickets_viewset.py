@@ -257,7 +257,7 @@ class ModelTicketViewsetPyTest(
 ):
 
 
-    def test_function_get_queryset_filtered_results_action_list(self):
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self):
         pytest.xfail( reason = 'test n/a as model does not have `model` field' )
 
     def test_function_get_meta_urls_self_url(self):
