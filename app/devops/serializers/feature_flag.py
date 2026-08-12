@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from drf_spectacular.utils import extend_schema_serializer
+
 from access.serializers.organization import Organization, TenantBaseSerializer
 
 from api.serializers import common
@@ -37,6 +39,7 @@ class SoftwareField(serializers.PrimaryKeyRelatedField):
 
 
 
+@extend_schema_serializer(component_name = 'FeatureFlagBaseSerializer')
 class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -67,6 +70,7 @@ class BaseSerializer(serializers.ModelSerializer):
         ]
 
 
+@extend_schema_serializer(component_name = 'FeatureFlagModelSerializer')
 class ModelSerializer(
     common.CommonModelSerializer,
     BaseSerializer
@@ -160,6 +164,7 @@ class ModelSerializer(
 
 
 
+@extend_schema_serializer(component_name = 'FeatureFlagViewSerializer')
 class ViewSerializer(ModelSerializer):
 
     organization = TenantBaseSerializer( read_only = True )
