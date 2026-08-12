@@ -14,7 +14,7 @@ from core.serializers.centurionmodelnote import (    # pylint: disable=W0611:unu
 
 
 
-@extend_schema_serializer(component_name = 'FeatureFlagModelSerializer')
+@extend_schema_serializer(component_name = 'FeatureFlagCenturionModelNoteModelSerializer')
 class ModelSerializer(
     BaseModelModelSerializer,
 ):
@@ -76,7 +76,7 @@ class ModelSerializer(
         return is_valid
 
 
-@extend_schema_serializer(component_name = 'FeatureFlagViewSerializer')
+@extend_schema_serializer(component_name = 'FeatureFlagCenturionModelNoteViewSerializer')
 class ViewSerializer(
     ModelSerializer,
     BaseModelViewSerializer,
