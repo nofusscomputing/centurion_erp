@@ -127,7 +127,7 @@ This container does not require any paths be passed to it from the reverse proxy
 
 ## Settings file
 
-The settings file is a python file `.py` and must remain a valid python file for the application to work. Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. PostgreSQL is supported.
+The settings file is a python file `.py` and must remain a valid python file for the application to work. Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. PostgreSQL is supported. Further details on configuration is within the settings file displayed below.
 
 ``` py title="settings.py"
 
