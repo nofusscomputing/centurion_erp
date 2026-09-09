@@ -140,9 +140,8 @@ requests==2.34.2
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-rpds-py==0.30.0
+rpds-py==2026.6.3
     # via
-    #   -r tools/requirements.in
     #   jsonschema
     #   referencing
 six==1.17.0

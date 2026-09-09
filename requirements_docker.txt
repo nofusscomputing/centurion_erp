@@ -251,7 +251,7 @@ requests-oauthlib==2.0.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   social-auth-core
-rpds-py==0.30.0
+rpds-py==2026.6.3
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
