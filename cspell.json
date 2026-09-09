@@ -20,7 +20,9 @@
         "organization",
         "organizational",
         "organizations",
-        "visualization"
+        "visualization",
+        "Authorize",
+        "Authorized"
     ],
     "suggestWords": [
         "color: colour",
@@ -28,7 +30,9 @@
         "organization: organisation",
         "organizational: organisational",
         "organizations: organisations",
-        "visualization: visualisation"
+        "visualization: visualisation",
+        "Authorize: Authorise",
+        "Authorized: Authorised"
     ],
     "dictionaries": [
         "en-common-misspellings",

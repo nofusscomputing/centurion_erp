@@ -6,6 +6,8 @@
 
 - Support added whe updating role permissions to use format `<app>.<permission>_<model>`
 
+- This release is the first release that provides the routes to [Centurion UI](https://nofusscomputing.com/projects/centurion_user_interface/describing/#ui-routes). As such [Centurion UI v0.14.0](https://github.com/nofusscomputing/centurion_ui/pull/243) will be required for Centurion ERP to work.
+
 
 ## Version v1.32.0
 
