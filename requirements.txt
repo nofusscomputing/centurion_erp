@@ -24,9 +24,9 @@ certifi==2026.7.22
     # via requests
 cffi==2.1.1
     # via cryptography
-charset-normalizer==3.4.9
+charset-normalizer==3.5.1
     # via requests
-click==8.4.2
+click==8.5.0
     # via
     #   celery
     #   click-didyoumean
@@ -38,7 +38,7 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-cryptography==50.0.0
+cryptography==50.0.1
     # via
     #   pyjwt
     #   social-auth-core
@@ -76,11 +76,11 @@ djangorestframework-jsonapi==7.1.0
     # via -r tools/requirements.in
 drf-spectacular[sidecar]==0.29.0
     # via -r tools/requirements.in
-drf-spectacular-sidecar==2026.8.1
+drf-spectacular-sidecar==2026.9.1
     # via drf-spectacular
-greenlet==3.5.4
+greenlet==3.5.5
     # via sqlalchemy
-idna==3.18
+idna==3.19
     # via requests
 inflection==0.5.1
     # via
@@ -92,7 +92,7 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 kombu==5.5.1
     # via celery
-linkify-it-py==2.1.0
+linkify-it-py==2.2.0
     # via markdown-it-py
 markdown-it-py[linkify,plugins]==3.0.0
     # via
@@ -153,7 +153,7 @@ social-auth-core==4.9.1
     # via social-auth-app-django
 sqlalchemy==2.0.31
     # via -r tools/requirements.in
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via django
 typing-extensions==4.16.0
     # via
@@ -164,8 +164,6 @@ tzdata==2025.1
     #   -r tools/requirements.in
     #   celery
     #   kombu
-uc-micro-py==2.0.0
-    # via linkify-it-py
 uritemplate==4.2.0
     # via drf-spectacular
 urllib3==2.7.0
@@ -175,5 +173,5 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.8.2
+wcwidth==0.8.3
     # via prompt-toolkit
