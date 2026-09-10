@@ -47,6 +47,39 @@ class RoleSerializerTestCases(
 
 
 
+    @pytest.mark.skip( reason = 'Test to be written' )
+    def test_serializer_function_to_internal_value_permissions_as_int(self):
+        """Serializer Function Check
+
+        Ensure that function `to_internal_value` accepts permissions as a list
+        of int
+        """
+        pass
+
+
+
+    @pytest.mark.skip( reason = 'Test to be written' )
+    def test_serializer_function_to_internal_value_permissions_to_int(self):
+        """Serializer Function Check
+
+        Ensure that function `to_internal_value` converts the permission
+        strings list to a list of int.
+        """
+        pass
+
+
+
+    @pytest.mark.skip( reason = 'Test to be written' )
+    def test_serializer_function_to_internal_value_permissions_not_exist(self):
+        """Serializer Function Check
+
+        Ensure that function `to_internal_value` raises an exception when a
+        permission supplied does not exist.
+        """
+        pass
+
+
+
 class RoleSerializerInheritedCases(
     RoleSerializerTestCases
 ):

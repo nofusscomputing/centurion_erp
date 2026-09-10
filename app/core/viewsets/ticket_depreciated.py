@@ -45,15 +45,6 @@ from itim.serializers.problem import (    # pylint: disable=W0611:unused-import
     ProblemTicketViewSerializer,
 )
 
-from project_management.serializers.project_task import (    # pylint: disable=W0611:unused-import
-    ProjectTaskAddTicketModelSerializer,
-    ProjectTaskChangeTicketModelSerializer,
-    ProjectTaskImportTicketModelSerializer,
-    ProjectTaskTriageTicketModelSerializer,
-    ProjectTaskTicketModelSerializer,
-    ProjectTaskTicketViewSerializer,
-)
-
 
 
 @depreciate(

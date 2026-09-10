@@ -9,11 +9,11 @@ amqp==5.3.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   kombu
-annotated-types==0.7.0
+annotated-types==0.8.0
     # via pydantic
 argcomplete==3.4.0
     # via commitizen
-asgiref==3.11.1
+asgiref==3.12.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -33,24 +33,24 @@ billiard==4.2.4
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   celery
-build==1.5.0
+build==1.6.0
     # via pip-tools
 celery==5.4.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   django-celery-results
-certifi==2026.6.17
+certifi==2026.7.22
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   requests
-cffi==2.0.0
+cffi==2.1.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   cryptography
-charset-normalizer==3.4.7
+charset-normalizer==3.5.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -58,7 +58,7 @@ charset-normalizer==3.4.7
     #   requests
 check-wheel-contents==0.6.3
     # via -r tools/requirements_dev.in
-click==8.4.1
+click==8.5.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -91,7 +91,7 @@ coverage[toml]==7.8.0
     # via
     #   -r tools/requirements_dev.in
     #   pytest-cov
-cryptography==49.0.0
+cryptography==50.0.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -156,17 +156,17 @@ drf-spectacular[sidecar]==0.29.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-drf-spectacular-sidecar==2026.6.1
+drf-spectacular-sidecar==2026.9.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   drf-spectacular
-greenlet==3.5.2
+greenlet==3.5.5
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   sqlalchemy
-idna==3.18
+idna==3.19
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -198,7 +198,7 @@ kombu==5.5.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   celery
-linkify-it-py==2.1.0
+linkify-it-py==2.2.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -222,24 +222,22 @@ mdurl==0.1.2
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   markdown-it-py
-mysqlclient==2.2.4
-    # via -r requirements_production.txt
 oauthlib==3.3.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   requests-oauthlib
     #   social-auth-core
-packaging==26.2
+packaging==26.3
     # via
     #   build
     #   check-wheel-contents
     #   commitizen
     #   pytest
     #   wheel
-pip-tools==7.5.3
+pip-tools==7.6.1
     # via -r tools/requirements_dev.in
-platformdirs==4.10.0
+platformdirs==4.11.8
     # via pylint
 pluggy==1.6.0
     # via pytest
@@ -248,7 +246,7 @@ prometheus-client==0.21.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   django-prometheus
-prompt-toolkit==3.0.52
+prompt-toolkit==3.0.53
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -261,9 +259,9 @@ pycparser==3.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   cffi
-pydantic==2.13.4
+pydantic==2.13.5
     # via check-wheel-contents
-pydantic-core==2.46.4
+pydantic-core==2.46.5
     # via pydantic
 pygments==2.20.0
     # via
@@ -334,7 +332,7 @@ requests-oauthlib==2.0.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   social-auth-core
-rpds-py==0.30.0
+rpds-py==2026.6.3
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -358,7 +356,7 @@ sqlalchemy==2.0.31
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -366,11 +364,11 @@ sqlparse==0.5.5
     #   django-debug-toolbar
 termcolor==2.5.0
     # via commitizen
-tomlkit==0.15.0
+tomlkit==0.15.1
     # via
     #   commitizen
     #   pylint
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -379,7 +377,7 @@ typing-extensions==4.15.0
     #   referencing
     #   sqlalchemy
     #   typing-inspection
-typing-inspection==0.4.2
+typing-inspection==0.4.4
     # via pydantic
 tzdata==2025.1
     # via
@@ -387,11 +385,6 @@ tzdata==2025.1
     #   -r requirements_production.txt
     #   celery
     #   kombu
-uc-micro-py==2.0.0
-    # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
-    #   linkify-it-py
 uritemplate==4.2.0
     # via
     #   -r requirements.txt
@@ -411,12 +404,12 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.8.1
+wcwidth==0.8.3
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   prompt-toolkit
-wheel==0.47.0
+wheel==0.48.0
     # via pip-tools
 wheel-filename==1.4.2
     # via check-wheel-contents

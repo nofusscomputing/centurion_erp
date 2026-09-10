@@ -229,6 +229,7 @@ class ViewSet( SubModelViewSet ):
 
     filterset_fields = [
         'is_deleted',
+        'milestone',
         'organization',
         'project',
     ]
@@ -288,7 +289,12 @@ class ViewSet( SubModelViewSet ):
         _meta_urls = super().get_meta_urls()
 
         if 'sub_models' in _meta_urls:
-            del _meta_urls['sub_models']['projecttaskticket']
+
+            if 'project_id' not in self.kwargs:
+                del _meta_urls['sub_models']['projecttaskticket']
+
+            if 'project_id' in self.kwargs:
+                _meta_urls['new'] = _meta_urls['sub_models']['projecttaskticket']['url']
 
         return self._meta_urls
 

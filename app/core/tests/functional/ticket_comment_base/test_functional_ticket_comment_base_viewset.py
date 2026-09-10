@@ -23,7 +23,7 @@ class ViewsetTestCases(
 
 
 
-    def test_function_get_queryset_filtered_results_action_list(self,
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self,
         viewset_mock_request, organization_one, organization_two, model
     ):
 

@@ -20,7 +20,7 @@ Centurion ERP is a container base application. You can deploy it with any contai
 
 Basic installation steps are as follows:
 
-1. Deploy a Database Server
+1. Deploy a Database Server (PostgreSQL)
 
 1. Deploy a RabbitMQ Server
 
@@ -79,7 +79,7 @@ Centurion ERP is not a monolithic application. ALL components have been broken i
 
 ### Database Server
 
-As Centurion ERP is uses the Django Framework, Theoretically Every Django supported database is available. The reality is however, that we have only used PostgreSQL Server with Centurion ERP. By default if no database is configured a SQLite database will be used. This allows [tests](../development/testing.md) to function and to quickly spin up a deployment for testing.
+As Centurion ERP is uses the Django Framework, Theoretically Every Django supported database is available. The reality is however, that we only develop for PostgreSQL Server with Centurion ERP. By default if no database is configured a SQLite database will be used. This allows [tests](../development/testing.md) to function and to quickly spin up a deployment for testing.
 
 
 ### RabbitMQ Server
@@ -127,7 +127,7 @@ This container does not require any paths be passed to it from the reverse proxy
 
 ## Settings file
 
-The settings file is a python file `.py` and must remain a valid python file for the application to work. Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. PostgreSQL is supported.
+The settings file is a python file `.py` and must remain a valid python file for the application to work. Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. PostgreSQL is supported. Further details on configuration is within the settings file displayed below.
 
 ``` py title="settings.py"
 

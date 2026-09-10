@@ -21,11 +21,49 @@ on:
     tags:
       - '*'
 
+
+env:
+  GIT_SYNC_URL: "https://${{ secrets.GITLAB_USERNAME_ROBOT }}:${{ secrets.GITLAB_TOKEN_ROBOT }}@gitlab.com/nofusscomputing/projects/centurion_erp.git"
+  PYTHON_VERSION: '3.11'
+  PYTHON_VERSIONS: '["3.11","3.12","3.13"]'
+
 jobs:
+
+
+  init:
+    if: >-
+      github.repository == 'nofusscomputing/centurion_erp'
+        &&
+      (
+        github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+          ||
+        github.event_name == 'push'
+      )
+    runs-on: ubuntu-latest
+    outputs:
+      PYTHON_VERSION: ${{ steps.python-vars.outputs.ENV_PYTHON_VERSION }}
+      PYTHON_VERSIONS: ${{ steps.python-vars.outputs.ENV_PYTHON_VERSIONS }}
+    steps:
+
+
+      - name: Use Workflow env vars
+        id: python-vars
+        shell: bash
+        run: |
+          echo 'ENV_PYTHON_VERSION=${{ env.PYTHON_VERSION }}' >> $GITHUB_OUTPUT
+
+          echo 'ENV_PYTHON_VERSIONS=${{ env.PYTHON_VERSIONS }}' >> $GITHUB_OUTPUT
+
 
 
   mkdocs:
     name: 'MKDocs'
+    if: >-
+      (
+        github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+          ||
+        github.event_name == 'push'
+      )
     permissions:
       pull-requests: write
       contents: write
@@ -37,26 +75,61 @@ jobs:
 
   python:
     name: 'Python'
+    if: >-
+      (
+        github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+          ||
+        github.event_name == 'push'
+      )
     uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
+    needs:
+      - init
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+    with:
+      DEFAULT_ONLY: ${{
+        github.ref_type != 'tag'
+        && github.ref_name != 'master'
+        && github.ref_name != 'development'
+        && ! startsWith(github.ref_name, 'feat-') }}
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
+      PYTHON_VERSIONS: ${{ needs.init.outputs.PYTHON_VERSIONS }}
 
 
   python-build:
     name: 'Python'
-    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    if: >- 
+      !startsWith(github.ref, 'refs/tags/')
+        &&
+      (
+        github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+          ||
+        github.event_name == 'push'
+      )
     uses: nofusscomputing/action_python/.github/workflows/python-package.yaml@development
 
 
   python-build_tag:
     name: 'Python'
-    if: startsWith(github.ref, 'refs/tags/')
+    if: >-
+      github.repository == 'nofusscomputing/centurion_erp'
+        &&
+      startsWith(github.ref, 'refs/tags/')
+        &&
+      github.event_name != 'pull_request'
     uses: nofusscomputing/action_python/.github/workflows/python-package.yaml@development
 
 
   docker:
     name: 'Docker'
-    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    if: >-
+      !startsWith(github.ref, 'refs/tags/')
+        &&
+      (
+        github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+          ||
+        github.event_name == 'push'
+      )
     needs:
       - python-build
     uses: nofusscomputing/action_docker/.github/workflows/docker.yaml@development
@@ -71,7 +144,12 @@ jobs:
 
   docker_tag:
     name: 'Docker'
-    if: startsWith(github.ref, 'refs/tags/')
+    if: >-
+      github.repository == 'nofusscomputing/centurion_erp'
+        &&
+      startsWith(github.ref, 'refs/tags/')
+        &&
+      github.event_name != 'pull_request'
     needs:
       - python-build_tag
     uses: nofusscomputing/action_docker/.github/workflows/docker.yaml@development
@@ -86,12 +164,27 @@ jobs:
 
   integration-test:
     name: 'Integration Test'
+    if: >-
+      github.ref_type != 'tag'
+        &&
+      (
+        github.ref_name == 'master'
+        || github.ref_name == 'development'
+        || startsWith(github.ref_name, 'feat-')
+      )
+        &&
+      (
+        github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+          ||
+        github.event_name == 'push'
+      )
     uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
     needs:
+      - init
       - docker
     with:
       POSTGRES_VERSIONS: '[ "13", "14", "15", "16", "17" ]'
-      PYTHON_VERSION: '3.11'
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
       RABBITMQ_VERSIONS: '[ "3.12", "3.13", "4.0", "4.1" ]'
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
@@ -99,12 +192,25 @@ jobs:
 
   integration-test_tag:
     name: 'Integration Test'
+    if: >-
+      github.repository == 'nofusscomputing/centurion_erp'
+        &&
+      github.ref_type == 'tag'
+        &&
+      (
+        github.ref_name == 'master'
+        || github.ref_name == 'development'
+        || startsWith(github.ref_name, 'feat-')
+      )
+        &&
+      github.event_name != 'pull_request'
     uses: nofusscomputing/action_python/.github/workflows/python-integration.yaml@development
     needs:
+      - init
       - docker_tag
     with:
       POSTGRES_VERSIONS: '[ "13", "14", "15", "16", "17" ]'
-      PYTHON_VERSION: '3.11'
+      PYTHON_VERSION: ${{ needs.init.outputs.PYTHON_VERSION }}
       RABBITMQ_VERSIONS: '[ "3.12", "3.13", "4.0", "4.1" ]'
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
@@ -112,7 +218,16 @@ jobs:
 
   python-publish:
     name: Python
-    if: startsWith(github.ref, 'refs/tags/')
+    if: >-
+      github.repository == 'nofusscomputing/centurion_erp'
+        &&
+      startsWith(github.ref, 'refs/tags/')
+        &&
+      (
+        github.event_name != 'pull_request'
+          &&
+        github.event_name == 'push'
+      )
     runs-on: ubuntu-latest
     environment:
       name: pypi

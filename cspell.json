@@ -19,14 +19,20 @@
         "colors",
         "organization",
         "organizational",
-        "organizations"
+        "organizations",
+        "visualization",
+        "Authorize",
+        "Authorized"
     ],
     "suggestWords": [
         "color: colour",
         "colors: colours",
         "organization: organisation",
         "organizational: organisational",
-        "organizations: organisations"
+        "organizations: organisations",
+        "visualization: visualisation",
+        "Authorize: Authorise",
+        "Authorized: Authorised"
     ],
     "dictionaries": [
         "en-common-misspellings",

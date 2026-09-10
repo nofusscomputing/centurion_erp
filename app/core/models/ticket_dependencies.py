@@ -3,6 +3,7 @@ from django.db import models
 
 from access.models.entity import Entity
 
+from core.classes.icon import Icon
 from core.models.centurion import CenturionModel
 from core.models.ticket_base import TicketBase
 
@@ -89,12 +90,10 @@ class TicketDependency(
         "dataset": {
             "columns": [
                 [
-                    'id',
-                    'title',
-                    'status_badge',
-                    'opened_by',
-                    'organization',
-                    'created'
+                    'how_related_icon',
+                ],
+                [
+                    'display_name',
                 ]
             ]
         },
@@ -117,6 +116,19 @@ class TicketDependency(
             return str( '#' + str(self.dependent_ticket.id) )
 
         return ''
+
+
+    @property
+    def how_related_icon(self) -> list([Icon]):
+
+        how_related = self.get_how_related_display()
+
+        return [
+            Icon(
+                name = f'ticket_related_{str(how_related).lower()}',
+                style = f"ticket-dependency-{str(how_related).lower().replace(' ' , '')}",
+            )
+        ]
 
 
 

@@ -228,8 +228,7 @@ CACHES = {
 ALLOWED_HOSTS = [ '*' ]          # Site host to serve
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
 SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
-SECRET_KEY = None                # You need to generate this
-SESSION_COOKIE_AGE = 1209600     # Age the session cookie should live for in seconds. 
+SECRET_KEY = None                # User must set
 SSO_ENABLED = False              # Enable SSO
 SSO_LOGIN_ONLY_BACKEND = None    # Use specified SSO backend as the ONLY method to login. (builting login form will not be used)
 TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
@@ -237,16 +236,28 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 
 
 # Application definition
+CSRF_COOKIE_DOMAIN = None
+CSRF_COOKIE_HTTPONLY = False    # Must be set to `False` for UI to access cookie.
+CSRF_COOKIE_PATH = '/'
+CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = True
+CSRF_USE_SESSIONS = False
 SECURE_HSTS_SECONDS = 86400
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
 # SECURE_SSL_REDIRECT = True    # Commented out so tests pass
 # SECURE_SSL_HOST =        # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-host
+SESSION_COOKIE_AGE = ( 3600 * 4 )     # Age the session cookie should live for in seconds.
+SESSION_COOKIE_DOMAIN = None
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_PATH = '/'
+SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = True
 # USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
 
+CSRF_COOKIE_AGE = ( SESSION_COOKIE_AGE + 2 )     # Age the CSRF cookie should live for in seconds.
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -534,7 +545,7 @@ CENTURION_LOGGING['handlers']['file_rest_api']['filename'] = LOG_FILES['rest_api
 CENTURION_LOGGING['handlers']['file_weblog']['filename'] = LOG_FILES['weblog']
 
 
-if str(CENTURION_LOGGING['handlers']['file_centurion']['filename']).startswith('log'):
+if os.getenv('PWD', None):   # Running locally, create log dir.
 
     if os.getenv('PWD', None) is None:
         raise LookupError("Unable to determine the current calling/working directory.")
@@ -708,15 +719,6 @@ if FEATURE_FLAGGING_ENABLED:
                 }
             },
             {
-                "2025-00006": {
-                    "name": "Ticket Models",
-                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
-                    "enabled": True,
-                    "created": "",
-                    "modified": ""
-                }
-            },
-            {
                 "2025-00007": {
                     "name": "itam.ITAMAssetBase",
                     "description": "ITAM Asset Base model. see https://github.com/nofusscomputing/centurion_erp/issues/692",
@@ -746,6 +748,15 @@ if FEATURE_FLAGGING_ENABLED:
             {
                 "2025-00011": {
                     "name": "itim.ProblemTicket",
+                    "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
+                    "enabled": True,
+                    "created": "",
+                    "modified": ""
+                }
+            },
+            {
+                "2026-00012": {
+                    "name": "itim.RequestTicket",
                     "description": "Ticket Model re-write. see https://github.com/nofusscomputing/centurion_erp/issues/564",
                     "enabled": True,
                     "created": "",
