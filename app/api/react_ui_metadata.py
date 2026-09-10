@@ -10,8 +10,6 @@ from rest_framework.utils.field_mapping import ClassLookupDict
 
 from rest_framework_json_api.utils import get_related_resource_type
 
-from access.models.tenant import Tenant
-
 from centurion.serializers.user import UserBaseSerializer
 User = django.contrib.auth.get_user_model()
 
@@ -106,6 +104,9 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         if metadata.get('layout', None) is None:
             metadata['layout'] = {}
+
+
+        metadata['routes'] = self.get_routes()
 
         build_repo: str = None
 
@@ -476,7 +477,46 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         **nav['itam']['pages']
                     }
 
-            if request.feature_flag['2025-00006']:
+
+            if request.feature_flag['2025-00009']:
+
+                nav['itim']['pages'].update({
+                    'itim.view_changeticket': {
+                        "display_name": "Changes New",
+                        "name": "change_new",
+                        "icon": "ticket_change",
+                        "link": "/itim/ticket/changeticket"
+                    },
+                })
+
+
+            if request.feature_flag['2025-00010']:
+
+                nav['itim']['pages'].update({
+
+                    'itim.view_incidentticket': {
+                        "display_name": "Incidents New",
+                        "name": "incident_new",
+                        "icon": "ticket_incident",
+                        "link": "/itim/ticket/incidentticket"
+                    },
+                })
+
+
+            if request.feature_flag['2025-00011']:
+
+                nav['itim']['pages'].update({
+
+                    'itim.view_problemticket': {
+                        "display_name": "Problems New",
+                        "name": "problem_new",
+                        "icon": "ticket_problem",
+                        "link": "/itim/ticket/problemticket"
+                    }
+                })
+
+
+            if request.feature_flag['2026-00012']:
 
                 nav['assistance']['pages'].update({
                     'itim.view_requestticket': {
@@ -486,41 +526,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "link": "/itim/ticket/requestticket"
                     }
                 })
-
-                if request.feature_flag['2025-00009']:
-
-                    nav['itim']['pages'].update({
-                        'itim.view_changeticket': {
-                            "display_name": "Changes New",
-                            "name": "change_new",
-                            "icon": "ticket_change",
-                            "link": "/itim/ticket/changeticket"
-                        },
-                    })
-
-                if request.feature_flag['2025-00010']:
-
-                    nav['itim']['pages'].update({
-
-                        'itim.view_incidentticket': {
-                            "display_name": "Incidents New",
-                            "name": "incident_new",
-                            "icon": "ticket_incident",
-                            "link": "/itim/ticket/incidentticket"
-                        },
-                    })
-
-                if request.feature_flag['2025-00011']:
-
-                    nav['itim']['pages'].update({
-
-                        'itim.view_problemticket': {
-                            "display_name": "Problems New",
-                            "name": "problem_new",
-                            "icon": "ticket_problem",
-                            "link": "/itim/ticket/problemticket"
-                        }
-                    })
 
 
         return nav
@@ -607,3 +612,229 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 nav += [ new_menu_entry ]
 
         return nav
+
+
+
+    def get_routes(self):
+
+        return [{
+            'id': "root",
+            'path': "/",
+            'revalidate': False,
+            'hydrate': "loader",
+            'children': [
+                {
+                    'path': "settings",
+                    'children': [
+                        {
+                            'index': True,
+                            'component': "settings",
+                            'loader': 'django'
+                        },
+                        {
+                            'path': ":model",
+                            'action': "api",
+                            'children': [
+                                {
+                                    'index': True,
+                                    'component': "list",
+                                    'loader': "django"
+                                },
+                                {
+                                    'path': ":pk",
+                                    'component': "detail",
+                                    'action': "api",
+                                    'loader': "django",
+                                    'revalidate': False
+                                    
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    'path': ":module",
+                    'children': [
+                        {
+                            'path': "entity",
+                            'children': [
+                                {
+                                    'path': ":model",
+                                    'action': "api",
+                                    'children': [
+                                        {
+                                            'index': True,
+                                            'component': "list",
+                                            'loader': "django"
+                                        },
+                                        # {
+                                        #     'path': "add",
+                                        #     'component': "detail",
+                                        #     'loader': "django_metadata",
+                                        #     'revalidate': False
+                                            
+                                        # },
+                                        {
+                                            'path': ":pk",
+                                            'component': "detail",
+                                            'action': "api",
+                                            'loader': "django",
+                                            'revalidate': False
+                                            
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            'path': "git_repository",
+                            'action': "api",
+                            'children': [
+                                {
+                                    'index': True,
+                                    'component': "list",
+                                    'loader': "django"
+                                },
+                                # {
+                                #     'path': "add",
+                                #     'component': "detail",
+                                #     'loader': "django_metadata",
+                                #     'revalidate': False
+                                # },
+                                {
+                                    'path': ":pk",
+                                    'component': "detail",
+                                    'loader': "django",
+                                    'action': "api",
+                                    'revalidate': False
+                                }
+                            ]
+                        },
+                        {
+                            'id': "tickets",
+                            'path': "ticket",
+                            'children': [
+                                {
+                                    'path': ":model",
+                                    'action': "api",
+                                    'children': [
+                                        {
+                                            'index': True,
+                                            'component': "list",
+                                            'loader': "django"
+                                        },
+                                        # {
+                                        #     'path': "add",
+                                        #     'component': "ticket",
+                                        #     'loader': "django_metadata"
+                                        # },
+                                        {
+                                            'path': ":pk",
+                                            'component': "ticket",
+                                            'action': "api",
+                                            'loader': "django"
+                                        },
+                                    ]
+                                },
+                                {
+                                    'path': ":pk",
+                                    'children': [
+                                        {
+                                            'path': ":subModel",
+                                            'action': "api",
+                                            'children': [
+                                                {
+                                                    'path': ":subModelPk",
+                                                    'action': "api",
+                                                    'revalidate': False,
+                                                    'children': [
+                                                        {
+                                                            'path': ":subSubModel",
+                                                            'action': "api",
+                                                            'revalidate': False
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            'path': ":model",
+                            'action': "api",
+                            'children': [
+                                {
+                                    'index': True,
+                                    'component': "list",
+                                    'loader': "django"
+                                },
+                                # {
+                                #     'path': "add",
+                                #     'component': "detail",
+                                #     'loader': "django_metadata",
+                                #     'revalidate': False
+                                # },
+                                {
+                                    'path': ":pk",
+                                    'action': "api",
+                                    'children': [
+                                        {
+                                            'index': True,
+                                            'component': "detail",
+                                            'loader': "django",
+                                            'action': "api",
+                                        },
+                                        {
+                                            'path': "history",
+                                            'component': "history",
+                                            'loader': "django"
+                                        },
+                                        {
+                                            'path': "ticket",
+                                            'children': [
+                                                {
+                                                    'path': ":ticket_sub_model",
+                                                    'action': "api",
+                                                    'revalidate': False,
+                                                    'children': [
+                                                        {
+                                                            'path': ":ticket_sub_model_pk",
+                                                            'component': "ticket",
+                                                            'loader': "django",
+                                                            'action': "api",
+                                                            'revalidate': False
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            'path': ":sub_model",
+                                            'children': [
+                                                {
+                                                    'index': True,
+                                                    'component': "list",
+                                                    'loader': "django",
+                                                    'action': "api",
+                                                    'revalidate': False
+                                                },
+                                                {
+                                                    'path': ":sub_model_pk",
+                                                    'component': "detail",
+                                                    'loader': "django",
+                                                    'action': "api",
+                                                    'revalidate': False
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }]

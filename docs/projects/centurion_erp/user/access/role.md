@@ -28,3 +28,8 @@ Unlike filesystem based permssions, Centurion ERP permissions are not inclusive,
 - To `view` an item you must have its corresponding `view` permission
 
 The exclusitvity is that each of the permissions listed above, dont include an assumed permission. For instance if you have the `add` permission for an item, you will not be able to view it. That would require the `view` permission.
+
+
+## Updating Role Permissions
+
+Roles like all objects can be updated via the API. However role permissions additionally support supplying the permission(s) as a string. The format for the permission is `<app>.<permission>_<model>`. This has been added as a feature so it's easier to see what permission is being used as normally an API list would only contain numbers.

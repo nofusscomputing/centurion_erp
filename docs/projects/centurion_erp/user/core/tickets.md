@@ -102,6 +102,10 @@ Nearly all items within Centurion ERP can be linked to a ticket. To find out if 
 
 To link an object to a ticket use slash command `/link` with the objects [model tag](./markdown.md#model-reference--model-tag).
 
+!!! tip
+    To view all models linked to a ticket you must have permission `core.view_modelticket`. This permission only provides for viewing an object as linked to a ticket, not the actual object itself.
+    To view the object linked to a ticket, you will also require the permission to view the actual ticket model itself and for each model. i.e. `<app label>.view_<model name>ticket` -> `itam.view_deviceticket` to view an object that is a Device from the itam app.
+
 
 ## Ticket Status'
 

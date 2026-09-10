@@ -157,6 +157,7 @@ class MarkdownField(CharField):
                         number: {
                             'status': TicketBase.TicketStatus(item.status).label,
                             'title': str(item),
+                            'type': item._meta.verbose_name,
                             'url': str(item.get_url( relative = True )).replace('/api/v2', '')
                         }
                     })

@@ -37,14 +37,16 @@ class TicketModelManager(
                 model_name = model._meta.model_name
 
                 model_permissions.update({
-                    f'{model._meta.app_label}.view_{model_name}': ContentType.objects.get_for_model(model).id
+                    f'{model._meta.app_label}.view_{model_name}':
+                    ContentType.objects.get_for_model(model).id
                 })
 
 
             if len(model_permissions) == 0:
 
                 model_permissions.update({
-                    f'{self.model.model.field.model._meta.app_label}.view_{self.model.model.field.model._meta.model_name}': ContentType.objects.get_for_model(self.model.model.field.related_model).id
+                    f'{self.model._meta.app_label}.view_{self.model._meta.model_name}':
+                    ContentType.objects.get_for_model(self.model).id
                 })
 
 

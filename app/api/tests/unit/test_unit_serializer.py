@@ -138,3 +138,16 @@ class SerializerTestCases:
         """
 
         assert model_serializer['model']._declared_fields['_urls'].method_name == 'get_url_fields'
+
+
+
+    @pytest.mark.skip( reason = 'Test to be written' )
+    def test_role_serializer_accepts_permissions_as_str(self,
+        serializer_role, model
+    ):
+        """RoleSerializer Function Check
+
+        Ensure that role function `to_internal_value` accepts models
+        permissions as a list of str. format `<app>.<permission>_<model>`.
+        """
+        pass

@@ -18,7 +18,7 @@ class ViewsetTestCases(
 ):
 
 
-    def test_function_get_queryset_filtered_results_action_list(self, mocker,
+    def test_function_get_queryset_filtered_results_action_list_user_tenancies_only(self, mocker,
         viewset_mock_request, organization_one, organization_two, model
     ):
 

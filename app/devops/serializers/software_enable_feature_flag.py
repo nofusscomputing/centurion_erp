@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from drf_spectacular.utils import extend_schema_serializer
+
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
@@ -10,6 +12,7 @@ from itam.serializers.software import SoftwareBaseSerializer
 
 
 
+@extend_schema_serializer(component_name = 'SoftwareEnableFeatureFlagBaseSerializer')
 class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -40,6 +43,7 @@ class BaseSerializer(serializers.ModelSerializer):
         ]
 
 
+@extend_schema_serializer(component_name = 'SoftwareEnableFeatureFlagModelSerializer')
 class ModelSerializer(
     common.CommonModelSerializer,
     BaseSerializer
@@ -92,6 +96,7 @@ class ModelSerializer(
 
 
 
+@extend_schema_serializer(component_name = 'SoftwareEnableFeatureFlagViewSerializer')
 class ViewSerializer(ModelSerializer):
 
     organization = TenantBaseSerializer( read_only = True )

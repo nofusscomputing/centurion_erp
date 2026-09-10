@@ -1,43 +1,196 @@
 .ONESHELL:
 
-PATH_VENV := /tmp/centurion_erp
+.PHONY: build build-pip clean clean-docs clean-make clean-test clean-ui docs-lint prepare-python prepare-ui
+
+.SILENT:
+
+# ANSI Terminal Colours
+
+BLACK         := \033[30m
+BLACK_BRIGHT  := \033[90m
+
+BLUE          := \033[34m
+BLUE_BRIGHT   := \033[94m
+
+CYAN          := \033[36m
+CYAN_BRIGHT   := \033[96m
+
+GREEN         := \033[32m
+GREEN_BRIGHT  := \033[92m
+
+MAGENTA       := \033[35m
+MAGENTA_BRIGHT := \033[95m
+
+RED           := \033[31m
+RED_BRIGHT    := \033[91m
+
+RESET         := \033[0m
+
+WHITE         := \033[37m
+WHITE_BRIGHT  := \033[97m
+
+YELLOW        := \033[33m
+YELLOW_BRIGHT := \033[93m
+
+
+# ANSI Terminal Background colours.
+BG_BLACK          := \033[40m
+BG_BLACK_BRIGHT   := \033[100m
+
+BG_BLUE           := \033[44m
+BG_BLUE_BRIGHT    := \033[104m
+
+BG_CYAN           := \033[46m
+BG_CYAN_BRIGHT    := \033[106m
+
+BG_GREEN          := \033[42m
+BG_GREEN_BRIGHT   := \033[102m
+
+BG_MAGENTA        := \033[45m
+BG_MAGENTA_BRIGHT := \033[105m
+
+BG_RED            := \033[41m
+BG_RED_BRIGHT     := \033[101m
+
+
+# ANSI Terminal Text formatting
+BOLD       := \033[1m
+DIM        := \033[2m
+ITALIC     := \033[3m
+UNDERLINE  := \033[4m
+BLINK      := \033[5m
+REVERSE    := \033[7m
+HIDDEN     := \033[8m
+STRIKETHROUGH := \033[9m
+
+RESET      := \033[0m
+RESET_BOLD := \033[21m
+RESET_DIM  := \033[22m
+RESET_ITALIC := \033[23m
+RESET_UNDERLINE := \033[24m
+RESET_BLINK := \033[25m
+RESET_REVERSE := \033[27m
+RESET_HIDDEN := \033[28m
+RESET_STRIKETHROUGH := \033[29m
+
+
+PATH_VENV     := ${PWD}/.venv
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
 
+# See dockerfile arg `PYTHON_VERSION` for current version
+PYTHON_BIN    := python3.11
+
 START_PWD     := ${PWD}
 
-.PHONY: clean prepare docs ansible-lint lint test
-
-prepare-git-submodule:
-	git submodule update --init;
-	git submodule foreach git submodule update --init;
+WORKDIR       := ${PWD}/.tmp
 
 
-prepare-python: prepare-git-submodule
-	python3 -m venv ${PATH_VENV};
+
+build: prepare-python clean-build
+	echo "${BLUE}Building Centurion ERP PIP Package${RESET}";
 	${ACTIVATE_VENV};
-	pip install -r requirements_dev.txt;
 
-prepare-docs: prepare-git-submodule
-	npm install markdownlint-cli2;
-	npm install markdownlint-cli2-formatter-junit;
-	cp -f "website-template/.markdownlint.json" ".markdownlint.json";
-	cp -f "gitlab-ci/lint/.markdownlint-cli2.jsonc" ".markdownlint-cli2.jsonc";
+	python -m build --wheel;
 
 
-markdown-mkdocs-lint: prepare-docs
-	PATH=${PATH}:node_modules/.bin markdownlint-cli2 docs/*.md docs/**/*.md docs/**/**/*.md docs/**/**/**/*.md docs/**/**/**/**/**/*.md !docs/pull_request_template.md !CHANGELOG.md !gitlab-ci !website-template || true
+
+build-pip: prepare-python
+	echo "${BLUE}Compiling pip files in tools/${RESET}";
+	${ACTIVATE_VENV};
+
+	echo "${BLUE}    tools/requirements.in...${RESET}";
+	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv || echo "${RED}    tools/requirements.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_production.in...${RESET}";
+	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv || echo "${RED}    tools/requirements_production.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_dev.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv || echo "${RED}    tools/requirements_dev.in FAILED${RESET}";
+	
+	echo "${BLUE}    tools/requirements_docker.in...${RESET}";
+	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv || echo "${RED}    tools/requirements_docker.in  FAILED${RESET}";
+
+	echo "${BLUE}    build-pip complete${RESET}";
 
 
-docs-lint: markdown-mkdocs-lint
+
+check-docker-installed: dir-make-tmp
+	echo -n "${BLUE}Checking if docker is installed: ${RESET}";
+	if [ `which docker` ]; then
+
+		echo "${GREEN}Yes${RESET}";
+
+		touch ${WORKDIR}/DOCKER_IS_INSTALLED;
+
+	else
+
+		echo "${RED}No${RESET}";
+
+		rm -f ${WORKDIR}/DOCKER_IS_INSTALLED;
+
+	fi;
 
 
-docs: docs-lint
-	${ACTIVATE_VENV}
-	mkdocs build --clean
+
+check-git-installed: dir-make-tmp
+	echo -n "${BLUE}Checking if git is installed: ${RESET}";
+	if [ `which git` ]; then
+
+		echo "${GREEN}Yes${RESET}";
+
+		touch ${WORKDIR}/GIT_IS_INSTALLED;
+
+	else
+
+		echo "${RED}No${RESET}";
+
+		rm -f ${WORKDIR}/GIT_IS_INSTALLED;
+
+	fi;
 
 
-fixtures:
+
+dir-make-tmp:
+	echo "${BLUE}Creating temp working directory [${WORKDIR}]: ${RESET}";
+
+	mkdir -p ${WORKDIR} || echo "${RED}Failed to create temp working directory. ${RESET}";
+
+
+
+docs-lint: check-docker-installed
+	echo "${BLUE}Lint document files${RESET}";
+
+	if [ -f ${WORKDIR}/DOCKER_IS_INSTALLED ]; then
+
+		docker run -t --rm \
+		-e IS_BUILD=1 \
+		-ti \
+		--entrypoint "" \
+		--volume ${PWD}:/workdir \
+		--workdir /workdir \
+		nofusscomputing/mkdocs-ci:latest \
+		markdownlint-cli2 \
+			docs/*.md \
+			docs/**/*.md \
+			docs/**/**/*.md \
+			docs/**/**/**/*.md \
+			docs/**/**/**/**/**/*.md \
+			!CHANGELOG.md \
+			!docs/pull_request_template.md\
+			!docs-template \
+			!.venv \
+		|| echo "    ${RED}Check above for errors${RESET}";
+
+	else
+
+		echo "    ${YELLOW}No linting will occur as docker is not installed${RESET}";
+
+	fi;
+
+
+
+fixtures: prepare-python
 	${ACTIVATE_VENV}
 	mv app/db.sqlite3 app/db.sqlite3-current
 	if [ ! -f app/db.sqlite3-current ]; then echo "failed to save current db"; exit 1; fi;
@@ -66,23 +219,91 @@ fixtures:
 
 
 
-lint: markdown-mkdocs-lint
+pip: prepare-python
+	echo "${BLUE}Syncing Python packages from repository requirements._dev.txt to Virtual Environment...${RESET}";
+	${ACTIVATE_VENV};
+	pip-sync requirements_dev.txt -vv;
+	echo "${BLUE}    pip complete.${RESET}";
 
 
-pip-file:
-	pip-compile --upgrade tools/requirements.in -o requirements.txt -vv
-	pip-compile --upgrade requirements.txt tools/requirements_production.in -o requirements_production.txt -vv
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_dev.in -o requirements_dev.txt -vv
-	pip-compile --upgrade requirements.txt requirements_production.txt tools/requirements_docker.in -o requirements_docker.txt -vv
 
-pip:
-	pip-sync requirements_dev.txt -vv
+prepare-python:
+	echo "${BLUE}Checking for Python Virtual Environment...${RESET}";
+
+	if [ ! -f ${PATH_VENV}/bin/activate ]; then
+
+		echo "    ${BLUE}Setting up Python Virtual Environment...${RESET}";
+
+		${PYTHON_BIN} -m venv ${PATH_VENV} || echo "${RED}Failed to create Virtual Environment. ${RESET}";
+
+		echo "    ${BLUE}Activating Python Virtual Environment...${RESET}";
+
+		${ACTIVATE_VENV} || echo "${RED}Failed to activate Virtual Environment. ${RESET}";
+
+		echo "    ${BLUE}Installing Python dependencies in Virtual Environment...${RESET}";
+
+		pip install -r requirements_dev.txt || echo "${RED}Failed to install Python Dependencies in Virtual Environment. ${RESET}";
+
+	else
+
+		echo "    ${GREEN}Python Virtual Environment already setup. Nothing to do.${RESET}";
+
+	fi;
+
+		echo "    ${BLUE}prepare-python complete.${RESET}";
+
+
+
+prepare-ui: check-git-installed
+	echo "${BLUE}Preparing Centurion UI...${RESET}";
+
+	if [ -f ${WORKDIR}/GIT_IS_INSTALLED ]; then
+
+		echo -n "    ${BLUE}Centurion UI already cloned: ${RESET}";
+
+		if [ ! -d ${WORKDIR}/centurion-ui/.git ]; then
+
+			echo "${YELLOW}No${RESET}";
+
+			echo "    ${BLUE}Cloning...${RESET}";
+
+			git clone https://github.com/nofusscomputing/centurion_erp_ui.git ${WORKDIR}/centurion-ui \
+				|| echo "    ${RED}Check above for errors${RESET}";
+
+		else
+
+			echo "${GREEN}Yes${RESET}";
+
+		fi;
+
+		echo "    ${BLUE}prepare-ui complete.${RESET}";
+
+		echo "${MAGENTA}To activate the ui, do the following:${RESET}";
+
+		echo "    ${CYAN_BRIGHT}1. cd ${WORKDIR}/centurion-ui${RESET}";
+
+		echo "    ${CYAN_BRIGHT}2. run npm start${RESET}";
+
+		echo "    ${CYAN_BRIGHT}3. UI can be viewed at http://127.0.0.1:3000/${RESET}";
+
+	else
+
+		echo "    ${YELLOW}Unable to prepare the UI as git is not installed${RESET}";
+
+	fi;
+
+
 
 test:
 	pytest --cov-report xml:artifacts/coverage_unit_functional.xml --cov-report html:artifacts/coverage/unit_functional/ --junit-xml=artifacts/unit_functional.JUnit.xml app/**/tests/unit app/**/tests/functional
 
 
 
+#
+# Do not make this user friendly. This primarily exists for CI jobs.
+# It can be run locally, however ensure that the venv as been activated prior
+# to running this target
+#
 test-integration:
 	export exit_code=0;
 	cp pyproject.toml app/;
@@ -200,17 +421,41 @@ test-functional:
 	pytest --cov-report xml:${PWD}/artifacts/coverage_functional.xml --cov-report html:${PWD}/artifacts/coverage/functional/ --junit-xml=${PWD}/artifacts/functional.JUnit.xml app/**/tests/functional
 
 
+
 test-unit:
 	pytest --cov-report xml:${PWD}/artifacts/coverage_unit.xml --cov-report html:${PWD}/artifacts/coverage/unit/ --junit-xml=${PWD}/artifacts/unit.JUnit.xml app/**/tests/unit
 
 
 
-clean:
-	rm -rf ${PATH_VENV}
-	rm -rf artifacts
-	rm -rf pages
-	rm -rf build
-	rm -rf node_modules
-	rm -f package-lock.json
-	rm -f package.json
-	rm -rf .pytest_cache
+clean-build:
+	echo "${BLUE}Cleaning build${RESET}";
+	rm -rf *.egg-info/;
+	rm -rf dist/;
+
+clean-docs:
+	echo "${BLUE}Cleaning docs${RESET}";
+	rm -rf pages;
+	rm -rf build;
+
+
+
+clean-make:
+	echo "${BLUE}Cleaning make temp dir${RESET}";
+	rm -rf ${PWD}/.tmp;
+
+
+
+clean-test:
+	echo "${BLUE}Cleaning tests${RESET}";
+	rm -rf artifacts;
+	rm -rf .pytest_cache;
+
+
+
+clean-ui:
+	echo "${BLUE}Cleaning UI${RESET}";
+	rm -rf ${WORKDIR}/centurion-ui;
+
+
+clean: clean-docs clean-make clean-test clean-ui
+	echo "${BLUE}Full Clean complete${RESET}";

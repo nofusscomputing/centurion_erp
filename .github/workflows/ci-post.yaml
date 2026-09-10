@@ -1,0 +1,35 @@
+name: 'Post CI'
+
+#
+# This workflow is for PR from forks
+#
+on:
+  workflow_run:
+    workflows:
+      - CI
+    branches-ignore:
+      - master
+      - development
+      - feat-*
+    types:
+      - completed
+
+
+permissions:
+  contents: read    # python-report-test
+  actions: read     # python-report-test
+  checks: write     # python-report-test
+
+
+jobs:
+
+
+  python-post:
+    name: 'Python - Post'
+    if: >-
+      github.event.workflow_run.conclusion == 'success'
+        &&
+      github.event.workflow_run.event == 'pull_request'
+        &&
+      github.event.workflow_run.head_repository.full_name != github.event.workflow_run.repository.full_name
+    uses: nofusscomputing/action_python/.github/workflows/python-post.yaml@development

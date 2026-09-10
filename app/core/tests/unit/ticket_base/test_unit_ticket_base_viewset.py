@@ -58,6 +58,7 @@ class ViewsetTestCases(
             'filterset_fields': {
                 'value': [
                     'is_deleted',
+                    'milestone',
                     'organization',
                     'project',
                 ]

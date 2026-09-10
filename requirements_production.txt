@@ -8,7 +8,7 @@ amqp==5.3.1
     # via
     #   -r requirements.txt
     #   kombu
-asgiref==3.11.1
+asgiref==3.12.1
     # via
     #   -r requirements.txt
     #   django
@@ -26,19 +26,19 @@ celery==5.4.0
     # via
     #   -r requirements.txt
     #   django-celery-results
-certifi==2026.6.17
+certifi==2026.7.22
     # via
     #   -r requirements.txt
     #   requests
-cffi==2.0.0
+cffi==2.1.1
     # via
     #   -r requirements.txt
     #   cryptography
-charset-normalizer==3.4.7
+charset-normalizer==3.5.1
     # via
     #   -r requirements.txt
     #   requests
-click==8.4.1
+click==8.5.0
     # via
     #   -r requirements.txt
     #   celery
@@ -57,7 +57,7 @@ click-repl==0.3.0
     # via
     #   -r requirements.txt
     #   celery
-cryptography==49.0.0
+cryptography==50.0.1
     # via
     #   -r requirements.txt
     #   pyjwt
@@ -97,15 +97,15 @@ djangorestframework-jsonapi==7.1.0
     # via -r requirements.txt
 drf-spectacular[sidecar]==0.29.0
     # via -r requirements.txt
-drf-spectacular-sidecar==2026.6.1
+drf-spectacular-sidecar==2026.9.1
     # via
     #   -r requirements.txt
     #   drf-spectacular
-greenlet==3.5.2
+greenlet==3.5.5
     # via
     #   -r requirements.txt
     #   sqlalchemy
-idna==3.18
+idna==3.19
     # via
     #   -r requirements.txt
     #   requests
@@ -126,7 +126,7 @@ kombu==5.5.1
     # via
     #   -r requirements.txt
     #   celery
-linkify-it-py==2.1.0
+linkify-it-py==2.2.0
     # via
     #   -r requirements.txt
     #   markdown-it-py
@@ -142,8 +142,6 @@ mdurl==0.1.2
     # via
     #   -r requirements.txt
     #   markdown-it-py
-mysqlclient==2.2.4
-    # via -r tools/requirements_production.in
 oauthlib==3.3.1
     # via
     #   -r requirements.txt
@@ -153,7 +151,7 @@ prometheus-client==0.21.1
     # via
     #   -r requirements.txt
     #   django-prometheus
-prompt-toolkit==3.0.52
+prompt-toolkit==3.0.53
     # via
     #   -r requirements.txt
     #   click-repl
@@ -197,7 +195,7 @@ requests-oauthlib==2.0.0
     # via
     #   -r requirements.txt
     #   social-auth-core
-rpds-py==0.30.0
+rpds-py==2026.6.3
     # via
     #   -r requirements.txt
     #   jsonschema
@@ -214,11 +212,11 @@ social-auth-core==4.9.1
     #   social-auth-app-django
 sqlalchemy==2.0.31
     # via -r requirements.txt
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via
     #   -r requirements.txt
     #   django
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   -r requirements.txt
     #   referencing
@@ -228,10 +226,6 @@ tzdata==2025.1
     #   -r requirements.txt
     #   celery
     #   kombu
-uc-micro-py==2.0.0
-    # via
-    #   -r requirements.txt
-    #   linkify-it-py
 uritemplate==4.2.0
     # via
     #   -r requirements.txt
@@ -248,7 +242,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.8.1
+wcwidth==0.8.3
     # via
     #   -r requirements.txt
     #   prompt-toolkit

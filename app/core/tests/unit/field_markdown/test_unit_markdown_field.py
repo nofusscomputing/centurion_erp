@@ -189,6 +189,7 @@ class MarkdownFieldTestCases(
                 '999999':{
                     'status': mock_model.TicketStatus(mock_model.status).label,
                     'title': str(mock_model),
+                    'type': mock_model._meta.verbose_name,
                     'url': url
                 }
             }

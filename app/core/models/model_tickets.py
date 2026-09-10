@@ -79,8 +79,7 @@ class ModelTicket(
         "dataset": {
             "columns": [
                 [
-                    'ticket',
-                    'created'
+                    'display_name',
                 ]
             ]
         },
@@ -185,8 +184,8 @@ class ModelTicketMetaModel(
         self.organization = self.model.get_tenant()
 
         self.content_type = ContentType.objects.get(
-            app_label = self.model._meta.app_label,
-            model = self.model._meta.model_name
+            app_label = self._meta.app_label,
+            model = self._meta.model_name
         )
 
         super().clean_fields(exclude = exclude)

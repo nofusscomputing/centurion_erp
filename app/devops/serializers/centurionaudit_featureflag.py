@@ -14,7 +14,7 @@ from core.serializers.centurionaudit import (
 
 
 
-@extend_schema_serializer(component_name = 'FeatureFlagModelSerializer')
+@extend_schema_serializer(component_name = 'FeatureFlagAuditHistoryModelSerializer')
 class ModelSerializer(
     common.CommonModelSerializer,
     BaseSerializer
@@ -44,7 +44,7 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'FeatureFlagViewSerializer')
+@extend_schema_serializer(component_name = 'FeatureFlagAuditHistoryViewSerializer')
 class ViewSerializer(
     ModelSerializer,
     AuditHistoryViewSerializer,
