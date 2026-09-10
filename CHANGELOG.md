@@ -1,3 +1,54 @@
+## 1.33.0 (2026-09-10)
+
+### Features
+
+- Add sensible defaults for cookie settings.
+- **api**: Provide routes to frontend
+- **core**: Adjust ModelTicket DataSet columns  to only contain one with field `display_name`
+- **core**: Add field `display_name` to TicketDependency DataSet column
+- **core**: Add field `how_related_icon` to TicketDependency
+- Remove MariaDB/MySQL database support
+- **access**: Support updating role permissions in format `<app>.<permission>_<model>`
+- **project_management**: Add tickets to ProjectMilestone `_urls` and filtered to milestone
+- **project_management**: Add Layout to Ticket tab on project milestones
+- **project_management**: Add ability to filter tickets by milestone
+- Place model itim.RequestTicket behind feature-flag 2026-00012
+- remove feature flag 2025-00006
+
+### Fixes
+
+- **core**: permissions for ModelTickets is based off if the sub-model, not the field model.
+- correct log gate in settings
+- **core**: default to filter by `model_id` for ModelTicket unless query is for tickets a model has
+- **access**: Give the entity Base serializers unique schema component names
+- **core**: When ModelTicket querySet is filtered when displaying for tickets, use `ticket_id` kwarg
+- **core**: Update ticket markdown object to include type
+- **docker**: Correct feature flag fetch to only gather once every 4th hour
+- Correct url prefixes to use full-words and not as  "chars" in regex or names
+- **project_management**: to fetch the queryset the "getter" must be used
+- **itam**: Use display field for model ITAMAssetBase when in dataset view
+
+### Refactoring
+
+- **core**: use variable `parent_model_pk_kwarg` for determining the parent kwarg pk when filtering ModelTicket for models view
+- **project_management**: Project tickets endpoint should be for ALL ticket models
+- **project_management**: when fetching project tickets, add new url to metadata
+
+### Tests
+
+- **api**: Add functional tests for the OrganizationField serializer field
+- **api**: Add unit tests for the OrganizationField serializer field
+- **core**: Add ViewSet Functional test case to ensure queryset is filtered to ticket for TicketDependency
+- **core**: Re-add ViewSet Functional test cases that were skipped for TicketDependency
+- **core**: Re-add ViewSet Functional test case for qs filter by tenancy for TicketDependency
+- **core**: Update ViewSet Functional test case name for clarity.
+- **core**: Functional test case for querying ModelTicket sub-model for all tickets related to a model
+- **core**: Functional test case for querying base model for all models related to a ticket
+- **core**: Unit Test case for model ModelTicket page_layout obj
+- **project_management**: Skipped Model Functional test case to confirm field estimation_project calculates correctly.
+- **project_management**: Model Functional test case to confirm field duration_project calculates correctly
+- **api**: When creating model api test suites, filter by issubclass not ends in ticket
+
 ## 1.32.0 (2026-06-29)
 
 ### Features
