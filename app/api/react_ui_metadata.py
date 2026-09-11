@@ -813,6 +813,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                         },
                                         {
                                             'path': ":sub_model",
+                                            'action': "api",
                                             'children': [
                                                 {
                                                     'index': True,
