@@ -1,3 +1,9 @@
+## 1.33.1 (2026-09-11)
+
+### Fixes
+
+- Add route action to `sub_model`
+
 ## 1.33.0 (2026-09-10)
 
 ### Features
