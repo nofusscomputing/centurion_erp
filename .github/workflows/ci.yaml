@@ -162,6 +162,37 @@ jobs:
       DOCKER_PUBLISH_PASSWORD: ${{ secrets.NFC_DOCKERHUB_TOKEN }}
 
 
+
+  kustomize:
+    name: Kustomize Manifest Update
+    runs-on: ubuntu-latest
+    if: >-
+      (
+        github.ref_name == 'master'
+        || github.ref_name == 'development'
+        || startsWith(github.ref_name, 'feat-')
+      )
+    needs:
+      - docker
+      - python
+    environment:
+      name: Kustomize Manifest Update
+      url: https://github.com/nofusscomputing/kubernetes
+    steps:
+
+
+
+      - name: Trigger Update Centurion UI Manifests
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_BOT_PR_COMMIT }}
+        run: |
+          gh workflow run manifest_update.yaml \
+            --repo nofusscomputing/kubernetes \
+            --ref development \
+            -f KUSTOMIZE_APP_DIR=centurion_erp;
+
+
+
   integration-test:
     name: 'Integration Test'
     if: >-

@@ -758,58 +758,66 @@ class CommonViewSet(
 
                     if issubclass(sub_model, self.base_model):
 
-                        # if not self.request.user.has_perm(
-                        #     permission = f'{sub_model._meta.app_label}.add_{sub_model._meta.model_name}',
-                        #     tenancy_permission = False
-                        # ):
-                        #     continue
+                        try:
 
-                        kwargs = self.kwargs.copy()
+                            # if not self.request.user.has_perm(
+                            #     permission = f'{sub_model._meta.app_label}.add_{sub_model._meta.model_name}',
+                            #     tenancy_permission = False
+                            # ):
+                            #     continue
 
-                        if 'pk' in kwargs:
-                            del kwargs['pk']
+                            kwargs = self.kwargs.copy()
+
+                            if 'pk' in kwargs:
+                                del kwargs['pk']
 
 
-                        basename = self.basename
+                            basename = self.basename
 
-                        if sub_model._is_submodel:
+                            if sub_model._is_submodel:
 
-                            if(
-                                self.base_model._meta.model_name in [
-                                    'ticketbase'
-                                ]
-                                and sub_model._is_submodel
-                                and 'project_id' not in kwargs
-                            ):
+                                if(
+                                    self.base_model._meta.model_name in [
+                                        'ticketbase'
+                                    ]
+                                    and sub_model._is_submodel
+                                    and 'project_id' not in kwargs
+                                ):
+                                    kwargs.update({
+                                        'app_label': sub_model._meta.app_label
+                                    })
+
+
                                 kwargs.update({
-                                    'app_label': sub_model._meta.app_label
+                                    self.model_kwarg: getattr(sub_model._meta, self.model_kwarg),
                                 })
 
 
-                            kwargs.update({
-                                self.model_kwarg: getattr(sub_model._meta, self.model_kwarg),
-                            })
+                                if '_sub' not in basename:
+
+                                    basename = f'{basename}_sub'
 
 
-                            if '_sub' not in basename:
+                            url = reverse(
+                                viewname = 'v2:' + app_namespace + basename + '-list',
+                                request = None,
+                                kwargs = kwargs
+                            )
 
-                                basename = f'{basename}_sub'
+                            if url != add_url['self']:
 
+                                sub_model_urls.update({
+                                    getattr(sub_model._meta, 'model_name'): {
+                                        "display_name": getattr(sub_model._meta, 'verbose_name'),
+                                        "url": url
+                                    }
+                                })
 
-                        url = reverse(
-                            viewname = 'v2:' + app_namespace + basename + '-list',
-                            request = None,
-                            kwargs = kwargs
-                        )
+                        except django.urls.exceptions.NoReverseMatch as exc:
 
-                        if url != add_url['self']:
-
-                            sub_model_urls.update({
-                                getattr(sub_model._meta, 'model_name'): {
-                                    "display_name": getattr(sub_model._meta, 'verbose_name'),
-                                    "url": url
-                                }
-                            })
+                            self.get_log().info(
+                                msg = f'Could not get url for model {sub_model}, reason = [{exc}]'
+                            )
 
 
                 add_url.update({
