@@ -263,7 +263,7 @@ jobs:
       id-token: write
     needs:
       - python-build_tag
-    uses: nofusscomputing/action_python/.github/workflows/python-package.yaml@development
+    uses: nofusscomputing/action_python/.github/workflows/python-publish.yaml@development
     with:
       PYTHON_PROJECT_NAME: centurion-erp
 
