@@ -1,3 +1,9 @@
+## 1.33.2 (2026-09-13)
+
+### Fixes
+
+- **api**: When building sub-model urls as part of meta, safely capture no reverse url as model behind feature flag.
+
 ## 1.33.1 (2026-09-11)
 
 ### Fixes
