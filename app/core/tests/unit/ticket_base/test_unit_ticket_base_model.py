@@ -430,6 +430,26 @@ class TicketBaseModelTestCases(
         assert model().ticket_duration is not None
 
 
+
+    def test_function_ticket_duration_includes_threads(self, model, mocker):
+        """Function test
+
+        Ensure that when function `ticket_duration` is called that it includes
+        threads.
+        """
+
+        my_model = model()
+
+        objects_call = mocker.patch.object(my_model, 'get_comments')
+
+        my_model.ticket_duration
+
+        objects_call.assert_called_with(
+            include_threads = True
+        )
+
+
+
     def test_function_ticket_estimation_type(self, model):
         """Function test
 
@@ -446,6 +466,25 @@ class TicketBaseModelTestCases(
         """
 
         assert model().ticket_estimation is not None
+
+
+
+    def test_function_ticket_estimation_includes_threads(self, model, mocker):
+        """Function test
+
+        Ensure that when function `ticket_duration` is called it includes
+        threads.
+        """
+
+        my_model = model()
+
+        objects_call = mocker.patch.object(my_model, 'get_comments')
+
+        my_model.ticket_estimation
+
+        objects_call.assert_called_with(
+            include_threads = True
+        )
 
 
     def test_function_get_milestone_choices(self, mocker, model,
@@ -789,7 +828,53 @@ class TicketBaseModelTestCases(
         assert type(model().get_comments()) is QuerySet
 
 
-    def test_function_called_clean_ticketbase(self, model, mocker, model_kwargs):
+
+    def test_function_param_get_comments_no_threads(self, model, model_ticketcommentbase, mocker):
+        """Function test, call params
+
+        Ensure that when function `get_comments` is called with default params
+        that threads are not included
+        """
+
+        my_model = model()
+
+        mocker.patch.object(my_model, 'id', 987621)
+
+        objects_call = mocker.patch.object(model_ticketcommentbase, 'objects')
+
+        my_model.get_comments()
+
+        print(objects_call.filter)
+
+        objects_call.filter.assert_called_with(
+            ticket = 987621,
+            parent = None,
+        )
+
+
+
+    def test_function_param_get_comments_threads(self, model, model_ticketcommentbase, mocker):
+        """Function test, call params
+
+        Ensure that when function `get_comments` is called with default params
+        that threads are `included
+        """
+
+        my_model = model()
+
+        mocker.patch.object(my_model, 'id', 91187621)
+
+        objects_call = mocker.patch.object(model_ticketcommentbase, 'objects')
+
+        my_model.get_comments( include_threads = True )
+
+        objects_call.filter.assert_called_with(
+            ticket = 91187621
+        )
+
+
+
+    def test_function_param_called_clean_ticketbase(self, model, mocker, model_kwargs):
         """Function Check
 
         Ensure function `TicketBase.clean` is called
