@@ -434,7 +434,8 @@ class TicketBaseModelTestCases(
     def test_function_ticket_duration_includes_threads(self, model, mocker):
         """Function test
 
-        Ensure that function `ticket_duration` returns a value that is not None
+        Ensure that when function `ticket_duration` is called that it includes
+        threads.
         """
 
         my_model = model()
@@ -471,7 +472,8 @@ class TicketBaseModelTestCases(
     def test_function_ticket_estimation_includes_threads(self, model, mocker):
         """Function test
 
-        Ensure that function `ticket_duration` returns a value that is not None
+        Ensure that when function `ticket_duration` is called it includes
+        threads.
         """
 
         my_model = model()
@@ -855,7 +857,7 @@ class TicketBaseModelTestCases(
         """Function test, call params
 
         Ensure that when function `get_comments` is called with default params
-        that threads are not included
+        that threads are `included
         """
 
         my_model = model()

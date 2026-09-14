@@ -36,5 +36,6 @@
     "licenser.customSPDXId": "AGPL-3.0-only",
     "licenser.disableAutoHeaderInsertion": true,
     "git.repositoryScanMaxDepth": 2,
-    "python.REPL.enableREPLSmartSend": false
+    "python.REPL.enableREPLSmartSend": false,
+    "python.experiments.enabled": false
 }
