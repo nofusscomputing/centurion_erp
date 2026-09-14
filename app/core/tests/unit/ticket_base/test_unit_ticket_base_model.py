@@ -430,6 +430,25 @@ class TicketBaseModelTestCases(
         assert model().ticket_duration is not None
 
 
+
+    def test_function_ticket_duration_includes_threads(self, model, mocker):
+        """Function test
+
+        Ensure that function `ticket_duration` returns a value that is not None
+        """
+
+        my_model = model()
+
+        objects_call = mocker.patch.object(my_model, 'get_comments')
+
+        my_model.ticket_duration
+
+        objects_call.assert_called_with(
+            include_threads = True
+        )
+
+
+
     def test_function_ticket_estimation_type(self, model):
         """Function test
 
