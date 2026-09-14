@@ -1,3 +1,18 @@
+## 1.33.3 (2026-09-14)
+
+### Fixes
+
+- **core**: When fecthing comments to calculate ticket estimation, ensure threads are also gathered.
+- **core**: When fecthing comments to calculate ticket duration, ensure threads are also gathered.
+- **api**: Add missing route for project task thread
+- **api**: Remove `revalidate = false` from project task route
+
+### Tests
+
+- **core**: Unit test case for ticketbase to ensure when calculating duration that threads are included
+- **core**: Unit test case for ticketbase to ensure when calculating estimation that threads are included
+- **core**: Unit test cases for ticketbase get comments confirming with and without threads
+
 ## 1.33.2 (2026-09-13)
 
 ### Fixes
