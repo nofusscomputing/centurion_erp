@@ -254,7 +254,7 @@ class TicketBase(
     @property
     def ticket_estimation(self) -> int:
 
-        comments = self.get_comments()
+        comments = self.get_comments( include_threads = True )
 
         estimation = comments.aggregate(models.Sum('estimation'))['estimation__sum']
 
