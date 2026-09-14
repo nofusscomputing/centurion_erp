@@ -739,7 +739,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                 },
                                 {
                                     'path': ":pk",
+                                    'action': "api",
                                     'children': [
+                                        {
+                                            'index': True,
+                                            'loader': "django"
+                                        },
                                         {
                                             'path': ":subModel",
                                             'action': "api",
@@ -747,12 +752,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                                 {
                                                     'path': ":subModelPk",
                                                     'action': "api",
-                                                    'revalidate': False,
                                                     'children': [
                                                         {
                                                             'path': ":subSubModel",
                                                             'action': "api",
-                                                            'revalidate': False
+                                                            'children': [
+                                                                    { # /core/ticket/1/comment/3/threads/6"
+                                                                        'path': ":subSubModelPk",
+                                                                        'action': "api",
+                                                                        'loader': "django"
+                                                                    },
+                                                            ]
                                                         }
                                                     ]
                                                 }
