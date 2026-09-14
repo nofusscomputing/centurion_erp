@@ -798,14 +798,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                                 {
                                                     'path': ":ticket_sub_model",
                                                     'action': "api",
-                                                    'revalidate': False,
                                                     'children': [
                                                         {
                                                             'path': ":ticket_sub_model_pk",
                                                             'component': "ticket",
                                                             'loader': "django",
-                                                            'action': "api",
-                                                            'revalidate': False
+                                                            'action': "api"
                                                         }
                                                     ]
                                                 }
