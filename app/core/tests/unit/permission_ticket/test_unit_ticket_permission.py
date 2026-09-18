@@ -354,6 +354,84 @@ class TicketPermissionTestCases(
 
 
 
+    def test_function_has_permission_ticket_comment_calls_ticket_model(self, mocker, viewset,
+        model_ticketcommentbase, model_ticketbase
+    ):
+        """Test Permissions function
+        
+        Ensure that if the viewset model is a ticket comment, that the model to
+        obtain permissions from is fetched from model using ticket_id kwarg.
+        """
+
+        view = viewset(
+            kwargs = {
+                'ticket_id': 1254
+            },
+            method = 'GET',
+            model = model_ticketcommentbase,
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = False
+            ),
+        )
+
+        mocker.patch('core.permissions.ticket.TicketPermission.get_tenancy', return_value = 'Tenancy')
+
+        mocker.patch('access.permissions.tenancy.TenancyPermissions.has_permission', return_value = True)
+
+        mocker.patch.object(view.request.user, 'has_perm', return_value = True)
+
+        ticket_model = mocker.patch('core.models.ticket_base.TicketBase.objects', return_value = [ 1234 ])
+
+        view.permission_classes[0]().has_permission(
+            request = view.request,
+            view = view
+        )
+
+        ticket_model.get.assert_called_with(
+            id = view.kwargs['ticket_id']
+        )
+
+
+
+    def test_function_has_permission_ticket_no_calls_ticket_model(self, mocker, viewset,
+        model_ticketcommentbase, model_ticketbase
+    ):
+        """Test Permissions function
+        
+        Ensure that if the viewset model is a ticket, that the model to
+        obtain permissions from is not re-fetched.
+        """
+
+        view = viewset(
+            kwargs = {
+                'pk': 1254
+            },
+            method = 'GET',
+            model = model_ticketbase,
+            user = MockUser(
+                is_anonymous = False,
+                is_superuser = False
+            ),
+        )
+
+        mocker.patch('core.permissions.ticket.TicketPermission.get_tenancy', return_value = 'Tenancy')
+
+        mocker.patch('access.permissions.tenancy.TenancyPermissions.has_permission', return_value = True)
+
+        mocker.patch.object(view.request.user, 'has_perm', return_value = True)
+
+        ticket_model = mocker.patch('core.models.ticket_base.TicketBase.objects', return_value = [ 1234 ])
+
+        view.permission_classes[0]().has_permission(
+            request = view.request,
+            view = view
+        )
+
+        ticket_model.get.has_no_calls()
+
+
+
 class TicketPermissionInheritedCases(
     TicketPermissionTestCases
 ):

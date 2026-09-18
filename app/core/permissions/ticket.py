@@ -1,5 +1,7 @@
 from access.permissions.tenancy import TenancyPermissions
 
+from core.models.ticket_base import TicketBase
+
 
 
 class TicketPermission(
@@ -24,17 +26,27 @@ class TicketPermission(
 
         tenancy = self.get_tenancy(view = view)
 
+        model = view.model
+
+        if(
+            'ticket_id' in view.kwargs
+            and not isinstance(model, TicketBase)
+        ):
+            model = TicketBase.objects.get(
+                id = view.kwargs['ticket_id']
+            ).get_related_model()
+
         if has_permission:
 
             if tenancy:
 
                 view._has_import = request.user.has_perm(
-                    permission = f'{view.model._meta.app_label}.import_{view.model._meta.model_name}',
+                    permission = f'{model._meta.app_label}.import_{model._meta.model_name}',
                     tenancy = self.get_tenancy(view = view)
                 )
 
                 view._has_triage = request.user.has_perm(
-                    permission = f'{view.model._meta.app_label}.triage_{view.model._meta.model_name}',
+                    permission = f'{model._meta.app_label}.triage_{model._meta.model_name}',
                     tenancy = self.get_tenancy(view = view)
                 )
 
@@ -44,12 +56,12 @@ class TicketPermission(
             ]:
 
                 view._has_import = request.user.has_perm(
-                    permission = f'{view.model._meta.app_label}.import_{view.model._meta.model_name}',
+                    permission = f'{model._meta.app_label}.import_{model._meta.model_name}',
                     tenancy_permission = False
                 )
 
                 view._has_triage = request.user.has_perm(
-                    permission = f'{view.model._meta.app_label}.triage_{view.model._meta.model_name}',
+                    permission = f'{model._meta.app_label}.triage_{model._meta.model_name}',
                     tenancy_permission = False
                 )
 
