@@ -1,3 +1,13 @@
+## 1.33.4 (2026-09-18)
+
+### Fixes
+
+- **core**: When checking ticket comment permissions, use ticket model to obtain triage and import permissions
+
+### Tests
+
+- **core**: Unit Test Cases to ensure that ticket permissions updates model to ticket when viewset request is for ticket comments.
+
 ## 1.33.3 (2026-09-14)
 
 ### Fixes
