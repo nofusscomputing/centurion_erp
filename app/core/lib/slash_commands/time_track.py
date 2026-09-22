@@ -22,7 +22,7 @@ For this command to process the following conditions must be met:
 """
 
 
-    time_track: str = r'\/(?P<command>[spend|spent]+) (?P<time>(?P<hours>\d+h)?[ ]?(?P<minutes>[\d]{1,2}m)?[ ]?(?P<seconds>\d+s)?)[\s|\r\n|\n]?'
+    time_track: str = r'\/(?P<command>[spend|spent]+)\s+(?P<time>(?P<hours>\d+h)?[\s+]?(?P<minutes>[\d]{1,2}m)?[\s+]?(?P<seconds>\d+s)?)[\s|\r\n|\n]?'
 
 
     def command_time_track(self, match) -> str:
