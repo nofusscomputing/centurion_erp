@@ -1226,6 +1226,46 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
+    def test_slash_command_ticket_comment_single_line_command_own_line_lf_command_removed_from_comment_dbl_space(self,
+        ticket_comment,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment.
+
+        This test case specifically tests a command with double spaces as the
+        separator, i.e. `/<command>\s\s<object>`
+        """
+
+        comment_text = self.single_line_command_own_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket_comment.body = str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + '  ' + command_obj
+            )
+        )
+
+
+        ticket_comment.save()
+
+
+        assert (
+            param_slash_command not in ticket_comment.body
+            and command_obj not in ticket_comment.body
+        )
+
+
+
     def test_slash_command_ticket_comment_single_line_command_own_line_crlf_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
