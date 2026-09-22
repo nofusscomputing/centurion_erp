@@ -28,7 +28,7 @@ For this command to process the following conditions must be met:
 """
 
 
-    link_model: str = r'\/(?P<full>(?P<command>[link]+)(?P<models>(\s\$(?P<type>[a-z_]+)-(?P<id>\d+)))+)[\s]?'
+    link_model: str = r'\/(?P<full>(?P<command>[link]+)(?P<models>(\s+\$(?P<type>[a-z_]+)-(?P<id>\d+)))+)[\s]?'
 
     single_model: str = r'\$(?P<type>[a-z_]+)-(?P<id>\d+)'
 
