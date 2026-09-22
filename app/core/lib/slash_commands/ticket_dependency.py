@@ -30,7 +30,7 @@ For this command to process the following conditions must be met:
 """
 
 
-    ticket_dependency: str = r'\/(?P<full>(?P<command>[relate|blocks|blocked_by]+)(\s\#(?P<ticket>\d+))+)\s?'
+    ticket_dependency: str = r'\/(?P<full>(?P<command>[relate|blocks|blocked_by]+)(\s+\#(?P<ticket>\d+))+)\s?'
 
     ticket_dependency_single_item: str = r'\#(?P<ticket>\d+)'
 
