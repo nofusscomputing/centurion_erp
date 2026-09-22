@@ -1,3 +1,16 @@
+## 1.33.5 (2026-09-22)
+
+### Fixes
+
+- **core**: Add support for double space a separator for time tracking slash command.
+- **core**: Add support for double space a separator for ticket dependency slash command.
+- **core**: Add support for double space a separator for link model slash command.
+
+### Tests
+
+- **core**: Functional test case to confirm double space slash commands in ticket comments still function
+- **core**: Functional test case to confirm double space slash commands in ticket description still function
+
 ## 1.33.4 (2026-09-18)
 
 ### Fixes
