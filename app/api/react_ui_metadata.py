@@ -324,11 +324,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITIM",
                 "name": "itim",
                 "pages": {
-                    'core.view_ticket_change': {
-                        "display_name": "Changes",
-                        "name": "ticket_change",
-                        "link": "/itim/ticket/change"
-                    },
                     'view_cluster': {
                         "display_name": "Clusters",
                         "name": "cluster",
