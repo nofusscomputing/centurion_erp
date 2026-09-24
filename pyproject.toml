@@ -191,8 +191,6 @@ omit = [
     # Old Ticketing Model
     #
     "app/core/models/ticket/*",
-    "app/core/serializers/ticket_comment_depreciated.py",
-    "app/core/viewsets/ticket_comment_depreciated.py",
     #
     # Not required as file is for debugging
     #

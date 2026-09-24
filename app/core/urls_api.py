@@ -6,7 +6,6 @@ from core.viewsets import (
     audit_history,
     ticket,
     ticket_comment,
-    ticket_comment_depreciated,
     ticket_dependency,
     ticket_model_link,
 
@@ -73,10 +72,6 @@ router.register(
         ')+)/(?P<parent_id>[0-9]+)/threads'),
     viewset = ticket_comment.ViewSet,
     basename = '_api_ticket_comment_base_thread_sub'
-)
-router.register(
-    prefix = '/ticket/(?P<ticket_id>[0-9]+)/comments', viewset = ticket_comment_depreciated.ViewSet,
-    basename = '_api_v2_ticket_comment'
 )
 router.register(
     prefix=f'/ticket/(?P<model_name>({ticket_type_names})+)/(?P<model_id>[0-9]+)/models', viewset = ticket_model_link.ViewSet,
