@@ -329,11 +329,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "cluster",
                         "link": "/itim/cluster"
                     },
-                    'core.view_ticket_problem': {
-                        "display_name": "Problems",
-                        "name": "ticket_problem",
-                        "link": "/itim/ticket/problem"
-                    },
                     'view_service': {
                         "display_name": "Services",
                         "name": "service",
@@ -492,7 +487,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 nav['itim']['pages'].update({
 
                     'itim.view_problemticket': {
-                        "display_name": "Problems New",
+                        "display_name": "Problem",
                         "name": "problem_new",
                         "icon": "ticket_problem",
                         "link": "/itim/ticket/problemticket"
