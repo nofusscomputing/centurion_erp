@@ -62,22 +62,22 @@ class NavigationMenu(
                     'content_model': 'manufacturer',
                     'permission_model': 'manufacturer'
                 },
-                {
-                    'content_model': 'ticket',
-                    'permission_model': 'ticket_change'
-                },
-                {
-                    'content_model': 'ticket',
-                    'permission_model': 'ticket_incident'
-                },
-                {
-                    'content_model': 'ticket',
-                    'permission_model': 'ticket_problem'
-                },
-                {
-                    'content_model': 'ticket',
-                    'permission_model': 'ticket_request'
-                },
+                # {
+                #     'content_model': 'ticket',
+                #     'permission_model': 'ticket_change'
+                # },
+                # {
+                #     'content_model': 'ticket',
+                #     'permission_model': 'ticket_incident'
+                # },
+                # {
+                #     'content_model': 'ticket',
+                #     'permission_model': 'ticket_problem'
+                # },
+                # {
+                #     'content_model': 'ticket',
+                #     'permission_model': 'ticket_request'
+                # },
                 {
                     'content_model': 'ticketcategory',
                     'permission_model': 'ticketcategory'
@@ -361,58 +361,58 @@ class NavigationMenu(
 
 
 
-    def test_navigation_menu_visible_assistance_request_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_assistance_request_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that if the user has the permission, the navigation menu and
-        page is available for the user
-        """
+    #     Ensure that if the user has the permission, the navigation menu and
+    #     page is available for the user
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_request)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_request)
 
-        menu_name = 'assistance'
+    #     menu_name = 'assistance'
 
-        page_name = 'request'
+    #     page_name = 'request'
 
-        menu_page_exists: bool = False
-
-
-        for menu in nav_menu:
-
-            for page in menu['pages']:
-
-                if(
-                    menu['name'] == menu_name
-                    and page['name'] == page_name
-                ):
-
-                    menu_page_exists = True
+    #     menu_page_exists: bool = False
 
 
-        assert menu_page_exists
+    #     for menu in nav_menu:
+
+    #         for page in menu['pages']:
+
+    #             if(
+    #                 menu['name'] == menu_name
+    #                 and page['name'] == page_name
+    #             ):
+
+    #                 menu_page_exists = True
+
+
+    #     assert menu_page_exists
 
 
 
-    def test_navigation_menu_visible_assistance_request_no_additional_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_assistance_request_no_additional_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that only the navigation menu and entry is the only one displayed
-        for the user who has the desired permission
-        """
+    #     Ensure that only the navigation menu and entry is the only one displayed
+    #     for the user who has the desired permission
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_request)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_request)
 
-        pages_found: int = 0
-
-
-        for menu in nav_menu:
-
-            for page in menu['pages']:
-
-                pages_found += 1
+    #     pages_found: int = 0
 
 
-        assert pages_found == 1
+    #     for menu in nav_menu:
+
+    #         for page in menu['pages']:
+
+    #             pages_found += 1
+
+
+    #     assert pages_found == 1
 
 
 
@@ -691,168 +691,168 @@ class NavigationMenu(
 
 
 
-    def test_navigation_menu_visible_itim_ticket_change_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_itim_ticket_change_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that if the user has the permission, the navigation menu and
-        page is available for the user
-        """
+    #     Ensure that if the user has the permission, the navigation menu and
+    #     page is available for the user
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_change)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_change)
 
-        menu_name = 'itim'
+    #     menu_name = 'itim'
 
-        page_name = 'ticket_change'
+    #     page_name = 'ticket_change'
 
-        menu_page_exists: bool = False
+    #     menu_page_exists: bool = False
 
 
-        for menu in nav_menu:
+    #     for menu in nav_menu:
 
-            for page in menu['pages']:
+    #         for page in menu['pages']:
 
-                if(
-                    menu['name'] == menu_name
-                    and page['name'] == page_name
-                ):
+    #             if(
+    #                 menu['name'] == menu_name
+    #                 and page['name'] == page_name
+    #             ):
 
-                    menu_page_exists = True
+    #                 menu_page_exists = True
 
 
-        assert menu_page_exists
+    #     assert menu_page_exists
 
 
 
-    def test_navigation_menu_visible_itim_ticket_change_no_additional_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_itim_ticket_change_no_additional_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that only the navigation menu and entry is the only one displayed
-        for the user who has the desired permission
-        """
+    #     Ensure that only the navigation menu and entry is the only one displayed
+    #     for the user who has the desired permission
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_change)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_change)
 
-        pages_found: int = 0
+    #     pages_found: int = 0
 
 
-        for menu in nav_menu:
+    #     for menu in nav_menu:
 
-            for page in menu['pages']:
+    #         for page in menu['pages']:
 
-                pages_found += 1
+    #             pages_found += 1
 
 
-        assert pages_found == 1
+    #     assert pages_found == 1
 
 
 
-    def test_navigation_menu_visible_itim_ticket_incident_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_itim_ticket_incident_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that if the user has the permission, the navigation menu and
-        page is available for the user
-        """
+    #     Ensure that if the user has the permission, the navigation menu and
+    #     page is available for the user
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_incident)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_incident)
 
-        menu_name = 'itim'
+    #     menu_name = 'itim'
 
-        page_name = 'ticket_incident'
+    #     page_name = 'ticket_incident'
 
-        menu_page_exists: bool = False
+    #     menu_page_exists: bool = False
 
 
-        for menu in nav_menu:
+    #     for menu in nav_menu:
 
-            for page in menu['pages']:
+    #         for page in menu['pages']:
 
-                if(
-                    menu['name'] == menu_name
-                    and page['name'] == page_name
-                ):
+    #             if(
+    #                 menu['name'] == menu_name
+    #                 and page['name'] == page_name
+    #             ):
 
-                    menu_page_exists = True
+    #                 menu_page_exists = True
 
 
-        assert menu_page_exists
+    #     assert menu_page_exists
 
 
 
-    def test_navigation_menu_visible_itim_ticket_incident_no_additional_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_itim_ticket_incident_no_additional_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that only the navigation menu and entry is the only one displayed
-        for the user who has the desired permission
-        """
+    #     Ensure that only the navigation menu and entry is the only one displayed
+    #     for the user who has the desired permission
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_incident)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_incident)
 
-        pages_found: int = 0
+    #     pages_found: int = 0
 
 
-        for menu in nav_menu:
+    #     for menu in nav_menu:
 
-            for page in menu['pages']:
+    #         for page in menu['pages']:
 
-                pages_found += 1
+    #             pages_found += 1
 
 
-        assert pages_found == 1
+    #     assert pages_found == 1
 
 
 
-    def test_navigation_menu_visible_itim_ticket_problem_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_itim_ticket_problem_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that if the user has the permission, the navigation menu and
-        page is available for the user
-        """
+    #     Ensure that if the user has the permission, the navigation menu and
+    #     page is available for the user
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_problem)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_problem)
 
-        menu_name = 'itim'
+    #     menu_name = 'itim'
 
-        page_name = 'ticket_problem'
+    #     page_name = 'ticket_problem'
 
-        menu_page_exists: bool = False
+    #     menu_page_exists: bool = False
 
 
-        for menu in nav_menu:
+    #     for menu in nav_menu:
 
-            for page in menu['pages']:
+    #         for page in menu['pages']:
 
-                if(
-                    menu['name'] == menu_name
-                    and page['name'] == page_name
-                ):
+    #             if(
+    #                 menu['name'] == menu_name
+    #                 and page['name'] == page_name
+    #             ):
 
-                    menu_page_exists = True
+    #                 menu_page_exists = True
 
 
-        assert menu_page_exists
+    #     assert menu_page_exists
 
 
 
-    def test_navigation_menu_visible_itim_ticket_problem_no_additional_exist(self):
-        """Navigation Menu Check
+    # def test_navigation_menu_visible_itim_ticket_problem_no_additional_exist(self):
+    #     """Navigation Menu Check
 
-        Ensure that only the navigation menu and entry is the only one displayed
-        for the user who has the desired permission
-        """
+    #     Ensure that only the navigation menu and entry is the only one displayed
+    #     for the user who has the desired permission
+    #     """
 
-        nav_menu = self.metadata.get_navigation(self.core_ticket_problem)
+    #     nav_menu = self.metadata.get_navigation(self.core_ticket_problem)
 
-        pages_found: int = 0
+    #     pages_found: int = 0
 
 
-        for menu in nav_menu:
+    #     for menu in nav_menu:
 
-            for page in menu['pages']:
+    #         for page in menu['pages']:
 
-                pages_found += 1
+    #             pages_found += 1
 
 
-        assert pages_found == 1
+    #     assert pages_found == 1
 
 
 

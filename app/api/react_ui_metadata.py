@@ -278,12 +278,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "Assistance",
                 "name": "assistance",
                 "pages": {
-                    'core.view_ticket_request': {
-                        "display_name": "Requests",
-                        "name": "request",
-                        "icon": "ticket_request",
-                        "link": "/assistance/ticket/request"
-                    },
                     'view_knowledgebase': {
                         "display_name": "Knowledge Base",
                         "name": "knowledge_base",
@@ -330,25 +324,10 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITIM",
                 "name": "itim",
                 "pages": {
-                    'core.view_ticket_change': {
-                        "display_name": "Changes",
-                        "name": "ticket_change",
-                        "link": "/itim/ticket/change"
-                    },
                     'view_cluster': {
                         "display_name": "Clusters",
                         "name": "cluster",
                         "link": "/itim/cluster"
-                    },
-                    'core.view_ticket_incident': {
-                        "display_name": "Incidents",
-                        "name": "ticket_incident",
-                        "link": "/itim/ticket/incident"
-                    },
-                    'core.view_ticket_problem': {
-                        "display_name": "Problems",
-                        "name": "ticket_problem",
-                        "link": "/itim/ticket/problem"
                     },
                     'view_service': {
                         "display_name": "Services",
@@ -482,7 +461,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 nav['itim']['pages'].update({
                     'itim.view_changeticket': {
-                        "display_name": "Changes New",
+                        "display_name": "Change",
                         "name": "change_new",
                         "icon": "ticket_change",
                         "link": "/itim/ticket/changeticket"
@@ -495,7 +474,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 nav['itim']['pages'].update({
 
                     'itim.view_incidentticket': {
-                        "display_name": "Incidents New",
+                        "display_name": "Incident",
                         "name": "incident_new",
                         "icon": "ticket_incident",
                         "link": "/itim/ticket/incidentticket"
@@ -508,7 +487,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 nav['itim']['pages'].update({
 
                     'itim.view_problemticket': {
-                        "display_name": "Problems New",
+                        "display_name": "Problem",
                         "name": "problem_new",
                         "icon": "ticket_problem",
                         "link": "/itim/ticket/problemticket"
@@ -520,7 +499,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 nav['assistance']['pages'].update({
                     'itim.view_requestticket': {
-                        "display_name": "Requests New",
+                        "display_name": "Request",
                         "name": "request_new",
                         "icon": "ticket_request",
                         "link": "/itim/ticket/requestticket"

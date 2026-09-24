@@ -136,7 +136,7 @@ As part of the linking, if there is data in the existing fields, it'll be used i
 
 All models have access to the core features, being:
 
-- [Assosiate model to ticket](./core/ticket.md#assosiate-object-to-ticket)
+- [Assosiate model to ticket](./core/ticket.md#associate-object-to-ticket)
 
     _Link an item to a ticket_
 
