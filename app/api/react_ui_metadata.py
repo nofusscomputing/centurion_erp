@@ -329,11 +329,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "cluster",
                         "link": "/itim/cluster"
                     },
-                    'core.view_ticket_incident': {
-                        "display_name": "Incidents",
-                        "name": "ticket_incident",
-                        "link": "/itim/ticket/incident"
-                    },
                     'core.view_ticket_problem': {
                         "display_name": "Problems",
                         "name": "ticket_problem",
