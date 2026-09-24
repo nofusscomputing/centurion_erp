@@ -278,12 +278,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "Assistance",
                 "name": "assistance",
                 "pages": {
-                    'core.view_ticket_request': {
-                        "display_name": "Requests",
-                        "name": "request",
-                        "icon": "ticket_request",
-                        "link": "/assistance/ticket/request"
-                    },
                     'view_knowledgebase': {
                         "display_name": "Knowledge Base",
                         "name": "knowledge_base",
