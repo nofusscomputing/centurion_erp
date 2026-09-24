@@ -3,7 +3,6 @@ from centurion_feature_flag.urls.routers import DefaultRouter
 from itim.viewsets import (
     index as itim_v2,
     cluster as cluster_v2,
-    incident,
     problem,
     service as service,
     service_cluster,
@@ -28,10 +27,6 @@ router.register(
 router.register(
     prefix = '/cluster/(?P<cluster_id>[0-9]+)/service', viewset = service_cluster.ViewSet,
     basename = '_api_v2_service_cluster'
-)
-router.register(
-    prefix = '/ticket/incident', viewset = incident.ViewSet,
-    basename = '_api_v2_ticket_incident'
 )
 router.register(
     prefix = '/ticket/problem', viewset = problem.ViewSet,
