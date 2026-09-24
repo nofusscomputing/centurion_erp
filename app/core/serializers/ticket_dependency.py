@@ -7,7 +7,7 @@ from access.serializers.organization import TenantBaseSerializer
 from api.serializers import common
 
 from core.fields.icon import IconField
-from core.serializers.ticket_depreciated import TicketBaseSerializer
+from core.serializers.ticketbase import BaseSerializer as TicketBaseSerializer
 
 from core import fields as centurion_field
 from core.models.ticket_dependencies import TicketDependency
