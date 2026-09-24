@@ -1,5 +1,10 @@
 ## Version v1.34.0
 
+- Removed all ingress code paths for depreciated ticket models. This has been done so as to ensure that Centurion ERP has no access to the depreciated models. The models have been kept even though they are depreciated (i.e. no data has been removed). This is due to us not planning to write migrations from the old to new ticket models. If you were one of the few that actually used the old ticket models, please file a ticket notating that you used the old models and that they need to be migrated to the "new" ticket models.
+
+!!! note
+    Even though we are offering to write migrations from the old to the new ticket models, understand that unless you have significantly used the old models ( i.e. > 100 tickets) We wont be writing migrations. Additionally this will be weighed against the amount of users whom used the depreciated models. i.e. if enough users used the old models, then we would consider writing migrations. Why? time.
+
 
 ## Version v1.33.0
 
