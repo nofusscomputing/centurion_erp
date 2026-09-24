@@ -55,6 +55,25 @@ class TicketCommentActionModelLinkModelTestCases(
 
 
 
+    @pytest.mark.regression
+    def test_method_value___str___has_model(self, model, model_instance ):
+        """Test Method
+
+        Ensure method `__str__` contains the model_tag for the model in
+        question.
+        """
+
+        if model._meta.abstract:
+
+            pytest.xfail(reason = 'Model is an abstract model')
+
+        assert model_instance.content_type.model_class().model_tag is not None, \
+            'The model must have a defined tag for this test to function correctly.'
+
+        assert f"${model_instance.content_type.model_class().model_tag}" in model_instance.__str__()
+
+
+
 class TicketCommentActionModelLinkModelInheritedCases(
     TicketCommentActionModelLinkModelTestCases,
 ):
