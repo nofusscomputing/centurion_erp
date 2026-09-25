@@ -53,7 +53,7 @@ class APIMetadataTestCases:
                 'expected': dict
             },
             'navigation': {
-                'expected': list
+                'expected': dict
             },
         }
 
