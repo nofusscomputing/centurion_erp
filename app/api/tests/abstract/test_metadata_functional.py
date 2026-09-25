@@ -987,7 +987,7 @@ class MetaDataNavigationEntriesFunctional:
 
         menu_entry_found: bool = False
 
-        for nav_menu in response.data['navigation']:
+        for nav_menu in response.data['navigation']['menu']:
 
             if nav_menu['name'] == self.menu_id:
 
@@ -1026,7 +1026,7 @@ class MetaDataNavigationEntriesFunctional:
 
         no_empty_menu_found: bool = True
 
-        for nav_menu in response.data['navigation']:
+        for nav_menu in response.data['navigation']['menu']:
 
             if len(nav_menu['pages']) == 0:
 

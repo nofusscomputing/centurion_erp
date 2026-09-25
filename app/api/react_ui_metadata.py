@@ -590,7 +590,10 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 nav += [ new_menu_entry ]
 
-        return nav
+        return {
+            # 'variant': 'horizontal',
+            'menu': nav
+        }
 
 
 
