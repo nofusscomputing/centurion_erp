@@ -82,6 +82,30 @@ class TicketCommentTaskModelTestCases(
 
 
 
+    def test_method_clean_fields_field_done_sets_is_closed(self,
+        ticket_comment, model,
+    ):
+        """Test class method
+
+        Ensure that when field status is marked "done" field `is_closed` is set
+        to `true`
+        """
+
+        ticket_comment.is_closed = False
+        ticket_comment.date_closed = None
+
+        ticket_comment.save()
+
+        assert ticket_comment.is_closed == False, "is_closed must be false for test to continue."
+
+        ticket_comment.status = model.CommentStatus.DONE
+
+        ticket_comment.save()
+
+        assert ticket_comment.is_closed
+
+
+
     def test_method_clean_fields_field_finish_date_no_threads_sets_done_is_closed(self,
         ticket_comment
     ):
