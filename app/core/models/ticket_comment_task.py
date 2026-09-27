@@ -106,5 +106,17 @@ class TicketCommentTask(
 
             self.status = self.CommentStatus.DONE
 
+        children = TicketCommentBase.objects.filter(
+            parent = self.id,
+            is_closed = False
+        )
+
+        if(
+            len(children) == 0
+            and self.status == self.CommentStatus.DONE
+        ):
+
+            self.is_closed = True
+
 
         super().clean_fields(exclude = exclude)
