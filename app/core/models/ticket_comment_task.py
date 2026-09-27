@@ -90,3 +90,21 @@ class TicketCommentTask(
         null = False,
         verbose_name = 'Deleted',
     )
+
+
+    def clean_fields(self, exclude=None):
+        """
+        Mark a Task as complete, when:
+
+        - status = done and no children
+        - status = done and with children that are only `is_closed = False`
+        
+        Mark status as done when a real_finish_date is added.
+        """
+
+        if self.real_finish_date:
+
+            self.status = self.CommentStatus.DONE
+
+
+        super().clean_fields(exclude = exclude)
