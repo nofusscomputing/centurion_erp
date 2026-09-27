@@ -82,6 +82,31 @@ class TicketCommentTaskModelTestCases(
 
 
 
+    def test_method_clean_fields_field_finish_date_no_threads_sets_done_is_closed(self,
+        ticket_comment
+    ):
+        """Test class method
+
+        Ensure that when a finish_date is set and there are no threads,
+        status = done and is_closed = true
+        """
+
+        ticket_comment.is_closed = False
+        ticket_comment.date_closed = None
+
+        ticket_comment.save()
+
+        assert ticket_comment.is_closed == False, "is_closed must be false for test to continue."
+
+        ticket_comment.real_finish_date = datetime.datetime.now(
+            tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        ticket_comment.save()
+
+        assert ticket_comment.is_closed
+
+
+
     def test_method_clean_fields_field_finish_date_set_status_done(self,
         ticket_comment, model
     ):
