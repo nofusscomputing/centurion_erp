@@ -1,3 +1,9 @@
+## 1.34.0 (2026-09-27)
+
+### Features
+
+- **access**: Add logging to tenancy permissions
+
 ## 1.33.5 (2026-09-22)
 
 ### Fixes
