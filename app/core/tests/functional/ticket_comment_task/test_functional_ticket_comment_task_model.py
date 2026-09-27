@@ -1,3 +1,4 @@
+import datetime
 import pytest
 
 from core.tests.functional.ticket_comment_base.test_functional_ticket_comment_base_model import (
@@ -78,6 +79,28 @@ class TicketCommentTaskModelTestCases(
         thread.ticket.save()
 
         assert thread.is_closed
+
+
+
+    def test_method_clean_fields_field_finish_date_set_status_done(self,
+        ticket_comment, model
+    ):
+        """Test class method
+
+        Ensure that when field status is marked "done" field `status` is set
+        to `done`
+        """
+
+        ticket_comment.save()
+
+        assert ticket_comment.is_closed == False, "is_closed must be false for test to continue."
+
+        ticket_comment.real_finish_date = datetime.datetime.now(
+            tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        ticket_comment.save()
+
+        assert ticket_comment.status == model.CommentStatus.DONE
 
 
 
