@@ -58,7 +58,7 @@ class TicketCommentBaseModelTestCases:
 
 
     @pytest.fixture
-    def ticket_comment(self, request, django_db_blocker, ticket, model_ticketcommentbase):
+    def ticket_comment(self, request, django_db_blocker, ticket, model):
         """ Ticket Comment that requires body
 
         when using this fixture, set the `body` then call ticket_comment.save()
@@ -71,7 +71,7 @@ class TicketCommentBaseModelTestCases:
 
             ticket.save()
 
-            ticket_comment = model_ticketcommentbase()
+            ticket_comment = model()
 
             ticket_comment.user = request.cls.entity_user
 
@@ -89,10 +89,12 @@ class TicketCommentBaseModelTestCases:
 
         with django_db_blocker.unblock():
 
-            for thread in ticket_comment.threads.all():
-                thread.delete()
+            if ticket_comment.pk:
 
-            ticket_comment.delete()
+                for thread in ticket_comment.threads.all():
+                    thread.delete()
+
+                ticket_comment.delete()
 
 
 
