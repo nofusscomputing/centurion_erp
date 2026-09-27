@@ -38,6 +38,8 @@ class MockUser:
 
     is_superuser: bool = None
 
+    username: str = 'mock.user'
+
     def __init__(
         self,
         has_perm: bool = False,
@@ -108,6 +110,9 @@ class MockUser:
 
 class MockLogger:
 
+    def notice(self, *args, **kwargs):
+        return None
+
     class MockChild:
 
         def warn(self, *args, **kwargs):
@@ -145,6 +150,8 @@ class MyMockView:
 
 
     class MockRequest:
+
+        path: str = '/mock/path'
 
         class MockStream:
 

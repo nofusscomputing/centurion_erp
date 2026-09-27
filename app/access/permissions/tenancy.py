@@ -221,7 +221,16 @@ class TenancyPermissions(
 
             self._view_allowed_methods = getattr(view, 'allowed_methods', {})
 
+            username = view.request.user.username
+
+            if username == '':
+
+                username = 'anonymous'
+
+
             if request.user.is_anonymous:
+
+                view.get_log().notice( f'{view.request.method} {view.request.path} {username} "denied access"' )
 
                 raise NotAuthenticated(
                     code = 'anonymouse_user'
@@ -241,6 +250,8 @@ class TenancyPermissions(
                 permission_list = view.permissions_required,
             ):
 
+                view.get_log().notice( f'{view.request.method} {view.request.path} {username} "missing permission(s) {view.permissions_required}"' )
+
                 raise PermissionDenied(
                     code = 'missing_permission'
                 )
@@ -255,6 +266,8 @@ class TenancyPermissions(
                 and obj_organization is None
                 and view.action not in [ 'create', 'list', 'metadata' ]
             ):
+
+                view.get_log().notice( f'{view.request.method} {view.request.path} {username} "Access not possible. User has required permission(s) {view.permissions_required}, however a tenancy is missing"' )
 
                 raise PermissionDenied(
                     detail = 'A tenancy model must specify a tenancy for authorization',
@@ -313,6 +326,9 @@ class TenancyPermissions(
                     user = request.user
                 )
 
+
+
+            view.get_log().notice( f'{view.request.method} {view.request.path} {username} "(default deny) User permission(s) could not be determined so they have been denied access"' )
 
             raise PermissionDenied(
                 code = 'default_deny'
