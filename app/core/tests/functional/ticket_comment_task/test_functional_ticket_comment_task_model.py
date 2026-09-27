@@ -123,6 +123,49 @@ class TicketCommentTaskModelTestCases(
 
 
 
+    def test_thread_task_real_finish_date_with_closed_thread_does_close(self,
+        ticket, ticket_comment, model, model_kwargs, model_ticketbase
+    ):
+        """Functional Test
+
+        Ensure that when there are no open threads, status=done closes the
+        comment.
+        """
+
+        ticket_comment.save()
+
+        ticket.status = model_ticketbase.TicketStatus.NEW
+        ticket.is_closed = False
+        ticket.is_solved = False
+        ticket.save()
+
+        kwargs = model_kwargs()
+        kwargs['parent'] = ticket_comment
+        kwargs['status'] = model.CommentStatus.DONE
+
+        del kwargs['external_ref']
+        del kwargs['external_system']
+
+        thread = model.objects.create( **kwargs )
+
+        thread.ticket.status = model_ticketbase.TicketStatus.NEW
+        thread.ticket.is_closed = False
+        thread.ticket.is_solved = False
+        thread.ticket.save()
+
+        assert ticket_comment.status == model.CommentStatus.TODO, "Ensure that value correct prior to continuing"
+
+        assert ticket_comment.is_closed == False, "Ensure that value correct prior to continuing"
+
+        ticket_comment.real_finish_date = datetime.datetime.now(
+            tz=datetime.timezone.utc).replace(microsecond=0).isoformat()
+
+        ticket_comment.save()
+
+        assert ticket_comment.is_closed == True
+
+
+
     def test_method_clean_fields_field_done_sets_is_closed(self,
         ticket_comment, model,
     ):
