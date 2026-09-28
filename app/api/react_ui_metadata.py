@@ -65,6 +65,9 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         metadata["name"] = view.get_view_name()
 
+        if re.fullmatch(r'v\d{1}', metadata["name"]):
+            metadata["name"] = 'Centurion ERP'
+
         metadata["description"] = view.get_view_description()
 
 
