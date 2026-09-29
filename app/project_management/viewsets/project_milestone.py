@@ -3,6 +3,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 from api.viewsets.common.tenancy import ModelViewSet
 
 from project_management.serializers.project_milestone import (    # pylint: disable=W0611:unused-import
+    Project,
     ProjectMilestone,
     ProjectMilestoneModelSerializer,
     ProjectMilestoneViewSerializer
@@ -116,6 +117,10 @@ class ViewSet( ModelViewSet ):
         'name',
         'description',
     ]
+
+    parent_model = Project
+
+    parent_model_pk_kwarg = 'project_id'
 
     model = ProjectMilestone
 
