@@ -1,6 +1,9 @@
 {
     "urls_list": [
         "/access/tenant",
+        "/access/role",
+        "/access/company",
+        "/access/entity/contact",
 
         "/assistance/knowledge_base",
 
@@ -23,7 +26,6 @@
         "/settings/device_type",
         "/settings/external_link",
         "/settings/knowledge_base_category",
-        "/settings/manufacturer",
         "/settings/port",
         "/settings/project_state",
         "/settings/project_type",
