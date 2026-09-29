@@ -1,8 +1,11 @@
+import django
+
 import pytest
 
 from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
 from project_management.viewsets.project_milestone import (
+    Project,
     ProjectMilestone,
     ViewSet,
 )
@@ -42,6 +45,14 @@ class ViewsetTestCases(
             'model_documentation': {
                 'type': type(None),
             },
+            'parent_model': {
+                'type': django.db.models.base.ModelBase,
+                'value': Project
+            },
+            'parent_model_pk_kwarg': {
+                'type': str,
+                'value': 'project_id'
+            },
             'serializer_class': {
                 'type': type(None),
             },
@@ -61,6 +72,37 @@ class ViewsetTestCases(
                 'type': type(None),
             }
         }
+
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'Parent model is project' )
+    def test_function_get_parent_model(self, mocker, viewset):
+        """Test class function
+    
+        Ensure that when function `get_parent_model` is called it returns the value
+        of `viewset.parent_model`.
+    
+        For all models that dont have attribute `viewset.parent_model` set, it should
+        return None
+        """
+    
+        assert viewset().get_parent_model() is None
+
+
+
+    def test_function_get_parent_model_is_project(self, mocker, viewset):
+        """Test class function
+    
+        Ensure that when function `get_parent_model` is called it returns the value
+        of `viewset.parent_model`.
+    
+        For all models that dont have attribute `viewset.parent_model` set, it should
+        return None
+        """
+    
+        assert viewset().get_parent_model() is Project
+
 
 
     def test_view_func_get_queryset_cache_result(self, mocker, viewset_mock_request,

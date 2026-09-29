@@ -1,10 +1,110 @@
 import pytest
 
 from django.test import Client
+from django.urls.exceptions import NoReverseMatch
 
 
 
 class AdditionalTestCases:
+
+
+    @pytest.mark.regression
+    @pytest.mark.xpass( reason = 'Model does not use organization field, however requires it.' )
+    def test_permission_add(self, model_instance, api_request_permissions,
+        model_kwargs, kwargs_api_create
+    ):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['add'] )
+
+
+        kwargs = model_kwargs()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        the_model = model_instance( kwargs_create = kwargs )
+
+        url = the_model.get_url( many = True )
+
+        # the_model.delete()
+
+        kwargs_create = kwargs_api_create.copy()
+        # kwargs_create['model'] = the_model.model.id
+        kwargs_create['created_by'] = api_request_permissions['user']['add'].id
+        kwargs_create['organization'] = api_request_permissions['tenancy']['user'].id
+
+
+        try:
+
+            response = client.post(
+                path = url,
+                data = kwargs_create,
+                content_type = 'application/json'
+            )
+
+        except NoReverseMatch:
+
+            # Cater for models that use viewset `-list` but `-detail`
+            try:
+
+                response = client.post(
+                    path = the_model.get_url( many = False ),
+                    data = kwargs_create
+                )
+
+            except NoReverseMatch:
+
+                pass
+
+
+        if response.status_code == 405:
+            pytest.xfail( reason = 'ViewSet does not have this request method.' )
+
+        assert response.status_code == 201, response.content
+
+
+
+    def test_permission_add_project_management(self, model_instance, api_request_permissions,
+        model_kwargs, kwargs_api_create
+    ):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+
+        client.force_login( api_request_permissions['user']['add'] )
+
+
+        kwargs = model_kwargs()
+        kwargs.update({
+            'organization': api_request_permissions['tenancy']['user']
+        })
+
+        the_model = model_instance( kwargs_create = kwargs )
+
+        url = the_model.get_url( many = True )
+
+        kwargs_create = kwargs_api_create.copy()
+        # kwargs_create['model'] = the_model.model.id
+        kwargs_create['created_by'] = api_request_permissions['user']['add'].id
+        del kwargs_create['organization']
+
+        response = client.post(
+            path = url,
+            data = kwargs_create,
+            content_type = 'application/json'
+        )
+
+        assert response.status_code == 201, response.content
+
 
 
     def test_permission_change(self, model_instance, api_request_permissions, model_kwargs):
