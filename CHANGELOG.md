@@ -1,3 +1,14 @@
+## 1.34.1 (2026-09-29)
+
+### Fixes
+
+- **project_management**: When working with project milestone parent project is required
+
+### Tests
+
+- **project_management**: Update functional test cases for api permissions
+- **project_management**: Update unit test cases for checking parent model
+
 ## 1.34.0 (2026-09-27)
 
 ### Features
