@@ -64,8 +64,6 @@ class SlashCommands(
 
         for line in lines:
 
-            line = str(line).strip()
-
             search = re.match(self.command, line)
 
             if search is not None:
@@ -124,4 +122,4 @@ class SlashCommands(
                 processed_lines += line + nl
 
 
-        return str(processed_lines).strip()
+        return str(processed_lines).rstrip()
