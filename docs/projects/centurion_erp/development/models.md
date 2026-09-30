@@ -51,6 +51,8 @@ When creating models they must meet the following requirements:
 
 - If you are replacing a model, ensure you mark it with decorator `centurion.lib.decorators.depreciated`
 
+- Any data that is provided by the end user and saved to the data base must maintain data integrity. i.e. The actual provided data is what's saved to the database **exactly.**
+
 !!! tip
     It's a good idea to create the initial model class, then create and add the model tests for that class. This way you can run the tests to ensure that the requirements are met. Of Note, the tests may not cover ALL of the requirements section, due diligence will need to be exercised.
 

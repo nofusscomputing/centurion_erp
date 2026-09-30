@@ -89,6 +89,12 @@ When detailing requirements the following must be taken into account:
 
 - Functional Requirements
 
+    - Data integrity maintained
+
+        - [ ] Create. _Data used to add to db equals the value supplied._
+
+        - [ ] Update.  _Data used to add to db equals the value supplied._
+
 
 - Non-Functional Requirements
 
