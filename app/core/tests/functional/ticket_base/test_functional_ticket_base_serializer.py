@@ -410,6 +410,116 @@ class TicketBaseSerializerTestCases:
 
 
 
+    def test_serializer_valid_milestone_existing_ticket(self, fake_view, create_serializer):
+        """Serializer Validation Check
+
+        Ensure that a milestone can be added to an existing ticket.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        milestone = valid_data['milestone']
+
+        del valid_data['milestone']
+
+        view_set = fake_view(
+            user = self.view_user.user,
+            _has_import = False,
+            _has_triage = True
+        )
+
+
+        ticket_serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        ticket_serializer.is_valid(raise_exception = False)
+
+        ticket_serializer.save()
+
+
+        view_set = fake_view(
+            user = self.view_user.user,
+            _has_import = False,
+            _has_triage = True,
+            action = 'partial_update',
+        )
+
+
+        serializer = create_serializer(
+            instance = ticket_serializer.instance,
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = {
+                'id': ticket_serializer.instance.id,
+                'milestone': milestone
+            },
+            partial = True,
+        )
+
+        assert serializer.is_valid(raise_exception = False)
+
+
+
+    def test_serializer_invalid_milestone_existing_ticket(self, fake_view, create_serializer):
+        """Serializer Validation Check
+
+        Ensure that a milestone can be added to an existing ticket.
+        """
+
+        valid_data = self.valid_data.copy()
+
+        milestone = self.project_milestone_two.id
+
+        del valid_data['milestone']
+
+        view_set = fake_view(
+            user = self.view_user.user,
+            _has_import = False,
+            _has_triage = True
+        )
+
+
+        ticket_serializer = create_serializer(
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = valid_data
+        )
+
+        ticket_serializer.is_valid(raise_exception = False)
+
+        ticket_serializer.save()
+
+
+        serializer = create_serializer(
+            instance = ticket_serializer.instance,
+            context = {
+                'request': view_set.request,
+                'view': view_set,
+            },
+            data = {
+                'id': ticket_serializer.instance.id,
+                'milestone': milestone
+            },
+            partial = True
+        )
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['milestone'][0] == 'milestone_same_project'
+
+
+
     def test_serializer_valid_data_milestone_from_different_project_not_valid(self, fake_view, create_serializer):
         """Serializer Validation Check
 
