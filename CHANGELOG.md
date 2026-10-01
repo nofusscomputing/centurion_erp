@@ -1,3 +1,15 @@
+## 1.34.2 (2026-10-01)
+
+### Fixes
+
+- **core**: When adding a milestone to a ticket obtain the project from the milestone instance
+- **core**: When processing Markdown, only trim right so as not to remove potential whitespace required for formatting
+
+### Tests
+
+- **core**: Ensure that when processing markdown for ticket and ticket comment that the data saved is the data passed
+- **core**: Ensure that a milestone can be added to an existing ticket
+
 ## 1.34.1 (2026-09-29)
 
 ### Fixes
