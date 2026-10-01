@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements_docker.txt requirements.txt requirements_production.txt tools/requirements_docker.in
 #
-amqp==5.3.1
+amqp==5.4.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -21,7 +21,7 @@ attrs==26.1.0
     #   -r requirements_production.txt
     #   jsonschema
     #   referencing
-billiard==4.2.4
+billiard==4.3.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -41,7 +41,7 @@ cffi==2.1.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   cryptography
-charset-normalizer==3.5.1
+charset-normalizer==3.5.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -64,12 +64,12 @@ click-plugins==1.1.1.2
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   celery
-click-repl==0.3.0
+click-repl==0.4.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   celery
-cryptography==50.0.1
+cryptography==50.0.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -132,12 +132,12 @@ drf-spectacular-sidecar==2026.9.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   drf-spectacular
-greenlet==3.5.5
+greenlet==3.5.6
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   sqlalchemy
-idna==3.19
+idna==3.20
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -183,7 +183,7 @@ mdurl==0.1.2
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   markdown-it-py
-oauthlib==3.3.1
+oauthlib==4.0.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -210,7 +210,7 @@ pygments==2.20.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-pyjwt[crypto]==2.13.0
+pyjwt[crypto]==2.15.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -286,6 +286,7 @@ typing-extensions==4.16.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
+    #   click-repl
     #   referencing
     #   sqlalchemy
 tzdata==2025.1
@@ -299,7 +300,7 @@ uritemplate==4.2.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   drf-spectacular
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -313,7 +314,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.8.3
+wcwidth==0.9.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt

@@ -276,6 +276,13 @@ class ModelSerializer(
 
         project = attrs.get('project', None)
 
+        if getattr(self, 'instance', None):
+
+            if getattr(self.instance, 'project'):
+
+                project = self.instance.project
+
+
         if milestone is not None:
 
             if project is None:

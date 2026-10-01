@@ -59,6 +59,17 @@ class SlashCommandsCommon:
     Required for Ticket Comment and Ticket Slash Commands Test cases.
     """
 
+
+    ticket_text = (
+        'some random text.\n\n'
+        'a list:\n\n'
+        '- list item one\n\n'
+        '    list paragraph text.\n\n'
+        '    - indented sub-list\n\n'
+        'A closing paragraph.'
+    )
+
+
     single_line_with_command = 'A single line comment COMMAND'
 
     single_line_command_own_line_lf = 'A single line comment\nCOMMAND'
@@ -114,6 +125,47 @@ class SlashCommandsTicketTestCases(
     Requires a fixture called `Ticket`
     """
 
+
+    @pytest.mark.regression
+    def test_slash_command_ticket_single_line_with_command_data_integrity(self,
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the comment that was supplied and in this case the command once
+        saved is what was passed. with the command remaining.
+        """
+
+        comment_text = self.single_line_with_command
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+
+        ticket.description = self.ticket_text + str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert self.ticket_text + comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+        ) == ticket.description
+
+
+
+    @pytest.mark.regression
     def test_slash_command_ticket_single_line_with_command_removed_from_description(self,
         ticket,
         parameterized, param_key_slash_command, param_name,
@@ -122,7 +174,8 @@ class SlashCommandsTicketTestCases(
     ):
         """Slash command Check
 
-        Ensure the command is removed from a comment
+        Ensure the command that is on the same line as any text, does not get
+        removed from the comment.
         """
 
         comment_text = self.single_line_with_command
@@ -189,6 +242,42 @@ class SlashCommandsTicketTestCases(
             and command_obj not in ticket.description
         )
 
+
+
+    def test_slash_command_ticket_single_line_command_own_line_lf_command_data_integrity(self,
+        ticket,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment and that the data passed
+        is what was saved.
+        """
+
+        comment_text = self.single_line_command_own_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket.description = self.ticket_text + str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket.save()
+
+
+        assert self.ticket_text + comment_text.replace(
+                'COMMAND', ''
+        ).rstrip() == ticket.description
 
 
 
@@ -1152,6 +1241,45 @@ class SlashCommandsTicketCommentTestCases(
 
 
 
+    @pytest.mark.regression
+    def test_slash_command_ticket_comment_single_line_with_command_data_integrity(self,
+        ticket_comment,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the comment that was supplied and in this case the command once
+        saved is what was passed. The command should also have remained.
+        """
+
+        comment_text = self.single_line_with_command
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket_comment.body = self.ticket_text + str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket_comment.save()
+
+
+        assert self.ticket_text + comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+        ) == ticket_comment.body
+
+
+
+    @pytest.mark.regression
     def test_slash_command_ticket_comment_single_line_with_command_removed_from_comment(self,
         ticket_comment,
         parameterized, param_key_slash_command, param_name,
@@ -1186,6 +1314,42 @@ class SlashCommandsTicketCommentTestCases(
             param_slash_command in ticket_comment.body
             and command_obj in ticket_comment.body
         )
+
+
+
+    def test_slash_command_ticket_comment_single_line_command_own_line_lf_command_data_integrity(self,
+        ticket_comment,
+        parameterized, param_key_slash_command, param_name,
+        param_slash_command,
+        param_command_obj,
+    ):
+        """Slash command Check
+
+        Ensure the command is removed from a comment and that the data passed
+        is what was saved.
+        """
+
+        comment_text = self.single_line_command_own_line_lf
+
+        assert 'COMMAND' in comment_text
+        # COMMAND must be in ticket comment so it can be constructed
+
+        command_obj = str(param_command_obj).replace(
+            'EXISTINGTICKET', str(self.existing_ticket.id)
+        )
+
+        ticket_comment.body = self.ticket_text + str(
+            comment_text.replace(
+                'COMMAND', '/' + param_slash_command + ' ' + command_obj
+            )
+        )
+
+
+        ticket_comment.save()
+
+        assert self.ticket_text + comment_text.replace(
+                'COMMAND', ''
+        ).rstrip() == ticket_comment.body
 
 
 
