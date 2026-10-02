@@ -66,11 +66,10 @@ class TicketCommentActionModelLink(
 
     def __str__(self):
 
-        comment = f"Linked model ${self.content_type.model_class().model_tag}-{self.model_id}"
-
+        comment = f"Linked model ${self.content_type.model_class()._meta.get_field('model').related_model.model_tag}-{self.model_id}"
         if not self.is_create:
 
-            comment = f"Unlinked model ${self.content_type.model_class().model_tag}-{self.model_id}"
+            comment = f"Unlinked model ${self.content_type.model_class()._meta.get_field('model').related_model.model_tag}-{self.model_id}"
 
 
         return comment

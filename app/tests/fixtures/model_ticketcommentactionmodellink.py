@@ -29,7 +29,10 @@ def kwargs_ticketcommentactionmodellink( kwargs_ticketcommentaction,
 
             model_to_link = model_entity.objects.create( **kwargs_entity() )
 
-            model_content_type = model_contenttype.objects.get_for_model(model_to_link)
+            model_content_type = model_contenttype.objects.get(
+                app_label = 'access',
+                model = 'entityticket'
+            )
 
         kwargs = kwargs_ticketcommentaction()
         kwargs['is_create'] = True
