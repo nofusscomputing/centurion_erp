@@ -1,3 +1,14 @@
+## 1.34.3 (2026-10-02)
+
+### Fixes
+
+- **core**: When rendering ticket action comment model link, collect the actual model and not the ticket model
+
+### Tests
+
+- **core**: Unit test case for model_link action comment to ensure model_tag renders
+- **core**: Unit test case for model tickets to ensure that correct model is used for content_type
+
 ## 1.34.2 (2026-10-01)
 
 ### Fixes
