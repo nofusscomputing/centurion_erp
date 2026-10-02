@@ -121,10 +121,35 @@ class ModelTicketModelTestCases(
 
 
 
+    @pytest.mark.regression
+    def test_field_content_type_correct(self, model_instance, model_modelticket ):
+        """Test model field
+
+        Ensure that the model in field `content_type` is an actual model and
+        not a `<model name>Ticket`.
+        """
+
+        assert issubclass(model_instance.content_type.model_class(), model_modelticket)
+
+
+
 class ModelTicketModelInheritedCases(
     ModelTicketModelTestCases,
 ):
-    pass
+
+
+    @pytest.mark.regression
+    def test_method_value___str___has_model(self, model_instance):
+        """Test Method
+
+        Ensure method `__str__` contains the model_tag for the model in
+        question.
+        """
+
+        assert model_instance.content_type.model_class()._meta.get_field('model').related_model.model_tag is not None, \
+            'The model must have a defined tag for this test to function correctly.'
+
+        assert model_instance.content_type.model_class()._meta.get_field('model').related_model.model_tag in model_instance.__str__()
 
 
 
@@ -139,3 +164,15 @@ class ModelTicketModelPyTest(
 
     def test_manager_ticketmodel_select_related(self):
         pytest.xfail( reason = 'filtering requires field model which is not avail in base model.' )
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'base model is not for storing model tickets.' )
+    def test_field_content_type_correct(self, model_instance, model_modelticket ):
+        """Test model field
+
+        Ensure that the model in field `content_type` is an actual model and
+        not a `<model name>Ticket`.
+        """
+
+        assert issubclass(model_instance.content_type.model_class(), model_modelticket)
