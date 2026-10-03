@@ -79,7 +79,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             ),
         ],
         request = PolymorphicProxySerializer(
-            component_name = 'AuditHistory',
+            component_name = 'AuditHistoryModelSerializer',
             serializers = spectacular_request_serializers(),
             resource_type_field_name = None,
             many = True,
@@ -88,7 +88,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             200: OpenApiResponse(
                 description='',
                 response = PolymorphicProxySerializer(
-                    component_name = 'AuditHistory (View)',
+                    component_name = 'AuditHistoryViewSerializer',
                     serializers = spectacular_request_serializers( 'View' ),
                     resource_type_field_name = None,
                     many = True,
@@ -127,7 +127,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             ),
         ],
         request = PolymorphicProxySerializer(
-            component_name = 'AuditHistory',
+            component_name = 'AuditHistoryModelSerializer',
             serializers = spectacular_request_serializers(),
             resource_type_field_name = None,
             many = False,
@@ -136,7 +136,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             200: OpenApiResponse(
                 description='',
                 response = PolymorphicProxySerializer(
-                    component_name = 'AuditHistory (View)',
+                    component_name = 'AuditHistoryViewSerializer',
                     serializers = spectacular_request_serializers( 'View' ),
                     resource_type_field_name = None,
                     many = False,
