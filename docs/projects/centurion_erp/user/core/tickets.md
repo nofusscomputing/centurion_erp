@@ -183,6 +183,10 @@ Ticket comments support [markdown](./markdown.md) as well as slash commands. Com
     !!! info
         To add this type of comment, you will require the `triage` permission for the ticket type the comment is for.
 
+    - Populating the "real finished date" will set the comment status to "done."
+
+    - Marking a task as "Done" will set the comment as "closed." This is unless the task has threads that are still "open."
+
 
 ## Ticket Change Tracking
 

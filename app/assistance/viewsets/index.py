@@ -26,6 +26,5 @@ class Index(IndexViewset):
         return Response(
             {
                 "knowledge_base": reverse('v2:_api_knowledgebase-list', request = None),
-                "request": reverse('v2:_api_v2_ticket_request-list', request = None),
             }
         )

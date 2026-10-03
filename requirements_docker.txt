@@ -97,11 +97,11 @@ django-celery-results==2.5.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-django-cors-headers==4.4.0
+django-cors-headers==4.9.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-django-filter==24.2
+django-filter==25.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -113,13 +113,13 @@ django-split-settings==1.3.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-djangorestframework==3.16.0
+djangorestframework==3.17.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   djangorestframework-jsonapi
     #   drf-spectacular
-djangorestframework-jsonapi==7.1.0
+djangorestframework-jsonapi==8.1.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
