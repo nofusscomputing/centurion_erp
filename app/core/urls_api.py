@@ -6,11 +6,8 @@ from core.viewsets import (
     audit_history,
     ticket,
     ticket_comment,
-    ticket_comment_depreciated,
     ticket_dependency,
-    ticket_linked_item,
     ticket_model_link,
-    related_ticket,
 
 )
 
@@ -77,25 +74,8 @@ router.register(
     basename = '_api_ticket_comment_base_thread_sub'
 )
 router.register(
-    prefix = '/ticket/(?P<ticket_id>[0-9]+)/comments', viewset = ticket_comment_depreciated.ViewSet,
-    basename = '_api_v2_ticket_comment'
-)
-router.register(
-    prefix = '/ticket/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads',
-    viewset = ticket_comment_depreciated.ViewSet,
-    basename = '_api_v2_ticket_comment_threads'
-)
-router.register(
-    prefix = '/ticket/(?P<ticket_id>[0-9]+)/linked_item', viewset = ticket_linked_item.ViewSet,
-    basename = '_api_v2_ticket_linked_item'
-)
-router.register(
     prefix=f'/ticket/(?P<model_name>({ticket_type_names})+)/(?P<model_id>[0-9]+)/models', viewset = ticket_model_link.ViewSet,
     basename = '_api_modelticket'
-)
-router.register(
-    prefix = '/ticket/(?P<ticket_id>[0-9]+)/related_ticket', viewset = related_ticket.ViewSet,
-    basename = '_api_v2_ticket_related'
 )
 router.register(
     prefix=f'/ticket/(?P<ticket_id>[0-9]+)/(?P<model_name>({ticket_comment_names})+)',
@@ -111,11 +91,6 @@ router.register(
 router.register(
     prefix = '/ticket/(?P<ticket_id>[0-9]+)/ticket_dependency', viewset = ticket_dependency.ViewSet,
     basename = '_api_ticketdependency'
-)
-router.register(
-    prefix = '/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket',
-    viewset = ticket_linked_item.ViewSet,
-    basename = '_api_v2_item_tickets'
 )
 
 

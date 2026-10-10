@@ -1,0 +1,151 @@
+{
+    "name": "Centurion ERP Docs",
+    "description": "Documentation for Centurion ERP by No Fuss Computing",
+    "allowed_methods": [
+        "GET"
+    ],
+    "navigation": {
+        "menu": [
+            {
+                "display_name": "Administration",
+                "name": "centurion_erp",
+                "pages": [
+                    {
+                        "display_name": "Auth",
+                        "name": "auth",
+                        "link": "/administration/auth"
+                    },
+                    {
+                        "display_name": "Backup",
+                        "name": "backup",
+                        "link": "/administration/backup"
+                    },
+                    {
+                        "display_name": "Installation",
+                        "name": "installation",
+                        "link": "/administration/installation"
+                    },
+                    {
+                        "display_name": "Logging",
+                        "name": "logging",
+                        "link": "/administration/logging"
+                    },
+                    {
+                        "display_name": "Monitoring",
+                        "name": "montitoring",
+                        "link": "/administration/montitoring"
+                    }
+                ]
+            },
+            {
+                "display_name": "Development",
+                "name": "centurion_erp",
+                "pages": [
+                    {
+                        "display_name": "Fields",
+                        "name": "fields",
+                        "link": "/development/fields"
+                    },
+                    {
+                        "display_name": "Models",
+                        "name": "Models",
+                        "link": "/development/models"
+                    },
+                    {
+                        "display_name": "Permissions",
+                        "name": "permissions",
+                        "link": "/development/permissions"
+                    },
+                    {
+                        "display_name": "Serializers",
+                        "name": "serializers",
+                        "link": "/development/serializers"
+                    },
+                    {
+                        "display_name": "Testing",
+                        "name": "testing",
+                        "link": "/development/testing"
+                    },
+                    {
+                        "display_name": "Views",
+                        "name": "views",
+                        "link": "/development/views"
+                    }
+                ]
+            },
+            {
+                "display_name": "User",
+                "name": "centurion_erp",
+                "pages": [
+                    {
+                        "display_name": "API",
+                        "name": "api",
+                        "link": "/user/api"
+                    },
+                    {
+                        "display_name": "Configuration",
+                        "name": "configuration",
+                        "link": "/user/configuration"
+                    },
+                    {
+                        "display_name": "User Settings",
+                        "name": "user_settings",
+                        "link": "/user/user_settings"
+                    }
+                ]
+            }
+        ]
+    },
+    "routes": [
+        {
+            "index": true,
+            "component": "markdown",
+            "loader": "github"
+        },
+        {
+            "path": ":dir",
+            "children": [
+                {
+                    "index": true,
+                    "component": "markdown",
+                    "loader": "github"
+                },
+                {
+                    "path": ":mdFile",
+                    "component": "markdown",
+                    "loader": "github"
+                },
+                {
+                    "path": ":subDir",
+                    "children": [
+                        {
+                            "index": true,
+                            "component": "markdown",
+                            "loader": "github"
+                        },
+                        {
+                            "path": ":mdFile",
+                            "component": "markdown",
+                            "loader": "github"
+                        },
+                        {
+                            "path": ":subSubDir",
+                            "children": [
+                                {
+                                    "index": true,
+                                    "component": "markdown",
+                                    "loader": "github"
+                                },
+                                {
+                                    "path": ":mdFile",
+                                    "component": "markdown",
+                                    "loader": "github"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

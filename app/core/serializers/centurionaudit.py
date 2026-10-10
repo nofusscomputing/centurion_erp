@@ -15,7 +15,7 @@ from core.models.audit import CenturionAudit
 
 
 
-@extend_schema_serializer(component_name = 'AuditHistoryBaseSerializer')
+@extend_schema_serializer(component_name = 'CenturionAuditBaseSerializer')
 class BaseSerializer(serializers.ModelSerializer):
 
 
@@ -50,7 +50,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
 
 
-@extend_schema_serializer(component_name = 'AuditHistoryModelSerializer')
+@extend_schema_serializer(component_name = 'CenturionAuditModelSerializer')
 class ModelSerializer(
     common.CommonModelSerializer,
     BaseSerializer
@@ -81,7 +81,7 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'AuditHistoryViewSerializer')
+@extend_schema_serializer(component_name = 'CenturionAuditViewSerializer')
 class ViewSerializer(ModelSerializer):
     """AuditHistory Base View Model"""
 
