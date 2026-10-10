@@ -1,3 +1,40 @@
+## 1.35.0 (2026-10-10)
+
+### Features
+
+- **api**: Use product name in rootMetadata
+- **core**: When setting a ticket comment task `status` to done mark task as "closed" if there are no children and/or no open children
+- **core**: When setting a ticket comment task `real_finish_date` mark status as done
+- **api**: update navigation output to match UI
+- **core**: Remove old model code for core ticket comment
+- **core**: Remove old model code for core ticket
+- **itim**: Remove old model code for problem ticket
+- **itim**: Remove old model code for incident ticket
+- **itim**: Remove old model code for change ticket
+- **assistance**: Remove old model code for related ticket
+- **core**: Remove old model ticket linked item
+
+### Fixes
+
+- **assistance**: remove depreciated tickets  from api index
+- **assistance**: remove request from api index
+
+### Tests
+
+- **core**: Ensure that when user sets field real_finish_date to done when there are no open threads task marked closed
+- **core**: Ensure that when user sets field status to done when there are no open threads task marked closed
+- **core**: Ensure that when user sets field status to done when there are no threads task marked closed
+- **core**: Ensure that when user sets field real_finish_date when there are no open threads task marked closed
+- **core**: Ensure that when user sets field real_finish_date status is set to done
+- **core**: ticket comment fixture must use the model being tested
+- **api**: Removed unit test suite for depreciated model ticket_linked_item
+- **api**: Removed unit test suite for depreciated model ticket
+- **api**: Removed unit test suite for depreciated model ticket_comment
+- **api**: Removed functional test suite for depreciated model ticket_comment
+- **api**: Removed functional test suite for depreciated model linked_item
+- **api**: Removed functional test suite for depreciated model related_ticket
+- **api**: Removed ole nav menu test cases for depreciated ticket models
+
 ## 1.34.3 (2026-10-02)
 
 ### Fixes
