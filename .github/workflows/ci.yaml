@@ -12,7 +12,7 @@ on:
   #
   pull_request:
     branches:
-      - feat-*
+      - '**'
     types:
       - synchronize    # covers commits
   push:

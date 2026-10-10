@@ -166,7 +166,7 @@ Feature table uses the following keys:
 | | [Milestones](./user/project_management/project.md#milestones) | :white_check_mark: |  |
 | | [Projects](./user/project_management/project.md) | :white_check_mark: |  |
 | | Roadmap | :x: |  |
-| | [Tasks](./user/project_management/project_task.md) | :recycle: |  |
+| | [Tasks](./user/project_management/project_task.md) | :white_check_mark: |  |
 | Supply Chain Management (SCM) |||  |
 | | Contract Management | :x: |  |
 | | Purchase Requisition & Order | :x: | _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_ |

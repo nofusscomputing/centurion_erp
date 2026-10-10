@@ -58,6 +58,8 @@ When creating a serializer, the following requirements must be met:
 
 - Follows file naming as described [above](#creating-a-serializer)
 
+- The DRF Spectacular schema name (serializer `component_name`) follows the convention `<model class name><type>Serializer`, where `<type>` is `Base`, `Model` or `View`. This keeps every component name unique across the schema. Where a `PolymorphicProxySerializer` is used within a viewset, its `component_name` follows the same convention.
+
 - `Base` serializer must return fields `id`, `display_name` and `url`, with url being the models url
 
 - `View` serializer must return a dict field called `_urls` which contains links to the models [core features](./models.md#core-features), including `_self`

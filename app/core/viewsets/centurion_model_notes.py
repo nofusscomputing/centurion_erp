@@ -78,7 +78,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             ),
         ],
         request = PolymorphicProxySerializer(
-            component_name = 'CenturionNote (request)',
+            component_name = 'CenturionModelNoteModelSerializer',
             serializers = spectacular_request_serializers(),
             resource_type_field_name = None,
             many = False,
@@ -87,7 +87,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             201: OpenApiResponse(
                 description = 'created',
                 response = PolymorphicProxySerializer(
-                    component_name = 'CenturionNote (create)',
+                    component_name = 'CenturionModelNoteViewSerializer',
                     serializers = spectacular_request_serializers( 'View' ),
                     resource_type_field_name = None,
                     many = False,
@@ -134,7 +134,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             ),
         ],
         request = PolymorphicProxySerializer(
-            component_name = 'CenturionNote (list)',
+            component_name = 'CenturionModelNoteModelSerializer',
             serializers = spectacular_request_serializers(),
             resource_type_field_name = None,
             many = True,
@@ -143,7 +143,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             200: OpenApiResponse(
                 description='',
                 response = PolymorphicProxySerializer(
-                    component_name = 'CenturionNote (View)',
+                    component_name = 'CenturionModelNoteViewSerializer',
                     serializers = spectacular_request_serializers( 'View' ),
                     resource_type_field_name = None,
                     many = True,
@@ -182,7 +182,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             ),
         ],
         request = PolymorphicProxySerializer(
-            component_name = 'CenturionNote (retrieve)',
+            component_name = 'CenturionModelNoteModelSerializer',
             serializers = spectacular_request_serializers(),
             resource_type_field_name = None,
             many = False,
@@ -191,7 +191,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             200: OpenApiResponse(
                 description='',
                 response = PolymorphicProxySerializer(
-                    component_name = 'CenturionNote (View)',
+                    component_name = 'CenturionModelNoteViewSerializer',
                     serializers = spectacular_request_serializers( 'View' ),
                     resource_type_field_name = None,
                     many = False,
@@ -231,7 +231,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             ),
         ],
         request = PolymorphicProxySerializer(
-            component_name = 'CenturionNote(update)',
+            component_name = 'CenturionModelNoteModelSerializer',
             serializers = spectacular_request_serializers(),
             resource_type_field_name = None,
             many = False,
@@ -240,7 +240,7 @@ def spectacular_request_serializers( serializer_type = 'Model'):
             200: OpenApiResponse(
                 description='',
                 response = PolymorphicProxySerializer(
-                    component_name = 'CenturionNote (update)',
+                    component_name = 'CenturionModelNoteViewSerializer',
                     serializers = spectacular_request_serializers( 'View' ),
                     resource_type_field_name = None,
                     many = False,
