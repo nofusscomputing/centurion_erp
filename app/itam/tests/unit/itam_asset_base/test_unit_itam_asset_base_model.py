@@ -62,7 +62,7 @@ class ITAMAssetModelInheritedCases(
 
 
 
-@pytest.mark.module_accounting
+@pytest.mark.module_itam
 class ITAMAssetModelPyTest(
     ITAMAssetModelTestCases,
 ):

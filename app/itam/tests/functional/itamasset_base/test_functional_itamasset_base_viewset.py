@@ -1,7 +1,5 @@
 import pytest
 
-from django.test import TestCase
-
 from accounting.tests.functional.asset_base.test_functional_asset_base_viewset import AssetBaseViewSetInheritedCases
 from accounting.viewsets.asset import (
     NoDocsViewSet,
