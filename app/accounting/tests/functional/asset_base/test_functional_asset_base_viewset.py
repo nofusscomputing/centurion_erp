@@ -1,278 +1,83 @@
 import django
 import pytest
 
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
+from rest_framework.reverse import reverse
 
-from access.models.tenant import Tenant as Organization
-from access.models.team import Team
-from access.models.team_user import TeamUsers
+from api.tests.functional.viewset.test_functional_tenancy_viewset import SubModelViewSetInheritedCases
 
-from accounting.models.asset_base import AssetBase
+from accounting.viewsets.asset import (
+    NoDocsViewSet,
+    ViewSet,
+)
 
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
-User = django.contrib.auth.get_user_model()
 
 
-@pytest.mark.skip( reason = 'behind ff. see #887' )
 @pytest.mark.model_assetbase
-class ViewSetBase:
-
-    add_data: dict = {
-        'asset_number': 'abc',
-        'serial_number': 'def',
-        'model_notes': 'sdasds',
-    }
-
-    app_namespace = 'v2'
-
-    base_model = AssetBase
-    """Base model for this sub model
-    don't change or override this value
-    """
-
-    change_data = None
-
-    delete_data = {}
-
-    kwargs_create_item: dict = {
-        'asset_number': '123',
-        'serial_number': '456',
-        'model_notes': 'sdasds',
-    }
-
-    kwargs_create_item_diff_org: dict = {
-        'asset_number': 'mno',
-        'serial_number': 'pqr',
-        'model_notes': 'sdasds',
-    }
-
-    model = None
-
-    url_kwargs: dict = {}
-
-    url_view_kwargs: dict = {}
-
-    url_name = None
-
-
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a team
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
-        """
-
-        organization = Organization.objects.create(name='test_org')
-
-        self.organization = organization
-
-        self.different_organization = Organization.objects.create(name='test_different_organization')
-
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
-
-        kwargs = self.kwargs_create_item
-        kwargs['organization'] = organization
-        self.item = self.model.objects.create(
-            **kwargs
-        )
-
-        self.other_org_item = self.model.objects.create(
-            organization = self.different_organization,
-            **self.kwargs_create_item_diff_org
-        )
-
-
-        self.url_view_kwargs.update({ 'pk': self.item.id })
-
-        if self.add_data is not None:
-
-            self.add_data.update({
-                'organization': self.organization.id,
-            })
-
-
-        view_permissions = Permission.objects.get(
-                codename = 'view_' + self.model._meta.model_name,
-                content_type = ContentType.objects.get(
-                    app_label = self.model._meta.app_label,
-                    model = self.model._meta.model_name,
-                )
-            )
-
-        view_team = Team.objects.create(
-            team_name = 'view_team',
-            organization = organization,
-        )
-
-        view_team.permissions.set([view_permissions])
-
-
-
-        add_permissions = Permission.objects.get(
-                codename = 'add_' + self.model._meta.model_name,
-                content_type = ContentType.objects.get(
-                    app_label = self.model._meta.app_label,
-                    model = self.model._meta.model_name,
-                )
-            )
-
-        add_team = Team.objects.create(
-            team_name = 'add_team',
-            organization = organization,
-        )
-
-        add_team.permissions.set([add_permissions])
-
-
-
-        change_permissions = Permission.objects.get(
-                codename = 'change_' + self.model._meta.model_name,
-                content_type = ContentType.objects.get(
-                    app_label = self.model._meta.app_label,
-                    model = self.model._meta.model_name,
-                )
-            )
-
-        change_team = Team.objects.create(
-            team_name = 'change_team',
-            organization = organization,
-        )
-
-        change_team.permissions.set([change_permissions])
-
-
-
-        delete_permissions = Permission.objects.get(
-                codename = 'delete_' + self.model._meta.model_name,
-                content_type = ContentType.objects.get(
-                    app_label = self.model._meta.app_label,
-                    model = self.model._meta.model_name,
-                )
-            )
-
-        delete_team = Team.objects.create(
-            team_name = 'delete_team',
-            organization = organization,
-        )
-
-        delete_team.permissions.set([delete_permissions])
-
-
-        self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
-
-
-        TeamUsers.objects.create(
-            team = view_team,
-            user = self.view_user
-        )
-
-        self.add_user = User.objects.create_user(username="test_user_add", password="password")
-        TeamUsers.objects.create(
-            team = add_team,
-            user = self.add_user
-        )
-
-        self.change_user = User.objects.create_user(username="test_user_change", password="password")
-        TeamUsers.objects.create(
-            team = change_team,
-            user = self.change_user
-        )
-
-        self.delete_user = User.objects.create_user(username="test_user_delete", password="password")
-        TeamUsers.objects.create(
-            team = delete_team,
-            user = self.delete_user
-        )
-
-
-        self.different_organization_user = User.objects.create_user(username="test_different_organization_user", password="password")
-
-
-        different_organization_team = Team.objects.create(
-            team_name = 'different_organization_team',
-            organization = self.different_organization,
-        )
-
-        different_organization_team.permissions.set([
-            view_permissions,
-            add_permissions,
-            change_permissions,
-            delete_permissions,
-        ])
-
-        TeamUsers.objects.create(
-            team = different_organization_team,
-            user = self.different_organization_user
-        )
-
-
-    def test_sanity_is_asset_sub_model(self):
-        """Sanity Test
-        
-        This test ensures that the model being tested `self.model` is a
-        sub-model of `self.base_model`.
-        This test is required as the same viewset is used for all sub-models
-        of `AssetBase`
-        """
-
-        assert issubclass(self.model, self.base_model)
-
-
-
-class ViewSetTestCases(
-    ViewSetBase,
-    SerializersTestCases,
+class ViewsetTestCases(
+    SubModelViewSetInheritedCases,
 ):
 
-    model = AssetBase
+
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
 
 class AssetBaseViewSetInheritedCases(
-    ViewSetTestCases,
+    ViewsetTestCases,
 ):
-
-    model = None
-
-    url_name = 'accounting:_api_asset_sub'
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        self.kwargs_create_item = {
-            **super().kwargs_create_item,
-            **self.kwargs_create_item
-        }
-
-        self.kwargs_create_item_diff_org = {
-            **super().kwargs_create_item_diff_org,
-            **self.kwargs_create_item_diff_org
-        }
-
-        self.url_kwargs = {
-            'model_name': self.model._meta.model_name
-        }
-
-        self.url_view_kwargs = {
-            'model_name': self.model._meta.model_name
-        }
-
-        super().setUpTestData()
+    pass
 
 
 
 @pytest.mark.module_accounting
-class AssetBaseViewSetTest(
-    ViewSetTestCases,
-    TestCase,
+class AssetBaseViewsetPyTest(
+    ViewsetTestCases,
 ):
 
-    url_name = 'accounting:_api_asset'
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return NoDocsViewSet
+
+
+    @pytest.mark.xfail( reason = 'Namespace for URL requires app_label.' )
+    def test_function_get_meta_urls_self_url(self,
+        viewset_mock_request, model, settings
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `self` key is the correct value
+        """
+
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        assert 'self' in urls, 'self key must exist, test cant continue.'
+
+        assert urls['self'] == reverse(
+            viewname = f'v2:{viewset_mock_request.basename}-list',
+            kwargs = viewset_mock_request.kwargs
+        )
+
+
+
+    def test_function_get_meta_urls_self_url_requires_app_label(self,
+        viewset_mock_request, model, settings
+    ):
+        """Test function `get_meta_urls`
+
+        Ensure that the `self` key is the correct value
+        """
+
+
+        urls = viewset_mock_request.get_meta_urls()
+
+        assert 'self' in urls, 'self key must exist, test cant continue.'
+
+        assert urls['self'] == reverse(
+            viewname = f'v2:{model._meta.app_label}:{viewset_mock_request.basename}-list',
+            kwargs = viewset_mock_request.kwargs
+        )
