@@ -23,7 +23,6 @@ class ITAMAssetBase(
 
     app_namespace = None
 
-    model_tag = 'it_asset'
 
     url_model_name = 'itamassetbase'
 
