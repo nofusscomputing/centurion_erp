@@ -30,6 +30,7 @@ from .model_appsettings import (
 from .model_assetbase import (
     kwargs_assetbase,
     model_assetbase,
+    serializer_assetbase,
 )
 
 from .model_authtoken import (
