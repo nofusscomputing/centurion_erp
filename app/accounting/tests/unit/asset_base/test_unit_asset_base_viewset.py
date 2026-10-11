@@ -99,7 +99,7 @@ class AssetBaseViewsetInheritedCases(
 
 
 
-@pytest.mark.module_access
+@pytest.mark.module_accounting
 class AssetBaseViewsetPyTest(
     AssetBaseViewsetTestCases,
 ):
