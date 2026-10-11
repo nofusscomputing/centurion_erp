@@ -219,6 +219,7 @@ from .model_incidentticket import (
 from .model_itamassetbase import (
     kwargs_itamassetbase,
     model_itamassetbase,
+    serializer_itamassetbase,
 )
 
 from .model_knowledgebase import (

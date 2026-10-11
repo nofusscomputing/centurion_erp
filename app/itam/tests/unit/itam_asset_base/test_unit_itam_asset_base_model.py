@@ -4,6 +4,7 @@ from django.db import models
 
 from accounting.tests.unit.asset_base.test_unit_asset_base_model import (
     AssetBaseModelInheritedCases,
+    AssetBase
 )
 
 from itam.models.itam_asset_base import ITAMAssetBase
@@ -29,7 +30,7 @@ class ITAMAssetModelTestCases(
             },
             'model_tag': {
                 'type': str,
-                'value': 'it_asset'
+                'value': 'asset'
             },
             'url_model_name': {
                 'type': str,
