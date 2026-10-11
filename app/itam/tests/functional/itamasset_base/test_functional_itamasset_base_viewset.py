@@ -31,7 +31,7 @@ class ITAMAssetBaseViewsetInheritedCases(
 
 
 
-@pytest.mark.module_accounting
+@pytest.mark.module_itam
 class ITAMAssetBaseViewsetPyTest(
     ViewsetTestCases,
 ):
