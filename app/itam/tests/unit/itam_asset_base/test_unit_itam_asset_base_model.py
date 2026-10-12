@@ -4,6 +4,7 @@ from django.db import models
 
 from accounting.tests.unit.asset_base.test_unit_asset_base_model import (
     AssetBaseModelInheritedCases,
+    AssetBase
 )
 
 from itam.models.itam_asset_base import ITAMAssetBase
@@ -24,16 +25,16 @@ class ITAMAssetModelTestCases(
                 'value': True
             },
             'app_namespace': {
-                'type': type(None),
-                'value': None
+                'type': str,
+                'value': 'accounting'
             },
             'model_tag': {
                 'type': str,
-                'value': 'it_asset'
+                'value': 'asset'
             },
             'url_model_name': {
                 'type': str,
-                'value': 'itamassetbase'
+                'value': 'asset'
             },
         }
 
@@ -61,7 +62,7 @@ class ITAMAssetModelInheritedCases(
 
 
 
-@pytest.mark.module_accounting
+@pytest.mark.module_itam
 class ITAMAssetModelPyTest(
     ITAMAssetModelTestCases,
 ):

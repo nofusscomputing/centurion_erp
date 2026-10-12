@@ -1,3 +1,8 @@
+## Version v1.36.0
+
+- Removed feature flag `2025-00004` enabling usage of accounting module.
+
+
 ## Version v1.35.0
 
 - Removed all ingress code paths for depreciated ticket models. This has been done so as to ensure that Centurion ERP has no access to the depreciated models. The models have been kept even though they are depreciated (i.e. no data has been removed). This is due to us not planning to write migrations from the old to new ticket models. If you were one of the few that actually used the old ticket models, please file a ticket notating that you used the old models and that they need to be migrated to the "new" ticket models.

@@ -102,7 +102,16 @@ For this command to process the following conditions must be met:
 
         for obj_model in apps.get_models():
 
-            if model_type == getattr(obj_model, 'model_tag', '-not_model-'):
+            if(
+                model_type == getattr(obj_model, 'model_tag', '-not_model-')
+                and not obj_model._is_submodel
+            ):
+                return obj_model
+
+            elif(
+                model_type == getattr(obj_model, 'model_tag', '-not_model-')
+                and not obj_model._is_submodel
+            ):
                 return obj_model
 
 

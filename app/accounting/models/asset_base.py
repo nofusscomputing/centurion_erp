@@ -98,7 +98,11 @@ class AssetBase(
         "dataset": {
             "columns": [
                 [
-                    "display_name",
+                    {
+                        "field": "display_name",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'asset_number',
                     'serial_number',
                     'organization',
@@ -168,6 +172,11 @@ class AssetBase(
 
 
 
-    def __str__(self):
+    def __str__(self) -> str:
 
+        related_model = self.get_related_model()
+
+        if related_model is not self:
+            return str( related_model )
+        
         return self._meta.verbose_name + ' - ' + self.asset_number

@@ -1,54 +1,39 @@
 import pytest
 
-from django.test import TestCase
-
 from accounting.tests.functional.asset_base.test_functional_asset_base_viewset import AssetBaseViewSetInheritedCases
+from accounting.viewsets.asset import (
+    NoDocsViewSet,
+    ViewSet,
+)
 
 from itam.models.itam_asset_base import ITAMAssetBase
 
 
-@pytest.mark.skip( reason = 'behind ff, see #888' )
+
 @pytest.mark.model_itamassetbase
-class ViewSetTestCases(
-    AssetBaseViewSetInheritedCases
+class ViewsetTestCases(
+    AssetBaseViewSetInheritedCases,
 ):
 
-    add_data: dict = {
-        'asset_number': '1354'
-    }
 
-    kwargs_create_item: dict = {}
-
-    kwargs_create_item_diff_org: dict = {}
-
-    model = ITAMAssetBase
-
-    url_kwargs: dict = {
-        'model_name': 'itamassetbase',
-    }
-
-    url_view_kwargs: dict = {
-        'model_name': 'itamassetbase',
-    }
-
-    url_name = '_api_itamassetbase'
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
 
-class ITAMAssetBaseViewSetInheritedCases(
-    ViewSetTestCases,
+class ITAMAssetBaseViewsetInheritedCases(
+    ViewsetTestCases,
 ):
-
-    model = None
-
-    url_name = None
-
-
-
-@pytest.mark.module_accounting
-class ITAMAssetBaseViewSetTest(
-    ViewSetTestCases,
-    TestCase,
-):
-
     pass
+
+
+
+@pytest.mark.module_itam
+class ITAMAssetBaseViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return NoDocsViewSet
