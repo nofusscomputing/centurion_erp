@@ -25,8 +25,8 @@ class ITAMAssetModelTestCases(
                 'value': True
             },
             'app_namespace': {
-                'type': type(None),
-                'value': None
+                'type': str,
+                'value': 'accounting'
             },
             'model_tag': {
                 'type': str,
@@ -34,7 +34,7 @@ class ITAMAssetModelTestCases(
             },
             'url_model_name': {
                 'type': str,
-                'value': 'itamassetbase'
+                'value': 'asset'
             },
         }
 
