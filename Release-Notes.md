@@ -1,3 +1,8 @@
+## Version v1.37.0
+
+- Removed feature flag `2025-00004` enabling usage of accounting module.
+
+
 ## Version v1.36.0
 
 This release is an OOB release to address vulnerability see [GHSA-93rj-7648-533c](https://github.com/nofusscomputing/centurion_erp/security/advisories/GHSA-93rj-7648-533c).

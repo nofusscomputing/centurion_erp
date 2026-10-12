@@ -710,15 +710,6 @@ if FEATURE_FLAGGING_ENABLED:
                 }
             },
             {
-                "2025-00004": {
-                    "name": "Accounting Module",
-                    "description": "Accounting related functions. see https://github.com/nofusscomputing/centurion_erp/issues/88",
-                    "enabled": True,
-                    "created": "",
-                    "modified": ""
-                }
-            },
-            {
                 "2025-00007": {
                     "name": "itam.ITAMAssetBase",
                     "description": "ITAM Asset Base model. see https://github.com/nofusscomputing/centurion_erp/issues/692",
