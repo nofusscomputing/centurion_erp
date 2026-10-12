@@ -633,6 +633,53 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     'path': ":module",
                     'children': [
                         {
+                            'path': "asset",
+                            'children': [
+                                {
+                                    'index': True,
+                                    'component': "list",
+                                    'loader': "django"
+                                },
+                                {
+                                    'path': ":pk",
+                                    'component': "detail",
+                                    'action': "api",
+                                    'loader': "django",
+                                    
+                                },
+                                {
+                                    'path': "add",
+                                    'component': "detail",
+                                    'loader': "django_metadata"
+                                    
+                                },
+                                {    # Sub-models had to be hard typed to prevent
+                                     # routing collisions.
+                                    'path': "itamassetbase",
+                                    'action': "api",
+                                    'children': [
+                                        {
+                                            'path': "add",
+                                            'component': "detail",
+                                            'loader': "django_metadata"
+                                            
+                                        },
+                                        {
+                                            'path': ":pk",
+                                            'component': "detail",
+                                            'action': "api",
+                                            'loader': "django"
+                                        },
+                                        {
+                                            'index': True,
+                                            'component': "list",
+                                            'loader': "django"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
                             'path': "entity",
                             'children': [
                                 {
