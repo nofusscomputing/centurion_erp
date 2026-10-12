@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from drf_spectacular.utils import extend_schema_serializer
 
@@ -79,6 +80,28 @@ class ModelSerializer(
             'modified',
             '_urls',
         ]
+
+
+
+    def get_url(self, item) -> dict:
+
+        get_url = super().get_url( item = item)
+
+
+        if getattr(item, '_ticket_linkable', False):
+            get_url['tickets'] = reverse(
+                "v2:_api_modelticket_sub-list",
+                request = None,
+                kwargs = {
+                    'app_label': 'accounting',
+                    'model_name': item._base_model._meta.model_name,
+                    'model_id': item.pk
+                }
+            )
+
+
+        return get_url
+
 
 
     def validate(self, attrs):
