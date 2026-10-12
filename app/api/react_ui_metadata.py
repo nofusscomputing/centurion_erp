@@ -311,6 +311,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITAM",
                 "name": "itam",
                 "pages": {
+                    'view_itamassetbase': {
+                        "display_name": "IT Assets",
+                        "name": "itasset",
+                        "link": "/accounting/asset/itamassetbase"
+                    },
                     'view_device': {
                         "display_name": "Devices",
                         "name": "device",
@@ -444,16 +449,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
-                if request.feature_flag['2025-00007']:
-
-                    nav['itam']['pages'] = {
-                        'view_itamassetbase': {
-                            "display_name": "IT Assets",
-                            "name": "itasset",
-                            "link": "/itam/itamassetbase"
-                        },
-                        **nav['itam']['pages']
-                    }
 
 
             if request.feature_flag['2025-00009']:
