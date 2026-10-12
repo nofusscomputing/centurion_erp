@@ -26,23 +26,6 @@ class ViewsetTestCases(
 
 
 
-class AssetBaseViewSetInheritedCases(
-    ViewsetTestCases,
-):
-    pass
-
-
-
-@pytest.mark.module_accounting
-class AssetBaseViewsetPyTest(
-    ViewsetTestCases,
-):
-
-    @pytest.fixture( scope = 'function' )
-    def viewset(self):
-        return NoDocsViewSet
-
-
     @pytest.mark.xfail( reason = 'Namespace for URL requires app_label.' )
     def test_function_get_meta_urls_self_url(self,
         viewset_mock_request, model, settings
@@ -78,6 +61,25 @@ class AssetBaseViewsetPyTest(
         assert 'self' in urls, 'self key must exist, test cant continue.'
 
         assert urls['self'] == reverse(
-            viewname = f'v2:{model._meta.app_label}:{viewset_mock_request.basename}-list',
+            viewname = f'v2:accounting:{viewset_mock_request.basename}-list',
             kwargs = viewset_mock_request.kwargs
         )
+
+
+
+class AssetBaseViewSetInheritedCases(
+    ViewsetTestCases,
+):
+    pass
+
+
+
+@pytest.mark.module_accounting
+class AssetBaseViewsetPyTest(
+    ViewsetTestCases,
+):
+
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return NoDocsViewSet
+
