@@ -35,11 +35,11 @@ router.register(
 )
 router.register(
     prefix = '/(?P<model_name>(itamassetbase)+)', viewset = asset.ViewSet,
-    feature_flag = '2025-00007', basename = '_api_itamassetbase'
+    basename = '_api_itamassetbase'
 )
 router.register(
     prefix = '/(?P<model_name>(itamassetbase)+)', viewset = asset.ViewSet,
-    feature_flag = '2025-00007', basename = '_api_itamassetbase_sub'
+    basename = '_api_itamassetbase_sub'
 )
 router.register(
     prefix = '/device', viewset = device.ViewSet,
