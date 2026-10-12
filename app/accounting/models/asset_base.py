@@ -98,7 +98,11 @@ class AssetBase(
         "dataset": {
             "columns": [
                 [
-                    "display_name",
+                    {
+                        "field": "display_name",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'asset_number',
                     'serial_number',
                     'organization',
