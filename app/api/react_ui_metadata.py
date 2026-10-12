@@ -275,7 +275,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             'accounting': {
                 "display_name": "Accounting",
                 "name": "accounting",
-                "pages": {}
+                "pages": {
+                    'view_assetbase': {
+                        "display_name": "Assets",
+                        "name": "asset",
+                        "link": "/accounting/asset"
+                    }
+                }
             },
             'assistance': {
                 "display_name": "Assistance",
@@ -435,16 +441,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "git_repository",
                         "icon": 'git',
                         "link": "/devops/git_repository"
-                    }
-                })
-
-            if request.feature_flag['2025-00004']:
-
-                nav['accounting']['pages'].update({
-                    'view_assetbase': {
-                        "display_name": "Assets",
-                        "name": "asset",
-                        "link": "/accounting/asset"
                     }
                 })
 
