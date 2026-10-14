@@ -228,6 +228,12 @@ from .model_itasset import (
     serializer_itasset,
 )
 
+from .model_itassetmodel import (
+    kwargs_itassetmodel,
+    model_itassetmodel,
+    serializer_itassetmodel,
+)
+
 from .model_knowledgebase import (
     kwargs_knowledgebase,
     model_knowledgebase,
