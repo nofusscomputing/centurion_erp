@@ -39,7 +39,7 @@ class ITAssetModel(CenturionModel):
         help_text = 'Type of device.',
         null = True,
         on_delete = models.PROTECT,
-        related_name = '+'
+        related_name = '+',
         verbose_name = 'Type'
     )
 
