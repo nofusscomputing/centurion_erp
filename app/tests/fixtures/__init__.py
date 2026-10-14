@@ -240,6 +240,12 @@ from .model_itassetrelationships import (
     serializer_itassetrelationships,
 )
 
+from .model_itassetsoftware import (
+    kwargs_itassetsoftware,
+    model_itassetsoftware,
+    serializer_itassetsoftware,
+)
+
 from .model_knowledgebase import (
     kwargs_knowledgebase,
     model_knowledgebase,
