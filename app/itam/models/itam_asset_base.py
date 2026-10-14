@@ -32,9 +32,9 @@ class ITAMAssetBase(
             'id'
         ]
 
-        verbose_name = "IT Asset"
+        verbose_name = "IT Asset Base"
 
-        verbose_name_plural = "IT Assets"
+        verbose_name_plural = "IT Assets Base"
 
 
 
@@ -117,5 +117,10 @@ class ITAMAssetBase(
 
 
     def __str__(self):
+
+        if not self.asset_number:
+
+            return self._meta.verbose_name
+
 
         return self._meta.verbose_name + ' - ' + self.asset_number
