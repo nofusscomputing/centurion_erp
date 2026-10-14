@@ -3,3 +3,4 @@ from .it_asset import ITAsset
 from .it_asset_model import ITAssetModel
 from .it_asset_relationships import ITAssetRelationships
 from .it_asset_software import ITAssetSoftware
+from .software_version import SoftwareVersions
