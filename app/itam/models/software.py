@@ -320,6 +320,11 @@ class Software(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    replacement = 'itam.SoftwareVersions',
+)
 class SoftwareVersion(
     CenturionModel
 ):

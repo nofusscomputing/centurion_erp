@@ -50,6 +50,7 @@ def permission_queryset():
         'devicesoftware',
 
         'software',
+        'softwareversion',
     ]
 
     exclude_permissions = [
