@@ -12,6 +12,7 @@ from django.utils.timezone import now
 from access.fields import AutoLastModifiedField
 
 from centurion.helpers.merge_software import merge_software
+from centurion.lib.decorators import depreciate
 
 from core.classes.icon import Icon
 from core.models.centurion import CenturionModel
@@ -123,6 +124,11 @@ class DeviceType(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    replacement = 'itam.ITAsset',
+)
 class Device(
     CenturionModel,
 ):
