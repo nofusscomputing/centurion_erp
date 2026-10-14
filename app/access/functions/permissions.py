@@ -45,6 +45,7 @@ def permission_queryset():
 
         # itam
         'device',
+        'devicemodel',
         'deviceoperatingsystem',
         'devicesoftware',
     ]
