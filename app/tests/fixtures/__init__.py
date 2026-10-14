@@ -222,6 +222,12 @@ from .model_itamassetbase import (
     serializer_itamassetbase,
 )
 
+from .model_itasset import (
+    kwargs_itasset,
+    model_itasset,
+    serializer_itasset,
+)
+
 from .model_knowledgebase import (
     kwargs_knowledgebase,
     model_knowledgebase,
