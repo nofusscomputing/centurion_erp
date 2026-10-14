@@ -12,7 +12,9 @@ from itam.models.device import Device, DeviceSoftware
 from itam.serializers.device import DeviceBaseSerializer
 from itam.serializers.software import Software, SoftwareBaseSerializer
 from itam.serializers.software_category import SoftwareCategoryBaseSerializer
-from itam.serializers.software_version import SoftwareVersionBaseSerializer
+from itam.serializers.software_version import (
+    BaseSerializer as SoftwareVersionBaseSerializer
+)
 
 
 
