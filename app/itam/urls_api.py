@@ -51,6 +51,10 @@ router.register(
     basename = '_api_itasset_connections'
 )
 router.register(
+    prefix = '/device_relationships', viewset = device_relationships.ViewSet,
+    basename = '_api_itassetrelationships'
+)
+router.register(
     prefix = '/device/(?P<device_id>[0-9]+)/operating_system',
     viewset = device_operating_system.ViewSet,
     basename = '_api_deviceoperatingsystem')
