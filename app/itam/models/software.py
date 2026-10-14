@@ -160,7 +160,7 @@ class Software(
         help_text = 'Who publishes this software',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'software',
+        related_name = '+',
         verbose_name = 'Publisher',
     )
 
