@@ -234,6 +234,12 @@ from .model_itassetmodel import (
     serializer_itassetmodel,
 )
 
+from .model_itassetrelationships import (
+    kwargs_itassetrelationships,
+    model_itassetrelationships,
+    serializer_itassetrelationships,
+)
+
 from .model_knowledgebase import (
     kwargs_knowledgebase,
     model_knowledgebase,
