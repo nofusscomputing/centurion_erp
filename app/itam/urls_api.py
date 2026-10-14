@@ -9,6 +9,7 @@ from devops.viewsets import (
 from itam.viewsets import (
     index as itam_index_v2,
     device,
+    device_relationships,
     device_software as device_software_v2,
     device_operating_system,
     inventory,
@@ -44,6 +45,10 @@ router.register(
 router.register(
     prefix = '/device', viewset = device.ViewSet,
     basename = '_api_device'
+)
+router.register(
+    prefix = '/(?P<model_name>(itasset|itassetmodel)+)/(?P<model_id>[0-9]+)/connections', viewset = device_relationships.ViewSet,
+    basename = '_api_itasset_connections'
 )
 router.register(
     prefix = '/device/(?P<device_id>[0-9]+)/operating_system',
