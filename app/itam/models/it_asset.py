@@ -135,6 +135,15 @@ class ITAsset(
         verbose_name = 'PUK PIN'
     )
 
+    device_model = models.ForeignKey(
+        to = 'itam.ITAssetModel',
+        blank = False,
+        help_text = 'Model of this device.',
+        on_delete = models.PROTECT,
+        related_name = '+',
+        verbose_name = 'Model'
+    )
+
     def validate_config_keys_not_reserved(self):
 
         if self:
@@ -176,7 +185,7 @@ class ITAsset(
             "columns": [
                 [
                     "name",
-                    # "device_type",
+                    "device_model",
                     'status_icon',
                 ],
                 [
@@ -195,7 +204,7 @@ class ITAsset(
                         "layout": "double",
                         "left": [
                             'organization',
-                            # 'device_type',
+                            'device_model',
                             'name',
                             'serial_number',
                             'uuid',
@@ -291,6 +300,7 @@ class ITAsset(
         "table": [
             'status_icon',
             "name",
+            "device_model",
             "organization",
             "created",
             "modified",
