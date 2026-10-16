@@ -51,6 +51,14 @@ Describe in detail the following:
 
 - [ ] User Documentation added/updated
 
+----
+
+Additional Tasks if replacing a model
+
+    - [ ] 🧹 [Depreciated current model](https://nofusscomputing.com/projects/centurion_erp/development/models/#depreciating-a-model)
+
+    - [ ] :broom: Added model to be excluded from permissions `access.functions.permissions.permission_queryset()`
+
 ---
 
 <!-- Add additional tasks here and as a check box list -->
