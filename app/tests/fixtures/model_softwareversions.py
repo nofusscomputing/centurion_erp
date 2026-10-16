@@ -21,16 +21,14 @@ def model_softwareversions(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_softwareversions(django_db_blocker,
     kwargs_centurionmodel,
-    kwargs_software, model_software
+    kwargs_itassetsoftware, model_itassetsoftware
 ):
 
     def factory():
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_software()
-
-            software = model_software.objects.create( **kwargs_software() )
+            software = model_itassetsoftware.objects.create( **kwargs_itassetsoftware() )
 
         kwargs = {
             **kwargs_centurionmodel(),
