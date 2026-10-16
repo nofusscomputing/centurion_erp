@@ -1,11 +1,17 @@
 # from django.contrib.auth.models import ContentType
 from django.db import models
 
-# from core.middleware.get_request import get_request
+from centurion.lib.decorators import depreciate
 
 
 
-class SaveHistory(models.Model):
+@depreciate(
+    depreciated_in = '1.19.0',
+    removed_in = '2.0',
+    replacement = 'core.models.CenturionAudit',
+    skip_tests = True,
+)
+class SaveHistory(models.Model):    # pragma: no cover
 
     save_model_history: bool = True
     """When set, history will be saved.

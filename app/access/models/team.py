@@ -21,8 +21,9 @@ from core import exceptions as centurion_exceptions
     depreciated_in = '1.21.0',
     removed_in = '2.0',
     replacement = 'access.models.roles',
+    skip_tests = True,
 )
-class Team(Group, TenancyObject):
+class Team(Group, TenancyObject):    # pragma: no cover
 
     class Meta:
 

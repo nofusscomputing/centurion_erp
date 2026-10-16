@@ -42,6 +42,15 @@ def permission_queryset():
         'history',
         'modelnotes',
         'usersettings',
+
+        # itam
+        'device',
+        'devicemodel',
+        'deviceoperatingsystem',
+        'devicesoftware',
+
+        'software',
+        'softwareversion',
     ]
 
     exclude_permissions = [

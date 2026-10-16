@@ -7,6 +7,7 @@ from django.db import models
 
 from access.fields import AutoLastModifiedField
 
+from centurion.lib.decorators import depreciate
 from centurion.helpers.merge_software import merge_software
 
 from core.models.centurion import CenturionModel
@@ -340,9 +341,14 @@ class ConfigGroups(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    skip_tests = True,
+)
 class ConfigGroupHosts(
     CenturionModel,
-):
+):    # pragma: no cover
 
     _notes_enabled = False
 
@@ -397,9 +403,14 @@ class ConfigGroupHosts(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    skip_tests = True,
+)
 class ConfigGroupSoftware(
     CenturionModel,
-):
+):    # pragma: no cover
     """ A way to configure software to install/remove per config group """
 
     _notes_enabled = False
