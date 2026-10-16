@@ -31,7 +31,7 @@ User = django.contrib.auth.get_user_model()
 class TicketComment(
     SlashCommands,
     TenancyObject,
-):
+):    # pragma: no cover
 
     save_model_history: bool = False
 

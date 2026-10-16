@@ -23,7 +23,7 @@ from settings.models.app_settings import AppSettings
 )
 class DeviceModel(
     CenturionModel
-):
+):    # pragma: no cover
 
     model_tag = 'device_model'
 

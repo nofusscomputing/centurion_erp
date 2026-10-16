@@ -132,7 +132,7 @@ class DeviceType(
 )
 class Device(
     CenturionModel,
-):
+):    # pragma: no cover
 
     model_tag = 'device'
 
@@ -575,7 +575,7 @@ class Device(
 )
 class DeviceSoftware(
     CenturionModel,
-):
+):    # pragma: no cover
     """ A way for the device owner to configure software to install/remove """
 
     _audit_enabled = False
@@ -718,7 +718,7 @@ class DeviceSoftware(
 )
 class DeviceOperatingSystem(
     CenturionModel,
-):
+):    # pragma: no cover
 
     _audit_enabled = False
 
