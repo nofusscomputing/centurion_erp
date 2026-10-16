@@ -10,8 +10,8 @@ from config_management.serializers.config_group import ConfigGroups, ConfigGroup
 
 from itam.serializers.software import SoftwareBaseSerializer
 from itam.serializers.software_version import (
-    SoftwareVersions,
-    BaseSerializer as SoftwareVersionBaseSerializer
+    SoftwareVersion,
+    SoftwareVersionBaseSerializer
 )
 
 

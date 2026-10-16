@@ -151,6 +151,7 @@ for model in get_models(
     excludes = [
         'manufacturer'
     ],
+    excludes_model_classes = [ 'CenturionAudit', ],
     only_class = CenturionAudit
 ):
 

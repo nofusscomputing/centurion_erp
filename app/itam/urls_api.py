@@ -97,6 +97,10 @@ router.register(
     basename = '_api_softwareversion'
 )
 router.register(
+    prefix = '/software/(?P<software_id>[0-9]+)/version', viewset = software_version_v2.ViewSet,
+    basename = '_api_softwareversions'
+)
+router.register(
     prefix = '/software/(?P<software_id>[0-9]+)/feature_flag',
     viewset = software_enable_feature_flag.ViewSet,
     basename = '_api_softwareenablefeatureflag'
