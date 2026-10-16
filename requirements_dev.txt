@@ -196,7 +196,7 @@ jsonschema-specifications==2025.9.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   jsonschema
-kombu==5.5.1
+kombu==5.6.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -235,10 +235,13 @@ oauthlib==4.0.0
     #   social-auth-core
 packaging==26.3
     # via
+    #   -r requirements.txt
+    #   -r requirements_production.txt
     #   black
     #   build
     #   check-wheel-contents
     #   commitizen
+    #   kombu
     #   pytest
     #   wheel
 pathspec==1.1.1
@@ -315,7 +318,7 @@ python3-openid==3.2.0
     #   social-auth-core
 pytokens==0.4.1
     # via black
-pytz==2025.1
+pytz==2026.5
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -392,7 +395,7 @@ typing-extensions==4.16.0
     #   typing-inspection
 typing-inspection==0.4.4
     # via pydantic
-tzdata==2025.1
+tzdata==2026.5
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
