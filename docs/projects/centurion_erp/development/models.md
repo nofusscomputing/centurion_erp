@@ -49,8 +49,6 @@ When creating models they must meet the following requirements:
 
 - **All** Model Exceptions must be from `django.core.exceptions`
 
-
-
 - Any data that is provided by the end user and saved to the data base must maintain data integrity. i.e. The actual provided data is what's saved to the database **exactly.**
 
 !!! tip
