@@ -90,7 +90,7 @@ jsonschema==4.26.0
     # via drf-spectacular
 jsonschema-specifications==2025.9.1
     # via jsonschema
-kombu==5.5.1
+kombu==5.6.2
     # via celery
 linkify-it-py==2.2.0
     # via markdown-it-py
@@ -106,6 +106,8 @@ oauthlib==4.0.0
     # via
     #   requests-oauthlib
     #   social-auth-core
+packaging==26.3
+    # via kombu
 prometheus-client==0.21.1
     # via
     #   -r tools/requirements.in
@@ -124,7 +126,7 @@ python-dateutil==2.9.0.post0
     # via celery
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2025.1
+pytz==2026.5
     # via -r tools/requirements.in
 pyyaml==6.0.3
     # via
@@ -159,7 +161,7 @@ typing-extensions==4.16.0
     #   click-repl
     #   referencing
     #   sqlalchemy
-tzdata==2025.1
+tzdata==2026.5
     # via
     #   -r tools/requirements.in
     #   celery
