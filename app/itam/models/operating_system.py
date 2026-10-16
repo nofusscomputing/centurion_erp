@@ -42,7 +42,7 @@ class OperatingSystem(
         help_text = 'Who publishes this Operating System',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'operating_system',
+        related_name = '+',
         verbose_name = 'Publisher'
     )
 
