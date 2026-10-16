@@ -2,7 +2,7 @@ import pytest
 import random
 
 from itam.models.software_version import SoftwareVersions
-from itam.serializers.software_version import (
+from itam.serializers.softwareversions import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer

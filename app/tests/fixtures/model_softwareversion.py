@@ -3,9 +3,9 @@ import random
 
 from itam.models.software import SoftwareVersion
 from itam.serializers.software_version import (
-    BaseSerializer,
-    ModelSerializer,
-    ViewSerializer
+    SoftwareVersionBaseSerializer,
+    SoftwareVersionModelSerializer,
+    SoftwareVersionViewSerializer
 )
 
 
@@ -47,7 +47,7 @@ def kwargs_softwareversion(django_db_blocker,
 def serializer_softwareversion():
 
     yield {
-        'base': BaseSerializer,
-        'model': ModelSerializer,
-        'view': ViewSerializer
+        'base': SoftwareVersionBaseSerializer,
+        'model': SoftwareVersionModelSerializer,
+        'view': SoftwareVersionViewSerializer
     }

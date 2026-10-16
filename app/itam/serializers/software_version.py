@@ -1,23 +1,15 @@
 from rest_framework import serializers
-from drf_spectacular.utils import extend_schema_serializer
 
 from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from itam.models import (
-    ITAssetSoftware,
-    SoftwareVersions
-)
-
-from itam.serializers.assetbase_itassetsoftware import (
-    BaseSerializer as SoftwareBaseSerializer
-)
+from itam.models.software import Software, SoftwareVersion
+from itam.serializers.software import SoftwareBaseSerializer
 
 
 
-@extend_schema_serializer(component_name = 'SoftwareVersionsBaseSerializer')
-class BaseSerializer(serializers.ModelSerializer):
+class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -35,7 +27,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = SoftwareVersions
+        model = SoftwareVersion
 
         fields = [
             'id',
@@ -52,11 +44,9 @@ class BaseSerializer(serializers.ModelSerializer):
         ]
 
 
-
-@extend_schema_serializer(component_name = 'SoftwareVersionsModelSerializer')
-class ModelSerializer(
+class SoftwareVersionModelSerializer(
     common.CommonModelSerializer,
-    BaseSerializer
+    SoftwareVersionBaseSerializer
 ):
 
 
@@ -70,7 +60,7 @@ class ModelSerializer(
 
     class Meta:
 
-        model = SoftwareVersions
+        model = SoftwareVersion
 
         fields =  [
              'id',
@@ -104,7 +94,7 @@ class ModelSerializer(
 
             if 'software_id' in self._context['view'].kwargs:
 
-                software = ITAssetSoftware.objects.get( id = self._context['view'].kwargs['software_id'] )
+                software = Software.objects.get( id = self._context['view'].kwargs['software_id'] )
 
                 self.validated_data['software'] = software
                 self.validated_data['organization'] = software.organization
@@ -113,8 +103,7 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'SoftwareVersionsViewSerializer')
-class ViewSerializer(ModelSerializer):
+class SoftwareVersionViewSerializer(SoftwareVersionModelSerializer):
 
     software = SoftwareBaseSerializer( many = False, read_only = True )
 
