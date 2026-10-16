@@ -23,7 +23,7 @@ from core import exceptions as centurion_exceptions
     replacement = 'access.models.roles',
     skip_tests = True,
 )
-class Team(Group, TenancyObject):
+class Team(Group, TenancyObject):    # pragma: no cover
 
     class Meta:
 

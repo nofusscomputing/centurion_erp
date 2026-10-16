@@ -122,7 +122,7 @@ class SoftwareCategory(
 )
 class Software(
     CenturionModel,
-):
+):    # pragma: no cover
 
     model_tag = 'software'
 
@@ -329,7 +329,7 @@ class Software(
 )
 class SoftwareVersion(
     CenturionModel
-):
+):    # pragma: no cover
 
     model_tag = 'software_version'
 

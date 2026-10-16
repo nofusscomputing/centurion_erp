@@ -3,7 +3,6 @@ from django.db import models
 from settings.models.app_settings import AppSettings
 
 from .itam_asset_base import ITAMAssetBase
-from .software import SoftwareCategory, SoftwareVersion
 
 
 
