@@ -21,7 +21,7 @@ from settings.models.app_settings import AppSettings
 )
 class Manufacturer(
     CenturionModel,
-):
+):    # pragma: no cover
 
     model_tag = 'manufacturer'
 

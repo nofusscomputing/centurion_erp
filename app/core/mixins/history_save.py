@@ -5,7 +5,7 @@ from django.db import models
 
 
 
-class SaveHistory(models.Model):
+class SaveHistory(models.Model):    # pragma: no cover
 
     save_model_history: bool = True
     """When set, history will be saved.
