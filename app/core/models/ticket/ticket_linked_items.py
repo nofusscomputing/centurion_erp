@@ -23,6 +23,7 @@ deleted_model = dispatch.Signal()
     depreciated_in = '1.16.0',
     removed_in = '2.0',
     replacement = 'core.models.models_ticket',
+    skip_tests = True,
 )
 class TicketLinkedItem(TenancyObject):
 

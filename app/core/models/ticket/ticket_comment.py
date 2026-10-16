@@ -26,6 +26,7 @@ User = django.contrib.auth.get_user_model()
     depreciated_in = '1.16.0',
     removed_in = '2.0',
     replacement = 'core.models.ticket_comment_base',
+    skip_tests = True,
 )
 class TicketComment(
     SlashCommands,

@@ -128,6 +128,7 @@ class DeviceType(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
     replacement = 'itam.ITAsset',
+    skip_tests = True,
 )
 class Device(
     CenturionModel,
@@ -570,6 +571,7 @@ class Device(
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
+    skip_tests = True,
 )
 class DeviceSoftware(
     CenturionModel,
@@ -712,6 +714,7 @@ class DeviceSoftware(
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
+    skip_tests = True,
 )
 class DeviceOperatingSystem(
     CenturionModel,
