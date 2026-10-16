@@ -49,12 +49,26 @@ When creating models they must meet the following requirements:
 
 - **All** Model Exceptions must be from `django.core.exceptions`
 
-- If you are replacing a model, ensure you mark it with decorator `centurion.lib.decorators.depreciated`
+
 
 - Any data that is provided by the end user and saved to the data base must maintain data integrity. i.e. The actual provided data is what's saved to the database **exactly.**
 
 !!! tip
     It's a good idea to create the initial model class, then create and add the model tests for that class. This way you can run the tests to ensure that the requirements are met. Of Note, the tests may not cover ALL of the requirements section, due diligence will need to be exercised.
+
+
+#### Depreciating a model
+
+When depreciating a model the following are also requirements:
+
+- Ensure you mark the model with decorator `centurion.lib.decorators.depreciated`
+
+- add `# pragma: no cover` to the model class so code coverage no longer includes the class.
+
+    !!! tip
+        Any object that is related to the class will also require `# pragma: no cover`
+
+- if also replacing the depreciated models Serializer, ViewSet, ensure they are also marked with the depreciated decorator and marked `# pragma: no cover`.
 
 
 ### Normal (Base) Model
