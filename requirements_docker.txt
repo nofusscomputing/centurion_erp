@@ -158,7 +158,7 @@ jsonschema-specifications==2025.9.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   jsonschema
-kombu==5.5.1
+kombu==5.6.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -189,6 +189,11 @@ oauthlib==4.0.0
     #   -r requirements_production.txt
     #   requests-oauthlib
     #   social-auth-core
+packaging==26.3
+    # via
+    #   -r requirements.txt
+    #   -r requirements_production.txt
+    #   kombu
 prometheus-client==0.21.1
     # via
     #   -r requirements.txt
@@ -225,7 +230,7 @@ python3-openid==3.2.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   social-auth-core
-pytz==2025.1
+pytz==2026.5
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -289,7 +294,7 @@ typing-extensions==4.16.0
     #   click-repl
     #   referencing
     #   sqlalchemy
-tzdata==2025.1
+tzdata==2026.5
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
