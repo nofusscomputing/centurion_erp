@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements_production.txt requirements.txt tools/requirements_production.in
 #
-amqp==5.4.0
+amqp==5.4.1
     # via
     #   -r requirements.txt
     #   kombu
@@ -18,7 +18,7 @@ attrs==26.1.0
     #   -r requirements.txt
     #   jsonschema
     #   referencing
-billiard==4.3.0
+billiard==4.3.1
     # via
     #   -r requirements.txt
     #   celery
@@ -53,7 +53,7 @@ click-plugins==1.1.1.2
     # via
     #   -r requirements.txt
     #   celery
-click-repl==0.4.0
+click-repl==0.4.1
     # via
     #   -r requirements.txt
     #   celery
@@ -97,7 +97,7 @@ djangorestframework-jsonapi==8.1.0
     # via -r requirements.txt
 drf-spectacular[sidecar]==0.29.0
     # via -r requirements.txt
-drf-spectacular-sidecar==2026.9.1
+drf-spectacular-sidecar==2026.10.1
     # via
     #   -r requirements.txt
     #   drf-spectacular
@@ -157,7 +157,7 @@ prompt-toolkit==3.0.53
     #   click-repl
 psycopg2==2.9.9
     # via -r tools/requirements_production.in
-pycparser==3.0
+pycparser==3.11
     # via
     #   -r requirements.txt
     #   cffi
@@ -195,7 +195,7 @@ requests-oauthlib==2.0.0
     # via
     #   -r requirements.txt
     #   social-auth-core
-rpds-py==2026.6.3
+rpds-py==2026.9.1
     # via
     #   -r requirements.txt
     #   jsonschema
@@ -243,7 +243,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.9.1
+wcwidth==0.9.2
     # via
     #   -r requirements.txt
     #   prompt-toolkit
