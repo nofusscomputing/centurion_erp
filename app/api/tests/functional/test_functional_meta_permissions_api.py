@@ -146,7 +146,16 @@ for centurion_model in get_models(
                             'history',
                             'centurionmodelnote',
                             'manufacturer',
-                            'notes'
+                            'notes',
+
+                            # ITAM
+                            'device',
+                            'devicemodel',
+                            'deviceoperatingsystem',
+                            'devicesoftware',
+
+                            'software',
+                            'softwareversion',
                         ]
 ):
 
