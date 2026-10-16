@@ -19,6 +19,7 @@ from settings.models.app_settings import AppSettings
     depreciated_in = '1.36.0',
     removed_in = '2.0',
     replacement = 'itam.ITAssetModel',
+    skip_tests = True,
 )
 class DeviceModel(
     CenturionModel

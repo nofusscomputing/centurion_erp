@@ -17,6 +17,7 @@ from settings.models.app_settings import AppSettings
     depreciated_in = '1.27.0',
     removed_in = '2.0',
     replacement = 'access.models.company',
+    skip_tests = True,
 )
 class Manufacturer(
     CenturionModel,

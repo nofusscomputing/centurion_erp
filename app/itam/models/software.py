@@ -118,6 +118,7 @@ class SoftwareCategory(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
     replacement = 'itam.ITAssetSoftware',
+    skip_tests = True,
 )
 class Software(
     CenturionModel,
@@ -324,6 +325,7 @@ class Software(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
     replacement = 'itam.SoftwareVersions',
+    skip_tests = True,
 )
 class SoftwareVersion(
     CenturionModel
