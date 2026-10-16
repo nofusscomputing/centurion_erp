@@ -4,14 +4,21 @@ from access.fields import AutoLastModifiedField
 
 from access.models.company_base import Company
 
+from centurion.lib.decorators import depreciate
+
 from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    replacement = 'itam.ITAssetOperatingSystem',
+)
 class OperatingSystem(
     CenturionModel
-):
+):    # pragma: no cover
 
     model_tag = 'operating_system'
 
