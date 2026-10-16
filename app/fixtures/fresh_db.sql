@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS "social_auth_nonce" ("id" integer NOT NULL PRIMARY KE
 CREATE TABLE IF NOT EXISTS "social_auth_partial" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(32) NOT NULL, "next_step" smallint unsigned NOT NULL CHECK ("next_step" >= 0), "backend" varchar(32) NOT NULL, "timestamp" datetime NOT NULL, "data" text NOT NULL CHECK ((JSON_VALID("data") OR "data" IS NULL)));
 CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "provider" varchar(32) NOT NULL, "uid" varchar(255) NOT NULL, "user_id" bigint NOT NULL REFERENCES "access_centurionuser" ("id") DEFERRABLE INITIALLY DEFERRED, "created" datetime NOT NULL, "modified" datetime NOT NULL, "extra_data" text NOT NULL CHECK ((JSON_VALID("extra_data") OR "extra_data" IS NULL)), CONSTRAINT "user_social_auth_uid_required" CHECK (NOT ("uid" = '')));
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('django_migrations',237);
+INSERT INTO sqlite_sequence VALUES('django_migrations',238);
 INSERT INTO sqlite_sequence VALUES('django_content_type',207);
 INSERT INTO sqlite_sequence VALUES('auth_permission',891);
 INSERT INTO sqlite_sequence VALUES('auth_group',0);
