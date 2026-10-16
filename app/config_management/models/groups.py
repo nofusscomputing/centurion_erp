@@ -403,9 +403,14 @@ class ConfigGroupHosts(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    skip_tests = True,
+)
 class ConfigGroupSoftware(
     CenturionModel,
-):
+):    # pragma: no cover
     """ A way to configure software to install/remove per config group """
 
     _notes_enabled = False
