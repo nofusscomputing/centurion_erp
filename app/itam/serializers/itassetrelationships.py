@@ -11,13 +11,12 @@ from api.serializers import common
 
 from itam.models import ITAssetRelationships
 
-from .itassetmodel import (
+from itam.serializers.itassetmodel import (
     BaseSerializer as DeviceModelBaseSerializer
 )
 from .assetbase_itasset import (
     BaseSerializer as DeviceBaseSerializer
 )
-
 
 
 

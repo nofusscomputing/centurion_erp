@@ -16,7 +16,7 @@ from itam.serializers.itassetmodel import (
     BaseSerializer as ITAssetModelBaseSerializer
 )
 from .assetbase_itamassetbase import BaseSerializer
-from itam.serializers.device_type import DeviceTypeBaseSerializer
+from .device_type import DeviceTypeBaseSerializer
 
 
 

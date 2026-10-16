@@ -11,7 +11,7 @@ from access.serializers.entity_company import (
 from api.serializers import common
 
 from itam.models import ITAssetModel
-from itam.serializers.device_type import (
+from .device_type import (
     DeviceTypeBaseSerializer
 )
 
@@ -56,19 +56,6 @@ class ModelSerializer(
     BaseSerializer
 ):
 
-    # children = BaseSerializer( many = True, read_only = False )
-    # children = serializers.PrimaryKeyRelatedField(
-    #     # queryset=ITAMDevice.objects.all(),
-    #     # source='itdevicerelationships_set',
-    #     many = True,
-    #     read_only = True
-    # )
-    # children = ITDeviceRelationshipsSerializer(
-    #     many=True,
-    #     source='itdevicerelationships_set',
-    #     read_only = False
-    # )
-
     def get_url(self, item) -> dict:
         urls = super().get_url(item)
 
@@ -83,6 +70,8 @@ class ModelSerializer(
 
         return urls
 
+
+
     class Meta:
 
         model = ITAssetModel
@@ -95,7 +84,6 @@ class ModelSerializer(
             'model_notes',
             'name',
             'manufacturer',
-            # 'children',
             'imei',
             'mac_address',
             'puk',
