@@ -13,7 +13,7 @@ from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 
-from .device import DeviceOperatingSystem, DeviceSoftware
+from .device import DeviceSoftware
 
 from .itam_asset_base import ITAMAssetBase
 
@@ -137,8 +137,9 @@ class ITAsset(
 
     device_model = models.ForeignKey(
         to = 'itam.ITAssetModel',
-        blank = False,
+        blank = True,
         help_text = 'Model of this device.',
+        null = True,
         on_delete = models.PROTECT,
         related_name = '+',
         verbose_name = 'Model'
