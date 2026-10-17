@@ -10,14 +10,17 @@ from access.serializers.entity_company import (
 from api.serializers import common
 
 from itam.models import ITAssetOperatingSystem
-from itam.serializers.assetbase_itamassetbase import BaseSerializer
+
+from .assetbase_itamassetbase import (
+    ModelSerializer as ITAssetModelSerializer,
+    BaseSerializer
+)
 
 
 
 @extend_schema_serializer(component_name = 'ITAssetOperatingSystemModelSerializer')
 class ModelSerializer(
-    common.CommonModelSerializer,
-    BaseSerializer
+    ITAssetModelSerializer
 ):
 
 
@@ -39,16 +42,20 @@ class ModelSerializer(
 
         model = ITAssetOperatingSystem
 
-        fields =  [
-             'id',
-            'organization',
+        fields =  ITAssetModelSerializer.Meta.fields + [
+            'id',
             'display_name',
-            'publisher',
-            'name',
+            'organization',
             'model_notes',
+            'asset_number',
+            'serial_number',
             'created',
             'modified',
             '_urls',
+
+
+            'publisher',
+            'name',
         ]
 
         read_only_fields = [
