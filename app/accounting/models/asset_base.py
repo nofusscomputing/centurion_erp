@@ -193,4 +193,4 @@ class AssetBase(
 
 
     def get_ticket_model_name(self):
-        return f'{self._base_model._meta.model_name}Ticket'
+        return f'{self._base_model._meta.object_name}Ticket'
