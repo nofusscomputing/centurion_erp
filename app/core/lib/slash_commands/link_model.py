@@ -67,7 +67,7 @@ For this command to process the following conditions must be met:
                 model = self.get_model( model_type )
 
                 model = apps.get_model(
-                    app_label = model._meta.app_label,
+                    app_label = model().get_ticket_app_label(),
                     model_name = f'{model._meta.object_name}Ticket'.lower()
                 )
 

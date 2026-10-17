@@ -180,3 +180,13 @@ class AssetBase(
             return str( related_model )
         
         return self._meta.verbose_name + ' - ' + self.asset_number
+
+
+    def get_ticket_app_label(self) -> str:
+        """Get the name for the History Model
+
+        Returns:
+            str: Name of the ticket model (`<model class name>Ticket`)
+        """
+
+        return self._base_model._meta.app_label
