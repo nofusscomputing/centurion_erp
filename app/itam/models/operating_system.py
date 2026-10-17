@@ -20,7 +20,7 @@ class OperatingSystem(
     CenturionModel
 ):    # pragma: no cover
 
-    model_tag = 'operating_system'
+    model_tag = 'operating_system-'
 
     class Meta:
 
