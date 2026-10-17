@@ -10,7 +10,7 @@ from django.db.models import ObjectDoesNotExist, QuerySet
 from centurion.logging import CenturionLogger
 
 
-def permission_queryset():
+def permission_queryset():    # pragma: no cover
     """Filter Permissions to those used within the application
 
     Returns:
@@ -43,14 +43,6 @@ def permission_queryset():
         'modelnotes',
         'usersettings',
 
-        # itam
-        'device',
-        'devicemodel',
-        'deviceoperatingsystem',
-        'devicesoftware',
-
-        'software',
-        'softwareversion',
     ]
 
     exclude_permissions = [
