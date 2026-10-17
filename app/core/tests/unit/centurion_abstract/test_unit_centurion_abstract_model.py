@@ -251,3 +251,26 @@ class CenturionAbstractTenancyModelPyTest(
 
     def test_attribute_page_layout_detail_section_columns(self):
         pytest.xfail( reason = 'base model, test is n/a.' )
+
+
+    @pytest.mark.xfail( reason = 'Is an abstract model.' )
+    def test_method_get_ticket_app_label_returns_own_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._base_model._meta.app_label
+
+
+
+    @pytest.mark.xfail( reason = 'Is an abstract model.' )
+    def test_method_get_ticket_model_name_returns_own_ticket_model_name(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_model_name() == f'{model()._base_model._meta.object_name}Ticket'
