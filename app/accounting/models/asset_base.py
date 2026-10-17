@@ -190,3 +190,7 @@ class AssetBase(
         """
 
         return self._base_model._meta.app_label
+
+
+    def get_ticket_model_name(self):
+        return f'{self._base_model._meta.model_name}Ticket'

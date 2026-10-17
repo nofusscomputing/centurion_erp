@@ -68,7 +68,7 @@ For this command to process the following conditions must be met:
 
                 model = apps.get_model(
                     app_label = model().get_ticket_app_label(),
-                    model_name = f'{model._meta.object_name}Ticket'.lower()
+                    model_name = f'{model().get_ticket_model_name()}'.lower()
                 )
 
                 if not model:
@@ -104,13 +104,23 @@ For this command to process the following conditions must be met:
 
             if(
                 model_type == getattr(obj_model, 'model_tag', '-not_model-')
-                and not obj_model._is_submodel
+                and not getattr(obj_model, '_is_submodel', False)
+                or (
+                    getattr(obj_model, '_is_submodel', False)
+                    and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
+                        ) != getattr(obj_model, 'model_tag', '-not_model-')
+                )
             ):
                 return obj_model
 
             elif(
                 model_type == getattr(obj_model, 'model_tag', '-not_model-')
-                and not obj_model._is_submodel
+                and not getattr(obj_model, '_is_submodel', False)
+                or (
+                    getattr(obj_model, '_is_submodel', False)
+                    and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
+                        ) != getattr(obj_model, 'model_tag', '-not_model-')
+                )
             ):
                 return obj_model
 
