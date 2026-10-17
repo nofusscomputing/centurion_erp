@@ -109,6 +109,7 @@ For this command to process the following conditions must be met:
                     getattr(obj_model, '_is_submodel', False)
                     and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
                         ) != getattr(obj_model, 'model_tag', '-not_model-')
+                    and model_type == getattr(obj_model, 'model_tag', '-not_model-')
                 )
             ):
                 return obj_model
@@ -120,6 +121,7 @@ For this command to process the following conditions must be met:
                     getattr(obj_model, '_is_submodel', False)
                     and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
                         ) != getattr(obj_model, 'model_tag', '-not_model-')
+                    and model_type == getattr(obj_model, 'model_tag', '-not_model-')
                 )
             ):
                 return obj_model
