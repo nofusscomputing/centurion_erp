@@ -7,9 +7,6 @@ from accounting.tests.unit.asset_base.test_unit_asset_base_viewset import (
     ViewSet,
 )
 
-from accounting.tests.unit.asset_base.test_unit_asset_base_viewset import (
-    AssetBaseViewsetInheritedCases
-)
 
 from itam.models.itam_asset_base import ITAMAssetBase
 
