@@ -95,6 +95,29 @@ class AssetBaseModelInheritedCases(
 
 
 
+    @pytest.mark.xfail( reason = 'Assets are sub models and use _base_model details.' )
+    def test_method_get_ticket_app_label_returns_own_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._base_model._meta.app_label
+
+
+
+    def test_method_get_ticket_app_label_returns_base_model_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._base_model._meta.app_label
+
+
+
 @pytest.mark.module_accounting
 class AssetBaseModelPyTest(
     AssetBaseModelTestCases,
