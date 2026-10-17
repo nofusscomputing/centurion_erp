@@ -59,6 +59,13 @@ class AssetBaseModelTestCases(
             'null': True,
             'unique': True,
         },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
     }
 
 
