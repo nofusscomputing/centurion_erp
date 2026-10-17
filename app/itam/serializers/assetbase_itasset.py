@@ -12,18 +12,21 @@ from api.serializers import common
 from core.fields.icon import IconField
 
 from itam.models import ITAsset
-from itam.serializers.itassetmodel import (
+
+from .assetbase_itamassetbase import (
+    ModelSerializer as ITAssetModelSerializer,
+    BaseSerializer
+)
+from .itassetmodel import (
     BaseSerializer as ITAssetModelBaseSerializer
 )
-from .assetbase_itamassetbase import BaseSerializer
 from .device_type import DeviceTypeBaseSerializer
 
 
 
 @extend_schema_serializer(component_name = 'ITAssetModelSerializer')
 class ModelSerializer(
-    common.CommonModelSerializer,
-    BaseSerializer,
+    ITAssetModelSerializer,
 ):
 
 
@@ -85,19 +88,25 @@ class ModelSerializer(
 
         model = ITAsset
 
-        fields =  [
+        fields = ITAssetModelSerializer.Meta.fields + [
             'id',
+            'display_name',
             'organization',
             'model_notes',
+            'asset_number',
+            'serial_number',
+            'created',
+            'modified',
+            '_urls',
+
+
             'status_icon',
-            'display_name',
             'name',
             'uuid',
             'imei',
             'mac_address',
             'puk',
             'puk_pin',
-            'serial_number',
             'device_model',
             'config',
             'rendered_config',
@@ -105,9 +114,6 @@ class ModelSerializer(
             'is_virtual',
 
             'context',
-            'created',
-            'modified',
-            '_urls',
         ]
 
         read_only_fields = [
