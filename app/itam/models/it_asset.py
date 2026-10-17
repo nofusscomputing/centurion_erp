@@ -336,28 +336,28 @@ class ITAsset(
             force_insert=False, force_update=False, using=None, update_fields=None
         )
 
-        models_to_update =[ 
-            DeviceSoftware,
-            DeviceOperatingSystem
-        ]
+        # models_to_update =[ 
+        #     DeviceSoftware,
+        #     DeviceOperatingSystem
+        # ]
 
-        for update_model in models_to_update:
+        # for update_model in models_to_update:
 
-            obj = update_model.objects.filter(
-                device = self.id,
-            )
+        #     obj = update_model.objects.filter(
+        #         device = self.id,
+        #     )
 
-            if obj.exists():
+        #     if obj.exists():
 
-                obj.update(
-                    organization = self.organization,
-                )
+        #         obj.update(
+        #             organization = self.organization,
+        #         )
 
-        from config_management.models.groups import ConfigGroupHosts
+        # from config_management.models.groups import ConfigGroupHosts
 
-        ConfigGroupHosts.objects.filter(
-            host = self.id,
-        ).delete()
+        # ConfigGroupHosts.objects.filter(
+        #     host = self.id,
+        # ).delete()
 
 
     def __str__(self):
