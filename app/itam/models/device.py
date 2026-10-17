@@ -134,7 +134,7 @@ class Device(
     CenturionModel,
 ):    # pragma: no cover
 
-    model_tag = 'device'
+    model_tag = 'device-'
 
     reserved_config_keys: list = [
         'software'
