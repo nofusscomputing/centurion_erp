@@ -124,7 +124,7 @@ class Software(
     CenturionModel,
 ):    # pragma: no cover
 
-    model_tag = 'software'
+    model_tag = 'software-'
 
 
     class Meta:
