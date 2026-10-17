@@ -195,6 +195,17 @@ class CenturionMixnTestCases(
 
 
 
+    def test_method_get_ticket_app_label_returns_own_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._meta.app_label
+
+
+
     def test_method_get_url_kwargs(self, mocker, model_instance, settings):
         """Test Class Method
         
