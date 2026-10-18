@@ -251,6 +251,7 @@ omit = [
     'app/itam/serializers/inventory.py',
     'app/itam/tasks/inventory.py',
     'app/itam/viewsets/inventory.py',
+    'app/api/serializers/inventory.py',
 
 
 ]
