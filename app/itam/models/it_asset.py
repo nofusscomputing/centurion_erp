@@ -104,7 +104,7 @@ class ITAsset(
 
             raise ValidationError(
                 message = f'UUID must be formated to match regex {str(pattern)}',
-                code = 'invalid_uuid'
+                code = 'invalid_mac_address'
             )
 
     mac_address = models.CharField(

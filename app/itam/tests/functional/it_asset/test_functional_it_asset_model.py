@@ -79,6 +79,161 @@ class ITAssetModelTestCases(
         assert err.value.args[0]['name'][0].code == 'invalid_hostname'
 
 
+
+    def test_field_validation_invalid_mac_address(self,
+        model, model_kwargs
+    ):
+        """Model Field Validation Check
+
+        Ensure that mac address is provided in wrong format a validation error
+        is raised.
+        """
+
+        kwargs = model_kwargs()
+        kwargs['mac_address'] = 'a0-b1-c2-d3-e4-f5'
+
+        created = model(**kwargs)
+
+        with pytest.raises(ValidationError) as err:
+
+            created.clean_fields()
+
+        assert err.value.args[0]['mac_address'][0].code == 'invalid_mac_address'
+
+
+
+    def test_field_validation_invalid_mac_address_first_octet(self,
+        model, model_kwargs
+    ):
+        """Model Field Validation Check
+
+        Ensure that mac address is invalid a validation error
+        is raised.
+        """
+
+        kwargs = model_kwargs()
+        kwargs['mac_address'] = 'z0:b1:c2:d3:e4:f5'
+
+        created = model(**kwargs)
+
+        with pytest.raises(ValidationError) as err:
+
+            created.clean_fields()
+
+        assert err.value.args[0]['mac_address'][0].code == 'invalid_mac_address'
+
+
+
+    def test_field_validation_invalid_mac_address_first_octet(self,
+        model, model_kwargs
+    ):
+        """Model Field Validation Check
+
+        Ensure that mac address is invalid a validation error
+        is raised.
+        """
+
+        kwargs = model_kwargs()
+        kwargs['mac_address'] = 'z0:b1:c2:d3:e4:f5'
+
+        created = model(**kwargs)
+
+        with pytest.raises(ValidationError) as err:
+
+            created.clean_fields()
+
+        assert err.value.args[0]['mac_address'][0].code == 'invalid_mac_address'
+
+
+
+    def test_field_validation_invalid_mac_address_third_octet(self,
+        model, model_kwargs
+    ):
+        """Model Field Validation Check
+
+        Ensure that mac address is invalid a validation error
+        is raised.
+        """
+
+        kwargs = model_kwargs()
+        kwargs['mac_address'] = 'a0:b1:z2:d3:e4:f5'
+
+        created = model(**kwargs)
+
+        with pytest.raises(ValidationError) as err:
+
+            created.clean_fields()
+
+        assert err.value.args[0]['mac_address'][0].code == 'invalid_mac_address'
+
+
+
+    def test_field_validation_invalid_mac_address_fourth_octet(self,
+        model, model_kwargs
+    ):
+        """Model Field Validation Check
+
+        Ensure that mac address is invalid a validation error
+        is raised.
+        """
+
+        kwargs = model_kwargs()
+        kwargs['mac_address'] = 'a0:b1:c2:z3:e4:f5'
+
+        created = model(**kwargs)
+
+        with pytest.raises(ValidationError) as err:
+
+            created.clean_fields()
+
+        assert err.value.args[0]['mac_address'][0].code == 'invalid_mac_address'
+
+
+
+    def test_field_validation_invalid_mac_address_fifth_octet(self,
+        model, model_kwargs
+    ):
+        """Model Field Validation Check
+
+        Ensure that mac address is invalid a validation error
+        is raised.
+        """
+
+        kwargs = model_kwargs()
+        kwargs['mac_address'] = 'a0:b1:c2:d3:z4:f5'
+
+        created = model(**kwargs)
+
+        with pytest.raises(ValidationError) as err:
+
+            created.clean_fields()
+
+        assert err.value.args[0]['mac_address'][0].code == 'invalid_mac_address'
+
+
+
+    def test_field_validation_invalid_mac_address_sixth_octet(self,
+        model, model_kwargs
+    ):
+        """Model Field Validation Check
+
+        Ensure that mac address is invalid a validation error
+        is raised.
+        """
+
+        kwargs = model_kwargs()
+        kwargs['mac_address'] = 'a0:b1:c2:d3:e4:z5'
+
+        created = model(**kwargs)
+
+        with pytest.raises(ValidationError) as err:
+
+            created.clean_fields()
+
+        assert err.value.args[0]['mac_address'][0].code == 'invalid_mac_address'
+
+
+
     def test_field_validation_invalid_uuid_first_octet(self,
         model, model_kwargs
     ):
