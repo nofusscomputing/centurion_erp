@@ -36,3 +36,9 @@ def model_kwargs(request, kwargs_itasset):
             del request.cls.kwargs_create_item
         except:
             pass
+
+
+@pytest.fixture( scope = 'class')
+def model_serializer(serializer_itasset):
+
+    yield serializer_itasset
