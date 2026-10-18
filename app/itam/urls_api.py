@@ -12,7 +12,7 @@ from itam.viewsets import (
     device_relationships,
     device_software as device_software_v2,
     device_operating_system,
-    inventory,
+    # inventory,
     operating_system as operating_system_v2,
     operating_system_version as operating_system_version_v2,
     software as software_v2,
@@ -66,10 +66,10 @@ router.register(
     prefix = '/device/(?P<device_id>[0-9]+)/service', viewset = service_device_v2.ViewSet,
     basename = '_api_v2_service_device'
 )
-router.register(
-    prefix = '/inventory', viewset = inventory.ViewSet,
-    basename = '_api_v2_inventory'
-)
+# router.register(
+#     prefix = '/inventory', viewset = inventory.ViewSet,
+#     basename = '_api_v2_inventory'
+# )
 router.register(
     prefix = '/operating_system', viewset = operating_system_v2.ViewSet,
     basename = '_api_operatingsystem'

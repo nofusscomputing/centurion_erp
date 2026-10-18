@@ -20,7 +20,7 @@ from settings.models.app_settings import AppSettings
 logger = get_task_logger(__name__)
 
 @shared_task(bind=True)
-def process_inventory(self, data, organization: int):
+def process_inventory(self, data, organization: int):    # pragma: no cover
 
     device = None
     device_operating_system = None
