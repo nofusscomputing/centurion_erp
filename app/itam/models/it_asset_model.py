@@ -187,6 +187,7 @@ class ITAssetModel(CenturionModel):
                 "type": "link",
                 "key": "_self"
             },
+            'device_type',
             'organization',
             'created',
             'modified'
@@ -195,4 +196,9 @@ class ITAssetModel(CenturionModel):
 
     def __str__(self) -> str:
 
-        return self.manufacturer.name + ' ' + self.name
+        if hasattr(self.manufacturer,'name'):
+
+            return self.manufacturer.name + ' ' + self.name
+
+
+        return self.name
