@@ -43,8 +43,6 @@ def kwargs_itasset( django_db_blocker, kwargs_itamassetbase,
             'name': 'dev-' + str( datetime.now().strftime("%H%M%S"
                 ) + f"{datetime.now().microsecond // 100:04d}" ),
 
-            'serial_number': 'dev-' + str( datetime.now().strftime("%H%M%S"
-                ) + f"{datetime.now().microsecond // 100:04d}" ),
 
             'uuid': '73'+ str( random.randint(10000, 99999)
                 ) + 'c-e3e8-4680-a3bf-2' + str( random.randint(10000, 99999)

@@ -13,7 +13,7 @@ from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 
-from .device import DeviceOperatingSystem, DeviceSoftware
+from .device import DeviceSoftware
 
 from .itam_asset_base import ITAMAssetBase
 
@@ -137,8 +137,9 @@ class ITAsset(
 
     device_model = models.ForeignKey(
         to = 'itam.ITAssetModel',
-        blank = False,
+        blank = True,
         help_text = 'Model of this device.',
+        null = True,
         on_delete = models.PROTECT,
         related_name = '+',
         verbose_name = 'Model'
@@ -335,28 +336,28 @@ class ITAsset(
             force_insert=False, force_update=False, using=None, update_fields=None
         )
 
-        models_to_update =[ 
-            DeviceSoftware,
-            DeviceOperatingSystem
-        ]
+        # models_to_update =[ 
+        #     DeviceSoftware,
+        #     DeviceOperatingSystem
+        # ]
 
-        for update_model in models_to_update:
+        # for update_model in models_to_update:
 
-            obj = update_model.objects.filter(
-                device = self.id,
-            )
+        #     obj = update_model.objects.filter(
+        #         device = self.id,
+        #     )
 
-            if obj.exists():
+        #     if obj.exists():
 
-                obj.update(
-                    organization = self.organization,
-                )
+        #         obj.update(
+        #             organization = self.organization,
+        #         )
 
-        from config_management.models.groups import ConfigGroupHosts
+        # from config_management.models.groups import ConfigGroupHosts
 
-        ConfigGroupHosts.objects.filter(
-            host = self.id,
-        ).delete()
+        # ConfigGroupHosts.objects.filter(
+        #     host = self.id,
+        # ).delete()
 
 
     def __str__(self):
