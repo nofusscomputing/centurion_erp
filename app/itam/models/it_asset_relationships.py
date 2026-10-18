@@ -78,6 +78,7 @@ class ITAssetRelationships(CenturionModel):
             'name',
             'parent_asset_model',
             'parent',
+            'asset_type',
             'child_asset_model',
             'child',
         ]

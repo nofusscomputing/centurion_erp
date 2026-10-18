@@ -17,7 +17,7 @@ from itam.serializers.itassetmodel import (
 from .assetbase_itasset import (
     BaseSerializer as DeviceBaseSerializer
 )
-
+from .device_type import DeviceTypeBaseSerializer
 
 
 @extend_schema_serializer(component_name = 'ITAssetRelationshipsBaseSerializer')
@@ -59,6 +59,8 @@ class ModelSerializer(
     BaseSerializer
 ):
 
+    asset_type = DeviceTypeBaseSerializer( source = 'child_asset_model.device_type', read_only = True)
+
     class Meta:
 
         model = ITAssetRelationships
@@ -69,6 +71,7 @@ class ModelSerializer(
             'name',
             'parent_asset_model',
             'parent',
+            'asset_type',
             'child_asset_model',
             'child',
             '_urls',
