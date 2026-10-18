@@ -186,6 +186,7 @@ class ITAsset(
             "columns": [
                 [
                     "name",
+                    "asset_type",
                     "device_model",
                     'status_icon',
                 ],
@@ -207,6 +208,7 @@ class ITAsset(
                             'organization',
                             'device_model',
                             'name',
+                            "asset_type",
                             'serial_number',
                             'uuid',
                             'inventorydate',
