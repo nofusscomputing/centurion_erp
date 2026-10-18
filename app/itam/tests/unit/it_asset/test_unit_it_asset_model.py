@@ -1,5 +1,8 @@
 import pytest
 
+from django.core.exceptions import (
+    ValidationError
+)
 from django.db import models
 
 from accounting.tests.unit.asset_base.test_unit_asset_base_model import (
@@ -132,6 +135,137 @@ class ITAssetModelTestCases(
         """
 
         assert issubclass(model, ITAsset)
+
+
+
+    def test_function_clean_fields_calls_clean_fields_asset_model(self, mocker,
+        model, model_kwargs
+    ):
+        """Class Function check
+        
+        Ensure that as part of clean_fields being called, the device_model
+        mandatory fields are also checked. i.e. `clean_fields_asset_model` called
+        """
+
+        kwargs = model_kwargs()
+
+        the_model = model(**kwargs)
+
+        mocked_field = mocker.patch.object(the_model, 'clean_fields_asset_model', return_value = True)
+
+        the_model.clean_fields()
+
+        mocked_field.assert_called()
+
+
+
+    mandatory_model_fields_from_type = [
+        'imei',
+        'mac_address',
+        'puk',
+        'puk_pin',
+        'serial_number',
+    ]
+
+
+
+    @pytest.mark.parametrize(
+        argnames = "mandatory_field",
+        argvalues = mandatory_model_fields_from_type,
+        ids = mandatory_model_fields_from_type,
+    )
+    def test_function_clean_fields_asset_model_checks_required_field(self, mocker,
+        model, model_kwargs, mandatory_field
+    ):
+        """Class Function check
+        
+        Ensure that as part of checking required the correct fields are called.
+        """
+
+        kwargs = model_kwargs()
+
+        the_model = model(**kwargs)
+
+        mocked_field = mocker.patch.object(
+            type(the_model.device_model),
+            mandatory_field,
+            new_callable=mocker.PropertyMock,
+            return_value=True,
+        )
+
+        the_model.clean_fields_asset_model()
+
+        mocked_field.assert_called()
+
+
+
+    @pytest.mark.parametrize(
+        argnames = "mandatory_field",
+        argvalues = mandatory_model_fields_from_type,
+        ids = mandatory_model_fields_from_type,
+    )
+    def test_function_clean_fields_asset_model_validates_field(self, mocker,
+        model, model_kwargs, mandatory_field
+    ):
+        """Class Function check
+        
+        Ensure that as part of checking required if the field is not populated
+        raise a validation exception.
+        """
+
+        kwargs = model_kwargs()
+
+        del kwargs[mandatory_field]
+
+        the_model = model(**kwargs)
+
+        mocked_field = mocker.patch.object(
+            type(the_model.device_model),
+            mandatory_field,
+            new_callable=mocker.PropertyMock,
+            return_value=True,
+        )
+
+        with pytest.raises(ValidationError) as exc:
+
+            the_model.clean_fields_asset_model()
+
+
+
+    @pytest.mark.parametrize(
+        argnames = "mandatory_field",
+        argvalues = mandatory_model_fields_from_type,
+        ids = mandatory_model_fields_from_type,
+    )
+    def test_function_clean_fields_asset_model_error_ouputs_msg_field(self, mocker,
+        model, model_kwargs, mandatory_field
+    ):
+        """Class Function check
+        
+        Ensure that as part of checking required if the field is not populated
+        raises a validation exception with the required msg.
+        """
+
+        kwargs = model_kwargs()
+
+        del kwargs[mandatory_field]
+
+        the_model = model(**kwargs)
+
+        mocked_field = mocker.patch.object(
+            type(the_model.device_model),
+            mandatory_field,
+            new_callable=mocker.PropertyMock,
+            return_value=True,
+        )
+
+        with pytest.raises(ValidationError) as exc:
+
+            the_model.clean_fields_asset_model()
+
+        assert exc.value.args[1] == 'required'
+
+
 
 
 
