@@ -57,6 +57,18 @@ class ITAssetAPITestCases(
             'is_virtual': {
                 'expected': bool
             },
+            'asset_type': {
+                'expected': dict
+            },
+            'asset_type.id': {
+                'expected': int
+            },
+            'asset_type.display_name': {
+                'expected': str
+            },
+            'asset_type.url': {
+                'expected': Hyperlink
+            },
         }
 
 

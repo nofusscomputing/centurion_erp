@@ -56,6 +56,7 @@ class ModelSerializer(
 
         return get_url
 
+    asset_type = DeviceTypeBaseSerializer( source = 'device_model.device_type', read_only = True)
 
     context = serializers.SerializerMethodField('get_cont')
 
@@ -102,6 +103,7 @@ class ModelSerializer(
 
             'status_icon',
             'name',
+            'asset_type',
             'uuid',
             'imei',
             'mac_address',
@@ -118,6 +120,7 @@ class ModelSerializer(
 
         read_only_fields = [
             'id',
+            'asset_type',
             'context',
             'display_name',
             'inventorydate',
