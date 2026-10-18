@@ -48,6 +48,36 @@ def kwargs_itasset( django_db_blocker, kwargs_itamassetbase,
                 ) + 'c-e3e8-4680-a3bf-2' + str( random.randint(10000, 99999)
                 ) + 'e' + str( random.randint(10000, 99999) ),
 
+            'imei' : (
+                str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+            ),
+
+            'mac_address' : (
+                str(random.randint(10, 99)) + ':'
+                + str(random.randint(10, 99)) + ':'
+                + str(random.randint(10, 99)) + ':'
+                + str(random.randint(10, 99)) + ':'
+                + str(random.randint(10, 99)) + ':'
+                + str(random.randint(10, 99))
+            ),
+
+            'puk' : (
+                str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+            ),
+
+            'puk_pin' : (
+                str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+                + str(random.randint(1, 99))
+            ),
+
             'device_model': device_model,
             # 'device_type': device_type,
             'config':  { 'a_dev_config_key': 'a_dev_config_value'},
