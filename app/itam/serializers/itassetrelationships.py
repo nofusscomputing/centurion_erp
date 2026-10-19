@@ -114,6 +114,19 @@ class ModelSerializer(
 
 
 
+    def validate(self, attrs) -> bool:
+
+        if(
+            self.context['view'].action == 'create'
+            and self.context['view'].kwargs.get('model_name', '') == 'itassetmodel'
+        ):
+
+            attrs['parent_asset_model_id'] = int(self.context['view'].kwargs['model_id'])
+
+        return attrs
+
+
+
 @extend_schema_serializer(component_name = 'ITAssetRelationshipsViewSerializer')
 class ViewSerializer(ModelSerializer):
 
