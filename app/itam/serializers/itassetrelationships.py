@@ -59,7 +59,6 @@ class ModelSerializer(
     BaseSerializer
 ):
 
-    asset_type = DeviceTypeBaseSerializer( source = 'child_asset_model.device_type', read_only = True)
 
 
     def get_fields(self):
@@ -77,7 +76,6 @@ class ModelSerializer(
 
             if viewset_model == 'itasset':
 
-                fields.pop('name', None)
                 fields.pop('parent_asset_model', None)
                 fields.pop('parent', None)
                 fields.pop('child_asset_model', None)
@@ -87,21 +85,6 @@ class ModelSerializer(
                 fields.pop('parent_asset_model', None)
                 fields.pop('parent', None)
                 fields.pop('child', None)
-
-        asset_type = None
-
-        if getattr(self.instance, 'child', None):
-
-            asset_type = DeviceTypeBaseSerializer( source = 'child.device_type', read_only = True)
-
-        elif getattr(self.instance, 'child_asset_model', None):
-
-            asset_type = DeviceTypeBaseSerializer( source = 'child_asset_model.device_type', read_only = True)
-
-
-        if asset_type:
-
-            fields.pop('asset_type', asset_type)
 
 
         return fields
@@ -133,6 +116,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'ITAssetRelationshipsViewSerializer')
 class ViewSerializer(ModelSerializer):
+
+    asset_type = DeviceTypeBaseSerializer( many = False, read_only = True )
 
     organization = TenantBaseSerializer( many = False, read_only = True )
 
