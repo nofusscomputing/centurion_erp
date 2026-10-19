@@ -42,6 +42,16 @@ class ITAssetRelationships(CenturionModel):
         max_length = 100
     )
 
+    asset_type = models.ForeignKey(
+        to = 'itam.DeviceType',
+        blank = True,
+        help_text = 'Type of asset.',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = '+',
+        verbose_name = 'Type'
+    )
+
     parent_asset_model = models.ForeignKey(
         to = 'itam.ITAssetModel',
         blank = False,
