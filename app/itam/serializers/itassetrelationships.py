@@ -61,6 +61,53 @@ class ModelSerializer(
 
     asset_type = DeviceTypeBaseSerializer( source = 'child_asset_model.device_type', read_only = True)
 
+
+    def get_fields(self):
+        """Dynamic fields.
+
+        Depending on where the connection is, only show fields relevant to that
+        model.
+        """
+
+        fields = super().get_fields()
+
+        if 'view' in self.context:
+
+            viewset_model = self.context['view'].kwargs.get('model_name', '')
+
+            if viewset_model == 'itasset':
+
+                fields.pop('name', None)
+                fields.pop('parent_asset_model', None)
+                fields.pop('parent', None)
+                fields.pop('child_asset_model', None)
+
+            elif viewset_model == 'itassetmodel':
+
+                fields.pop('parent_asset_model', None)
+                fields.pop('parent', None)
+                fields.pop('child', None)
+
+        asset_type = None
+
+        if getattr(self.instance, 'child', None):
+
+            asset_type = DeviceTypeBaseSerializer( source = 'child.device_type', read_only = True)
+
+        elif getattr(self.instance, 'child_asset_model', None):
+
+            asset_type = DeviceTypeBaseSerializer( source = 'child_asset_model.device_type', read_only = True)
+
+
+        if asset_type:
+
+            fields.pop('asset_type', asset_type)
+
+
+        return fields
+
+
+
     class Meta:
 
         model = ITAssetRelationships

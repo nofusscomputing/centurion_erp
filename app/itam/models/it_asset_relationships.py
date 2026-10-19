@@ -25,7 +25,9 @@ class ITAssetRelationships(CenturionModel):
     class Meta:
 
         ordering = [
-            'name'
+            'child_asset_model__device_type__name',
+            'child__name',
+            'name',
         ]
 
         verbose_name = 'Device Connection'
@@ -36,7 +38,7 @@ class ITAssetRelationships(CenturionModel):
 
     name = models.CharField(
         blank = False,
-        help_text = 'Name of the child asset/connection.',
+        help_text = 'Name used for templating the child assets name.',
         max_length = 100
     )
 
@@ -68,7 +70,7 @@ class ITAssetRelationships(CenturionModel):
         to = 'itam.ITAssetModel',
         blank = True,
         null = True,
-        help_text = 'Child Asset model.',
+        help_text = 'Child Asset model to limit this child to.',
         on_delete = models.CASCADE,
         related_name = '+'
     )
@@ -81,5 +83,6 @@ class ITAssetRelationships(CenturionModel):
             'asset_type',
             'child_asset_model',
             'child',
+            '-action_delete-',
         ]
     }
