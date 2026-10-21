@@ -52,6 +52,14 @@ class AssetBase(
         return True
 
 
+    # asset_class    # buildings, land, licences, patents, plant_and_equipment, software, trademark, vehicles
+
+    # asset_category    # use one of the fixed asset categories. etc.
+
+    # asset_status    # lifecycle status
+
+    # asset_type    # tangible / intangible
+
     asset_number = models.CharField(
         blank = True,
         help_text = 'Number or tag to use to track this asset',
@@ -85,8 +93,6 @@ class AssetBase(
     different asset types.
     """
 
-
-    # Status
 
     # model (manufacturer / model)
 
