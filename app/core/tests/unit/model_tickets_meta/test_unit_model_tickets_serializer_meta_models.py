@@ -7,6 +7,8 @@ from django.db import models
 
 from centurion.tests.helpers import get_models
 
+from core.models.audit import CenturionAudit
+from core.models.centurion_notes import CenturionModelNote
 from core.models.model_tickets import ModelTicket
 from core.tests.unit.model_tickets_meta.test_unit_model_tickets_serializer_meta import (
     ModelTicketMetaSerializerInheritedCases
@@ -135,10 +137,12 @@ for model in get_models(
     excludes = [
         'manufacturer'
     ],
-    excludes_model_classes = [ 'ModelTicket', ],
     only_class = ModelTicket
 ):
 
+
+    if model()._base_model is model:
+        continue
 
     cls_name: str = f"{model._meta.object_name}MetaModelSerializerPyTest"
 
