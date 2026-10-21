@@ -14,7 +14,9 @@ on:
     branches:
       - '**'
     types:
+      - opened
       - synchronize    # covers commits
+      - reopened
   push:
     branches:
       - '**'
