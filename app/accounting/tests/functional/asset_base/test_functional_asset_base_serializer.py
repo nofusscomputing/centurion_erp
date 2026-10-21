@@ -16,6 +16,8 @@ class MockView:
     _has_triage: bool = False
     """User Permission"""
 
+    action = 'create'
+
 
 
 @pytest.mark.model_assetbase
