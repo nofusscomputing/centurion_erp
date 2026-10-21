@@ -22,7 +22,6 @@ def get_models(
 
     excludes = [ str(model_name).lower() for model_name in excludes ]
 
-    excludes_model_classes = [ str(model_name).lower() for model_name in excludes_model_classes ]
 
     models: list = []
 
@@ -57,19 +56,31 @@ def get_models(
 
         if(
             model._meta.app_label not in model_apps
-            or not issubclass(model, only_class)
-            or model._meta.model_name in excludes_model_classes
+            or (
+                not issubclass(model, only_class)
+                and only_class is not type(None)
+            )
             or getattr(model, 'decorator_depreciated', False)
         ):
             continue
 
         skip = False
 
-        for exclude in excludes:
+        if excludes_model_classes:
 
-            if exclude in model_name:
-                skip = True
-                break
+            for excluded_class in excludes_model_classes:
+
+                if issubclass(model, excluded_class):
+                    skip = True
+                    break
+
+        if not skip:
+
+            for exclude in excludes:
+
+                if exclude in model_name:
+                    skip = True
+                    break
 
         if skip:
                 continue
