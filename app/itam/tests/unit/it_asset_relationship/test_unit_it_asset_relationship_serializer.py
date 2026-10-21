@@ -12,7 +12,6 @@ class ITAssetRelationshipsBaseSerializerTestCases(
 ):
 
     itasset_serializer_fields_removed = [
-        'name',
         'parent_asset_model',
         'parent',
         'child_asset_model',
@@ -29,6 +28,9 @@ class ITAssetRelationshipsBaseSerializerTestCases(
         removed_field, model_serializer, kwargs_api_create
     ):
         """ Test Serializer function "get_fields"
+
+        ensure that when the viewset is sub-model `itasset` that the appropriate
+        fields are removed.
         """
         class MockView:
 
@@ -67,6 +69,9 @@ class ITAssetRelationshipsBaseSerializerTestCases(
         removed_field, model_serializer, kwargs_api_create
     ):
         """ Test Serializer function "get_fields"
+
+        ensure that when the viewset is sub-model `itassetmodel` that the appropriate
+        fields are removed.
         """
         class MockView:
 
