@@ -156,14 +156,16 @@ class ModelNotesMetaModelTestCases(
 
 for model in get_models(
     excludes = [
-        'manufacturer'
+        'manufacturer',
     ],
-    excludes_model_classes = [
-            CenturionAudit,
-            CenturionModelNote,
-            ModelTicket
-    ],
+    only_class = CenturionModelNote
 ):
+
+    if(
+        not issubclass(model, CenturionModelNote)
+        or model == CenturionModelNote
+    ):
+        continue
 
 
     cls_name: str = f"{model._meta.object_name}MetaModelPyTest"
