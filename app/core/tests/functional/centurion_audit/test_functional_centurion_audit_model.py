@@ -6,6 +6,8 @@ from django.conf import settings
 from centurion.tests.helpers import get_models
 
 from core.models.audit import CenturionAudit
+from core.models.centurion_notes import CenturionModelNote
+from core.models.model_tickets import ModelTicket
 
 from core.tests.functional.centurion_abstract.test_functional_centurion_abstract_model import (
     CenturionAbstractTenancyModelInheritedCases
@@ -59,7 +61,14 @@ class CenturionAuditModelPyTest(
 
 
 
-    history_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket', 'team', 'teamusers' ] )
+    history_models = [(model,) for model in get_models(
+        excludes = [ 'base', 'manufacturer', 'team', 'teamusers' ],
+        excludes_model_classes = [
+            CenturionAudit,
+            CenturionModelNote,
+            ModelTicket
+        ]
+    )]
 
 
     @pytest.mark.parametrize(

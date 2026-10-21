@@ -12,6 +12,7 @@ class ViewSet( ModelViewSet ):
     filterset_fields = [
         'parent_asset_model',
         'parent',
+        'child_asset_model__device_type',
         'child',
     ]
 
@@ -29,11 +30,11 @@ class ViewSet( ModelViewSet ):
     def get_queryset(self):
         queryset = super().get_queryset()
 
-        if self.kwargs['model_name'] == 'itasset':
+        if self.kwargs.get('model_name', '') == 'itasset':
 
             self._queryset = queryset.filter( parent = int(self.kwargs[self.parent_model_pk_kwarg]))
 
-        elif self.kwargs['model_name'] == 'itassetmodel':
+        elif self.kwargs.get('model_name', '') == 'itassetmodel':
 
             self._queryset = queryset.filter(
                 parent_asset_model = int(self.kwargs[self.parent_model_pk_kwarg]),

@@ -1,3 +1,6 @@
+import re
+
+from django.apps import apps
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -187,6 +190,7 @@ class ITAssetModel(CenturionModel):
                 "type": "link",
                 "key": "_self"
             },
+            'device_type',
             'organization',
             'created',
             'modified'
@@ -195,4 +199,69 @@ class ITAssetModel(CenturionModel):
 
     def __str__(self) -> str:
 
-        return self.manufacturer.name + ' ' + self.name
+        if hasattr(self.manufacturer,'name'):
+
+            return self.manufacturer.name + ' ' + self.name
+
+
+        return self.name
+
+
+
+    _regex_template_connect_name = r'^(?P<name>[A-Za-z0-9]*?[A-Za-z])(?P<lowest>\d+)?(?:-(?P<highest>\d+))?$'
+
+
+
+    def create_asset_connections(self, parent_asset: models.Model) -> None:
+
+        connections_model = apps.get_model(
+            app_label='itam',
+            model_name = 'ITAssetRelationships')
+
+        for connection in connections_model.objects.filter(
+            parent_asset_model = self,
+            parent = None,
+        ):
+
+            multi_name = re.match(
+                self._regex_template_connect_name,
+                connection.name
+            )
+
+            name = multi_name.group( 'name')
+
+            lowest = multi_name.group( 'lowest')
+
+            highest = multi_name.group( 'highest')
+
+            has_suffix = (
+                lowest is not None
+            )
+
+            if lowest is None:
+                lowest = 0
+
+            if highest is None:
+
+                highest = int(lowest) + 1
+
+            else:
+
+                highest = int(highest) + 1
+
+            for i in range(int(lowest), int(highest)):
+
+                suffix = ''
+                if has_suffix:
+                    suffix= str(i)
+
+                connections_model.objects.create(
+                    organization = parent_asset.organization,
+                    name = name + suffix,
+                    asset_type = connection.asset_type,
+                    parent_asset_model = connection.parent_asset_model,
+                    parent = parent_asset,
+                    child_asset_model = connection.child_asset_model
+                )
+
+            print(connection)

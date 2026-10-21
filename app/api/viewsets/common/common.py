@@ -1041,20 +1041,48 @@ class ModelViewSetBase(
 
     def get_serializer_class(self):
 
+        try:
+
+            if (
+                self.action == 'list'
+                or self.action == 'retrieve'
+            ):
+
+                self.serializer_class = globals()[str(
+                    self.model._meta.verbose_name
+                ).replace(' ', '_') + 'ViewSerializer']
+
+            else:
+
+                self.serializer_class = globals()[str(
+                    self.model._meta.verbose_name
+                ).replace(' ', '_') + 'ModelSerializer']
+
+
+            return self.serializer_class
+
+        except KeyError:
+            pass
+
+        serializer_name = self.model._meta.model_name
+
+        serializer_module = importlib.import_module(
+            self.model._meta.app_label + '.serializers.' + str(
+                serializer_name
+            )
+        )
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            self.serializer_class = globals()[str(
-                self.model._meta.verbose_name
-            ).replace(' ', '_') + 'ViewSerializer']
+            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
+
 
         else:
 
-            self.serializer_class = globals()[str(
-                self.model._meta.verbose_name
-            ).replace(' ', '_') + 'ModelSerializer']
+            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
 
 
         return self.serializer_class

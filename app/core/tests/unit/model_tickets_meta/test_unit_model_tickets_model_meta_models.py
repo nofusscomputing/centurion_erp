@@ -132,9 +132,11 @@ for model in get_models(
     excludes = [
         'manufacturer'
     ],
-    excludes_model_classes = [ 'ModelTicket' ],
     only_class = ModelTicket
 ):
+
+    if model()._base_model is model:
+        continue
 
 
     cls_name: str = f"{model._meta.object_name}MetaModelPyTest"

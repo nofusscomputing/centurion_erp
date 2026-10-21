@@ -21,11 +21,15 @@ class ITAssetRelationships(CenturionModel):
 
     _ticket_linkable = False
 
+    url_model_name = 'itasset_connections'
+
 
     class Meta:
 
         ordering = [
-            'name'
+            'child_asset_model__device_type__name',
+            'child__name',
+            'name',
         ]
 
         verbose_name = 'Device Connection'
@@ -36,8 +40,18 @@ class ITAssetRelationships(CenturionModel):
 
     name = models.CharField(
         blank = False,
-        help_text = 'Name of the child asset/connection.',
+        help_text = 'Name used for templating the child assets name.',
         max_length = 100
+    )
+
+    asset_type = models.ForeignKey(
+        to = 'itam.DeviceType',
+        blank = True,
+        help_text = 'Type of asset.',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = '+',
+        verbose_name = 'Type'
     )
 
     parent_asset_model = models.ForeignKey(
@@ -68,7 +82,7 @@ class ITAssetRelationships(CenturionModel):
         to = 'itam.ITAssetModel',
         blank = True,
         null = True,
-        help_text = 'Child Asset model.',
+        help_text = 'Child Asset model to limit this child to.',
         on_delete = models.CASCADE,
         related_name = '+'
     )
@@ -78,7 +92,20 @@ class ITAssetRelationships(CenturionModel):
             'name',
             'parent_asset_model',
             'parent',
+            'asset_type',
             'child_asset_model',
             'child',
+            '-action_delete-',
         ]
     }
+
+
+
+    def get_url_kwargs(self, many=False) -> dict:
+        kwargs = super().get_url_kwargs(many)
+
+        kwargs['model_name'] = str( self.parent_asset_model._meta.model_name )
+        kwargs['model_id'] = str( self.parent_asset_model.pk )
+
+
+        return kwargs

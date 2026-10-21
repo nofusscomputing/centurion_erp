@@ -8,7 +8,9 @@ from django.db import models
 
 from centurion.tests.helpers import get_models
 
+from core.models.audit import CenturionAudit
 from core.models.centurion_notes import CenturionModelNote
+from core.models.model_tickets import ModelTicket
 from core.tests.unit.centurion_model_note_meta.test_unit_centurion_model_note_meta_model import (
     MetaAbstractModelInheritedCases
 )
@@ -154,11 +156,16 @@ class ModelNotesMetaModelTestCases(
 
 for model in get_models(
     excludes = [
-        'manufacturer'
+        'manufacturer',
     ],
-    excludes_model_classes = [ 'centurionmodelnote', ],
     only_class = CenturionModelNote
 ):
+
+    if(
+        not issubclass(model, CenturionModelNote)
+        or model == CenturionModelNote
+    ):
+        continue
 
 
     cls_name: str = f"{model._meta.object_name}MetaModelPyTest"

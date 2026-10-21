@@ -75,6 +75,37 @@ class ModelSerializer(
         return context
 
 
+    def get_fields(self) -> dict:
+        """Dynamic fields
+
+        Only fields that are marked as required in the device model are to be
+        shown to the user. Otherwise keep the fields as `null` and un-editable.
+        """
+
+        fields = super().get_fields()
+
+        if self.context['view'].action in [
+            'retrieve',
+            'update',
+            'partial_update'
+        ]:
+    
+            for mandatory_field in [
+                'imei',
+                'mac_address',
+                'puk',
+                'puk_pin',
+                'serial_number',
+            ]:
+                
+                if not getattr(self.instance.device_model, mandatory_field, False):
+
+                    fields.pop(mandatory_field, None)
+
+
+        return fields
+
+
     rendered_config = serializers.JSONField(source='get_configuration', read_only=True)
 
     def get_rendered_config(self, item) -> dict:

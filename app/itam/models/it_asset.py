@@ -15,6 +15,8 @@ from core.classes.icon import Icon
 
 from .device import DeviceSoftware
 
+from .software import Software
+
 from .itam_asset_base import ITAMAssetBase
 
 
@@ -312,9 +314,33 @@ class ITAsset(
     }
 
 
+    def clean_fields_asset_model(self):
+
+        for mandatory_field in [
+            'imei',
+            'mac_address',
+            'puk',
+            'puk_pin',
+            'serial_number',
+        ]:
+        
+            if getattr(self.device_model, mandatory_field):
+
+                if getattr(self, mandatory_field) in [None, '']:
+
+                    raise ValidationError(
+                        message = {
+                            mandatory_field: f'field {mandatory_field} has been set as mandatory and must be populated.'},
+                        code = 'required'
+                    )
+
+
+
     def clean_fields(self, exclude = None) -> None:
 
         # if virtual set the asset_type = 'Intangible'
+
+        self.clean_fields_asset_model()
 
         if self.uuid is not None:
 
@@ -333,10 +359,19 @@ class ITAsset(
         of the same organization as the device.
         """
 
+        created = False
+        if self.pk is None and getattr(self, 'device_model', None):
+
+            created = True
+
 
         super().save(
             force_insert=False, force_update=False, using=None, update_fields=None
         )
+
+        if created:
+
+            self.device_model.create_asset_connections(parent_asset = self)
 
         # models_to_update =[ 
         #     DeviceSoftware,
