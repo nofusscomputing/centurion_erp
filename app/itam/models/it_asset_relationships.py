@@ -21,6 +21,8 @@ class ITAssetRelationships(CenturionModel):
 
     _ticket_linkable = False
 
+    url_model_name = 'itasset_connections'
+
 
     class Meta:
 
@@ -96,3 +98,14 @@ class ITAssetRelationships(CenturionModel):
             '-action_delete-',
         ]
     }
+
+
+
+    def get_url_kwargs(self, many=False) -> dict:
+        kwargs = super().get_url_kwargs(many)
+
+        kwargs['model_name'] = str( self.parent_asset_model._meta.model_name )
+        kwargs['model_id'] = str( self.parent_asset_model.pk )
+
+
+        return kwargs
