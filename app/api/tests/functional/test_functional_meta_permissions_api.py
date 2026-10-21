@@ -14,6 +14,8 @@ from api.tests.functional.test_functional_permissions_api import (
 from centurion.tests.helpers import get_models
 
 from core.mixins.centurion import Centurion
+from core.models.audit import CenturionAudit
+from core.models.centurion_notes import CenturionModelNote
 from core.models.model_tickets import ModelTicket
 
 
@@ -80,13 +82,11 @@ class APIPermissionsTestCases(
 
 
 for centurion_model in get_models(
-                        excludes = [
-                            'centurionaudit',
-                            'centurionmodelnote',
-                            'notes',
-
-                        ],
-                        excludes_model_classes = [ ModelTicket ]
+                        excludes_model_classes = [
+                            CenturionAudit,
+                            CenturionModelNote,
+                            ModelTicket
+                        ]
 ):
 
     if(
