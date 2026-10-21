@@ -37,6 +37,14 @@ def kwargs_itasset( django_db_blocker, kwargs_itamassetbase,
 
             device_model = model_itassetmodel.objects.create( **kwargs )
 
+            device_model.serial_number = True
+            device_model.imei = True
+            device_model.mac_address = True
+            device_model.puk = True
+            device_model.puk_pin = True
+
+            device_model.save()
+
 
         kwargs = {
             **kwargs_itamassetbase(),
@@ -88,6 +96,7 @@ def kwargs_itasset( django_db_blocker, kwargs_itamassetbase,
                 f'{random.randint(0, 59):02d}:'
                 f'{random.randint(0, 59):02d}Z'
             ),
+            'serial_number': 'dev-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
         }
 
         return kwargs
