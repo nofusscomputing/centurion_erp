@@ -149,11 +149,16 @@ class AuditHistoryMetaModelTestCases(
 
 for model in get_models(
     excludes = [
-        'manufacturer'
+        'manufacturer',
     ],
-    excludes_model_classes = [ 'CenturionAudit', ],
     only_class = CenturionAudit
 ):
+
+    if(
+        not issubclass(model, CenturionAudit)
+        or model == CenturionAudit
+    ):
+        continue
 
 
     cls_name: str = f"{model._meta.object_name}MetaModelPyTest"
