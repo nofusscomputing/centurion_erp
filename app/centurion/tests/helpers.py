@@ -5,9 +5,9 @@ from django.conf import settings
 
 def get_models(
     excludes: list[ str ] = [],
-    excludes_model_classes: list[ str ] = [],
+    excludes_model_classes: list = [],
     only_class = None
-) -> list[ tuple ]:
+) -> list:
     """Fetch models from Centurion Apps
 
     Args:
@@ -66,7 +66,7 @@ def get_models(
 
         skip = False
 
-        if excludes_model_classes:
+        if excludes_model_classes and only_class is type(None):
 
             for excluded_class in excludes_model_classes:
 
@@ -74,13 +74,12 @@ def get_models(
                     skip = True
                     break
 
-        if not skip:
 
-            for exclude in excludes:
+        for exclude in excludes:
 
-                if exclude in model_name:
-                    skip = True
-                    break
+            if exclude in model_name:
+                skip = True
+                break
 
         if skip:
                 continue

@@ -5,10 +5,23 @@ from django.conf import settings
 
 from centurion.tests.helpers import get_models
 
+from core.models.audit import CenturionAudit
+from core.models.centurion_notes import CenturionModelNote
+from core.models.model_tickets import ModelTicket
+
+
+
 class MetaChecksPyTest:
 
 
-    notes_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket' ] )
+    notes_models = [(model,) for model in get_models(
+        excludes = [ 'base', ],
+        excludes_model_classes = [
+            CenturionAudit,
+            CenturionModelNote,
+            ModelTicket
+        ]
+    )]
 
 
     @pytest.mark.xfail( reason = 'Test Checks if installed models has a notes table' )
@@ -26,7 +39,7 @@ class MetaChecksPyTest:
         called `<app_label>_<model_name>_notes`
         """
 
-        notes_model_table: str = test_model._meta.app_label + '_' + test_model._meta.model_name + '_notes'
+        notes_model_table: str = test_model._meta.app_label + '_' + test_model._meta.model_name + '_centurionmodelnote'
 
         found = False
 
@@ -42,7 +55,16 @@ class MetaChecksPyTest:
 
 
 
-    history_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket' ] )
+    # history_models = get_models( [ 'audithistory', 'base', 'history', 'note', 'ticket' ] )
+
+    history_models = [(model,) for model in get_models(
+        excludes = [ 'base', ],
+        excludes_model_classes = [
+            CenturionAudit,
+            CenturionModelNote,
+            ModelTicket
+        ]
+    )]
 
 
     @pytest.mark.xfail( reason = 'Test Checks if installed models has a History table' )
@@ -60,7 +82,7 @@ class MetaChecksPyTest:
         called `<app_label>_<model_name>_notes`
         """
 
-        history_model_table: str = test_model._meta.app_label + '_' + test_model._meta.model_name + '_history'
+        history_model_table: str = test_model._meta.app_label + '_' + test_model._meta.model_name + '_audithistory'
 
         found = False
 

@@ -8,7 +8,9 @@ from django.db import models
 
 from centurion.tests.helpers import get_models
 
+from core.models.audit import CenturionAudit
 from core.models.centurion_notes import CenturionModelNote
+from core.models.model_tickets import ModelTicket
 from core.tests.unit.centurion_model_note_meta.test_unit_centurion_model_note_meta_model import (
     MetaAbstractModelInheritedCases
 )
@@ -156,8 +158,11 @@ for model in get_models(
     excludes = [
         'manufacturer'
     ],
-    excludes_model_classes = [ 'centurionmodelnote', ],
-    only_class = CenturionModelNote
+    excludes_model_classes = [
+            CenturionAudit,
+            CenturionModelNote,
+            ModelTicket
+    ],
 ):
 
 
