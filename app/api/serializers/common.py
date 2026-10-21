@@ -176,18 +176,36 @@ class CommonModelSerializer(CommonBaseSerializer):
         #             kwargs = item.get_url_kwargs_notes()
         #         )
 
+        app_label = item._meta.app_label
+
+        model_name = item._meta.model_name
+
+        if item._is_submodel:
+
+            app_label = item._base_model._meta.app_label
+            model_name = item._base_model._meta.model_name
+
         if getattr(self.Meta.model, '_notes_enabled', False):
 
             get_url['notes'] = reverse(
                 "v2:_api_centurionmodelnote_sub-list",
                 request = None,
                 kwargs = {
-                    'app_label': item._meta.app_label,
-                    'model_name': item._meta.model_name,
+                    'app_label': app_label,
+                    'model_name': model_name,
                     'model_id': item.pk
                 }
             )
 
+
+        app_label = item._meta.app_label
+
+        model_name = item._meta.model_name
+
+        if item._is_submodel:
+
+            app_label = item._base_model._meta.app_label
+            model_name = item._base_model._meta.model_name
 
 
         if getattr(item, '_ticket_linkable', False):
@@ -195,8 +213,8 @@ class CommonModelSerializer(CommonBaseSerializer):
                 "v2:_api_modelticket_sub-list",
                 request = None,
                 kwargs = {
-                    'app_label': item._meta.app_label,
-                    'model_name': item._meta.model_name,
+                    'app_label': app_label,
+                    'model_name': model_name,
                     'model_id': item.pk
                 }
             )
