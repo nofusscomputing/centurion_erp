@@ -621,7 +621,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                     'component': "detail",
                                     'action': "api",
                                     'loader': "django",
-                                    'revalidate': False
                                     
                                 }
                             ]
