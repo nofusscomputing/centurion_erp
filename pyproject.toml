@@ -164,6 +164,14 @@ omit = [
     #
     "app/core/lib/markdown.py",
 
+    #
+    # Centurion Feature Flag
+    #    - is bypassed during tests.
+    #
+    "app/centurion_feature_flag/*",
+    "app/centurion_feature_flag/*/*",
+    "app/centurion_feature_flag/*/*/*",
+
     ##############################################
     # Depreciated Code Scheduled to be removed
     ##############################################
