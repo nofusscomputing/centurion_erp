@@ -454,6 +454,77 @@ class ITAssetModelTestCases(
 
 
 
+
+    def test_model_create_calls_create_asset_connections(self, mocker,
+        model, model_kwargs, model_itassetmodel
+    ):
+        """Test Model Function
+        
+        When an asset is created, `create_asset_connections` must be called to create connections from
+        asset_model.
+        """
+
+        test_function = mocker.patch.object(
+            model_itassetmodel,
+            'create_asset_connections',
+            return_value = ''
+        )
+
+        model.objects.create( **model_kwargs() )
+
+        test_function.assert_called_once()
+
+
+
+    def test_model_create_calls_create_asset_connections_args(self, mocker,
+        model, model_kwargs, model_itassetmodel
+    ):
+        """Test Model Function
+        
+        When an asset is created, `create_asset_connections` is called with the
+        correct kargs
+        """
+
+        test_function = mocker.patch.object(
+            model_itassetmodel,
+            'create_asset_connections',
+            return_value = ''
+        )
+
+        parent_model = model.objects.create( **model_kwargs() )
+
+        test_function.assert_called_once_with( parent_asset = parent_model )
+
+
+
+
+    def test_model_save_no_calls_create_asset_connections(self, mocker,
+        model, model_kwargs, model_itassetmodel
+    ):
+        """Test Model Function
+        
+        When an asset is created, `create_asset_connections` must be called to create connections from
+        asset_model.
+        """
+
+        test_function = mocker.patch.object(
+            model_itassetmodel,
+            'create_asset_connections',
+            return_value = ''
+        )
+
+        test_obj = model.objects.create( **model_kwargs() )
+
+        test_function.reset_mock()
+
+        test_obj.name = 'fred'
+
+        test_obj.save()
+
+        test_function.assert_not_called()
+
+
+
 class ITAssetModelInheritedCases(
     ITAssetModelTestCases,
 ):
