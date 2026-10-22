@@ -208,7 +208,7 @@ class ITAssetModel(CenturionModel):
 
 
 
-    _regex_template_connect_name = r'^(?P<name>[A-Za-z0-9]*?[A-Za-z])(?P<lowest>\d+)?(?:-(?P<highest>\d+))?$'
+    _regex_template_connect_name = r'^(?P<name>[A-Za-z0-9]*?[A-Za-z]\-?)(?P<lowest>\d+)?(?:-(?P<highest>\d+))?$'
 
 
 
