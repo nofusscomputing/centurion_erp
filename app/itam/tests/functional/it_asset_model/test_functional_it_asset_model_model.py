@@ -17,28 +17,29 @@ class ITAssetModelModelTestCases(
 
 
         itassetmodel_regex_params = [
-                ('wlp3s', 'wlp3s', None, None),
-                ('wlp3s0', 'wlp3s', '0', None),
-                ('wlp3s44', 'wlp3s', '44', None),
-                ('wlp344s0', 'wlp344s', '0', None),
-                ('wlp344s544', 'wlp344s', '544', None),
-                ('LAN0', 'LAN', '0', None),
-                ('LAN-0', 'LAN-', '0', None),
-                ('LAN0-5', 'LAN', '0', '5'),
-                ('LAN11-22', 'LAN', '11', '22'),
+                ('wlp3s', 'wlp3s', None, None, [ 'wlp3s' ]),
+                ('wlp3s0', 'wlp3s', '0', None, [ 'wlp3s0' ]),
+                ('wlp3s44', 'wlp3s', '44', None, [ 'wlp3s44' ]),
+                ('wlp344s0', 'wlp344s', '0', None, [ 'wlp344s0' ]),
+                ('wlp344s544', 'wlp344s', '544', None, [ 'wlp344s544' ]),
+                ('LAN0', 'LAN', '0', None, [ 'LAN0' ]),
+                ('LAN-0', 'LAN-', '0', None, [ 'LAN-0' ]),
+                ('LAN0-5', 'LAN', '0', '5', [ 'LAN0', 'LAN1', 'LAN2', 'LAN3', 'LAN4', 'LAN5' ]),
+                ('LAN1-3', 'LAN', '1', '3', [ 'LAN1', 'LAN2', 'LAN3' ]),
+                ('LAN-1-3', 'LAN-', '1', '3', [ 'LAN-1', 'LAN-2', 'LAN-3' ]),
 
             ]
 
 
 
         @pytest.mark.parametrize(
-            argnames = [ 'value', 'name', 'lowest', 'highest' ],
+            argnames = [ 'value', 'name', 'lowest', 'highest', 'asset_name' ],
             argvalues = itassetmodel_regex_params,
             ids = [val[0] for val in itassetmodel_regex_params]
         )
         def test_function_create_asset_connections_name_templating_name(self,
             model, 
-            value, name, lowest, highest
+            value, name, lowest, highest, asset_name
         ):
             """Test class function
             
@@ -59,13 +60,13 @@ class ITAssetModelModelTestCases(
 
 
         @pytest.mark.parametrize(
-            argnames = [ 'value', 'name', 'lowest', 'highest' ],
+            argnames = [ 'value', 'name', 'lowest', 'highest', 'asset_name' ],
             argvalues = itassetmodel_regex_params,
             ids = [val[0] for val in itassetmodel_regex_params]
         )
         def test_function_create_asset_connections_name_templating_lowest(self,
             model, 
-            value, name, lowest, highest
+            value, name, lowest, highest, asset_name
         ):
             """Test class function
             
@@ -86,13 +87,13 @@ class ITAssetModelModelTestCases(
 
 
         @pytest.mark.parametrize(
-            argnames = [ 'value', 'name', 'lowest', 'highest' ],
+            argnames = [ 'value', 'name', 'lowest', 'highest', 'asset_name' ],
             argvalues = itassetmodel_regex_params,
             ids = [val[0] for val in itassetmodel_regex_params]
         )
         def test_function_create_asset_connections_name_templating_highest(self,
             model, 
-            value, name, lowest, highest
+            value, name, lowest, highest, asset_name
         ):
             """Test class function
             
@@ -147,6 +148,58 @@ class ITAssetModelModelTestCases(
 
             assert len(connections_created) == 2
 
+
+
+        
+        @pytest.mark.parametrize(
+            argnames = 'value, name, lowest, highest, asset_name',
+            argvalues = [
+                (value, name, lowest, highest, item)
+                for value, name, lowest, highest, expected_list in itassetmodel_regex_params
+                for item in expected_list
+            ],
+            ids = [
+                f'{value}-{item})'
+                for value, name, lowest, highest, expected_list in itassetmodel_regex_params
+                for item in expected_list
+            ]
+        )
+        def test_function_create_asset_connections_creates_connection_asset_created(self,
+            value, name, lowest, highest, asset_name,
+            model, model_kwargs, model_itassetrelationships, kwargs_itassetrelationships,
+            model_itasset, kwargs_itasset
+        ):
+            """Test class function
+            
+            When this function is called an `it_asset` is passed to it. Then using the
+            connections on `self`, they are created and connected to the passed `it_asset`.
+            """
+
+            kwargs = kwargs_itassetrelationships()
+            kwargs['name'] = value
+
+            template_model = kwargs['parent_asset_model']
+            connection = model_itassetrelationships.objects.create( **kwargs )
+
+            template_connection = model_itassetrelationships.objects.filter(
+                parent = None,
+                parent_asset_model = template_model
+            )
+
+            assert len(template_connection) == 1, \
+                'Template connection must exist for test to function'
+
+            kwargs = kwargs_itasset()
+            kwargs['device_model'] = template_model
+
+            asset = model_itasset.objects.create( **kwargs )
+
+            connections_created = model_itassetrelationships.objects.filter(
+                name = asset_name,
+                parent = asset
+            )
+
+            assert len(connections_created) == 1
 
 
 
