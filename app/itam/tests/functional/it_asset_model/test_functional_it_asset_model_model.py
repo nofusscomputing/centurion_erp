@@ -17,11 +17,13 @@ class ITAssetModelModelTestCases(
 
 
         itassetmodel_regex_params = [
+                ('wlp3s', 'wlp3s', None, None),
                 ('wlp3s0', 'wlp3s', '0', None),
                 ('wlp3s44', 'wlp3s', '44', None),
                 ('wlp344s0', 'wlp344s', '0', None),
                 ('wlp344s544', 'wlp344s', '544', None),
                 ('LAN0', 'LAN', '0', None),
+                ('LAN-0', 'LAN-', '0', None),
                 ('LAN0-5', 'LAN', '0', '5'),
                 ('LAN11-22', 'LAN', '11', '22'),
 
