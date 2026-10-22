@@ -93,6 +93,44 @@ class ITAssetRelationshipsBaseSerializerTestCases(
 
 
 
+    def test_serializer_function_validate_adds_field_parent_asset_model_id(self,
+        model, kwargs_api_create, model_serializer
+    ):
+        """Test Serializer Function
+        
+        When view model is `itassetmodel` the validate function must add `parent_asset_model_id`
+        to the fields using the value from `view.kwargs.model_id`
+        """
+
+        kwargs = kwargs_api_create
+
+        class MockView:
+
+            action = 'create'
+
+            kwargs = {
+                'model_name': 'itassetmodel',
+                'model_id': kwargs_api_create['parent_asset_model']
+            }
+
+
+        kwargs = kwargs_api_create
+
+        del kwargs_api_create['parent_asset_model']
+
+        serializer = model_serializer['model'](
+            context = {
+                'view': MockView()
+            },
+            data = kwargs
+        )
+
+        serializer.is_valid()
+
+        assert serializer.validated_data.get('parent_asset_model_id', None) == MockView.kwargs['model_id']
+
+
+
 class ITAssetRelationshipsSerializerInheritedCases(
     ITAssetRelationshipsBaseSerializerTestCases
 ):
