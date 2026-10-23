@@ -15,6 +15,8 @@ As part of the lifecycle management of IT Assets, You would be required to popul
 
 - Assets
 
+- [Asset Type](./asset_type.md)
+
 - [Devices](device.md)
 
 - [Operating Systems](operating_system.md)
