@@ -70,7 +70,7 @@ Additional Tasks if replacing a model
 - Unit Tests
     - [ ] [Model](https://nofusscomputing.com/projects/centurion_erp/development/models/#tests)
     - [ ] [ViewSet](https://nofusscomputing.com/projects/centurion_erp/development/views/#requirements)
-    - [ ] Serializer
+    - [ ] [Serializer](https://nofusscomputing.com/projects/centurion_erp/development/serializers/#tests)
 - Function Test
     - [ ] API Render (fields)
     - [ ] Model
