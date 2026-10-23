@@ -37,7 +37,7 @@ class ITAssetModelModelTestCases(
             'default': models.fields.NOT_PROVIDED,
             'field_type': models.CharField,
             'length': 50,
-            'null': True,
+            'null': False,
             'unique': True,
         },
         'device_type': {

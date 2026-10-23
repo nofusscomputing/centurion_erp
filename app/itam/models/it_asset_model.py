@@ -31,7 +31,7 @@ class ITAssetModel(CenturionModel):
         blank = False,
         help_text = 'Model name manufacturer provided.',
         max_length = 50,
-        null = True,
+        null = False,
         unique = True,
         verbose_name = 'Model Name'
     )
