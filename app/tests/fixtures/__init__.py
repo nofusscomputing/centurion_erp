@@ -131,12 +131,6 @@ from .model_device import (
     serializer_device,
 )
 
-from .model_devicemodel import (
-    kwargs_devicemodel,
-    model_devicemodel,
-    serializer_devicemodel,
-)
-
 from .model_deviceoperatingsystem import (
     kwargs_deviceoperatingsystem,
     model_deviceoperatingsystem,

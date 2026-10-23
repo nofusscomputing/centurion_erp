@@ -10,36 +10,36 @@ from centurion.logging import CenturionLogger
 
 
 
-def migrate_itam_devicemodel_manufacturer(manufacturer, company, log, user):
+# def migrate_itam_devicemodel_manufacturer(manufacturer, company, log, user):
 
-    DeviceModel = apps.get_model(
-        app_label = 'itam',
-        model_name = 'devicemodel'
-    )
+#     DeviceModel = apps.get_model(
+#         app_label = 'itam',
+#         model_name = 'devicemodel'
+#     )
 
-    for device_model in DeviceModel.objects.filter( manufacturer_old = manufacturer ):
+#     for device_model in DeviceModel.objects.filter( manufacturer_old = manufacturer ):
 
-        try:
+#         try:
 
-            type(device_model).context.update({
-                'logger': log,
-                device_model._meta.model_name: user
-            })
-            device_model.manufacturer = company
-            device_model.save()
+#             type(device_model).context.update({
+#                 'logger': log,
+#                 device_model._meta.model_name: user
+#             })
+#             device_model.manufacturer = company
+#             device_model.save()
 
-            device_model.manufacturer_old = None
-            device_model.save()
+#             device_model.manufacturer_old = None
+#             device_model.save()
 
-            log.info(
-                msg = f'Migrated Device Model {device_model} to use company {company}'
-            )
+#             log.info(
+#                 msg = f'Migrated Device Model {device_model} to use company {company}'
+#             )
 
 
-        except Exception as exc:
-            log.exception(
-                msg = f'Error occured when processing Device Model {device_model} for manufacturer {manufacturer}. [{exc}]'
-            )
+#         except Exception as exc:
+#             log.exception(
+#                 msg = f'Error occured when processing Device Model {device_model} for manufacturer {manufacturer}. [{exc}]'
+#             )
 
 
 
@@ -250,10 +250,10 @@ def manufacturer_to_company(sender, **kwargs):
                     msg = f'Created Company {company} from Manufacturer {manufacturer}.'
                 )
 
-                migrate_itam_devicemodel_manufacturer(
-                    manufacturer, company, log,
-                    system_user,
-                )
+                # migrate_itam_devicemodel_manufacturer(
+                #     manufacturer, company, log,
+                #     system_user,
+                # )
 
                 migrate_itam_operatingsystem_publisher(
                     manufacturer, company, log,
