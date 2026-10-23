@@ -25,7 +25,7 @@ class DeviceModel(
     CenturionModel
 ):    # pragma: no cover
 
-    model_tag = 'device_model'
+    model_tag = 'device_model-'
 
 
     class Meta:
