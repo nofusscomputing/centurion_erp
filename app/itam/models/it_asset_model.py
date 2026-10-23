@@ -55,6 +55,19 @@ class ITAssetModel(CenturionModel):
         related_name = '+'
     )
 
+    connector: list[ str ]  = [
+        'HDMI',
+        'HDMI-Mini',
+        'IDE',
+        'memory card',
+        'pci',
+        'RJ-12',
+        'RJ-45',
+        'SATA',
+        'sim card',
+        'usb',
+    ]
+
     imei = models.BooleanField(
         blank = True,
         default = False,
@@ -94,6 +107,13 @@ class ITAssetModel(CenturionModel):
         null = False,
         verbose_name = 'Serial Number',
     )
+
+    # connections = models.ManyToManyField(
+    #     to = 'self',
+    #     symmetrical = False,
+    #     through = 'itam.ITAssetRelationships',
+    #     through_fields = ('parent_asset_model', 'child_asset_model'),
+    # )
 
     modified = AutoLastModifiedField()
 
