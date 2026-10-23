@@ -11,7 +11,7 @@ from core.models.centurion import CenturionModel
 
 class ITAssetModel(CenturionModel):
 
-    model_tag = 'itam_asset_type'
+    model_tag = 'device_model'
 
 
     class Meta:
