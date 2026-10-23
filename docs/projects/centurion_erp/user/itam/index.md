@@ -13,7 +13,7 @@ As part of the lifecycle management of IT Assets, You would be required to popul
 
 ## ITAM Components
 
-- Assets
+- [Assets](./it_asset.md)
 
 - [Asset Type](./asset_type.md)
 
