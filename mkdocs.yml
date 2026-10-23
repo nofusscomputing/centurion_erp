@@ -208,6 +208,8 @@ nav:
 
         - projects/centurion_erp/user/itam/index.md
 
+        - projects/centurion_erp/user/itam/asset_type.md
+
         - projects/centurion_erp/user/itam/device.md
 
         - projects/centurion_erp/user/itam/operating_system.md
