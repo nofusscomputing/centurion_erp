@@ -369,12 +369,23 @@ class ConfigGroupHosts(
             )
 
 
-    host = models.ForeignKey(
+    host_old = models.ForeignKey(
         Device,
         blank = False,
         help_text = 'Host that will be apart of this config group',
         on_delete = models.PROTECT,
         null = False,
+        related_name = '+',
+        validators = [ validate_host_no_parent_group ],
+        verbose_name = 'Host',
+    )
+
+    host = models.ForeignKey(
+        to = 'itam.ITAsset',
+        blank = False,
+        help_text = 'Host that will be apart of this config group',
+        null = False,
+        on_delete = models.PROTECT,
         validators = [ validate_host_no_parent_group ],
         verbose_name = 'Host',
     )
