@@ -7,7 +7,11 @@ from api.serializers import common
 
 from config_management.models.groups import ConfigGroups
 
-from itam.serializers.device import DeviceBaseSerializer
+from itam.serializers.assetbase_itasset import (
+    BaseSerializer as DeviceBaseSerializer
+)
+
+
 
 class ConfigGroupBaseSerializer(serializers.ModelSerializer):
 
