@@ -26,7 +26,7 @@ class Index(IndexViewset):
         return Response(
             {
                 "device": reverse('v2:_api_device-list', request = None),
-                "inventory": reverse('v2:_api_v2_inventory-list', request = None),
+                # "inventory": reverse('v2:_api_v2_inventory-list', request = None),
                 "operating_system": reverse('v2:_api_operatingsystem-list', request = None),
                 "software": reverse('v2:_api_software-list', request = None)
             }

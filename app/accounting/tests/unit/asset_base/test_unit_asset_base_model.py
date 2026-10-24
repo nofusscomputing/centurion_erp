@@ -9,7 +9,7 @@ from core.tests.unit.centurion_abstract.test_unit_centurion_abstract_model impor
 )
 
 
-@pytest.mark.skip( reason = 'behind ff, see #887' )
+
 @pytest.mark.model_assetbase
 class AssetBaseModelTestCases(
     CenturionAbstractTenancyModelInheritedCases
@@ -59,6 +59,13 @@ class AssetBaseModelTestCases(
             'null': True,
             'unique': True,
         },
+        'modified': {
+            'blank': False,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.DateTimeField,
+            'null': False,
+            'unique': False,
+        },
     }
 
 
@@ -85,6 +92,52 @@ class AssetBaseModelInheritedCases(
             'model_name': model_instance._meta.model_name,
             'pk': model_instance.id
         }
+
+
+
+    @pytest.mark.xfail( reason = 'Assets are sub models and use _base_model details.' )
+    def test_method_get_ticket_app_label_returns_own_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._base_model._meta.app_label
+
+
+
+    @pytest.mark.xfail( reason = 'Assets are sub models and use _base_model details.' )
+    def test_method_get_ticket_model_name_returns_own_ticket_model_name(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_model_name() == f'{model()._base_model._meta.object_name}Ticket'
+
+
+
+    def test_method_get_ticket_app_label_returns_base_model_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._base_model._meta.app_label
+
+
+
+    def test_method_get_ticket_model_name_returns_base_model_ticket_model_name(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_model_name() == f'{model()._base_model._meta.object_name}Ticket'
 
 
 

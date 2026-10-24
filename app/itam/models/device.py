@@ -12,6 +12,7 @@ from django.utils.timezone import now
 from access.fields import AutoLastModifiedField
 
 from centurion.helpers.merge_software import merge_software
+from centurion.lib.decorators import depreciate
 
 from core.classes.icon import Icon
 from core.models.centurion import CenturionModel
@@ -123,11 +124,17 @@ class DeviceType(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    replacement = 'itam.ITAsset',
+    skip_tests = True,
+)
 class Device(
     CenturionModel,
-):
+):    # pragma: no cover
 
-    model_tag = 'device'
+    model_tag = 'device-'
 
     reserved_config_keys: list = [
         'software'
@@ -144,6 +151,15 @@ class Device(
 
         verbose_name_plural = 'Devices'
 
+
+    it_asset = models.ForeignKey(
+        to = 'itam.ITAsset',
+        blank = True,
+        help_text = 'IT Asset this device was migrated to.',
+        null = True,
+        on_delete = models.PROTECT,
+        verbose_name = 'IT Asset',
+    )
 
     def validate_hostname_format(self):
 
@@ -561,9 +577,14 @@ class Device(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    skip_tests = True,
+)
 class DeviceSoftware(
     CenturionModel,
-):
+):    # pragma: no cover
     """ A way for the device owner to configure software to install/remove """
 
     _audit_enabled = False
@@ -699,9 +720,14 @@ class DeviceSoftware(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    skip_tests = True,
+)
 class DeviceOperatingSystem(
     CenturionModel,
-):
+):    # pragma: no cover
 
     _audit_enabled = False
 

@@ -9,7 +9,7 @@ from itam.models.device import Device
 
 
 
-class InventorySerializer(serializers.Serializer):
+class InventorySerializer(serializers.Serializer):    # pragma: no cover
     """ Serializer for Inventory Upload """
 
 

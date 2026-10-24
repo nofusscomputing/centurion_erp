@@ -30,6 +30,7 @@ from .model_appsettings import (
 from .model_assetbase import (
     kwargs_assetbase,
     model_assetbase,
+    serializer_assetbase,
 )
 
 from .model_authtoken import (
@@ -130,12 +131,6 @@ from .model_device import (
     serializer_device,
 )
 
-from .model_devicemodel import (
-    kwargs_devicemodel,
-    model_devicemodel,
-    serializer_devicemodel,
-)
-
 from .model_deviceoperatingsystem import (
     kwargs_deviceoperatingsystem,
     model_deviceoperatingsystem,
@@ -218,6 +213,37 @@ from .model_incidentticket import (
 from .model_itamassetbase import (
     kwargs_itamassetbase,
     model_itamassetbase,
+    serializer_itamassetbase,
+)
+
+from .model_itasset import (
+    kwargs_itasset,
+    model_itasset,
+    serializer_itasset,
+)
+
+from .model_itassetmodel import (
+    kwargs_itassetmodel,
+    model_itassetmodel,
+    serializer_itassetmodel,
+)
+
+from .model_itassetoperatingsystem import (
+    kwargs_itassetoperatingsystem,
+    model_itassetoperatingsystem,
+    serializer_itassetoperatingsystem,
+)
+
+from .model_itassetrelationships import (
+    kwargs_itassetrelationships,
+    model_itassetrelationships,
+    serializer_itassetrelationships,
+)
+
+from .model_itassetsoftware import (
+    kwargs_itassetsoftware,
+    model_itassetsoftware,
+    serializer_itassetsoftware,
 )
 
 from .model_knowledgebase import (
@@ -368,6 +394,12 @@ from .model_softwareversion import (
     kwargs_softwareversion,
     model_softwareversion,
     serializer_softwareversion,
+)
+
+from .model_softwareversions import (
+    kwargs_softwareversions,
+    model_softwareversions,
+    serializer_softwareversions,
 )
 
 from .model_ticketbase import (

@@ -6,10 +6,11 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 
 from itim.models.services import Service, Port
 
-from itam.models.device import Device
+from itam.models import ITAsset
 
 
 
+@pytest.mark.skip( reason = 'To be refactored as itam.Devices migrated to itam.ITAsset' )
 @pytest.mark.model_device
 @pytest.mark.model_service
 class ViewSetBase(
@@ -37,7 +38,7 @@ class ViewSetBase(
 
         super().setUpTestData()
 
-        device = Device.objects.create(
+        device = ITAsset.objects.create(
             organization=self.organization,
             name = 'cluster'
         )

@@ -5,7 +5,9 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from itam.serializers.device import DeviceBaseSerializer
+from itam.serializers.assetbase_itasset import (
+    BaseSerializer as DeviceBaseSerializer
+)
 
 from itim.serializers.cluster_type import ClusterTypeBaseSerializer
 from itim.models.clusters import Cluster

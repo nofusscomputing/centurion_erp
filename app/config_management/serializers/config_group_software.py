@@ -9,7 +9,10 @@ from config_management.models.groups import ConfigGroupSoftware
 from config_management.serializers.config_group import ConfigGroups, ConfigGroupBaseSerializer
 
 from itam.serializers.software import SoftwareBaseSerializer
-from itam.serializers.software_version import SoftwareVersion, SoftwareVersionBaseSerializer
+from itam.serializers.software_version import (
+    SoftwareVersion,
+    SoftwareVersionBaseSerializer
+)
 
 
 

@@ -10,13 +10,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.DeleteModel(
-            name="ConfigGroupHostsHistory",
-        ),
-        migrations.DeleteModel(
-            name="ConfigGroupsHistory",
-        ),
-        migrations.DeleteModel(
-            name="ConfigGroupSoftwareHistory",
-        ),
+        # migrations.DeleteModel(
+        #     name="ConfigGroupHostsHistory",
+        # ),
+        # migrations.DeleteModel(
+        #     name="ConfigGroupsHistory",
+        # ),
+        # migrations.DeleteModel(
+        #     name="ConfigGroupSoftwareHistory",
+        # ),
     ]

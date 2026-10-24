@@ -49,11 +49,11 @@ class AppSettings(
         related_name = 'owner_organization'
     )
 
-    device_model_is_global = models.BooleanField (
+    it_asset_model_is_global = models.BooleanField (
         blank= False,
-        help_text = 'Should Device Models be global',
+        help_text = 'Should IT Asset Models be global',
         default = False,
-        verbose_name = 'Global Device Models',
+        verbose_name = 'Global IT Asset Models',
     )
 
     device_type_is_global = models.BooleanField (
@@ -108,7 +108,7 @@ class AppSettings(
                             'global_organization',
                         ],
                         "right": [
-                            'device_model_is_global',
+                            'it_asset_model_is_global',
                             'device_type_is_global',
                             'manufacturer_is_global',
                             'software_is_global',
@@ -135,7 +135,7 @@ class AppSettings(
         super().clean()
 
     __all__ = [
-        'device_model_is_global',
+        'it_asset_model_is_global',
         'device_type_is_global',
         'manufacturer_is_global',
         'software_is_global',

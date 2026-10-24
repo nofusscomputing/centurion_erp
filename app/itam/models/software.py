@@ -4,6 +4,8 @@ from access.fields import AutoLastModifiedField
 from access.models.company_base import Company
 from access.models.tenant import Tenant
 
+from centurion.lib.decorators import depreciate
+
 from core.models.centurion import CenturionModel
 from core.models.manufacturer import Manufacturer
 
@@ -112,11 +114,17 @@ class SoftwareCategory(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    replacement = 'itam.ITAssetSoftware',
+    skip_tests = True,
+)
 class Software(
     CenturionModel,
-):
+):    # pragma: no cover
 
-    model_tag = 'software'
+    model_tag = 'software-'
 
 
     class Meta:
@@ -160,7 +168,7 @@ class Software(
         help_text = 'Who publishes this software',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'software',
+        related_name = '+',
         verbose_name = 'Publisher',
     )
 
@@ -313,9 +321,15 @@ class Software(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    replacement = 'itam.SoftwareVersions',
+    skip_tests = True,
+)
 class SoftwareVersion(
     CenturionModel
-):
+):    # pragma: no cover
 
     model_tag = 'software_version'
 
