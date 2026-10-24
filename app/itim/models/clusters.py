@@ -178,7 +178,7 @@ class Cluster(
         Device,
         blank = True,
         help_text = 'Hosts for resource consumption that the cluster is deployed upon',
-        related_name = '+',
+        related_name = 'cluster_node',
         verbose_name = 'Nodes',
     )
 
@@ -194,7 +194,7 @@ class Cluster(
         Device,
         blank = True,
         help_text = 'Devices that are deployed upon the cluster.',
-        related_name = '+',
+        related_name = 'cluster_device',
         verbose_name = 'Devices',
     )
 
