@@ -10,6 +10,7 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
+@pytest.mark.skip( reason = 'To be refactored as itam.Devices migrated to itam.ITAsset' )
 @pytest.mark.model_configgroups
 class ConfigGroupsAPITestCases(
     APIFieldsInheritedCases,
