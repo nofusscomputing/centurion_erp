@@ -81,8 +81,15 @@ class ConfigGroups(
         verbose_name = 'Configuration'
     )
 
-    hosts = models.ManyToManyField(
+    hosts_old = models.ManyToManyField(
         to = Device,
+        blank = True,
+        help_text = 'Hosts that are part of this group',
+        verbose_name = 'Hosts'
+    )
+
+    hosts = models.ManyToManyField(
+        to = 'itam.ITAsset',
         blank = True,
         help_text = 'Hosts that are part of this group',
         verbose_name = 'Hosts'
@@ -375,7 +382,6 @@ class ConfigGroupHosts(
         help_text = 'Host that will be apart of this config group',
         on_delete = models.PROTECT,
         null = False,
-        related_name = '+',
         validators = [ validate_host_no_parent_group ],
         verbose_name = 'Host',
     )
