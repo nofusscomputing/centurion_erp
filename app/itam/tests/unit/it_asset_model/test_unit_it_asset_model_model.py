@@ -121,6 +121,44 @@ class ITAssetModelModelTestCases(
 
 
 
+    def test_function_clean_global_org(self, mocker,
+        model, model_kwargs, organization_three
+    ):
+        """Test model function
+        
+        Ensure that if there is as global organization specified, that the
+        software model is updated to this organization if device model is set
+        to global.
+        """
+
+        class MockAppSettings:
+
+            it_asset_model_is_global = True
+
+            device_type_is_global = True
+
+            global_organization = organization_three
+
+            manufacturer_is_global = True
+
+
+        app_settings = mocker.patch('settings.models.app_settings.AppSettings.objects', return_value=MockAppSettings() )
+        app_settings.get.return_value=MockAppSettings()
+
+        kwargs = model_kwargs()
+        
+        original_tenancy = kwargs['organization']
+
+        assert original_tenancy != organization_three, \
+            'Global tenancy must be different to the kwargs tenancy for the test to function.'
+
+        test_model = model( **kwargs )
+
+        test_model.full_clean()
+
+        assert test_model.organization == organization_three
+
+
 
 class ITAssetModelModelInheritedCases(
     ITAssetModelModelTestCases,

@@ -7,6 +7,8 @@ from access.fields import AutoLastModifiedField
 
 from core.models.centurion import CenturionModel
 
+from settings.models.app_settings import AppSettings
+
 
 
 class ITAssetModel(CenturionModel):
@@ -225,6 +227,18 @@ class ITAssetModel(CenturionModel):
 
 
         return self.name
+
+
+
+    def clean(self):
+
+        app_settings = AppSettings.objects.get( owner_organization = None )
+
+        if app_settings.it_asset_model_is_global:
+
+            self.organization = app_settings.global_organization
+
+        super().clean()
 
 
 
