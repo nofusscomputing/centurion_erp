@@ -201,8 +201,18 @@ class Service(
         verbose_name = 'Name',
     )
 
-    device = models.ForeignKey(
+    device_old = models.ForeignKey(    # Migrate to ITAsset
         Device,
+        blank = True,
+        help_text = 'Device the service is assigned to',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = '+',
+        verbose_name = 'Device',
+    )
+
+    device = models.ForeignKey(    # Migrate to ITAsset
+        to = 'itam.ITAsset',
         blank = True,
         help_text = 'Device the service is assigned to',
         null = True,
