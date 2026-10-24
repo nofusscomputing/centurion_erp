@@ -145,7 +145,7 @@ class DeviceModel(
 
         app_settings = AppSettings.objects.get(owner_organization=None)
 
-        if app_settings.device_model_is_global:
+        if app_settings.it_asset_model_is_global:
 
             self.organization = app_settings.global_organization
 
