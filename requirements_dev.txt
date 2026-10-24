@@ -13,7 +13,7 @@ annotated-types==0.8.0
     # via pydantic
 argcomplete==3.4.0
     # via commitizen
-asgiref==3.12.1
+asgiref==3.13.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -42,7 +42,7 @@ celery==5.4.0
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   django-celery-results
-certifi==2026.7.22
+certifi==2026.10.23
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -248,7 +248,7 @@ pathspec==1.1.1
     # via black
 pip-tools==7.6.2
     # via -r tools/requirements_dev.in
-platformdirs==4.13.3
+platformdirs==4.13.5
     # via
     #   black
     #   pylint
@@ -267,7 +267,7 @@ prompt-toolkit==3.0.53
     #   questionary
 psycopg2==2.9.9
     # via -r requirements_production.txt
-pycparser==3.11
+pycparser==3.12
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -306,7 +306,7 @@ pytest-mock==3.14.0
     # via -r tools/requirements_dev.in
 pytest-simplified==1.0.0rc3
     # via -r tools/requirements_dev.in
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -401,6 +401,7 @@ tzdata==2026.5
     #   -r requirements_production.txt
     #   celery
     #   kombu
+    #   python-dateutil
 uritemplate==4.2.0
     # via
     #   -r requirements.txt
@@ -420,7 +421,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.9.2
+wcwidth==0.9.3
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
