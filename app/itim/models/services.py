@@ -207,7 +207,6 @@ class Service(
         help_text = 'Device the service is assigned to',
         null = True,
         on_delete = models.PROTECT,
-        related_name = '+',
         verbose_name = 'Device',
     )
 
