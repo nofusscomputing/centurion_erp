@@ -7,11 +7,13 @@ from access.fields import AutoLastModifiedField
 
 from core.models.centurion import CenturionModel
 
+from settings.models.app_settings import AppSettings
+
 
 
 class ITAssetModel(CenturionModel):
 
-    model_tag = 'itam_asset_type'
+    model_tag = 'device_model'
 
 
     class Meta:
@@ -31,7 +33,7 @@ class ITAssetModel(CenturionModel):
         blank = False,
         help_text = 'Model name manufacturer provided.',
         max_length = 50,
-        null = True,
+        null = False,
         unique = True,
         verbose_name = 'Model Name'
     )
@@ -54,6 +56,19 @@ class ITAssetModel(CenturionModel):
         on_delete = models.PROTECT,
         related_name = '+'
     )
+
+    connector: list[ str ]  = [
+        'HDMI',
+        'HDMI-Mini',
+        'IDE',
+        'memory card',
+        'pci',
+        'RJ-12',
+        'RJ-45',
+        'SATA',
+        'sim card',
+        'usb',
+    ]
 
     imei = models.BooleanField(
         blank = True,
@@ -94,6 +109,13 @@ class ITAssetModel(CenturionModel):
         null = False,
         verbose_name = 'Serial Number',
     )
+
+    # connections = models.ManyToManyField(
+    #     to = 'self',
+    #     symmetrical = False,
+    #     through = 'itam.ITAssetRelationships',
+    #     through_fields = ('parent_asset_model', 'child_asset_model'),
+    # )
 
     modified = AutoLastModifiedField()
 
@@ -208,7 +230,19 @@ class ITAssetModel(CenturionModel):
 
 
 
-    _regex_template_connect_name = r'^(?P<name>[A-Za-z0-9]*?[A-Za-z])(?P<lowest>\d+)?(?:-(?P<highest>\d+))?$'
+    def clean(self):
+
+        app_settings = AppSettings.objects.get( owner_organization = None )
+
+        if app_settings.it_asset_model_is_global:
+
+            self.organization = app_settings.global_organization
+
+        super().clean()
+
+
+
+    _regex_template_connect_name = r'^(?P<name>[A-Za-z0-9]*?[A-Za-z]\-?)(?P<lowest>\d+)?(?:-(?P<highest>\d+))?$'
 
 
 

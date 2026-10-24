@@ -1,16 +1,18 @@
 import pytest
 
-from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
+from api.tests.unit.viewset.test_unit_tenancy_viewset import (
+    ModelViewSetInheritedCases
+)
 
-from itam.viewsets.device_model import (
-    DeviceModel,
+from itam.models import ITAssetModel
+from itam.viewsets.asset_model import (
     ViewSet,
 )
 
 
 
-@pytest.mark.model_devicemodel
-class ViewsetTestCases(
+@pytest.mark.model_itassetmodel
+class ITAssetModelBaseViewsetTestCases(
     ModelViewSetInheritedCases,
 ):
 
@@ -25,23 +27,23 @@ class ViewsetTestCases(
         return {
             '_model_documentation': {
                 'type': type(None),
+                'value': None
             },
             'back_url': {
                 'type': type(None),
             },
             'documentation': {
                 'type': type(None),
-                'value': None
             },
             'filterset_fields': {
                 'value': [
                     'name',
                     'manufacturer',
-                    'organization'
+                    'organization',
                 ]
             },
             'model': {
-                'value': DeviceModel
+                'value': ITAssetModel
             },
             'model_documentation': {
                 'type': type(None),
@@ -55,7 +57,7 @@ class ViewsetTestCases(
                 ]
             },
             'view_description': {
-                'value': 'Device Models'
+                'type': type(None),
             },
             'view_name': {
                 'type': type(None),
@@ -67,16 +69,15 @@ class ViewsetTestCases(
 
 
 
-class DeviceModelViewsetInheritedCases(
-    ViewsetTestCases,
+class ITAssetModelViewsetInheritedCases(
+    ITAssetModelBaseViewsetTestCases,
 ):
     pass
 
 
 
 @pytest.mark.module_itam
-class DeviceModelViewsetPyTest(
-    ViewsetTestCases,
+class ITAssetModelViewsetPyTest(
+    ITAssetModelBaseViewsetTestCases,
 ):
-
     pass

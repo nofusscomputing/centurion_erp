@@ -22,7 +22,7 @@ class ViewSetBase(
     
     url_name = '_api_authtoken'
 
-    change_data = {'device_model_is_global': True}
+    change_data = {'it_asset_model_is_global': True}
 
     delete_data = {}
 

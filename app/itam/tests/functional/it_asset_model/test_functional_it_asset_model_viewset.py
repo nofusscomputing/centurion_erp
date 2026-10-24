@@ -1,15 +1,14 @@
 import pytest
 
-from api.tests.functional.viewset.test_functional_tenancy_viewset import ModelViewSetInheritedCases
-
-from itam.viewsets.device_model import (
-    DeviceModel,
+from itam.viewsets.asset_model import (
     ViewSet,
 )
 
+from api.tests.functional.viewset.test_functional_tenancy_viewset import ModelViewSetInheritedCases
 
 
-@pytest.mark.model_devicemodel
+
+@pytest.mark.model_itassetmodel
 class ViewsetTestCases(
     ModelViewSetInheritedCases,
 ):
@@ -21,7 +20,7 @@ class ViewsetTestCases(
 
 
 
-class DeviceModelViewsetInheritedCases(
+class ITAssetModelViewsetInheritedCases(
     ViewsetTestCases,
 ):
     pass
@@ -29,8 +28,7 @@ class DeviceModelViewsetInheritedCases(
 
 
 @pytest.mark.module_itam
-class DeviceModelViewsetPyTest(
+class ITAssetModelViewsetPyTest(
     ViewsetTestCases,
 ):
-
     pass

@@ -8,13 +8,16 @@ from api.tests.unit.test_unit_serializer import (
 
 from centurion.tests.abstract.mock_view import MockView
 
+from itam.tests.unit.itam_asset_base.test_unit_asset_base_serializer import (
+    ITAMAssetBaseSerializerInheritedCases
+)
 
 
-@pytest.mark.model_devicemodel
-class DeviceSerializerTestCases(
+
+@pytest.mark.model_itassetmodel
+class ITAssetModelBaseSerializerTestCases(
     SerializerTestCases
 ):
-
 
     def test_serializer_validation_no_name(self,
         kwargs_api_create, model, model_serializer, request_user,
@@ -49,15 +52,16 @@ class DeviceSerializerTestCases(
 
 
 
-class DeviceSerializerInheritedCases(
-    DeviceSerializerTestCases
+
+class ITAssetModelSerializerInheritedCases(
+    ITAssetModelBaseSerializerTestCases
 ):
     pass
 
 
 
 @pytest.mark.module_itam
-class DeviceSerializerPyTest(
-    DeviceSerializerTestCases
+class ITAssetModelSerializerPyTest(
+    ITAssetModelBaseSerializerTestCases
 ):
     pass

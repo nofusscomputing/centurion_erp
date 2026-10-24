@@ -2,6 +2,8 @@
 
 - Removed feature flag `2025-00004` enabling usage of accounting module.
 
+- New model `itam.ITAssetModel` that replaces `itam.DeviceModel`. All data from old table to new table occurs during migration admin command.
+
 
 ## Version v1.35.0
 
