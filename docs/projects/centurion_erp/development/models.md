@@ -68,6 +68,9 @@ When depreciating a model the following are also requirements:
 
 - if also replacing the depreciated models Serializer, ViewSet, ensure they are also marked with the depreciated decorator and marked `# pragma: no cover`.
 
+!!! note
+    When you depreciate a model, any derived meta models will automagically be depreciated alongside. i.e. Audit, Notes etc.
+
 
 ### Normal (Base) Model
 
