@@ -20,7 +20,7 @@ class AppSettingsAdmin(admin.ModelAdmin):
         ('Settings',
             {
                 "fields": [
-                    "device_model_is_global",
+                    "it_asset_model_is_global",
                     'device_type_is_global',
                     "manufacturer_is_global",
                     'software_is_global',

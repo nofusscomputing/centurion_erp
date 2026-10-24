@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.DeleteModel(
-            name="ConfigGroupNotes",
-        ),
+        # migrations.DeleteModel(
+        #     name="ConfigGroupNotes",
+        # ),
     ]

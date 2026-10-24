@@ -6,7 +6,7 @@
 #
 amqp==5.4.1
     # via kombu
-asgiref==3.12.1
+asgiref==3.13.0
     # via
     #   django
     #   django-cors-headers
@@ -20,7 +20,7 @@ celery==5.4.0
     # via
     #   -r tools/requirements.in
     #   django-celery-results
-certifi==2026.7.22
+certifi==2026.10.23
     # via requests
 cffi==2.1.1
     # via cryptography
@@ -114,7 +114,7 @@ prometheus-client==0.21.1
     #   django-prometheus
 prompt-toolkit==3.0.53
     # via click-repl
-pycparser==3.11
+pycparser==3.12
     # via cffi
 pygments==2.20.0
     # via -r tools/requirements.in
@@ -122,7 +122,7 @@ pyjwt[crypto]==2.15.1
     # via
     #   pyjwt
     #   social-auth-core
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via celery
 python3-openid==3.2.0
     # via social-auth-core
@@ -166,6 +166,7 @@ tzdata==2026.5
     #   -r tools/requirements.in
     #   celery
     #   kombu
+    #   python-dateutil
 uritemplate==4.2.0
     # via drf-spectacular
 urllib3==2.8.0
@@ -175,5 +176,5 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.9.2
+wcwidth==0.9.3
     # via prompt-toolkit

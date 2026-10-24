@@ -152,6 +152,15 @@ class Device(
         verbose_name_plural = 'Devices'
 
 
+    it_asset = models.ForeignKey(
+        to = 'itam.ITAsset',
+        blank = True,
+        help_text = 'IT Asset this device was migrated to.',
+        null = True,
+        on_delete = models.PROTECT,
+        verbose_name = 'IT Asset',
+    )
+
     def validate_hostname_format(self):
 
         pattern = r'^[a-z]{1}[a-z|0-9|\-]+[a-z|0-9]{1}$'
