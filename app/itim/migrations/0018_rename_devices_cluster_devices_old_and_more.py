@@ -3,6 +3,47 @@
 from django.db import migrations
 
 
+
+def rename_index(apps, schema_editor):
+
+    if schema_editor.connection.vendor == "postgresql":
+
+        schema_editor.execute("""
+            ALTER INDEX itim_cluster_devices_cluster_id_81894530
+            RENAME TO itim_cluster_devices_old_cluster_id_81894530;
+        """)
+
+        schema_editor.execute("""
+            ALTER INDEX itim_cluster_nodes_cluster_id_301e57a6
+            RENAME TO itim_cluster_nodes_old_cluster_id_301e57a6;
+        """)
+
+        schema_editor.execute("""
+            ALTER INDEX itim_service_device_id_c7bc4433
+            RENAME TO itim_service_device_old_id_c7bc4433;
+        """)
+
+def reverse_rename_index(apps, schema_editor):
+
+    if schema_editor.connection.vendor == "postgresql":
+
+        schema_editor.execute("""
+            ALTER INDEX itim_cluster_devices_old_cluster_id_81894530
+            RENAME TO itim_cluster_devices_cluster_id_81894530;
+        """)
+
+        schema_editor.execute("""
+            ALTER INDEX itim_cluster_nodes_cluster_id_301e57a6
+            RENAME TO itim_cluster_nodes_old_cluster_id_301e57a6;
+        """)
+
+        schema_editor.execute("""
+            ALTER INDEX itim_service_device_old_id_c7bc4433
+            RENAME TO itim_service_device_id_c7bc4433;
+        """)
+
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -25,4 +66,5 @@ class Migration(migrations.Migration):
             old_name="device",
             new_name="device_old",
         ),
+        migrations.RunPython(rename_index, reverse_rename_index),
     ]

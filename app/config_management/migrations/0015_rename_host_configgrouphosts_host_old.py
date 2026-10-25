@@ -3,6 +3,27 @@
 from django.db import migrations
 
 
+
+def rename_index(apps, schema_editor):
+
+    if schema_editor.connection.vendor == "postgresql":
+
+        schema_editor.execute("""
+            ALTER INDEX config_management_configgrouphosts_host_id_7e4780ba
+            RENAME TO config_management_configgrouphosts_old_host_id_7e4780ba;
+        """)
+
+def reverse_rename_index(apps, schema_editor):
+
+    if schema_editor.connection.vendor == "postgresql":
+
+        schema_editor.execute("""
+            ALTER INDEX config_management_configgrouphosts_old_host_id_7e4780ba
+            RENAME TO config_management_configgrouphosts_host_id_7e4780ba;
+        """)
+
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -15,4 +36,5 @@ class Migration(migrations.Migration):
             old_name="host",
             new_name="host_old",
         ),
+        migrations.RunPython(rename_index, reverse_rename_index),
     ]
