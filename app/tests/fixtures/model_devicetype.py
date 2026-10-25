@@ -2,7 +2,7 @@ import pytest
 
 from datetime import datetime
 
-from itam.models.device import DeviceType
+from itam.models import DeviceType
 from itam.serializers.device_type import (
     DeviceTypeBaseSerializer,
     DeviceTypeModelSerializer,

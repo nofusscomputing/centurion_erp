@@ -1,7 +1,7 @@
 import pytest
 import random
 
-from itam.models.software import SoftwareCategory
+from itam.models import SoftwareCategory
 from itam.serializers.software_category import (
     SoftwareCategoryBaseSerializer,
     SoftwareCategoryModelSerializer,
