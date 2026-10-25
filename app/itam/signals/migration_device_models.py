@@ -40,6 +40,28 @@ def migrate_device_model_asset_model(sender, **kwargs):
 
         log.info( msg = 'End of data migration form itam.DeviceModel to itam.ITAssetModel.' )
 
+        del device_model.context['logger']
+
+        log.info( msg = 'Begin data migration form itam.Device to itam.ITAsset.' )
+
+        device = apps.get_model(
+            app_label = 'itam',
+            model_name = 'device'
+        )
+
+        device.context['logger'] = log
+
+        for old_device in device.objects.filter(
+            migrated_id = None
+        ):
+
+            old_device.migrate()
+
+
+        log.info( msg = 'End of data migration form itam.Device to itam.ITAsset.' )
+
+        del device.context['logger']
+
     except Exception as exc:
         log.exception(msg = exc)
 

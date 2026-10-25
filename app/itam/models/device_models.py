@@ -210,7 +210,7 @@ class DeviceModel(
                 mac_address = False,
                 puk = False,
                 puk_pin = False,
-                serial_number = True,
+                serial_number = False,
                 organization = current_model.organization,
                 created = current_model.created,
                 modified = current_model.modified
@@ -238,7 +238,7 @@ class DeviceModel(
 
                     organization = notes_entry.organization,
                     created = notes_entry.created,
-                    modified = notes_entry.id,
+                    modified = notes_entry.modified,
 
 
                 )
