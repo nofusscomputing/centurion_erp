@@ -10,7 +10,6 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
-@pytest.mark.skip( reason = 'To be refactored as itam.Devices migrated to itam.ITAsset' )
 @pytest.mark.model_configgroups
 class ConfigGroupsAPITestCases(
     APIFieldsInheritedCases,
@@ -18,7 +17,7 @@ class ConfigGroupsAPITestCases(
 
     @pytest.fixture( scope = 'class')
     def second_model(self, request, django_db_blocker,
-        model, model_kwargs, model_device, kwargs_device
+        model, model_kwargs, model_itasset, kwargs_itasset
     ):
 
         item = None
@@ -45,7 +44,7 @@ class ConfigGroupsAPITestCases(
                         key: value
                     })
 
-            device = model_device.objects.create( **kwargs_device() )
+            device = model_itasset.objects.create( **kwargs_itasset() )
 
             kwargs_many_to_many.update({
                 'hosts': [ device ]

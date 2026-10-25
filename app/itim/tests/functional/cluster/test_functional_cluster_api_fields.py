@@ -10,7 +10,6 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 
-@pytest.mark.skip( reason = 'To be refactored as itam.Devices migrated to itam.ITAsset' )
 @pytest.mark.model_cluster
 class ClusterAPITestCases(
     APIFieldsInheritedCases,
@@ -135,7 +134,7 @@ class ClusterAPITestCases(
                 'expected': str
             },
             'nodes.0.url': {
-                'expected': Hyperlink
+                'expected': str
             },
             'devices': {
                 'expected': list
@@ -147,7 +146,7 @@ class ClusterAPITestCases(
                 'expected': str
             },
             'devices.0.url': {
-                'expected': Hyperlink
+                'expected': str
             },
             'modified': {
                 'expected': str

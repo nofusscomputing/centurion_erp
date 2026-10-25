@@ -13,7 +13,6 @@ from centurion.tests.abstract.mock_view import MockView
 
 
 
-@pytest.mark.skip( reason = 'To be refactored as itam.Devices migrated to itam.ITAsset' )
 @pytest.mark.model_service
 class ServiceSerializerTestCases(
     SerializerTestCases
