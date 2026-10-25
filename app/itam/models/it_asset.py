@@ -324,15 +324,17 @@ class ITAsset(
             'serial_number',
         ]:
         
-            if getattr(self.device_model, mandatory_field):
+            if self.device_model:
 
-                if getattr(self, mandatory_field) in [None, '']:
+                if getattr(self.device_model, mandatory_field):
 
-                    raise ValidationError(
-                        message = {
-                            mandatory_field: f'field {mandatory_field} has been set as mandatory and must be populated.'},
-                        code = 'required'
-                    )
+                    if getattr(self, mandatory_field) in [None, '']:
+
+                        raise ValidationError(
+                            message = {
+                                mandatory_field: f'field {mandatory_field} has been set as mandatory and must be populated.'},
+                            code = 'required'
+                        )
 
 
 
