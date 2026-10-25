@@ -750,12 +750,47 @@ class Device(
                 # field.save()
 
 
+            kb_articles = apps.get_model(
+                app_label = 'assistance',
+                model_name = 'modelknowledgebasearticle'
+            )
+
+            for article in kb_articles.objects.filter(
+                model = f'{self._meta.app_label}.{self._meta.model_name}',
+                model_pk = self.id
+            ):
+
+                article.model = f'{created_object._meta.app_label}.{created_object._meta.model_name}'
+
+                article.model_pk = created_object.id
+
+                article.save()
+
+
             self.migrated_id = created_object
             self.save()
 
 
         except Exception as exc:
             type(self).context['logger'].exception(exc)
+
+
+            kb_articles = apps.get_model(
+                app_label = 'assistance',
+                model_name = 'modelknowledgebasearticle'
+            )
+
+            for article in kb_articles.objects.filter(
+                model = f'{created_object._meta.app_label}.{created_object._meta.model_name}',
+                model_pk = created_object.id
+            ):
+
+                article.model = f'{self._meta.app_label}.{self._meta.model_name}'
+
+                article.model_pk = self.id
+
+                article.save()
+
 
 
             if hasattr( created_object, 'pk'):    # Remove migrated object
