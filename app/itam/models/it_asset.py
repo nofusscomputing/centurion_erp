@@ -233,7 +233,7 @@ class ITAsset(
                     },
                     {
                         "layout": "table",
-                        "name": "Dependent Services",
+                        "name": "Deployed Services",
                         "field": "service",
                     },
                     {
@@ -324,15 +324,17 @@ class ITAsset(
             'serial_number',
         ]:
         
-            if getattr(self.device_model, mandatory_field):
+            if self.device_model:
 
-                if getattr(self, mandatory_field) in [None, '']:
+                if getattr(self.device_model, mandatory_field):
 
-                    raise ValidationError(
-                        message = {
-                            mandatory_field: f'field {mandatory_field} has been set as mandatory and must be populated.'},
-                        code = 'required'
-                    )
+                    if getattr(self, mandatory_field) in [None, '']:
+
+                        raise ValidationError(
+                            message = {
+                                mandatory_field: f'field {mandatory_field} has been set as mandatory and must be populated.'},
+                            code = 'required'
+                        )
 
 
 
@@ -494,17 +496,13 @@ class ITAsset(
 
         if self.id:
 
-            config_groups = ConfigGroupHosts.objects.filter(host=self.id).order_by('group')
+            for group in self.configgroups_set.all():
 
-            for group in config_groups:
-
-                rendered_config = group.group.render_config()
+                rendered_config = group.render_config()
 
                 if rendered_config:
 
-                    config.update(json.loads(rendered_config))
-
-                    rendered_config: dict = json.loads(rendered_config)
+                    config.update(rendered_config)
 
                     if 'software' in rendered_config.keys():
                         

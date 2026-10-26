@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 
-from itam.models.device import DeviceType
+from itam.models import DeviceType
 
 from settings.models.app_settings import AppSettings
 

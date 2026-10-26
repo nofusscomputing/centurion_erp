@@ -177,6 +177,7 @@ class Cluster(
     nodes_old = models.ManyToManyField(
         Device,
         blank = True,
+        default = None,
         help_text = 'Hosts for resource consumption that the cluster is deployed upon',
         related_name = 'cluster_node',
         verbose_name = 'Nodes',
@@ -193,6 +194,7 @@ class Cluster(
     devices_old = models.ManyToManyField(
         Device,
         blank = True,
+        default = None,
         help_text = 'Devices that are deployed upon the cluster.',
         related_name = 'cluster_device',
         verbose_name = 'Devices',

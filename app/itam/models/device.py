@@ -3,6 +3,9 @@ import re
 
 from datetime import timedelta
 
+from django.apps import apps
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import (
     ValidationError
 )
@@ -22,105 +25,6 @@ from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
-
-
-
-class DeviceType(
-    CenturionModel,
-):
-
-    model_tag = 'device_type'
-
-    class Meta:
-
-        ordering = [
-            'name'
-        ]
-
-        verbose_name = 'Device Type'
-
-        verbose_name_plural = 'Device Types'
-
-
-    name = models.CharField(
-        blank = False,
-        help_text = 'The items name',
-        max_length = 50,
-        unique = True,
-        verbose_name = 'Name'
-    )
-
-    modified = AutoLastModifiedField()
-
-    page_layout: dict = {
-        "dataset": {
-            "columns": [
-                [
-                    'name',
-                    'organization',
-                    'created',
-                    'modified'
-                ]
-            ]
-        },
-        "detail": [
-            {
-                "name": "Details",
-                "slug": "details",
-                "sections": [
-                    {
-                        "layout": "double",
-                        "left": [
-                            'organization',
-                            'name',
-                        ],
-                        "right": [
-                            'model_notes',
-                            'created',
-                            'modified',
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "Knowledge Base",
-                "slug": "kb_articles",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "knowledge_base",
-                    }
-                ]
-            },
-            {
-                "name": "Notes",
-                "slug": "notes",
-                "sections": []
-            },
-        ],
-        "table": [
-            'name',
-            'organization',
-            'created',
-            'modified'
-        ]
-    }
-
-
-    def clean(self):
-
-        app_settings = AppSettings.objects.get(owner_organization=None)
-
-        if app_settings.device_type_is_global:
-
-            self.organization = app_settings.global_organization
-
-        super().clean()
-
-
-    def __str__(self):
-
-        return self.name
 
 
 
@@ -152,7 +56,7 @@ class Device(
         verbose_name_plural = 'Devices'
 
 
-    it_asset = models.ForeignKey(
+    migrated_id = models.ForeignKey(
         to = 'itam.ITAsset',
         blank = True,
         help_text = 'IT Asset this device was migrated to.',
@@ -225,7 +129,7 @@ class Device(
     )
 
     device_type = models.ForeignKey(
-        DeviceType,
+        to = 'itam.DeviceType',
         blank = True,
         help_text = 'Type of device.',
         null = True,
@@ -573,6 +477,283 @@ class Device(
                     config.update(service_config)
 
         return config
+
+
+
+    def migrate(self) -> None:
+
+        new_model = apps.get_model(
+            app_label = self._meta.app_label,
+            model_name = 'itasset'
+        )
+
+        history_content_type = ContentType.objects.get_for_model(new_model())
+
+        new_history_model = apps.get_model(
+            app_label = new_model._meta.app_label,
+            model_name = str(new_model().get_history_model_name()).lower()
+        )
+
+        new_notes_model = apps.get_model(
+            app_label = new_model._meta.app_label,
+            model_name = str(f'{new_model._meta.object_name}CenturionModelNote').lower()
+        )
+
+        new_ticket_model = apps.get_model(
+            app_label = 'accounting',
+            model_name = str(f'AssetBaseTicket').lower()
+        )
+
+        system_user = apps.get_model(settings.AUTH_USER_MODEL).objects.filter(
+            username = 'system'
+        ).first()
+
+        new_model.context[self._meta.model_name] = system_user
+
+
+        created_object = ''
+
+        current_model = self
+
+        try:
+
+            type(self).context['logger'].info(f"Begin migrating {self.pk} - {getattr(self, 'name', '')}.")
+
+            device_model = None
+
+            if getattr(self.device_model, 'migrated_id', None):
+                device_model = self.device_model.migrated_id
+
+
+            created_object = new_model.objects.create(
+                organization = self.organization,
+                name = self.name,
+                uuid = self.uuid,
+                serial_number = self.serial_number,
+                device_model = device_model,
+                config = self.config,
+                inventorydate = self.inventorydate,
+                is_virtual = self.is_virtual,
+                created = self.created,
+                modified = self.modified,
+
+            )
+
+
+            type(self).context['logger'].info(f'Migrated {self.pk} to {created_object.pk}.')
+
+            tickets_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str(f'{current_model._meta.object_name}Ticket').lower()
+            )
+
+            type(self).context['logger'].info(f'Begin migrate model tickets for {self.pk}.')
+
+            for ticket_entry in tickets_model.objects.filter(
+                model = current_model
+            ):
+
+                new_ticket_model.objects.create(
+                    organization = ticket_entry.organization,
+                    created = ticket_entry.created,
+                    ticket = ticket_entry.ticket,
+                    modified = ticket_entry.modified,
+
+                    model = created_object,
+
+                )
+
+                type(self).context['logger'].info(f'Migrate model ticket {ticket_entry.pk} to {new_notes_model.pk}.')
+
+
+            notes_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str(f'{current_model._meta.object_name}CenturionModelNote').lower()
+            )
+
+            type(self).context['logger'].info(f'Begin migrate notes for {self.pk}.')
+
+            for notes_entry in notes_model.objects.filter(
+                model_id = current_model.pk
+            ):
+
+                new_notes_model.objects.create(
+                    body = notes_entry.body,
+                    created_by = notes_entry.created_by,
+                    modified_by = notes_entry.modified_by,
+
+                    model = created_object,
+
+                    organization = notes_entry.organization,
+                    created = notes_entry.created,
+                    modified = notes_entry.modified,
+
+
+                )
+
+                type(self).context['logger'].info(f'Migrate note {notes_entry.pk} to {new_notes_model.pk}.')
+
+
+            type(self).context['logger'].info(f'Begin migrate audit entries for {self.pk}.')
+
+            history_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str(current_model.get_history_model_name()).lower()
+            )
+
+            for audit_entry in history_model.objects.filter(
+                model_id = current_model.pk
+            ):
+
+                new_audit_entry = new_history_model.objects.create(
+                    content_type = history_content_type,
+
+                    model = created_object,
+
+                    before = audit_entry.before,
+                    after = audit_entry.after,
+                    action = audit_entry.action,
+                    user = audit_entry.user,
+                    organization = audit_entry.organization,
+                    created = audit_entry.created
+
+                )
+
+                type(self).context['logger'].info(f'Migrate audit_entry {audit_entry.pk} to {new_audit_entry.id}.')
+
+
+            # current_model.configgrouphosts_set.all()
+            for field in current_model.configgrouphosts_set.all():
+
+                # field.hosts.add( created_object )
+                created_object.configgrouphosts_set.add( field )
+
+                # field.save()
+
+            # current_model.configgroups_set.all()
+            for field in current_model.configgroups_set.all():
+
+                # field.hosts.add( created_object )
+                created_object.configgroups_set.add( field )
+
+                # field.save()
+
+            # current_model.cluster_device.all()
+            for field in current_model.cluster_device.all():
+
+                # field.devices.add( created_object )
+                created_object.cluster_device.add( field )
+
+                # field.save()
+
+            # current_model.cluster_node.all()
+            for field in current_model.cluster_node.all():
+
+                # field.nodes.add( created_object )
+                created_object.cluster_node.add( field )
+
+                # field.save()
+
+            # current_model.service_set.all()
+            for field in current_model.service_set.all():
+
+                # field.device.add( created_object )
+                created_object.service_set.add( field )
+
+                # field.save()
+
+
+            kb_articles = apps.get_model(
+                app_label = 'assistance',
+                model_name = 'modelknowledgebasearticle'
+            )
+
+            for article in kb_articles.objects.filter(
+                model = f'{self._meta.app_label}.{self._meta.model_name}',
+                model_pk = self.id
+            ):
+
+                article.model = f'{created_object._meta.app_label}.{created_object._meta.model_name}'
+
+                article.model_pk = created_object.id
+
+                article.save()
+
+
+            self.migrated_id = created_object
+            self.save()
+
+
+        except Exception as exc:
+            type(self).context['logger'].exception(exc)
+
+
+            if hasattr( created_object, 'pk'):    # Remove migrated object
+
+                tickets_model = apps.get_model(
+                    app_label = 'accounting',
+                    model_name = str(f'AssetBaseTicket').lower()
+                )
+
+                type(self).context['logger'].info(f'Begin migrate model tickets for {self.pk}.')
+
+                for ticket_entry in tickets_model.objects.filter(
+                    model = created_object
+                ):
+
+                    type(self).context['logger'].info(f'Reverting model ticket {ticket_entry.pk} to {new_ticket_model.pk}.')
+
+                    ticket_entry.delete()
+
+
+                kb_articles = apps.get_model(
+                    app_label = 'assistance',
+                    model_name = 'modelknowledgebasearticle'
+                )
+
+                for article in kb_articles.objects.filter(
+                    model = f'{created_object._meta.app_label}.{created_object._meta.model_name}',
+                    model_pk = created_object.id
+                ):
+
+                    article.model = f'{self._meta.app_label}.{self._meta.model_name}'
+
+                    article.model_pk = self.id
+
+                    article.save()
+
+
+
+                type(self).context['logger'].notice('Begin reverting created notes.')
+
+                for note in new_notes_model.objects.filter(
+                    model = created_object
+                ):
+
+                    type(self).context['logger'].notice(f'Reverting note {note.pk}.')
+
+                    note.delete()
+
+
+                type(self).context['logger'].notice('Begin reverting created audit entries.')
+
+                for history_model in new_history_model.objects.filter(
+                    model = created_object
+                ):
+
+                    type(self).context['logger'].notice(f'Reverting note {history_model.pk}.')
+
+                    history_model.delete()
+
+
+                type(self).context['logger'].notice(f'Revert created model {created_object.pk}.')
+
+                created_object.delete()
+
+
+        del new_model.context[self._meta.model_name]
+
+        type(self).context['logger'].info(f"Completed migration for {self.pk} - {self.name}.")
 
 
 

@@ -84,6 +84,7 @@ class ConfigGroups(
     hosts_old = models.ManyToManyField(
         to = Device,
         blank = True,
+        default = None,
         help_text = 'Hosts that are part of this group',
         verbose_name = 'Hosts'
     )
@@ -378,10 +379,11 @@ class ConfigGroupHosts(
 
     host_old = models.ForeignKey(
         Device,
-        blank = False,
+        blank = True,
+        default = None,
         help_text = 'Host that will be apart of this config group',
         on_delete = models.PROTECT,
-        null = False,
+        null = True,
         validators = [ validate_host_no_parent_group ],
         verbose_name = 'Host',
     )
