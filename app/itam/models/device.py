@@ -499,6 +499,11 @@ class Device(
             model_name = str(f'{new_model._meta.object_name}CenturionModelNote').lower()
         )
 
+        new_ticket_model = apps.get_model(
+            app_label = 'accounting',
+            model_name = str(f'AssetBaseTicket').lower()
+        )
+
         system_user = apps.get_model(settings.AUTH_USER_MODEL).objects.filter(
             username = 'system'
         ).first()
@@ -519,7 +524,6 @@ class Device(
             if getattr(self.device_model, 'migrated_id', None):
                 device_model = self.device_model.migrated_id
 
-            # if self.serial_number:
 
             created_object = new_model.objects.create(
                 organization = self.organization,
@@ -535,24 +539,32 @@ class Device(
 
             )
 
-            # else:
-
-            #     created_object = new_model.objects.create(
-            #         organization = self.organization,
-            #         name = self.name,
-            #         uuid = self.uuid,
-            #         # serial_number = self.serial_number,
-            #         device_model = device_model,
-            #         config = self.config,
-            #         inventorydate = self.inventorydate,
-            #         is_virtual = self.is_virtual,
-            #         created = self.created,
-            #         modified = self.modified,
-
-            #     )
-
 
             type(self).context['logger'].info(f'Migrated {self.pk} to {created_object.pk}.')
+
+            tickets_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str(f'{current_model._meta.object_name}Ticket').lower()
+            )
+
+            type(self).context['logger'].info(f'Begin migrate model tickets for {self.pk}.')
+
+            for ticket_entry in tickets_model.objects.filter(
+                model = current_model
+            ):
+
+                new_ticket_model.objects.create(
+                    organization = ticket_entry.organization,
+                    created = ticket_entry.created,
+                    ticket = ticket_entry.ticket,
+                    modified = ticket_entry.modified,
+
+                    model = created_object,
+
+                )
+
+                type(self).context['logger'].info(f'Migrate model ticket {ticket_entry.pk} to {new_notes_model.pk}.')
+
 
             notes_model = apps.get_model(
                 app_label = current_model._meta.app_label,
@@ -676,25 +688,41 @@ class Device(
             type(self).context['logger'].exception(exc)
 
 
-            kb_articles = apps.get_model(
-                app_label = 'assistance',
-                model_name = 'modelknowledgebasearticle'
-            )
-
-            for article in kb_articles.objects.filter(
-                model = f'{created_object._meta.app_label}.{created_object._meta.model_name}',
-                model_pk = created_object.id
-            ):
-
-                article.model = f'{self._meta.app_label}.{self._meta.model_name}'
-
-                article.model_pk = self.id
-
-                article.save()
-
-
-
             if hasattr( created_object, 'pk'):    # Remove migrated object
+
+                tickets_model = apps.get_model(
+                    app_label = 'accounting',
+                    model_name = str(f'AssetBaseTicket').lower()
+                )
+
+                type(self).context['logger'].info(f'Begin migrate model tickets for {self.pk}.')
+
+                for ticket_entry in tickets_model.objects.filter(
+                    model = created_object
+                ):
+
+                    type(self).context['logger'].info(f'Reverting model ticket {ticket_entry.pk} to {new_ticket_model.pk}.')
+
+                    ticket_entry.delete()
+
+
+                kb_articles = apps.get_model(
+                    app_label = 'assistance',
+                    model_name = 'modelknowledgebasearticle'
+                )
+
+                for article in kb_articles.objects.filter(
+                    model = f'{created_object._meta.app_label}.{created_object._meta.model_name}',
+                    model_pk = created_object.id
+                ):
+
+                    article.model = f'{self._meta.app_label}.{self._meta.model_name}'
+
+                    article.model_pk = self.id
+
+                    article.save()
+
+
 
                 type(self).context['logger'].notice('Begin reverting created notes.')
 
