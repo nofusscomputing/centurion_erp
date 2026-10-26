@@ -3,9 +3,9 @@ import random
 
 from itam.models.software import Software
 from itam.serializers.software import (
-    SoftwareBaseSerializer,
-    SoftwareModelSerializer,
-    SoftwareViewSerializer,
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
 )
 
 
@@ -51,7 +51,7 @@ def kwargs_software(kwargs_centurionmodel, django_db_blocker,
 def serializer_software():
 
     yield {
-        'base': SoftwareBaseSerializer,
-        'model': SoftwareModelSerializer,
-        'view': SoftwareViewSerializer
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
     }
