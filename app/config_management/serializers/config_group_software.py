@@ -13,7 +13,7 @@ from itam.serializers.software import (
 )
 from itam.serializers.software_version import (
     SoftwareVersion,
-    SoftwareVersionBaseSerializer
+    BaseSerializer as SoftwareVersionBaseSerializer
 )
 
 

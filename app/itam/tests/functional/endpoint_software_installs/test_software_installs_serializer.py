@@ -9,7 +9,8 @@ from access.models.tenant import Tenant as Organization
 
 from itam.serializers.device_software import Device, DeviceSoftware, SoftwareInstallsModelSerializer
 from itam.models import SoftwareCategory
-from itam.models.software import Software, SoftwareVersion
+from itam.models import SoftwareVersion
+from itam.models.software import Software
 
 from settings.models.app_settings import AppSettings
 
