@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from itam.models.software import Software, SoftwareVersion
+from itam.models import Software, SoftwareVersion
 
 
 

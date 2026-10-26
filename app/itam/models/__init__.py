@@ -5,6 +5,7 @@ from .it_asset_model import ITAssetModel
 from .it_asset_operating_system import ITAssetOperatingSystem
 from .it_asset_relationships import ITAssetRelationships
 from .it_asset_software import ITAssetSoftware
+from .software import Software
 from .software_category import SoftwareCategory
 from .software_version import SoftwareVersion, SoftwareVersions
 
@@ -17,6 +18,7 @@ __all__ = [
     'ITAssetOperatingSystem',
     'ITAssetRelationships',
     'ITAssetSoftware',
+    'Software',
     'SoftwareCategory',
     'SoftwareVersion',
     'SoftwareVersions',

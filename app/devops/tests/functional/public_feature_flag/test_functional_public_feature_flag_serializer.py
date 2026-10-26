@@ -9,7 +9,7 @@ from access.models.tenant import Tenant as Organization
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from devops.serializers.public_feature_flag import FeatureFlag, ViewSerializer
 
-from itam.models.software import Software
+from itam.models import Software
 
 
 

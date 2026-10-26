@@ -21,7 +21,7 @@ from core.classes.icon import Icon
 from core.models.centurion import CenturionModel
 
 from itam.models.device_models import DeviceModel
-from itam.models.software import Software
+from itam.models import Software
 from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
@@ -802,7 +802,7 @@ class DeviceSoftware(
     )
 
     software = models.ForeignKey(
-        Software,
+        to = 'itam.Software',
         blank = False,
         help_text = 'Software Name',
         null = False,

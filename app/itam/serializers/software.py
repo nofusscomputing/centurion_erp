@@ -10,7 +10,7 @@ from access.serializers.entity_company import (
 
 from api.serializers import common
 
-from itam.models.software import Software
+from itam.models import Software
 from itam.serializers.software_category import SoftwareCategoryBaseSerializer
 
 

@@ -6,7 +6,7 @@ from rest_framework.reverse import reverse
 
 from api.tests.unit.viewset.test_unit_tenancy_viewset import ModelViewSetInheritedCases
 
-from itam.models.software import Software
+from itam.models import Software
 from itam.viewsets.device_software import ViewSet
 
 
