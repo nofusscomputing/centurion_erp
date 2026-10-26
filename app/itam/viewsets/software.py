@@ -2,8 +2,8 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from itam.serializers.software import (    # pylint: disable=W0611:unused-import
     Software,
-    SoftwareModelSerializer,
-    SoftwareViewSerializer
+    ModelSerializer as SoftwareModelSerializer,
+    ViewSerializer as SoftwareViewSerializer
 )
 from api.viewsets.common.tenancy import ModelViewSet
 
@@ -70,19 +70,3 @@ class ViewSet( ModelViewSet ):
     model = Software
 
     view_description = 'Physical Softwares'
-
-    def get_serializer_class(self):
-
-        if (
-            self.action == 'list'
-            or self.action == 'retrieve'
-        ):
-
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
-
-        else:
-
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
-
-
-        return self.serializer_class

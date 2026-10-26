@@ -1,3 +1,5 @@
+from drf_spectacular.utils import extend_schema_serializer
+
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
@@ -13,7 +15,8 @@ from itam.serializers.software_category import SoftwareCategoryBaseSerializer
 
 
 
-class SoftwareBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'SoftwareBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -44,9 +47,10 @@ class SoftwareBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class SoftwareModelSerializer(
+@extend_schema_serializer(component_name = 'SoftwareModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    SoftwareBaseSerializer
+    BaseSerializer
 ):
 
 
@@ -117,7 +121,8 @@ class SoftwareModelSerializer(
 
 
 
-class SoftwareViewSerializer(SoftwareModelSerializer):
+@extend_schema_serializer(component_name = 'SoftwareViewSerializer')
+class ViewSerializer(ModelSerializer):
 
     category = SoftwareCategoryBaseSerializer( many = False, read_only = True )
 

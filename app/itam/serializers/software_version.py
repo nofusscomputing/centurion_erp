@@ -5,7 +5,9 @@ from access.serializers.organization import TenantBaseSerializer
 from api.serializers import common
 
 from itam.models.software import Software, SoftwareVersion
-from itam.serializers.software import SoftwareBaseSerializer
+from itam.serializers.software import (
+    BaseSerializer as SoftwareBaseSerializer
+)
 
 
 

@@ -8,7 +8,9 @@ from api.serializers import common
 
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
-from itam.serializers.software import SoftwareBaseSerializer
+from itam.serializers.software import (
+    BaseSerializer as SoftwareBaseSerializer
+)
 
 
 
