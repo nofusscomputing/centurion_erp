@@ -2,8 +2,16 @@ from django.db import models
 
 from . import ITAMAssetBase
 
+from centurion.lib.decorators import depreciate
 
 
+
+@depreciate(
+    depreciated_in = 'temp',
+    removed_in = 'to be reverted',
+    replacement = 'itam.ITAssetOperatingSystem',
+    skip_tests = True
+)
 class ITAssetOperatingSystem(
     ITAMAssetBase,
 ):

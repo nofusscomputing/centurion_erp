@@ -5,7 +5,16 @@ from access.fields import AutoLastModifiedField
 from core.models.centurion import CenturionModel
 
 
+from centurion.lib.decorators import depreciate
 
+
+
+@depreciate(
+    depreciated_in = 'temp',
+    removed_in = 'to be reverted',
+    replacement = 'itam.ITAssetOperatingSystem',
+    skip_tests = True
+)
 class SoftwareVersions(
     CenturionModel
 ):
@@ -32,14 +41,14 @@ class SoftwareVersions(
         verbose_name = 'Name'
     )
 
-    software = models.ForeignKey(
-        to = 'itam.itassetsoftware',
-        blank = False,
-        help_text = 'Software this version applies',
-        null = False,
-        on_delete = models.CASCADE,
-        verbose_name = 'versions',
-    )
+    # software = models.ForeignKey(
+    #     to = 'itam.itassetsoftware',
+    #     blank = False,
+    #     help_text = 'Software this version applies',
+    #     null = False,
+    #     on_delete = models.CASCADE,
+    #     verbose_name = 'versions',
+    # )
 
     modified = AutoLastModifiedField()
 
