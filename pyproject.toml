@@ -242,16 +242,7 @@ omit = [
     'app/itam/viewsets/operating_system.py',
     'app/itam/viewsets/operating_system_version.py',
 
-    'app/itam/models/software.py',
-    'app/itam/serializers/centurionaudit_software.py',
-    'app/itam/serializers/centurionmodelnote_software.py',
-    'app/itam/serializers/software.py',
-    'app/itam/viewsets/software.py',
 
-    'app/itam/serializers/software_version.py',
-    'app/itam/serializers/centurionaudit_softwareversion.py',
-    'app/itam/serializers/centurionmodelnote_softwareversion.py',
-    'app/itam/serializers/software_version.py',
     #
     #    ITAM Inventory till post re-write
     #

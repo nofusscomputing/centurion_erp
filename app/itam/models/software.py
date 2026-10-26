@@ -10,12 +10,6 @@ from settings.models.app_settings import AppSettings
 
 
 
-@depreciate(
-    depreciated_in = '1.36.0',
-    removed_in = '2.0',
-    replacement = 'itam.ITAssetSoftware',
-    skip_tests = True,
-)
 class Software(
     CenturionModel,
 ):
