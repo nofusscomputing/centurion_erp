@@ -390,12 +390,6 @@ from .model_softwareversion import (
     serializer_softwareversion,
 )
 
-from .model_softwareversions import (
-    kwargs_softwareversions,
-    model_softwareversions,
-    serializer_softwareversions,
-)
-
 from .model_ticketbase import (
     kwargs_ticketbase,
     model_ticketbase,
