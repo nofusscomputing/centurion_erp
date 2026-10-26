@@ -21,7 +21,6 @@ from core.classes.icon import Icon
 from core.models.centurion import CenturionModel
 
 from itam.models.device_models import DeviceModel
-from itam.models import Software
 from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
@@ -423,7 +422,7 @@ class Device(
                     state = 'absent'
 
                 software_action = {
-                    "name": str(Software),
+                    "name": str(software),
                     "state": state
                 }
 
