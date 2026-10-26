@@ -13,7 +13,7 @@ from centurion.helpers.merge_software import merge_software
 from core.models.centurion import CenturionModel
 
 from itam.models.device import Device, DeviceSoftware
-from itam.models.software import Software, SoftwareVersion
+from itam.models.software import Software
 
 
 
@@ -477,7 +477,7 @@ class ConfigGroupSoftware(
     )
 
     version = models.ForeignKey(
-        SoftwareVersion,
+        to = 'itam.SoftwareVersion',
         blank = True,
         help_text = 'Software Version for this config group',
         null = True,

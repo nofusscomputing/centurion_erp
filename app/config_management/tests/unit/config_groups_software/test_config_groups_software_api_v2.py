@@ -14,7 +14,9 @@ from access.models.team_user import TeamUsers
 
 from api.tests.abstract.api_fields import APITenancyObject
 
-from config_management.models.groups import DeviceSoftware, ConfigGroups, ConfigGroupSoftware, Software, SoftwareVersion
+from config_management.models.groups import DeviceSoftware, ConfigGroups, ConfigGroupSoftware, Software
+
+from itam.models import SoftwareVersion
 
 User = django.contrib.auth.get_user_model()
 

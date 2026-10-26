@@ -4,14 +4,15 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from itam.models.software import Software, SoftwareVersion
+from itam.models import SoftwareVersion
+from itam.models.software import Software
 from itam.serializers.software import (
     BaseSerializer as SoftwareBaseSerializer
 )
 
 
 
-class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
+class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -46,9 +47,9 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class SoftwareVersionModelSerializer(
+class ModelSerializer(
     common.CommonModelSerializer,
-    SoftwareVersionBaseSerializer
+    BaseSerializer
 ):
 
 
@@ -105,7 +106,7 @@ class SoftwareVersionModelSerializer(
 
 
 
-class SoftwareVersionViewSerializer(SoftwareVersionModelSerializer):
+class ViewSerializer(ModelSerializer):
 
     software = SoftwareBaseSerializer( many = False, read_only = True )
 
