@@ -13,7 +13,7 @@ from centurion.helpers.merge_software import merge_software
 from core.models.centurion import CenturionModel
 
 from itam.models.device import Device, DeviceSoftware
-from itam.models.software import Software
+from itam.models import Software
 
 
 

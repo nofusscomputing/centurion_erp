@@ -1,7 +1,7 @@
 import pytest
 import random
 
-from itam.models.software import Software
+from itam.models import Software
 from itam.serializers.software import (
     BaseSerializer,
     ModelSerializer,

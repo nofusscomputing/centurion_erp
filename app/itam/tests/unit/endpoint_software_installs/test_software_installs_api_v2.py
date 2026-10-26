@@ -18,10 +18,10 @@ from api.tests.abstract.api_fields import APITenancyObject
 
 from itam.models.device import Device, DeviceSoftware
 from itam.models import (
+    Software,
     SoftwareVersion,
     SoftwareCategory
 )
-from itam.models.software import Software
 
 User = django.contrib.auth.get_user_model()
 

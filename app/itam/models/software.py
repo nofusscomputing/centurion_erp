@@ -1,13 +1,10 @@
 from django.db import models
 
 from access.fields import AutoLastModifiedField
-from access.models.company_base import Company
-from access.models.tenant import Tenant
 
 from centurion.lib.decorators import depreciate
 
 from core.models.centurion import CenturionModel
-from core.models.manufacturer import Manufacturer
 
 from settings.models.app_settings import AppSettings
 
@@ -21,7 +18,7 @@ from settings.models.app_settings import AppSettings
 )
 class Software(
     CenturionModel,
-):    # pragma: no cover
+):
 
     model_tag = 'software'
 

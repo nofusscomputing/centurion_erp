@@ -16,7 +16,7 @@ from access.models.team_user import TeamUsers
 from api.tests.abstract.api_fields import APITenancyObject
 
 from itam.models.device import Device, DeviceSoftware
-from itam.models.software import Software, SoftwareCategory, SoftwareVersion
+from itam.models import Software, SoftwareCategory, SoftwareVersion
 
 User = django.contrib.auth.get_user_model()
 

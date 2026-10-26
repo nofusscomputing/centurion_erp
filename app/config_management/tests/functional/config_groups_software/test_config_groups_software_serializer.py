@@ -9,8 +9,7 @@ from access.models.tenant import Tenant as Organization
 from config_management.serializers.config_group_software import ConfigGroupSoftware, ConfigGroupSoftwareModelSerializer
 from config_management.models.groups import ConfigGroups
 
-from itam.models import SoftwareVersion
-from itam.models.software import Software
+from itam.models import Software, SoftwareVersion
 
 
 

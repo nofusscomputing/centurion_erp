@@ -5,9 +5,9 @@ from django.test import TestCase
 
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from config_management.models.groups import ConfigGroups, ConfigGroupSoftware, Software
+from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 
-from itam.models import SoftwareVersion
+from itam.models import Software, SoftwareVersion
 
 User = django.contrib.auth.get_user_model()
 

@@ -22,7 +22,7 @@ from api.serializers.inventory import Inventory
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.models import SoftwareCategory
-from itam.models.software import Software, SoftwareVersion
+from itam.models import Software, SoftwareVersion
 from itam.tasks.inventory import process_inventory
 
 from settings.models.user_settings import UserSettings
