@@ -10,7 +10,7 @@ class ITAssetSoftware(
     ITAMAssetBase,
 ):
 
-    model_tag = 'software'
+    model_tag = 'software-'
 
 
     class Meta:
