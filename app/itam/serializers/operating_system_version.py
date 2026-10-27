@@ -5,7 +5,9 @@ from access.serializers.organization import TenantBaseSerializer
 from api.serializers import common
 
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
-from itam.serializers.operating_system import OperatingSystemBaseSerializer
+from itam.serializers.operatingsystem import (
+    BaseSerializer as OperatingSystemBaseSerializer
+)
 
 
 
