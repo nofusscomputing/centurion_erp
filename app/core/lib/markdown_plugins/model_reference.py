@@ -83,7 +83,7 @@ def plugin(
 
             elif  item_type == 'operating_system':
 
-                from itam.models.operating_system import OperatingSystem
+                from itam.models import OperatingSystem
 
                 model = OperatingSystem
 
