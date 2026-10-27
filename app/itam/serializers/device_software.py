@@ -15,7 +15,7 @@ from itam.serializers.software import (
     BaseSerializer as SoftwareBaseSerializer
 )
 from itam.serializers.software_category import SoftwareCategoryBaseSerializer
-from itam.serializers.software_version import (
+from itam.serializers.softwareversion import (
     BaseSerializer as SoftwareVersionBaseSerializer
 )
 

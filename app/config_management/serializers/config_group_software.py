@@ -11,7 +11,7 @@ from config_management.serializers.config_group import ConfigGroups, ConfigGroup
 from itam.serializers.software import (
     BaseSerializer as SoftwareBaseSerializer
 )
-from itam.serializers.software_version import (
+from itam.serializers.softwareversion import (
     SoftwareVersion,
     BaseSerializer as SoftwareVersionBaseSerializer
 )

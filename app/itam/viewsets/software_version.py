@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from itam.serializers.software_version import (    # pylint: disable=W0611:unused-import
+from itam.serializers.softwareversion import (    # pylint: disable=W0611:unused-import
     Software,
     SoftwareVersion,
     ModelSerializer,
