@@ -1,11 +1,12 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from api.viewsets.common.tenancy import ModelViewSet
+
 from itam.serializers.operatingsystem import (    # pylint: disable=W0611:unused-import
     OperatingSystem,
     ModelSerializer,
     ViewSerializer
 )
-from api.viewsets.common.tenancy import ModelViewSet
 
 
 
