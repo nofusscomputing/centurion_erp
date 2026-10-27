@@ -2,10 +2,7 @@ from django.db import models
 
 from access.fields import AutoLastModifiedField
 
-from access.models.company_base import Company
-
 from core.models.centurion import CenturionModel
-from core.models.manufacturer import Manufacturer
 
 
 
@@ -27,7 +24,7 @@ class OperatingSystem(
 
 
     publisher_old = models.ForeignKey(
-        Manufacturer,
+        to = 'core.Manufacturer',
         blank = True,
         help_text = 'Who publishes this Operating System',
         null = True,
@@ -37,7 +34,7 @@ class OperatingSystem(
     )
 
     publisher = models.ForeignKey(
-        Company,
+        to = 'access.Company',
         blank = True,
         help_text = 'Who publishes this Operating System',
         null = True,
@@ -180,7 +177,7 @@ class OperatingSystemVersion(
 
 
     operating_system = models.ForeignKey(
-        OperatingSystem,
+        to = 'itam.OperatingSystem',
         help_text = 'Operating system this version applies to',
         on_delete = models.PROTECT,
         verbose_name = 'Operating System'
