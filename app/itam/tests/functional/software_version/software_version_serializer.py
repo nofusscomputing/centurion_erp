@@ -8,7 +8,11 @@ from access.models.tenant import Tenant as Organization
 
 from centurion.tests.abstract.mock_view import MockView, User
 
-from itam.serializers.software_version import Software, SoftwareVersion, SoftwareVersionModelSerializer
+from itam.serializers.softwareversion import (
+    Software,
+    SoftwareVersion,
+    ModelSerializer as SoftwareVersionModelSerializer,
+)
 
 
 
