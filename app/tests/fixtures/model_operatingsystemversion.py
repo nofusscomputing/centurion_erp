@@ -4,9 +4,9 @@ from datetime import datetime
 
 from itam.models import OperatingSystemVersion
 from itam.serializers.operating_system_version import (
-    OperatingSystemVersionBaseSerializer,
-    OperatingSystemVersionModelSerializer,
-    OperatingSystemVersionViewSerializer,
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
 )
 
 
@@ -51,7 +51,7 @@ def kwargs_operatingsystemversion(django_db_blocker,
 def serializer_operatingsystemversion():
 
     yield {
-        'base': OperatingSystemVersionBaseSerializer,
-        'model': OperatingSystemVersionModelSerializer,
-        'view': OperatingSystemVersionViewSerializer
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
     }
