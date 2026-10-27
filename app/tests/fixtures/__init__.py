@@ -228,12 +228,6 @@ from .model_itassetmodel import (
     serializer_itassetmodel,
 )
 
-from .model_itassetoperatingsystem import (
-    kwargs_itassetoperatingsystem,
-    model_itassetoperatingsystem,
-    serializer_itassetoperatingsystem,
-)
-
 from .model_itassetrelationships import (
     kwargs_itassetrelationships,
     model_itassetrelationships,
