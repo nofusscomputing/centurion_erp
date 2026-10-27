@@ -183,6 +183,13 @@ class ITAsset(
         verbose_name = 'Is Virtual',
     )
 
+    operating_system = models.ManyToManyField(
+        to = 'itam.OperatingSystemVersion',
+        symmetrical = True,
+        through = 'itam.ITAssetOperatingSystem',
+        through_fields = ('it_asset', 'operating_system_version'),
+    )
+
     page_layout: dict = {
         "dataset":{
             "columns": [

@@ -11,9 +11,9 @@ from itam.viewsets import (
     device,
     device_relationships,
     device_software as device_software_v2,
-    device_operating_system,
+    it_asset_operating_system,
     # inventory,
-    operating_system as operating_system_v2,
+    operating_system,
     operating_system_version as operating_system_version_v2,
     software as software_v2,
     software_version as software_version_v2,
@@ -55,10 +55,6 @@ router.register(
     basename = '_api_itassetrelationships'
 )
 router.register(
-    prefix = '/device/(?P<device_id>[0-9]+)/operating_system',
-    viewset = device_operating_system.ViewSet,
-    basename = '_api_deviceoperatingsystem')
-router.register(
     prefix = '/device/(?P<device_id>[0-9]+)/software', viewset = device_software_v2.ViewSet,
     basename = '_api_devicesoftware'
 )
@@ -71,13 +67,13 @@ router.register(
 #     basename = '_api_v2_inventory'
 # )
 router.register(
-    prefix = '/operating_system', viewset = operating_system_v2.ViewSet,
+    prefix = '/operating_system', viewset = operating_system.ViewSet,
     basename = '_api_operatingsystem'
 )
 router.register(
-    prefix = '/operating_system/(?P<operating_system_id>[0-9]+)/installs',
-    viewset = device_operating_system.ViewSet,
-    basename = '_api_v2_operating_system_installs'
+    prefix = '/(?P<model_name>(itasset)+)/(?P<model_id>[0-9]+)/operating_system',
+    viewset = it_asset_operating_system.ViewSet,
+    basename = '_api_itassetoperatingsystem'
 )
 router.register(
     prefix = '/operating_system/(?P<operating_system_id>[0-9]+)/version',

@@ -17,11 +17,14 @@ from .assetbase_itamassetbase import (
     ModelSerializer as ITAssetModelSerializer,
     BaseSerializer
 )
+from .device_type import DeviceTypeBaseSerializer
 from .itassetmodel import (
     BaseSerializer as ITAssetModelBaseSerializer
 )
-from .device_type import DeviceTypeBaseSerializer
-
+from .itassetrelationships import (
+    BaseSerializer as ITAssetRelationshipsBaseSerializer,
+    ModelSerializer as ITAssetRelationshipsModelSerializer
+)
 
 
 @extend_schema_serializer(component_name = 'ITAssetModelSerializer')
@@ -48,7 +51,14 @@ class ModelSerializer(
             'device_model': reverse("v2:_api_itassetmodel-list", request = None),
             'device_type': reverse("v2:_api_devicetype-list", request = None),
             'external_links': reverse("v2:_api_externallink-list", request = None) + '?devices=true',
-            'operating_system': reverse("v2:_api_deviceoperatingsystem-list", request = None, kwargs={'device_id': item.pk}),
+            'operating_system': reverse(
+                viewname = "v2:_api_itassetoperatingsystem-list",
+                request = None,
+                kwargs={
+                    'model_name': item._meta.model_name,
+                    'model_id': item.pk
+                }
+            ),
             'service': reverse("v2:_api_v2_service_device-list", request = None, kwargs={'device_id': item.pk}),
             'software': reverse("v2:_api_devicesoftware-list", request = None, kwargs={'device_id': item.pk}),
         })
@@ -117,6 +127,7 @@ class ModelSerializer(
 
     status_icon = IconField(read_only = True, label='')
 
+    # connections = ITAssetRelationshipsModelSerializer( many = True )
 
     class Meta:
 
@@ -147,7 +158,7 @@ class ModelSerializer(
             'rendered_config',
             'inventorydate',
             'is_virtual',
-
+            # 'connections',
             'context',
         ]
 
@@ -167,6 +178,8 @@ class ModelSerializer(
 
 @extend_schema_serializer(component_name = 'ITAssetViewSerializer')
 class ViewSerializer(ModelSerializer):
+
+    # connections = ITAssetRelationshipsBaseSerializer( many = True, read_only = True )
 
     device_model = ITAssetModelBaseSerializer( many = False, read_only = True )
 
