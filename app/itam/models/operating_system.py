@@ -10,7 +10,7 @@ class OperatingSystem(
     CenturionModel
 ):
 
-    model_tag = 'operating_system-'
+    model_tag = 'operating_system'
 
     class Meta:
 
