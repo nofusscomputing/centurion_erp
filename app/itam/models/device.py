@@ -21,7 +21,6 @@ from core.classes.icon import Icon
 from core.models.centurion import CenturionModel
 
 from itam.models.device_models import DeviceModel
-from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
 
@@ -938,7 +937,7 @@ class DeviceOperatingSystem(
     )
 
     operating_system_version = models.ForeignKey(
-        OperatingSystemVersion,
+        to = 'itam.OperatingSystemVersion',
         blank = False,
         help_text = 'Operating system version',
         null = False,

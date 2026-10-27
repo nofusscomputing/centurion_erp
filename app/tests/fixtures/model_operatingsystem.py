@@ -2,7 +2,7 @@ import pytest
 
 from datetime import datetime
 
-from itam.models.operating_system import OperatingSystem
+from itam.models import OperatingSystem
 from itam.serializers.operatingsystem import (
     BaseSerializer,
     ModelSerializer,

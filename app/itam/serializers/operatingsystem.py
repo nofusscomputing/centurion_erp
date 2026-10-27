@@ -11,7 +11,7 @@ from access.serializers.entity_company import (
 
 from api.serializers import common
 
-from itam.models.operating_system import OperatingSystem
+from itam.models import OperatingSystem
 
 
 

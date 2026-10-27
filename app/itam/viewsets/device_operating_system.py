@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-from itam.models.operating_system import OperatingSystem
+from itam.models import OperatingSystem
 from itam.serializers.device_operating_system import (    # pylint: disable=W0611:unused-import
     Device,
     DeviceOperatingSystem,
