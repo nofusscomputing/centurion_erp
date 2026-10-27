@@ -1,5 +1,5 @@
 ---
-title: Assets
+title: IT Assets
 description: IT Assets Documentation for Centurion ERP by No Fuss Computing
 date: 2024-05-15
 template: project.html
@@ -58,30 +58,24 @@ The design of the IT Assets has been done to support creating and if required as
 
     - WiFi Router
 
-This list is not exhaustive and you are only limited by your imagination. Basically, you create an asset, if it can have a child connected to or part of it, you create the connection and the child asset.
-
-
+This list is not exhaustive and you are only limited by your imagination. Basically, you create an asset, if it can have a child connected to or part of it, you create the connection and the child asset can be connected.
 
 
 ## Features
 
-For each device within your inventory, the following fields/tabs are available to track items:
+The following Additional features are available for IT Asset Models:
 
-- Name
+- Links into [configuration management](../config_management/index.md)
 
-- [Model](./it_asset_model.md)
+- Records collected inventories
 
-- Operating System
+- Tracks:
 
-- Software
+    - Installed software details
 
-- Configuration
+    - Installed operating System
 
-- Inventory
-
-- [Change History](../index.md#history)
-
-- Virtual Status
+    - Deployed Services
 
 
 ### Status at a glance
@@ -97,23 +91,23 @@ The fields that show on this tab are the details of the asset. Available fields 
 
     - [Model](./it_asset_model.md)
 
-    - Name
+    - Name _Required_ - Name of this asset.
 
     - [Asset Type](./asset_type.md) _Read-Only_ - This field is obtained from the model.
 
-    - UUID
+    - UUID _Optional_ - UUID of this asset.
 
-    - Last Inventory Date
+    - Last Inventory Date _Read-Only_ - Date the last inventory was collected.
 
-    - Virtual Status
+    - Virtual Status _Optional, default: False_ Is this asset a virtual asset.
 
 - Operating System Section
 
-    - Shows the operating system installed on this device
+    - Shows the [operating system(s)](./operating_system.md) installed on this asset
 
 - Deployed Services Section
 
-    - Shows the services that are deployed upon this asset.
+    - Shows the [services](../itim/service.md) that are deployed upon this asset.
 
 - Host Configuration Section
 
@@ -145,18 +139,16 @@ Additionally if the asset was created with an [asset model](./it_asset_model.md)
 Creating an asset without providing an [asset model](./it_asset_model.md), will have all of the previous listed fields displayed on the asset.
 
 
+## Connections
+
+This tab displays the available connections that this asset can have. Alongside that, will also display any child items connected to the asset.
 
 
+## Software
+
+This tab displays the [software](./software.md) installed upon the asset. Additionally it also provides the config management options for installing/uninstalling any software within ITAM.
 
 
+## Config Management
 
-This tab display the details of the device.
-
-To add a new model navigate to `settings -> ITAM -> Device Models`
-
-Operating System is also visible on this tab with the version `name` as intended to be full [semver](https://semver.org/).
-
-!!! note
-    If you change the devices organization the config groups the device is a part of will be removed.
-
-
+This tab displays the fully rendered configuration for this asset. The fully rendered config is obtained from the [configuration groups](../config_management/index.md) the asset is part of, merged with the hosts configuration.
