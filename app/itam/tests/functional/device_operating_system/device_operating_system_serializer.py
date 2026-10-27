@@ -10,7 +10,7 @@ from access.models.tenant import Tenant as Organization
 
 from itam.serializers.device_operating_system import Device, DeviceOperatingSystem, DeviceOperatingSystemModelSerializer
 from itam.models import OperatingSystem
-from itam.models.operating_system import OperatingSystemVersion
+from itam.models import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
 

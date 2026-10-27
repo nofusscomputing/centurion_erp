@@ -2,7 +2,7 @@ import pytest
 
 from datetime import datetime
 
-from itam.models.operating_system import OperatingSystemVersion
+from itam.models import OperatingSystemVersion
 from itam.serializers.operating_system_version import (
     OperatingSystemVersionBaseSerializer,
     OperatingSystemVersionModelSerializer,
