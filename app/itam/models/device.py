@@ -21,7 +21,6 @@ from core.classes.icon import Icon
 from core.models.centurion import CenturionModel
 
 from itam.models.device_models import DeviceModel
-from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
@@ -423,7 +422,7 @@ class Device(
                     state = 'absent'
 
                 software_action = {
-                    "name": str(Software),
+                    "name": str(software),
                     "state": state
                 }
 
@@ -802,7 +801,7 @@ class DeviceSoftware(
     )
 
     software = models.ForeignKey(
-        Software,
+        to = 'itam.Software',
         blank = False,
         help_text = 'Software Name',
         null = False,
@@ -819,7 +818,7 @@ class DeviceSoftware(
     )
 
     version = models.ForeignKey(
-        SoftwareVersion,
+        to = 'itam.SoftwareVersion',
         blank = True,
         help_text = 'Version to install',
         on_delete = models.PROTECT,
@@ -829,7 +828,7 @@ class DeviceSoftware(
 
 
     installedversion = models.ForeignKey(
-        SoftwareVersion,
+        to = 'itam.SoftwareVersion',
         blank = True,
         help_text = 'Version that is installed',
         null = True,

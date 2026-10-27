@@ -311,11 +311,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITAM",
                 "name": "itam",
                 "pages": {
-                    'view_itamassetbase': {
-                        "display_name": "IT Assets",
-                        "name": "itasset",
-                        "link": "/accounting/asset/itamassetbase"
-                    },
                     'view_device': {
                         "display_name": "Devices",
                         "name": "device",

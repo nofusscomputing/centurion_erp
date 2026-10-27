@@ -240,12 +240,6 @@ from .model_itassetrelationships import (
     serializer_itassetrelationships,
 )
 
-from .model_itassetsoftware import (
-    kwargs_itassetsoftware,
-    model_itassetsoftware,
-    serializer_itassetsoftware,
-)
-
 from .model_knowledgebase import (
     kwargs_knowledgebase,
     model_knowledgebase,
@@ -394,12 +388,6 @@ from .model_softwareversion import (
     kwargs_softwareversion,
     model_softwareversion,
     serializer_softwareversion,
-)
-
-from .model_softwareversions import (
-    kwargs_softwareversions,
-    model_softwareversions,
-    serializer_softwareversions,
 )
 
 from .model_ticketbase import (

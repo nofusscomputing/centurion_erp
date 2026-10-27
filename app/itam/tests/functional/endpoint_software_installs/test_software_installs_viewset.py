@@ -14,7 +14,7 @@ from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from itam.models.device import Device, DeviceSoftware
-from itam.models.software import Software
+from itam.models import Software
 
 User = django.contrib.auth.get_user_model()
 

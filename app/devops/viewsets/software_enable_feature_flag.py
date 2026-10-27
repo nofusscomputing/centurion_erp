@@ -8,7 +8,7 @@ from devops.serializers.software_enable_feature_flag import (
     ViewSerializer,
 )
 
-from itam.models.software import Software
+from itam.models import Software
 
 
 
