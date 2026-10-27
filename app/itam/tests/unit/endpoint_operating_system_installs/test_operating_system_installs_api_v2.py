@@ -17,7 +17,7 @@ from api.tests.abstract.api_fields import APITenancyObject
 
 from itam.serializers.device_operating_system import Device, DeviceOperatingSystem, DeviceOperatingSystemModelSerializer
 from itam.models import OperatingSystem
-from itam.models.operating_system import OperatingSystemVersion
+from itam.models import OperatingSystemVersion
 
 User = django.contrib.auth.get_user_model()
 
