@@ -3,7 +3,7 @@ import pytest
 from datetime import datetime
 
 from itam.models import OperatingSystemVersion
-from itam.serializers.operating_system_version import (
+from itam.serializers.operatingsystemversion import (
     BaseSerializer,
     ModelSerializer,
     ViewSerializer,
