@@ -161,11 +161,6 @@ class OperatingSystem(
 
 
 
-@depreciate(
-    depreciated_in = '1.36.0',
-    removed_in = '2.0',
-    replacement = 'itam.ITAssetOperatingSystemVersions',
-)
 class OperatingSystemVersion(
     CenturionModel
 ):    # pragma: no cover
