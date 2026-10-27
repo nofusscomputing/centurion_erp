@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_serializer
 from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
@@ -14,7 +15,8 @@ from itam.serializers.operatingsystem import (
 
 
 
-class OperatingSystemVersionBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'OperatingSystemVersionBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -50,9 +52,10 @@ class OperatingSystemVersionBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class OperatingSystemVersionModelSerializer(
+@extend_schema_serializer(component_name = 'OperatingSystemVersionModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    OperatingSystemVersionBaseSerializer
+    BaseSerializer
 ):
 
 
@@ -101,7 +104,8 @@ class OperatingSystemVersionModelSerializer(
 
 
 
-class OperatingSystemVersionViewSerializer(OperatingSystemVersionModelSerializer):
+@extend_schema_serializer(component_name = 'OperatingSystemVersionViewSerializer')
+class ViewSerializer(ModelSerializer):
 
     operating_system = OperatingSystemBaseSerializer( many = False, read_only = True )
 
