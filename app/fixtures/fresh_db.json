@@ -3,7 +3,7 @@
   "model": "settings.appsettings",
   "pk": 1,
   "fields": {
-    "created": "2026-10-26T08:09:33.805Z",
+    "created": "2026-10-27T01:20:13.554Z",
     "owner_organization": null,
     "it_asset_model_is_global": false,
     "device_type_is_global": false,
@@ -11,7 +11,7 @@
     "software_is_global": false,
     "software_categories_is_global": false,
     "global_organization": null,
-    "modified": "2026-10-26T08:09:33Z"
+    "modified": "2026-10-27T01:20:13Z"
   }
 }
 ]
