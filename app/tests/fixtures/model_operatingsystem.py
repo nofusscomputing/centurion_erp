@@ -3,10 +3,10 @@ import pytest
 from datetime import datetime
 
 from itam.models.operating_system import OperatingSystem
-from itam.serializers.operating_system import (
-    OperatingSystemBaseSerializer,
-    OperatingSystemModelSerializer,
-    OperatingSystemViewSerializer,
+from itam.serializers.operatingsystem import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
 )
 
 
@@ -48,7 +48,7 @@ def kwargs_operatingsystem(django_db_blocker,
 def serializer_operatingsystem():
 
     yield {
-        'base': OperatingSystemBaseSerializer,
-        'model': OperatingSystemModelSerializer,
-        'view': OperatingSystemViewSerializer
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
     }

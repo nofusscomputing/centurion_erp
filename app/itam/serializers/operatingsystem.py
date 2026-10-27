@@ -1,3 +1,5 @@
+from drf_spectacular.utils import extend_schema_serializer
+
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
@@ -13,7 +15,8 @@ from itam.models.operating_system import OperatingSystem
 
 
 
-class OperatingSystemBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'OperatingSystemBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -45,9 +48,10 @@ class OperatingSystemBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class OperatingSystemModelSerializer(
+@extend_schema_serializer(component_name = 'OperatingSystemModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    OperatingSystemBaseSerializer
+    BaseSerializer
 ):
 
 
@@ -91,7 +95,8 @@ class OperatingSystemModelSerializer(
 
 
 
-class OperatingSystemViewSerializer(OperatingSystemModelSerializer):
+@extend_schema_serializer(component_name = 'OperatingSystemViewSerializer')
+class ViewSerializer(ModelSerializer):
 
     organization = TenantBaseSerializer( many = False, read_only = True )
 
