@@ -7,6 +7,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import (
+    ObjectDoesNotExist,
     ValidationError
 )
 from django.db import models
@@ -540,6 +541,28 @@ class Device(
 
             type(self).context['logger'].info(f'Migrated {self.pk} to {created_object.pk}.')
 
+            new_device_os_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str('ITAssetOperatingSystem').lower()
+            )
+
+            type(self).context['logger'].info(f'Begin migrate Device Operating System for {self.pk}.')
+
+            try:
+                entry = self.deviceoperatingsystem
+
+                new_device_os_model.objects.create(
+                    it_asset = created_object,
+                    installed = entry.installdate,
+                    operating_system_version = entry.operating_system_version,
+                )
+
+                type(self).context['logger'].info(f'Migrated Device Operating System model {entry.pk}.')
+
+            except ObjectDoesNotExist:    # no OS, so capture
+                pass
+
+
             tickets_model = apps.get_model(
                 app_label = current_model._meta.app_label,
                 model_name = str(f'{current_model._meta.object_name}Ticket').lower()
@@ -687,6 +710,21 @@ class Device(
 
 
             if hasattr( created_object, 'pk'):    # Remove migrated object
+
+
+                new_device_os_model = apps.get_model(
+                    app_label = current_model._meta.app_label,
+                    model_name = str('ITAssetOperatingSystem').lower()
+                )
+
+                for entry in new_device_os_model.objects.filter(
+                    it_asset = created_object
+                ):
+
+                    type(self).context['logger'].info(f'Reverting Device Operating System {entry.pk}.')
+
+                    entry.delete()
+
 
                 tickets_model = apps.get_model(
                     app_label = 'accounting',
