@@ -1,141 +1,89 @@
 from django.db import models
 
-from . import ITAMAssetBase
-
-from centurion.lib.decorators import depreciate
+from core.mixins.centurion import Centurion
 
 
 
-@depreciate(
-    depreciated_in = 'temp',
-    removed_in = 'to be reverted',
-    replacement = 'itam.ITAssetOperatingSystem',
-    skip_tests = True
-)
 class ITAssetOperatingSystem(
-    ITAMAssetBase,
+    Centurion,
 ):
+    """Custom M2M Table
 
-    model_tag = 'operating_system'
+    This table tracks the date the OS was first detected.
+    """
+
+    _audit_enabled = False
+
+    _notes_enabled = False
+
+    _ticket_linkable = False
+
+    model_tag = None
+
 
     class Meta:
 
         ordering = [
-            'name'
+            'installed',
         ]
 
-        verbose_name = 'Operating System'
+        verbose_name = 'IT Asset Operating System'
 
-        verbose_name_plural = 'Operating Systems'
+        verbose_name_plural = 'IT Asset Operating Systems'
 
-
-    publisher = models.ForeignKey(
-        to = 'access.Company',
+    it_asset = models.ForeignKey(
+        to = 'itam.ITAsset',
         blank = True,
-        help_text = 'Who publishes this Operating System',
+        help_text = 'Asset OS installed upon.',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'operating_system',
-        verbose_name = 'Publisher'
+        related_name = '+',
+        verbose_name = 'IT Asset'
     )
 
-    name = models.CharField(
-        blank = False,
-        help_text = 'Name of this item',
-        max_length = 50,
-        unique = True,
-        verbose_name = 'Name'
+
+    installed = models.DateTimeField(
+        blank = True,
+        help_text = 'Initial date the OS was detected.',
+        null = True,
+        verbose_name = 'Date Detected',
     )
+
+
+    operating_system_version = models.ForeignKey(
+        to = 'itam.OperatingSystemVersion',
+        blank = True,
+        help_text = 'Asset OS installed upon.',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = 'it_asset',
+        verbose_name = 'Operating System Version'
+    )
+
+
+    @property
+    def operating_system(self):
+
+        return self.operating_system_version.operating_system
 
 
     page_layout: dict = {
-        "dataset": {
-            "columns": [
-                [
-                    'name',
-                    'publisher',
-                    'organization',
-                    'created',
-                    'modified'
-                ]
-            ]
-        },
-        "detail": [
-            {
-                "name": "Details",
-                "slug": "details",
-                "sections": [
-                    {
-                        "layout": "double",
-                        "left": [
-                            'organization',
-                            'publisher',
-                            'name',
-                        ],
-                        "right": [
-                            'model_notes',
-                            'created',
-                            'modified',
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "Versions",
-                "slug": "version",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "version",
-                    }
-                ]
-            },
-            {
-                "name": "Installations",
-                "slug": "installs",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "installations",
-                    }
-                ]
-            },
-            {
-                "name": "Knowledge Base",
-                "slug": "kb_articles",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "knowledge_base",
-                    }
-                ]
-            },
-            {
-                "name": "Tickets",
-                "slug": "ticket",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "tickets",
-                    }
-                ]
-            },
-            {
-                "name": "Notes",
-                "slug": "notes",
-                "sections": []
-            },
-        ],
         "table": [
-            'name',
-            'publisher',
-            'organization',
-            'created',
-            'modified'
+            'it_asset',
+            'installed',
+            'operating_system',
+            'operating_system_version',
         ]
     }
 
+    def get_tenant(self):
+        return self.it_asset.organization
 
-    def __str__(self):
 
-        return self.name
+    def get_url_kwargs(self, many=False) -> dict:
+        kwargs = super().get_url_kwargs(many)
+
+        kwargs['model_name'] = self.it_asset._meta.model_name
+        kwargs['model_id'] = self.it_asset.pk
+
+        return kwargs

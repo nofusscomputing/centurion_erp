@@ -11,24 +11,20 @@ An IT Asset model is for recording the manufacturer and model for an IT Asset. A
 
 ## Features
 
-The following fields/tabs are available to track items:
+The following Additional features are available for IT Asset Models:
 
-- [Connections](#connections)
-
-- [Change History](../index.md#history)
+- [Asset Templating](#connections)
 
 
-### Details
+## Details
 
 The fields that show on this tab are the details of the asset Model. Available fields are:
 
-- `Name`, _Required_ - The model name
+- `Name`, _Required_ - The model name.
 
-- [Manufacturer](../access/company.md)
+- [Manufacturer](../access/company.md) _Optional_ - Manufacturer of this model.
 
-- [Asset Type](./asset_type.md)
-
-
+- [Asset Type](./asset_type.md) _Optional_ - Type this asset is.
 
 Additionally you can set the fields that should be marked as mandatory. These fields are collectively an identifier, they are:
 
@@ -55,7 +51,7 @@ Additionally you can set the fields that should be marked as mandatory. These fi
 Marking any of the above identifiers as mandatory, will force the assets that use this model to require the field of the same name to be filled-out.
 
 
-### Connections
+## Connections
 
 This tab shows the child connections for this model. Its intent is that you create each child asset and then when an asset is created using the model, those child connections will be created on the asset.
 

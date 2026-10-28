@@ -1,3 +1,5 @@
+from drf_spectacular.utils import extend_schema_serializer
+
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
@@ -9,11 +11,12 @@ from access.serializers.entity_company import (
 
 from api.serializers import common
 
-from itam.models.operating_system import OperatingSystem
+from itam.models import OperatingSystem
 
 
 
-class OperatingSystemBaseSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name = 'OperatingSystemBaseSerializer')
+class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -45,9 +48,10 @@ class OperatingSystemBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class OperatingSystemModelSerializer(
+@extend_schema_serializer(component_name = 'OperatingSystemModelSerializer')
+class ModelSerializer(
     common.CommonModelSerializer,
-    OperatingSystemBaseSerializer
+    BaseSerializer
 ):
 
 
@@ -56,7 +60,7 @@ class OperatingSystemModelSerializer(
         get_url = super().get_url( item = item )
 
         get_url.update({
-            'installations': reverse("v2:_api_v2_operating_system_installs-list", request = None, kwargs={'operating_system_id': item.pk}),
+            # 'installations': reverse("v2:_api_v2_operating_system_installs-list", request = None, kwargs={'operating_system_id': item.pk}),
             'version': reverse("v2:_api_operatingsystemversion-list", request = None, kwargs={'operating_system_id': item.pk}),
         })
 
@@ -91,7 +95,8 @@ class OperatingSystemModelSerializer(
 
 
 
-class OperatingSystemViewSerializer(OperatingSystemModelSerializer):
+@extend_schema_serializer(component_name = 'OperatingSystemViewSerializer')
+class ViewSerializer(ModelSerializer):
 
     organization = TenantBaseSerializer( many = False, read_only = True )
 

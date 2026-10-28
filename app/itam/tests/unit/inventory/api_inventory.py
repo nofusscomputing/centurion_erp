@@ -20,8 +20,8 @@ from access.models.team_user import TeamUsers
 from api.serializers.inventory import Inventory
 
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
-from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
-from itam.models import SoftwareCategory
+from itam.models import OperatingSystemVersion
+from itam.models import OperatingSystem, SoftwareCategory
 from itam.models import Software, SoftwareVersion
 from itam.tasks.inventory import process_inventory
 
