@@ -1,8 +1,5 @@
 
 import pytest
-import random
-
-from datetime import datetime
 
 from itam.models import ITAssetOperatingSystem
 
@@ -42,7 +39,7 @@ def kwargs_itassetoperatingsystem( django_db_blocker, kwargs_itamassetbase,
 
         kwargs = {
             'it_asset': it_asset,
-            'installed': datetime.now(),
+            'installed': '2025-06-11T17:38:00Z',
             'operating_system_version': os
 
         }
