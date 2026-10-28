@@ -134,7 +134,7 @@ class ClusterAPITestCases(
                 'expected': str
             },
             'nodes.0.url': {
-                'expected': Hyperlink
+                'expected': str
             },
             'devices': {
                 'expected': list
@@ -146,7 +146,7 @@ class ClusterAPITestCases(
                 'expected': str
             },
             'devices.0.url': {
-                'expected': Hyperlink
+                'expected': str
             },
             'modified': {
                 'expected': str

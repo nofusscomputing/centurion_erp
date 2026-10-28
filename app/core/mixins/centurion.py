@@ -321,6 +321,28 @@ class Centurion(
 
 
 
+    def get_ticket_app_label(self) -> str:
+        """Get the name for the History Model
+
+        Returns:
+            str: Name of the ticket model (`<model class name>Ticket`)
+        """
+
+        return self._meta.app_label
+
+
+
+    def get_ticket_model_name(self) -> str:
+        """Get the name for the History Model
+
+        Returns:
+            str: Name of the ticket model (`<model class name>Ticket`)
+        """
+
+        return f'{self._meta.object_name}Ticket'
+
+
+
     def get_url(
         self, relative: bool = True, api_version: int = 2, many = False
     ) -> str:

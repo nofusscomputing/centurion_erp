@@ -9,7 +9,7 @@ from core import exceptions as centurion_exception
 
 from itam.models.device import Device, DeviceOperatingSystem
 from itam.serializers.device import DeviceBaseSerializer
-from itam.serializers.operating_system_version import OperatingSystemVersionBaseSerializer
+from itam.serializers.operatingsystemversion import BaseSerializer as OperatingSystemVersionBaseSerializer
 
 
 

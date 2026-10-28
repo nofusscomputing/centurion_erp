@@ -8,7 +8,7 @@ from api.tests.unit.viewset.test_unit_public_viewset import PublicReadOnlyViewSe
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 from devops.viewsets.public_feature_flag import ViewSet
 
-from itam.models.software import Software
+from itam.models import Software
 
 
 

@@ -12,18 +12,18 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='ConfigGroupNotes',
-            fields=[
-                ('modelnotes_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='core.modelnotes')),
-                ('model', models.ForeignKey(help_text='Model this note belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='notes', to='config_management.configgroups', verbose_name='Model')),
-            ],
-            options={
-                'verbose_name': 'Config Group Note',
-                'verbose_name_plural': 'Config Group Notes',
-                'db_table': 'config_management_config_group_notes',
-                'ordering': ['-created'],
-            },
-            bases=('core.modelnotes',),
-        ),
+        # migrations.CreateModel(
+        #     name='ConfigGroupNotes',
+        #     fields=[
+        #         ('modelnotes_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='core.modelnotes')),
+        #         ('model', models.ForeignKey(help_text='Model this note belongs to', on_delete=django.db.models.deletion.CASCADE, related_name='notes', to='config_management.configgroups', verbose_name='Model')),
+        #     ],
+        #     options={
+        #         'verbose_name': 'Config Group Note',
+        #         'verbose_name_plural': 'Config Group Notes',
+        #         'db_table': 'config_management_config_group_notes',
+        #         'ordering': ['-created'],
+        #     },
+        #     bases=('core.modelnotes',),
+        # ),
     ]

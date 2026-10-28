@@ -9,6 +9,8 @@ from centurion.tests.integration.test_integration_common import (
     IntegrationCommon
 )
 
+from centurion.tests.helpers import get_models
+
 from core.mixins.centurion import Centurion
 from core.models.model_tickets import ModelTicketMetaModel
 
@@ -596,56 +598,6 @@ class ModelTicketMetaModelTestCases:
 
 
 
-def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
-    """Fetch models from Centurion Apps
-
-    Args:
-        excludes (list[ str ]): Words that may be in a models name to exclude
-
-    Returns:
-        list[ tuple ]: Centurion ERP Only models
-    """
-
-    models: list = []
-
-    model_apps: list = []
-
-    exclude_model_apps = [
-        'django',
-        'django_celery_results',
-        'django_filters',
-        'drf_spectacular',
-        'drf_spectacular_sidecar',
-        'coresheaders',
-        'corsheaders',
-        'rest_framework',
-        'rest_framework_json_api',
-        'social_django',
-    ]
-
-    for app in settings.INSTALLED_APPS:
-
-        app = app.split('.')[0]
-
-        if app in exclude_model_apps:
-            continue
-
-        model_apps += [ app ]
-
-
-    for model in apps.get_models():
-
-        model_name = str(model._meta.model_name)
-
-        if model_name in excludes:
-            continue
-
-        models += [ model ]
-
-    return models
-
-
-
 def make_fixture_with_args(arg_names, func, decorator_factory=None, decorator_args=None):
     args_str = ", ".join(arg_names)
 
@@ -717,8 +669,6 @@ for centurion_model in get_models(
                         excludes = [
                             'centurionmodelnote',    # Base Model
                             'centurionaudit',        # Base Model
-                            'history',
-                            'manufacturer',
                             'manufactureraudithistory',
                             'manufacturercenturionmodelnote',
                             'manufacturerticket',

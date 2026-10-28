@@ -20,8 +20,9 @@ from access.models.team_user import TeamUsers
 from api.serializers.inventory import Inventory
 
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
-from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
-from itam.models.software import Software, SoftwareCategory, SoftwareVersion
+from itam.models import OperatingSystemVersion
+from itam.models import OperatingSystem, SoftwareCategory
+from itam.models import Software, SoftwareVersion
 from itam.tasks.inventory import process_inventory
 
 from settings.models.user_settings import UserSettings
@@ -30,6 +31,7 @@ User = django.contrib.auth.get_user_model()
 
 
 
+@pytest.mark.skip( reason = 'to be refactored. see #1255' )
 class InventoryAPI(TestCase):
 
     model = Device

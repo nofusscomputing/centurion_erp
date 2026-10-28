@@ -17,7 +17,7 @@ class ConfigGroupsAPITestCases(
 
     @pytest.fixture( scope = 'class')
     def second_model(self, request, django_db_blocker,
-        model, model_kwargs, model_device, kwargs_device
+        model, model_kwargs, model_itasset, kwargs_itasset
     ):
 
         item = None
@@ -44,7 +44,7 @@ class ConfigGroupsAPITestCases(
                         key: value
                     })
 
-            device = model_device.objects.create( **kwargs_device() )
+            device = model_itasset.objects.create( **kwargs_itasset() )
 
             kwargs_many_to_many.update({
                 'hosts': [ device ]

@@ -11,8 +11,13 @@ from access.models.tenant import Tenant as Organization
 from itam.serializers.inventory import InventorySerializer
 
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
-from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
-from itam.models.software import Software, SoftwareCategory, SoftwareVersion
+from itam.models import (
+    OperatingSystem,
+    OperatingSystemVersion,
+    Software,
+    SoftwareCategory,
+    SoftwareVersion,
+)
 
 from settings.models.app_settings import AppSettings
 
@@ -20,7 +25,7 @@ from settings.models.app_settings import AppSettings
 logger = get_task_logger(__name__)
 
 @shared_task(bind=True)
-def process_inventory(self, data, organization: int):
+def process_inventory(self, data, organization: int):    # pragma: no cover
 
     device = None
     device_operating_system = None

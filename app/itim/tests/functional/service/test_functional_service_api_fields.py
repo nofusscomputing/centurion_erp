@@ -145,7 +145,7 @@ class ServiceAPITestCases(
                 'expected': str
             },
             'device.url': {
-                'expected': Hyperlink
+                'expected': str
             },
             'cluster': {
                 'expected': dict

@@ -2,11 +2,11 @@ from rest_framework.reverse import reverse
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
-from itam.serializers.software_version import (    # pylint: disable=W0611:unused-import
+from itam.serializers.softwareversion import (    # pylint: disable=W0611:unused-import
     Software,
     SoftwareVersion,
-    SoftwareVersionModelSerializer,
-    SoftwareVersionViewSerializer
+    ModelSerializer,
+    ViewSerializer
 )
 from api.viewsets.common.tenancy import ModelViewSet
 
@@ -26,9 +26,9 @@ from api.viewsets.common.tenancy import ModelViewSet
         responses = {
             200: OpenApiResponse(
                 description='Already exists',
-                response = SoftwareVersionViewSerializer
+                response = ViewSerializer
             ),
-            201: OpenApiResponse(description='Software created', response=SoftwareVersionViewSerializer),
+            201: OpenApiResponse(description='Software created', response=ViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),
         }
@@ -64,7 +64,7 @@ from api.viewsets.common.tenancy import ModelViewSet
             ),
         ],
         responses = {
-            200: OpenApiResponse(description='', response=SoftwareVersionViewSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
@@ -84,7 +84,7 @@ from api.viewsets.common.tenancy import ModelViewSet
             ),
         ],
         responses = {
-            200: OpenApiResponse(description='', response=SoftwareVersionViewSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
@@ -105,7 +105,7 @@ from api.viewsets.common.tenancy import ModelViewSet
             ),
         ],
         responses = {
-            200: OpenApiResponse(description='', response=SoftwareVersionViewSerializer),
+            200: OpenApiResponse(description='', response = ViewSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),
         }
     ),
@@ -164,20 +164,3 @@ class ViewSet( ModelViewSet ):
                 'pk': self.kwargs['software_id']
             }
         )
-
-
-    def get_serializer_class(self):
-
-        if (
-            self.action == 'list'
-            or self.action == 'retrieve'
-        ):
-
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
-
-        else:
-
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
-
-
-        return self.serializer_class

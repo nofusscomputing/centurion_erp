@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
-from itam.models.device import Device
+from itam.models import ITAsset
 
 from itim.models.services import Service, Port
 
@@ -43,7 +43,7 @@ class ViewSetBase(
 
 
 
-        device = Device.objects.create(
+        device = ITAsset.objects.create(
             organization=self.organization,
             name = 'device'
         )

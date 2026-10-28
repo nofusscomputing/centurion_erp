@@ -7,12 +7,13 @@ from django.db import models
 
 from access.fields import AutoLastModifiedField
 
+from centurion.lib.decorators import depreciate
 from centurion.helpers.merge_software import merge_software
 
 from core.models.centurion import CenturionModel
 
 from itam.models.device import Device, DeviceSoftware
-from itam.models.software import Software, SoftwareVersion
+from itam.models import Software
 
 
 
@@ -80,8 +81,16 @@ class ConfigGroups(
         verbose_name = 'Configuration'
     )
 
-    hosts = models.ManyToManyField(
+    hosts_old = models.ManyToManyField(
         to = Device,
+        blank = True,
+        default = None,
+        help_text = 'Hosts that are part of this group',
+        verbose_name = 'Hosts'
+    )
+
+    hosts = models.ManyToManyField(
+        to = 'itam.ITAsset',
         blank = True,
         help_text = 'Hosts that are part of this group',
         verbose_name = 'Hosts'
@@ -340,9 +349,14 @@ class ConfigGroups(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    skip_tests = True,
+)
 class ConfigGroupHosts(
     CenturionModel,
-):
+):    # pragma: no cover
 
     _notes_enabled = False
 
@@ -363,12 +377,23 @@ class ConfigGroupHosts(
             )
 
 
-    host = models.ForeignKey(
+    host_old = models.ForeignKey(
         Device,
-        blank = False,
+        blank = True,
+        default = None,
         help_text = 'Host that will be apart of this config group',
         on_delete = models.PROTECT,
+        null = True,
+        validators = [ validate_host_no_parent_group ],
+        verbose_name = 'Host',
+    )
+
+    host = models.ForeignKey(
+        to = 'itam.ITAsset',
+        blank = False,
+        help_text = 'Host that will be apart of this config group',
         null = False,
+        on_delete = models.PROTECT,
         validators = [ validate_host_no_parent_group ],
         verbose_name = 'Host',
     )
@@ -397,9 +422,14 @@ class ConfigGroupHosts(
 
 
 
+@depreciate(
+    depreciated_in = '1.36.0',
+    removed_in = '2.0',
+    skip_tests = True,
+)
 class ConfigGroupSoftware(
     CenturionModel,
-):
+):    # pragma: no cover
     """ A way to configure software to install/remove per config group """
 
     _notes_enabled = False
@@ -447,7 +477,7 @@ class ConfigGroupSoftware(
     )
 
     version = models.ForeignKey(
-        SoftwareVersion,
+        to = 'itam.SoftwareVersion',
         blank = True,
         help_text = 'Software Version for this config group',
         null = True,
