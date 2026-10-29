@@ -193,7 +193,6 @@ CREATE TABLE IF NOT EXISTS "itam_itassetrelationships" ("id" integer NOT NULL PR
 CREATE TABLE IF NOT EXISTS "itam_softwareversions_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "itam_softwareversions" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itam_softwareversions_centurionmodelnote" ("centurionmodelnote_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_centurionmodelnote" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "itam_softwareversions" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itam_softwareversions_ticket" ("modelticket_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_modelticket" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "itam_softwareversions" ("id") DEFERRABLE INITIALLY DEFERRED);
-CREATE TABLE IF NOT EXISTS "itam_itassetmodel" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "model_notes" text NULL, "created" datetime NOT NULL, "imei" bool NOT NULL, "mac_address" bool NOT NULL, "puk" bool NOT NULL, "puk_pin" bool NOT NULL, "serial_number" bool NOT NULL, "modified" datetime NOT NULL, "device_type_id" integer NULL REFERENCES "itam_devicetype" ("id") DEFERRABLE INITIALLY DEFERRED, "manufacturer_id" integer NULL REFERENCES "access_company" ("entity_ptr_id") DEFERRABLE INITIALLY DEFERRED, "organization_id" integer NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED, "name" varchar(50) NOT NULL UNIQUE);
 CREATE TABLE IF NOT EXISTS "itam_device" ("model_notes" text NULL, "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "created" datetime NOT NULL, "modified" datetime NOT NULL, "name" varchar(50) NOT NULL UNIQUE, "serial_number" varchar(50) NULL UNIQUE, "uuid" char(32) NULL UNIQUE, "inventorydate" datetime NULL, "organization_id" integer NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED, "device_model_id" integer NULL REFERENCES "itam_devicemodel" ("id") DEFERRABLE INITIALLY DEFERRED, "device_type_id" integer NULL REFERENCES "itam_devicetype" ("id") DEFERRABLE INITIALLY DEFERRED, "config" text NULL CHECK ((JSON_VALID("config") OR "config" IS NULL)), "is_virtual" bool NOT NULL, "migrated_id_id" integer NULL REFERENCES "itam_itasset" ("itamassetbase_ptr_id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "config_management_configgrouphosts_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "config_management_configgrouphosts" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "config_management_configgroups_audithistory" ("centurionaudit_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_audithistory" ("id") DEFERRABLE INITIALLY DEFERRED, "model_id" integer NOT NULL REFERENCES "config_management_configgroups" ("id") DEFERRABLE INITIALLY DEFERRED);
@@ -213,6 +212,8 @@ CREATE TABLE IF NOT EXISTS "human_resources_employee_centurionmodelnote" ("centu
 CREATE TABLE IF NOT EXISTS "human_resources_employee" ("contact_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "access_contact" ("person_ptr_id") DEFERRABLE INITIALLY DEFERRED, "user_id" bigint NULL UNIQUE REFERENCES "access_centurionuser" ("id") DEFERRABLE INITIALLY DEFERRED, "employee_number" bigint NOT NULL UNIQUE);
 CREATE TABLE IF NOT EXISTS "itam_softwareversions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "model_notes" text NULL, "created" datetime NOT NULL, "name" varchar(50) NOT NULL, "modified" datetime NOT NULL, "organization_id" integer NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itam_itassetoperatingsystem" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "installed" datetime NULL, "it_asset_id" integer NULL REFERENCES "itam_itasset" ("itamassetbase_ptr_id") DEFERRABLE INITIALLY DEFERRED, "operating_system_version_id" integer NULL REFERENCES "itam_operatingsystemversion" ("id") DEFERRABLE INITIALLY DEFERRED);
+CREATE TABLE IF NOT EXISTS "itam_itassetmodel" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "model_notes" text NULL, "created" datetime NOT NULL, "name" varchar(50) NOT NULL UNIQUE, "imei" bool NOT NULL, "mac_address" bool NOT NULL, "puk" bool NOT NULL, "puk_pin" bool NOT NULL, "serial_number" bool NOT NULL, "modified" datetime NOT NULL, "device_type_id" integer NULL REFERENCES "itam_devicetype" ("id") DEFERRABLE INITIALLY DEFERRED, "manufacturer_id" integer NULL REFERENCES "access_company" ("entity_ptr_id") DEFERRABLE INITIALLY DEFERRED, "organization_id" integer NULL REFERENCES "access_tenant" ("id") DEFERRABLE INITIALLY DEFERRED);
+CREATE TABLE IF NOT EXISTS "itam_itassetsoftware" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "action" integer NULL, "installed" datetime NULL, "installedversion_id" integer NULL REFERENCES "itam_softwareversion" ("id") DEFERRABLE INITIALLY DEFERRED, "it_asset_id" integer NOT NULL REFERENCES "itam_itasset" ("itamassetbase_ptr_id") DEFERRABLE INITIALLY DEFERRED, "software_id" integer NOT NULL REFERENCES "itam_software" ("id") DEFERRABLE INITIALLY DEFERRED, "version_id" integer NULL REFERENCES "itam_softwareversion" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itam_itasset" ("itamassetbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "itam_itamassetbase" ("assetbase_ptr_id") DEFERRABLE INITIALLY DEFERRED, "name" varchar(50) NOT NULL UNIQUE, "uuid" char(32) NULL UNIQUE, "imei" varchar(50) NULL UNIQUE, "mac_address" varchar(50) NULL UNIQUE, "puk" varchar(50) NULL UNIQUE, "puk_pin" varchar(50) NULL UNIQUE, "config" text NULL CHECK ((JSON_VALID("config") OR "config" IS NULL)), "inventorydate" datetime NULL, "is_virtual" bool NOT NULL, "device_model_id" integer NULL REFERENCES "itam_itassetmodel" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itim_changeticket" ("ticketbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_ticketbase" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "itim_problemticket" ("ticketbase_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "core_ticketbase" ("id") DEFERRABLE INITIALLY DEFERRED, "business_impact" text NULL, "cause_analysis" text NULL, "observations" text NULL, "workaround" text NULL);
@@ -228,9 +229,9 @@ CREATE TABLE IF NOT EXISTS "social_auth_nonce" ("id" integer NOT NULL PRIMARY KE
 CREATE TABLE IF NOT EXISTS "social_auth_partial" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(32) NOT NULL, "next_step" smallint unsigned NOT NULL CHECK ("next_step" >= 0), "backend" varchar(32) NOT NULL, "timestamp" datetime NOT NULL, "data" text NOT NULL CHECK ((JSON_VALID("data") OR "data" IS NULL)));
 CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "provider" varchar(32) NOT NULL, "uid" varchar(255) NOT NULL, "user_id" bigint NOT NULL REFERENCES "access_centurionuser" ("id") DEFERRABLE INITIALLY DEFERRED, "created" datetime NOT NULL, "modified" datetime NOT NULL, "extra_data" text NOT NULL CHECK ((JSON_VALID("extra_data") OR "extra_data" IS NULL)), CONSTRAINT "user_social_auth_uid_required" CHECK (NOT ("uid" = '')));
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('django_migrations',263);
-INSERT INTO sqlite_sequence VALUES('django_content_type',202);
-INSERT INTO sqlite_sequence VALUES('auth_permission',871);
+INSERT INTO sqlite_sequence VALUES('django_migrations',264);
+INSERT INTO sqlite_sequence VALUES('django_content_type',203);
+INSERT INTO sqlite_sequence VALUES('auth_permission',875);
 INSERT INTO sqlite_sequence VALUES('auth_group',0);
 INSERT INTO sqlite_sequence VALUES('core_relatedtickets',0);
 INSERT INTO sqlite_sequence VALUES('core_ticket',0);
@@ -283,7 +284,6 @@ INSERT INTO sqlite_sequence VALUES('devops_featureflag',0);
 INSERT INTO sqlite_sequence VALUES('devops_gitgroup',0);
 INSERT INTO sqlite_sequence VALUES('devops_gitrepository',0);
 INSERT INTO sqlite_sequence VALUES('devops_softwareenablefeatureflag',0);
-INSERT INTO sqlite_sequence VALUES('itam_itassetmodel',0);
 INSERT INTO sqlite_sequence VALUES('itam_device',0);
 INSERT INTO sqlite_sequence VALUES('config_management_configgroups',0);
 INSERT INTO sqlite_sequence VALUES('config_management_configgroupsoftware',0);
@@ -292,6 +292,7 @@ INSERT INTO sqlite_sequence VALUES('config_management_configgroups_hosts_old',0)
 INSERT INTO sqlite_sequence VALUES('django_celery_results_chordcounter',0);
 INSERT INTO sqlite_sequence VALUES('django_celery_results_taskresult',0);
 INSERT INTO sqlite_sequence VALUES('itam_softwareversions',0);
+INSERT INTO sqlite_sequence VALUES('itam_itassetmodel',0);
 INSERT INTO sqlite_sequence VALUES('itim_service',0);
 INSERT INTO sqlite_sequence VALUES('itim_cluster_devices_old',0);
 INSERT INTO sqlite_sequence VALUES('itim_cluster_nodes_old',0);
