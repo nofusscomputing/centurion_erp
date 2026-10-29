@@ -10,7 +10,6 @@ from itam.viewsets import (
     index as itam_index_v2,
     device,
     device_software as device_software_v2,
-    it_asset_operating_system,
     it_asset_related,
     # inventory,
     operating_system,
@@ -68,8 +67,8 @@ router.register(
     basename = '_api_operatingsystem'
 )
 router.register(
-    prefix = '/(?P<model_name>(itasset)+)/(?P<model_id>[0-9]+)/operating_system',
-    viewset = it_asset_operating_system.ViewSet,
+    prefix = '/(?P<model_name>(itasset)+)/(?P<model_id>[0-9]+)/(?P<related_model_name>(operating_system)+)',
+    viewset = it_asset_related.ViewSet,
     basename = '_api_itassetoperatingsystem'
 )
 router.register(

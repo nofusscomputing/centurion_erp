@@ -84,6 +84,7 @@ class ITAssetOperatingSystem(
         kwargs = super().get_url_kwargs(many)
 
         kwargs['model_name'] = self.it_asset._meta.model_name
-        kwargs['model_id'] = self.it_asset.pk
+        kwargs['model_id'] = self.it_asset.id
+        kwargs['related_model_name'] = 'operating_system'
 
         return kwargs
