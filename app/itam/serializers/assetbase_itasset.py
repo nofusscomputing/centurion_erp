@@ -60,7 +60,15 @@ class ModelSerializer(
                 }
             ),
             'service': reverse("v2:_api_v2_service_device-list", request = None, kwargs={'device_id': item.pk}),
-            'software': reverse("v2:_api_devicesoftware-list", request = None, kwargs={'device_id': item.pk}),
+            'software': reverse(
+                viewname = "v2:_api_itassetsoftware-list",
+                request = None,
+                kwargs={
+                    'model_name': item._meta.model_name,
+                    'model_id': item.pk,
+                    'related_model_name': 'software',
+                }
+            ),
         })
 
 
