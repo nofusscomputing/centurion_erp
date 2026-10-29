@@ -72,6 +72,11 @@ router.register(
     basename = '_api_itassetoperatingsystem'
 )
 router.register(
+    prefix = '/(?P<model_name>(itasset)+)/(?P<model_id>[0-9]+)/(?P<related_model_name>(software)+)',
+    viewset = it_asset_related.ViewSet,
+    basename = '_api_itassetsoftware'
+)
+router.register(
     prefix = '/operating_system/(?P<operating_system_id>[0-9]+)/version',
     viewset = operating_system_version_v2.ViewSet,
     basename = '_api_operatingsystemversion'
