@@ -563,6 +563,29 @@ class Device(
                 pass
 
 
+            new_asset_software_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str('ITAssetSoftware').lower()
+            )
+
+            type(self).context['logger'].info(f'Begin migrate Device Software for {self.pk}.')
+
+            for entry in self.devicesoftware_set.all():
+
+                new_asset_software_model.objects.create(
+                    it_asset = created_object,
+                    software = entry.software,
+                    action = entry.action,
+                    version = entry.version,
+                    installedversion = entry.installedversion,
+                    installed = entry.installed,
+
+                )
+
+                type(self).context['logger'].info(f'Migrated Device Software {entry.pk}.')
+
+
+
             tickets_model = apps.get_model(
                 app_label = current_model._meta.app_label,
                 model_name = str(f'{current_model._meta.object_name}Ticket').lower()
@@ -731,7 +754,26 @@ class Device(
                     model_name = str(f'AssetBaseTicket').lower()
                 )
 
-                type(self).context['logger'].info(f'Begin migrate model tickets for {self.pk}.')
+
+
+                new_asset_software_model = apps.get_model(
+                    app_label = current_model._meta.app_label,
+                    model_name = str('ITAssetSoftware').lower()
+                )
+
+                type(self).context['logger'].info(f'Begin reverting Device Software.')
+
+                for entry in new_asset_software_model.objects.filter(
+                    it_asset = created_object
+                ):
+
+                    entry.delete()
+
+                    type(self).context['logger'].info(f'Reverted Device Software {entry.pk}.')
+
+
+
+                type(self).context['logger'].info(f'Begin reverting model tickets.')
 
                 for ticket_entry in tickets_model.objects.filter(
                     model = created_object
@@ -797,6 +839,7 @@ class Device(
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
+    replacement = 'itam.ITAssetSoftware',
     skip_tests = True,
 )
 class DeviceSoftware(
@@ -843,6 +886,7 @@ class DeviceSoftware(
         help_text = 'Software Name',
         null = False,
         on_delete = models.PROTECT,
+        related_name = '+',
         verbose_name = 'Software'
     )
 
@@ -860,6 +904,7 @@ class DeviceSoftware(
         help_text = 'Version to install',
         on_delete = models.PROTECT,
         null = True,
+        related_name = '+',
         verbose_name = 'Desired Version'
     )
 
@@ -870,7 +915,7 @@ class DeviceSoftware(
         help_text = 'Version that is installed',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'installedversion',
+        related_name = '+',
         verbose_name = 'Installed Version'
     )
 
@@ -940,6 +985,7 @@ class DeviceSoftware(
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
+    replacement = 'itam.ITAssetOperatingSystem',
     skip_tests = True,
 )
 class DeviceOperatingSystem(
