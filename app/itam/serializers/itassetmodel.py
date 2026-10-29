@@ -60,13 +60,14 @@ class ModelSerializer(
         urls = super().get_url(item)
 
         urls['connections'] = reverse(
-            viewname = 'v2:_api_itasset_connections-list',
+            viewname = 'v2:_api_itassetrelationships-list',
             request = None,
             kwargs = {
                 'model_name': item._meta.model_name,
-                'model_id': item.pk
+                'model_id': item.pk,
+                'related_model_name': 'connections',
             }
-        ),
+        )
 
         return urls
 
