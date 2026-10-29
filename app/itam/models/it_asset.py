@@ -182,6 +182,12 @@ class ITAsset(
         null = False,
         verbose_name = 'Is Virtual',
     )
+    software = models.ManyToManyField(
+        to = 'itam.SoftwareVersion',
+        symmetrical = True,
+        through = 'itam.ITAssetSoftware',
+        through_fields = ('it_asset', 'installedversion'),
+    )
 
     operating_system = models.ManyToManyField(
         to = 'itam.OperatingSystemVersion',
