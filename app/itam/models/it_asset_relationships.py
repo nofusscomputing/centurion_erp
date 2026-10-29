@@ -21,7 +21,6 @@ class ITAssetRelationships(CenturionModel):
 
     _ticket_linkable = False
 
-    url_model_name = 'itasset_connections'
 
 
     class Meta:
@@ -106,6 +105,7 @@ class ITAssetRelationships(CenturionModel):
 
         kwargs['model_name'] = str( self.parent_asset_model._meta.model_name )
         kwargs['model_id'] = str( self.parent_asset_model.pk )
+        kwargs['related_model_name'] = 'connections'
 
 
         return kwargs

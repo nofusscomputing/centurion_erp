@@ -182,6 +182,14 @@ class ITAsset(
         null = False,
         verbose_name = 'Is Virtual',
     )
+
+    connections = models.ManyToManyField(
+        to = 'self',
+        symmetrical = False,
+        through = 'itam.ITAssetRelationships',
+        through_fields = ('parent', 'child'),
+    )
+
     software = models.ManyToManyField(
         to = 'itam.SoftwareVersion',
         symmetrical = True,

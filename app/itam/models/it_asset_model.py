@@ -110,12 +110,12 @@ class ITAssetModel(CenturionModel):
         verbose_name = 'Serial Number',
     )
 
-    # connections = models.ManyToManyField(
-    #     to = 'self',
-    #     symmetrical = False,
-    #     through = 'itam.ITAssetRelationships',
-    #     through_fields = ('parent_asset_model', 'child_asset_model'),
-    # )
+    connections = models.ManyToManyField(
+        to = 'self',
+        symmetrical = False,
+        through = 'itam.ITAssetRelationships',
+        through_fields = ('parent_asset_model', 'child_asset_model'),
+    )
 
     modified = AutoLastModifiedField()
 
