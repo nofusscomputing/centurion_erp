@@ -304,7 +304,7 @@ pytest-django==4.11.1
     # via -r tools/requirements_dev.in
 pytest-mock==3.14.0
     # via -r tools/requirements_dev.in
-pytest-simplified==1.0.0rc3
+pytest-simplified==1.0.0rc4
     # via -r tools/requirements_dev.in
 python-dateutil==3.0.0
     # via
