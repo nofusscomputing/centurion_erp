@@ -137,7 +137,13 @@ class ViewSet( ModelViewSet ):
 
         if not self._queryset:
 
-            self._queryset = super().get_queryset().get(
+
+            self._queryset = self.get_parent_model().objects.user(
+                user = self.request.user,
+                permission = self.permissions_required
+            ).all()
+
+            self._queryset = self._queryset.get(
                 id = int(self.kwargs[self.parent_model_pk_kwarg])
             )
 
