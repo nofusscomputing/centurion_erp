@@ -165,11 +165,19 @@ class TenancyPermissions(
 
                 elif pk:
 
-                    obj = view.model.objects.get( pk = int( pk ) )
+                    if view.get_parent_model():
 
-                    if self.is_tenancy_model( view = view ):
+                        self._tenant = view.get_parent_model().objects.get(
+                            pk = int(view.kwargs[view.parent_model_pk_kwarg])
+                        ).get_tenant()
 
-                        self._tenant = obj.get_tenant()
+                    else:
+
+                        obj = view.model.objects.get( pk = int( pk ) )
+
+                        if self.is_tenancy_model( view = view ):
+
+                            self._tenant = obj.get_tenant()
 
 
         return self._tenant
