@@ -386,9 +386,15 @@ class TenancyPermissions(
             if self.is_tenancy_model( view ):
 
                 if(
-                    request.user.has_perms(
-                        permission_list = view.permissions_required,
-                        obj = obj
+                    (
+                        request.user.has_perms(
+                            permission_list = view.permissions_required,
+                            obj = obj
+                        )
+                        or request.user.has_perms(    # Covers models that may use parent tenancy
+                            permission_list = view.permissions_required,
+                            tenancy = self._tenant
+                        )
                     )
                     and self.get_tenancy( view = view, obj = obj )
                 ):
