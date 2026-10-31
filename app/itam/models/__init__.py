@@ -9,7 +9,7 @@ from .operating_system import OperatingSystem
 from .operating_system_version import OperatingSystemVersion
 from .software import Software
 from .software_category import SoftwareCategory
-from .software_version import SoftwareVersion, SoftwareVersions
+from .software_version import SoftwareVersion
 
 
 __all__ = [
@@ -25,5 +25,4 @@ __all__ = [
     'Software',
     'SoftwareCategory',
     'SoftwareVersion',
-    'SoftwareVersions',
 ]
