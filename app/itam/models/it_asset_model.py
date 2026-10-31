@@ -290,7 +290,6 @@ class ITAssetModel(CenturionModel):
                     suffix= str(i)
 
                 connections_model.objects.create(
-                    organization = parent_asset.organization,
                     name = name + suffix,
                     asset_type = connection.asset_type,
                     parent_asset_model = connection.parent_asset_model,
