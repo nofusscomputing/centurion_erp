@@ -42,5 +42,7 @@ def clean_model_from_db(django_db_blocker):
                         db_obj.delete( keep_parents = False )
                     except ProtectedError:
                         pass
+    def dummy(model_to_clean):
+        return None
 
-    yield clean_db
+    yield dummy

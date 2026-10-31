@@ -47,7 +47,7 @@ def model(self, model__model_name, clean_model_from_db):
 
     yield model__model_name
 
-    clean_model_from_db(model__model_name)
+    # clean_model_from_db(model__model_name)
 
 
 def model_kwargs(self, request, kwargs__model_name):

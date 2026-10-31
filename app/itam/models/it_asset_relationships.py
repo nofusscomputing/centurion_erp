@@ -1,9 +1,9 @@
 from django.db import models
 
-from core.models.centurion import CenturionModel
+from core.mixins.centurion import Centurion
 
 
-class ITAssetRelationships(CenturionModel):
+class ITAssetRelationships(Centurion):
     """IT Asset Children
 
     This model is a custom m2m table.
@@ -21,7 +21,6 @@ class ITAssetRelationships(CenturionModel):
 
     _ticket_linkable = False
 
-    url_model_name = 'itasset_connections'
 
 
     class Meta:
@@ -106,6 +105,13 @@ class ITAssetRelationships(CenturionModel):
 
         kwargs['model_name'] = str( self.parent_asset_model._meta.model_name )
         kwargs['model_id'] = str( self.parent_asset_model.pk )
+
+        if self.parent:
+            kwargs['model_name'] = str( self.parent._meta.model_name )
+            kwargs['model_id'] = str( self.parent.pk )
+
+
+        kwargs['related_model_name'] = 'connections'
 
 
         return kwargs

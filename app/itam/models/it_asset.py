@@ -183,6 +183,20 @@ class ITAsset(
         verbose_name = 'Is Virtual',
     )
 
+    connections = models.ManyToManyField(
+        to = 'self',
+        symmetrical = False,
+        through = 'itam.ITAssetRelationships',
+        through_fields = ('parent', 'child'),
+    )
+
+    software = models.ManyToManyField(
+        to = 'itam.SoftwareVersion',
+        symmetrical = True,
+        through = 'itam.ITAssetSoftware',
+        through_fields = ('it_asset', 'installedversion'),
+    )
+
     operating_system = models.ManyToManyField(
         to = 'itam.OperatingSystemVersion',
         symmetrical = True,

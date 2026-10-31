@@ -123,6 +123,14 @@ class ModelSerializer(
 
             attrs['parent_asset_model_id'] = int(self.context['view'].kwargs['model_id'])
 
+        elif(
+            self.context['view'].action == 'create'
+            and self.context['view'].kwargs.get('model_name', '') == 'itasset'
+        ):
+
+            attrs['parent_id'] = int(self.context['view'].kwargs['model_id'])
+
+
         return attrs
 
 

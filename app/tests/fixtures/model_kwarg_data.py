@@ -179,10 +179,10 @@ def model_kwarg_data(django_db_blocker):
 
     yield data
 
-    with django_db_blocker.unblock():
+    # with django_db_blocker.unblock():
 
-        for created_instance in instances:
-            try:
-                created_instance.delete()
-            except:
-                pass
+    #     for created_instance in instances:
+    #         try:
+    #             created_instance.delete()
+    #         except:
+    #             pass

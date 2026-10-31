@@ -40,11 +40,12 @@ class ModelSerializer(
         get_url.update({
 
             'connections': reverse(
-                viewname = 'v2:_api_itasset_connections-list',
+                viewname = 'v2:_api_itassetrelationships-list',
                 request = None,
                 kwargs = {
                     'model_name': item._meta.model_name,
-                    'model_id': item.pk
+                    'model_id': item.pk,
+                    'related_model_name': 'connections',
                 }
             ),
 
@@ -56,11 +57,20 @@ class ModelSerializer(
                 request = None,
                 kwargs={
                     'model_name': item._meta.model_name,
-                    'model_id': item.pk
+                    'model_id': item.pk,
+                    'related_model_name': 'operating_system',
                 }
             ),
             'service': reverse("v2:_api_v2_service_device-list", request = None, kwargs={'device_id': item.pk}),
-            'software': reverse("v2:_api_devicesoftware-list", request = None, kwargs={'device_id': item.pk}),
+            'software': reverse(
+                viewname = "v2:_api_itassetsoftware-list",
+                request = None,
+                kwargs={
+                    'model_name': item._meta.model_name,
+                    'model_id': item.pk,
+                    'related_model_name': 'software',
+                }
+            ),
         })
 
 

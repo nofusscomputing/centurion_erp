@@ -7,6 +7,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import (
+    ObjectDoesNotExist,
     ValidationError
 )
 from django.db import models
@@ -540,6 +541,51 @@ class Device(
 
             type(self).context['logger'].info(f'Migrated {self.pk} to {created_object.pk}.')
 
+            new_device_os_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str('ITAssetOperatingSystem').lower()
+            )
+
+            type(self).context['logger'].info(f'Begin migrate Device Operating System for {self.pk}.')
+
+            try:
+                entry = self.deviceoperatingsystem
+
+                new_device_os_model.objects.create(
+                    it_asset = created_object,
+                    installed = entry.installdate,
+                    operating_system_version = entry.operating_system_version,
+                )
+
+                type(self).context['logger'].info(f'Migrated Device Operating System model {entry.pk}.')
+
+            except ObjectDoesNotExist:    # no OS, so capture
+                pass
+
+
+            new_asset_software_model = apps.get_model(
+                app_label = current_model._meta.app_label,
+                model_name = str('ITAssetSoftware').lower()
+            )
+
+            type(self).context['logger'].info(f'Begin migrate Device Software for {self.pk}.')
+
+            for entry in self.devicesoftware_set.all():
+
+                new_asset_software_model.objects.create(
+                    it_asset = created_object,
+                    software = entry.software,
+                    action = entry.action,
+                    version = entry.version,
+                    installedversion = entry.installedversion,
+                    installed = entry.installed,
+
+                )
+
+                type(self).context['logger'].info(f'Migrated Device Software {entry.pk}.')
+
+
+
             tickets_model = apps.get_model(
                 app_label = current_model._meta.app_label,
                 model_name = str(f'{current_model._meta.object_name}Ticket').lower()
@@ -688,12 +734,46 @@ class Device(
 
             if hasattr( created_object, 'pk'):    # Remove migrated object
 
+
+                new_device_os_model = apps.get_model(
+                    app_label = current_model._meta.app_label,
+                    model_name = str('ITAssetOperatingSystem').lower()
+                )
+
+                for entry in new_device_os_model.objects.filter(
+                    it_asset = created_object
+                ):
+
+                    type(self).context['logger'].info(f'Reverting Device Operating System {entry.pk}.')
+
+                    entry.delete()
+
+
                 tickets_model = apps.get_model(
                     app_label = 'accounting',
                     model_name = str(f'AssetBaseTicket').lower()
                 )
 
-                type(self).context['logger'].info(f'Begin migrate model tickets for {self.pk}.')
+
+
+                new_asset_software_model = apps.get_model(
+                    app_label = current_model._meta.app_label,
+                    model_name = str('ITAssetSoftware').lower()
+                )
+
+                type(self).context['logger'].info(f'Begin reverting Device Software.')
+
+                for entry in new_asset_software_model.objects.filter(
+                    it_asset = created_object
+                ):
+
+                    entry.delete()
+
+                    type(self).context['logger'].info(f'Reverted Device Software {entry.pk}.')
+
+
+
+                type(self).context['logger'].info(f'Begin reverting model tickets.')
 
                 for ticket_entry in tickets_model.objects.filter(
                     model = created_object
@@ -759,6 +839,7 @@ class Device(
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
+    replacement = 'itam.ITAssetSoftware',
     skip_tests = True,
 )
 class DeviceSoftware(
@@ -805,6 +886,7 @@ class DeviceSoftware(
         help_text = 'Software Name',
         null = False,
         on_delete = models.PROTECT,
+        related_name = '+',
         verbose_name = 'Software'
     )
 
@@ -822,6 +904,7 @@ class DeviceSoftware(
         help_text = 'Version to install',
         on_delete = models.PROTECT,
         null = True,
+        related_name = '+',
         verbose_name = 'Desired Version'
     )
 
@@ -832,7 +915,7 @@ class DeviceSoftware(
         help_text = 'Version that is installed',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'installedversion',
+        related_name = '+',
         verbose_name = 'Installed Version'
     )
 
@@ -902,6 +985,7 @@ class DeviceSoftware(
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
+    replacement = 'itam.ITAssetOperatingSystem',
     skip_tests = True,
 )
 class DeviceOperatingSystem(
