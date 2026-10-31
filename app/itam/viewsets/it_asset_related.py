@@ -83,24 +83,6 @@ class ViewSet( ModelViewSet ):
 
 
 
-    def get_layout(self) -> dict:
-
-        related_model =  getattr(
-            self.model, self.kwargs['related_model_name']
-        ).rel.through
-
-        return related_model.page_layout
-
-
-
-    def get_parent_model(self):
-        return apps.get_model(
-            app_label = 'itam',
-            model_name = self.kwargs['model_name']
-        )
-
-
-
     def get_meta_urls(self) -> dict[ str ] | dict[ str, dict[str] ]:
 
         if self._meta_urls is None:
@@ -131,6 +113,13 @@ class ViewSet( ModelViewSet ):
 
         return self._meta_urls
 
+
+
+    def get_parent_model(self):
+        return apps.get_model(
+            app_label = 'itam',
+            model_name = self.kwargs['model_name']
+        )
 
 
     def get_queryset(self):
