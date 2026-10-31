@@ -17,7 +17,7 @@ def model_device(clean_model_from_db):
 
     yield Device
 
-    clean_model_from_db(Device)
+    # clean_model_from_db(Device)
 
 
 @pytest.fixture( scope = 'class')
