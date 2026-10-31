@@ -105,6 +105,12 @@ class ITAssetRelationships(Centurion):
 
         kwargs['model_name'] = str( self.parent_asset_model._meta.model_name )
         kwargs['model_id'] = str( self.parent_asset_model.pk )
+
+        if self.parent:
+            kwargs['model_name'] = str( self.parent._meta.model_name )
+            kwargs['model_id'] = str( self.parent.pk )
+
+
         kwargs['related_model_name'] = 'connections'
 
 
