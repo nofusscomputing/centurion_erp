@@ -89,6 +89,14 @@ class ViewSet( ModelViewSet ):
 
 
 
+    def get_parent_model(self):
+        return apps.get_model(
+            app_label = 'itam',
+            model_name = self.kwargs['model_name']
+        )
+
+
+
     def get_meta_urls(self) -> dict[ str ] | dict[ str, dict[str] ]:
 
         if self._meta_urls is None:
