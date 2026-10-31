@@ -83,7 +83,7 @@ class ModelSerializer(
 
     def validate(self, attrs):
 
-        attrs['it_asset_id'] = int(self.context['view'].kwargs['related_model_id'])
+        attrs['it_asset_id'] = int(self.context['view'].kwargs['model_id'])
 
         return super().validate(attrs)
 
