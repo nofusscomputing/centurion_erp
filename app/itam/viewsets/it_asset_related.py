@@ -149,9 +149,21 @@ class ViewSet( ModelViewSet ):
 
             if self.kwargs.get('related_model_name', None):
 
-                self._queryset = getattr(
+                m2m_field = getattr(
                     self._queryset, self.kwargs['related_model_name']
-                ).constrained_target
+                )
+
+                if len(m2m_field.constrained_target) > 0:
+                    
+                    self._queryset = m2m_field.constrained_target
+
+                else:
+
+                    filter_kwargs = {
+                        f'{m2m_field.source_field.cache_name}_id': int(self.kwargs[self.parent_model_pk_kwarg])
+                    }
+
+                    self._queryset = m2m_field.through.objects.filter( **filter_kwargs)
 
 
                 if self.kwargs.get('pk', None):
