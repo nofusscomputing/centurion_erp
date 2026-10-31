@@ -16,7 +16,7 @@ def model_itassetoperatingsystem(clean_model_from_db):
 
     yield ITAssetOperatingSystem
 
-    clean_model_from_db(ITAssetOperatingSystem)
+    # clean_model_from_db(ITAssetOperatingSystem)
 
 
 
