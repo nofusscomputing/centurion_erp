@@ -19,7 +19,7 @@ def model_itasset(clean_model_from_db):
 
     yield ITAsset
 
-    clean_model_from_db(ITAsset)
+    # clean_model_from_db(ITAsset)
 
 
 

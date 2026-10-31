@@ -15,7 +15,7 @@ def model_software(clean_model_from_db):
 
     yield Software
 
-    clean_model_from_db(Software)
+    # clean_model_from_db(Software)
 
 
 @pytest.fixture( scope = 'class')

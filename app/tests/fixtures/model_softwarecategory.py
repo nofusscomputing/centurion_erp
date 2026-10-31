@@ -15,7 +15,7 @@ def model_softwarecategory(clean_model_from_db):
 
     yield SoftwareCategory
 
-    clean_model_from_db(SoftwareCategory)
+    # clean_model_from_db(SoftwareCategory)
 
 
 @pytest.fixture( scope = 'class')

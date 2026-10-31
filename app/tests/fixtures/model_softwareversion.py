@@ -15,7 +15,7 @@ def model_softwareversion(clean_model_from_db):
 
     yield SoftwareVersion
 
-    clean_model_from_db(SoftwareVersion)
+    # clean_model_from_db(SoftwareVersion)
 
 
 @pytest.fixture( scope = 'class')

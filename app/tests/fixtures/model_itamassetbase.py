@@ -16,7 +16,7 @@ def model_itamassetbase(clean_model_from_db):
 
     yield ITAMAssetBase
 
-    clean_model_from_db(ITAMAssetBase)
+    # clean_model_from_db(ITAMAssetBase)
 
 
 

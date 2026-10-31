@@ -9,7 +9,7 @@ def model_itassetsoftware(clean_model_from_db):
 
     yield ITAssetSoftware
 
-    clean_model_from_db(ITAssetSoftware)
+    # clean_model_from_db(ITAssetSoftware)
 
 
 @pytest.fixture( scope = 'class')
@@ -34,8 +34,11 @@ def kwargs_itassetsoftware(django_db_blocker,
 
             model_objs += [ itasset, softwareversion ]
 
+        kwargs = kwargs_centurionmodel()
+        del kwargs['organization']
+
         kwargs = {
-            **kwargs_centurionmodel(),
+            **kwargs,
             'it_asset': itasset,
             'software': kwargs_softwareversion()['software'],
             'action': ITAssetSoftware.Actions.INSTALL,
