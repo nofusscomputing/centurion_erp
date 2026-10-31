@@ -72,9 +72,13 @@ class ViewSet( ModelViewSet ):
     @property
     def model(self):
 
+        related_model =  getattr(
+            self.get_parent_model(), self.kwargs['related_model_name']
+        ).rel.through
+
         return apps.get_model(
             app_label = 'itam',
-            model_name = self.kwargs['model_name']
+            model_name = related_model._meta.model_name
         )
 
 
@@ -105,18 +109,19 @@ class ViewSet( ModelViewSet ):
 
             app_namespace = ''
 
-            model =  getattr(
-                self.model, self.kwargs['related_model_name']
-            ).rel.through
+            model = self.model
 
             if getattr(model, 'app_namespace', None) not in [None, '']:
 
                 app_namespace = model().get_app_namespace() + ':'
 
+            view_type = 'list'
+            if self.kwargs.get('pk', None):
+                view_type = 'detail'
 
             add_url.update({
                 'self': reverse(
-                    viewname = 'v2:' + app_namespace + self.basename + '-list',
+                    viewname = f'v2:{app_namespace}{self.basename}-{view_type}',
                     request = None,
                     kwargs = self.kwargs
                 )
@@ -154,14 +159,10 @@ class ViewSet( ModelViewSet ):
 
     def get_serializer_class(self):
 
-        related_model =  getattr(
-            self.model, self.kwargs['related_model_name']
-        ).rel.through
-
-        serializer_name = related_model._meta.model_name
+        serializer_name = self.model._meta.model_name
 
         serializer_module = importlib.import_module(
-            name = related_model._meta.app_label + '.serializers.' + str(
+            name = self.model._meta.app_label + '.serializers.' + str(
                 serializer_name
             )
         )
