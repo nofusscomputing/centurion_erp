@@ -128,9 +128,6 @@ class ITAssetSoftware(
         )
 
 
-    def get_tenant(self):
-        return self.it_asset.organization
-
 
     def get_url_kwargs(self, many = False) -> dict:
 
