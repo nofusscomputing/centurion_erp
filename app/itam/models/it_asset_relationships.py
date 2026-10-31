@@ -1,9 +1,9 @@
 from django.db import models
 
-from core.models.centurion import CenturionModel
+from core.mixins.centurion import Centurion
 
 
-class ITAssetRelationships(CenturionModel):
+class ITAssetRelationships(Centurion):
     """IT Asset Children
 
     This model is a custom m2m table.
