@@ -140,7 +140,7 @@ class ModelSerializer(
             if 'pk' in self._context['view'].kwargs:
 
                 itasset = ITAsset.objects.get(
-                    id = int(self._context['view'].kwargs['pk'])
+                    id = int(self._context['view'].kwargs['model_id'])
                 )
 
                 data['it_asset'] = itasset
