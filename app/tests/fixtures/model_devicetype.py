@@ -16,7 +16,7 @@ def model_devicetype(clean_model_from_db):
 
     yield DeviceType
 
-    clean_model_from_db(DeviceType)
+    # clean_model_from_db(DeviceType)
 
 
 @pytest.fixture( scope = 'class')

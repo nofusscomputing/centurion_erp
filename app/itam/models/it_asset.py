@@ -105,7 +105,7 @@ class ITAsset(
         if not re.match(pattern, str(self)):
 
             raise ValidationError(
-                message = f'UUID must be formated to match regex {str(pattern)}',
+                message = f'MAC Address must be formated to match regex {str(pattern)}',
                 code = 'invalid_mac_address'
             )
 
@@ -181,6 +181,20 @@ class ITAsset(
         help_text = 'Is this device a virtual machine',
         null = False,
         verbose_name = 'Is Virtual',
+    )
+
+    connections = models.ManyToManyField(
+        to = 'self',
+        symmetrical = False,
+        through = 'itam.ITAssetRelationships',
+        through_fields = ('parent', 'child'),
+    )
+
+    software = models.ManyToManyField(
+        to = 'itam.SoftwareVersion',
+        symmetrical = True,
+        through = 'itam.ITAssetSoftware',
+        through_fields = ('it_asset', 'installedversion'),
     )
 
     operating_system = models.ManyToManyField(

@@ -104,24 +104,24 @@ For this command to process the following conditions must be met:
 
             if(
                 model_type == getattr(obj_model, 'model_tag', '-not_model-')
-                and not getattr(obj_model, '_is_submodel', False)
-                or (
-                    getattr(obj_model, '_is_submodel', False)
-                    and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
-                        ) != getattr(obj_model, 'model_tag', '-not_model-')
-                    and model_type == getattr(obj_model, 'model_tag', '-not_model-')
+                and (
+                    (
+                        getattr(obj_model, '_is_submodel', False)
+                        and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
+                            ) != getattr(obj_model, 'model_tag', '-not_model-')
+                    ) or not getattr(obj_model, '_is_submodel', False)
                 )
             ):
                 return obj_model
 
             elif(
                 model_type == getattr(obj_model, 'model_tag', '-not_model-')
-                and not getattr(obj_model, '_is_submodel', False)
-                or (
-                    getattr(obj_model, '_is_submodel', False)
-                    and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
-                        ) != getattr(obj_model, 'model_tag', '-not_model-')
-                    and model_type == getattr(obj_model, 'model_tag', '-not_model-')
+                and (
+                    (
+                        getattr(obj_model, '_is_submodel', False)
+                        and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
+                            ) != getattr(obj_model, 'model_tag', '-not_model-')
+                    ) or not getattr(obj_model, '_is_submodel', False)
                 )
             ):
                 return obj_model

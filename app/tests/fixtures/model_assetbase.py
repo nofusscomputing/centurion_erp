@@ -14,7 +14,7 @@ def model_assetbase(clean_model_from_db):
 
     yield AssetBase
 
-    clean_model_from_db(AssetBase)
+    # clean_model_from_db(AssetBase)
 
 
 @pytest.fixture( scope = 'class')

@@ -1205,6 +1205,7 @@ class CommonSubModelViewSet_ReWrite(
                 or getattr(
                         related_object.related_model._meta,'model_name', ''
                     ) == getattr(self.base_model._meta,'model_name', '-not-exist')
+                or hasattr(related_object, 'through')    # Skip M2M fields
             ):
                 continue
 

@@ -63,40 +63,45 @@ def ticket_action_comment_ticket_dependency(
             dependent_ticket = instance.ticket
         )
 
-        user = get_action_user( instance = instance ).get_entity()
+        user = get_action_user( instance = instance )
 
-        if len( inverse_exists ) == 0 and kwargs.get('signal') == post_save :
+        if user:
 
-            inverse_how_related = instance.how_related
+            user = user.get_entity()
 
-            if instance.how_related == TicketDependency.Related.BLOCKS:
 
-                inverse_how_related = TicketDependency.Related.BLOCKED_BY
+            if len( inverse_exists ) == 0 and kwargs.get('signal') == post_save :
 
-            elif instance.how_related == TicketDependency.Related.BLOCKED_BY:
+                inverse_how_related = instance.how_related
 
-                inverse_how_related = TicketDependency.Related.BLOCKS
+                if instance.how_related == TicketDependency.Related.BLOCKS:
 
-            TicketDependency.objects.create(
-                ticket = instance.dependent_ticket,
-                how_related = inverse_how_related,
-                dependent_ticket = instance.ticket,
-                organization = instance.dependent_ticket.organization,
-                user = user
+                    inverse_how_related = TicketDependency.Related.BLOCKED_BY
+
+                elif instance.how_related == TicketDependency.Related.BLOCKED_BY:
+
+                    inverse_how_related = TicketDependency.Related.BLOCKS
+
+                TicketDependency.objects.create(
+                    ticket = instance.dependent_ticket,
+                    how_related = inverse_how_related,
+                    dependent_ticket = instance.ticket,
+                    organization = instance.dependent_ticket.organization,
+                    user = user
+                )
+
+            TicketCommentActionTicketDependency.objects.create(
+                organization = instance.organization,
+
+                ticket = instance.ticket,
+                is_closed = True,
+                body = '',
+                user = user,
+
+                is_create = ( kwargs.get('signal') == post_save ),
+                link_type = instance.how_related,
+                dependent_ticket_id = instance.dependent_ticket,
             )
-
-        TicketCommentActionTicketDependency.objects.create(
-            organization = instance.organization,
-
-            ticket = instance.ticket,
-            is_closed = True,
-            body = '',
-            user = user,
-
-            is_create = ( kwargs.get('signal') == post_save ),
-            link_type = instance.how_related,
-            dependent_ticket_id = instance.dependent_ticket,
-        )
 
 
     except Exception as e:

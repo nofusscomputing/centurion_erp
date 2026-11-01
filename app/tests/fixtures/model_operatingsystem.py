@@ -16,7 +16,7 @@ def model_operatingsystem(clean_model_from_db):
 
     yield OperatingSystem
 
-    clean_model_from_db(OperatingSystem)
+    # clean_model_from_db(OperatingSystem)
 
 
 @pytest.fixture( scope = 'class')
