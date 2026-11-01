@@ -88,6 +88,7 @@ def ticket_action_comment_model_link(
                 'vars: '
                 f"sender={sender._meta.app_label}.{sender._meta.model_name} "
                 # f"action_comment_source={action_comment_source} "
+                f"signal={kwargs.get('signal')} "
                 f"model={instance._meta.model_name} "
                 f"app_label={instance._meta.app_label} "
                 f"context={instance.context} "
