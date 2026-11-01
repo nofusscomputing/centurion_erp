@@ -105,7 +105,7 @@ class ITAsset(
         if not re.match(pattern, str(self)):
 
             raise ValidationError(
-                message = f'UUID must be formated to match regex {str(pattern)}',
+                message = f'MAC Address must be formated to match regex {str(pattern)}',
                 code = 'invalid_mac_address'
             )
 
