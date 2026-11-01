@@ -99,6 +99,10 @@ class NavigationMenu(
                     'permission_model': 'device'
                 },
                 {
+                    'content_model': 'itasset',
+                    'permission_model': 'itasset'
+                },
+                {
                     'content_model': 'devicemodel',
                     'permission_model': 'devicemodel'
                 },
@@ -478,7 +482,7 @@ class NavigationMenu(
         page is available for the user
         """
 
-        nav_menu = self.metadata.get_navigation(self.itam_device)
+        nav_menu = self.metadata.get_navigation(self.itam_itasset)
 
         menu_name = 'itam'
 
@@ -510,7 +514,7 @@ class NavigationMenu(
         for the user who has the desired permission
         """
 
-        nav_menu = self.metadata.get_navigation(self.itam_device)
+        nav_menu = self.metadata.get_navigation(self.itam_itasset)
 
         pages_found: int = 0
 
