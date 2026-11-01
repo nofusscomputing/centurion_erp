@@ -55,7 +55,7 @@ def ticket_action_comment_model_link(
     try:
 
         log: Logger = settings.CENTURION_LOG.getChild(
-            'ticket_action_comment_ticket_dependency'
+            'ticket_action_comment_model_link'
         )
 
 
