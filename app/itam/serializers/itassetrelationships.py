@@ -1,3 +1,4 @@
+from django.apps import apps
 from drf_spectacular.utils import extend_schema_serializer
 
 from rest_framework import serializers
@@ -97,7 +98,6 @@ class ModelSerializer(
 
         fields =  [
             'id',
-            'organization',
             'name',
             'parent_asset_model',
             'parent',
@@ -128,7 +128,15 @@ class ModelSerializer(
             and self.context['view'].kwargs.get('model_name', '') == 'itasset'
         ):
 
-            attrs['parent_id'] = int(self.context['view'].kwargs['model_id'])
+            asset_model = apps.get_model(
+                app_label = 'itam',
+                model_name = 'itasset'
+            )
+
+            attrs['parent'] = asset_model.objects.get(
+                id = int(self.context['view'].kwargs['model_id'])
+            )
+            attrs['parent_asset_model_id'] = attrs['parent'].device_model
 
 
         return attrs
