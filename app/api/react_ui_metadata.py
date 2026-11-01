@@ -311,11 +311,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITAM",
                 "name": "itam",
                 "pages": {
-                    'view_device': {
-                        "display_name": "Devices",
+                    'view_itasset': {
+                        "display_name": "Devices / Hardware",
                         "name": "device",
                         "icon": "device",
-                        "link": "/itam/device"
+                        "link": "/accounting/asset/itasset"
                     },
                     'view_operatingsystem': {
                         "display_name": "Operating System",
