@@ -479,8 +479,6 @@ class ITAsset(
     @property
     def get_configuration(self):
 
-        softwares = DeviceSoftware.objects.filter(device=self.id)
-
         config = {
             "software": []
         }
@@ -488,10 +486,10 @@ class ITAsset(
         host_software = []
         group_software = []
 
-        for software in softwares:
+        for software in self.software.constrained_target:
 
-            if software.action:
-            
+            if software.action is not None:
+
                 if int(software.action) == 1:
 
                     state = 'present'
@@ -501,7 +499,7 @@ class ITAsset(
                     state = 'absent'
 
                 software_action = {
-                    "name": str(Software),
+                    "name": software.software.name,
                     "state": state
                 }
 
@@ -509,11 +507,11 @@ class ITAsset(
                 if software.version:
                     software_action['version'] = software.version.name
 
+
                 host_software += [ software_action ]
 
-        config: dict = config
 
-        from config_management.models.groups import ConfigGroupHosts
+        config: dict = config
 
         if self.id:
 
@@ -529,11 +527,13 @@ class ITAsset(
                         
                         group_software = group_software + rendered_config['software']
 
+
             config['software'] = merge_software(group_software, host_software)
 
             if self.config:
 
                 config.update(self.config)
+
 
             from itim.models.services import Service
             services = Service.objects.filter(
@@ -549,5 +549,6 @@ class ITAsset(
                     }
 
                     config.update(service_config)
+
 
         return config
