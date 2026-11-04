@@ -304,6 +304,18 @@ class ITAssetModelTestCases(
 
 
 
+    def test_function_validate_config_keys_not_reserved_software(self, model):
+        """Test model function
+        
+        ensure that a config key in reserved list of config keys raises an
+        exception.
+        """
+
+        with pytest.raises(ValidationError):
+
+            model.validate_config_keys_not_reserved({'software': ['a']})
+
+
 
 class ITAssetModelInheritedCases(
     ITAssetModelTestCases,
