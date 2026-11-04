@@ -14,7 +14,7 @@ def model_entity(clean_model_from_db):
 
     yield Entity
 
-    clean_model_from_db(Entity)
+    # clean_model_from_db(Entity)
 
 
 @pytest.fixture( scope = 'class')
