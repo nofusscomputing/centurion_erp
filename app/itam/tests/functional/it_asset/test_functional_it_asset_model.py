@@ -525,6 +525,31 @@ class ITAssetModelTestCases(
 
 
 
+    def test_property_get_configuration(self,
+        model_configgroups, kwargs_configgroups,
+        model, model_kwargs,
+    ):
+        """ Test model property
+
+        Ensure that property `get_configuration` returns the correct value.
+        """
+
+        kwargs = kwargs_configgroups()
+
+        config_group = model_configgroups.objects.create( **kwargs )
+
+        the_model = model.objects.create( **model_kwargs() )
+
+        config_group.hosts.add( the_model )
+
+        assert the_model.get_configuration == {
+            **config_group.config,
+            **the_model.config,
+            **{ 'software': [] }
+        }
+
+
+
 class ITAssetModelInheritedCases(
     ITAssetModelTestCases,
 ):
