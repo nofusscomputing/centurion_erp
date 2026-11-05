@@ -13,10 +13,6 @@ from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 
-from .device import DeviceSoftware
-
-from .software import Software
-
 from .itam_asset_base import ITAMAssetBase
 
 
@@ -147,24 +143,46 @@ class ITAsset(
         verbose_name = 'Model'
     )
 
+
+    @staticmethod
+    def validate_config_keys_is_dict(value):
+
+        if isinstance(value, str):
+
+            raise ValidationError(
+                message = f'configuration must be a dict, not a str.'
+            )
+
+
+
     def validate_config_keys_not_reserved(self):
 
         if self:
 
             value: dict = self
 
-            for invalid_key in ITAsset.reserved_config_keys:
+            try:
 
-                if invalid_key in value.keys():
-                    raise ValidationError(
-                        message = f'json key "{invalid_key}" is a reserved configuration key'
-                    )
+                for invalid_key in ITAsset.reserved_config_keys:
+
+                    if invalid_key in value.keys():
+                        raise ValidationError(
+                            message = f'json key "{invalid_key}" is a reserved configuration key'
+                        )
+
+            except AttributeError:
+                pass    # more likely than not, config is a string.
+
+
 
     config = models.JSONField(
         blank = True,
         help_text = 'Configuration for this device',
         null = True,
-        validators = [ validate_config_keys_not_reserved ],
+        validators = [
+            validate_config_keys_is_dict,
+            validate_config_keys_not_reserved
+        ],
         verbose_name = 'Host Configuration',
     )
 
