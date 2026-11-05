@@ -1,9 +1,12 @@
 import pytest
 
+from datetime import datetime, timedelta
+
 from django.core.exceptions import (
     ValidationError
 )
 from django.db import models
+from django.utils.timezone import make_aware
 
 from accounting.tests.unit.asset_base.test_unit_asset_base_model import (
     AssetBaseModelInheritedCases,
@@ -302,6 +305,60 @@ class ITAssetModelTestCases(
 
         assert test_model._meta.verbose_name == str(test_model)
 
+
+
+    def test_function_validate_config_keys_not_reserved_software(self, model):
+        """Test model function
+        
+        ensure that a config key in reserved list of config keys raises an
+        exception.
+        """
+
+        with pytest.raises(ValidationError):
+
+            model.validate_config_keys_not_reserved({'software': ['a']})
+
+
+
+    def test_property_status_ok(self, model, model_kwargs):
+        """ Test model property
+
+        Ensure that status returns `ok` when the checkdate < 1 days
+        """
+
+        test_obj = model( **model_kwargs() )
+
+        test_obj.inventorydate = make_aware(datetime.now()) - timedelta( days = 1 )
+
+        assert test_obj.status == 'OK'
+
+
+
+    def test_property_status_warn(self, model, model_kwargs):
+        """ Test model property
+
+        Ensure that status returns `warn` when the checkdate < 2 days
+        """
+
+        test_obj = model( **model_kwargs() )
+
+        test_obj.inventorydate = make_aware(datetime.now()) - timedelta( days = 2 )
+
+        assert test_obj.status == 'WARN'
+
+
+
+    def test_property_status_bad(self, model, model_kwargs):
+        """ Test model property
+
+        Ensure that status returns `bad` when the checkdate < 3 days
+        """
+
+        test_obj = model( **model_kwargs() )
+
+        test_obj.inventorydate = make_aware(datetime.now()) - timedelta( days = 3 )
+
+        assert test_obj.status == 'BAD'
 
 
 

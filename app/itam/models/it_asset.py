@@ -13,10 +13,6 @@ from centurion.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 
-from .device import DeviceSoftware
-
-from .software import Software
-
 from .itam_asset_base import ITAMAssetBase
 
 
@@ -147,24 +143,46 @@ class ITAsset(
         verbose_name = 'Model'
     )
 
+
+    @staticmethod
+    def validate_config_keys_is_dict(value):
+
+        if isinstance(value, str):
+
+            raise ValidationError(
+                message = f'configuration must be a dict, not a str.'
+            )
+
+
+
     def validate_config_keys_not_reserved(self):
 
         if self:
 
             value: dict = self
 
-            for invalid_key in ITAsset.reserved_config_keys:
+            try:
 
-                if invalid_key in value.keys():
-                    raise ValidationError(
-                        message = f'json key "{invalid_key}" is a reserved configuration key'
-                    )
+                for invalid_key in ITAsset.reserved_config_keys:
+
+                    if invalid_key in value.keys():
+                        raise ValidationError(
+                            message = f'json key "{invalid_key}" is a reserved configuration key'
+                        )
+
+            except AttributeError:
+                pass    # more likely than not, config is a string.
+
+
 
     config = models.JSONField(
         blank = True,
         help_text = 'Configuration for this device',
         null = True,
-        validators = [ validate_config_keys_not_reserved ],
+        validators = [
+            validate_config_keys_is_dict,
+            validate_config_keys_not_reserved
+        ],
         verbose_name = 'Host Configuration',
     )
 
@@ -479,8 +497,6 @@ class ITAsset(
     @property
     def get_configuration(self):
 
-        softwares = DeviceSoftware.objects.filter(device=self.id)
-
         config = {
             "software": []
         }
@@ -488,10 +504,10 @@ class ITAsset(
         host_software = []
         group_software = []
 
-        for software in softwares:
+        for software in self.software.constrained_target:
 
-            if software.action:
-            
+            if software.action is not None:
+
                 if int(software.action) == 1:
 
                     state = 'present'
@@ -501,7 +517,7 @@ class ITAsset(
                     state = 'absent'
 
                 software_action = {
-                    "name": str(Software),
+                    "name": software.software.name,
                     "state": state
                 }
 
@@ -509,11 +525,11 @@ class ITAsset(
                 if software.version:
                     software_action['version'] = software.version.name
 
+
                 host_software += [ software_action ]
 
-        config: dict = config
 
-        from config_management.models.groups import ConfigGroupHosts
+        config: dict = config
 
         if self.id:
 
@@ -529,11 +545,13 @@ class ITAsset(
                         
                         group_software = group_software + rendered_config['software']
 
+
             config['software'] = merge_software(group_software, host_software)
 
             if self.config:
 
                 config.update(self.config)
+
 
             from itim.models.services import Service
             services = Service.objects.filter(
@@ -549,5 +567,6 @@ class ITAsset(
                     }
 
                     config.update(service_config)
+
 
         return config

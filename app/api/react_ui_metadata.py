@@ -670,7 +670,31 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                             'loader': "django"
                                         }
                                     ]
-                                }
+                                },
+                                {    # Sub-models had to be hard typed to prevent
+                                     # routing collisions.
+                                    'path': "itasset",
+                                    'action': "api",
+                                    'children': [
+                                        {
+                                            'path': "add",
+                                            'component': "detail",
+                                            'loader': "django_metadata"
+                                            
+                                        },
+                                        {
+                                            'path': ":pk",
+                                            'component': "detail",
+                                            'action': "api",
+                                            'loader': "django"
+                                        },
+                                        {
+                                            'index': True,
+                                            'component': "list",
+                                            'loader': "django"
+                                        }
+                                    ]
+                                },
                             ]
                         },
                         {
