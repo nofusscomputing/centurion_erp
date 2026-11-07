@@ -520,6 +520,13 @@ DATETIME_FORMAT = 'j N Y H:i:s'
 if RUNNING_TESTS:
     SECRET_KEY = 'django-insecure-tests_are_being_run'
 
+    for handler, conf in CENTURION_LOGGING['handlers'].items():
+
+        # during testing dont limit the number of logs keps
+        if CENTURION_LOGGING['handlers'][handler].get('backupCount', None):
+
+            del CENTURION_LOGGING['handlers'][handler]['backupCount']
+
 #
 # Load user settings files
 #
