@@ -5,22 +5,24 @@ import logging.handlers
 
 class CenturionLogger(logging.Logger):
 
-    EMERG    = 90
-    ALERT    = 80
-    CRITICAL = 70
-    ERROR    = 60
-    WARNING  = 50
+    EMERG    = 70
+    ALERT    = 60
+    CRITICAL = 50
+    FATAL = CRITICAL
+    ERROR    = 40
+    WARNING  = 30
     WARN     = WARNING
-    NOTICE   = 40
-    INFO     = 30
-    DEBUG    = 20
-    TRACE    = 10
+    NOTICE   = 25
+    INFO     = 20
+    DEBUG    = 10
+    TRACE    = 5
     NOTSET = logging.NOTSET
 
     _levelToName = {
         EMERG:    "EMERG",
         ALERT:    "ALERT",
         CRITICAL: "CRITICAL",
+        FATAL:    "CRITICAL",
         ERROR:    "ERROR",
         WARNING:  "WARNING",
         NOTICE:   "NOTICE",

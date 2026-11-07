@@ -77,6 +77,8 @@ The following Additional features are available for IT Asset Models:
 
     - Deployed Services
 
+- Select software to be installed / un-installed
+
 
 ### Status at a glance
 
@@ -151,4 +153,4 @@ This tab displays the [software](./software.md) installed upon the asset. Additi
 
 ## Config Management
 
-This tab displays the fully rendered configuration for this asset. The fully rendered config is obtained from the [configuration groups](../config_management/index.md) the asset is part of, merged with the hosts configuration.
+This tab displays the fully rendered configuration for this asset. The fully rendered config is obtained from the [configuration groups](../config_management/index.md) the asset is part of, Services the host has deployed and is merged with the hosts configuration.

@@ -102,7 +102,7 @@ CENTURION_LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
         "root":{
-            "handlers" : ["file_centurion"],
+            "handlers" : [ 'file_catch_all', 'file_error' ],
             "level": "DEBUG",
             "propagate": False,
         },
@@ -132,39 +132,51 @@ CENTURION_LOGGING = {
             },
             "file_catch_all": {
                 "level": "INFO",
-                "class": "logging.FileHandler",
+                "class": "logging.handlers.RotatingFileHandler",
                 "filename": "catch-all.log",
                 'formatter': 'verbose',
+                'maxBytes': 10 * 1024 * 1024,
+                'backupCount': 5,
             },
             "file_centurion": {
                 "level": 'INFO',
-                "class": "logging.FileHandler",
+                "class": "logging.handlers.RotatingFileHandler",
                 "filename": "centurion.log",
                 'formatter': 'verbose',
+                'maxBytes': 10 * 1024 * 1024,
+                'backupCount': 5,
             },
             "file_centurion_trace": {
                 "level": 'TRACE',
-                "class": "logging.FileHandler",
+                "class": "logging.handlers.RotatingFileHandler",
                 "filename": "trace.log",
                 'formatter': 'verbose',
+                'maxBytes': 10 * 1024 * 1024,
+                'backupCount': 5,
             },
             "file_error": {
                 "level": "ERROR",
-                "class": "logging.FileHandler",
+                "class": "logging.handlers.RotatingFileHandler",
                 "filename": "error.log",
                 "formatter": "verbose",
+                'maxBytes': 10 * 1024 * 1024,
+                'backupCount': 5,
             },
             "file_rest_api": {
                 "level": "INFO",
-                "class": "logging.FileHandler",
+                "class": "logging.handlers.RotatingFileHandler",
                 "filename": "rest_api.log",
                 'formatter': 'verbose',
+                'maxBytes': 10 * 1024 * 1024,
+                'backupCount': 5,
             },
             "file_weblog": {
                 "level": "INFO",
-                "class": "logging.FileHandler",
+                "class": "logging.handlers.RotatingFileHandler",
                 "filename": "weblog.log",
                 'formatter': 'web_log',
+                'maxBytes': 10 * 1024 * 1024,
+                'backupCount': 5,
             },
         },
         "loggers": {
@@ -198,11 +210,6 @@ CENTURION_LOGGING = {
                 'level': 'INFO',
                 'propagate': False,
             },
-            '': {
-                'handlers': ['file_catch_all', 'file_error'],
-                'level': 'INFO',
-                'propagate': False,
-                },
         },
     }
 
@@ -512,6 +519,13 @@ DATETIME_FORMAT = 'j N Y H:i:s'
 
 if RUNNING_TESTS:
     SECRET_KEY = 'django-insecure-tests_are_being_run'
+
+    for handler, conf in CENTURION_LOGGING['handlers'].items():
+
+        # during testing dont limit the number of logs keps
+        if CENTURION_LOGGING['handlers'][handler].get('backupCount', None):
+
+            del CENTURION_LOGGING['handlers'][handler]['backupCount']
 
 #
 # Load user settings files

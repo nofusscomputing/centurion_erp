@@ -992,14 +992,10 @@ class CommonViewSet(
 
         if self.detail:
 
-            self.view_name = str(self.model._meta.verbose_name)
-
-        else:
-
-            self.view_name = str(self.model._meta.verbose_name_plural)
+            self.view_name = str(getattr(self, 'model._meta.verbose_name', ''))
 
 
-        return self.view_name
+        return str(getattr(self, 'model._meta.verbose_name_plural', ''))
 
 
 

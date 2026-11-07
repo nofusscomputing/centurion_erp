@@ -69,17 +69,24 @@ class ViewSet( ModelViewSet ):
 
     search_fields = []
 
+    _model = None
+
     @property
     def model(self):
 
-        related_model =  getattr(
-            self.get_parent_model(), self.kwargs['related_model_name']
-        ).rel.through
+        if not self._model:
 
-        return apps.get_model(
-            app_label = 'itam',
-            model_name = related_model._meta.model_name
-        )
+            related_model =  getattr(
+                self.get_parent_model(), self.kwargs['related_model_name']
+            ).rel.through
+
+            self._model = apps.get_model(
+                app_label = 'itam',
+                model_name = related_model._meta.model_name
+            )
+
+
+        return self._model
 
 
 
@@ -98,8 +105,11 @@ class ViewSet( ModelViewSet ):
                 app_namespace = model().get_app_namespace() + ':'
 
             view_type = 'list'
+
             if self.kwargs.get('pk', None):
+
                 view_type = 'detail'
+
 
             add_url.update({
                 'self': reverse(
@@ -111,21 +121,38 @@ class ViewSet( ModelViewSet ):
 
             self._meta_urls = add_url
 
+
         return self._meta_urls
 
 
+    _parent_model = None
 
     def get_parent_model(self):
-        return apps.get_model(
-            app_label = 'itam',
-            model_name = self.kwargs['model_name']
-        )
+
+        if not self._parent_model:
+
+            self._parent_model = apps.get_model(
+                app_label = 'itam',
+                model_name = self.kwargs['model_name']
+            )
+
+
+        return self._parent_model
 
 
     def get_queryset(self):
+        """Queryset based off of field
+        
+        As this model is an M2M field of parent model. A custom queryset is
+        required. Flow is as follows:
+        - Limit to the parent object
+        - fetch the m2m field values
+            - if has `constrained_target` use that queryset
+            - if not has `constrained_target` filter based off of the parent
+              model.
+        """
 
         if not self._queryset:
-
 
             self._queryset = self.get_parent_model().objects.user(
                 user = self.request.user,
