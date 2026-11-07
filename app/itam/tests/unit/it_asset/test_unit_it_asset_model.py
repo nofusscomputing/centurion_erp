@@ -320,6 +320,21 @@ class ITAssetModelTestCases(
 
 
 
+    def test_property_status_no_date(self, model, model_kwargs):
+        """ Test model property
+
+        Ensure that status returns `UKN` when no inventory date has been
+        supplied.
+        """
+
+        test_obj = model( **model_kwargs() )
+
+        test_obj.inventorydate = None
+
+        assert test_obj.status == 'UNK'
+
+
+
     def test_property_status_ok(self, model, model_kwargs):
         """ Test model property
 
