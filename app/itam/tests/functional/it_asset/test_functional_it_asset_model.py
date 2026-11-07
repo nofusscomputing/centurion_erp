@@ -550,6 +550,102 @@ class ITAssetModelTestCases(
 
 
 
+    def test_property_get_configuration_group_software(self,
+        model_configgroupsoftware, kwargs_configgroupsoftware,
+        model, model_kwargs, model_itassetsoftware
+    ):
+        """ Test model property
+
+        Ensure that property `get_configuration` returns the correct value when
+        the config group has software.
+        """
+
+        kwargs = kwargs_configgroupsoftware()
+
+        config_groupsoftware = model_configgroupsoftware.objects.create( **kwargs )
+
+        config_group = config_groupsoftware.config_group
+
+        the_model = model.objects.create( **model_kwargs() )
+
+        config_group.hosts.add( the_model )
+
+        state = 'remove'
+
+        if config_groupsoftware.action == model_itassetsoftware.Actions.INSTALL:
+
+            state = 'present'
+
+
+        assert the_model.get_configuration == {
+            **config_group.config,
+            **the_model.config,
+            **{
+                'software': [
+                    {
+                    'name': config_groupsoftware.software.name,
+                    'state': state
+                    }
+                ]
+            }
+        }
+
+
+
+    def test_property_get_configuration_no_group_config(self,
+        model_configgroups, kwargs_configgroups,
+        model, model_kwargs,
+    ):
+        """ Test model property
+
+        Ensure that property `get_configuration` returns the correct value when
+        the group has no config.
+        """
+
+        kwargs = kwargs_configgroups()
+
+        config_group = model_configgroups.objects.create( **kwargs )
+
+        config_group.config = None
+
+        config_group.save()
+
+        the_model = model.objects.create( **model_kwargs() )
+
+        config_group.hosts.add( the_model )
+
+        assert the_model.get_configuration == {
+            **the_model.config,
+            **{ 'software': [] }
+        }
+
+
+
+    def test_property_get_configuration_has_service(self,
+        model_service, kwargs_service,
+    ):
+        """ Test model property
+
+        Ensure that property `get_configuration` returns the correct value
+        when asset part of a service.
+        """
+
+        kwargs = kwargs_service()
+
+        del kwargs['port']
+
+        service = model_service.objects.create( **kwargs )
+
+        the_model = service.device
+
+        assert the_model.get_configuration == {
+            service.config_key_variable: service.config,
+            **the_model.config,
+            **{ 'software': [] }
+        }
+
+
+
 class ITAssetModelInheritedCases(
     ITAssetModelTestCases,
 ):
