@@ -616,12 +616,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                     'component': "detail",
                                     'action': "api",
                                     'loader': "django",
-                                    
                                 }
                             ]
                         }
                     ]
                 },
+
 
                 {
                     'path': ":module",
@@ -713,7 +713,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                         #     'path': "add",
                                         #     'component': "detail",
                                         #     'loader': "django_metadata",
-                                        #     'revalidate': False
                                             
                                         # },
                                         {
@@ -721,7 +720,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                             'component': "detail",
                                             'action': "api",
                                             'loader': "django",
-                                            'revalidate': False
                                             
                                         }
                                     ]
@@ -741,14 +739,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                 #     'path': "add",
                                 #     'component': "detail",
                                 #     'loader': "django_metadata",
-                                #     'revalidate': False
                                 # },
                                 {
                                     'path': ":pk",
                                     'component': "detail",
                                     'loader': "django",
                                     'action': "api",
-                                    'revalidate': False
                                 }
                             ]
                         },
@@ -826,7 +822,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                 #     'path': "add",
                                 #     'component': "detail",
                                 #     'loader': "django_metadata",
-                                #     'revalidate': False
                                 # },
                                 {
                                     'path': ":pk",
@@ -869,14 +864,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                                     'component': "list",
                                                     'loader': "django",
                                                     'action': "api",
-                                                    'revalidate': False
                                                 },
                                                 {
                                                     'path': ":sub_model_pk",
                                                     'component': "detail",
                                                     'loader': "django",
                                                     'action': "api",
-                                                    'revalidate': False
                                                 }
                                             ]
                                         }
