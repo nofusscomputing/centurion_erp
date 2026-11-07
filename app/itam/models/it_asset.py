@@ -529,44 +529,30 @@ class ITAsset(
                 host_software += [ software_action ]
 
 
-        config: dict = config
+        for group in self.configgroups_set.all():
 
-        if self.id:
+            rendered_config = group.render_config()
 
-            for group in self.configgroups_set.all():
+            config.update(rendered_config)
 
-                rendered_config = group.render_config()
+            if 'software' in rendered_config.keys():
 
-                if rendered_config:
-
-                    config.update(rendered_config)
-
-                    if 'software' in rendered_config.keys():
-                        
-                        group_software = group_software + rendered_config['software']
+                group_software = group_software + rendered_config['software']
 
 
-            config['software'] = merge_software(group_software, host_software)
+        config['software'] = merge_software(group_software, host_software)
 
-            if self.config:
+        config.update(getattr(self, 'config', {}))
 
-                config.update(self.config)
+        for service in self.service_set.all():
 
+            if service.config_variables:
 
-            from itim.models.services import Service
-            services = Service.objects.filter(
-                device = self.pk
-            )
+                service_config:dict = {
+                    service.config_key_variable: service.config_variables
+                }
 
-            for service in services:
-
-                if service.config_variables:
-
-                    service_config:dict = {
-                        service.config_key_variable: service.config_variables
-                    }
-
-                    config.update(service_config)
+                config.update(service_config)
 
 
         return config
