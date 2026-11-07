@@ -1,6 +1,6 @@
 import pytest
 
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ParseError, ValidationError
 
 from api.tests.unit.test_unit_serializer import (
     SerializerTestCases
@@ -47,36 +47,83 @@ class RoleSerializerTestCases(
 
 
 
-    @pytest.mark.skip( reason = 'Test to be written' )
-    def test_serializer_function_to_internal_value_permissions_as_int(self):
+    def test_serializer_function_to_internal_value_permissions_as_int(self,
+        mocker, model_serializer
+    ):
         """Serializer Function Check
 
         Ensure that function `to_internal_value` accepts permissions as a list
-        of int
+        of int, i.e. the string-to-id conversion is not attempted.
         """
-        pass
+
+        serializer = model_serializer['model']()
+
+        permission_model = serializer.Meta.model.permissions.field.related_model
+
+        permission_objects = mocker.patch.object(permission_model, 'objects')
+
+        mocker.patch(
+            'rest_framework.serializers.ModelSerializer.to_internal_value'
+        )
+
+        serializer.to_internal_value({ 'permissions': [ 1, 2 ] })
+
+        permission_objects.filter.assert_not_called()
 
 
 
-    @pytest.mark.skip( reason = 'Test to be written' )
-    def test_serializer_function_to_internal_value_permissions_to_int(self):
+    def test_serializer_function_to_internal_value_permissions_to_int(self,
+        mocker, model_serializer
+    ):
         """Serializer Function Check
 
         Ensure that function `to_internal_value` converts the permission
         strings list to a list of int.
         """
-        pass
+
+        serializer = model_serializer['model']()
+
+        permission_model = serializer.Meta.model.permissions.field.related_model
+
+        permission = mocker.Mock()
+        permission.id = 99
+
+        permission_objects = mocker.patch.object(permission_model, 'objects')
+        permission_objects.filter.return_value = [ permission ]
+
+        mocker.patch(
+            'rest_framework.serializers.ModelSerializer.to_internal_value'
+        )
+
+        data = { 'permissions': [ 'app_label.codename' ] }
+
+        serializer.to_internal_value( data )
+
+        assert data['permissions'] == [ 99 ]
 
 
 
-    @pytest.mark.skip( reason = 'Test to be written' )
-    def test_serializer_function_to_internal_value_permissions_not_exist(self):
+    def test_serializer_function_to_internal_value_permissions_not_exist(self,
+        mocker, model_serializer
+    ):
         """Serializer Function Check
 
         Ensure that function `to_internal_value` raises an exception when a
         permission supplied does not exist.
         """
-        pass
+
+        serializer = model_serializer['model']()
+
+        permission_model = serializer.Meta.model.permissions.field.related_model
+
+        permission_objects = mocker.patch.object(permission_model, 'objects')
+        permission_objects.filter.return_value = []
+
+        with pytest.raises(ParseError) as exception:
+
+            serializer.to_internal_value({ 'permissions': [ 'app_label.codename' ] })
+
+        assert exception.value.get_codes() == 'supplied_permission_does_not_exist'
 
 
 

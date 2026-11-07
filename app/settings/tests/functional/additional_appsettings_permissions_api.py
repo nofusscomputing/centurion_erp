@@ -84,7 +84,7 @@ class AdditionalTestCases:
         )
 
         kwargs = self.change_data.copy()
-        kwargs.update({ 'device_model_is_global': True })
+        kwargs.update({ 'it_asset_model_is_global': True })
 
         response = client.patch(
             path = change_item.get_url( many = False ),
@@ -252,7 +252,7 @@ class AdditionalTestCases:
         )
 
         kwargs = self.change_data.copy()
-        kwargs.update({ 'device_model_is_global': True })
+        kwargs.update({ 'it_asset_model_is_global': True })
 
         mocker.patch(
             f"{model.__module__}.{model.__name__}.save",

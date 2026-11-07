@@ -58,6 +58,11 @@ class APIExceptionAddInheritedCases(
         kwargs_create['organization'] = api_request_permissions['tenancy']['user'].id
 
         mocker.patch(
+            f'{model.__module__}.{model.__name__}.objects.create',
+            side_effect = param_exception("an integrity error occured....")
+        )
+
+        mocker.patch(
             "access.managers.tenancy.TenancyManager.create",
             side_effect = param_exception("an integrity error occured....")
         )

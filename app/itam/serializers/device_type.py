@@ -4,7 +4,7 @@ from access.serializers.organization import TenantBaseSerializer
 
 from api.serializers import common
 
-from itam.models.device import DeviceType
+from itam.models import DeviceType
 
 
 

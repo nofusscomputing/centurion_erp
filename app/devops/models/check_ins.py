@@ -2,8 +2,6 @@ from django.db import models
 
 from core.models.centurion import CenturionModel
 
-from itam.models.software import Software
-
 
 
 class CheckIn(
@@ -34,7 +32,7 @@ class CheckIn(
 
 
     software = models.ForeignKey(
-        Software,
+        to = 'itam.Software',
         blank = False,
         help_text = 'Software related to the checkin',
         on_delete = models.CASCADE,

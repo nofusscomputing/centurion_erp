@@ -4,8 +4,6 @@ from access.fields import AutoLastModifiedField
 
 from core.models.centurion import CenturionModel
 
-from itam.models.software import Software
-
 
 
 class FeatureFlag(
@@ -32,7 +30,7 @@ class FeatureFlag(
 
 
     software = models.ForeignKey(
-        Software,
+        to = 'itam.Software',
         blank = False,
         help_text = 'Software this feature flag is for',
         # limit_choices_to = {    # bug: returns duplicates

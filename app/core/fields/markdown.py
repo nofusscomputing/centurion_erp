@@ -46,9 +46,19 @@ class MarkdownField(CharField):
 
         for model in apps.get_models():
 
-            if getattr(model, 'model_tag', '') == model_tag:
+            if(
+                getattr(model, 'model_tag', '') == model_tag
+                and not model._is_submodel
+            ):
 
                 return model
+
+            elif(
+                getattr(model, 'model_tag', '') == model_tag
+                and model._is_submodel
+            ):
+
+                return model()._base_model
 
 
         return None

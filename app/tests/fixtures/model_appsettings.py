@@ -32,7 +32,7 @@ def kwargs_appsettings( django_db_blocker, model_user, organization_one ):
             )
 
         kwargs = {
-            'device_model_is_global': False,
+            'it_asset_model_is_global': False,
             'owner_organization': organization_one
         }
 

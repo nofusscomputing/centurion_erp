@@ -992,14 +992,10 @@ class CommonViewSet(
 
         if self.detail:
 
-            self.view_name = str(self.model._meta.verbose_name)
-
-        else:
-
-            self.view_name = str(self.model._meta.verbose_name_plural)
+            self.view_name = str(getattr(self, 'model._meta.verbose_name', ''))
 
 
-        return self.view_name
+        return str(getattr(self, 'model._meta.verbose_name_plural', ''))
 
 
 
@@ -1041,20 +1037,48 @@ class ModelViewSetBase(
 
     def get_serializer_class(self):
 
+        try:
+
+            if (
+                self.action == 'list'
+                or self.action == 'retrieve'
+            ):
+
+                self.serializer_class = globals()[str(
+                    self.model._meta.verbose_name
+                ).replace(' ', '_') + 'ViewSerializer']
+
+            else:
+
+                self.serializer_class = globals()[str(
+                    self.model._meta.verbose_name
+                ).replace(' ', '_') + 'ModelSerializer']
+
+
+            return self.serializer_class
+
+        except KeyError:
+            pass
+
+        serializer_name = self.model._meta.model_name
+
+        serializer_module = importlib.import_module(
+            self.model._meta.app_label + '.serializers.' + str(
+                serializer_name
+            )
+        )
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            self.serializer_class = globals()[str(
-                self.model._meta.verbose_name
-            ).replace(' ', '_') + 'ViewSerializer']
+            self.serializer_class = getattr(serializer_module, 'ViewSerializer')
+
 
         else:
 
-            self.serializer_class = globals()[str(
-                self.model._meta.verbose_name
-            ).replace(' ', '_') + 'ModelSerializer']
+            self.serializer_class = getattr(serializer_module, 'ModelSerializer')
 
 
         return self.serializer_class
@@ -1177,6 +1201,7 @@ class CommonSubModelViewSet_ReWrite(
                 or getattr(
                         related_object.related_model._meta,'model_name', ''
                     ) == getattr(self.base_model._meta,'model_name', '-not-exist')
+                or hasattr(related_object, 'through')    # Skip M2M fields
             ):
                 continue
 

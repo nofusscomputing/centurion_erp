@@ -1,7 +1,7 @@
 import pytest
 import random
 
-from itam.models.software import SoftwareCategory
+from itam.models import SoftwareCategory
 from itam.serializers.software_category import (
     SoftwareCategoryBaseSerializer,
     SoftwareCategoryModelSerializer,
@@ -15,7 +15,7 @@ def model_softwarecategory(clean_model_from_db):
 
     yield SoftwareCategory
 
-    clean_model_from_db(SoftwareCategory)
+    # clean_model_from_db(SoftwareCategory)
 
 
 @pytest.fixture( scope = 'class')

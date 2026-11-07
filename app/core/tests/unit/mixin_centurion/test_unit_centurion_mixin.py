@@ -195,6 +195,28 @@ class CenturionMixnTestCases(
 
 
 
+    def test_method_get_ticket_app_label_returns_own_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._meta.app_label
+
+
+
+    def test_method_get_ticket_model_name_returns_own_ticket_model_name(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_model_name() == f'{model()._meta.object_name}Ticket'
+
+
+
     def test_method_get_url_kwargs(self, mocker, model_instance, settings):
         """Test Class Method
         
@@ -1032,6 +1054,30 @@ class CenturionMixnPyTest(
         model_instance._before = test_value
 
         assert model_instance.get_before() == test_value
+
+
+
+    @pytest.mark.xfail( reason = 'Is an abstract model.' )
+    def test_method_get_ticket_app_label_returns_own_app_label(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_app_label() == model()._base_model._meta.app_label
+
+
+
+    @pytest.mark.xfail( reason = 'Is an abstract model.' )
+    def test_method_get_ticket_model_name_returns_own_ticket_model_name(self, model):
+        """Test Class Method
+        
+        Ensure method `get_ticket_app_label` returns the value of the models
+        ._meta.app_label
+        """
+
+        assert model().get_ticket_model_name() == f'{model()._base_model._meta.object_name}Ticket'
 
 
 

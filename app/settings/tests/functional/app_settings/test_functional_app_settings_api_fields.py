@@ -112,7 +112,7 @@ class AppSettingsAPITestCases(
             # 'owner_organization.url': {
             #     'expected': Hyperlink
             # },
-            'device_model_is_global': {
+            'it_asset_model_is_global': {
                 'expected': bool
             },
             'device_type_is_global': {

@@ -164,6 +164,14 @@ omit = [
     #
     "app/core/lib/markdown.py",
 
+    #
+    # Centurion Feature Flag
+    #    - is bypassed during tests.
+    #
+    "app/centurion_feature_flag/*",
+    "app/centurion_feature_flag/*/*",
+    "app/centurion_feature_flag/*/*/*",
+
     ##############################################
     # Depreciated Code Scheduled to be removed
     ##############################################
@@ -195,6 +203,45 @@ omit = [
     # Not required as file is for debugging
     #
     "app/centurion/middleware/trace_calls.py",
+    #
+    # Config Management
+    'app/config_management/serializers/centurionaudit_configgrouphosts.py',
+    'app/config_management/serializers/centurionmodelnote_configgrouphosts.py',
+    'app/config_management/serializers/centurionaudit_configgroupsoftware.py',
+    'app/config_management/serializers/centurionmodelnote_configgroupsoftware.py',
+    'app/config_management/serializers/config_group_software.py',
+    'app/config_management/viewsets/config_group_software.py',
+
+    #
+    #
+    # ITAM
+    #
+    'app/itam/models/device.py',
+    'app/itam/serializers/centurionaudit_device.py',
+    'app/itam/serializers/centurionmodelnote_device.py',
+    'app/itam/serializers/device.py',
+    'app/itam/serializers/device_operating_system.py',
+    'app/itam/viewsets/device_operating_system.py',
+    'app/itam/viewsets/device_software.py',
+    'app/itam/viewsets/device.py',
+    'app/itam/serializers/device_software.py',
+
+    'app/itam/models/device_models.py',
+    'app/itam/serializers/centurionaudit_devicemodel.py',
+    'app/itam/serializers/centurionmodelnote_devicemodel.py',
+    'app/itam/serializers/device_model.py',
+    'app/itam/models/device_models.py',
+
+    #
+    #    ITAM Inventory till post re-write
+    #
+    'app/itam/tests/unit/inventory/api_inventory.py',
+    'app/itam/serializers/inventory.py',
+    'app/itam/tasks/inventory.py',
+    'app/itam/viewsets/inventory.py',
+    'app/api/serializers/inventory.py',
+
+
 ]
 
 
@@ -1391,10 +1438,6 @@ markers = [
     "model_contact: Selects test for model Contact.",
     "model_cluster: Selects Cluster tests.",
     "model_clustertype: Selects Cluster Type tests.",
-    "model_device: Select all Device tests",
-    "model_devicemodel: Select all device model tests.",
-    "model_deviceoperatingsystem: Select tests for model Device Operating System",
-    "model_devicesoftware: Select tests for model Device Software.",
     "model_devicetype: Select all device type tests.",
     "model_employee: Selects test for model Employee.",
     "model_entity: Selects test for model Entity.",
@@ -1405,6 +1448,10 @@ markers = [
     "model_gitlabrepository: Selects tests for model `gitlab repository`",
     "model_gitrepository: Selects tests for model `git repository`",
     "model_itamassetbase: Selects tests for model ITAM Asset Base.",
+    "model_itasset: Selects tests for model IT Asset.",
+    "model_itassetmodel: Selects tests for model IT Asset Model.",
+    "model_itassetsoftware: Selects tests for model IT Asset Software.",
+    "model_itassetoperatingsystem: Selects tests for model IT Asset Operating System.",
     "model_knowledgebase: Selects Knowledge base tests.",
     "model_knowledgebasecategory: Selects Knowledge base category tests.",
     "model_modelticket: Select all tests for model Model Tickets",

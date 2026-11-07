@@ -58,7 +58,7 @@ class AppSettingsModelTestCases(
                 'null': True,
                 'unique': False,
             },
-            'device_model_is_global': {
+            'it_asset_model_is_global': {
                 'blank': False,
                 'default': False,
                 'field_type': models.BooleanField,

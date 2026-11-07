@@ -20,3 +20,9 @@ def model_kwargs(request, kwargs_assetbase):
             del request.cls.kwargs_create_item
         except:
             pass
+
+
+@pytest.fixture( scope = 'class')
+def model_serializer(serializer_assetbase):
+
+    yield serializer_assetbase

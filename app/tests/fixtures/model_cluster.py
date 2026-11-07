@@ -22,7 +22,7 @@ def model_cluster(clean_model_from_db):
 
 @pytest.fixture( scope = 'class')
 def kwargs_cluster(kwargs_centurionmodel, django_db_blocker,
-    model_device, kwargs_device,
+    model_itasset, kwargs_itasset,
     model_clustertype, kwargs_clustertype
 ):
 
@@ -30,11 +30,11 @@ def kwargs_cluster(kwargs_centurionmodel, django_db_blocker,
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_device()
+            kwargs = kwargs_itasset()
             kwargs['serial_number'] = f'clu-{random.randint(100, 999)}-{random.randint(100, 999)}-654'
             kwargs['uuid'] = f'1cf{random.randint(100, 999)}d4-1776-4{random.randint(100, 999)}-8{random.randint(100, 999)}-0{random.randint(100, 999)}4a43d60e'
 
-            node = model_device.objects.create( **kwargs )
+            node = model_itasset.objects.create( **kwargs )
             cluster_type = model_clustertype.objects.create( **kwargs_clustertype() )
 
         kwargs = {

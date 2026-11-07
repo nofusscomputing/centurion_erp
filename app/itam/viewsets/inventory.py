@@ -51,7 +51,7 @@ this setting populated, no device will be created and the endpoint will return H
         }
     )
 )
-class ViewSet( ModelCreateViewSet ):
+class ViewSet( ModelCreateViewSet ):    # pragma: no cover
     """Device Inventory
 
     Use this endpoint to upload your device inventories.
