@@ -76,23 +76,6 @@ class ModelSerializer(
 
         del get_url['knowledge_base']
 
-        if 'view' in self._context:
-
-            if 'software_id' in self._context['view'].kwargs:
-
-                get_url.update({
-                    '_self': reverse("v2:_api_v2_software_installs-detail", request = None, kwargs = {
-                        'software_id': item.software.pk,
-                        'pk': item.pk
-                    } )
-                })
-
-            elif 'device_id' in self._context['view'].kwargs:
-
-                get_url.update({
-                    '_self': item.get_url()
-                })
-
         return get_url
 
 
