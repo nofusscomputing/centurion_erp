@@ -102,7 +102,7 @@ CENTURION_LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
         "root":{
-            "handlers" : ["file_centurion"],
+            "handlers" : [ 'file_catch_all', 'file_error' ],
             "level": "DEBUG",
             "propagate": False,
         },
@@ -198,11 +198,6 @@ CENTURION_LOGGING = {
                 'level': 'INFO',
                 'propagate': False,
             },
-            '': {
-                'handlers': ['file_catch_all', 'file_error'],
-                'level': 'INFO',
-                'propagate': False,
-                },
         },
     }
 
