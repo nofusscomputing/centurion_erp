@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements_dev.txt requirements.txt requirements_production.txt tools/requirements_dev.in
 #
-amqp==5.4.1
+amqp==5.4.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -28,7 +28,7 @@ attrs==26.1.0
     #   check-wheel-contents
     #   jsonschema
     #   referencing
-billiard==4.3.1
+billiard==4.3.2
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -60,7 +60,7 @@ charset-normalizer==3.5.2
     #   requests
 check-wheel-contents==0.6.3
     # via -r tools/requirements_dev.in
-click==8.5.0
+click==8.5.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -196,7 +196,7 @@ jsonschema-specifications==2025.9.1
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   jsonschema
-kombu==5.6.2
+kombu==5.7.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -225,9 +225,9 @@ mdurl==0.1.2
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   markdown-it-py
-mypy-extensions==1.1.0
+mypy-extensions==1.2.0
     # via black
-oauthlib==4.0.0
+oauthlib==4.0.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -235,20 +235,17 @@ oauthlib==4.0.0
     #   social-auth-core
 packaging==26.3
     # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
     #   black
     #   build
     #   check-wheel-contents
     #   commitizen
-    #   kombu
     #   pytest
     #   wheel
 pathspec==1.1.1
     # via black
 pip-tools==7.6.2
     # via -r tools/requirements_dev.in
-platformdirs==4.13.5
+platformdirs==4.14.5
     # via
     #   black
     #   pylint
@@ -272,9 +269,9 @@ pycparser==3.12
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   cffi
-pydantic==2.14.1
+pydantic==2.14.3
     # via check-wheel-contents
-pydantic-core==2.50.1
+pydantic-core==2.50.4
     # via pydantic
 pygments==2.20.0
     # via
@@ -306,7 +303,7 @@ pytest-mock==3.14.0
     # via -r tools/requirements_dev.in
 pytest-simplified==1.0.0rc4
     # via -r tools/requirements_dev.in
-python-dateutil==3.0.0
+python-dateutil==4.0.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -353,11 +350,6 @@ rpds-py==2026.9.1
     #   -r requirements_production.txt
     #   jsonschema
     #   referencing
-six==1.17.0
-    # via
-    #   -r requirements.txt
-    #   -r requirements_production.txt
-    #   python-dateutil
 social-auth-app-django==5.6.0
     # via
     #   -r requirements.txt
@@ -371,7 +363,7 @@ sqlalchemy==2.0.31
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
-sqlparse==0.6.0
+sqlparse==0.6.1
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -393,14 +385,13 @@ typing-extensions==4.16.0
     #   referencing
     #   sqlalchemy
     #   typing-inspection
-typing-inspection==0.4.4
+typing-inspection==0.4.5
     # via pydantic
 tzdata==2026.5
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
     #   celery
-    #   kombu
     #   python-dateutil
 uritemplate==4.2.0
     # via
@@ -421,7 +412,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.9.3
+wcwidth==0.9.4
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
