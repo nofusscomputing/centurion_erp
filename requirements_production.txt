@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements_production.txt requirements.txt tools/requirements_production.in
 #
-amqp==5.4.1
+amqp==5.4.2
     # via
     #   -r requirements.txt
     #   kombu
@@ -18,7 +18,7 @@ attrs==26.1.0
     #   -r requirements.txt
     #   jsonschema
     #   referencing
-billiard==4.3.1
+billiard==4.3.2
     # via
     #   -r requirements.txt
     #   celery
@@ -38,7 +38,7 @@ charset-normalizer==3.5.2
     # via
     #   -r requirements.txt
     #   requests
-click==8.5.0
+click==8.5.1
     # via
     #   -r requirements.txt
     #   celery
@@ -122,7 +122,7 @@ jsonschema-specifications==2025.9.1
     # via
     #   -r requirements.txt
     #   jsonschema
-kombu==5.6.2
+kombu==5.7.0
     # via
     #   -r requirements.txt
     #   celery
@@ -142,15 +142,11 @@ mdurl==0.1.2
     # via
     #   -r requirements.txt
     #   markdown-it-py
-oauthlib==4.0.0
+oauthlib==4.0.1
     # via
     #   -r requirements.txt
     #   requests-oauthlib
     #   social-auth-core
-packaging==26.3
-    # via
-    #   -r requirements.txt
-    #   kombu
 prometheus-client==0.21.1
     # via
     #   -r requirements.txt
@@ -171,7 +167,7 @@ pyjwt[crypto]==2.15.1
     # via
     #   -r requirements.txt
     #   social-auth-core
-python-dateutil==3.0.0
+python-dateutil==4.0.0
     # via
     #   -r requirements.txt
     #   celery
@@ -204,10 +200,6 @@ rpds-py==2026.9.1
     #   -r requirements.txt
     #   jsonschema
     #   referencing
-six==1.17.0
-    # via
-    #   -r requirements.txt
-    #   python-dateutil
 social-auth-app-django==5.6.0
     # via -r requirements.txt
 social-auth-core==4.9.1
@@ -216,7 +208,7 @@ social-auth-core==4.9.1
     #   social-auth-app-django
 sqlalchemy==2.0.31
     # via -r requirements.txt
-sqlparse==0.6.0
+sqlparse==0.6.1
     # via
     #   -r requirements.txt
     #   django
@@ -230,7 +222,6 @@ tzdata==2026.5
     # via
     #   -r requirements.txt
     #   celery
-    #   kombu
     #   python-dateutil
 uritemplate==4.2.0
     # via
@@ -248,7 +239,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.9.3
+wcwidth==0.9.4
     # via
     #   -r requirements.txt
     #   prompt-toolkit
