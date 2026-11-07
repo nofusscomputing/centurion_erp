@@ -542,7 +542,7 @@ class ITAsset(
 
         config['software'] = merge_software(group_software, host_software)
 
-        config.update(getattr(self, 'config', {}))
+        config.update(getattr(self, 'config', None) or {})
 
         for service in self.service_set.all():
 
