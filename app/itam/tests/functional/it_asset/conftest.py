@@ -1,27 +1,22 @@
 import pytest
 
-from itam.models import ITAsset
-
 
 
 @pytest.fixture( scope = 'class')
-def model(request):
+def model(request, model_itasset):
 
-    request.cls.model = ITAsset
+    request.cls.model = model_itasset
 
-    yield request.cls.model
+    yield model_itasset
 
     del request.cls.model
 
 
 
 @pytest.fixture(scope='function')
-def create_serializer():
+def create_serializer(model_serializer):
 
-    from itam.serializers.assetbase_itasset import ModelSerializer
-
-
-    yield ModelSerializer
+    yield model_serializer['model']
 
 
 @pytest.fixture( scope = 'class', autouse = True)

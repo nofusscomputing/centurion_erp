@@ -13,6 +13,12 @@ class ITAssetRelationships(Centurion):
     the device as empty "slots."
 
     Then Device will use this for linking the children devices.
+
+    Note:
+    
+    - when model is connected and parent = None. connection is to device model
+
+    - when model is connected and parent != None connection is to device.
     """
 
     _audit_enabled = False
