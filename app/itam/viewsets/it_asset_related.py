@@ -23,7 +23,7 @@ from api.viewsets.common.tenancy import ModelViewSet
 )
 class ViewSet( ModelViewSet ):
     """ M2M viewset
-    
+
     This ViewSet is not documented (drf spectacular) as it is not possible beforehand to know
     what models will use this view. Additionally it's also not possible to split
     this ViwSet into multiple ViewSets to document each as it will have the same
