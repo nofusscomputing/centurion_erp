@@ -93,6 +93,33 @@ class ITAssetRelationships(Centurion):
     )
 
     page_layout: dict = {
+        "detail": [
+            {
+                "name": "Details",
+                "slug": "details",
+                "sections": [
+                    {
+                        "layout": "double",
+                        "left": [
+                            'name',
+                        ],
+                        "right": [
+                            "asset_type",
+                        ]
+                    },
+                    {
+                        "layout": "double",
+                        'name': 'Child Model',
+                        "left": [
+                            'child_asset_model',
+                        ],
+                        "right": [
+                            'child',
+                        ]
+                    },
+                ]
+            },
+        ],
         "table": [
             'name',
             'parent_asset_model',
@@ -100,7 +127,6 @@ class ITAssetRelationships(Centurion):
             'asset_type',
             'child_asset_model',
             'child',
-            '-action_delete-',
         ]
     }
 
