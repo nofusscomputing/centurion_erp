@@ -21,13 +21,13 @@ class ViewSet( RelatedViewSet ):
 
     def get_queryset(self):
 
-        if not self.queryset:
+        if not self._queryset:
 
-            self.queryset = super().get_queryset()
+            self._queryset = super().get_queryset()
 
             if self.kwargs['model_name'] == 'itassetmodel':
 
-                self.queryset = self.queryset.filter( parent = None )
+                self._queryset = self._queryset.filter( parent = None )
 
 
-        return self.queryset
+        return self._queryset
