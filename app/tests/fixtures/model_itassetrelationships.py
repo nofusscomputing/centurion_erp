@@ -18,23 +18,23 @@ def model_itassetrelationships(clean_model_from_db):
 
     yield ITAssetRelationships
 
-    # clean_model_from_db(ITAssetRelationships)
-
 
 
 @pytest.fixture( scope = 'class')
-def kwargs_itassetrelationships(
+def kwargs_itassetrelationships(django_db_blocker,
     model_itasset, kwargs_itasset,
-    model_itassetmodel, kwargs_itassetmodel,
 ):
 
-    def factory():
+    def factory(parent_model = False):
 
-        parent_asset_model = model_itassetmodel.objects.create( **kwargs_itassetmodel() )
+        with django_db_blocker.unblock():
 
-        kwargs = kwargs_itasset()
 
-        parent = model_itasset.objects.create( **kwargs )
+            kwargs = kwargs_itasset()
+
+            parent = model_itasset.objects.create( **kwargs )
+
+            parent_asset_model = parent.device_model
 
         kwargs = {
             'name': 'dev-' + str( datetime.now().strftime("%H%M%S"
@@ -44,6 +44,9 @@ def kwargs_itassetrelationships(
             # 'parent': parent,
 
         }
+
+        if parent_model:
+            kwargs['parent'] = parent
 
         return kwargs
 

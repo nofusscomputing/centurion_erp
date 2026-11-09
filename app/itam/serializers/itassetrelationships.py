@@ -79,7 +79,8 @@ class ModelSerializer(
 
                 fields.pop('parent_asset_model', None)
                 fields.pop('parent', None)
-                fields.pop('child_asset_model', None)
+                fields['child_asset_model'].read_only = True
+
 
             elif viewset_model == 'itassetmodel':
 

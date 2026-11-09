@@ -2,66 +2,33 @@ import importlib
 
 from django.apps import apps
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+)
 
 from rest_framework.reverse import reverse
 
 from api.viewsets.common.tenancy import ModelViewSet
 
-from itam.serializers.itassetsoftware import (    # pylint: disable=W0611:unused-import
-    ModelSerializer,
-    ViewSerializer
-)
-
 
 
 @extend_schema_view(
-    create=extend_schema(
-        summary = 'Create an operating system',
-        description='',
-        responses = {
-            200: OpenApiResponse(description='Software allready exists', response=ViewSerializer),
-            201: OpenApiResponse(description='Software created', response=ViewSerializer),
-            400: OpenApiResponse(description='Validation failed.'),
-            403: OpenApiResponse(description='User is missing create permissions'),
-        }
-    ),
-    destroy = extend_schema(
-        summary = 'Delete an operating system',
-        description = '',
-        responses = {
-            204: OpenApiResponse(description=''),
-            403: OpenApiResponse(description='User is missing delete permissions'),
-        }
-    ),
-    list = extend_schema(
-        summary = 'Fetch all operating systems',
-        description='',
-        responses = {
-            200: OpenApiResponse(description='', response=ViewSerializer),
-            403: OpenApiResponse(description='User is missing view permissions'),
-        }
-    ),
-    retrieve = extend_schema(
-        summary = 'Fetch a single operating system',
-        description='',
-        responses = {
-            200: OpenApiResponse(description='', response=ViewSerializer),
-            403: OpenApiResponse(description='User is missing view permissions'),
-        }
-    ),
+    create = extend_schema(exclude = True),
+    destroy = extend_schema(exclude = True),
+    list = extend_schema(exclude = True),
+    retrieve = extend_schema(exclude = True),
     update = extend_schema(exclude = True),
-    partial_update = extend_schema(
-        summary = 'Update an operating system',
-        description = '',
-        responses = {
-            200: OpenApiResponse(description='', response=ViewSerializer),
-            403: OpenApiResponse(description='User is missing change permissions'),
-        }
-    ),
+    partial_update = extend_schema(exclude = True),
 )
 class ViewSet( ModelViewSet ):
-    """ M2M viewset """
+    """ M2M viewset
+
+    This ViewSet is not documented (drf spectacular) as it is not possible beforehand to know
+    what models will use this view. Additionally it's also not possible to split
+    this ViwSet into multiple ViewSets to document each as it will have the same
+    URL signature.
+    """
 
     filterset_fields = []
 
@@ -103,6 +70,7 @@ class ViewSet( ModelViewSet ):
             if getattr(model, 'app_namespace', None) not in [None, '']:
 
                 app_namespace = model().get_app_namespace() + ':'
+
 
             view_type = 'list'
 
@@ -170,7 +138,7 @@ class ViewSet( ModelViewSet ):
                 )
 
                 if len(m2m_field.constrained_target) > 0:
-                    
+
                     self._queryset = m2m_field.constrained_target
 
                 else:

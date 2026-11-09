@@ -14,7 +14,6 @@ class ITAssetRelationshipsBaseSerializerTestCases(
     itasset_serializer_fields_removed = [
         'parent_asset_model',
         'parent',
-        'child_asset_model',
     ]
 
 
@@ -49,6 +48,35 @@ class ITAssetRelationshipsBaseSerializerTestCases(
         )
 
         assert removed_field not in serializer.fields.fields
+
+
+
+    def test_function_get_fields_itasset_child_model_read_only(self,
+        model_serializer, kwargs_api_create
+    ):
+        """ Test Serializer function "get_fields"
+
+        ensure that when the viewset is sub-model `itasset` that field
+        `child_asset_model` is marked as `read_only=True` as user needs to see
+        the field, but it should only be editable when model is updated.
+        """
+        class MockView:
+
+            kwargs = {
+                'model_name': 'itasset'
+            }
+
+
+        kwargs = kwargs_api_create
+
+        serializer = model_serializer['model'](
+            context = {
+                'view': MockView()
+            },
+            data = kwargs
+        )
+
+        assert serializer.fields.fields['child_asset_model'].read_only == True
 
 
 
