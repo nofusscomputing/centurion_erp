@@ -320,6 +320,28 @@ class ITAssetModelTestCases(
 
 
 
+    def test_function_validate_config_validate_config_keys_is_dict(self, model):
+        """Test model function
+        
+        ensure that a config key passed as dict does not raise exception.
+        """
+
+        assert model.validate_config_keys_is_dict({'software': ['a']}) == None
+
+
+
+    def test_function_validate_config_validate_config_keys_is_dict_str(self, model):
+        """Test model function
+        
+        ensure that a config key passed as str raises a validation exception.
+        """
+
+        with pytest.raises(ValidationError):
+
+            model.validate_config_keys_is_dict("{'software': ['a']}")
+
+
+
     def test_property_status_no_date(self, model, model_kwargs):
         """ Test model property
 
