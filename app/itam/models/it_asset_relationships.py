@@ -37,6 +37,11 @@ class ITAssetRelationships(Centurion):
             'name',
         ]
 
+        unique_together = [
+            'parent',
+            'child',
+        ]
+
         verbose_name = 'Device Connection'
 
         verbose_name_plural = 'Device Connections'

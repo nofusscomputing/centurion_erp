@@ -144,7 +144,6 @@ class ITAsset(
     )
 
 
-    @staticmethod
     def validate_config_keys_is_dict(value):
 
         if isinstance(value, str):
@@ -221,6 +220,8 @@ class ITAsset(
         through = 'itam.ITAssetOperatingSystem',
         through_fields = ('it_asset', 'operating_system_version'),
     )
+
+    # add bool field to check if connected to another asset.
 
     page_layout: dict = {
         "dataset":{
