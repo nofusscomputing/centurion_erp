@@ -11,7 +11,12 @@ def model(model_itassetrelationships):
 @pytest.fixture( scope = 'class', autouse = True)
 def model_kwargs(request, kwargs_itassetrelationships):
 
+    request.cls.kwargs_create_item = kwargs_itassetrelationships()
+
     yield kwargs_itassetrelationships
+
+    if hasattr(request.cls, 'kwargs_create_item'):
+        del request.cls.kwargs_create_item
 
 
 @pytest.fixture( scope = 'class')
