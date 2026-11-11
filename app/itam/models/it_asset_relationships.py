@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.base import ValidationError
 
 from core.mixins.centurion import Centurion
 
@@ -134,6 +135,23 @@ class ITAssetRelationships(Centurion):
             'child',
         ]
     }
+
+
+
+    def clean_fields(self, exclude=None):
+
+        if self.child and self.child_asset_model:
+
+            if self.child.device_model != self.child_asset_model:
+
+                raise ValidationError(
+                    message = {
+                        'child': 'Child must be the same model as field `child_asset_model`.'
+                    },
+                    code = 'child_model_mismatch'
+                )
+
+        return super().clean_fields(exclude)
 
 
 

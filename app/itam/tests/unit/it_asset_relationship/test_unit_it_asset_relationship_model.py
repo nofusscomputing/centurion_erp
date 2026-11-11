@@ -32,6 +32,94 @@ class ITAssetRelationshipModelModelTestCases(
 
 
 
+    def test_function_clean_fields_child_model_matches_relationship_model_valid(self,
+        model, model_kwargs,
+        model_itasset, kwargs_itasset
+    ):
+        """Test model function
+
+        When clean_fields is called, if the child asset is set, validate that
+        the child model matches the relationship model.
+        """
+
+        kwargs = kwargs_itasset()
+
+        asset = model_itasset.objects.create( **kwargs )
+
+        kwargs = model_kwargs()
+
+        kwargs['child_asset_model'] = asset.device_model
+
+        kwargs['child'] = asset
+
+        test_model = model( **kwargs )
+
+        test_model.clean_fields()
+
+        assert test_model.child.device_model == test_model.child_asset_model
+
+
+
+    def test_function_clean_fields_empty_relationship_child_model(self,
+        model, model_kwargs,
+        model_itasset, kwargs_itasset
+    ):
+        """Test model function
+
+        When clean_fields is called, if the child asset is set, Raise no exceptions
+        if there is no relationship child model.
+        """
+
+        kwargs = kwargs_itasset()
+
+        asset = model_itasset.objects.create( **kwargs )
+
+        kwargs = model_kwargs()
+
+        # kwargs['child_asset_model'] = asset.device_model
+
+        kwargs['child'] = asset
+
+        test_model = model( **kwargs )
+
+        test_model.clean_fields()
+
+        assert test_model.child.device_model != test_model.child_asset_model
+
+
+
+    def test_function_clean_fields_child_model_different_relationship_child_model(self,
+        model, model_kwargs,
+        model_itasset, kwargs_itasset
+    ):
+        """Test model function
+
+        When clean_fields is called, if the child asset is set, raise an
+        exception when the child model does not match the relationship child model.
+        """
+
+        kwargs = kwargs_itasset()
+
+        asset = model_itasset.objects.create( **kwargs )
+
+
+        kwargs = model_kwargs()
+
+        kwargs['child_asset_model'] = kwargs_itasset()['device_model']
+
+        kwargs['child'] = asset
+
+        test_model = model( **kwargs )
+
+        assert test_model.child.device_model != test_model.child_asset_model, \
+            'Test cant continue if the models are the same.'
+
+        with pytest.raises(ValidationError):
+
+            test_model.clean_fields()
+
+
+
     @pytest.mark.xfail( reason = 'model is an M2M model and should not have model_tag defined.' )
     def test_model_tag_defined(self, model):
         """ Model Tag
