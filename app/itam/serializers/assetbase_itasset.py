@@ -7,24 +7,42 @@ from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
-from api.serializers import common
-
 from core.fields.icon import IconField
 
 from itam.models import ITAsset
 
 from .assetbase_itamassetbase import (
     ModelSerializer as ITAssetModelSerializer,
-    BaseSerializer
+    BaseSerializer as ITAMAssetBaseBaseSerializer
 )
 from .device_type import DeviceTypeBaseSerializer
 from .itassetmodel import (
     BaseSerializer as ITAssetModelBaseSerializer
 )
-from .itassetrelationships import (
-    BaseSerializer as ITAssetRelationshipsBaseSerializer,
-    ModelSerializer as ITAssetRelationshipsModelSerializer
-)
+
+
+
+@extend_schema_serializer(component_name = 'ITAssetBaseSerializer')
+class BaseSerializer(ITAMAssetBaseBaseSerializer):
+    """Base Ticket Model"""
+
+
+    class Meta:
+
+        model = ITAsset
+
+        fields = [
+            'id',
+            'display_name',
+            'url',
+        ]
+
+        read_only_fields = [
+            'id',
+            'display_name',
+            'url',
+        ]
+
 
 
 @extend_schema_serializer(component_name = 'ITAssetModelSerializer')
@@ -93,6 +111,15 @@ class ModelSerializer(
         context: dict = {}
 
         return context
+
+
+    parent_asset = BaseSerializer(
+        help_text = 'The asset that this asset is connected to or a part of.',
+        source = 'get_parent_asset',
+        read_only = True,
+        many = False,
+        label = 'Parent Asset'
+    )
 
 
     def get_fields(self) -> dict:
@@ -191,6 +218,8 @@ class ModelSerializer(
             'is_virtual',
             # 'connections',
             'context',
+
+            'parent_asset',
         ]
 
         read_only_fields = [
