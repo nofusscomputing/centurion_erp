@@ -11,9 +11,56 @@ from api.tests.functional.test_functional_api_fields import (
 
 
 @pytest.mark.model_itasset
-class ITAssetAPITestCases(
+class ITAssetSoftwareAPITestCases(
     APIFieldsInheritedCases,
 ):
+
+
+    @pytest.fixture( scope = 'class')
+    def api_request_permissions(self, api_request_permissions,
+        django_db_blocker, model_kwargs, model_permission,
+        model_contenttype,
+    ):
+
+
+        with django_db_blocker.unblock():
+
+            amended_request_permissions = api_request_permissions.copy()
+
+            kwargs = model_kwargs()
+
+            parent_model = kwargs['it_asset']
+
+            change_permission = model_permission.objects.get(
+                    codename = 'change_' + parent_model._meta.model_name,
+                    content_type = model_contenttype.objects.get(
+                        app_label = parent_model._meta.app_label,
+                        model = parent_model._meta.model_name,
+                    )
+                )
+
+            amended_request_permissions['user']['add'].groups.all(
+            ).first().roles.all().first().permissions.add(change_permission)
+
+            amended_request_permissions['user']['change'].groups.all(
+            ).first().roles.all().first().permissions.add(change_permission)
+
+            amended_request_permissions['user']['delete'].groups.all(
+            ).first().roles.all().first().permissions.add(change_permission)
+
+            view_permission = model_permission.objects.get(
+                    codename = 'view_' + parent_model._meta.model_name,
+                    content_type = model_contenttype.objects.get(
+                        app_label = parent_model._meta.app_label,
+                        model = parent_model._meta.model_name,
+                    )
+                )
+
+            amended_request_permissions['user']['view'].groups.all(
+            ).first().roles.all().first().permissions.add(view_permission)
+
+
+        yield amended_request_permissions
 
 
     @property
@@ -114,8 +161,8 @@ class ITAssetAPITestCases(
 
 
 
-class ITAssetAPIInheritedCases(
-    ITAssetAPITestCases,
+class ITAssetSoftwareAPIInheritedCases(
+    ITAssetSoftwareAPITestCases,
 ):
 
     pass
@@ -123,8 +170,8 @@ class ITAssetAPIInheritedCases(
 
 
 @pytest.mark.module_itam
-class ITAssetAPIPyTest(
-    ITAssetAPITestCases,
+class ITAssetSoftwareAPIPyTest(
+    ITAssetSoftwareAPITestCases,
 ):
 
     pass
