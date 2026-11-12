@@ -4,6 +4,16 @@
 
 - New model `itam.ITAssetModel` that replaces `itam.DeviceModel`. All data from old table to new table occurs during migration admin command.
 
+- Model `itam.DeviceSoftware` depreciated in favour of `itam.ITAssetSoftware`
+
+- Endpoint for model `itam.DeviceSoftware` removed.
+
+- Model `itam.DeviceOperatingSystem` depreciated in favour of `itam.ITAssetOperatingSystem`
+
+- Endpoint for model `itam.DeviceOperatingSystem` removed.
+
+- Added ability to be able to build IT Assets via parent <> child relationships.
+
 
 ## Version v1.35.0
 
