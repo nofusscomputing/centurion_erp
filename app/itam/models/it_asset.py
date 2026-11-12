@@ -249,6 +249,7 @@ class ITAsset(
                         "left": [
                             'organization',
                             'device_model',
+                            'parent_asset',
                             'name',
                             "asset_type",
                             'serial_number',
@@ -390,6 +391,16 @@ class ITAsset(
 
 
         super().clean_fields(exclude = exclude)
+
+
+
+    def get_parent_asset(self):
+
+        if self.parent_asset.all():
+
+            return self.parent_asset.all().first().parent
+
+        return None
 
 
     def save(
