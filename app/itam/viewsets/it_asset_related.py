@@ -55,7 +55,8 @@ class ViewSet( ModelViewSet ):
                     f'{self.get_parent_model()._meta.model_name}',
             ],
             'OPTIONS': [
-                parent_change_permission,
+                f'{self.get_parent_model()._meta.app_label}.view_' \
+                    f'{self.get_parent_model()._meta.model_name}',
             ],
             'POST': [
                 parent_change_permission,
