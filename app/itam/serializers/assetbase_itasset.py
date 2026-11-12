@@ -104,44 +104,46 @@ class ModelSerializer(
 
         fields = super().get_fields()
 
-        if self.context['view'].action in [
-            'create',
-            'metadata',
-            'retrieve',
-            'partial_update',
-            'update',
-        ]:
+        if self.context.get('view', None):
 
-            if(
-                self.context['view'].action == 'metadata'
-                and self.context['view'].kwargs.get('pk', None)
-            ):
+            if self.context['view'].action in [
+                'create',
+                'metadata',
+                'retrieve',
+                'partial_update',
+                'update',
+            ]:
 
-                self.instance = self.Meta.model.objects.get(
-                    pk = int(self.context['view'].kwargs['pk'])
-                )
+                if(
+                    self.context['view'].action == 'metadata'
+                    and self.context['view'].kwargs.get('pk', None)
+                ):
 
-            if getattr(self.instance, 'device_model', False):
+                    self.instance = self.Meta.model.objects.get(
+                        pk = int(self.context['view'].kwargs['pk'])
+                    )
 
-                for mandatory_field in [
-                    'imei',
-                    'mac_address',
-                    'puk',
-                    'puk_pin',
-                    'serial_number',
-                ]:
+                if getattr(self.instance, 'device_model', False):
 
-                    if not getattr(self.instance.device_model, mandatory_field, False):
+                    for mandatory_field in [
+                        'imei',
+                        'mac_address',
+                        'puk',
+                        'puk_pin',
+                        'serial_number',
+                    ]:
 
-                        fields.pop(mandatory_field, None)
+                        if not getattr(self.instance.device_model, mandatory_field, False):
 
-                    elif(
-                        getattr(self.instance.device_model, mandatory_field, False)
-                        and self.context['view'].action == 'metadata'
-                    ):
+                            fields.pop(mandatory_field, None)
 
-                        fields[mandatory_field].allow_blank = False
-                        fields[mandatory_field].required = True
+                        elif(
+                            getattr(self.instance.device_model, mandatory_field, False)
+                            and self.context['view'].action == 'metadata'
+                        ):
+
+                            fields[mandatory_field].allow_blank = False
+                            fields[mandatory_field].required = True
 
 
         return fields
