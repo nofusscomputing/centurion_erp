@@ -86,7 +86,7 @@ class ITAssetRelationships(Centurion):
         blank = True,
         null = True,
         on_delete = models.CASCADE,
-        related_name = '+'
+        related_name = 'parent_asset'
     )
 
     child_asset_model = models.ForeignKey(
