@@ -93,6 +93,8 @@ The fields that show on this tab are the details of the asset. Available fields 
 
     - [Model](./it_asset_model.md)
 
+    - Parent Asset _Read-only_ - The asset that this asset is connected to.
+
     - Name _Required_ - Name of this asset.
 
     - [Asset Type](./asset_type.md) _Read-Only_ - This field is obtained from the model.
@@ -143,7 +145,7 @@ Creating an asset without providing an [asset model](./it_asset_model.md), will 
 
 ## Connections
 
-This tab displays the available connections that this asset can have. Alongside that, will also display any child items connected to the asset.
+This tab displays the available connections that this asset can have. Alongside that, also displays any child assets connected to the asset.
 
 
 ## Software
