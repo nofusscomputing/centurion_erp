@@ -1,7 +1,6 @@
 from drf_spectacular.utils import extend_schema_serializer
 
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from access.serializers.organization import TenantBaseSerializer
 
@@ -17,7 +16,7 @@ from itam.models import (
 from itam.serializers.assetbase_itasset import (
     BaseSerializer as ITAssetBaseSerializer
 )
-from itam.serializers.software import (
+from itam.serializers.software import (    # pylint: disable=W0611:unused-import
     Software,
     BaseSerializer as SoftwareBaseSerializer
 )
@@ -28,7 +27,7 @@ from itam.serializers.softwareversion import (
 
 
 
-@extend_schema_serializer(component_name = 'DeviceSoftwareBaseSerializer')
+@extend_schema_serializer(component_name = 'ITAssetSoftwareBaseSerializer')
 class BaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -63,7 +62,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
 
 
-@extend_schema_serializer(component_name = 'DeviceSoftwareModelSerializer')
+@extend_schema_serializer(component_name = 'ITAssetSoftwareModelSerializer')
 class ModelSerializer(
     common.CommonModelSerializer,
     BaseSerializer
@@ -158,31 +157,7 @@ class ModelSerializer(
 
 
 
-
-@extend_schema_serializer(component_name = 'SoftwareInstallsModelSerializer')
-class SoftwareInstallsModelSerializer(
-    ModelSerializer
-):
-
-
-    class Meta( ModelSerializer.Meta ):
-
-        read_only_fields = [
-            'id',
-            'category',
-            'software',
-            'installed',
-            'installedversion',
-            'organization',
-            'created',
-            'modified',
-            '_urls',
-
-        ]
-
-
-
-@extend_schema_serializer(component_name = 'DeviceSoftwareViewSerializer')
+@extend_schema_serializer(component_name = 'ITAssetSoftwareViewSerializer')
 class ViewSerializer(ModelSerializer):
 
     it_asset = ITAssetBaseSerializer(many=False, read_only=True)
@@ -194,4 +169,3 @@ class ViewSerializer(ModelSerializer):
     software = SoftwareBaseSerializer(many=False, read_only=True)
 
     version = SoftwareVersionBaseSerializer(many=False, read_only=True)
-
