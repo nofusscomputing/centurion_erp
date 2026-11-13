@@ -55,6 +55,7 @@ class ITAssetSoftware(
         help_text = 'Software Name',
         null = False,
         on_delete = models.PROTECT,
+        related_name = 'installed_device',
         verbose_name = 'Software'
     )
 
@@ -97,6 +98,7 @@ class ITAssetSoftware(
     page_layout: dict = {
         "table": [
             "nbsp",
+            'it_asset',
             "software",
             "category",
             "action_badge",
