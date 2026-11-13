@@ -82,6 +82,11 @@ router.register(
     basename = '_api_software'
 )
 router.register(
+    prefix = '/(?P<model_name>(software)+)/(?P<model_id>[0-9]+)/installs',
+    viewset = software_v2.SoftwareInstallsViewSet,
+    basename = '_api_v2_software_installs'
+)
+router.register(
     prefix = '/software/(?P<software_id>[0-9]+)/version', viewset = software_version_v2.ViewSet,
     basename = '_api_softwareversion'
 )

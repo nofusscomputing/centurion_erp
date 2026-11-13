@@ -65,7 +65,14 @@ class ModelSerializer(
                 kwargs={'software_id': item.pk},
                 request = None
             ) + '',
-            'installations': reverse("v2:_api_v2_software_installs-list", request = None, kwargs={'software_id': item.pk}),
+            'installations': reverse(
+                viewname = "v2:_api_v2_software_installs-list",
+                request = None,
+                kwargs = {
+                    'model_name': 'software',
+                    'model_id': item.pk
+                }
+            ),
             'services': 'ToDo',
             'version': reverse(
                 "v2:_api_softwareversion-list",
