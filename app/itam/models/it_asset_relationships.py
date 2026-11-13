@@ -86,7 +86,7 @@ class ITAssetRelationships(Centurion):
         blank = True,
         null = True,
         on_delete = models.CASCADE,
-        related_name = '+'
+        related_name = 'parent_asset'
     )
 
     child_asset_model = models.ForeignKey(
@@ -140,16 +140,32 @@ class ITAssetRelationships(Centurion):
 
     def clean_fields(self, exclude=None):
 
-        if self.child and self.child_asset_model:
+        if self.child:
 
-            if self.child.device_model != self.child_asset_model:
 
-                raise ValidationError(
-                    message = {
-                        'child': 'Child must be the same model as field `child_asset_model`.'
-                    },
-                    code = 'child_model_mismatch'
-                )
+            if self.child_asset_model:
+
+                if self.child.device_model != self.child_asset_model:
+
+                    raise ValidationError(
+                        message = {
+                            'child': 'Child must be the same model as field `child_asset_model`.'
+                        },
+                        code = 'child_model_mismatch'
+                    )
+
+            if self.asset_type:
+
+                if self.child.device_model.device_type != self.asset_type:
+
+                    raise ValidationError(
+                        message = {
+                            'child': f'Child asset type ({self.child.device_model.device_type})' \
+                                'does not match the required asset type {self.asset_type}' \
+                                'for this connection.'
+                        },
+                        code = 'child_type_mismatch'
+                    )
 
         return super().clean_fields(exclude)
 

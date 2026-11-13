@@ -9,7 +9,6 @@ from devops.viewsets import (
 from itam.viewsets import (
     index as itam_index_v2,
     device,
-    device_software as device_software_v2,
     it_asset_connection,
     it_asset_related,
     # inventory,
@@ -52,10 +51,6 @@ router.register(
     basename = '_api_itassetrelationships'
 )
 router.register(
-    prefix = '/device/(?P<device_id>[0-9]+)/software', viewset = device_software_v2.ViewSet,
-    basename = '_api_devicesoftware'
-)
-router.register(
     prefix = '/device/(?P<device_id>[0-9]+)/service', viewset = service_device_v2.ViewSet,
     basename = '_api_v2_service_device'
 )
@@ -87,7 +82,8 @@ router.register(
     basename = '_api_software'
 )
 router.register(
-    prefix = '/software/(?P<software_id>[0-9]+)/installs', viewset = device_software_v2.ViewSet,
+    prefix = '/(?P<model_name>(software)+)/(?P<model_id>[0-9]+)/installs',
+    viewset = software_v2.SoftwareInstallsViewSet,
     basename = '_api_v2_software_installs'
 )
 router.register(

@@ -7,24 +7,42 @@ from rest_framework import serializers
 
 from access.serializers.organization import TenantBaseSerializer
 
-from api.serializers import common
-
 from core.fields.icon import IconField
 
 from itam.models import ITAsset
 
 from .assetbase_itamassetbase import (
     ModelSerializer as ITAssetModelSerializer,
-    BaseSerializer
+    BaseSerializer as ITAMAssetBaseBaseSerializer
 )
 from .device_type import DeviceTypeBaseSerializer
 from .itassetmodel import (
     BaseSerializer as ITAssetModelBaseSerializer
 )
-from .itassetrelationships import (
-    BaseSerializer as ITAssetRelationshipsBaseSerializer,
-    ModelSerializer as ITAssetRelationshipsModelSerializer
-)
+
+
+
+@extend_schema_serializer(component_name = 'ITAssetBaseSerializer')
+class BaseSerializer(ITAMAssetBaseBaseSerializer):
+    """Base Ticket Model"""
+
+
+    class Meta:
+
+        model = ITAsset
+
+        fields = [
+            'id',
+            'display_name',
+            'url',
+        ]
+
+        read_only_fields = [
+            'id',
+            'display_name',
+            'url',
+        ]
+
 
 
 @extend_schema_serializer(component_name = 'ITAssetModelSerializer')
@@ -95,6 +113,15 @@ class ModelSerializer(
         return context
 
 
+    parent_asset = BaseSerializer(
+        help_text = 'The asset that this asset is connected to or a part of.',
+        source = 'get_parent_asset',
+        read_only = True,
+        many = False,
+        label = 'Parent Asset'
+    )
+
+
     def get_fields(self) -> dict:
         """Dynamic fields
 
@@ -104,44 +131,46 @@ class ModelSerializer(
 
         fields = super().get_fields()
 
-        if self.context['view'].action in [
-            'create',
-            'metadata',
-            'retrieve',
-            'partial_update',
-            'update',
-        ]:
+        if self.context.get('view', None):
 
-            if(
-                self.context['view'].action == 'metadata'
-                and self.context['view'].kwargs.get('pk', None)
-            ):
+            if self.context['view'].action in [
+                'create',
+                'metadata',
+                'retrieve',
+                'partial_update',
+                'update',
+            ]:
 
-                self.instance = self.Meta.model.objects.get(
-                    pk = int(self.context['view'].kwargs['pk'])
-                )
+                if(
+                    self.context['view'].action == 'metadata'
+                    and self.context['view'].kwargs.get('pk', None)
+                ):
 
-            if getattr(self.instance, 'device_model', False):
+                    self.instance = self.Meta.model.objects.get(
+                        pk = int(self.context['view'].kwargs['pk'])
+                    )
 
-                for mandatory_field in [
-                    'imei',
-                    'mac_address',
-                    'puk',
-                    'puk_pin',
-                    'serial_number',
-                ]:
+                if getattr(self.instance, 'device_model', False):
 
-                    if not getattr(self.instance.device_model, mandatory_field, False):
+                    for mandatory_field in [
+                        'imei',
+                        'mac_address',
+                        'puk',
+                        'puk_pin',
+                        'serial_number',
+                    ]:
 
-                        fields.pop(mandatory_field, None)
+                        if not getattr(self.instance.device_model, mandatory_field, False):
 
-                    elif(
-                        getattr(self.instance.device_model, mandatory_field, False)
-                        and self.context['view'].action == 'metadata'
-                    ):
+                            fields.pop(mandatory_field, None)
 
-                        fields[mandatory_field].allow_blank = False
-                        fields[mandatory_field].required = True
+                        elif(
+                            getattr(self.instance.device_model, mandatory_field, False)
+                            and self.context['view'].action == 'metadata'
+                        ):
+
+                            fields[mandatory_field].allow_blank = False
+                            fields[mandatory_field].required = True
 
 
         return fields
@@ -189,6 +218,8 @@ class ModelSerializer(
             'is_virtual',
             # 'connections',
             'context',
+
+            'parent_asset',
         ]
 
         read_only_fields = [

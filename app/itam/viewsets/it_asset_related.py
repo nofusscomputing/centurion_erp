@@ -34,6 +34,39 @@ class ViewSet( ModelViewSet ):
 
     parent_model_pk_kwarg = 'model_id'
 
+
+    @property
+    def perms_map(self) -> dict[str, list[str]]:
+        """ Add parent model permissions
+
+        As this model is a field of the parent model, The user must also have
+        the parent models `view` permission.
+        """
+
+        parent_change_permission = f'{self.get_parent_model()._meta.app_label}.change_' \
+            f'{self.get_parent_model()._meta.model_name}'
+
+        return {
+            'DELETE': [
+                parent_change_permission,
+            ],
+            'GET': [
+                f'{self.get_parent_model()._meta.app_label}.view_' \
+                    f'{self.get_parent_model()._meta.model_name}',
+            ],
+            'OPTIONS': [
+                f'{self.get_parent_model()._meta.app_label}.view_' \
+                    f'{self.get_parent_model()._meta.model_name}',
+            ],
+            'POST': [
+                parent_change_permission,
+            ],
+            'PATCH': [
+                parent_change_permission,
+            ],
+        }
+
+
     search_fields = []
 
     _model = None
