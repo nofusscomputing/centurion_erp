@@ -120,6 +120,113 @@ class ITAssetRelationshipModelModelTestCases(
 
 
 
+    def test_function_clean_fields_type_model_child_asset_same_asset_model(self,
+        model, model_kwargs,
+        model_itasset, kwargs_itasset
+    ):
+        """Test model function
+
+        When clean_fields is called, and the asset model and child model match,
+        which means asset type and child type match, dont raise an exception.
+        """
+
+        device_model = kwargs_itasset()['device_model']
+
+        kwargs = kwargs_itasset()
+
+        asset = model_itasset.objects.create( **kwargs )
+
+        asset.device_model = device_model
+
+        asset.save()
+
+
+        kwargs = model_kwargs()
+
+        kwargs['child_asset_model'] = device_model
+
+        kwargs['asset_type'] = device_model.device_type
+
+        kwargs['child'] = asset
+
+        test_model = model( **kwargs )
+
+        test_model.clean_fields()
+
+
+        assert(
+            test_model.asset_type
+            and asset.device_model.device_type
+            and asset.device_model == test_model.child_asset_model
+        )
+
+
+
+    def test_function_clean_fields_no_asset_model_same_type(self,
+        model, model_kwargs,
+        model_itasset, kwargs_itasset
+    ):
+        """Test model function
+
+        When clean_fields is called, and the asset and connection type matches,
+        even though child_model is not set, dont raise an exception.
+        """
+
+        device_type = kwargs_itasset()['device_model'].device_type
+
+        kwargs = kwargs_itasset()
+
+        asset = model_itasset.objects.create( **kwargs )
+
+        asset.device_model.device_type = device_type
+
+
+        kwargs = model_kwargs()
+
+        kwargs['asset_type'] = device_type
+
+        kwargs['child'] = asset
+
+        test_model = model( **kwargs )
+
+        test_model.clean_fields()
+
+        assert test_model.asset_type == asset.device_model.device_type
+
+
+
+    def test_function_clean_fields_type_no_child_model(self,
+        model, model_kwargs,
+        model_itasset, kwargs_itasset
+    ):
+        """Test model function
+
+        When clean_fields is called, and the asset has no child model set and asset_type is,
+        raise an exception.
+        """
+
+        kwargs = kwargs_itasset()
+
+        asset = model_itasset.objects.create( **kwargs )
+
+
+        kwargs = model_kwargs()
+
+        kwargs['asset_type'] = kwargs_itasset()['device_model'].device_type
+
+        kwargs['child'] = asset
+
+        test_model = model( **kwargs )
+
+        with pytest.raises(ValidationError) as exc:
+
+            test_model.clean_fields()
+
+
+        assert exc.value.args[1] == 'child_type_mismatch'
+
+
+
     @pytest.mark.xfail( reason = 'model is an M2M model and should not have model_tag defined.' )
     def test_model_tag_defined(self, model):
         """ Model Tag
