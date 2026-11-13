@@ -36,8 +36,9 @@ class ViewsetTestCases(
             'filterset_fields': {
                 'value': [
                     'category',
+                    'installed_device__it_asset',
                     'organization',
-                    'publisher'
+                    'publisher',
                 ]
             },
             'model': {
