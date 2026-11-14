@@ -165,11 +165,19 @@ class TenancyPermissions(
 
                 elif pk:
 
-                    obj = view.model.objects.get( pk = int( pk ) )
+                    if view.get_parent_model():
 
-                    if self.is_tenancy_model( view = view ):
+                        self._tenant = view.get_parent_model().objects.get(
+                            pk = int(view.kwargs[view.parent_model_pk_kwarg])
+                        ).get_tenant()
 
-                        self._tenant = obj.get_tenant()
+                    else:
+
+                        obj = view.model.objects.get( pk = int( pk ) )
+
+                        if self.is_tenancy_model( view = view ):
+
+                            self._tenant = obj.get_tenant()
 
 
         return self._tenant
@@ -378,9 +386,15 @@ class TenancyPermissions(
             if self.is_tenancy_model( view ):
 
                 if(
-                    request.user.has_perms(
-                        permission_list = view.permissions_required,
-                        obj = obj
+                    (
+                        request.user.has_perms(
+                            permission_list = view.permissions_required,
+                            obj = obj
+                        )
+                        or request.user.has_perms(    # Covers models that may use parent tenancy
+                            permission_list = view.permissions_required,
+                            tenancy = self._tenant
+                        )
                     )
                     and self.get_tenancy( view = view, obj = obj )
                 ):

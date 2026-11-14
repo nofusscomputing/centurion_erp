@@ -1,11 +1,12 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from itam.serializers.operating_system import (    # pylint: disable=W0611:unused-import
-    OperatingSystem,
-    OperatingSystemModelSerializer,
-    OperatingSystemViewSerializer
-)
 from api.viewsets.common.tenancy import ModelViewSet
+
+from itam.serializers.operatingsystem import (    # pylint: disable=W0611:unused-import
+    OperatingSystem,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -14,8 +15,8 @@ from api.viewsets.common.tenancy import ModelViewSet
         summary = 'Create an operating system',
         description='',
         responses = {
-            200: OpenApiResponse(description='Software allready exists', response=OperatingSystemViewSerializer),
-            201: OpenApiResponse(description='Software created', response=OperatingSystemViewSerializer),
+            200: OpenApiResponse(description='Software allready exists', response=ViewSerializer),
+            201: OpenApiResponse(description='Software created', response=ViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
             403: OpenApiResponse(description='User is missing create permissions'),
         }
@@ -32,7 +33,7 @@ from api.viewsets.common.tenancy import ModelViewSet
         summary = 'Fetch all operating systems',
         description='',
         responses = {
-            200: OpenApiResponse(description='', response=OperatingSystemViewSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
@@ -40,7 +41,7 @@ from api.viewsets.common.tenancy import ModelViewSet
         summary = 'Fetch a single operating system',
         description='',
         responses = {
-            200: OpenApiResponse(description='', response=OperatingSystemViewSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
         }
     ),
@@ -49,7 +50,7 @@ from api.viewsets.common.tenancy import ModelViewSet
         summary = 'Update an operating system',
         description = '',
         responses = {
-            200: OpenApiResponse(description='', response=OperatingSystemViewSerializer),
+            200: OpenApiResponse(description='', response=ViewSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),
         }
     ),
@@ -67,24 +68,8 @@ class ViewSet( ModelViewSet ):
     ]
 
     model = OperatingSystem
+    # model must change to use ITAsset.operating_system when `parent_model=itasset` operating_system is Many2Many field
 
     documentation: str = model._meta.app_label + '/operating_system'
 
     view_description = 'Operating Systems'
-
-
-    def get_serializer_class(self):
-
-        if (
-            self.action == 'list'
-            or self.action == 'retrieve'
-        ):
-
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ViewSerializer']
-
-        else:
-
-            self.serializer_class = globals()[str( self.model._meta.verbose_name).replace(' ' , '') + 'ModelSerializer']
-
-
-        return self.serializer_class

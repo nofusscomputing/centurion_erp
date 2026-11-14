@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
-from itam.models.device import DeviceType
+from itam.models import DeviceType
 
 
 

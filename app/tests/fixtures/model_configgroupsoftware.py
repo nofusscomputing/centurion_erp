@@ -4,7 +4,6 @@ from datetime import datetime
 
 from config_management.models.groups import ConfigGroupSoftware
 
-from itam.models.device import DeviceSoftware
 
 
 @pytest.fixture( scope = 'class')
@@ -19,6 +18,7 @@ def model_configgroupsoftware(clean_model_from_db):
 def kwargs_configgroupsoftware(django_db_blocker,
     kwargs_software, model_software,
     kwargs_centurionmodel, model_configgroups, kwargs_configgroups,
+    model_itassetsoftware
 ):
 
 
@@ -51,7 +51,7 @@ def kwargs_configgroupsoftware(django_db_blocker,
                 **centurion_kwargs,
                 'software': software,
                 'config_group': group,
-                'action': DeviceSoftware.Actions.INSTALL,
+                'action': model_itassetsoftware.Actions.INSTALL,
                 }
 
         return kwargs

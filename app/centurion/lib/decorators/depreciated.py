@@ -8,6 +8,7 @@ def depreciate(
     depreciated_in: str,
     removed_in: str | None = None,
     replacement: str | None = None,
+    skip_tests: bool = False,
 ):
     def decorator(obj):
 
@@ -22,6 +23,25 @@ def depreciate(
         if isinstance(obj, type):
 
             original_init = obj.__init__
+
+
+            if not hasattr(obj, '_decorator'):
+                obj._decorator = []
+
+            obj._decorator.append({
+                'name': 'depreciate',
+                'kwargs': {
+                    'depreciated_in': depreciated_in,
+                    'removed_in': removed_in,
+                    'replacement': replacement,
+                    'skip_tests': skip_tests,
+                }
+            })
+
+            if skip_tests:
+
+                obj.decorator_depreciated = True
+
 
             @functools.wraps(original_init)
             def wrapped_init(self, *args, **kwargs):

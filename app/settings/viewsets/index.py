@@ -51,7 +51,7 @@ class Index(IndexViewset):
                 "body": [
                     {
                         "name": "Device Model",
-                        "model": "device_model"
+                        "model": "asset_model"
                     },
                     {
                         "name": "Device Type",
@@ -103,7 +103,7 @@ class Index(IndexViewset):
                 "app_settings": reverse('v2:_api_appsettings-detail', request = None, kwargs={'pk': 1}),
                 "celery_log": reverse('v2:_api_v2_celery_log-list', request = None),
                 "cluster_type": reverse('v2:_api_clustertype-list', request = None),
-                "device_model": reverse('v2:_api_devicemodel-list', request = None),
+                "asset_model": reverse('v2:_api_itassetmodel-list', request = None),
                 "device_type": reverse('v2:_api_devicetype-list', request = None),
                 "external_link": reverse('v2:_api_externallink-list', request = None),
                 "knowledge_base_category": reverse('v2:_api_knowledgebasecategory-list', request = None),

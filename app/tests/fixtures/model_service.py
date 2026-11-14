@@ -22,7 +22,7 @@ def model_service(clean_model_from_db):
 @pytest.fixture( scope = 'class')
 def kwargs_service(django_db_blocker,
     kwargs_centurionmodel,
-    kwargs_device, model_device,
+    kwargs_itasset, model_itasset,
     kwargs_port, model_port,
 ):
 
@@ -33,12 +33,12 @@ def kwargs_service(django_db_blocker,
 
         with django_db_blocker.unblock():
 
-            kwargs = kwargs_device()
+            kwargs = kwargs_itasset()
             kwargs.update({
                 'name': 'svc' + random_str
             })
 
-            device = model_device.objects.create( **kwargs )
+            device = model_itasset.objects.create( **kwargs )
 
             port = model_port.objects.create( **kwargs_port() )
 

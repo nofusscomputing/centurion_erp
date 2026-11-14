@@ -25,6 +25,10 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
  ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_functional_test.json)
 
 
+![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_coverage_combined.json&style=plastic)
+ ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fendpoint_combined_stats.json)
+
+
 </span>
 
 <!-- markdownlint-disable no-emphasis-as-heading -->

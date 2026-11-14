@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 
-from itam.models.software import SoftwareCategory
+from itam.models import SoftwareCategory
 
 from settings.models.app_settings import AppSettings
 

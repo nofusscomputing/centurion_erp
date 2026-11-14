@@ -2,11 +2,11 @@ import pytest
 
 from datetime import datetime
 
-from itam.models.operating_system import OperatingSystemVersion
-from itam.serializers.operating_system_version import (
-    OperatingSystemVersionBaseSerializer,
-    OperatingSystemVersionModelSerializer,
-    OperatingSystemVersionViewSerializer,
+from itam.models import OperatingSystemVersion
+from itam.serializers.operatingsystemversion import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer,
 )
 
 
@@ -16,7 +16,7 @@ def model_operatingsystemversion(clean_model_from_db):
 
     yield OperatingSystemVersion
 
-    clean_model_from_db(OperatingSystemVersion)
+    # clean_model_from_db(OperatingSystemVersion)
 
 
 @pytest.fixture( scope = 'class')
@@ -51,7 +51,7 @@ def kwargs_operatingsystemversion(django_db_blocker,
 def serializer_operatingsystemversion():
 
     yield {
-        'base': OperatingSystemVersionBaseSerializer,
-        'model': OperatingSystemVersionModelSerializer,
-        'view': OperatingSystemVersionViewSerializer
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
     }

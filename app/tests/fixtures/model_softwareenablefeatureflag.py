@@ -13,7 +13,7 @@ def model_softwareenablefeatureflag(clean_model_from_db):
 
     yield SoftwareEnableFeatureFlag
 
-    clean_model_from_db(SoftwareEnableFeatureFlag)
+    # clean_model_from_db(SoftwareEnableFeatureFlag)
 
 
 @pytest.fixture( scope = 'class')

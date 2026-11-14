@@ -10,8 +10,6 @@ from core.models.centurion import CenturionModel
 
 from devops.models.check_ins import CheckIn
 
-from itam.models.software import Software
-
 
 
 class SoftwareEnableFeatureFlag(
@@ -45,7 +43,7 @@ class SoftwareEnableFeatureFlag(
 
 
     software = models.ForeignKey(
-        Software,
+        to = 'itam.Software',
         blank = False,
         help_text = 'Software this feature flag is for',
         on_delete = models.PROTECT,

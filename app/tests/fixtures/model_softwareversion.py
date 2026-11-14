@@ -1,11 +1,11 @@
 import pytest
 import random
 
-from itam.models.software import SoftwareVersion
-from itam.serializers.software_version import (
-    SoftwareVersionBaseSerializer,
-    SoftwareVersionModelSerializer,
-    SoftwareVersionViewSerializer
+from itam.models import SoftwareVersion
+from itam.serializers.softwareversion import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
 )
 
 
@@ -15,7 +15,7 @@ def model_softwareversion(clean_model_from_db):
 
     yield SoftwareVersion
 
-    clean_model_from_db(SoftwareVersion)
+    # clean_model_from_db(SoftwareVersion)
 
 
 @pytest.fixture( scope = 'class')
@@ -47,7 +47,7 @@ def kwargs_softwareversion(django_db_blocker,
 def serializer_softwareversion():
 
     yield {
-        'base': SoftwareVersionBaseSerializer,
-        'model': SoftwareVersionModelSerializer,
-        'view': SoftwareVersionViewSerializer
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
     }

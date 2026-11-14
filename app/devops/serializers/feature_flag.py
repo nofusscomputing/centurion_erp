@@ -10,7 +10,10 @@ from core import exceptions as centurion_exceptions
 
 from devops.models.feature_flag import FeatureFlag
 
-from itam.serializers.software import Software, SoftwareBaseSerializer
+from itam.serializers.software import (
+    Software,
+    BaseSerializer as SoftwareBaseSerializer
+)
 
 
 class OrganizationField(common.OrganizationField):

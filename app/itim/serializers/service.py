@@ -9,8 +9,10 @@ from itim.serializers.cluster import ClusterBaseSerializer
 from itim.serializers.port import PortBaseSerializer
 from itim.models.services import Service
 
-from itam.serializers.device import Device, DeviceBaseSerializer
-
+from itam.serializers.assetbase_itasset import (
+    ITAsset,
+    BaseSerializer as DeviceBaseSerializer
+)
 
 
 class ServiceBaseSerializer(serializers.ModelSerializer):
@@ -121,7 +123,7 @@ class ServiceModelSerializer(
 
             if 'device_id' in self._context['view'].kwargs:
 
-                device = Device.objects.get( id = self._context['view'].kwargs['device_id'] )
+                device = ITAsset.objects.get( id = self._context['view'].kwargs['device_id'] )
 
                 self.validated_data['device'] = device
                 self.validated_data['organization'] = device.organization

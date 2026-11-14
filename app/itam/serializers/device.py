@@ -10,7 +10,6 @@ from api.serializers import common
 from core.fields.icon import IconField
 
 from itam.models.device import Device
-from itam.serializers.device_model import DeviceModelBaseSerializer
 from itam.serializers.device_type import DeviceTypeBaseSerializer
 
 
@@ -58,7 +57,6 @@ class DeviceModelSerializer(
 
         get_url.update({
 
-            'device_model': reverse("v2:_api_devicemodel-list", request = None),
             'device_type': reverse("v2:_api_devicetype-list", request = None),
             'external_links': reverse("v2:_api_externallink-list", request = None) + '?devices=true',
             'operating_system': reverse("v2:_api_deviceoperatingsystem-list", request = None, kwargs={'device_id': item.pk}),
@@ -136,8 +134,6 @@ class DeviceModelSerializer(
 
 
 class DeviceViewSerializer(DeviceModelSerializer):
-
-    device_model = DeviceModelBaseSerializer( many = False, read_only = True )
 
     device_type = DeviceTypeBaseSerializer( many = False, read_only = True )
 

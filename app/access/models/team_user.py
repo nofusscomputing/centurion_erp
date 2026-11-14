@@ -25,8 +25,9 @@ User = django.contrib.auth.get_user_model()
 @depreciate(
     depreciated_in = '1.21.0',
     removed_in = '2.0',
+    skip_tests = True,
 )
-class TeamUsers(SaveHistory):
+class TeamUsers(SaveHistory):    # pragma: no cover
 
     class Meta:
 

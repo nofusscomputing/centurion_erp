@@ -55,22 +55,29 @@ def ticket_action_comment_model_link(
     try:
 
         log: Logger = settings.CENTURION_LOG.getChild(
-            'ticket_action_comment_ticket_dependency'
+            'ticket_action_comment_model_link'
         )
 
 
-        TicketCommentActionModelLink.objects.create(
-            organization = instance.organization,
+        user = get_action_user( instance = instance )
 
-            ticket = instance.ticket,
-            is_closed = True,
-            body = '',
-            user = get_action_user( instance = instance ).get_entity(),
+        if user:
 
-            is_create = ( kwargs.get('signal') == post_save ),
-            model_id = instance.model.id,
-            content_type = instance.content_type,
-        )
+            user = user.get_entity()
+
+
+            TicketCommentActionModelLink.objects.create(
+                organization = instance.organization,
+
+                ticket = instance.ticket,
+                is_closed = True,
+                body = '',
+                user = user,
+
+                is_create = ( kwargs.get('signal') == post_save ),
+                model_id = instance.model.id,
+                content_type = instance.content_type,
+            )
 
 
     except Exception as e:
@@ -81,6 +88,7 @@ def ticket_action_comment_model_link(
                 'vars: '
                 f"sender={sender._meta.app_label}.{sender._meta.model_name} "
                 # f"action_comment_source={action_comment_source} "
+                f"signal={kwargs.get('signal')} "
                 f"model={instance._meta.model_name} "
                 f"app_label={instance._meta.app_label} "
                 f"context={instance.context} "
