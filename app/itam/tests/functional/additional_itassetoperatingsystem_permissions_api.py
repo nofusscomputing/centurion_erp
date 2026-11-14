@@ -68,6 +68,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     @pytest.mark.parametrize(
         argnames = "test_name, user, expected",
@@ -128,6 +129,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_permission_add(self, model_instance, api_request_permissions,
         model_kwargs, kwargs_api_create
@@ -198,6 +200,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     @pytest.mark.parametrize(
         argnames = "test_name, user, expected",
@@ -253,6 +256,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_permission_change(self, model_instance, api_request_permissions, model_kwargs):
         """ Check correct permission for change
@@ -289,6 +293,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     @pytest.mark.parametrize(
         argnames = "test_name, user, expected",
@@ -340,6 +345,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_permission_delete(self, model_instance, api_request_permissions, model_kwargs):
         """ Check correct permission for delete
@@ -374,6 +380,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     @pytest.mark.parametrize(
         argnames = "test_name, user, expected",
@@ -430,6 +437,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_permission_view(self, model_instance, api_request_permissions,
         model_kwargs, kwargs_api_create
@@ -466,6 +474,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_permission_metdata(self, model_instance, api_request_permissions,
         model_kwargs
@@ -499,6 +508,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_returned_results_only_user_orgs(self, model_instance, model_kwargs, api_request_permissions):
         """Returned results check
@@ -588,6 +598,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_returned_data_from_user_and_global_organizations_only(
         self, model, model_instance, model_kwargs, api_request_permissions
@@ -679,6 +690,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_api_add_exception(self, mocker, model_instance,
         parameterized, param_key_exceptions, param_value,
@@ -753,6 +765,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_api_change_exception(self, mocker, model, model_instance,
         parameterized, param_key_exceptions, param_value,
@@ -796,6 +809,7 @@ class AdditionalTestCases:
 
 
 
+    @pytest.mark.regression
     @pytest.mark.xfail( reason = 'm2m models also require parent model view permissions' )
     def test_api_delete_exception(self, mocker, model, model_instance,
         parameterized, param_key_exceptions, param_value,
