@@ -22,7 +22,7 @@ class AdditionalTestCases:
 
             kwargs = model_kwargs()
 
-            parent_model = kwargs['it_asset']
+            parent_model = kwargs['parent_asset_model']
 
             change_permission = model_permission.objects.get(
                     codename = 'change_' + parent_model._meta.model_name,
