@@ -131,10 +131,20 @@ class ConfigGroupModelSerializer(
 
             if 'parent_group' in self._context['view'].kwargs:
 
-                self.Meta.read_only_fields += [ 
+                self.Meta.read_only_fields += [
                     'organization',
                     'parent'
                 ]
+
+            else:
+
+                if 'organization' in self.Meta.read_only_fields:
+                    self.Meta.read_only_fields.remove('organization')
+
+
+                if 'parent' in self.Meta.read_only_fields:
+                    self.Meta.read_only_fields.remove('parent')
+
 
         return fields
 
