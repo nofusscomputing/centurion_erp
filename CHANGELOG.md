@@ -1,3 +1,19 @@
+## 1.36.0 (2026-11-17)
+
+### Features
+
+- **config_management**: Do not change tenancy to match parent when parent group set
+
+### Fixes
+
+- **api**: Perform a permission check on foreign key fields prior to user setting value.
+- **api**: Perform a permission check on foreign key fields prior to user setting value.
+- **config_management**: Reset read_only fields if serializer is parent_group
+
+### Refactoring
+
+- Update serializers so that common.validate is called in correct order.
+
 ## 1.35.0 (2026-10-10)
 
 ### Features
