@@ -89,8 +89,7 @@ class ModelSerializer(
 
         attrs['software_id'] = self._context['view'].kwargs['software_id']
 
-        attrs = super().validate(attrs)
-
+        attrs = super().validate( attrs = attrs )
 
         return attrs
 

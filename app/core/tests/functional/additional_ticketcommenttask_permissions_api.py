@@ -1,13 +1,6 @@
 import pytest
-import random
 
 from django.test import Client
-
-from rest_framework.permissions import (
-    IsAuthenticatedOrReadOnly
-)
-
-from centurion_feature_flag.lib.feature_flag import CenturionFeatureFlagging
 
 
 

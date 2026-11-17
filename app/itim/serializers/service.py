@@ -131,8 +131,6 @@ class ServiceModelSerializer(
 
     def validate(self, attrs):
 
-        attrs = super().validate(attrs=attrs)
-        
         cluster = None
 
         config_key_variable = None
@@ -260,6 +258,8 @@ class ServiceModelSerializer(
                 },
                 code = 'required'
             )
+
+        attrs = super().validate( attrs = attrs )
 
         return attrs
 

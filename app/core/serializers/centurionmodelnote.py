@@ -94,9 +94,11 @@ class ModelSerializer(
 
     def validate(self, attrs):
 
+        attrs = super().validate( attrs = attrs )    # Don't permission check changes
+
         attrs['created_by'] = self._context['request'].user
 
-        return super().validate(attrs)
+        return attrs
 
 
     def is_valid(self, *, raise_exception=False) -> bool:

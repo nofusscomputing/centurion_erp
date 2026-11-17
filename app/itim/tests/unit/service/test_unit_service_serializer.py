@@ -4,6 +4,7 @@ from django.db import models
 
 from rest_framework.exceptions import ValidationError
 
+from api.serializers.common import CommonModelSerializer
 from api.tests.unit.test_unit_serializer import (
     SerializerTestCases
 )
@@ -434,6 +435,99 @@ class ServiceSerializerTestCases(
 
         assert err.value.get_codes()['dependent_service'][0] == 'no_circular_dependencies'
         root_service.delete()
+
+
+
+    @pytest.mark.regression
+    def test_serializer_update_calls_common_validate(self,
+        kwargs_api_create, mocker, model, model_serializer, request_user,
+        created_model,
+    ):
+        """ Serializer Check
+
+        Confirm that when updating (HTTP/PUT) an object `validate()` is called.
+        """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
+
+        instance = created_model
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'update',
+        )
+
+        mock_view.kwargs = instance.get_url_kwargs()
+
+        serializer = model_serializer['model'](
+            instance = instance,
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        full_clean = mocker.spy(CommonModelSerializer, 'validate')
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        del mock_view.kwargs
+
+        full_clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_serializer_partial_update_calls_common_validate(self,
+        mocker, model, model_serializer, request_user,
+        created_model,
+    ):
+        """ Serializer Check
+
+        Confirm that when updating (HTTP/PATCH) an object `validate()` is called.
+        """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
+
+        instance = created_model
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'partial_update',
+        )
+
+        mock_view.kwargs = instance.get_url_kwargs()
+
+        serializer = model_serializer['model'](
+            instance = instance,
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = {
+                'model_notes': "update data"
+            },
+            partial = True
+        )
+
+        full_clean = mocker.spy(CommonModelSerializer, 'validate')
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        del mock_view.kwargs
+
+        full_clean.assert_called_once()
 
 
 

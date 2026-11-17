@@ -169,7 +169,9 @@ class KnowledgeBaseModelSerializer(
                 code='invalid_need_target_team_or_user'
             )
 
-        return super().validate(attrs)
+        attrs = super().validate( attrs = attrs )
+
+        return attrs
 
 
 

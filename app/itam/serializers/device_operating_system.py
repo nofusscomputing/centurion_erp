@@ -109,19 +109,18 @@ class DeviceOperatingSystemModelSerializer(
         ]
 
 
-    def validate(self, data):
+    def validate(self, attrs):
+
+        attrs = super().validate( attrs = attrs )    # Don't permission check changes
 
         if self._context['view'].kwargs.get('device_id', None):
 
             device = Device.objects.get(id = (self._context['view'].kwargs['device_id']))
 
-            data['device'] = device
-
-            # data['organization'] = device.organization
-
+            attrs['device'] = device
 
         if (
-            not data.get('device', None)
+            not attrs.get('device', None)
             and not getattr(self.instance, 'device', None)
         ):
 
@@ -133,19 +132,10 @@ class DeviceOperatingSystemModelSerializer(
             )
 
 
-        # if self._context['view'].kwargs.get('operating_system_id', None):
-
-        #     operating_system = OperatingSystem.objects.get(id = int(self._context['view'].kwargs['operating_system_id']))
-
-        #     data['operating_system'] = operating_system
-
-        
-        data['organization'] = data['device'].organization
-
-
+        attrs['organization'] = attrs['device'].organization
 
         if (
-            not data.get('operating_system_version', None)
+            not attrs.get('operating_system_version', None)
             and not getattr(self.instance, 'operating_system_version', None)
         ):
 
@@ -157,9 +147,7 @@ class DeviceOperatingSystemModelSerializer(
             )
 
 
-        validate = super().validate(data)
-
-        return validate
+        return attrs
 
 
 

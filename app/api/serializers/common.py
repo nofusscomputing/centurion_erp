@@ -10,7 +10,7 @@ from rest_framework.exceptions import (
 )
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import Tenant
+from access.models.tenant import Tenant
 
 from core.mixins.centurion import Centurion
 from core import fields as centurion_field
@@ -231,6 +231,10 @@ class CommonModelSerializer(CommonBaseSerializer):
         - Built-in DRF validations.
 
         - Foreign Key permission check.
+
+        When inheriting this class, this method should be called after any `attr` changes from
+        the child serializer. Failing to do so may allow an object to be used that a user does
+        not have access to.
 
 
         ## Foreign Key permissions check

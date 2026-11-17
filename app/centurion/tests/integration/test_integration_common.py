@@ -7,8 +7,6 @@ from django.contrib.auth import get_user_model
 from django.db import connections
 from django.urls import URLPattern, URLResolver
 
-from core.mixins.centurion import Centurion
-
 
 
 @pytest.mark.integration
@@ -70,7 +68,6 @@ class IntegrationCommon:
         ]
 
         return filtered
-
 
 
     #

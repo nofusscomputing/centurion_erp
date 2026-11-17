@@ -64,6 +64,45 @@ class ModelTicketSerializerTestCases(
         pytest.xfail( reason = 'must be a sub-model. test is N/A.' )
 
 
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'Serializer is base and all fields marked read-only so serializer cant be used' )
+    def test_serializer_create_calls_common_validate(self,
+        kwargs_api_create, mocker, model, model_serializer, request_user,
+    ):
+        """ Serializer Check
+
+        Confirm that when creating an object `validate()` is called.
+        """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'create',
+        )
+
+        serializer = model_serializer['model'](
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        full_clean = mocker.spy(CommonModelSerializer, 'validate')
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        full_clean.assert_called_once()
+
+
+
     def test_serializer_is_valid(self, kwargs_api_create, model, model_kwargs, model_serializer,
         request_user, mocker,
     ):

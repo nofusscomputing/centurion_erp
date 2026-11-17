@@ -181,7 +181,9 @@ class ConfigGroupModelSerializer(
                         code = 'self_not_parent'
                     )
 
-        return super().validate(attrs)
+        attrs = super().validate( attrs = attrs )
+
+        return attrs
 
 
 

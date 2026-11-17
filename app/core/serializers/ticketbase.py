@@ -350,8 +350,6 @@ class ModelSerializer(
 
         attrs = self.validate_field_external_system( attrs )
 
-        attrs = super().validate( attrs )
-
         has_import_permission = self.context['view']._has_import
 
         has_triage_permission = self.context['view']._has_triage
@@ -450,6 +448,8 @@ class ModelSerializer(
 
             attrs['project_id'] = int( self.context['view'].kwargs['project_id'] )
 
+
+        attrs = super().validate( attrs = attrs )
 
         return attrs
 

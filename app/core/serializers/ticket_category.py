@@ -92,6 +92,8 @@ class TicketCategoryModelSerializer(
                         code = 'parent_not_self'
                     )
 
+        attrs = super().validate( attrs = attrs )
+
         return attrs
 
 
