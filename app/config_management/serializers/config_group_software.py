@@ -198,7 +198,9 @@ class ConfigGroupSoftwareModelSerializer(
                         )
 
 
-        return super().validate(attrs)
+        attrs = super().validate( attrs = attrs )
+
+        return attrs
 
 
 

@@ -166,7 +166,9 @@ class KnowledgeBaseCategoryModelSerializer(
             )
 
 
-        return super().validate(attrs)
+        attrs = super().validate( attrs = attrs )
+
+        return attrs
 
 
 

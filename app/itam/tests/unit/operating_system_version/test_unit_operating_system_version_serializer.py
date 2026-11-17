@@ -2,6 +2,7 @@ import pytest
 
 from rest_framework.exceptions import ValidationError
 
+from api.serializers.common import CommonModelSerializer
 from api.tests.unit.test_unit_serializer import (
     SerializerTestCases
 )
@@ -54,6 +55,47 @@ class OperatingSystemVersionSerializerTestCases(
     def test_serializer_create_calls_model_full_clean(self,
         kwargs_api_create, mocker, model, model_serializer, request_user
     ):
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'create',
+        )
+
+        mock_view.kwargs = {
+            'operating_system_id': kwargs_api_create['operating_system']
+        }
+
+        serializer = model_serializer['model'](
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        serializer.is_valid(raise_exception = True)
+
+        full_clean = mocker.spy(model, 'full_clean')
+
+        serializer.save()
+
+        full_clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_serializer_create_calls_model_full_clean(self,
+        kwargs_api_create, mocker, model, model_serializer, request_user,
+    ):
+        """ Serializer Check
+
+        Confirm that using valid data the object validates without exceptions.
+        """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,

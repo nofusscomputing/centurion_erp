@@ -1,3 +1,12 @@
+## Version v1.36.0
+
+This release is an OOB release to address vulnerability see [GHSA-93rj-7648-533c](https://github.com/nofusscomputing/centurion_erp/security/advisories/GHSA-93rj-7648-533c).
+
+- When creating or updating a model, a permission check is now conducted on all foreign key fields to ensure that only a user with permissions to that object can link that object ([GHSA-93rj-7648-533c](https://github.com/nofusscomputing/centurion_erp/security/advisories/GHSA-93rj-7648-533c)).
+
+- Removed changing tenancy to parent groups tenancy from config_management.Groups model.
+
+
 ## Version v1.35.0
 
 - Removed all ingress code paths for depreciated ticket models. This has been done so as to ensure that Centurion ERP has no access to the depreciated models. The models have been kept even though they are depreciated (i.e. no data has been removed). This is due to us not planning to write migrations from the old to new ticket models. If you were one of the few that actually used the old ticket models, please file a ticket notating that you used the old models and that they need to be migrated to the "new" ticket models.

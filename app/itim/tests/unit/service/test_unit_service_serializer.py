@@ -4,6 +4,7 @@ from django.db import models
 
 from rest_framework.exceptions import ValidationError
 
+from api.serializers.common import CommonModelSerializer
 from api.tests.unit.test_unit_serializer import (
     SerializerTestCases
 )
@@ -94,12 +95,17 @@ class ServiceSerializerTestCases(
 
 
     def test_serializer_validation_can_create_device(self,
-        kwargs_api_create, model, model_serializer, request_user
+        kwargs_api_create, model, model_serializer, request_user,
+        mocker,
     ):
         """Serializer Validation Check
 
         Ensure that a valid item is serialized
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -122,12 +128,17 @@ class ServiceSerializerTestCases(
 
 
     def test_serializer_validation_no_port(self,
-        kwargs_api_create, model, model_serializer, request_user
+        kwargs_api_create, model, model_serializer, request_user,
+        mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and no port is provided a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -156,13 +167,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_no_port_required_if_template_with_port(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_kwargs,
+        model_kwargs, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and no port is provided and the template has a port
         no validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -201,13 +216,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_template_without_port(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_kwargs
+        model_kwargs, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating a port is provided and the template has no port
         no validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -241,13 +260,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_no_port_or_template_port(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_kwargs,
+        model_kwargs, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and no port is provided and the template
         has no port a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -319,13 +342,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_device_and_cluster(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_cluster, kwargs_cluster
+        model_cluster, kwargs_cluster, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and a cluster and device is provided
         a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -363,7 +390,7 @@ class ServiceSerializerTestCases(
 
 
     def test_serializer_validation_no_circular_dependency(self,
-        created_model,
+        created_model, mocker,
         kwargs_api_create, model, model_serializer, request_user,
         model_kwargs
     ):
@@ -372,6 +399,10 @@ class ServiceSerializerTestCases(
         Ensure that if creating and a dependent service loop
         a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -404,6 +435,99 @@ class ServiceSerializerTestCases(
 
         assert err.value.get_codes()['dependent_service'][0] == 'no_circular_dependencies'
         root_service.delete()
+
+
+
+    @pytest.mark.regression
+    def test_serializer_update_calls_common_validate(self,
+        kwargs_api_create, mocker, model, model_serializer, request_user,
+        created_model,
+    ):
+        """ Serializer Check
+
+        Confirm that when updating (HTTP/PUT) an object `validate()` is called.
+        """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
+
+        instance = created_model
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'update',
+        )
+
+        mock_view.kwargs = instance.get_url_kwargs()
+
+        serializer = model_serializer['model'](
+            instance = instance,
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = kwargs_api_create
+        )
+
+        full_clean = mocker.spy(CommonModelSerializer, 'validate')
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        del mock_view.kwargs
+
+        full_clean.assert_called_once()
+
+
+
+    @pytest.mark.regression
+    def test_serializer_partial_update_calls_common_validate(self,
+        mocker, model, model_serializer, request_user,
+        created_model,
+    ):
+        """ Serializer Check
+
+        Confirm that when updating (HTTP/PATCH) an object `validate()` is called.
+        """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
+
+        instance = created_model
+
+        mock_view = MockView(
+            user = request_user,
+            model = model,
+            action = 'partial_update',
+        )
+
+        mock_view.kwargs = instance.get_url_kwargs()
+
+        serializer = model_serializer['model'](
+            instance = instance,
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
+            data = {
+                'model_notes': "update data"
+            },
+            partial = True
+        )
+
+        full_clean = mocker.spy(CommonModelSerializer, 'validate')
+
+        serializer.is_valid(raise_exception = True)
+
+        serializer.save()
+
+        del mock_view.kwargs
+
+        full_clean.assert_called_once()
 
 
 

@@ -210,9 +210,6 @@ class ConfigGroups(
 
             self.config = self.config_keys_ansible_variable(self.config)
 
-        if self.parent:
-            self.organization = ConfigGroups.objects.get(id=self.parent.id).organization
-
         if self.pk:
 
             obj = ConfigGroups.objects.get(

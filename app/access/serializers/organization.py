@@ -2,6 +2,8 @@ from rest_framework.reverse import reverse
 
 from rest_framework import serializers
 
+from api.serializers.common import CommonModelSerializer
+
 from access.models.tenant import Tenant
 
 from centurion.serializers.user import UserBaseSerializer
@@ -44,6 +46,7 @@ class TenantBaseSerializer(serializers.ModelSerializer):
 
 
 class TenantModelSerializer(
+    CommonModelSerializer,
     TenantBaseSerializer
 ):
 
@@ -75,8 +78,6 @@ class TenantModelSerializer(
     class Meta:
 
         model = Tenant
-
-        fields = '__all__'
 
         fields =  [
              'id',

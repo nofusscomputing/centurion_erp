@@ -183,7 +183,7 @@ class ModelSerializer(
             attrs['model_id'] = int( model_id )
 
 
-        attrs = super().validate(attrs)
+        attrs = super().validate( attrs = attrs )
 
         return attrs
 
