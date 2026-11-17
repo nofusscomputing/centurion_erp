@@ -154,7 +154,7 @@ class ModelSerializer(
             # 'status',
             # 'responsible_user',
             # 'responsible_team',
-            # 'user',
+            'user',
             # 'planned_start_date',
             # 'planned_finish_date',
             # 'real_start_date',
@@ -179,13 +179,39 @@ class ModelSerializer(
 
             self.fields.fields['parent'].write_only = True
             self.fields.fields['ticket'].write_only = True
-            self.fields.fields['user'].write_only = True
+            # self.fields.fields['user'].write_only = True
 
         if self.context.get('view', None) is not None:
 
             read_only_fields = [
                 'id',
-                'display_name',
+
+                #
+                # Commented out as the metadata was not being populated.
+                # ToDo: Unit test to confirm that this serializer is ONLY provided
+                # to the metadata (HTTP/OPTIONS)
+                #
+                # 'parent',
+                'external_ref',
+                'external_system',
+                # 'private',
+                'duration',
+                # # 'category',
+                # 'template',
+                # 'is_template',
+                # 'source',
+                # 'status',
+                # 'responsible_user',
+                # 'responsible_team',
+                'user',
+                # 'planned_start_date',
+                # 'planned_finish_date',
+                # 'real_start_date',
+                # 'real_finish_date',
+                'organization',
+                # 'date_closed',
+                'created',
+                'modified',
                 '_urls',
             ]
 
@@ -348,8 +374,6 @@ class ModelSerializer(
 
     def validate(self, attrs):
 
-        attrs['user'] = self.context['request'].user.get_entity()
-
         if self.context['view']._has_triage:
 
             attrs = self.validate_triage( attrs )
@@ -363,6 +387,10 @@ class ModelSerializer(
 
             attrs = self.validate_update_comment( attrs )
 
+
+        attrs = super().validate( attrs = attrs )
+
+        attrs['user'] = self.context['request'].user.get_entity()
 
         return attrs
 

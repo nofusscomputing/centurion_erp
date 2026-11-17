@@ -360,12 +360,16 @@ class TicketBaseSerializerTestCases:
         pass
 
 
-    def test_serializer_valid_data(self, fake_view, create_serializer):
+    def test_serializer_valid_data(self, fake_view, create_serializer, mocker):
         """Serializer Validation Check
 
         Ensure that when creating an object with valid data, no validation
         error occurs.
         """
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         view_set = fake_view(
             user = self.view_user.user,
@@ -385,12 +389,16 @@ class TicketBaseSerializerTestCases:
         assert serializer.is_valid(raise_exception = True)
 
 
-    def test_serializer_valid_data_permission_import(self, fake_view, create_serializer):
+    def test_serializer_valid_data_permission_import(self, fake_view, create_serializer, mocker):
         """Serializer Validation Check
 
         Ensure that when creating an object with valid data, no validation
         error occurs. when the user has permission import.
         """
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         view_set = fake_view(
             user = self.view_user.user,
@@ -410,11 +418,15 @@ class TicketBaseSerializerTestCases:
 
 
 
-    def test_serializer_valid_milestone_existing_ticket(self, fake_view, create_serializer):
+    def test_serializer_valid_milestone_existing_ticket(self, fake_view, create_serializer, mocker):
         """Serializer Validation Check
 
         Ensure that a milestone can be added to an existing ticket.
         """
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         valid_data = self.valid_data.copy()
 
@@ -467,11 +479,15 @@ class TicketBaseSerializerTestCases:
 
 
 
-    def test_serializer_invalid_milestone_existing_ticket(self, fake_view, create_serializer):
+    def test_serializer_invalid_milestone_existing_ticket(self, fake_view, create_serializer, mocker):
         """Serializer Validation Check
 
         Ensure that a milestone can be added to an existing ticket.
         """
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         valid_data = self.valid_data.copy()
 
@@ -635,7 +651,7 @@ class TicketBaseSerializerTestCases:
 
 
     def test_serializer_valid_data_missing_field_is_valid_permission_import(self, fake_view, parameterized, param_key_test_data,
-        create_serializer,
+        create_serializer, mocker,
         param_value,
         param_will_create,
         param_permission_import_required
@@ -645,6 +661,10 @@ class TicketBaseSerializerTestCases:
         Ensure that when creating an object with a user with import permission
         and with valid data, no validation error occurs.
         """
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         valid_data = self.valid_data.copy()
 
@@ -689,7 +709,7 @@ class TicketBaseSerializerTestCases:
 
 
     def test_serializer_valid_data_fields_updatable_permission_import(self, fake_view, parameterized, param_key_test_data,
-        create_serializer,
+        create_serializer, mocker,
         param_value,
         param_will_create,
         param_permission_import_required,
@@ -704,6 +724,10 @@ class TicketBaseSerializerTestCases:
         if not create_serializer.Meta.model._meta.get_field(param_value).editable:
             pytest.xfail( reason = 'Field is not editable. test is N/A.' )
 
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         valid_data = self.valid_data.copy()
 
@@ -748,7 +772,7 @@ class TicketBaseSerializerTestCases:
 
 
     def test_serializer_valid_data_missing_field_is_valid_permission_triage(self, fake_view, parameterized, param_key_test_data,
-        create_serializer,
+        create_serializer, mocker,
         param_value,
         param_will_create,
         param_permission_import_required, param_permission_triage_required
@@ -761,6 +785,10 @@ class TicketBaseSerializerTestCases:
 
         if param_permission_import_required:
             pytest.xfail( reason = 'Field is editable by import user ONLY. test is N/A.' )
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         valid_data = self.valid_data.copy()
 
@@ -805,7 +833,7 @@ class TicketBaseSerializerTestCases:
 
 
     def test_serializer_valid_data_fields_updatable_permission_triage(self, fake_view, parameterized, param_key_test_data,
-        create_serializer,
+        create_serializer, mocker,
         param_value,
         param_will_create,
         param_permission_import_required, param_permission_triage_required,
@@ -823,6 +851,10 @@ class TicketBaseSerializerTestCases:
         if param_permission_import_required:
             pytest.xfail( reason = 'Field is editable by import user ONLY. test is N/A.' )
 
+
+        mocker.patch.object(self.view_user.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(self.view_user.user, 'has_perms', return_value = True)
 
         valid_data = self.valid_data.copy()
 
@@ -935,7 +967,7 @@ class TicketBaseSerializerTestCases:
             ]
     )
     def test_serializer_create_validation_status(self,
-        fake_view,
+        fake_view, mocker,
         create_serializer,
         name,
         param_permission_import,
@@ -973,6 +1005,10 @@ class TicketBaseSerializerTestCases:
             view_set.request.user = self.view_user.user
 
 
+        mocker.patch.object(view_set.request.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(view_set.request.user, 'has_perms', return_value = True)
+
         serializer = create_serializer(
             context = {
                 'request': view_set.request,
@@ -996,13 +1032,17 @@ class TicketBaseSerializerTestCases:
 
 
     @pytest.fixture( scope = 'function' )
-    def existing_ticket(self, db, fake_view, create_serializer):
+    def existing_ticket(self, db, fake_view, create_serializer, mocker):
 
         view_set = fake_view(
             user = self.view_user.user,
             _has_import = False,
             _has_triage = True
         )
+
+        mocker.patch.object(view_set.request.user, 'has_perm', return_value = True)
+
+        mocker.patch.object(view_set.request.user, 'has_perms', return_value = True)
 
         valid_data = self.valid_data.copy()
 
@@ -1054,7 +1094,7 @@ class TicketBaseSerializerTestCases:
             ]
     )
     def test_serializer_update_validation_status(self, fake_view,
-        create_serializer,
+        create_serializer, mocker,
         existing_ticket,
         name,
         param_permission_import,
@@ -1434,7 +1474,7 @@ class TicketBaseSerializerTestCases:
 
 
     def test_serializer_validation_user_is_not_entity(self,
-        fake_view, create_serializer,
+        fake_view, create_serializer, mocker,
         model_employee, kwargs_employee
     ):
         """Validation Check
@@ -1446,6 +1486,10 @@ class TicketBaseSerializerTestCases:
         kwargs = kwargs_employee()
         user = kwargs['user']
         del kwargs['user']
+
+        mocker.patch.object(user, 'has_perm', return_value = True)
+
+        mocker.patch.object(user, 'has_perms', return_value = True)
 
         employee = model_employee.objects.create( **kwargs )
 

@@ -71,7 +71,6 @@ class OperatingSystemVersionModelSerializer(
             'id',
             'organization',
             'display_name',
-            'operating_system',
             'created',
             'modified',
             '_urls',

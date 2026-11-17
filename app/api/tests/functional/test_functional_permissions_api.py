@@ -9,6 +9,8 @@ from rest_framework.permissions import (
 
 from centurion_feature_flag.lib.feature_flag import CenturionFeatureFlagging
 
+from core.mixins.centurion import Centurion
+
 
 
 @pytest.mark.api
@@ -707,4 +709,51 @@ class APIPermissionsInheritedCases(
     APIPermissionViewInheritedCases
 ):
     """ Test Suite for all API Permission test cases """
-    pass
+
+    @pytest.fixture( scope = 'class' )
+    def api_request_permissions(self, api_request_permissions,
+        model, model_kwargs, model_permission, model_contenttype,
+    ):
+
+
+        for action in ['add', 'change' ]:
+
+            role_permissions = api_request_permissions['user'][action].groups.all(
+
+            ).first().roles.first().permissions
+
+            current_permission = role_permissions.first()
+
+
+            for field_name, value in model_kwargs().items():
+
+                    field_model = value.__class__
+
+                    if(
+                        field_name in [
+                            'organization'
+                        ]
+                        or not issubclass(value.__class__, Centurion)
+                        or (
+                            current_permission.codename == \
+                                f'{action}_{field_model._meta.model_name}'
+                            and current_permission.content_type.app_label == \
+                                field_model._meta.app_label
+                        )
+                    ):
+                        continue
+
+
+
+                    field_view_permission = model_permission.objects.get(
+                        codename = 'view_' + field_model._meta.model_name,
+                        content_type = model_contenttype.objects.get(
+                            app_label = field_model._meta.app_label,
+                            model = field_model._meta.model_name,
+                        )
+                    )
+
+                    role_permissions.add( field_view_permission )
+
+
+        yield api_request_permissions

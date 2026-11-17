@@ -122,7 +122,7 @@ class DeviceSoftwareModelSerializer(
         ]
 
 
-    def validate(self, data):
+    def validate(self, attrs):
 
 
         if 'view' in self._context:
@@ -131,22 +131,22 @@ class DeviceSoftwareModelSerializer(
 
                 device = Device.objects.get(id=self._context['view'].kwargs['device_id'])
 
-                data['device'] = device
-                data['organization'] = device.organization
+                attrs['device'] = device
+                attrs['organization'] = device.organization
 
             if 'software_id' in self._context['view'].kwargs:
 
                 software = Software.objects.get(id=int(self._context['view'].kwargs['software_id']))
 
-                data['software'] = software
+                attrs['software'] = software
 
-                if 'device' in data:
+                if 'device' in attrs:
 
-                    data['organization'] = data['device'].organization
+                    attrs['organization'] = attrs['device'].organization
 
 
         if(
-            not data.get('device')
+            not attrs.get('device')
             and not getattr(self.instance, 'device', None)
         ):
 
@@ -159,7 +159,7 @@ class DeviceSoftwareModelSerializer(
 
 
         if(
-            not data.get('software')
+            not attrs.get('software')
             and not getattr(self.instance, 'software', None)
         ):
 
@@ -170,7 +170,9 @@ class DeviceSoftwareModelSerializer(
                 code =  'required'
             )
 
-        return data
+        attrs = super().validate( attrs = attrs )
+
+        return attrs
 
 
 
