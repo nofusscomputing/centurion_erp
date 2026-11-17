@@ -94,12 +94,17 @@ class ServiceSerializerTestCases(
 
 
     def test_serializer_validation_can_create_device(self,
-        kwargs_api_create, model, model_serializer, request_user
+        kwargs_api_create, model, model_serializer, request_user,
+        mocker,
     ):
         """Serializer Validation Check
 
         Ensure that a valid item is serialized
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -122,12 +127,17 @@ class ServiceSerializerTestCases(
 
 
     def test_serializer_validation_no_port(self,
-        kwargs_api_create, model, model_serializer, request_user
+        kwargs_api_create, model, model_serializer, request_user,
+        mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and no port is provided a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -156,13 +166,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_no_port_required_if_template_with_port(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_kwargs,
+        model_kwargs, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and no port is provided and the template has a port
         no validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -201,13 +215,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_template_without_port(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_kwargs
+        model_kwargs, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating a port is provided and the template has no port
         no validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -241,13 +259,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_no_port_or_template_port(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_kwargs,
+        model_kwargs, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and no port is provided and the template
         has no port a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -319,13 +341,17 @@ class ServiceSerializerTestCases(
 
     def test_serializer_validation_device_and_cluster(self,
         kwargs_api_create, model, model_serializer, request_user,
-        model_cluster, kwargs_cluster
+        model_cluster, kwargs_cluster, mocker,
     ):
         """Serializer Validation Check
 
         Ensure that if creating and a cluster and device is provided
         a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -363,7 +389,7 @@ class ServiceSerializerTestCases(
 
 
     def test_serializer_validation_no_circular_dependency(self,
-        created_model,
+        created_model, mocker,
         kwargs_api_create, model, model_serializer, request_user,
         model_kwargs
     ):
@@ -372,6 +398,10 @@ class ServiceSerializerTestCases(
         Ensure that if creating and a dependent service loop
         a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,

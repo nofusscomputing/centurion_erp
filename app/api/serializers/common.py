@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.exceptions import (
     ValidationError as DjangoValidationError,
 )
+
 from rest_framework import serializers
 from rest_framework.exceptions import (
     ValidationError
@@ -11,8 +12,8 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import Tenant
 
+from core.mixins.centurion import Centurion
 from core import fields as centurion_field
-from core.lib.feature_not_used import FeatureNotUsed
 
 
 
@@ -220,6 +221,78 @@ class CommonModelSerializer(CommonBaseSerializer):
 
 
         return url_dict
+
+
+    def validate(self, attrs):
+        """ Common Serializer Validation
+
+        This function must be called by **all** child serializers. Flow is as follows:
+
+        - Built-in DRF validations.
+
+        - Foreign Key permission check.
+
+
+        ## Foreign Key permissions check
+
+        Checks every field provided by the user that is a foreign key. On finding a foreign key
+        that was supplied by the user as part of a `create` or `update` request. That items tenancy
+        along with its view permission is used to check if the user has access to it. If not a
+        validation error `HTTP/400` is raised letting the user know that the pk of that item does
+        not exist. Even though the object does exist, always return `not found` so the user is
+        unable to determine any valid id's of that model.
+
+        """
+
+        validated_attrs = super().validate(attrs)
+
+        if self.context.get('view', None):
+
+            if getattr(self.context['view'], 'action', None) in [
+                'create',
+                'partial_update',
+                'update',
+            ]:
+
+                for field_name, value in attrs.items():
+
+                    id = self.initial_data.get(field_name, None)
+
+                    if(
+                        field_name in [
+                            'organization'
+                        ]
+                        or not issubclass(value.__class__, Centurion)
+                        or id == None
+                        or field_name in self.Meta.read_only_fields
+                    ):
+                        continue
+
+
+                    model = value.__class__
+
+                    obj = model.objects.get( id = id )
+
+                    if not self.context['request'].user.has_perm(
+                        permission = f'{obj._meta.app_label}.view_{obj._meta.model_name}',
+                        tenancy = obj.get_organization()
+                    ):
+
+                        self.context.get('view').get_log().notice(
+                            msg = (
+                                f"User {self.context['request'].user.username} tried to "
+                                f"access {obj._meta.model_name} with pk={obj.pk}"
+                            )
+                        )
+
+                        raise ValidationError(
+                            detail = {
+                                field_name: f"Invalid pk '{id}' - object does not exist."
+                            },
+                        )    # Dont use `code` kwarg as it leaks via API.
+
+
+        return validated_attrs
 
 
 

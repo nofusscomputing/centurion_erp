@@ -15,12 +15,16 @@ class TicketBaseSerializerTestCases(
 ):
 
     def test_serializer_is_valid(self, kwargs_api_create, model, model_serializer, request_user,
-        model_employee, kwargs_employee,
+        model_employee, kwargs_employee, mocker,
     ):
         """ Serializer Check
 
         Confirm that using valid data the object validates without exceptions.
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         kwargs = kwargs_employee()
         kwargs['user'] = request_user
@@ -57,6 +61,10 @@ class TicketBaseSerializerTestCases(
 
         Confirm that using valid data the object validates without exceptions.
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         employee = model_employee.objects.create( **kwargs_employee() )
 

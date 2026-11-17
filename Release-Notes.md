@@ -1,4 +1,9 @@
 ## Version v1.36.0
+
+This release is an OOB release to address vulnerability see [GHSA-93rj-7648-533c](https://github.com/nofusscomputing/centurion_erp/security/advisories/GHSA-93rj-7648-533c).
+
+- When creating or updating a model, a permission check is now conducted on all foreign key fields to ensure that only a user with permissions to that object can link that object ([GHSA-93rj-7648-533c](https://github.com/nofusscomputing/centurion_erp/security/advisories/GHSA-93rj-7648-533c)).
+
 - Removed changing tenancy to parent groups tenancy from config_management.Groups model.
 
 

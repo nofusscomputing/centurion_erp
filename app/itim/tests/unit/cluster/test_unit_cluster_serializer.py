@@ -94,13 +94,17 @@ class ClusterSerializerTestCases(
 
 
     def test_serializer_validation_self_not_parent(self,
-        created_model,
+        created_model, mocker,
         kwargs_api_create, model, model_serializer, request_user
     ):
         """Serializer Validation Check
 
         Ensure that if assiging itself as parent a validation error occurs
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,

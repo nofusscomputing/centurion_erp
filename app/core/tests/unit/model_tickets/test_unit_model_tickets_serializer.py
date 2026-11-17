@@ -64,11 +64,17 @@ class ModelTicketSerializerTestCases(
         pytest.xfail( reason = 'must be a sub-model. test is N/A.' )
 
 
-    def test_serializer_is_valid(self, kwargs_api_create, model, model_kwargs, model_serializer, request_user):
+    def test_serializer_is_valid(self, kwargs_api_create, model, model_kwargs, model_serializer,
+        request_user, mocker,
+    ):
         """ Serializer Check
 
         Confirm that using valid data the object validates without exceptions.
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         if model._meta.abstract:
             pytest.xfail( reason = 'Model is an abstract model. test not required.' )
@@ -96,7 +102,8 @@ class ModelTicketSerializerTestCases(
 
 
     def test_serializer_method_validate_ticket_id(
-        self, kwargs_api_create, model, model_kwargs, model_serializer, request_user
+        self, kwargs_api_create, model, model_kwargs, model_serializer, request_user,
+        mocker,
     ):
         """Test serializer method validate
         
@@ -106,6 +113,10 @@ class ModelTicketSerializerTestCases(
 
         if model._meta.abstract:
             pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -134,7 +145,8 @@ class ModelTicketSerializerTestCases(
 
 
     def test_serializer_method_validate_model_id(
-        self, kwargs_api_create, model, model_kwargs, model_serializer, request_user
+        self, kwargs_api_create, model, model_kwargs, model_serializer, request_user,
+        mocker,
     ):
         """Test serializer method validate
         
@@ -144,6 +156,10 @@ class ModelTicketSerializerTestCases(
 
         if model._meta.abstract:
             pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -178,11 +194,16 @@ class ModelTicketSerializerInheritedCases(
 
     @pytest.mark.regression
     def test_serializer_create_calls_model_full_clean(self,
-        kwargs_api_create, mocker, model, model_kwargs, model_serializer, request_user
+        kwargs_api_create, mocker, model, model_kwargs, model_serializer, request_user,
     ):
 
         if model._meta.abstract:
             pytest.xfail( reason = 'Model is an abstract model. test not required.' )
+
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,

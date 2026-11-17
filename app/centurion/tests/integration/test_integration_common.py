@@ -1,6 +1,3 @@
-
-from time import sleep
-
 import pytest
 import re
 import requests
@@ -9,6 +6,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import connections
 from django.urls import URLPattern, URLResolver
+
+from core.mixins.centurion import Centurion
 
 
 
@@ -71,6 +70,7 @@ class IntegrationCommon:
         ]
 
         return filtered
+
 
 
     #

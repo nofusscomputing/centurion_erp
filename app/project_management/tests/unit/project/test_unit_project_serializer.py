@@ -96,13 +96,17 @@ class ProjectSerializerTestCases(
 
 
     def test_serializer_validation_external_ref_not_import_user(self,
-        kwargs_api_create, model, model_serializer, request_user
+        kwargs_api_create, model, model_serializer, request_user, mocker
     ):
         """Serializer Validation Check
 
         Ensure that if creating by user who is not import user, they can't edit
         fields external_ref and external_system.
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
@@ -134,13 +138,17 @@ class ProjectSerializerTestCases(
 
 
     def test_serializer_validation_external_ref_is_import_user(self,
-        kwargs_api_create, model, model_serializer, request_user
+        kwargs_api_create, model, model_serializer, request_user, mocker
     ):
         """Serializer Validation Check
 
          Ensure that if creating by user who import user, they can edit
         fields external_ref and external_system.
         """
+
+        mocker.patch.object(request_user, 'has_perm', return_value = True)
+
+        mocker.patch.object(request_user, 'has_perms', return_value = True)
 
         mock_view = MockView(
             user = request_user,
