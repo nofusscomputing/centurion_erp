@@ -26,7 +26,17 @@ from itam.models.device_models import DeviceModel
 from settings.models.app_settings import AppSettings
 
 
-
+#
+# Do not remove this model until post migration of internal systems
+# to Centurion is complete.
+#
+# Why: within markdown `$device-` tags are used which uses the pk
+# from this model.
+#
+# Currently `core.lib.slash_commands.link_model.command_link_model()` has been
+# updated so that any `$device-` will be mapped to `$itasset-` when linking
+# models.
+#
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
@@ -37,7 +47,7 @@ class Device(
     CenturionModel,
 ):    # pragma: no cover
 
-    model_tag = 'device-'
+    model_tag = 'device'
 
     reserved_config_keys: list = [
         'software'

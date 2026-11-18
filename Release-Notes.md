@@ -4,6 +4,18 @@
 
 - New model `itam.ITAssetModel` that replaces `itam.DeviceModel`. All data from old table to new table occurs during migration admin command.
 
+    As part of migrations the following will occur:
+
+    - Migrate devices table to new itasset table.
+
+    - Search ticket comments for usage of `$device-<original pk>` and update it to `$itasset-<new pk>`
+
+    - Search KB articles for usage of `$device-<original pk>` and update it to `$itasset-<new pk>`
+
+    - Search **all** models with field `model_notes` for usage of `$device-<original pk>` and update it to `$itasset-<new pk>`
+
+    Additionally, now to reference devices (`$device-`), you'll use `$itasset-`
+
 - Model `itam.DeviceSoftware` depreciated in favour of `itam.ITAssetSoftware`
 
 - Endpoint for model `itam.DeviceSoftware` removed.

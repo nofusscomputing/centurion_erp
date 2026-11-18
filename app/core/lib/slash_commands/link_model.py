@@ -64,6 +64,23 @@ For this command to process the following conditions must be met:
 
             for model_type, model_id in found_items:
 
+                if model_type == 'device':
+                    #
+                    # See itam.Device for notes for this scope.
+                    #
+
+                    model_type = 'itasset'
+
+                    device_model = apps.get_model(
+                        app_label = model().get_ticket_app_label(),
+                        model_name = f'{model().get_ticket_model_name()}'.lower()
+                    )
+
+                    old_model = device_model.objects.get( id = int(model_id) )
+
+                    model_id = old_model.migrated_id
+
+
                 model = self.get_model( model_type )
 
                 model = apps.get_model(

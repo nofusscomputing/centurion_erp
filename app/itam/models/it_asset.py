@@ -22,7 +22,7 @@ class ITAsset(
 ):
 
 
-    model_tag = 'device'
+    model_tag = 'itasset'
 
     reserved_config_keys: list = [
         'software'
