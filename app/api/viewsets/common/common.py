@@ -985,18 +985,36 @@ class CommonViewSet(
 
     def get_view_name(self):
 
-        if self.view_name is not None:
+        model = self.model
 
-            return self.view_name
+        if model == None:    # maybe an index view
 
-
-        if self.detail:
-
-            self.view_name = str(getattr(self, 'model._meta.verbose_name', ''))
+            return ''
 
 
-        return str(getattr(self, 'model._meta.verbose_name_plural', ''))
+        if(
+            not issubclass(self.model.__class__, models.Model)
+        ):
 
+            model = self.model()
+
+
+        try:
+
+            if self.detail:
+
+                self.view_name = str(self.model._meta.verbose_name)
+
+            else:
+
+                self.view_name = str(self.model._meta.verbose_name_plural)
+
+        except:
+            # probably requires kwargs to determine model.
+            self.view_name = str(self.model._meta.verbose_name_plural)
+
+
+        return self.view_name
 
 
 
