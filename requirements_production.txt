@@ -134,7 +134,7 @@ markdown-it-py[linkify,plugins]==3.0.0
     # via
     #   -r requirements.txt
     #   mdit-py-plugins
-mdit-py-plugins==0.6.1
+mdit-py-plugins==0.7.0
     # via
     #   -r requirements.txt
     #   markdown-it-py
@@ -155,7 +155,7 @@ prompt-toolkit==3.0.53
     # via
     #   -r requirements.txt
     #   click-repl
-psycopg2==2.9.9
+psycopg2==2.9.13
     # via -r tools/requirements_production.in
 pycparser==3.12
     # via

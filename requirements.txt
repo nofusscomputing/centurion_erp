@@ -98,7 +98,7 @@ markdown-it-py[linkify,plugins]==3.0.0
     # via
     #   -r tools/requirements.in
     #   mdit-py-plugins
-mdit-py-plugins==0.6.1
+mdit-py-plugins==0.7.0
     # via markdown-it-py
 mdurl==0.1.2
     # via markdown-it-py

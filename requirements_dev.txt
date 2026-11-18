@@ -215,7 +215,7 @@ markupsafe==3.0.4
     # via jinja2
 mccabe==0.7.0
     # via pylint
-mdit-py-plugins==0.6.1
+mdit-py-plugins==0.7.0
     # via
     #   -r requirements.txt
     #   -r requirements_production.txt
@@ -245,7 +245,7 @@ pathspec==1.1.1
     # via black
 pip-tools==7.6.2
     # via -r tools/requirements_dev.in
-platformdirs==4.14.5
+platformdirs==4.14.7
     # via
     #   black
     #   pylint
@@ -262,7 +262,7 @@ prompt-toolkit==3.0.53
     #   -r requirements_production.txt
     #   click-repl
     #   questionary
-psycopg2==2.9.9
+psycopg2==2.9.13
     # via -r requirements_production.txt
 pycparser==3.12
     # via
