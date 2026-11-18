@@ -140,6 +140,9 @@ class ModelSerializer(
             attrs['parent_asset_model_id'] = attrs['parent'].device_model
 
 
+        attrs = super().validate( attrs = attrs )
+
+
         return attrs
 
 
