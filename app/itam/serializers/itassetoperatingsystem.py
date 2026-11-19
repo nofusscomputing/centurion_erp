@@ -13,6 +13,9 @@ from .operatingsystemversion import (
 from api.serializers import common
 
 from itam.models import ITAssetOperatingSystem
+from .assetbase_itasset import (
+    BaseSerializer as ITAssetBaseSerializer
+)
 
 
 
@@ -93,3 +96,5 @@ class ModelSerializer(
 class ViewSerializer(ModelSerializer):
 
     operating_system_version = OperatingSystemVersionBaseSerializer( read_only = True )
+
+    it_asset = ITAssetBaseSerializer( read_only = True )
