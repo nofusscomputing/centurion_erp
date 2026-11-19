@@ -13,9 +13,9 @@ from itam.viewsets import (
     it_asset_related,
     # inventory,
     operating_system,
-    operating_system_version as operating_system_version_v2,
-    software as software_v2,
-    software_version as software_version_v2,
+    operating_system_version as operating_system_version,
+    software,
+    software_version,
 )
 
 from itim.viewsets import (
@@ -59,10 +59,6 @@ router.register(
 #     basename = '_api_v2_inventory'
 # )
 router.register(
-    prefix = '/operating_system', viewset = operating_system.ViewSet,
-    basename = '_api_operatingsystem'
-)
-router.register(
     prefix = '/(?P<model_name>(itasset)+)/(?P<model_id>[0-9]+)/(?P<related_model_name>(operating_system)+)',
     viewset = it_asset_related.ViewSet,
     basename = '_api_itassetoperatingsystem'
@@ -73,25 +69,35 @@ router.register(
     basename = '_api_itassetsoftware'
 )
 router.register(
+    prefix = '/operating_system', viewset = operating_system.ViewSet,
+    basename = '_api_operatingsystem'
+)
+router.register(
+    # prefix = '/operating_system/(?P<operating_system_id>[0-9]+)/installs',
+    prefix = '/(?P<model_name>(operating_system)+)/(?P<model_id>[0-9]+)/installs',
+    viewset = operating_system.ViewSet,
+    basename = '_api_v2_operating_system_installs'
+)
+router.register(
     prefix = '/operating_system/(?P<operating_system_id>[0-9]+)/version',
-    viewset = operating_system_version_v2.ViewSet,
+    viewset = operating_system_version.ViewSet,
     basename = '_api_operatingsystemversion'
 )
 router.register(
-    prefix = '/software', viewset = software_v2.ViewSet,
+    prefix = '/software', viewset = software.ViewSet,
     basename = '_api_software'
 )
 router.register(
     prefix = '/(?P<model_name>(software)+)/(?P<model_id>[0-9]+)/installs',
-    viewset = software_v2.SoftwareInstallsViewSet,
+    viewset = software.SoftwareInstallsViewSet,
     basename = '_api_v2_software_installs'
 )
 router.register(
-    prefix = '/software/(?P<software_id>[0-9]+)/version', viewset = software_version_v2.ViewSet,
+    prefix = '/software/(?P<software_id>[0-9]+)/version', viewset = software_version.ViewSet,
     basename = '_api_softwareversion'
 )
 router.register(
-    prefix = '/software/(?P<software_id>[0-9]+)/version', viewset = software_version_v2.ViewSet,
+    prefix = '/software/(?P<software_id>[0-9]+)/version', viewset = software_version.ViewSet,
     basename = '_api_softwareversions'
 )
 router.register(
