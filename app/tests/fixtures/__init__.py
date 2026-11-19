@@ -113,6 +113,7 @@ from .model_configgrouphost import (
 from .model_configgroupsoftware import (
     kwargs_configgroupsoftware,
     model_configgroupsoftware,
+    serializer_configgroupsoftware,
 )
 
 from .model_contact import (

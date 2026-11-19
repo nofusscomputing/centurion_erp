@@ -3,6 +3,11 @@ import pytest
 from datetime import datetime
 
 from config_management.models.groups import ConfigGroupSoftware
+from config_management.serializers.config_group_software import (
+    ConfigGroupBaseSerializer,
+    ConfigGroupSoftwareModelSerializer,
+    ConfigGroupSoftwareViewSerializer
+)
 
 
 
@@ -57,3 +62,13 @@ def kwargs_configgroupsoftware(django_db_blocker,
         return kwargs
 
     yield factory
+
+
+@pytest.fixture( scope = 'class')
+def serializer_configgroupsoftware():
+
+    yield {
+        'base': ConfigGroupBaseSerializer,
+        'model': ConfigGroupSoftwareModelSerializer,
+        'view': ConfigGroupSoftwareViewSerializer
+    }
