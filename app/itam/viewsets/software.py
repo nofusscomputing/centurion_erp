@@ -82,9 +82,9 @@ class ViewSet( ModelViewSet ):
 
         return [
             'category',
+            'installed_device__it_asset',
             'organization',
             'publisher',
-            'installed_device__it_asset',
         ]
 
 

@@ -151,6 +151,7 @@ omit = [
     "app/core/signal/centurion_model_migrate.py",
     "app/core/signal/migra_manufacturer_to_company.py",
     "app/human_resources/signal/migra_centurion_user_add_entity.py",
+    'app/itam/signals/migration_device_models.py',
 
     "*apps.py",
     "*conftest.py",

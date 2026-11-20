@@ -136,6 +136,22 @@ class CreateCases:
 
 
 
+    def test_view_func_get_serializer_class_create(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct create
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'create'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
 
 class CommonCreatePyTest(
     CreateCases,
@@ -144,6 +160,12 @@ class CommonCreatePyTest(
     @pytest.fixture( scope = 'function' )
     def viewset(self):
         return Create
+
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_create(self, viewset, model_serializer):
+        assert False
 
 
 
@@ -325,6 +347,36 @@ class UpdateCases:
 
         assert callable(viewset().update)
 
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
 
 
 class CommonUpdatePyTest(
@@ -335,6 +387,38 @@ class CommonUpdatePyTest(
     def viewset(self):
         return Update
 
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
 
 
 
@@ -765,6 +849,22 @@ class ModelViewSetBaseCases(
 
 
 
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
+
+
+
 class CommonModelViewSetBasePyTest(
     ModelViewSetBaseCases,
 ):
@@ -821,11 +921,29 @@ class CommonModelViewSetBasePyTest(
         }
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
 
 
 
@@ -962,11 +1080,34 @@ class CommonModelViewSetPyTest(
         }
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_create(self, viewset, model_serializer):
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        assert False
+
 
 
 
@@ -1012,33 +1153,6 @@ class CommonSubModelViewSetTestCases(
         """
 
         pass
-
-
-
-    @pytest.mark.skip( reason = 'to be written')
-    def test_view_func_get_serializer_class_view(self):
-        """ Function Test
-
-        Function `get_serializer_class` must return the correct view serializer
-        for the model in question
-        """
-
-        pass
-
-
-
-    @pytest.mark.skip( reason = 'to be written')
-    def test_view_func_get_serializer_class_create(self):
-        """ Function Test
-
-        Function `get_serializer_class` must return the correct create
-        serializer for the model in question.
-        """
-
-        pass
-
-
-    # ToDo: Test returned serializer for all CRUD. Add, Change, Delete, Replace and View
 
 
 
@@ -1148,11 +1262,37 @@ class CommonSubModelViewSetPyTest(
         assert viewset().model_kwarg is None
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        assert False
+
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_create(self, viewset, model_serializer):
+        assert False
+
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        assert False
+
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        assert False
 
 
 
@@ -1228,11 +1368,34 @@ class CommonModelCreateViewSetPyTest(
         }
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_create(self, viewset, model_serializer):
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
 
 
 
@@ -1311,11 +1474,29 @@ class CommonModelListRetrieveDeleteViewSetPyTest(
         }
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
 
 
 
@@ -1392,11 +1573,62 @@ class CommonModelRetrieveUpdateViewSetPyTest(
         }
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
 
 
 
@@ -1474,11 +1706,29 @@ class CommonReadOnlyModelViewSetPyTest(
         }
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
 
 
 
@@ -1556,11 +1806,29 @@ class CommonReadOnlyListModelViewSetPyTest(
 
 
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
 
 
 

@@ -1,28 +1,28 @@
 import pytest
 
-from itim.tests.unit.ticket_slm.test_unit_ticket_slm_serializer import (
-    SLMTicketSerializerInheritedCases
+from itim.tests.unit.ticket_slm.test_unit_ticket_slm_viewset import (
+    SLMTicketBaseViewsetInheritedCases
 )
 
 
 
 @pytest.mark.model_incidentticket
-class IncidentTicketSerializerTestCases(
-    SLMTicketSerializerInheritedCases
+class IncidentTicketViewSetTestCases(
+    SLMTicketBaseViewsetInheritedCases
 ):
     pass
 
 
 
-class IncidentTicketSerializerInheritedCases(
-    IncidentTicketSerializerTestCases
+class IncidentTicketViewSetInheritedCases(
+    IncidentTicketViewSetTestCases
 ):
     pass
 
 
 
 @pytest.mark.module_itim
-class IncidentTicketSerializerPyTest(
-    IncidentTicketSerializerTestCases
+class IncidentTicketViewSetPyTest(
+    IncidentTicketViewSetTestCases
 ):
     pass
