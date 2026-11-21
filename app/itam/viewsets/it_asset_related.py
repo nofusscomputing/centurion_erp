@@ -153,7 +153,7 @@ class ViewSet( ModelViewSet ):
               model.
         """
 
-        if not self._queryset:
+        if self._queryset is None:
 
             self._queryset = self.get_parent_model().objects.user(
                 user = self.request.user,
