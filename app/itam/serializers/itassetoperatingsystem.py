@@ -88,7 +88,9 @@ class ModelSerializer(
 
         attrs['it_asset_id'] = int(self.context['view'].kwargs['model_id'])
 
-        return super().validate(attrs)
+        attrs = super().validate(attrs)
+
+        return attrs
 
 
 

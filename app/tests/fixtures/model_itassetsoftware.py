@@ -1,6 +1,11 @@
 import pytest
 
 from itam.models import ITAssetSoftware
+from itam.serializers.itassetsoftware import (
+    BaseSerializer,
+    ModelSerializer,
+    ViewSerializer
+)
 
 
 
@@ -45,3 +50,13 @@ def kwargs_itassetsoftware(django_db_blocker,
         return kwargs
 
     yield factory
+
+
+@pytest.fixture( scope = 'class')
+def serializer_itassetsoftware():
+
+    yield {
+        'base': BaseSerializer,
+        'model': ModelSerializer,
+        'view': ViewSerializer
+    }

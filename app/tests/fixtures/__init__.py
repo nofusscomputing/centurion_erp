@@ -238,6 +238,7 @@ from .model_itassetoperatingsystem import (
 from .model_itassetsoftware import (
     kwargs_itassetsoftware,
     model_itassetsoftware,
+    serializer_itassetsoftware,
 )
 
 from .model_itassetrelationships import (
