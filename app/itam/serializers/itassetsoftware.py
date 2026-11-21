@@ -114,7 +114,7 @@ class ModelSerializer(
         ]
 
 
-    def validate(self, data):
+    def validate(self, attrs):
 
 
         if 'view' in self._context:
@@ -125,11 +125,11 @@ class ModelSerializer(
                     id = int(self._context['view'].kwargs['model_id'])
                 )
 
-                data['it_asset'] = itasset
+                attrs['it_asset'] = itasset
 
 
         if(
-            ( not data.get('it_asset_id') and not data.get('it_asset') )
+            ( not attrs.get('it_asset_id') and not attrs.get('it_asset') )
             and not getattr(self.instance, 'it_asset', None)
         ):
 
@@ -142,7 +142,7 @@ class ModelSerializer(
 
 
         if(
-            not data.get('software')
+            not attrs.get('software')
             and not getattr(self.instance, 'software', None)
         ):
 
@@ -153,7 +153,9 @@ class ModelSerializer(
                 code =  'required'
             )
 
-        return data
+        attrs = super().validate( attrs = attrs)
+
+        return attrs
 
 
 
