@@ -312,7 +312,10 @@ class CenturionUser(
 
 
             if tenancy is None and obj is not None:
-                tenancy = obj.get_tenant()
+
+                if hasattr(obj, 'get_tenant'):
+
+                    tenancy = obj.get_tenant()
 
 
             if tenancy is not None:
@@ -320,7 +323,7 @@ class CenturionUser(
                 if permission in self.get_permissions().get(f'tenancy_{tenancy.id}', []):
                     return True
 
-            else:
+            elif not tenancy_permission:
 
                 if permission in self.get_permissions( tenancy = False ):
                     return True

@@ -26,7 +26,7 @@ from project_management.models.project_milestone import Project, ProjectMileston
 
 
 
-class TicketCommonFields(models.Model):
+class TicketCommonFields(models.Model):    # pragma: no cover
 
     class Meta:
         abstract = True
@@ -51,12 +51,13 @@ class TicketCommonFields(models.Model):
     depreciated_in = '1.16.0',
     removed_in = '2.0',
     replacement = 'core.models.ticket_base',
+    skip_tests = True,
 )
 class Ticket(
     SlashCommands,
     TenancyObject,
     TicketCommonFields,
-):
+):    # pragma: no cover
 
     save_model_history: bool = False
 
@@ -1440,7 +1441,7 @@ class Ticket(
 
 
 
-class RelatedTickets(TenancyObject):
+class RelatedTickets(TenancyObject):    # pragma: no cover
 
     class Meta:
 

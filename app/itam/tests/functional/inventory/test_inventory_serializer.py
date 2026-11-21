@@ -12,7 +12,7 @@ from itam.serializers.inventory import (
 
 
 
-@pytest.mark.skip( reason = 'to be refactored' )
+@pytest.mark.skip( reason = 'to be refactored. see #1255' )
 class InventoryValidationAPI(
     TestCase,
 ):

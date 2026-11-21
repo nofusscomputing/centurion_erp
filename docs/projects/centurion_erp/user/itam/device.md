@@ -1,12 +1,66 @@
 ---
-title: Device
-description: Device Documentation for Centurion ERP by No Fuss Computing
+title: Assets
+description: IT Assets Documentation for Centurion ERP by No Fuss Computing
 date: 2024-05-15
 template: project.html
-about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
+about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-This component within ITAM is intended to display information about a device, be it a computer, router or switch etc.
+This component within ITAM is intended to display information about an asset, be it a computer, router or switch etc. We have designed the IT Assets not as hard coded pre-defined assets, but as a thing you create and assemble as an asset. This is far superior than pre-defined assets like computer, mouse, printer and HDD etc. As assembling the assets yourself allows you to create a template for a common make of computer and another for a single one off custom computer you physically built yourself. Even better, if you have an asset with some random thing that can be connected to it, you can do that with our IT Assets.
+
+IT Assets is not intended to cover **all** assets within an IT environment as there is a need that some assets be hard coded into the ITAM module. In this case the hard coded assets require some part of their lifecycle be managed by the ITAM module. Examples of some of these assets are:
+
+- Certificates
+
+- Operating Systems
+
+- Softwares
+
+The design of the IT Assets has been done to support creating and if required assembling the following assets:
+
+- Hardware
+
+    - Custom computer case
+
+    - Case fan
+
+    - Water cooling block
+
+    - switch/router expansion port hardware
+
+    - your custom piece of hardware
+
+- Components
+
+    - some electronic component. i.e. CPU, RAM, HDD etc
+
+- Peripherals
+
+    - Mouse
+
+    - Keyboard
+
+    - External HDD
+
+- Devices (pre-build)
+
+    - Computer
+
+    - Mobile Phone
+
+    - Model
+
+    - Phone
+
+    - Printer
+
+    - Switch
+
+    - WiFi Router
+
+This list is not exhaustive and you are only limited by your imagination. Basically, you create an asset, if it can have a child connected to or part of it, you create the connection and the child asset.
+
+
 
 
 ## Features
@@ -36,6 +90,30 @@ On the devices list page you can quickly gauge the status of a device. It's a si
 
 
 ### Details
+
+The fields that show on this tab are the details of the asset. Additionally if the asset was created with an asset model, then depending upon what fields in the model were marked as mandatory, will determine what else will be displayed. Some other fields that may be shown:
+
+- International Mobile Equipment Identity (IMEI)
+
+    For assets that have a sim card slot.
+
+- Mac Address
+
+    For assets that connect to a 802.3/802.11 network.
+
+- Personal Unlocking Key (PUK)
+
+    For assets that are a sim card.
+
+- PUK Pin
+
+    For assets that are a sim card.
+
+- Serial Number
+
+    For assets that were manufactured with a serial number.
+
+Creating an asset without providing an asset model, will have all of the previous listed fields displayed on the asset.
 
 This tab display the details of the device.
 

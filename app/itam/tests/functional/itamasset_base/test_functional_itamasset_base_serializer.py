@@ -47,7 +47,7 @@ class ITAMAssetBaseSerializerInheritedCases(
 
 
 
-@pytest.mark.module_accounting
+@pytest.mark.module_itam
 class ITAMAssetBaseSerializerPyTest(
     ITAMAssetBaseSerializerTestCases,
 ):

@@ -27,7 +27,7 @@ class ITAMAssetBaseAPIInheritedCases(
 
 
 
-@pytest.mark.module_accounting
+@pytest.mark.module_itam
 class ITAMAssetBaseAPIPyTest(
     ITAMAssetBaseAPITestCases,
 ):

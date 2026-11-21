@@ -42,6 +42,9 @@ This project is hosted on [Github](https://github.com/NofussComputing/centurion_
 ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_coverage_functional.json&style=plastic)
  ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_functional_test.json)
 
+![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_coverage_combined.json&style=plastic)
+ ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fendpoint_combined_stats.json)
+
 
 
 ----
@@ -50,13 +53,16 @@ This project is hosted on [Github](https://github.com/NofussComputing/centurion_
 
 
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nofusscomputing/centurion_erp/ci.yaml?branch=development&style=plastic&logo=github&label=Build&color=%23000) ![GitHub Release](https://img.shields.io/github/v/release/nofusscomputing/centurion_erp?include_prereleases&sort=date&style=plastic&logo=github&label=Release&color=000) 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nofusscomputing/centurion_erp/ci.yaml?branch=feat-next-release&style=plastic&logo=github&label=Build&color=%23000) ![GitHub Release](https://img.shields.io/github/v/release/nofusscomputing/centurion_erp?include_prereleases&sort=date&style=plastic&logo=github&label=Release&color=000) 
 
-![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_coverage.json&style=plastic)
- ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_unit_test.json)
+![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Ffeat-next-release%2Fbadge_endpoint_coverage.json&style=plastic)
+ ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Ffeat-next-release%2Fbadge_endpoint_unit_test.json)
 
-![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_coverage_functional.json&style=plastic)
- ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_functional_test.json)
+![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Ffeat-next-release%2Fbadge_endpoint_coverage_functional.json&style=plastic)
+ ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Ffeat-next-release%2Fbadge_endpoint_functional_test.json)
+
+![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Ffeat-next-release%2Fbadge_endpoint_coverage_combined.json&style=plastic)
+ ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Ffeat-next-release%2Fendpoint_combined_stats.json)
 
 ----
 <br>

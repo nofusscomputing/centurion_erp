@@ -275,7 +275,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             'accounting': {
                 "display_name": "Accounting",
                 "name": "accounting",
-                "pages": {}
+                "pages": {
+                    'view_assetbase': {
+                        "display_name": "Assets",
+                        "name": "asset",
+                        "link": "/accounting/asset"
+                    }
+                }
             },
             'assistance': {
                 "display_name": "Assistance",
@@ -305,11 +311,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "display_name": "ITAM",
                 "name": "itam",
                 "pages": {
-                    'view_device': {
-                        "display_name": "Devices",
+                    'view_itasset': {
+                        "display_name": "Devices / Hardware",
                         "name": "device",
                         "icon": "device",
-                        "link": "/itam/device"
+                        "link": "/accounting/asset/itasset"
                     },
                     'view_operatingsystem': {
                         "display_name": "Operating System",
@@ -438,26 +444,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 })
 
-            if request.feature_flag['2025-00004']:
-
-                nav['accounting']['pages'].update({
-                    'view_assetbase': {
-                        "display_name": "Assets",
-                        "name": "asset",
-                        "link": "/accounting/asset"
-                    }
-                })
-
-                if request.feature_flag['2025-00007']:
-
-                    nav['itam']['pages'] = {
-                        'view_itamassetbase': {
-                            "display_name": "IT Assets",
-                            "name": "itasset",
-                            "link": "/itam/itamassetbase"
-                        },
-                        **nav['itam']['pages']
-                    }
 
 
             if request.feature_flag['2025-00009']:
@@ -630,17 +616,87 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                     'component': "detail",
                                     'action': "api",
                                     'loader': "django",
-                                    'revalidate': False
-                                    
                                 }
                             ]
                         }
                     ]
                 },
 
+
                 {
                     'path': ":module",
                     'children': [
+                        {
+                            'path': "asset",
+                            'children': [
+                                {
+                                    'index': True,
+                                    'component': "list",
+                                    'loader': "django"
+                                },
+                                {
+                                    'path': ":pk",
+                                    'component': "detail",
+                                    'action': "api",
+                                    'loader': "django",
+                                    
+                                },
+                                {
+                                    'path': "add",
+                                    'component': "detail",
+                                    'loader': "django_metadata"
+                                    
+                                },
+                                {    # Sub-models had to be hard typed to prevent
+                                     # routing collisions.
+                                    'path': "itamassetbase",
+                                    'action': "api",
+                                    'children': [
+                                        {
+                                            'path': "add",
+                                            'component': "detail",
+                                            'loader': "django_metadata"
+                                            
+                                        },
+                                        {
+                                            'path': ":pk",
+                                            'component': "detail",
+                                            'action': "api",
+                                            'loader': "django"
+                                        },
+                                        {
+                                            'index': True,
+                                            'component': "list",
+                                            'loader': "django"
+                                        }
+                                    ]
+                                },
+                                {    # Sub-models had to be hard typed to prevent
+                                     # routing collisions.
+                                    'path': "itasset",
+                                    'action': "api",
+                                    'children': [
+                                        {
+                                            'path': "add",
+                                            'component': "detail",
+                                            'loader': "django_metadata"
+                                            
+                                        },
+                                        {
+                                            'path': ":pk",
+                                            'component': "detail",
+                                            'action': "api",
+                                            'loader': "django"
+                                        },
+                                        {
+                                            'index': True,
+                                            'component': "list",
+                                            'loader': "django"
+                                        }
+                                    ]
+                                },
+                            ]
+                        },
                         {
                             'path': "entity",
                             'children': [
@@ -657,7 +713,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                         #     'path': "add",
                                         #     'component': "detail",
                                         #     'loader': "django_metadata",
-                                        #     'revalidate': False
                                             
                                         # },
                                         {
@@ -665,7 +720,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                             'component': "detail",
                                             'action': "api",
                                             'loader': "django",
-                                            'revalidate': False
                                             
                                         }
                                     ]
@@ -685,14 +739,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                 #     'path': "add",
                                 #     'component': "detail",
                                 #     'loader': "django_metadata",
-                                #     'revalidate': False
                                 # },
                                 {
                                     'path': ":pk",
                                     'component': "detail",
                                     'loader': "django",
                                     'action': "api",
-                                    'revalidate': False
                                 }
                             ]
                         },
@@ -770,7 +822,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                 #     'path': "add",
                                 #     'component': "detail",
                                 #     'loader': "django_metadata",
-                                #     'revalidate': False
                                 # },
                                 {
                                     'path': ":pk",
@@ -813,14 +864,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                                     'component': "list",
                                                     'loader': "django",
                                                     'action': "api",
-                                                    'revalidate': False
                                                 },
                                                 {
                                                     'path': ":sub_model_pk",
                                                     'component': "detail",
                                                     'loader': "django",
                                                     'action': "api",
-                                                    'revalidate': False
                                                 }
                                             ]
                                         }

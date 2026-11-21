@@ -30,6 +30,7 @@ from .model_appsettings import (
 from .model_assetbase import (
     kwargs_assetbase,
     model_assetbase,
+    serializer_assetbase,
 )
 
 from .model_authtoken import (
@@ -112,6 +113,7 @@ from .model_configgrouphost import (
 from .model_configgroupsoftware import (
     kwargs_configgroupsoftware,
     model_configgroupsoftware,
+    serializer_configgroupsoftware,
 )
 
 from .model_contact import (
@@ -128,12 +130,6 @@ from .model_device import (
     kwargs_device,
     model_device,
     serializer_device,
-)
-
-from .model_devicemodel import (
-    kwargs_devicemodel,
-    model_devicemodel,
-    serializer_devicemodel,
 )
 
 from .model_deviceoperatingsystem import (
@@ -218,6 +214,37 @@ from .model_incidentticket import (
 from .model_itamassetbase import (
     kwargs_itamassetbase,
     model_itamassetbase,
+    serializer_itamassetbase,
+)
+
+from .model_itasset import (
+    kwargs_itasset,
+    model_itasset,
+    serializer_itasset,
+)
+
+from .model_itassetmodel import (
+    kwargs_itassetmodel,
+    model_itassetmodel,
+    serializer_itassetmodel,
+)
+
+from .model_itassetoperatingsystem import (
+    kwargs_itassetoperatingsystem,
+    model_itassetoperatingsystem,
+    serializer_itassetoperatingsystem,
+)
+
+from .model_itassetsoftware import (
+    kwargs_itassetsoftware,
+    model_itassetsoftware,
+    serializer_itassetsoftware,
+)
+
+from .model_itassetrelationships import (
+    kwargs_itassetrelationships,
+    model_itassetrelationships,
+    serializer_itassetrelationships,
 )
 
 from .model_knowledgebase import (

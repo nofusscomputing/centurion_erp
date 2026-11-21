@@ -74,4 +74,3 @@ class SoftwareVersionModelPyTest(
         """
 
         assert model_instance.get_url_kwargs() == { 'pk': model_instance.id, 'software_id': model_instance.software.id }
-

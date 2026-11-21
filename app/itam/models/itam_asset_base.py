@@ -21,11 +21,9 @@ class ITAMAssetBase(
 
     _is_submodel = True
 
-    app_namespace = None
+    app_namespace = 'accounting'
 
-    model_tag = 'it_asset'
-
-    url_model_name = 'itamassetbase'
+    url_model_name = 'asset'
 
 
     class Meta:
@@ -34,9 +32,9 @@ class ITAMAssetBase(
             'id'
         ]
 
-        verbose_name = "IT Asset"
+        verbose_name = "IT Asset Base"
 
-        verbose_name_plural = "IT Assets"
+        verbose_name_plural = "IT Assets Base"
 
 
 
@@ -120,48 +118,9 @@ class ITAMAssetBase(
 
     def __str__(self):
 
+        if not self.asset_number:
+
+            return self._meta.verbose_name
+
+
         return self._meta.verbose_name + ' - ' + self.asset_number
-
-
-
-    def get_url(
-        self, relative: bool = True, api_version: int = 2, many = False
-    ) -> str:
-
-        namespace = f'v{api_version}'
-
-        if self.get_app_namespace():
-            namespace = namespace + ':' + self.get_app_namespace()
-
-
-        url_basename = f'{namespace}:_api_{self._meta.model_name}'
-
-        if self.url_model_name:
-
-            url_basename = f'{namespace}:_api_{self.url_model_name}'
-
-        if (
-            self._is_submodel
-            and self._meta.model_name != 'itamassetbase'
-        ):
-
-            url_basename += '_sub'
-
-
-        if many:
-
-            url_basename += '-list'
-
-        else:
-
-            url_basename += '-detail'
-
-
-        url = reverse( viewname = url_basename, request = None, kwargs = self.get_url_kwargs( many = many ) )
-
-        if not relative:
-
-            url = settings.SITE_URL + url
-
-
-        return url

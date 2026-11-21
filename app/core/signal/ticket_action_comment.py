@@ -324,7 +324,10 @@ def ticket_action_comment(sender, instance, created = False, **kwargs) -> None:
                 ids = list(kwargs['pk_set']),
             )
 
-        elif action == '':    # Ticket edit
+        elif (
+            action == ''
+            and hasattr(instance, '_before')
+        ):    # Ticket edit
 
             ticket( instance )
 
