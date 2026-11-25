@@ -6,7 +6,7 @@ template: project.html
 about: https://github.com/nofusscomputing/centurion_erp
 ---
 
-This component within ITAM is intended to display information about an asset, be it a computer, router or switch etc. We have designed the IT Assets not as hard coded pre-defined assets, but as a thing you create and assemble as an asset. This is far superior than pre-defined assets like computer, mouse, printer and HDD etc. As assembling the assets yourself allows you to create a template for a common make of computer and another for a single one off custom computer you physically built yourself. Even better, if you have an asset with some random thing that can be connected to it, you can do that with our IT Assets.
+This component within ITAM is intended to track information about an asset, be it a computer, router or switch etc. We have designed the IT Assets not as hard coded pre-defined assets, but as a thing you create and assemble as an asset. This is far superior than pre-defined assets like computer, mouse, printer and HDD etc. As assembling the assets yourself allows you to create a template for a common make of computer and another for a single one off custom computer you physically built yourself. Even better, if you have an asset with some random thing that can be connected to it, you can do that with our IT Assets.
 
 IT Assets is not intended to cover **all** assets within an IT environment as there is a need that some assets be hard coded into the ITAM module. In this case the hard coded assets require some part of their lifecycle be managed by the ITAM module. Examples of some of these assets are:
 
@@ -16,7 +16,7 @@ IT Assets is not intended to cover **all** assets within an IT environment as th
 
 - Softwares
 
-The design of the IT Assets has been done to support creating and if required assembling the following assets:
+The design of the IT Assets has been done to support creating and if required, assembling the following assets:
 
 - Hardware
 
@@ -126,7 +126,7 @@ Additionally if the asset was created with an [asset model](./it_asset_model.md)
 
 - Mac Address
 
-    For assets that connect to a 802.3/802.11 network.
+    For assets that connect to a 802.3/802.11/802.15.1 network.
 
 - Personal Unlocking Key (PUK)
 
@@ -155,4 +155,6 @@ This tab displays the [software](./software.md) installed upon the asset. Additi
 
 ## Config Management
 
-This tab displays the fully rendered configuration for this asset. The fully rendered config is obtained from the [configuration groups](../config_management/index.md) the asset is part of, Services the host has deployed and is merged with the hosts configuration.
+This tab displays the fully rendered configuration for this asset as a JSON document and is intended to replicate Ansible `host_vars`. The fully rendered config is obtained from the [configuration groups](../config_management/index.md) the asset is part of, Services the host has deployed and is merged with the hosts configuration.
+
+This configuration can also be obtained from API endpoint `/api/config/<machine-slug>` where `<machine-slug>` would match the Ansible `inventory_hostname`.

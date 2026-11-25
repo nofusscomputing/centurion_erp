@@ -23,7 +23,7 @@ class ITAssetModelModelTestCases(
             },
             'model_tag': {
                 'type': str,
-                'value': 'device_model'
+                'value': 'itasset_model'
             },
         }
 

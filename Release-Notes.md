@@ -14,7 +14,7 @@
 
     - Search **all** models with field `model_notes` for usage of `$device-<original pk>` and update it to `$itasset-<new pk>`
 
-    Additionally, now to reference devices (`$device-`), you'll use `$itasset-`
+    Additionally, now to reference devices (`$device-`), you'll use `$itasset-`. This is the same for device models (`$device_model`), you'll use `$itasset_mdoel-`.
 
 - Model `itam.DeviceSoftware` depreciated in favour of `itam.ITAssetSoftware`
 

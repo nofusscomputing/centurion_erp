@@ -34,7 +34,7 @@ Additionally you can set the fields that should be marked as mandatory. These fi
 
 - Mac Address
 
-    For assets that connect to a 802.3/802.11 network.
+    For assets that connect to a 802.3/802.11/802.15.1 network.
 
 - Personal Unlocking Key (PUK)
 
