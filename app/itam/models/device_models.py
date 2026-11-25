@@ -18,6 +18,17 @@ from settings.models.app_settings import AppSettings
 
 
 
+#
+# Do not remove this model until post migration of internal systems
+# to Centurion is complete.
+#
+# Why: within markdown `$device-` tags are used which uses the pk
+# from this model.
+#
+# Currently `core.lib.slash_commands.link_model.command_link_model()` has been
+# updated so that any `$device_model-` will be mapped to `$itasset_model-` when linking
+# models.
+#
 @depreciate(
     depreciated_in = '1.36.0',
     removed_in = '2.0',
@@ -28,7 +39,7 @@ class DeviceModel(
     CenturionModel
 ):    # pragma: no cover
 
-    model_tag = 'device_model-'
+    model_tag = 'device_model'
 
 
     class Meta:

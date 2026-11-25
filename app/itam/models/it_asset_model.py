@@ -13,7 +13,7 @@ from settings.models.app_settings import AppSettings
 
 class ITAssetModel(CenturionModel):
 
-    model_tag = 'device_model'
+    model_tag = 'itasset_model'
 
 
     class Meta:
