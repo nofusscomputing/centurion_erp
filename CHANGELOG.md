@@ -1,3 +1,295 @@
+## 1.37.0 (2026-11-26)
+
+### Features
+
+- **itam**: model tag for itam.ITAssetModel update `$device_model-` to `$itasset_model-`
+- **itam**: Add endpoint for ITAsset operating system installs
+- **itam**: use itam.ITAsset base serializer for it_asset field in serializer for model itam.ITAssetOperatingSystem
+- **itam**: model tag for itam.ITAsset update `$device-` to `$itasset-`
+- **itam**: Ensure that if an asset connection has type set, that any asset to be connected, must have the same type
+- **itam**: Add field software from model itam.ITAssetSoftware as related to model itam.ITAsset
+- **itam**: Add parent_asset field to model itam.ITAsset
+- **itam**: m2m model permissions update to also require parent permission
+- **itam**: When adding a child connection to an asset, if the relationship model is set, ensure that the child asset is the same model
+- **itam**: uniqueness for itam.ITAssetRelationship must be by both parent and child.
+- **itam**: Add ITAssetRelationship Viewset
+- **itam**: Remove drf spectacular docs for m2m ViewSet
+- **itam**: Add detail page_layout to itam.ITAssetRelationships
+- **itam**: Make field child_asset_model RO as user needs to see it
+- **itam**: Do mark field as required in metadata for itam.ITAsset
+- **itam**: Add caching to parent and model for related viewset
+- **itam**: Add validatior to config for model itam.ITAsset to ensure config is a dict
+- **itam**: Add itasset route
+- **itam**: Add signal to model link action comment signal
+- **core**: Add support for slash command link model for sub_models to have usable model_tag
+- **itam**: When serializer for model itam.ITAssetRelationships is validated, support a parent model of ITAsset
+- **itam**: m2m ViewSet can use default get_layout
+- **itam**: m2m ViewSet queryset must be from constrained_target unless empty, then construct filtered queryset
+- **itam**: m2m ViewSet queryset must start with parent model
+- **itam**: m2m ViewSet model derived from parent m2m field
+- **itam**: m2m ViewSet must obtain parent_model from kwargs
+- **itam**: URL kwargs for model itam.ITAssetRelationships must be based off of the parent model.
+- **itam**: db migrations
+- **itam**: Add software to M2M ViewSet for ITAssetSoftware
+- **itam**: Add ViewSet for M2M tables
+- **itam**: Add serializer for m2m table itam.ITAssetSoftware
+- **itam**: Add itam.DeviceSoftware to itam.Device data migration
+- **itam**: Add field software to model itam.ITAsset
+- **itam**: Add itam.DeviceOperatingSystem to itam.Device data migration
+- **itam**: Add field operating_system to model itam.ITAsset
+- **itam**: Remove depreciation of model itam.ITAssetOperatingSystemVersion for continued use
+- **itam**: Remove depreciation of model itam.ITAssetOperatingSystem for continued use
+- **itam**: Remove navigation entry "IT Asset"
+- **itam**: Data migration for itam.Device -> itam.ITAsset Model Tickets
+- **itam**: Data migration for itam.Device -> itam.ITAsset KB Articles
+- **itam**: Data migration for itam.Device -> itam.ITAsset
+- **itam**: Migrate feature "global device models" from old device_model to itam.ITAssetModel
+- **itam**: Remove access to depreciated model itam.DeviceModel
+- **itam**: Data migration from itam.DeviceModel to itam.ITAssetModel
+- **itam**: model tag for itam.ITAssetModel must be same as previous model
+- **itam**: model tag for itam.ITAssetModel must be same as previous model
+- **itam**: When creating an Asset and an asset_model is selected, create connections if present on asset_model
+- **itam**: Serializer itam.ITAsset to remove fields not marked mandatory
+- **itam**: Store Asset Type as part of model itam.ITAssetRelationships
+- **itam**: Make serializer for model itam.ITAssetRelationships based off of ViewSet model
+- **itam**: When adding/updating itam.ITAsset also check for fields that have been marked mandatory
+- **itam**: Add asset type to asset relationships
+- **itam**: When displaying an asset model name,  only include manufacturer name if defined
+- **itam**: Add Field device_model.device_type as asset_type to model serializer itam.ITAsset
+- **itam**: Add Field device_model.device_type as asset_type to model serializer itam.ITAsset
+- **itam**: Disable Inventory endpoint and features
+- **core**: Add fn `get_ticket_model_name` to Centurion Mixin
+- **core**: Add fn `get_ticket_app_label` to Centurion Mixin
+- **config_management**: Depreciated model config_management.ConfigGroupSoftware
+- **config_management**: Depreciated model config_management.ConfigGroupHosts
+- **itam**: Depreciated model itam.OperatingSystemVersion
+- **itam**: Depreciated model itam.OperatingSystem
+- **itam**: Add Migrations for model itam.ITAssetOperatingSystem
+- **itam**: Add note serializer for model itam.ITAssetOperatingSystem
+- **itam**: Add audit serializer for model itam.ITAssetOperatingSystem
+- **itam**: Add serializer for model itam.ITAssetOperatingSystem
+- **itam**: Add new model itam.ITAssetOperatingSystem
+- **itam**: field `parent_asset_model` must not link to model itam.ITAssetRelationships
+- **itam**: Mark model SoftwareVersion as Depreciated
+- **itam**: Mark model Software as Depreciated
+- **itam**: Mark model DeviceModel as Depreciated
+- **itam**: Mark model DeviceOperatingSystem as Depreciated
+- **itam**: Mark model DeviceSoftware as Depreciated
+- **itam**: Mark model Device as Depreciated
+- **itam**: Add Urls for model itam.ITAssetRelationships
+- **itam**: migrations for itam.ITAsset itam.ITAssetSoftware itam.ITAssetRelationships itam.SoftwareVersions
+- **itam**: Add Urls for model itam.ITAssetRelationships
+- **itam**: Add ViewSet for model itam.ITAssetRelationships
+- **itam**: Add Serializer for model itam.ITAssetRelationships
+- **itam**: Add ViewSet for model itam.SoftwareVersions
+- **itam**: Add serializer for model itam.SoftwareVersions
+- **itam**: Add ticket serializer for model itam.SoftwareVersions
+- **itam**: Add note serializer for model itam.SoftwareVersions
+- **itam**: Add audit serializer for model itam.SoftwareVersions
+- **itam**: Add serializer for model itam.ITAssetSoftware
+- **itam**: Add note serializer for model itam.ITAssetSoftware
+- **itam**: Add audit serializer for model itam.ITAssetSoftware
+- **itam**: Add new model itam.SoftwareVersions
+- **itam**: Add new model itam.ITAssetRelationships
+- **itam**: Add new model itam.ITAssetModel
+- **itam**: Add ViewSet for model itam.ITAssetModel
+- **itam**: Update URL for model itam.ITAssetModel
+- **itam**: Add ticket serializer for model itam.ITAssetModel
+- **itam**: Add serializer for model itam.ITAssetModel
+- **itam**: Add serializer for model itam.ITAsset
+- **itam**: Add note serializer for model itam.ITAssetModel
+- **itam**: Add audit serializer for model itam.ITAssetModel
+- **itam**: Add note serializer for model itam.ITAsset
+- **itam**: Add audit serializer for model itam.ITAsset
+- **itam**: Add new model itam.ITAssetModel
+- **itam**: Add new model itam.ITAsset
+- **accounting**: Add UI routes for asset models
+- **accounting**: removed feature flag `2025-00007`
+- **accounting**: removed feature flag `2025-00004`
+- **accounting**: When displaying AssetBase, useits display name as link
+
+### Fixes
+
+- **core**: Save Action Comment for ticket description changes
+- **api**: correct get_view_name so it works for index and dynamic model views
+- **itam**: itam.ITAssetRelationships validator must call parent
+- **itam**: m2m ViewSet permissions for HTTP/OPTIONS must match GET
+- **api**: When determining the view_name, support dynamic models
+- **itam**: if no fonfig exists for itam.ITAsset set to empty dict even when None returned
+- **config_management**: Ensure groups config software name is the actual software name
+- **api**: User token requires allowed_methods to be set
+- **itam**: Use software m2m field for config iteration
+- **itam**: user correct log name for ticket action comment
+- **itam**: when creating a ticket action comment dependency, if ticket is missing _before attr, assume not created via user request
+- **itam**: when creating a ticket action comment, if ticket is missing _before attr, assume not created via user request
+- **itam**: Error msg for ITAsset mac address corrected
+- **itam**: Use correct key for m2m software serializer
+- **itam**: asset connection to ITAsset must also add model
+- **core**: Only remove permissions if model is depreciated
+- **itam**: Remove organization field when creating itasset connections
+- **access**: when object permissions as part of tenancy permissions, support object that uses parent model for tenancy
+- **access**: when obtaining tenancy as part of tenancy permissions, if ViewSet has parent_model, use that for tenancy
+- **itam**: asset_id for serializer for model itam.ITAssetOperatingsystem derives from `model_id`
+- **access**: dont attempt to get object tenancy if fn not exist
+- **itam**: When fetching sub-models as part of viewset, skip m2m fields
+- **itam**: update itam.SoftwareVersion serializer to correct file name convention
+- **itam**: must use software name
+- **core**: Dont create an action comment if there is no user
+- **itam**: Correct the query object for fetching config groups when rendering config
+- rename indexes for renamed columns for migrations
+- **itam**: for dynamic fields, dont attempt to set unless there is an instance
+- **settings**: Correct the new field name `device_model_is_global` -> `it_asset_model_is_global`
+- **api**: removed revalidate from  model/pk route
+- **itam**: itam.ITAssetRelationships requires urlkwargs model_name and model_id for url
+- Correct get_models helper
+- **accounting**:  ticket model_name must use object name
+- **core**: for slash command link when fetching model, sub_model tag must match type
+- **itam**: field `device_model` can be blank for model itam.ITAssetSoftware
+- **itam**: When displaying ITAMAssetBase dont show asset_number if empty
+- **itam**: fix typo in device_type field for model itam.ITAssetModel
+- **accounting**: When Stringifying AssetBase Models, if sub model,use its magic str method
+- **core**: When linking model with slash command it should be returning base_model when searching by model tag
+- **core**: MarkdownField should be returning base_model when searching by model tag
+
+### Refactoring
+
+- **itam**: Migrate device installs endpoint to new ITAsset Software installs endpoint
+- Add log file rotation
+- remove empty logger as root does the same
+- Set logging class levels to match python default with cust levels in-between
+- **itam**: clean up fn get_configuration for itam.ITAsset
+- **itam**: Update navigation entry for device model migration to ITAsset
+- **itam**: Model itam.ITAssetSoftware is not a Centurion model, so remove get_tenancy fn
+- **itam**: Model itam.ITAssetRelationships is not a Centurion model
+- **itam**: Migrate operating_system ViewSet to M2M ViewSet
+- **itam**: Migrate connections ViewSet to M2M ViewSet
+- **itam**: update serializer to current naming convention for itam.OperatingSystemVersion
+- **itam**: Correctly name Serializers for model itam.OperatingSystemVersion
+- **itam**: move model  itam.OperatingSystemVersion to own module
+- **itam**: Update import for itam.OperatingSystem
+- **itam**: model fields must not mix args and kwargs itam.ITAssetOperatingSystem
+- **itam**: update serializer to current naming convention for itam.OperatingSystem
+- **itam**: clean-up model import for itam.Software
+- **itam**: Move itam.SoftwareVersion to own module
+- **itam**: split models into own files
+- adjust fields Device -> ITAsset for test cases/fixtures and re-activate tests
+- **api**: CommonViewset fn get_serializer_class updated to reflect modern method to obtain serializer
+- **api**: CommonSerializer fn adding urls,  use object passed to fn to obtain
+- **accounting**: ticket URL for AssetBase and children must use base_model
+- **itam**: `url_model_name` and `app_namespace` must match base model for ITAMAssetModel
+
+### Tests
+
+- **itam**: ViewSet functional test suite for model itam.ITAssetOperatingSystem
+- **itam**: Model functional test suite for model itam.ITAssetOperatingSystem
+- **itam**: API Fields functional test suite for model itam.ITAssetOperatingSystem
+- **itam**: ViewSet unit test suite for itam.ITAssetSoftware
+- **itam**: ViewSet unit test suite for itam.ITAssetOperatingSystem
+- **itam**: Serializer unit test suite for itam.ITAssetSoftware
+- **itam**: Model unit test suite for itam.ITAssetSoftware
+- **itam**: Serializer unit test suite for itam.ITAssetOperatingSystem
+- **itam**: Model unit test suite for itam.ITAssetOperatingSystem
+- **api**: Correct ViewSet Unit Test suites for SLM Submodels
+- **api**: Unit test cases to ensure the viewset returns the correct serializer
+- **itam**: Re-enable unit test suites for model itam.SoftwareVersion
+- **itam**: Re-enable functional test suites for model itam.SoftwareVersion
+- **itam**: Correct fixture for integration test suite endpoints for model itam.ITAssetRelationships
+- **itam**: Add integration test suite endpoints for mopel itam.ITAssetSoftware
+- **itam**: Add integration test suite endpoints for mopel itam.ITAssetRelationships
+- **itam**: Add integration test suite endpoints for mopel itam.ITAssetOperatingSystem
+- **itam**: Update API permissions functional test suite for model itam.ITAssetSoftware
+- **itam**: Update API permissions functional test suite for model itam.ITAssetRelationships
+- **itam**: Update API permissions functional test suite for model itam.ITAssetOperatingSystem
+- **itam**: Model unit test suite for itam.ITAssetRelationship
+- **itam**: Viewset functional test suite for ITAssetRelationship
+- **itam**: Refactor IT_asset_related M2M ViewSet to own test suite
+- **itam**: Ensure that the config field for itam.ITAsset only accepts a dict
+- **itam**: no inventory unit test case for model itam.ITAsset
+- **itam**: config functional test cases for model itam.ITAsset
+- **itam**: ViewSet Functional Test suite for model itam.ITAssetSoftware
+- **itam**: APIFields Functional Test suite for model itam.ITAssetSoftware
+- **itam**: Unit Test case for model itam.ITAsset for status check values
+- **itam**: Unit Test case for model itam.ITAssetSoftware add/remove software
+- **itam**: Unit Test case for model itam.ITAsset cant use reserved key `software` in configuration
+- **itam**: Functional Test case for model itam.ITAsset configuration
+- **itam**: re-enable functional test suites for model itam.ITAssetOperatingSystemVersion
+- **itam**: re-enable unit test suites for model itam.ITAssetOperatingSystemVersion
+- **itam**: re-enable unit test suites for model itam.ITAssetOperatingSystem
+- **itam**: re-enable functional test suites for model itam.ITAssetOperatingSystem
+- **itam**: Revert remove functional test suites for model itam.ITAssetSoftware
+- **itam**: Revert remove unit test suites for model itam.ITAssetSoftware
+- **itam**: Re-Enable unit test suits for model itam.Software
+- **itam**: Re-Enable functional test suits for model itam.Software
+- **itam**: Mark itam.ITAMAssetBase stringify test cases as regression tests for itam.ITAssetSoftware
+- **itam**: Mark itam.ITAMAssetBase stringify test cases as regression tests for itam.ITAssetOperatingSystem
+- **itam**: Mark itam.ITAMAssetBase stringify test cases as regression tests for itam.ITAsset
+- **itam**: Model unit test cases for model itam.ITAMAssetBase to ensure that stringified name is correct
+- **itam**: Migrated old unit Serializer test case for model itam.ITAsset
+- **itam**: ViewSet functional test suite for model itam.ITAssetModel
+- **itam**: API Fields functional test suite for model itam.ITAssetModel
+- **itam**: Serializer unit test suite for model itam.ITAssetModel
+- **itam**: ViewSet unit test suite for model itam.ITAssetModel
+- **itam**: Model unit test suite for model itam.ITAssetModel
+- **itam**: Model functional testcases for itam.ITAssetModel to cover date integrity
+- **itam**: Model functional testcases for itam.ITAssetModel to cover no end number and hyphons
+- **itam**: Ensure that serializer removes non-mandatory fields for model itam.ITAsset
+- **itam**: Ensure that when an itam.ITAssetModel connection is added, the PK is obtained from the viewset
+- **itam**: Ensure that when an asset is created, if the model has connections, they are created on the new asset
+- **itam**: Model functional test suite for model itam.ITAssetModel
+- **access**: Test the Role serializer to_internal_value permission handling
+- **itam**: Unit Serializer no longer removes `name` field when ViewSet model is ITAsset
+- **itam**: Remove old device functional test suites
+- **itam**: Completed api_fields functional test suite for model itam.ITAsset
+- **itam**: Completed Unit test suite for model itam.ITAsset
+- **itam**: Add remaining "new" fields Unit test cases for model itam.ITAsset
+- **itam**: functional test cases for mac_address field on model itam.ITAsset
+- **itam**: Migrate old device uuid field test cases to functional test suite for itam.ITAsset
+- **itam**: Migrate old device name field test cases to functional test suite for itam.ITAsset
+- **core**: Unit test case for method get_ticket_model_name for mixin Centurion
+- **core**: Unit test case for method get_ticket_app_label for mixin Centurion
+- **itam**: Model functional TestSuite for itam.ITAssetSoftware
+- **itam**: Model functional TestSuite for itam.ITAssetOperatingSystem
+- **itam**: Model functional TestSuite for itam.ITAsset
+- **itam**: Serializer functional TestSuite for itam.ITAssetSoftware
+- **itam**: Serializer functional TestSuite for itam.ITAssetOperatingSystem
+- **itam**: Serializer functional TestSuite for itam.ITAsset
+- **itam**: API Fields functional TestSuite for itam.ITAssetSoftware
+- **itam**: API Fields functional TestSuite for itam.ITAssetOperatingSystem
+- **itam**: API Fields functional TestSuite for itam.ITAsset
+- Disable All tests suites for depreciated model itam.OperatingSystemVersion
+- Disable All tests suites for depreciated model itam.OperatingSystem
+- **itam**: ViewSet functional TestSuite for itam.ITAssetSOftware
+- **itam**: ViewSet functional TestSuite for itam.ITAssetOPeratingSystem
+- **itam**: ViewSet functional TestSuite for itam.ITAsset
+- **accounting**: Add missing model unit test case for modified field on model accounting.Asset
+- **itam**: ViewSet unit TestSuite for itam.ITAssetSoftware
+- **itam**: Serializer unit TestSuite for itam.ITAssetSoftware
+- **itam**: Model unit TestSuite for itam.ITAssetSoftware
+- **itam**: ViewSet unit TestSuite for itam.ITAssetOperatingSystem
+- **itam**: Serializer unit TestSuite for itam.ITAssetOperatingSystem
+- **itam**: Model unit TestSuite for itam.ITAssetOperatingSystem
+- **itam**: ViewSet unit TestSuite for itam.ITAsset
+- **itam**: Serializer unit TestSuite for itam.ITAsset
+- **itam**: Model unit TestSuite for itam.ITAsset
+- **itam**: Remove API permissions tests for depreciated models
+- **itam**: Disable tests for depreciated model DeviceSoftware
+- **itam**: Disable tests for depreciated model SoftwareVersion
+- **itam**: Disable tests for depreciated model Software
+- **itam**: Disable tests for depreciated model DeviceModel
+- **itam**: Disable tests for depreciated model Device
+- **itam**: Model Functional Test Suite for ITAMAssetBase
+- **itam**: Remove depreciated Metadata Functional Test Suite for ITAMAssetBase
+- **accounting**: Remove depreciated Metadata Functional Test Suite for AssetBase
+- **itam**: Viewset Functional Test Suite for ITAMAssetBase
+- **accounting**: Viewset Functional Test Suite for AssetBase
+- **accounting**: Model Functional Test Suite for AssetBase
+- **itam**: ViewSet Unit Test Suite for ITAMAssetBase
+- **itam**: Serializer Unit Test Suite for ITAMAssetBase
+- **itam**: Model Unit Test Suite for ITAMAssetBase
+- **accounting**: ViewSet Unit Test Suite for AssetBase
+- **accounting**: Serializer Unit Test Suite for AssetBase
+- **accounting**: Model Unit Test Suite for AssetBase
+
 ## 1.36.0 (2026-11-17)
 
 ### Features
