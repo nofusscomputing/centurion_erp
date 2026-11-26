@@ -14,7 +14,7 @@ from itam.models.itam_asset_base import ITAMAssetBase
 
 
 
-@extend_schema_serializer(component_name = 'ITAssetBaseModelSerializer')
+@extend_schema_serializer(component_name = 'ITAMAssetBaseModelSerializer')
 class ModelSerializer(
     AssetBaseModelSerializer,
     BaseSerializer
@@ -63,7 +63,7 @@ class ModelSerializer(
 
 
 
-@extend_schema_serializer(component_name = 'ITAssetBaseViewSerializer')
+@extend_schema_serializer(component_name = 'ITAMAssetBaseViewSerializer')
 class ViewSerializer(
     AssetBaseViewSerializer,
     ModelSerializer

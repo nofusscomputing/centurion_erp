@@ -52,6 +52,14 @@ class AssetBase(
         return True
 
 
+    # asset_class    # buildings, land, licences, patents, plant_and_equipment, software, trademark, vehicles
+
+    # asset_category    # use one of the fixed asset categories. etc.
+
+    # asset_status    # lifecycle status
+
+    # asset_type    # tangible / intangible
+
     asset_number = models.CharField(
         blank = True,
         help_text = 'Number or tag to use to track this asset',
@@ -86,8 +94,6 @@ class AssetBase(
     """
 
 
-    # Status
-
     # model (manufacturer / model)
 
 
@@ -98,7 +104,11 @@ class AssetBase(
         "dataset": {
             "columns": [
                 [
-                    "display_name",
+                    {
+                        "field": "display_name",
+                        "type": "link",
+                        "key": "_self"
+                    },
                     'asset_number',
                     'serial_number',
                     'organization',
@@ -168,6 +178,25 @@ class AssetBase(
 
 
 
-    def __str__(self):
+    def __str__(self) -> str:
 
+        related_model = self.get_related_model()
+
+        if related_model is not self:
+            return str( related_model )
+        
         return self._meta.verbose_name + ' - ' + self.asset_number
+
+
+    def get_ticket_app_label(self) -> str:
+        """Get the name for the History Model
+
+        Returns:
+            str: Name of the ticket model (`<model class name>Ticket`)
+        """
+
+        return self._base_model._meta.app_label
+
+
+    def get_ticket_model_name(self):
+        return f'{self._base_model._meta.object_name}Ticket'

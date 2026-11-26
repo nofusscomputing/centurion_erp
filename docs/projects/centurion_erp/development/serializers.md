@@ -78,3 +78,14 @@ With the exception of Centurion ERP models, the following additional serializers
 - User `centurion.serializers.permission`
 
 - User `centurion.serializers.user`
+
+
+## Tests
+
+The following test suites exists for serializers:
+
+- Unit
+
+    - `api.tests.unit.test_unit_serializer.SerializerTestCases`
+
+When you create the serializer test suite for the new serializer, unless the serializer is for a sub model, then the test suite **must** inherit from the above test suites.

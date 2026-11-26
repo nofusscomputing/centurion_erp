@@ -204,9 +204,9 @@ class MigrationsTestCases:
                 "cp -vf requirements_dev.txt test/requirements_dev.txt; "
                 "cd test; "
                 'docker image rm -f $(docker inspect -f "{{ index .Config.Image }}" centurion-erp | cut -d: -f1):test; '
-                "docker-compose rm -fs centurion; "
+                "docker compose rm -fs centurion; "
                 f"CENTURION_IMAGE_TAG={last_git_tag_sha} "
-                "docker-compose up -d centurion;'"
+                "docker compose up -d centurion;'"
             ),
             description = 'set centurion image to the current git tag'
         )
@@ -315,9 +315,9 @@ class MigrationsTestCases:
                 "cp -vf requirements_dev.txt test/requirements_dev.txt; "
                 "cd test; "
                 'docker image rm -f $(docker inspect -f "{{ index .Config.Image }}" centurion-erp | cut -d: -f1):test; '
-                "docker-compose rm -fs centurion; "
+                "docker compose rm -fs centurion; "
                 f"CENTURION_IMAGE_TAG={last_git_commit_sha} "
-                "docker-compose up -d centurion;'"
+                "docker compose up -d centurion;'"
             ),
             description = 'set centurion image to the current git tag'
         )

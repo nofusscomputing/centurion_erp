@@ -5,72 +5,14 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
-# from core.models.centurion_notes import CenturionModelNote
+from centurion.tests.helpers import get_models
+
+from core.models.audit import CenturionAudit
+from core.models.centurion_notes import CenturionModelNote
 from core.models.model_tickets import ModelTicket
 from core.tests.unit.model_tickets_meta.test_unit_model_tickets_viewset_meta import (
     ModelTicketViewsetMetaInheritedCases
 )
-
-
-
-def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
-    """Fetch models from Centurion Apps
-
-    Args:
-        excludes (list[ str ]): Words that may be in a models name to exclude
-
-    Returns:
-        list[ tuple ]: Centurion ERP Only models
-    """
-
-    models: list = []
-
-    model_apps: list = []
-
-    exclude_model_apps = [
-        'django',
-        'django_celery_results',
-        'django_filters',
-        'drf_spectacular',
-        'drf_spectacular_sidecar',
-        'coresheaders',
-        'corsheaders',
-        'rest_framework',
-        'rest_framework_json_api',
-        'social_django',
-    ]
-
-    for app in settings.INSTALLED_APPS:
-
-        app = app.split('.')[0]
-
-        if app in exclude_model_apps:
-            continue
-
-        model_apps += [ app ]
-
-
-    for model in apps.get_models():
-
-        model_name = str(model._meta.model_name)
-
-        if not issubclass(model, ModelTicket):
-            continue
-
-        skip = False
-
-        for exclude in excludes:
-
-            if exclude in str(model._meta.model_name):
-                skip = True
-                break
-
-        if skip:
-                continue
-
-        models += [ model ]
-
-    return models
 
 
 
@@ -178,6 +120,7 @@ class ModelTicketMetaModelsViewSetTestCases(
     def test_model_creation(self, model, user):
         pass
 
+
     @pytest.fixture( scope = 'class')
     def model_serializer(self, request):
 
@@ -185,8 +128,8 @@ class ModelTicketMetaModelsViewSetTestCases(
 
         serializer_module = importlib.import_module(
             model._meta.app_label + '.serializers.' + str(
-                request.cls.base_model._meta.model_name
-                + '_' +
+                'modelticket' +
+                '_' +
                 model._meta.model_name
             )
         )
@@ -198,18 +141,185 @@ class ModelTicketMetaModelsViewSetTestCases(
         }
 
 
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_create(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct create
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'create'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.skip( reason = 'test to be written' )
+    def test_view_func_get_serializer_class_create_dynamic_serializer(self, viewset, model, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct create
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'create'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.skip( reason = 'test to be written' )
+    def test_view_func_get_serializer_class_partial_update_dynamic_serializer(self,
+        viewset, model, model_kwargs, model_serializer, mocker,
+    ):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+        serializer = view_set.get_serializer_class()(
+            context={
+                'view': view_set,
+                'request': mocker.Mock()
+            }
+        )
+
+        kwargs = model_kwargs()
+        kwargs['pk'] = 55
+        kwargs['id'] = kwargs['pk']
+        tester = serializer.to_representation(instance = model( **kwargs ))
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.skip( reason = 'test to be written' )
+    def test_view_func_get_serializer_class_update_dynamic_serializer(self, viewset, model, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
+
+
+
+    @pytest.mark.skip( reason = 'test to be written' )
+    def test_view_func_get_serializer_class_view_dynamic_serializer(self, viewset, model, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
+
+
 
 
 for model in get_models(
     excludes = [
         'manufacturer'
-    ]
+    ],
+    only_class = ModelTicket
 ):
 
-    if(
-        not issubclass(model, ModelTicket)
-        or model == ModelTicket
-    ):
+    if model()._base_model is model:
         continue
 
 

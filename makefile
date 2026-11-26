@@ -313,7 +313,7 @@ test-integration:
 	if [ ! -n "$CENTURION_IMAGE_TAG" ]; then
 		export CENTURION_IMAGE_TAG=$$(git log -1 --format=%H);
 	fi
-	if docker-compose up -d; then
+	if docker compose up -d; then
 
 		docker ps -a;
 
@@ -411,7 +411,7 @@ test-integration:
 	cd "${START_PWD}/test";
 	rm -f requirements_dev.txt;
 	echo 'REmoving containers.';
-	docker-compose down -v;
+	docker compose down -v;
 	cd "${START_PWD}";
 	exit ${exit_code};
 

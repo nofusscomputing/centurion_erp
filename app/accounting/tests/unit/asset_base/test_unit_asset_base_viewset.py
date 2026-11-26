@@ -1,10 +1,5 @@
 import pytest
 
-from django.test import Client, TestCase
-
-from rest_framework.reverse import reverse
-
-
 from accounting.viewsets.asset import (
     NoDocsViewSet,
     AssetBase,
@@ -13,123 +8,252 @@ from accounting.viewsets.asset import (
 
 from api.tests.unit.viewset.test_unit_tenancy_viewset import SubModelViewSetInheritedCases
 
-from centurion.tests.abstract.mock_view import MockRequest
-
-from settings.models.app_settings import AppSettings
 
 
-
-@pytest.mark.skip(reason = 'see #895, tests being refactored')
 @pytest.mark.model_assetbase
 class AssetBaseViewsetTestCases(
     SubModelViewSetInheritedCases,
 ):
 
-    model = AssetBase
 
-    viewset = ViewSet
-
-    base_model = AssetBase
-
-    route_name = None
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return ViewSet
 
 
-    @classmethod
-    def setUpTestData(self):
-        """Setup Test
-
-        1. make list request
-        """
-
-        self.model = AssetBase
-
-        self.viewset = ViewSet
-
-
-        super().setUpTestData()
-
-        if self.model is not AssetBase:
-
-            self.kwargs = {
-                'model_name': self.model._meta.model_name
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            # '_log': {
+            #     'type': logging.Logger,
+            #     'value': None
+            # },
+            '_model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'back_url': {
+                'type': type(None),
+                'value': None
+            },
+            'base_model': {
+                'value': AssetBase
+            },
+            'documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'filterset_fields': {
+                'value': [
+                    'asset_number',
+                    'serial_number',
+                    'organization',
+                ]
+            },
+            'model': {
+                'value': AssetBase
+            },
+            'model_documentation': {
+                'type': type(None),
+                'value': None
+            },
+            'model_kwarg': {
+                'value': 'model_name'
+            },
+            'model_suffix': {
+                'type': type(None)
+            },
+            'queryset': {
+                'type': type(None),
+                'value': None
+            },
+            'serializer_class': {
+                'type': type(None),
+                'value': None
+            },
+            'search_fields': {
+                'value': [
+                    'asset_number',
+                    'serial_number',
+                ]
+            },
+            'view_description': {
+                'value': 'All Assets'
+            },
+            'view_name': {
+                'type': type(None),
+                'value': None
+            },
+            'view_serializer_name': {
+                'type': type(None),
+                'value': None
             }
-
-            self.viewset.kwargs = self.kwargs
-
-
-        client = Client()
-
-        url = reverse(
-            self.route_name + '-list',
-            kwargs = self.kwargs
-        )
-
-        client.force_login(self.view_user)
-
-        self.http_options_response_list = client.options(url)
-
-        a = 'a'
-
-
-
-    def test_view_attr_value_model_kwarg(self):
-        """Attribute Test
-
-        Attribute `model_kwarg` must be equal to model._meta.model_name
-        """
-
-        view_set = self.viewset()
-
-        assert view_set.model_kwarg == 'model_name'
-
-
-
-    def test_view_attr_model_value(self):
-        """Attribute Test
-
-        Attribute `model` must return the correct sub-model
-        """
-
-        view_set = self.viewset()
-
-
-        app_settings = AppSettings.objects.select_related('global_organization').get(
-            owner_organization = None
-        )
-
-
-        view_set.request = MockRequest(
-            user = self.view_user,
-            app_settings = app_settings,
-        )
-
-        assert view_set.model == self.model
+        }
 
 
 
 class AssetBaseViewsetInheritedCases(
     AssetBaseViewsetTestCases,
 ):
-    """Test Suite for Sub-Models of TicketBase
-    
-    Use this Test suit if your sub-model inherits directly from TicketBase.
-    """
 
-    model: str = None
-    """name of the model to test"""
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_create(self, viewset, model_serializer):
+        """ Function Test
 
-    route_name = 'v2:accounting:_api_asset_sub'
+        Function `get_serializer_class` must return the correct create
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'create'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    def test_view_func_get_serializer_class_create_kwargs(self, viewset, model, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct create
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'create'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    def test_view_func_get_serializer_class_partial_update_kwargs(self, viewset, model, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    def test_view_func_get_serializer_class_update_kwargs(self, viewset, model, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.regression
+    @pytest.mark.xfail( reason = 'viewset requires kwarg `model_name`' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
+
+
+
+    def test_view_func_get_serializer_class_view_kwargs(self, viewset, model, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+        view_set.kwargs = {
+            'model_name': model._meta.model_name
+        }
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']
+
 
 
 
 @pytest.mark.module_accounting
-class AssetBaseViewsetTest(
+class AssetBaseViewsetPyTest(
     AssetBaseViewsetTestCases,
-    TestCase,
 ):
 
-    kwargs = {}
-
-    route_name = 'v2:accounting:_api_asset'
-
-    viewset = NoDocsViewSet
+    @pytest.fixture( scope = 'function' )
+    def viewset(self):
+        return NoDocsViewSet

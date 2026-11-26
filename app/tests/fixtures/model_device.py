@@ -22,7 +22,6 @@ def model_device(clean_model_from_db):
 
 @pytest.fixture( scope = 'class')
 def kwargs_device(django_db_blocker, kwargs_centurionmodel,
-    model_devicemodel, kwargs_devicemodel,
     model_devicetype, kwargs_devicetype,
 ):
 
@@ -30,11 +29,6 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
     def kwargs():
 
         with django_db_blocker.unblock():
-
-            kwargs = kwargs_devicemodel()
-            kwargs['name'] = 'dev_dm' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
-
-            device_model = model_devicemodel.objects.create( **kwargs )
 
             kwargs = kwargs_devicetype()
             kwargs['name'] = 'dev_dt-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" )
@@ -46,7 +40,6 @@ def kwargs_device(django_db_blocker, kwargs_centurionmodel,
             'name': 'dev-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'serial_number': 'dev-' + str( datetime.now().strftime("%H%M%S") + f"{datetime.now().microsecond // 100:04d}" ),
             'uuid': '73'+ str( random.randint(10000, 99999) ) + 'c-e3e8-4680-a3bf-2' + str( random.randint(10000, 99999) ) + 'e' + str( random.randint(10000, 99999) ),
-            'device_model': device_model,
             'device_type': device_type,
             'config':  { 'a_dev_config_key': 'a_dev_config_value'},
             'inventorydate': (

@@ -1,114 +1,12 @@
 from django.db import models
 
 from access.fields import AutoLastModifiedField
-from access.models.company_base import Company
-from access.models.tenant import Tenant
+
+from centurion.lib.decorators import depreciate
 
 from core.models.centurion import CenturionModel
-from core.models.manufacturer import Manufacturer
 
 from settings.models.app_settings import AppSettings
-
-
-
-class SoftwareCategory(
-    CenturionModel,
-):
-
-    model_tag = 'software_category'
-
-
-    class Meta:
-
-        ordering = [
-            'name',
-        ]
-
-        verbose_name = 'Software Category'
-
-        verbose_name_plural = 'Software Categories'
-
-
-    name = models.CharField(
-        blank = False,
-        help_text = 'Name of this item',
-        max_length = 50,
-        unique = True,
-        verbose_name = 'Name'
-    )
-
-    modified = AutoLastModifiedField()
-
-
-    page_layout: dict = {
-        "dataset": {
-            "columns": [
-                [
-                    "name",
-                    "organization",
-                    "created",
-                    "modified",
-                ]
-            ]
-        },
-        "detail": [
-            {
-                "name": "Details",
-                "slug": "details",
-                "sections": [
-                    {
-                        "layout": "double",
-                        "left": [
-                            'organization',
-                            'name',
-                        ],
-                        "right": [
-                            'model_notes',
-                            'created',
-                            'modified',
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "Knowledge Base",
-                "slug": "kb_articles",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "knowledge_base",
-                    }
-                ]
-            },
-            {
-                "name": "Notes",
-                "slug": "notes",
-                "sections": []
-            }
-        ],
-        "table": [
-            "name",
-            "organization",
-            "created",
-            "modified",
-        ]
-    }
-
-
-    def __str__(self):
-
-        return self.name
-
-
-    def clean(self):
-
-        app_settings = AppSettings.objects.get(owner_organization=None)
-
-        if app_settings.software_categories_is_global:
-
-            self.organization = app_settings.global_organization
-
-        super().clean()
 
 
 
@@ -132,7 +30,7 @@ class Software(
 
 
     organization = models.ForeignKey(
-        Tenant,
+        to = 'access.Tenant',
         blank = False,
         help_text = 'Tenant this belongs to',
         null = True,
@@ -145,7 +43,7 @@ class Software(
     )
 
     publisher_old = models.ForeignKey(
-        Manufacturer,
+        to = 'core.Manufacturer',
         blank= True,
         help_text = 'Who publishes this software',
         null = True,
@@ -155,12 +53,12 @@ class Software(
     )
 
     publisher = models.ForeignKey(
-        Company,
+        to = 'access.Company',
         blank= True,
         help_text = 'Who publishes this software',
         null = True,
         on_delete = models.PROTECT,
-        related_name = 'software',
+        related_name = '+',
         verbose_name = 'Publisher',
     )
 
@@ -173,7 +71,7 @@ class Software(
     )
 
     category = models.ForeignKey(
-        SoftwareCategory,
+        to = 'itam.SoftwareCategory',
         blank = True,
         help_text = 'Category of this Softwarae',
         null = True,
@@ -310,126 +208,3 @@ class Software(
             self.organization = app_settings.global_organization
 
         super().clean()
-
-
-
-class SoftwareVersion(
-    CenturionModel
-):
-
-    model_tag = 'software_version'
-
-
-    class Meta:
-
-        ordering = [
-            'name'
-        ]
-
-        verbose_name = 'Software Version'
-
-        verbose_name_plural = 'Software Versions'
-
-
-    software = models.ForeignKey(
-        Software,
-        blank = False,
-        help_text = 'Software this version applies',
-        null = False,
-        on_delete = models.CASCADE,
-        verbose_name = 'Software',
-    )
-
-    name = models.CharField(
-        blank = False,
-        help_text = 'Name of for the software version',
-        max_length = 50,
-        unique = False,
-        verbose_name = 'Name'
-    )
-
-    modified = AutoLastModifiedField()
-
-
-    page_layout: dict = {
-        "dataset": {
-            "columns": [
-                [
-                    'name',
-                    'organization',
-                    'created',
-                    'modified',
-                ]
-            ]
-        },
-        "detail": [
-            {
-                "name": "Details",
-                "slug": "details",
-                "sections": [
-                    {
-                        "layout": "double",
-                        "left": [
-                            'organization',
-                            'software',
-                            'name',
-                            'created',
-                            'modified',
-                        ],
-                        "right": [
-                            'model_notes',
-                            'is_virtual',
-                        ]
-                    },
-                ]
-            },
-            {
-                "name": "Knowledge Base",
-                "slug": "kb_articles",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "knowledge_base",
-                    }
-                ]
-            },
-            {
-                "name": "Tickets",
-                "slug": "tickets",
-                "sections": [
-                    {
-                        "layout": "table",
-                        "field": "tickets",
-                    }
-                ],
-            },
-            {
-                "name": "Notes",
-                "slug": "notes",
-                "sections": []
-            },
-
-        ],
-        "table": [
-            'name',
-            'organization',
-            'created',
-            'modified',
-        ]
-    }
-
-
-    def get_url_kwargs(self, many = False) -> dict:
-
-        kwargs = super().get_url_kwargs( many = many)
-
-        kwargs.update({
-            'software_id': self.software.id,
-        })
-
-        return kwargs
-
-
-    def __str__(self):
-
-        return self.software.name + ' ' + self.name

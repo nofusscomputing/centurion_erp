@@ -56,19 +56,17 @@ class TicketCommentActionFieldEdit(
         verbose_name = 'Edit Type'
     )
 
-    previous_value = models.CharField(
+    previous_value = models.TextField(
         blank = True,
         help_text = 'Value changed from',
-        max_length = 50,
         null = True,
         unique = False,
         verbose_name = 'Previous Value'
     )
 
-    new_value = models.CharField(
+    new_value = models.TextField(
         blank = True,
         help_text = 'Value changed to',
-        max_length = 50,
         null = True,
         unique = False,
         verbose_name = 'New Value'

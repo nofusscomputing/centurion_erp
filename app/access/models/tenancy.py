@@ -17,8 +17,9 @@ from core.mixins.history_save import SaveHistory
     depreciated_in = '1.19.0',
     removed_in = '2.0',
     replacement = 'access.models.roles',
+    skip_tests = True,
 )
-class TenancyObject(SaveHistory):
+class TenancyObject(SaveHistory):    # pragma: no cover
     """ Tenancy Model Abstrct class.
 
     This class is for inclusion wihtin **every** model within Centurion ERP.

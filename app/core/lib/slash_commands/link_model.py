@@ -64,11 +64,45 @@ For this command to process the following conditions must be met:
 
             for model_type, model_id in found_items:
 
+                if model_type == 'device':
+                    #
+                    # See itam.Device for notes for this scope.
+                    #
+
+                    model_type = 'itasset'
+
+                    device_model = apps.get_model(
+                        app_label = model().get_ticket_app_label(),
+                        model_name = f'{model().get_ticket_model_name()}'.lower()
+                    )
+
+                    old_model = device_model.objects.get( id = int(model_id) )
+
+                    model_id = old_model.migrated_id
+
+
+                elif model_type == 'device_model':
+                    #
+                    # See itam.DeviceModel for notes for this scope.
+                    #
+
+                    model_type = 'itasset_model'
+
+                    device_model = apps.get_model(
+                        app_label = model().get_ticket_app_label(),
+                        model_name = f'{model().get_ticket_model_name()}'.lower()
+                    )
+
+                    old_model = device_model.objects.get( id = int(model_id) )
+
+                    model_id = old_model.migrated_id
+
+
                 model = self.get_model( model_type )
 
                 model = apps.get_model(
-                    app_label = model._meta.app_label,
-                    model_name = f'{model._meta.object_name}Ticket'.lower()
+                    app_label = model().get_ticket_app_label(),
+                    model_name = f'{model().get_ticket_model_name()}'.lower()
                 )
 
                 if not model:
@@ -102,7 +136,28 @@ For this command to process the following conditions must be met:
 
         for obj_model in apps.get_models():
 
-            if model_type == getattr(obj_model, 'model_tag', '-not_model-'):
+            if(
+                model_type == getattr(obj_model, 'model_tag', '-not_model-')
+                and (
+                    (
+                        getattr(obj_model, '_is_submodel', False)
+                        and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
+                            ) != getattr(obj_model, 'model_tag', '-not_model-')
+                    ) or not getattr(obj_model, '_is_submodel', False)
+                )
+            ):
+                return obj_model
+
+            elif(
+                model_type == getattr(obj_model, 'model_tag', '-not_model-')
+                and (
+                    (
+                        getattr(obj_model, '_is_submodel', False)
+                        and getattr(obj_model()._base_model, 'model_tag', '-not_base_model-'
+                            ) != getattr(obj_model, 'model_tag', '-not_model-')
+                    ) or not getattr(obj_model, '_is_submodel', False)
+                )
+            ):
                 return obj_model
 
 

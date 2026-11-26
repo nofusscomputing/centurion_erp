@@ -5,72 +5,13 @@ from django.apps import apps
 from django.conf import settings
 from django.db import models
 
-# from core.models.centurion_notes import CenturionModelNote
+from centurion.tests.helpers import get_models
+
 from core.models.model_tickets import ModelTicket
 
 from core.tests.functional.model_tickets_meta.test_functional_model_tickets_api_fields_meta import (
     ModelTicketMetaAPIInheritedCases
 )
-
-
-def get_models( excludes: list[ str ] = [] ) -> list[ tuple ]:
-    """Fetch models from Centurion Apps
-
-    Args:
-        excludes (list[ str ]): Words that may be in a models name to exclude
-
-    Returns:
-        list[ tuple ]: Centurion ERP Only models
-    """
-
-    models: list = []
-
-    model_apps: list = []
-
-    exclude_model_apps = [
-        'django',
-        'django_celery_results',
-        'django_filters',
-        'drf_spectacular',
-        'drf_spectacular_sidecar',
-        'coresheaders',
-        'corsheaders',
-        'rest_framework',
-        'rest_framework_json_api',
-        'social_django',
-    ]
-
-    for app in settings.INSTALLED_APPS:
-
-        app = app.split('.')[0]
-
-        if app in exclude_model_apps:
-            continue
-
-        model_apps += [ app ]
-
-
-    for model in apps.get_models():
-
-        model_name = str(model._meta.model_name)
-
-        if not issubclass(model, ModelTicket):
-            continue
-
-        skip = False
-
-        for exclude in excludes:
-
-            if exclude in str(model._meta.model_name):
-                skip = True
-                break
-
-        if skip:
-                continue
-
-        models += [ model ]
-
-    return models
 
 
 
@@ -278,7 +219,8 @@ class ModelTicketMetaModelsAPITestCases(
 for model in get_models(
     excludes = [
         'manufacturer'
-    ]
+    ],
+    only_class = ModelTicket,
 ):
 
     if(

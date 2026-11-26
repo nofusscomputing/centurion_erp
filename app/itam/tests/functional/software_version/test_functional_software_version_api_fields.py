@@ -1,7 +1,5 @@
 import pytest
 
-# from django.db import models
-
 from rest_framework.relations import Hyperlink
 
 from api.tests.functional.test_functional_api_fields import (

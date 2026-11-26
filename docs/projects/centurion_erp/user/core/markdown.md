@@ -78,8 +78,6 @@ A Model link is a reference to an item within the database. Supported model link
 | config groups| `$config_group-<id>` |
 | contact | `$entity-<id>` |
 | company | `$entity-<id>` |
-| device| `$device-<id>` |
-| devicemodel| `$device_model-<id>` |
 | devicetype| `$device_type-<id>` |
 | employee | `$entity-<id>` |
 | entity | `$entity-<id>` |
@@ -88,7 +86,8 @@ A Model link is a reference to an item within the database. Supported model link
 | gitrepository| `$git_repository-<id>` |
 | gitgroup| `$git_group-<id>` |
 | group| `$-<id>` |
-| it_asset | `$asset-<id>` or `$it_asset-<id>` |
+| it_asset | `$itasset-<id>` |
+| it asset model | `$itasset_model-<id>` |
 | knowledgebase| `$kb-<id>` |
 | knowledgebasecategory| `$kb_category-<id>` |
 | manufacturer| `$manufacturer-<id>` |
