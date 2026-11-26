@@ -11,7 +11,7 @@ from access.models.tenant import Tenant as Organization
 from devops.models.feature_flag import FeatureFlag
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
-from itam.models.software import Software
+from itam.models import Software
 
 
 

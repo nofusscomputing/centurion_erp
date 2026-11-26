@@ -86,17 +86,71 @@ class SuperUserPermissionsModelRetrieveUpdateViewSetPyTest(
             }
         }
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_view_func_get_queryset_cache_result_used(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_function_get_queryset_manager_calls_user(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_function_get_queryset_manager_filters_by_pk(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
 
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
     def test_function_get_queryset_manager_filters_by_model_id(self):
-        pytest.xfail( reason = 'base class is abstract with no model' )
+        assert False
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_partial_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct partial_update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'partial_update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_update(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct update
+        serializer for the model in question.
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'update'
+
+
+        assert view_set.get_serializer_class() == model_serializer['model']
+
+
+    @pytest.mark.xfail( reason = 'base class is abstract with no model' )
+    def test_view_func_get_serializer_class_view(self, viewset, model_serializer):
+        """ Function Test
+
+        Function `get_serializer_class` must return the correct view serializer
+        for the model in question
+        """
+
+        view_set = viewset()
+
+        view_set.action = 'list'
+
+
+        assert view_set.get_serializer_class() == model_serializer['view']

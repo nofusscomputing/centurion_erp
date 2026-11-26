@@ -56,7 +56,10 @@ def remove_non_existent_permissions(sender, **kwargs):
 
             for model_permission, description in PermissionModel._meta.permissions:
 
-                if model_permission == permission.codename:
+                if(
+                    model_permission == permission.codename
+                    and not getattr(PermissionModel, 'decorator_depreciated', False)
+                ):
                     clean = False
 
 

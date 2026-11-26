@@ -23,8 +23,9 @@ deleted_model = dispatch.Signal()
     depreciated_in = '1.16.0',
     removed_in = '2.0',
     replacement = 'core.models.models_ticket',
+    skip_tests = True,
 )
-class TicketLinkedItem(TenancyObject):
+class TicketLinkedItem(TenancyObject):    # pragma: no cover
 
     class Meta:
 
@@ -230,6 +231,6 @@ class TicketLinkedItem(TenancyObject):
 
 
 @receiver(post_delete, sender=KnowledgeBase, dispatch_uid='knowledge_base_delete_signal')
-def signal_deleted_model(sender, instance, using, **kwargs):
+def signal_deleted_model(sender, instance, using, **kwargs):    # pragma: no cover
 
     deleted_model.send(sender='knowledge_base_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.KB)

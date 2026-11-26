@@ -1,3 +1,32 @@
+## Version v1.37.0
+
+- Removed feature flag `2025-00004` enabling usage of accounting module.
+
+- New model `itam.ITAssetModel` that replaces `itam.DeviceModel`. All data from old table to new table occurs during migration admin command.
+
+    As part of migrations the following will occur:
+
+    - Migrate devices table to new itasset table.
+
+    - Search ticket comments for usage of `$device-<original pk>` and update it to `$itasset-<new pk>`
+
+    - Search KB articles for usage of `$device-<original pk>` and update it to `$itasset-<new pk>`
+
+    - Search **all** models with field `model_notes` for usage of `$device-<original pk>` and update it to `$itasset-<new pk>`
+
+    Additionally, now to reference devices (`$device-`), you'll use `$itasset-`. This is the same for device models (`$device_model`), you'll use `$itasset_mdoel-`.
+
+- Model `itam.DeviceSoftware` depreciated in favour of `itam.ITAssetSoftware`
+
+- Endpoint for model `itam.DeviceSoftware` removed.
+
+- Model `itam.DeviceOperatingSystem` depreciated in favour of `itam.ITAssetOperatingSystem`
+
+- Endpoint for model `itam.DeviceOperatingSystem` removed.
+
+- Added ability to be able to build IT Assets via parent <> child relationships.
+
+
 ## Version v1.36.0
 
 This release is an OOB release to address vulnerability see [GHSA-93rj-7648-533c](https://github.com/nofusscomputing/centurion_erp/security/advisories/GHSA-93rj-7648-533c).

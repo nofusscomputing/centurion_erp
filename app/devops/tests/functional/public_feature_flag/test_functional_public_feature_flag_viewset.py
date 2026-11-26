@@ -17,7 +17,7 @@ from api.tests.abstract.api_serializer_viewset import SerializerView
 from devops.models.feature_flag import FeatureFlag
 from devops.models.software_enable_feature_flag import SoftwareEnableFeatureFlag
 
-from itam.models.software import Software
+from itam.models import Software
 
 from settings.models.app_settings import AppSettings
 

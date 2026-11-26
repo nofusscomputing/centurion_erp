@@ -27,6 +27,11 @@ def clean_model_from_db(django_db_blocker):
 
                     for linked_model in db_obj._meta.related_objects:
 
+                        if issubclass(linked_model.related_model, getattr(db_obj, '_base_model', None).__class__):
+                            # skip models that share same base
+                            continue
+
+
                         for rel_obj in linked_model.related_model.objects.all():
 
                             if rel_obj._meta.model_name == 'appsettings':

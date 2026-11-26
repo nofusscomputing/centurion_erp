@@ -16,7 +16,7 @@ def model_company(clean_model_from_db):
 
     yield Company
 
-    clean_model_from_db(Company)
+    # clean_model_from_db(Company)
 
 
 @pytest.fixture( scope = 'class')

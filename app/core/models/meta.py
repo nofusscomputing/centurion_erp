@@ -10,6 +10,8 @@ from django.utils.module_loading import import_string
 from access.models.company_base import Company    # pylint: disable=W0611:unused-import
 from access.models.role import Role   # pylint: disable=W0611:unused-import
 ## EoF Include block
+from centurion.lib.decorators.depreciated import depreciate
+
 
 
 module_path = f'centurion.models.meta'
@@ -24,6 +26,20 @@ if apps.models_ready:
     existing_models = { m.__name__ for m in apps.get_models() }
 
     for model in apps.get_models():
+
+
+        #
+        # If the model is depreciated, depreciate the meta class too.
+        #
+        depreciated = None
+
+        if hasattr(model, '_decorator'):
+
+            for decorator in model._decorator:
+
+                if decorator['name'] == 'depreciate':
+                    depreciated= decorator['kwargs']
+
 
         name = model.__name__
 
@@ -70,6 +86,9 @@ if apps.models_ready:
 
             setattr(sys.modules[module_path], audit_meta_name, AuditMetaModel)
 
+            if depreciated:
+                AuditMetaModel = depreciate( **depreciated )( obj = AuditMetaModel )
+
 
         if getattr(model, '_notes_enabled', False):
 
@@ -106,6 +125,9 @@ if apps.models_ready:
             )
 
             setattr(sys.modules[module_path], notes_meta_name, NotesMetaModel)
+
+            if depreciated:
+                NotesMetaModel = depreciate( **depreciated )( obj = NotesMetaModel )
 
 
         if getattr(model, '_ticket_linkable', False):
@@ -146,3 +168,6 @@ if apps.models_ready:
             )
 
             setattr(sys.modules[module_path], ticketlinkedmodel_meta_name, TicketLinkedModel)
+
+            if depreciated:
+                TicketLinkedModel = depreciate( **depreciated )( obj = TicketLinkedModel )

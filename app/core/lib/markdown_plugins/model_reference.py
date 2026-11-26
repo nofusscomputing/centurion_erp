@@ -83,7 +83,7 @@ def plugin(
 
             elif  item_type == 'operating_system':
 
-                from itam.models.operating_system import OperatingSystem
+                from itam.models import OperatingSystem
 
                 model = OperatingSystem
 
@@ -99,7 +99,7 @@ def plugin(
 
             elif item_type == 'software':
 
-                from itam.models.software import Software
+                from itam.models import Software
 
                 model = Software
 
@@ -107,7 +107,7 @@ def plugin(
 
             elif item_type == 'software_version':
 
-                from itam.models.software import SoftwareVersion
+                from itam.models import SoftwareVersion
 
                 model = SoftwareVersion
 

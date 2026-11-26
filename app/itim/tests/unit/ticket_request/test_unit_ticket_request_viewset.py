@@ -1,28 +1,37 @@
 import pytest
 
-from itim.tests.unit.ticket_slm.test_unit_ticket_slm_serializer import (
-    SLMTicketSerializerInheritedCases
+from itim.models.request_ticket import RequestTicket
+from itim.tests.unit.ticket_slm.test_unit_ticket_slm_viewset import (
+    SLMTicketBaseViewsetInheritedCases
 )
 
 
 
 @pytest.mark.model_requestticket
-class RequestTicketSerializerTestCases(
-    SLMTicketSerializerInheritedCases
+class RequestTicketViewSetTestCases(
+    SLMTicketBaseViewsetInheritedCases
 ):
-    pass
+
+    @property
+    def parameterized_class_attributes(self):
+        return {
+            'model': {
+                'value': RequestTicket
+            },
+        }
 
 
 
-class RequestTicketSerializerInheritedCases(
-    RequestTicketSerializerTestCases
+
+class RequestTicketViewSetInheritedCases(
+    RequestTicketViewSetTestCases
 ):
     pass
 
 
 
 @pytest.mark.module_itim
-class RequestTicketSerializerPyTest(
-    RequestTicketSerializerTestCases
+class RequestTicketViewSetPyTest(
+    RequestTicketViewSetTestCases
 ):
     pass

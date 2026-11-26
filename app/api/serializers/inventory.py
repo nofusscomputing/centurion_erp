@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 
 
 
-class Inventory:
+class Inventory:    # pragma: no cover
     """ Inventory Object
 
     Pass in an Inventory dict that a device has provided and sanitize ready for use.

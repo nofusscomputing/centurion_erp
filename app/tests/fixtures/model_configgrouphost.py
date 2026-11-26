@@ -15,7 +15,7 @@ def model_configgrouphosts(clean_model_from_db):
 
 @pytest.fixture( scope = 'class')
 def kwargs_configgrouphosts(django_db_blocker,
-    kwargs_device, model_device,
+    kwargs_itasset, model_itasset,
     kwargs_centurionmodel, model_configgroups, kwargs_configgroups,
 ):
 
@@ -25,7 +25,7 @@ def kwargs_configgrouphosts(django_db_blocker,
 
             centurion_kwargs = kwargs_centurionmodel()
 
-            host = model_device.objects.create( **kwargs_device() )
+            host = model_itasset.objects.create( **kwargs_itasset() )
 
 
             group_kwargs = kwargs_configgroups()
@@ -36,7 +36,7 @@ def kwargs_configgrouphosts(django_db_blocker,
 
             group = model_configgroups.objects.create( **group_kwargs )
 
-            host = model_device.objects.create( **kwargs_device() )
+            host = model_itasset.objects.create( **kwargs_itasset() )
 
             kwargs = {
                 **centurion_kwargs,
