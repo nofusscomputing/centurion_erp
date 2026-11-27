@@ -43,4 +43,4 @@ Configuration has been setup in such a way that it replicates the Ansible invent
 
 ## Software
 
-Just like [devices](../itam/device.md#software) you can apply a software action to a config group. Software actions are recursive with the child-group obtaining the software actions of all parent groups. If a software action assigned to a group is also assigned to a device, the devices software configuration that is the same will take precedence to the extant of the difference.
+Just like [devices](../itam/it_asset.md#software) you can apply a software action to a config group. Software actions are recursive with the child-group obtaining the software actions of all parent groups. If a software action assigned to a group is also assigned to a device, the devices software configuration that is the same will take precedence to the extant of the difference.

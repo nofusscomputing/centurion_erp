@@ -30,9 +30,9 @@ Within the services the following fields are available:
 
 - [Tenant](../access/tenant.md) _tenant this cluster belongs to_
 
-- [Nodes](../itam/device.md) _Cluster Nodes_
+- [Nodes](../itam/it_asset.md) _Cluster Nodes_
 
-- [Devices](../itam/device.md) _Devices deployed upon the cluster_
+- [Devices](../itam/it_asset.md) _Devices deployed upon the cluster_
 
 - [Services](./service.md) _Services deployed upon the cluster_
 

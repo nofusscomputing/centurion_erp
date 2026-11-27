@@ -20,7 +20,7 @@ All models can be found and accessed via the API. To locate a model click on it'
 
 ## Device Inventory
 
-You can [inventory](itam/device.md#inventory) your devices and upload them to the inventory endpoint.
+You can inventory your devices and upload them to the inventory endpoint.
 
 
 ## Swagger UI
