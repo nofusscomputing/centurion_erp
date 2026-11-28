@@ -1,3 +1,6 @@
+## Version v1.38.0
+
+
 ## Version v1.37.0
 
 - Removed feature flag `2025-00004` enabling usage of accounting module.
