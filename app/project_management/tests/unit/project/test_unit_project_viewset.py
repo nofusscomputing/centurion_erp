@@ -41,6 +41,7 @@ class ViewsetTestCases(
                 'value': [
                     'organization',
                     'external_system',
+                    'parent',
                     'priority',
                     'project_type',
                     'state'

@@ -306,6 +306,16 @@ class Project(
                 ]
             },
             {
+                "name": "Sub Projects",
+                "slug": "children",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "children",
+                    }
+                ]
+            },
+            {
                 "name": "Tasks",
                 "slug": "ticket",
                 "sections": [

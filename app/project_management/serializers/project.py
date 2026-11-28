@@ -72,6 +72,7 @@ class ProjectModelSerializer(
                     'model_name': 'ticketbase'
                 }
             ),
+            'children': f'{item.get_url( many = True)}?parent={item.pk}'
         })
 
 
