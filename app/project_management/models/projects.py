@@ -90,7 +90,17 @@ class Project(
         help_text = 'External system this item derives',
         null = True,
         verbose_name = 'External System',
-    ) 
+    )
+
+    parent = models.ForeignKey(
+        to = 'self',
+        blank = True,
+        help_text = 'Parent project this project belongs to.',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = 'threads',
+        verbose_name = 'Parent Project',
+    )
 
     name = models.CharField(
         blank = False,
