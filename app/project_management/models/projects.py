@@ -261,10 +261,10 @@ class Project(
                         "layout": "double",
                         "left": [
                             'state',
-                            'completed',
                             'priority',
                         ],
                         "right": [
+                            'completed',
                             'estimation_project',
                             'duration_project',
                         ]
@@ -275,6 +275,7 @@ class Project(
                         "left": [
                             'organization',
                             'code',
+                            'parent',
                             'name',
                             'project_type',
                         ],
@@ -283,7 +284,6 @@ class Project(
                             'planned_finish_date',
                             'real_start_date',
                             'real_finish_date',
-                            'duration_project',
                             'created',
                             'modified',
                         ]
