@@ -39,7 +39,7 @@ You are encouraged to do the following as they will assist in the development wo
 
 - Read / View open Issues.
 
-    **Note:** We always have an epic open titled _"Planning Document: [whatever next version is]."_ There is one always part of a milestone prefixed with `Next Release - `. This epic is a working document for every release and notates the current goals, direction etc.
+    **Note:** We always have an epic titled _"Planning Document: [whatever next version is]."_ that will be a pinned issue. This epic is a working document for every release and notates the current goals, direction etc.
 
 - Read / View open Pull/Merge requests. This provides insight into many different areas.
 
