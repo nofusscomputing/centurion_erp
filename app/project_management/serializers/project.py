@@ -91,6 +91,7 @@ class ProjectModelSerializer(
             'external_system',
             'organization',
             'display_name',
+            'parent',
             'name',
             'description',
             'priority',
@@ -152,6 +153,8 @@ class ProjectViewSerializer(ProjectModelSerializer):
     manager_user = UserBaseSerializer( many = False, read_only = True )
 
     organization = TenantBaseSerializer( many = False, read_only = True )
+
+    parent = ProjectBaseSerializer( many = False, read_only = True )
 
     state = ProjectStateBaseSerializer( many = False, read_only = True )
 
