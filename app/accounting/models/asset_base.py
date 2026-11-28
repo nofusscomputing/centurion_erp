@@ -72,7 +72,7 @@ class AssetBase(
     serial_number = models.CharField(
         blank = True,
         help_text = 'Serial number of this asset assigned by manufacturer.',
-        max_length = 30,
+        max_length = 50,
         null = True,
         unique = True,
         verbose_name = 'Serial Number',
