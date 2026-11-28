@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -90,7 +91,17 @@ class Project(
         help_text = 'External system this item derives',
         null = True,
         verbose_name = 'External System',
-    ) 
+    )
+
+    parent = models.ForeignKey(
+        to = 'self',
+        blank = True,
+        help_text = 'Parent project this project belongs to.',
+        null = True,
+        on_delete = models.PROTECT,
+        related_name = 'threads',
+        verbose_name = 'Parent Project',
+    )
 
     name = models.CharField(
         blank = False,
@@ -210,6 +221,23 @@ class Project(
     modified = AutoLastModifiedField()
 
 
+
+    def clean_fields(self, exclude=None):
+
+        if self.parent is not None:
+
+            if self.pk == self.parent.pk:
+
+                raise ValidationError(
+                    message = {'parent': 'Can not set self as parent'},
+                    code = 'self_not_parent'
+                )
+
+
+        return super().clean_fields( exclude = exclude )
+
+
+
     page_layout: dict = {
         "dataset": {
             "columns": [
@@ -233,10 +261,10 @@ class Project(
                         "layout": "double",
                         "left": [
                             'state',
-                            'completed',
                             'priority',
                         ],
                         "right": [
+                            'completed',
                             'estimation_project',
                             'duration_project',
                         ]
@@ -247,6 +275,7 @@ class Project(
                         "left": [
                             'organization',
                             'code',
+                            'parent',
                             'name',
                             'project_type',
                         ],
@@ -255,7 +284,6 @@ class Project(
                             'planned_finish_date',
                             'real_start_date',
                             'real_finish_date',
-                            'duration_project',
                             'created',
                             'modified',
                         ]
@@ -274,6 +302,16 @@ class Project(
                         "fields": [
                             'description'
                         ]
+                    }
+                ]
+            },
+            {
+                "name": "Sub Projects",
+                "slug": "children",
+                "sections": [
+                    {
+                        "layout": "table",
+                        "field": "children",
                     }
                 ]
             },

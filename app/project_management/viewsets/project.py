@@ -65,6 +65,7 @@ class ViewSet( ModelViewSet ):
     filterset_fields = [
         'organization',
         'external_system',
+        'parent',
         'priority',
         'project_type',
         'state',
