@@ -56,6 +56,13 @@ class ClusterModelTestCases(
             'null': True,
             'unique': False,
         },
+        "parent": {
+            'blank': True,
+            'default': models.fields.NOT_PROVIDED,
+            'field_type': models.ForeignKey,
+            'null': True,
+            'unique': False,
+        },
         'name': {
             'blank': False,
             'default': models.fields.NOT_PROVIDED,

@@ -1,4 +1,5 @@
 import pytest
+import random
 
 from django.db import models
 
@@ -46,6 +47,15 @@ class ProjectAPITestCases(
                     })
 
 
+            
+            parent_kwargs = {
+                'organization': kwargs['organization'],
+                'name': 'project_' + str( random.randint(1,999) ) + str( random.randint(1,999) ),
+                'description': 'a description',
+            }
+
+            parent_project = model.objects.create( **parent_kwargs )
+
             # # Switch model fields so all fields can be checked
             # kwargs_many_to_many.update({ 'devices': kwargs_many_to_many['nodes']})
             # del kwargs_many_to_many['nodes']
@@ -63,7 +73,8 @@ class ProjectAPITestCases(
 
 
             item_two = model.objects.create(
-                **kwargs
+                **kwargs,
+                **{'parent': parent_project}
             )
 
 
@@ -116,6 +127,18 @@ class ProjectAPITestCases(
             },
             'external_system': {
                 'expected': int
+            },
+            'parent': {
+                'expected': dict
+            },
+            'parent.id': {
+                'expected': int
+            },
+            'parent.display_name': {
+                'expected': str
+            },
+            'parent.url': {
+                'expected': Hyperlink
             },
             'name': {
                 'expected': str
