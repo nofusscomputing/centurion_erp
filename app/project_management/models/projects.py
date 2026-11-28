@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from access.fields import AutoLastModifiedField
@@ -218,6 +219,23 @@ class Project(
     )
 
     modified = AutoLastModifiedField()
+
+
+
+    def clean_fields(self, exclude=None):
+
+        if self.parent is not None:
+
+            if self.pk == self.parent.pk:
+
+                raise ValidationError(
+                    message = {'parent': 'Can not set self as parent'},
+                    code = 'self_not_parent'
+                )
+
+
+        return super().clean_fields( exclude = exclude )
+
 
 
     page_layout: dict = {

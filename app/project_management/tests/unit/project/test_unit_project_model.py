@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 import pytest
 
 from django.db import models
@@ -171,6 +172,40 @@ class ClusterModelTestCases(
             'unique': False,
         },
     }
+
+
+
+    def test_field_parent_cant_set_self(self,
+        model, model_kwargs
+    ):
+        """ Field Check
+
+        Ensure that the parent project cant be set to self.
+        """
+
+
+        parent_kwargs = model_kwargs()
+        del parent_kwargs['team_members']
+
+        parent_obj = model( **parent_kwargs )
+
+        kwargs = model_kwargs()
+        del kwargs['team_members']
+        kwargs ['parent'] = parent_obj
+
+        obj = model( **kwargs )
+
+        obj.id = 98765432
+        obj.pk = obj.id
+
+        obj.parent.id = obj.pk
+        obj.parent.pk = obj.pk
+
+        with pytest.raises( ValidationError ) as exc:
+
+            obj.clean_fields()
+
+        assert exc.value.args[1] == 'self_not_parent'
 
 
 
