@@ -1,3 +1,9 @@
+## 1.37.1 (2026-11-28)
+
+### Fixes
+
+- **accounting**: Correct `seriali_number` field for accounting.Asset to be same as old model itam.Device
+
 ## 1.37.0 (2026-11-26)
 
 ### Features
